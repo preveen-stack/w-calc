@@ -242,6 +242,10 @@ static char * flatten (char * str)
 
 	standard_output = 0;
 
+	if (*str == '\\') {
+		standard_output = standard_output_save;
+		return str;
+	}
 	curs = strchr(str,'=');
 	if (! curs || ! *curs) curs = str;
 
