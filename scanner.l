@@ -50,7 +50,7 @@ ACCEPTABLE	[_:]
 \\h(ex(adecimal)?)?		{ return(HEX_CMD); }
 \\l(enient)?			{ return(PICKY_CMD); }
 \\o(ct(al)?)?			{ return(OCT_CMD); }
-\\p{DIGIT}+				{ yylval.number = atoi(yytext+2);
+\\p({DIGIT}|[-])+		{ yylval.number = atoi(yytext+2);
 	return(PRECISION_CMD);}
 \\p(icky)?				{ return(PICKY_CMD); }
 \\r(ad(ians)?)?			{ return(RADIAN_CMD); }
@@ -118,6 +118,8 @@ re				{ yylval.number = W_ELECTRON_RADIUS; return(NUMBER); }
 (\!\=)|(ne)|(­)			{ return(WNEQUAL); }
 \>						{ return(WGT); }
 \<						{ return(WLT); }
+\>\>                    { return(WRSHFT); }
+\<\<                    { return(WLSHFT); }
 (\>\=)|(³)				{ return(WGEQ); }
 (\<\=)|(²)				{ return(WLEQ); }
 
@@ -174,7 +176,7 @@ cbrt { return(WCBRT); }
 		unsigned int t = count_digits(yytext);
 		if (t<sig_figs) sig_figs = t;
 	}
-	
+
 	return(NUMBER);
 }
 
