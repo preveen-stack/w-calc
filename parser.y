@@ -56,7 +56,7 @@ char character;
 %token <number> PRECISION_CMD ENG_CMD HLIMIT_CMD ROUNDING_INDICATION_CMD
 
 %token EOLN PAR REN WBRA WKET WSBRA WSKET
-%token WPLUS WMINUS WMULT WDIV WMOD WEQL WEXP WSQR
+%token WPLUS WMINUS WMULT WDIV WMOD WEQL WPOS WEXP WSQR
 %token WOR WAND WEQUAL WNEQUAL WGT WLT WGEQ WLEQ
 %token WLSHFT WRSHFT WBOR WBAND
 
@@ -78,7 +78,7 @@ char character;
 %left WMINUS WPLUS
 %left WMULT WDIV WMOD WLSHFT WRSHFT
 %right WBANG
-%left WEXP
+%left WPOW
 %left WNOT WBNOT WNEG
 
 %expect 1181
@@ -443,6 +443,7 @@ func : WSIN { $$ = wsin; }
 | WROUND { $$ = wround; }
 | WABS { $$ = wabs; }
 | WSQRT { $$ = wsqrt; }
+| WEXP { $$ = wexp; }
 | WFLOOR { $$ = wfloor; }
 | WCEIL { $$ = wceil; }
 | WCBRT { $$ = wcbrt; }
@@ -469,7 +470,7 @@ oval : exp_l3 oval
 ;
 
 exp_l3 : capsule oval { $$ = $1 * $2; }
-| capsule WEXP sign exp_l3 oval { $$ = pow($1,$3*$4) * $5; }
+| capsule WPOW sign exp_l3 oval { $$ = pow($1,$3*$4) * $5; }
 ;
 
 capsule: PAR exp REN { $$ = $2; }

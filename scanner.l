@@ -177,7 +177,7 @@ not						{ return(WNOT); }
 [/]|[Ö]					{ return(WDIV); }
 [%]						{ return(WMOD); }
 [=]						{ return(WEQL); }
-(\^)					{ return(WEXP); }
+(\^)					{ return(WPOW); }
 \|                      { return(WBOR); }
 \&                      { return(WBAND); }
 \~                      { return(WBNOT); }
@@ -220,6 +220,7 @@ ln { return(WLN); }
 round { return(WROUND); }
 abs { return(WABS); }
 (sqrt)|(Ã) { return(WSQRT); }
+exp { return(WEXP); }
 floor { return(WFLOOR); }
 (ceil)|(ceiling) { return(WCEIL); }
 cbrt { return(WCBRT); }

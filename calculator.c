@@ -679,7 +679,7 @@ double simple_exp (double first, enum operations op, double second)
 			case wmult:		temp = (first * second); break;
 			case wdiv:		temp = first/second; break;
 			case wmod:		temp = fmod(first, second); break;
-			case wexp:		temp = pow(first, second); break;
+			case wpow:		temp = pow(first, second); break;
 			case wbor:		temp = (int)first | (int)second; break;
 			case wband:		temp = (int)first & (int)second; break;
 			default:		temp = 0.0; break;
@@ -731,6 +731,7 @@ double uber_function (enum functions func, double input)
 			case wrand:     temp = fmod(fabs(kbw_rand()),input) * ((input>=0)?1:-1); break;
 			case wirand:    temp = (abs(kbw_int_rand()) % (int) input) * ((input>=0)?1:-1); break;
 			case wcbrt:		temp = cbrt(input); break;
+			case wexp:		temp = pow(W_E, input); break;
 			default:		temp = input; break;
 		}
 		if (conf.precision_guard && fabs(modf(temp, &trash)) <= DBL_EPSILON) {
