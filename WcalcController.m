@@ -192,7 +192,6 @@ static char update_history = 0;
 		[prefs setObject:@"0" forKey:@"outputFormat"];
 		[prefs setObject:@"NO" forKey:@"printPrefixes"];
 		[prefs setObject:@"NO" forKey:@"updateHistory"];
-		[prefs setObject:@"NO" forKey:@"useCommas"];
 		[prefs setObject:@"YES" forKey:@"strictSyntax"];
 		[prefs setObject:@"0" forKey:@"roundingIndication"];
 		[prefs setObject:@"NO" forKey:@"historyShowing"];
@@ -206,7 +205,6 @@ static char update_history = 0;
 	conf.output_format = [prefs integerForKey:@"outputFormat"];
 	[PrecisionSlider setEnabled:(conf.output_format==DECIMAL_FORMAT)];
 	conf.print_prefixes = [prefs boolForKey:@"printPrefixes"];
-	conf.use_commas = [prefs boolForKey:@"useCommas"];
 	conf.strict_syntax = [prefs boolForKey:@"strictSyntax"];
 	conf.rounding_indication = [prefs integerForKey:@"roundingIndication"];
 	/* history preferences */
@@ -505,15 +503,6 @@ static char update_history = 0;
 				[prefs setObject:(update_history?@"YES":@"NO") forKey:@"updateHistory"];
 			}
 				break;
-		case 8: // Use Commas
-			olde = conf.use_commas;
-			conf.use_commas = ([sender state]==NSOnState);
-			if (olde != conf.use_commas) {
-				need_redraw = 1;
-				[prefs setObject:(conf.use_commas?@"YES":@"NO") forKey:@"useCommas"];
-				[decimalKey setTitle:(conf.use_commas?@",":@".")];
-			}
-				break;
 		case 9: // Flag Confusing Numbers
 			olde = conf.strict_syntax;
 			conf.strict_syntax = ([sender state]==NSOnState);
@@ -593,7 +582,6 @@ static char update_history = 0;
 	[useRadians setState:(conf.use_radians?NSOnState:NSOffState)];
 	[outputFormat selectCellWithTag:conf.output_format];
 	[printPrefixes setState:(conf.print_prefixes?NSOnState:NSOffState)];
-	[useCommas setState:(conf.use_commas?NSOnState:NSOffState)];
 	[strictSyntax setState:(conf.strict_syntax?NSOnState:NSOffState)];
 	[roundingIndication selectItemAtIndex:conf.rounding_indication];
 	[rememberErrors setState:(conf.remember_errors?NSOnState:NSOffState)];
