@@ -57,11 +57,19 @@ ACCEPTABLE	[_:]
 \\l(enient)?            { return(PICKY_CMD); }
 \\li(st(vars)?)?        { return(LISTVAR_CMD); }
 \\o(ct(al)?)?           { return(OCT_CMD); }
-\\p({DIGIT}|[-])+       { yylval.number = atoi(yytext+2); return(PRECISION_CMD);}
+\\p[-]?{DIGIT}+         { yylval.number = atoi(yytext+2); return(PRECISION_CMD);}
 \\p(icky)?              { return(PICKY_CMD); }
 \\pre(fix(es)?)?        { return(PREFIX_CMD); }
 \\pref(s|erences)?      { return(DISPLAY_PREFS_CMD); }
 \\r(ad(ians)?)?         { return(RADIAN_CMD); }
+\\rou(nd(ing)?)?{WHITESPACE}+no(ne)? { yylval.number = NO_ROUNDING_INDICATION;
+	                      return(ROUNDING_INDICATION_CMD); }
+\\rou(nd(ing)?)?{WHITESPACE}+simple { yylval.number = SIMPLE_ROUNDING_INDICATION;
+	                      return(ROUNDING_INDICATION_CMD); }
+\\rou(nd(ing)?)?{WHITESPACE}+sig_fig { yylval.number = SIG_FIG_ROUNDING_INDICATION;
+	                      return(ROUNDING_INDICATION_CMD); }
+\\rou(nd(int)?)?        { yylval.number = -1;
+	                      return(ROUNDING_INDICATION_CMD); }
 \\re(member(_errors)?)? { return(REMEMBER_CMD); }
 \\tsep.                 { yylval.character = yytext[5]; return(TSEP_CMD); }
 \\c(onv(ert)?)?{WHITESPACE}+{LETTER}+{WHITESPACE}+{LETTER}+{WHITESPACE}+{LETTER}+ {}
