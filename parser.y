@@ -41,6 +41,7 @@ char * variable;
 %token EOLN PAR REN WBRA WKET WSBRA WSKET WPIPE
 %token WPLUS WMINUS WMULT WDIV WMOD WEQL WEXP WSQR
 %token WOR WAND WEQUAL WNEQUAL WGT WLT WGEQ WLEQ
+%token WLSHFT WRSHFT
 
 %token WNOT WLOG WLN WROUND WABS WSQRT WCEIL WFLOOR WCBRT
 %token WSIN WCOS WTAN WASIN WACOS WATAN WSINH WCOSH WTANH WASINH WACOSH WATANH
@@ -56,7 +57,7 @@ char * variable;
 %left WAND WOR
 %left WEQUAL WNEQUAL WGT WLT WGEQ WLEQ
 %left WMINUS WPLUS
-%left WMULT WDIV WMOD
+%left WMULT WDIV WMOD WLSHFT WRSHFT
 %left WEXP
 %left WNOT
 
@@ -188,13 +189,13 @@ command : HEX_CMD {
 assignment : VAR WEQL exp
 {
 	if (compute && ! scanerror) {
-		/* if standard_error, P, E, and q are reserved */
+		/* if standard_error, q is reserved */
 		if (standard_output && !strcmp($1,"q")) {
 			printf("q cannot be assigned a value. q is used to exit.\n");
 		} else {
-			if (putvar($1,$3) == 0) {
+			if (putval($1,$3) == 0) {
 				if (standard_output) {
-					printf("%s = %g\n", $1, *getvar($1));
+					printf("%s = %f\n", $1, getvar($1).val);
 				}
 			} else {
 				report_error("There was a problem assigning variables.");
@@ -218,6 +219,8 @@ exp : exp WMINUS exp { $$ = simple_exp($1, wminus, $3); }
 | exp WLT exp { $$ = simple_exp($1, wlt, $3); }
 | exp WGEQ exp { $$ = simple_exp($1, wgeq, $3); }
 | exp WLEQ exp { $$ = simple_exp($1, wleq, $3); }
+| exp WLSHFT exp { $$ = simple_exp($1, wlshft, $3); }
+| exp WRSHFT exp { $$ = simple_exp($1, wrshft, $3); }
 | WNOT exp { $$ = ! $2; }
 | exp_l2
 ;
@@ -289,14 +292,14 @@ capsule: PAR exp REN { $$ = $2; }
 		compute = 0;
 		$$ = 0;
 	} else {
-		double * temp = getvar($1);
-		if (temp)
-			$$ = *temp;
-		else {
+		struct answer temp = getvar($1);
+		if (! temp.err && ! temp.exp) {
+			$$ = temp.val;
+		} else {
 			$$ = 0;
 			if (conf.picky_variables) {
 				char * error = malloc(sizeof(char)*(strlen($1)+18));
-				sprintf(error,"%s does not exist.",$1);
+				sprintf(error,"%s does not exist or was not properly parsed.",$1);
 				report_error(error);
 				compute = 0;
 				free(error);
