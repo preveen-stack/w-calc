@@ -47,6 +47,7 @@ int main (int argc, char *argv[])
 	precision = -1;
 	engineering = 0;
 	standard_output = 1;
+	picky_variables = 1;
 
 	/* Parse commandline options */
 	for (i = 1; i < argc; ++i) {
@@ -77,7 +78,7 @@ int main (int argc, char *argv[])
 		} else if (!strcmp(argv[i],"-p")) {
 			print_prefixes = 1;
 		} else if (!strcmp(argv[i],"-l")||!strcmp(argv[i],"--lenient")) {
-			picky_variables = 1;
+			picky_variables = 0;
 		} else if (!strcmp(argv[i],"-r")||!strcmp(argv[i],"--radians")) {
 			use_radians = 1;
 		} else if (!strcmp(argv[i],"--yydebug")) {
@@ -127,6 +128,13 @@ int main (int argc, char *argv[])
 				} else if (!strncmp(readme,"\\commas",7)) {
 					use_commas = ! use_commas;
 					printf("%s are the decimal delineation.\n", use_commas?"Commas (,)":"Periods (.)");
+				} else if (!strncmp(readme,"\\lenient",7)) {
+					picky_variables = ! picky_variables;
+					if (! picky_variables) {
+						printf("Unknown variables are assumed to be zero.\n");
+					} else {
+						printf("Strict variable parsing.\n");
+					}
 				} else if (!strncmp(readme,"?",1) || !strncmp(readme,"help",4)) {
 					print_interactive_help();
 				} else {
