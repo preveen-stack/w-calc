@@ -58,10 +58,6 @@
 /* Define to 1 if you have the <readline/readline.h> header file. */
 #undef HAVE_READLINE_READLINE_H
 
-/* Define to 1 if your system has a working `realloc' function, and to 0
-   otherwise. */
-#undef HAVE_REALLOC
-
 /* Define to 1 if you have the `rint' function. */
 #undef HAVE_RINT
 
@@ -151,6 +147,3 @@
 
 /* Define to rpl_malloc if the replacement function should be used. */
 #undef malloc
-
-/* Define to rpl_realloc if the replacement function should be used. */
-#undef realloc
