@@ -10,7 +10,7 @@
 					<td valign="middle" align="left">
 						<h1>Wcalc</h1>
 					</td>
-					<td width="100">Version: 1.5
+					<td width="100">Version: 1.5.1
 					</td>
 				</tr>
 				<tr>
@@ -26,9 +26,11 @@
 					<table border=1 bgcolor="#EEEEEE" width="150">
 						<tr><td nowrap>
 								<h3>News</h3>
-								<b>11 Aug - 1.5</b><br>- Active Variables!<br>
-								- Conversions!<br>
-								<b>7 Mar - 1.4.5</b><br>- Bugfixes!<br>
+								<b>20 Oct - 1.5.1</b><br>- Precision Fix!<br>
+								- Jaguar Compatability!<br>
+								<b>11 Aug - 1.5</b><br>- Active Variables<br>
+								- Conversions<br>
+								<b>7 Mar - 1.4.5</b><br>- Bugfixes<br>
 								<b>27 Feb - 1.4.4</b><br>- Bugfixes n Commas<br>
 								<b>24 Feb - 1.4.2</b><br>- Bugfixes<br>
 								<b>11 Feb - 1.4.1</b><br>- Bugfixes<br>
@@ -47,16 +49,18 @@
 					<p>
 					Wcalc also comes in a command-line version that works on most (if not all) forms of Unix (including Linux and BSD).
 					<p>
-					<font color="%FF0000">HELP!</font> Wcalc needs an icon!
-					<p>
 					<h3>Status</h3>
+					<p>1.5.1 is out!
+					<p>Two months later, not much has changed. Jaguar came out - compatability was a simple recompile away. (If you're curious, Apple moved the termcap functions from libSystem.B.dylib to libtermcap - which is the "correct" place for those functions.) I was alerted (thanks Chris!) to some precision issues in Wcalc. The problem was that C doubles can't accurately compute equivalence for numbers less than about 2.2e-16 apart. In order to represent numbers as accurately as I could, I put in checks, so that numbers that are less than that far away from an integer are rounded to that integer (that way 1 - 0.9 - 0.1 returns zero). This doesn't work so well for really small numbers - like Plank's constant. So, I added a toggle to turn off my precision checks. It's not a great fix, but it's better than the full solution, which is to implement my own number representation, and re-implement all the standard functions (if you know of a good way to get unlimited precision - please, let me know!).
+					<p>Anyway, there's a new version out. Go <a href="download.html">fetch</a>!
+					<hr><font size=-1>
 					<p>Howdy!
 					<p>Well, it seems that releasing took a little longer than I planned (big surprise, eh?) With the time I updated the man page and online-help, so those should be working (still no online GUI help...).
 					<p>Anyway, I'm really proud of this one. The conversion support is solid, extensible, and has a gazillion units. Active variable support is finally done (which should help those of you who want to do functions with it). It doesn't check for recursion, so you can put it in an infinite loop... I'll try to fix that, but figured that could wait a little bit. There are also all sorts of little fixes and feature additions (live keypresses!) here and there. <a href="download.html">I hope you like it!</a>
 					<p>Next on the field of features to get done... I want to be able to detect recursion instead of infinitely looping and eventually crashing. From there it's PRINTING and SAVING FILES! There's nothing to stop me now! (famous last words, of course).
 					<p>One last note about the new URL... I want to move off of Notre Dame's servers as quickly as possible (I was forced on here after Apple decided to charge for mac.com webspace). I plan to open-source Wcalc by (or when) it turns 2.0 (which will be when printing and saving/opening files works), and I'll move it to Sourceforge then. Let's hope that's sooner rather than later, shall we?
 					<p>Until next time...
-					<p><hr><font size="-1">
+					<p><hr>
 					It's baaaack! <a href="Wcalc-1.5-beta2.dmg.sit">New pre-release!</a>
 					<p>
 					Confronted with a little more time to spare now that school is over and I'm settled into my new apartment, I've been fiddling with Wcalc again. All my notes about planned features were left in my parent's house (hopefully I'll get them re-collected at some point), so I'm on my own to think of new features. (That and I sifted through my email archive.)
