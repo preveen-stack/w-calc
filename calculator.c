@@ -191,7 +191,7 @@ char * flatten (char * str)
 					break;
 				vcurs = vcurs->next;
 			}
-			if (curs) {
+			if (vcurs) {
 				report_error("Variable recursion is not allowed.");
 				return str;
 			}
