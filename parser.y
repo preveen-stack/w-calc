@@ -204,13 +204,6 @@ assignment : VAR WEQL exp
 }
 ;
 
-/* Expression priority levels are of the following form:
-* expressionlevel : nextexpressionlevel
-*                 | anythingspecial
-*                 | expressionlevel thisleveloperations nextexpressionlevel
-*                 ;
-*/
-
 exp : exp WMINUS exp { $$ = simple_exp($1, wminus, $3); }
 | exp WPLUS exp { $$ = simple_exp($1, wplus, $3); }
 | exp WAND exp { $$ = simple_exp($1, wand, $3); }
