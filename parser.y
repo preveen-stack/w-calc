@@ -81,7 +81,7 @@ char character;
 %left WEXP
 %left WNOT WBNOT WNEG
 
-%expect 1185
+%expect 1181
 
 %% 	/* beginning of the parsing rules	*/
 
@@ -417,7 +417,6 @@ exp : exp WMINUS exp { $$ = simple_exp($1, wminus, $3); }
 | exp WMULT exp { $$ = simple_exp($1, wmult, $3); }
 | exp WDIV exp { $$ = simple_exp($1, wdiv, $3); }
 | exp WMOD exp { $$ = simple_exp($1, wmod, $3); }
-| WNOT exp { $$ = ! $2; }
 | WBNOT exp { $$ = ~ (int)$2; }
 | exp_l2
 ;
