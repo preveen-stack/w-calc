@@ -18,3 +18,5 @@ y.tab.h
 *.swp
 autom4te*
 .gdb_history
+parser.tab.c
+parser.tab.h
