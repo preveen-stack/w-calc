@@ -47,6 +47,7 @@ ACCEPTABLE	[_:]
 	while (*foo && ! isdigit(*foo)) ++foo;
 	yylval.number = atoi(foo);
 	return(ENG_CMD);}
+\\cons(ervative)?       { return(GUARD_CMD); }
 \\h(ex(adecimal)?)?		{ return(HEX_CMD); }
 \\x                     { return(HEX_CMD); }
 \\l(enient)?			{ return(PICKY_CMD); }

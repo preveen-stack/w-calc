@@ -155,6 +155,11 @@ command : HEX_CMD {
 	conf.use_radians = ! conf.use_radians;
 	if (standard_output)
 		printf("%sUsing Radians\n", conf.use_radians?"":"Not ");}
+| GUARD_CMD {
+	$$ = nothing;
+	conf.precision_guard = ! conf.precision_guard;
+	if (standard_output)
+		printf("%sUsing Conservative Precision\n", conf.precision_guard?"":"Not ");}
 | PRECISION_CMD {
 	$$ = isatty(0)?redisplay:nothing;
 	conf.precision = $1;
