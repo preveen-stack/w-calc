@@ -29,11 +29,17 @@ OFILES = ${CFILES:.c=.o}
 # all of the .o files that the program needs
 OBJECTS = y.tab.o lex.yy.o ${OFILES}
 
+all: ${PROGRAM}
+
+rh: ${PROGRAM}-rh
 
 # How to make the whole program
 # (don't forget the Lex Library "-ll")
 ${PROGRAM} : ${OBJECTS} libreadline.a
 	${CC} ${OBJECTS} libreadline.a -o ${PROGRAM} ${LFLAGS}
+
+${PROGRAM}-rh : ${OBJECTS}
+	${CC} ${OBJECTS} -lreadline -lm -ltermcap -o ${PROGRAM} ${LFLAGS}
 
 distro : ${PROGRAM}
 	strip ${PROGRAM}
