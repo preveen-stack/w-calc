@@ -10,15 +10,15 @@
 		);
 		perUserDictionary = {
 			PBXWorkspaceConfiguration = {
-				ContentSize = "{1162, 961}";
+				ContentSize = "{1227, 972}";
 				LeftSlideOut = {
 					ActiveTab = 0;
-					Frame = "{{0, 23}, {1162, 938}}";
+					Frame = "{{0, 23}, {1227, 949}}";
 					Split0 = {
 						ActiveTab = 2;
-						Frame = "{{305, 0}, {857, 938}}";
+						Frame = "{{305, 0}, {922, 949}}";
 						Split0 = {
-							Frame = "{{0, 216}, {857, 722}}";
+							Frame = "{{0, 216}, {922, 733}}";
 						};
 						SplitCount = 1;
 						Tab0 = {
@@ -47,16 +47,16 @@
 							LauncherConfigVersion = 4;
 						};
 						Tab1 = {
-							Frame = "{{0, 0}, {857, 208}}";
+							Frame = "{{0, 0}, {922, 208}}";
 							LauncherConfigVersion = 3;
 							Runner = {
-								Frame = "{{0, 0}, {857, 208}}";
+								Frame = "{{0, 0}, {922, 208}}";
 							};
 						};
 						Tab2 = {
-							BuildMessageFrame = "{{0, 0}, {859, 56}}";
-							BuildTranscriptFrame = "{{0, 65}, {859, 129}}";
-							Frame = "{{0, 0}, {857, 192}}";
+							BuildMessageFrame = "{{0, 0}, {924, 78}}";
+							BuildTranscriptFrame = "{{0, 87}, {924, 107}}";
+							Frame = "{{0, 0}, {922, 192}}";
 						};
 						Tab3 = {
 							Frame = "{{0, 0}, {612, 295}}";
@@ -65,7 +65,7 @@
 					};
 					SplitCount = 1;
 					Tab0 = {
-						Frame = "{{0, 0}, {281, 938}}";
+						Frame = "{{0, 0}, {281, 949}}";
 					};
 					Tab1 = {
 						ClassesFrame = "{{0, 0}, {202, 358}}";
@@ -77,12 +77,12 @@
 						Frame = "{{0, 0}, {200, 100}}";
 					};
 					Tab3 = {
-						Frame = "{{0, 0}, {200, 938}}";
+						Frame = "{{0, 0}, {200, 949}}";
 						Split0 = {
-							Frame = "{{0, 0}, {200, 458}}";
+							Frame = "{{0, 0}, {200, 463}}";
 						};
 						Split1 = {
-							Frame = "{{0, 467}, {200, 471}}";
+							Frame = "{{0, 472}, {200, 477}}";
 						};
 						SplitCount = 2;
 					};
@@ -166,7 +166,7 @@
 	};
 	F5B29D6601F7391601A80164 = {
 		uiCtxt = {
-			sepNavWindowFrame = "{{383, 335}, {750, 502}}";
+			sepNavWindowFrame = "{{955, 327}, {750, 502}}";
 		};
 	};
 	F5B29D6901F7392301A80164 = {

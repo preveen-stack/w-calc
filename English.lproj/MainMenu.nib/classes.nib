@@ -51,21 +51,25 @@
                 clear = id; 
                 enterData = id; 
                 go = id; 
+                menuConstant = id; 
+                menuFunction = id; 
                 setPrecision = id; 
                 showInspectorDrawer = id; 
                 showKeyboardDrawer = id; 
+                toggleSize = id; 
             }; 
             CLASS = WcalcController; 
             LANGUAGE = ObjC; 
             OUTLETS = {
                 AnswerField = id; 
                 ExpressionField = NSTextField; 
-                PrecisionSlider = id; 
+                PrecisionSlider = NSSlider; 
                 affectDrawerMenu = NSMenuItem; 
                 affectKeyboardMenu = NSMenuItem; 
                 capsLockKey = NSButton; 
                 errorController = id; 
                 historyList = id; 
+                keypad = id; 
                 mainWindow = NSWindow; 
                 shiftKey1 = NSButton; 
                 shiftKey2 = NSButton; 
@@ -75,7 +79,12 @@
             }; 
             SUPERCLASS = NSObject; 
         }, 
-        {CLASS = theDelegate; LANGUAGE = ObjC; SUPERCLASS = NSObject; }
+        {
+            CLASS = theDelegate; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {mainWindow = NSWindow; }; 
+            SUPERCLASS = NSObject; 
+        }
     ); 
     IBVersion = 1; 
 }
