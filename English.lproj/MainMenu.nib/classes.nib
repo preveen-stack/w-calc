@@ -4,7 +4,7 @@
             ACTIONS = {closeIt = id; openIt = id; }; 
             CLASS = AboutBoxController; 
             LANGUAGE = ObjC; 
-            OUTLETS = {aboutBox = NSWindow; }; 
+            OUTLETS = {aboutBox = NSWindow; version = NSTextField; }; 
             SUPERCLASS = NSObject; 
         }, 
         {
@@ -75,7 +75,7 @@
             }; 
             SUPERCLASS = NSObject; 
         }, 
-        {ACTIONS = {}; CLASS = theDelegate; LANGUAGE = ObjC; SUPERCLASS = NSObject; }
+        {CLASS = theDelegate; LANGUAGE = ObjC; SUPERCLASS = NSObject; }
     ); 
     IBVersion = 1; 
 }

@@ -1,3 +1,4 @@
+#import "calculator.h"
 #import "AboutBoxController.h"
 
 @implementation AboutBoxController
@@ -9,6 +10,7 @@
 
 - (IBAction)openIt:(id)sender
 {
+	[version setStringValue:[NSString stringWithFormat:@"Version %s",VERSION]];
 	[aboutBox makeKeyAndOrderFront:self];
 	[aboutBox center];
 }
