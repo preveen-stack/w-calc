@@ -54,7 +54,7 @@ int main (int argc, char *argv[])
 	/* Parse commandline options */
 	for (i = 1; i < argc; ++i) {
 		if (!strncmp(argv[i],"-P",2)) {
-			if ((isdigit(*(argv[i]+2))) || ((*(argv[i]+2) == '-') && (isdigit(*(argv[i]+3))))) {
+			if ((isdigit((int)(argv[i][2]))) || (((argv[i][2]) == '-') && (isdigit((int)(argv[i][3]))))) {
 				conf.precision = atoi((argv[i])+2);
 			} else {
 				fprintf(stderr,"-P option requires a valid integer without spaces.\n");

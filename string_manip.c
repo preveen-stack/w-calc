@@ -49,7 +49,7 @@ unsigned int count_digits(char * curs)
 {
 	unsigned int counter = 0;
 	while (curs && *curs && *curs != 'e' && *curs != 'E') {
-		counter += isdigit(*curs);
+		counter += isdigit((int)(*curs));
 		++curs;
 	}
 	return counter;
@@ -57,7 +57,7 @@ unsigned int count_digits(char * curs)
 
 int justnumbers (char * curs)
 {
-	while (curs && *curs && (isdigit(*curs) || ispunct(*curs)))
+	while (curs && *curs && (isdigit((int)(*curs)) || ispunct((int)(*curs))))
 		curs ++;
 	if (curs && ! *curs) // if we reached the end of the string
 		return 1;

@@ -5,10 +5,11 @@
 #
 OPT=-O3
 #OPT=-O0 -g
-CFLAGS = -Wall -Werror ${OPT} -L/sw/lib -I/sw/include
+#CFLAGS = -Wall -Werror ${OPT} -L/sw/lib -I/sw/include
+CFLAGS = -Wall -Werror ${OPT} -L/usr/lib -I/usr/include -DSOLARIS
 CC = gcc
-YACC = yacc
-#YACC = bison -b y
+#YACC = yacc
+YACC = bison -b y
 
 LFLAGS = -ll -lm
 

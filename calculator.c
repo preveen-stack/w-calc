@@ -2,8 +2,13 @@
 #include <stdio.h>
 #include <math.h>		/* for HUGE_VAL */
 #include <float.h>		/* for DBL_EPSILON */
+#ifndef SOLARIS
 #include <string.h>		/* for bzero() */
 #include <stdint.h>		/* for UINT32_MAX */
+#else
+#include <strings.h>	/* for bzero() */
+#include <sys/int_limits.h> /* for UINT32_MAX */
+#endif
 #include <ctype.h>      /* for isalpha() */
 /* these are for kbw_rand() */
 #include <sys/types.h>	/* for stat() and read() */
@@ -106,7 +111,7 @@ char * flatten (char * str)
 	
 	while (curs && *curs) {
 		// search for the first letter of a possible variable
-		while (curs && *curs && ! isalpha(*curs)) {
+		while (curs && *curs && ! isalpha((int)(*curs))) {
 			if (*curs == '\'') {
 				curs++;
 				while (curs && *curs && *curs != '\'') curs++;
@@ -118,7 +123,7 @@ char * flatten (char * str)
 		// pull out that variable
 		eov = curs;
 		i = 0;
-		while (eov && *eov && (isalpha(*eov) || *eov == '_' || *eov == ':')) {
+		while (eov && *eov && (isalpha((int)(*eov)) || *eov == '_' || *eov == ':')) {
 			varname[i++] = *eov;
 			eov++;
 		}
