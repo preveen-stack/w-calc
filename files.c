@@ -33,6 +33,41 @@ int saveState(char* filename)
 	if (fd >= 0) { // success
 		int hindex;
 		int retval;
+		extern int contents;
+		/* save variables */
+		for (hindex=0;hindex<contents;hindex++) {
+			struct variable *keyval = getrealnvar(hindex);
+			char value[100], *cptr;
+			if (! keyval) continue;
+			if (!strcmp(keyval->key,"a")) continue;
+			retval = write(fd,keyval->key,strlen(keyval->key));
+			if (retval < strlen(keyval->key)) {
+				return_error = errno;
+				break;
+			}
+			retval = write(fd,"=",1);
+			if (retval < 1) {
+				return_error = errno;
+				break;
+			}
+			if (keyval->exp) {
+				cptr = keyval->expression;
+			} else {
+				sprintf(value,"%g",keyval->value);
+				cptr = value;
+			}
+			retval = write(fd,cptr,strlen(cptr));
+			if (retval < strlen(cptr)) {
+				return_error = errno;
+				break;
+			}
+			retval = write(fd,"\n",1);
+			if (retval < 1) {
+				return_error = errno;
+				break;
+			}
+		}
+	    /* save history */
 		for (hindex=0;hindex<historyLength();hindex++) {
 			char * history_entry = historynum(hindex,1);
 			retval = write(fd,history_entry,strlen(history_entry));
