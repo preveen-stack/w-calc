@@ -12,7 +12,7 @@
 	fprintf(stderr, "[%s:%d] " fmt, __FILE__, __LINE__, ##__VA_ARGS__); \
 	fflush(stderr);
 #else
-#define Dprintf(fmt, ...) ;
+#define Dprintf(...) ;
 #endif
 
 enum functions {wnot,
@@ -72,6 +72,7 @@ void print_results (void);
 void push_value (double);
 void report_error (char *);
 void print_result (void);
+void set_prettyanswer(double num);
 char *print_this_result (double result);
 double uber_function (enum functions func, double input);
 double simple_exp (double first, enum operations op, double second);
@@ -97,6 +98,7 @@ struct _conf {
 	unsigned long history_limit_len;
 	unsigned int print_equal:1;
 	unsigned int print_ints:1;
+	unsigned int simple_calc:1;
 };
 
 /* configuration */
