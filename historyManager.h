@@ -7,12 +7,10 @@
  *
  */
 
-#include <Carbon/Carbon.h>
-
 void clearHistory(void);
 void addToHistory(char *, double);
 char * historynum(int,int);
-int history_length(void);
+int historyLength(void);
 
 extern short allow_duplicates;
 extern short recalculate;

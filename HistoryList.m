@@ -5,7 +5,7 @@
 
 - (int)numberOfRowsInTableView:(NSTableView *)atv
 {
-	return history_length();
+	return historyLength();
 }
 
 /* returns the correct text for a given column and row */

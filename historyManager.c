@@ -7,6 +7,9 @@
  *
  */
 
+#include <stdlib.h>
+#include <string.h>
+
 #ifndef GUI
 #include "config.h"
 #endif
@@ -42,6 +45,9 @@ void clearHistory()
 
 void addToHistory(char * expression, double answer)
 {
+#ifdef HAVE_READLINE_HISTORY
+	add_history(expression);
+#endif
 	if (! histlen) {
 	    if (! conf.history_limit || conf.history_limit_len > 0) {
 		history = malloc(sizeof(struct entry));
@@ -97,7 +103,7 @@ char * historynum (int step, int col)
 	if (col == 1)
 		return history[step].exp;
 	else {
-		char * temp;
+		static char * temp;
 		if (recalculate) {
 			history[step].ans = parseme(history[step].exp);
 			history[step].calc = 1;
@@ -128,7 +134,7 @@ static void clear_calculated (void)
 	}
 }
 
-int history_length (void)
+int historyLength (void)
 {
 	return histlen;
 }
