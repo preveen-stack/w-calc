@@ -200,13 +200,13 @@ int putexp (char * key, char * value)
 	if (cursor->key) {
 		if (cursor->expression)
 			free(cursor->expression);
-		cursor->expression = strdup(value);
+		cursor->expression = (char*)strdup(value);
 		cursor->exp = 1;
 		return 0;
 	} else {
 		contents++;
-		cursor->key = strdup(key);
-		cursor->expression = strdup(value);
+		cursor->key = (char*)strdup(key);
+		cursor->expression = (char*)strdup(value);
 		cursor->exp = 1;
 		return 0;
 	}
@@ -248,7 +248,7 @@ int putval (char * key, double value)
 		return 0;
 	} else {
 		contents++;
-		cursor->key = strdup(key);
+		cursor->key = (char*)strdup(key);
 		cursor->value = value;
 		cursor->expression = NULL;
 		cursor->exp = 0;
