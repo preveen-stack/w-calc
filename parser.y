@@ -60,7 +60,7 @@ char character;
 
 %token WBNOT WNOT WLOG WLN WROUND WABS WSQRT WCEIL WFLOOR WCBRT WLOGTWO
 %token WSIN WCOS WTAN WASIN WACOS WATAN WSINH WCOSH WTANH WASINH WACOSH WATANH
-%token WCOT WACOT WCOTH WACOTH
+%token WCOT WACOT WCOTH WACOTH WRAND WIRAND
 
 %token <number> NUMBER
 %token <variable> VAR STRING OPEN_CMD SAVE_CMD
@@ -417,6 +417,8 @@ func : WSIN { $$ = wsin; }
 | WFLOOR { $$ = wfloor; }
 | WCEIL { $$ = wceil; }
 | WCBRT { $$ = wcbrt; }
+| WRAND { $$ = wrand; }
+| WIRAND { $$ = wirand; }
 ;
 
 null : PAR REN

@@ -33,6 +33,8 @@ enum functions {wnot,
 	wsqrt,
 	wfloor,
 	wceil,
+	wrand,
+	wirand,
 	wcbrt};
 enum operations {wplus,
 	wminus,
@@ -65,6 +67,7 @@ char *print_this_result (double result);
 double uber_function (enum functions func, double input);
 double simple_exp (double first, enum operations op, double second);
 double kbw_rand ();
+int kbw_int_rand ();
 char *output_string(unsigned int);
 
 double fact (int);

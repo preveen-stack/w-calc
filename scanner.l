@@ -113,6 +113,7 @@ ACCEPTABLE	[_:]
 (e)				{ yylval.number = W_E; return(NUMBER); }
 ([pP][iI])|(¹)	{ yylval.number = W_PI; return(NUMBER); }
 random			{ yylval.number = kbw_rand(); return(NUMBER); }
+irandom			{ yylval.number = (double) kbw_int_rand(); return(NUMBER); }
 N[aA]			{ yylval.number = W_AVOGADROS_CONSTANT; return(NUMBER); }
 k				{ yylval.number = W_BOLTZMANN_CONSTANT; return(NUMBER); }
 Cc				{ yylval.number = W_COULOMB_CONSTANT; return(NUMBER); }
@@ -208,6 +209,8 @@ abs { return(WABS); }
 floor { return(WFLOOR); }
 (ceil)|(ceiling) { return(WCEIL); }
 cbrt { return(WCBRT); }
+rand { return(WRAND); }
+irand { return(WIRAND); }
 
 '.*' {
 	char * temp = strdup(yytext+1);

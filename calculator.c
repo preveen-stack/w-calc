@@ -79,7 +79,6 @@ char * flatten (char * str);
 double parseme (char * pthis)
 {
 	extern int synerrors;
-	int i;
 	short numbers = 0;
 	int len = strlen(pthis);
 	char * sanitized;
@@ -98,13 +97,17 @@ double parseme (char * pthis)
 	
 	/* Convert to standard notation if there are numbers */
 	// are there numbers?
-	for (i=0;i<strlen(sanitized);++i) {
-		if (isdigit((int)(sanitized[i]))) {
-			numbers = 1;
-			break;
+	{
+		unsigned int i;
+		for (i=0;i<strlen(sanitized);++i) {
+			if (isdigit((int)(sanitized[i]))) {
+				numbers = 1;
+				break;
+			}
 		}
 	}
 	if (numbers) {
+		unsigned int i;
 		for (i=0;i<strlen(sanitized);++i) {
 			char errmsg[1000];
 			if ((conf.thou_delimiter != '.' &&
@@ -386,7 +389,7 @@ char *print_this_result (double result)
 				}
 				/* was it as good for you as it was for me?
 				 * now, you must localize it */
-				{ int index;
+				{ unsigned int index;
 					for (index=0;index<strlen(pa);++index) {
 						if (pa[index] == '.')
 							pa[index] = conf.dec_delimiter;
@@ -563,6 +566,8 @@ double uber_function (enum functions func, double input)
 			case wsqrt:		temp = sqrt(input); break;
 			case wfloor:	temp = floor(input); break;
 			case wceil:		temp = ceil(input); break;
+			case wrand:     temp = fmod(fabs(kbw_rand()),input) * ((input>=0)?1:-1); break;
+			case wirand:    temp = (abs(kbw_int_rand()) % (int) input) * ((input>=0)?1:-1); break;
 			case wcbrt:		temp = cbrt(input); break;
 			default:		temp = input; break;
 		}
@@ -669,6 +674,30 @@ double kbw_rand (void)
 			int sizeread = read(fd,&retval,sizeof(double));
 			close(fd); // I should check a return value here - but I wouldn't do much with it :-)
 			if (sizeread != sizeof(double))
+				return seed_random && random();
+			else {
+				return retval;
+			}
+		}
+	} else {
+		return seed_random && random();
+	}
+}
+
+int kbw_int_rand (void)
+{
+	struct stat ex;
+	int fd;
+	
+	if (! stat(RAND_FILE,&ex) && ex.st_ino) { // if could stat it and it has an inode
+		fd = open(RAND_FILE, O_RDONLY);
+		if (fd < 0) { // could not open it
+			return seed_random && random();
+		} else {
+			int retval;
+			int sizeread = read(fd,&retval,sizeof(int));
+			close(fd); // I should check a return value here - but I wouldn't do much with it :-)
+			if (sizeread != sizeof(int))
 				return seed_random && random();
 			else {
 				return retval;
