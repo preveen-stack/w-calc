@@ -2301,7 +2301,7 @@
 				StatusViewVisible = NO;
 				Template = F5CA7ECB015C094F0DCA290F;
 				ToolbarVisible = NO;
-				WindowLocation = "{334, 103}";
+				WindowLocation = "{-12, 103}";
 			};
 			PBXWorkspaceContents = (
 				{

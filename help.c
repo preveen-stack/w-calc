@@ -19,7 +19,7 @@ void print_interactive_help (void)
 {
 	printf("Wcalc %s by Kyle Wheeler.\nVersion 0.1.x written in C++ for CS240C at Ohio University, Jan 14 2000\n",VERSION);
 	printf("Version 0.2.x rewritten for lex/yacc in C, Nov 25 2001\n");
-	printf( "This calculator recognized the following symbols:\n"
+	printf( "This calculator recognizes the following symbols:\n"
 		 SUPPORTED_SYMBOLS
 		 "\nThe ! is factorial or boolean, depending on use.\n"
 		 "Spaces are ignored (unknown symbols cause errors or are treated as variables)\n"
@@ -49,6 +49,8 @@ void print_interactive_help (void)
 		 "\\dsepX sets the decimal separator character to X.\n"
 		 "\\tsepX sets the thousands-place separator character to X.\n"
 		 "\\hlimitX sets the limit on the length of the history.\n"
+		 "\\openXXXXX loads a saved file\n"
+		 "\\saveXXXXX saves the history and variable list to a file\n"
 		 "\\li or \\list or \\listvars prints out the currently defined variables.\n\n"
 		 "Variables are supported and may be assigned using the = operator.\n"
 		 "To assign a variable, use the form:\n"

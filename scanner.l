@@ -57,7 +57,18 @@ ACCEPTABLE	[_:]
 \\l(enient)?            { return(PICKY_CMD); }
 \\li(st(vars)?)?        { return(LISTVAR_CMD); }
 \\o(ct(al)?)?           { return(OCT_CMD); }
-\\open[ ].*             { yylval.variable = strdup(yytext+6); return(OPEN_CMD); }
+\\open[ ].*             {
+	char * curs = yytext+5, *returnme;
+	while (curs && *curs && *curs == ' ')
+		curs++;
+	returnme = strdup(curs);
+	curs = returnme+strlen(returnme)-1;
+	while (curs && *curs && *curs == ' ') {
+		*curs = 0;
+		curs--;
+	}
+	yylval.variable = returnme;
+	return(OPEN_CMD); }
 \\p[-]?{DIGIT}+         { yylval.number = atoi(yytext+2); return(PRECISION_CMD);}
 \\p(icky)?              { return(PICKY_CMD); }
 \\pre(fix(es)?)?        { return(PREFIX_CMD); }
@@ -72,7 +83,18 @@ ACCEPTABLE	[_:]
 \\rou(nd(int)?)?        { yylval.number = -1;
 	                      return(ROUNDING_INDICATION_CMD); }
 \\re(member(_errors)?)? { return(REMEMBER_CMD); }
-\\save[ ].*             { yylval.variable = strdup(yytext+6); return(SAVE_CMD); }
+\\save.*                { 
+	char * curs = yytext+5, *returnme;
+	while (curs && *curs && *curs == ' ')
+		curs++;
+	returnme = strdup(curs);
+	curs = returnme+strlen(returnme)-1;
+	while (curs && *curs && *curs == ' ') {
+		*curs = 0;
+		curs--;
+	}
+	yylval.variable = returnme;
+	return(SAVE_CMD); }
 \\tsep.                 { yylval.character = yytext[5]; return(TSEP_CMD); }
 \\c(onv(ert)?)?{WHITESPACE}+{LETTER}+{WHITESPACE}+{LETTER}+{WHITESPACE}+{LETTER}+ {}
 \?                      { return(PRINT_HELP_CMD); }
