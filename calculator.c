@@ -97,10 +97,22 @@ char * flatten (char * str)
 	char varname[500];
 	int i, olen, nlen, changedlen;
 	struct answer a;
+	char standard_output_save = standard_output;
+
+	standard_output = 0;
+
+	curs = strchr(str,'=');
+	if (! curs || ! *curs) curs = str;
 	
 	while (curs && *curs) {
 		// search for the first letter of a possible variable
-		while (curs && *curs && ! isalpha(*curs)) curs++;
+		while (curs && *curs && ! isalpha(*curs)) {
+			if (*curs == '\'') {
+				curs++;
+				while (curs && *curs && *curs != '\'') curs++;
+			}
+			curs++;
+		}
 		if (! *curs) break;
 
 		// pull out that variable
@@ -119,9 +131,9 @@ char * flatten (char * str)
 		if (! a.err) { // it is a var
 			if (a.exp) { // it is an expression
 				double f = parseme(a.exp);
-				sprintf(varname,"%1.30f",f);
+				sprintf(varname,"%1.15f",f);
 			} else { // it is a value
-				sprintf(varname,"%1.30f",a.val);
+				sprintf(varname,"%1.15f",a.val);
 			}
 		}
 		nlen = strlen(varname);
@@ -156,6 +168,7 @@ char * flatten (char * str)
 		free(str);
 		str = nstr;
 	}
+	standard_output = standard_output_save;
 	return str;
 }
 
