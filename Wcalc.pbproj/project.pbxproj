@@ -22,6 +22,8 @@
 				F574E09E01FD122F01A80164,
 				F574E0A101FD273F01A80164,
 				F574E0A201FD273F01A80164,
+				F5EF54D202022A7001A80164,
+				F5EF54D302022A7001A80164,
 			);
 			isa = PBXGroup;
 			name = Classes;
@@ -177,7 +179,7 @@
 				F5B29D6F01F7393A01A80164,
 				F5B29D7B01F7398A01A80164,
 				089C165CFE840E0CC02AAC07,
-				F5B29D7F01F73BC301A80164,
+				F5463560020065B401A80164,
 				F5B29D8301F73C2701A80164,
 				F521994801FA927601A80164,
 			);
@@ -283,6 +285,7 @@
 				F574E09B01FD0FD701A80164,
 				F574E09F01FD122F01A80164,
 				F574E0A301FD273F01A80164,
+				F5EF54D402022A7001A80164,
 			);
 			isa = PBXHeadersBuildPhase;
 			name = Headers;
@@ -293,9 +296,9 @@
 				089C165EFE840E0CC02AAC07,
 				F5B29D7001F7393A01A80164,
 				F5B29D7D01F7398A01A80164,
-				F5B29D8001F73BC301A80164,
 				F5B29D8401F73C2701A80164,
 				F586ED3901FD41B201A80164,
+				F5463561020065B401A80164,
 			);
 			isa = PBXResourcesBuildPhase;
 			name = "Bundle Resources";
@@ -315,6 +318,7 @@
 				F574E09C01FD0FD701A80164,
 				F574E0A001FD122F01A80164,
 				F574E0A401FD273F01A80164,
+				F5EF54D502022A7001A80164,
 			);
 			isa = PBXSourcesBuildPhase;
 			name = Sources;
@@ -516,6 +520,17 @@
 			isa = PBXFileReference;
 			path = ChangeLog;
 			refType = 4;
+		};
+		F5463560020065B401A80164 = {
+			isa = PBXFileReference;
+			path = Wred.png;
+			refType = 4;
+		};
+		F5463561020065B401A80164 = {
+			fileRef = F5463560020065B401A80164;
+			isa = PBXBuildFile;
+			settings = {
+			};
 		};
 		F574E09901FD0FD701A80164 = {
 			isa = PBXFileReference;
@@ -766,18 +781,6 @@
 			settings = {
 			};
 		};
-		F5B29D7F01F73BC301A80164 = {
-			isa = PBXFileReference;
-			name = Wred.png;
-			path = /Users/kyle/Documents/Wred.png;
-			refType = 0;
-		};
-		F5B29D8001F73BC301A80164 = {
-			fileRef = F5B29D7F01F73BC301A80164;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		F5B29D8301F73C2701A80164 = {
 			isa = PBXFileReference;
 			path = w.png;
@@ -785,6 +788,28 @@
 		};
 		F5B29D8401F73C2701A80164 = {
 			fileRef = F5B29D8301F73C2701A80164;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5EF54D202022A7001A80164 = {
+			isa = PBXFileReference;
+			path = theDelegate.m;
+			refType = 4;
+		};
+		F5EF54D302022A7001A80164 = {
+			isa = PBXFileReference;
+			path = theDelegate.h;
+			refType = 4;
+		};
+		F5EF54D402022A7001A80164 = {
+			fileRef = F5EF54D302022A7001A80164;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5EF54D502022A7001A80164 = {
+			fileRef = F5EF54D202022A7001A80164;
 			isa = PBXBuildFile;
 			settings = {
 			};
