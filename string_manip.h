@@ -17,3 +17,4 @@ unsigned int count_digits(char*);
 int justnumbers(char*);
 
 #endif
+
