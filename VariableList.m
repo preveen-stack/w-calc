@@ -1,5 +1,6 @@
 #import "variables.h"
 #import "calculator.h"
+#import "string_manip.h"
 #import "VariableList.h"
 
 @implementation VariableList
@@ -19,7 +20,10 @@
 		return @"BAD ROW";
 
 	if ([[col identifier] isEqualToString:@"value"]) {
-		return [NSString localizedStringWithFormat:@"%g",(keyval->value)];
+		if (keyval->exp)
+			return [NSString stringWithCString:keyval->expression];
+		else
+			return [NSString localizedStringWithFormat:@"%g",(keyval->value)];
 	} else if ([[col identifier] isEqualToString:@"variable"]) {
 		return [NSString stringWithCString:(keyval->key)];
 	} else {
@@ -35,8 +39,15 @@
 //	printf("Column %s, Row %i was %s,%s becomes %s\n", [ch cString], rowIndex, theval->key, theval->value, [anObject cString]);
 	if ([ch isEqualToString:@"value"]) {
 		char * input=strdup([anObject cString]);
-		theval->value = parseme(input);
-		free(input);
+		if (justnumbers(input)) {
+			double la = last_answer;
+			theval->value = parseme(input);
+			theval->exp = 0;
+			last_answer = la;
+		} else {
+			theval->expression = input;
+			theval->exp = 1;
+		}
 	} else if ([ch isEqualToString:@"variable"]) {
 		int i,j;
 		free(theval->key);
@@ -56,11 +67,11 @@
 	char varname[20];
 	int i=1;
 	sprintf(varname,"NewVariable%i",i);
-	while(getvar(varname)) {
+	while(! getvar_full(varname).err) {
 		++i;
 		sprintf(varname,"NewVariable%i",i);
 	}
-	putvar(varname,0);
+	putval(varname,0);
 	[theList reloadData];
 }
 
