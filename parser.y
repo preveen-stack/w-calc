@@ -20,7 +20,7 @@
 	int lines = 1;
 	int synerrors = 0;
 	short scanerror = 0;
-	char errstring[1000] = "";
+	char * errstring = NULL;
 
 	%}
 
