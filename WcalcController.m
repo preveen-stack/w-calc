@@ -444,6 +444,7 @@ static char update_history = 0;
 			if (olde != use_commas) {
 				need_redraw = 1;
 				[prefs setObject:(use_commas?@"YES":@"NO") forKey:@"useCommas"];
+				[decimalKey setTitle:(use_commas?@",":@".")];
 			}
 				break;
 		case 9: // Flag Confusing Numbers
@@ -507,6 +508,7 @@ static char update_history = 0;
 	[useRadians setState:(use_radians?NSOnState:NSOffState)];
 	[outputFormat selectCellWithTag:output_format];
 	[printPrefixes setState:(print_prefixes?NSOnState:NSOffState)];
+	[useCommas setState:(use_commas?NSOnState:NSOffState)];
 	[strictSyntax setState:(strict_syntax?NSOnState:NSOffState)];
 	[printPrefixes setEnabled:(output_format!=DECIMAL_FORMAT)];
 	[engineeringNotation setEnabled:(output_format==DECIMAL_FORMAT)];

@@ -30,6 +30,7 @@
 	IBOutlet NSButton *updateHistory;
 	IBOutlet NSButton *useCommas;
 	IBOutlet NSButton *strictSyntax;
+	IBOutlet NSButton *decimalKey;
 
 	bool just_answered;
 	NSView *superview;
