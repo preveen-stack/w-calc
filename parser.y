@@ -373,6 +373,14 @@ assignment : VAR WEQL exp
 {
 	report_error("Constants cannot be assigned to other values.");
 }
+| func WEQL STRING
+{
+	report_error("Functions cannot be assigned to values.");
+}
+| func WEQL exp
+{
+	report_error("Functions cannot be assigned to values.");
+}
 ;
 
 exp : exp WMINUS exp { $$ = simple_exp($1, wminus, $3); }
