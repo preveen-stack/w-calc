@@ -6,34 +6,41 @@
 {
     IBOutlet NSMenuItem *affectDrawerMenu;
     IBOutlet NSMenuItem *affectKeyboardMenu;
-    IBOutlet id AnswerField;
+	IBOutlet NSMenuItem *baseMenu;
+	
+	IBOutlet NSWindow *mainWindow;
+	
     IBOutlet NSButton *capsLockKey;
-    IBOutlet id errorController;
-    IBOutlet NSTextField *ExpressionField;
-    IBOutlet id historyList;
-    IBOutlet id PrecisionSlider;
     IBOutlet NSButton *shiftKey1;
     IBOutlet NSButton *shiftKey2;
-    IBOutlet NSDrawer *theDrawer;
-    IBOutlet id theKeyboard;
-    IBOutlet id variableList;
-	IBOutlet NSWindow *mainWindow;
-	IBOutlet id keypad;
 	IBOutlet NSButton *engineeringNotation;
 	IBOutlet NSButton *historyDuplicates;
 	IBOutlet NSButton *pickyVariables;
 	IBOutlet NSButton *printPrefixes;
 	IBOutlet NSButton *useRadians;
-	IBOutlet NSMatrix *outputFormat;
-	IBOutlet NSPanel *thePrefPanel;
 	IBOutlet NSButton *updateHistory;
-	IBOutlet NSButton *useCommas;
 	IBOutlet NSButton *strictSyntax;
 	IBOutlet NSButton *decimalKey;
 	IBOutlet NSButton *rememberErrors;
+	
+    IBOutlet NSTextField *AnswerField;
+    IBOutlet NSTextField *ExpressionField;
+	
+    IBOutlet NSDrawer *theDrawer;
 	IBOutlet NSDrawer *baseDrawer;
-	IBOutlet NSMenuItem *baseMenu;
+	
+	IBOutlet NSMatrix *outputFormat;
 	IBOutlet NSMatrix *outputFormat2;
+	
+    IBOutlet id errorController;
+    IBOutlet id historyList;
+    IBOutlet id PrecisionSlider;
+    IBOutlet id theKeyboard;
+    IBOutlet id variableList;
+	IBOutlet id keypad;
+	
+	IBOutlet NSPanel *thePrefPanel;
+	
 	IBOutlet NSPopUpButton *roundingIndication;
 
 	bool just_answered;
