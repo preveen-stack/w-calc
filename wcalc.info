@@ -18,7 +18,8 @@ output, unit conversions, embedded comments, and the ability to save history to
 a file and load it from a file. Wcalc evaluates expressions using the standard
 order of operations.
 
-Wcalc uses intuitive expressions. For example, Wcalc will evaluate 5sin4!-7*2(4%6)^2 to be -221.96631678.
+Wcalc uses intuitive expressions. For example, Wcalc will evaluate
+5sin4!-7*2(4%6)^2 to be -221.96631678.
 <<
 License: GPL
 Homepage: http://w-calc.sourceforge.net/
