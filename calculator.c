@@ -389,15 +389,7 @@ int find_recursion (struct variable_list *vstack)
 			return 0;
 		}
 	} else { // it is not a variable
-		if (conf.picky_variables) {
-			char * error = malloc(sizeof(char)*(strlen(vstack->varname)+45));
-			sprintf(error,"%s does not exist or was not properly parsed.",vstack->varname);
-			report_error(error);
-			free(error);
-			return -1;
-		} else {
-			return 0;
-		}
+		return 0;
 	}
 }
 
