@@ -194,6 +194,7 @@ static char update_history = 0;
 		[prefs setObject:@"NO" forKey:@"useCommas"];
 		[prefs setObject:@"YES" forKey:@"strictSyntax"];
 		[prefs setObject:@"0" forKey:@"roundingIndication"];
+		[prefs setObject:@"NO" forKey:@"historyShowing"];
 	}
 	conf.precision = [prefs integerForKey:@"precision"];
 	conf.engineering = [prefs boolForKey:@"engineeringNotation"];
@@ -234,8 +235,18 @@ static char update_history = 0;
 		bounds.height = 1200;
 		[mainWindow setMaxSize:bounds];
 	}
-	w = [mainWindow frame];
-	bounds = [mainWindow minSize];
+//	w = [mainWindow frame];
+//	bounds = [mainWindow minSize];
+
+	/* suggested by cocoa-dev */
+	if ([prefs boolForKey:@"historyShowing"]) {
+		[NSTimer scheduledTimerWithTimeInterval:0 target:self selector:@selector(performOpen:) userInfo:nil repeats:NO];
+	}
+}
+
+- (void)performOpen: (id) sender
+{
+	[theDrawer open];
 }
 
 - (IBAction)setPrecision:(id)sender
@@ -370,11 +381,14 @@ static char update_history = 0;
 
 - (IBAction)showInspectorDrawer:(id)sender
 {
+	NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
 	if (! [theDrawer state]) {
 		[theDrawer open];
+		[prefs setObject:@"YES" forKey:@"historyShowing"];
 		[affectDrawerMenu setTitle:@"Hide Inspector Drawer"];
 	} else {
 		[theDrawer close];
+		[prefs setObject:@"NO" forKey:@"historyShowing"];
 		[affectDrawerMenu setTitle:@"Show Inspector Drawer"];
 	}
 }
