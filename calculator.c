@@ -138,6 +138,7 @@ double parseme (char * pthis)
 	
 	/* now resolve the variables */
 	sanitized = flatten(sanitized);
+	Dprintf("flattened: '%s'\n",sanitized);
 	
 	/* Sanitize the input (add a newline) */
 	{
@@ -160,13 +161,17 @@ double parseme (char * pthis)
 		* http://www.bgw.org/tutorials/programming/c/lex_yacc/main.c
 		* and are here strictly for readline suppport
 		*/
+	Dprintf("scanning string\n");
 	yy_scan_string(sanitized);
+	Dprintf("yyparse\n");
 	yyparse();
+	Dprintf("done yyparse\n");
 
 	if (open_file) {
 		char * filename = open_file;
 		int retval;
 		open_file = NULL;
+		Dprintf("open_file\n");
 		retval = loadState(filename);
 		if (retval) {
 			report_error("Could not load file.");
@@ -213,7 +218,7 @@ static struct variable_list * extract_vars (char * str)
 
 		// if we did find something, pull out the variable name
 		eov = curs;
-		while (eov && *eov && (isalpha((int)(*eov)) || *eov == '_' || *eov == ':')) {
+		while (eov && *eov && (isalpha((int)(*eov)) || *eov == '_' || *eov == ':' || isdigit((int)(*eov)))) {
 			eov++;
 		}
 		save_char = *eov;
@@ -267,7 +272,7 @@ static char * flatten (char * str)
 		// pull out that variable
 		eov = curs;
 		i = 0;
-		while (eov && *eov && (isalpha((int)(*eov)) || *eov == '_' || *eov == ':')) {
+		while (eov && *eov && (isalpha((int)(*eov)) || *eov == '_' || *eov == ':' || isdigit((int)(*eov)))) {
 			varname[i++] = *eov;
 			eov++;
 		}
@@ -288,7 +293,10 @@ static char * flatten (char * str)
 		nlen = strlen(varname);
 
 		// now, put it back in the string
-		changedlen = strlen(str) + nlen - olen + 1 + 2; // make sure there's space for parenthesis
+		// it is a var, and needs parenthesis
+		changedlen = strlen(str) + nlen - olen + 1;
+		if (! a.err) changedlen += 2; // space for parens if it's a variable
+		
 		nstr = malloc(changedlen);
 		if (!nstr) { // not enough memory
 			perror("flatten: ");
@@ -304,16 +312,20 @@ static char * flatten (char * str)
 				++fromstring;
 				++tostring;
 			}
-			*tostring = '(';
-			++tostring;
+			if (! a.err) {
+				*tostring = '(';
+				++tostring;
+			}
 			fromstring = varname;
 			while (fromstring && *fromstring) {
 				*tostring = *fromstring;
 				++fromstring;
 				++tostring;
 			}
-			*tostring = ')';
-			++tostring;
+			if (! a.err) {
+				*tostring = ')';
+				++tostring;
+			}
 			curs = tostring;
 			fromstring = eov;
 			while (fromstring && *fromstring) {
@@ -416,16 +428,29 @@ void report_error (char * err)
 }
 
 void print_result (void) {
-	char * temp;
+	Dprintf("print_result\n");
 	if ((! stack) || (stacklast < 0)) return;
+	Dprintf(" stack or stacklast < 0\n");
 
 	last_answer = stack[stacklast];
 	stacklast --;
 
-	if (pretty_answer) free(pretty_answer);
-	temp = print_this_result(last_answer);
-	if (temp) pretty_answer = (char*)strdup(temp);
-	else pretty_answer = NULL;
+	set_prettyanswer(last_answer);
+}
+
+void set_prettyanswer(double num)
+{
+	char * temp;
+	
+	if (pretty_answer) {
+		free(pretty_answer);
+	}
+	temp = print_this_result(num);
+	if (temp) {
+		pretty_answer = (char *) strdup(temp);
+	} else {
+		pretty_answer = NULL;
+	}
 }
 
 char *print_this_result (double result)
@@ -615,7 +640,9 @@ char *print_this_result (double result)
 		} // switch
 	} // if
 
+	Dprintf("standard_output? -> ");
 	if (standard_output) {
+		Dprintf("yes\n");
 		if (errstring && strlen(errstring)) {
                     extern int scanerror;
 			fprintf(stderr,"%s\n",errstring);
@@ -625,6 +652,7 @@ char *print_this_result (double result)
 		}
 		printf("%s%s\n",conf.print_equal?(not_all_displayed?" ~= ":" = "):(not_all_displayed?"~":""),pa);
 	}
+	Dprintf("no\n");
 
 	return pa;
 	
@@ -657,6 +685,9 @@ double simple_exp (double first, enum operations op, double second)
 			default:		temp = 0.0; break;
 		}
 		if (conf.precision_guard && fabs(modf(temp,&trash)) <= DBL_EPSILON) {
+			if (fabs(trash) == 0.0) {
+				return 0.0;
+			}
 			return trash;
 		}
 		return temp;
