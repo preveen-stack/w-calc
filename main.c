@@ -113,25 +113,9 @@ int main (int argc, char *argv[])
 				add_history(readme);
 				if (!strcmp(readme,"q") || !strcmp(readme,"quit") || !strcmp(readme,"\\q")) {
 					break;
-				} else if (!strncmp(readme,"\\p",2)) {
-					precision = atoi(readme+2);
-					printf("Precision = %i\n",precision);
-				} else if (! strncmp(readme,"\\e",2)) {
-					engineering = readme[2]?atoi(readme+2)>0:!engineering;
-					printf("Engineering notation is %s %s\n",engineering?"enabled":"disabled", precision?"":"if the precision is set to a nonzero value");
 				} else if (!strncmp(readme,"\\yydebug",8)) {
 					yydebug = ! yydebug;
 					printf("Debug Mode %s\n",yydebug?"On":"Off");
-				} else if (!strncmp(readme,"\\radians",8)) {
-					use_radians = ! use_radians;
-					printf("%sUsing Radians\n",use_radians?"":"Not ");
-				} else if (!strncmp(readme,"\\lenient",7)) {
-					picky_variables = ! picky_variables;
-					if (! picky_variables) {
-						printf("Unknown variables are assumed to be zero.\n");
-					} else {
-						printf("Strict variable parsing.\n");
-					}
 				} else if (!strncmp(readme,"?",1) || !strncmp(readme,"help",4)) {
 					print_interactive_help();
 				} else {
