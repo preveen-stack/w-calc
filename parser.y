@@ -17,6 +17,7 @@ char *strchr (), *strrchr ();
 #include <unistd.h> /* for isatty() */
 #include "calculator.h"
 #include "variables.h"
+#include "help.h"
 
 	/* Based on the headstart code by Shawn Ostermann
 	* modified by Kyle Wheeler
@@ -44,8 +45,9 @@ char * variable;
 char character;
 }
 
-%token DEC_CMD OCT_CMD HEX_CMD BIN_CMD GUARD_CMD
+%token DEC_CMD OCT_CMD HEX_CMD BIN_CMD GUARD_CMD DISPLAY_PREFS_CMD
 %token RADIAN_CMD PICKY_CMD STRICT_CMD REMEMBER_CMD LISTVAR_CMD
+%token PRINT_HELP_CMD
 %token <number> PRECISION_CMD ENG_CMD HLIMIT_CMD
 
 %token EOLN PAR REN WBRA WKET WSBRA WSKET WPIPE
@@ -179,6 +181,26 @@ command : HEX_CMD {
 		else
 			printf("Strict variable parsing.\n");
 	}}
+| DISPLAY_PREFS_CMD {
+	$$ = nothing;
+	if (standard_output) {
+		printf("                Precision: %i\n",conf.precision);
+		printf("       Engineering Output: %s\n",conf.engineering?"yes":"no");
+		printf("            Output Format: %s\n",output_string(conf.output_format));
+		printf("Flag Undeclared Variables: %s\n",conf.picky_variables?"yes":"no");
+		printf("            Strict Syntax: %s\n",conf.strict_syntax?"yes":"no");
+		printf("              Use Radians: %s\n",conf.use_radians?"yes":"no");
+		printf("           Print Prefixes: %s\n",conf.print_prefixes?"yes":"no");
+		printf("      Rounding Indication: %s\n",conf.rounding_indication?"yes":"no");
+		printf("   Save Errors in History: %s\n",conf.remember_errors?"yes":"no");
+		printf("      Thousands Delimiter: %c\n",conf.thou_delimiter);
+		printf("        Decimal Delimiter: %c\n",conf.dec_delimiter);
+		printf("          Precision Guard: %s\n",conf.precision_guard?"yes":"no");
+		printf("            History Limit: %s\n",conf.history_limit?"yes":"no");
+		if (conf.history_limit)
+			printf("       History Limited To: %i\n",conf.history_limit_len);
+	}
+}
 | RADIAN_CMD {
 	$$ = nothing;
 	conf.use_radians = ! conf.use_radians;
@@ -240,6 +262,12 @@ command : HEX_CMD {
 	conf.remember_errors = ! conf.remember_errors;
 	if (standard_output)
 		printf("Statements that produce errors are %s.\n",conf.remember_errors?"recorded":"forgotten");
+}
+| PRINT_HELP_CMD {
+	$$ = nothing;
+	if (standard_output) {
+		print_interactive_help();
+	}
 }
 ;
 

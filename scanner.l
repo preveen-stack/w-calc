@@ -57,14 +57,21 @@ ACCEPTABLE	[_:]
 \\o(ct(al)?)?           { return(OCT_CMD); }
 \\p({DIGIT}|[-])+       { yylval.number = atoi(yytext+2); return(PRECISION_CMD);}
 \\p(icky)?              { return(PICKY_CMD); }
+\\pr(ef(s|erences))?    { return(DISPLAY_PREFS_CMD); }
 \\r(ad(ians)?)?         { return(RADIAN_CMD); }
 \\re(member(_errors)?)? { return(REMEMBER_CMD); }
 \\s(tr(ict)?)?          { return(STRICT_CMD); }
 \\tsep.                 { yylval.character = yytext[5]; return(TSEP_CMD); }
 \\c(onv(ert)?)?{WHITESPACE}+{LETTER}+{WHITESPACE}+{LETTER}+{WHITESPACE}+{LETTER}+ {}
+\?                      { return(PRINT_HELP_CMD); }
+[Hh][Ee][Ll][Pp]        { return(PRINT_HELP_CMD); }
+
+%{ /* These are comments */
+%}
 \/\*.*\*\/              { }
 \/\/.*                  { }
 \#.*                    { }
+
 
 %{ /* These are the constants (except random) */
 	%}
