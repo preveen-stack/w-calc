@@ -1,0 +1,78 @@
+{
+    IBClasses = (
+        {
+            ACTIONS = {closeIt = id; openIt = id; }; 
+            CLASS = AboutBoxController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {aboutBox = NSWindow; }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            ACTIONS = {closeAlert = id; showAlert = id; }; 
+            CLASS = ErrorController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {errorDialog = id; errorMessage = id; }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {rowSelected = id; }; 
+            CLASS = HistoryList; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {expressionField = NSTextField; theList = NSTableView; }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {CLASS = Interpreter; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {setPrefs = id; showPrefs = id; }; 
+            CLASS = PrefsController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                answerField = NSTextField; 
+                engineeringNotation = NSButton; 
+                expressionField = NSTextField; 
+                historyDuplicates = NSButton; 
+                pickyVariables = NSButton; 
+                thePrefPanel = NSPanel; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            ACTIONS = {delVariable = id; newVariable = id; }; 
+            CLASS = VariableList; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {theList = NSTableView; }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            ACTIONS = {
+                clear = id; 
+                enterData = id; 
+                go = id; 
+                initialize = id; 
+                setPrecision = id; 
+                showInspectorDrawer = id; 
+                showKeyboardDrawer = id; 
+            }; 
+            CLASS = WcalcController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                AnswerField = id; 
+                ExpressionField = NSTextField; 
+                PrecisionSlider = id; 
+                affectDrawerMenu = NSMenuItem; 
+                affectKeyboardMenu = NSMenuItem; 
+                capsLockKey = NSButton; 
+                errorController = id; 
+                historyList = id; 
+                shiftKey1 = NSButton; 
+                shiftKey2 = NSButton; 
+                theDrawer = NSDrawer; 
+                theKeyboard = id; 
+                variableList = id; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }
+    ); 
+    IBVersion = 1; 
+}

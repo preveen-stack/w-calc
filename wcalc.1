@@ -1,0 +1,42 @@
+.TH wcalc 1
+.SH NAME
+wcalc - a natural-expression command-line calculator
+.SH SYNOPSIS
+.B wcalc
+[-h|--help] [-E] [-P#] [-M#] [-v|--version]
+.SH DESCRIPTION
+wcalc is a command-line calculator designed to accept all valid mathematical
+expressions. It supports all standard mathematical operations, parenthesis,
+brackets, trigonometric functions, hyperbolic trig functions, logs, and
+boolean operators.
+.br
+If no mathematical expression is given at the commandline, wcalc enters
+"interactive" mode. Interactive mode has more features and accepts
+expressions with spaces. Also, files may be piped to wcalc, and they will be
+interpreted.
+.SS OPTIONS
+.TP
+.I "\-h \-\-help"
+Either one prints a help usage message to standard output, then exits.
+.TP
+.I "\-E"
+Specifies that numerical output should be in scientific notation.
+.TP
+.I "\-P"
+Followed by an integer, it sets the precision.
+.br
+Precision is set to autoadjust (-1) by default.
+.br
+Example: wcalc -P6
+.TP
+.I "\-v \-\-version"
+Either one prints the version number and exits.
+.SH COPYRIGHT
+wcalc is Copyright (C) 2000 Kyle Wheeler.
+.br
+It is freely distributed, and can be modified and used freely for any purpose,
+as long as a copy of the modification is sent to Kyle Wheeler at memoryhole@cheerful.com.
+.SH SUGGESTIONS AND BUG REPORTS
+Any bugs found should be reported to
+.br
+Kyle Wheeler at memoryhole@mac.com.
