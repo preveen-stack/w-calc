@@ -1,3 +1,7 @@
+Mar 07 2002 - Kyle Wheeler
+ - Added cube root (cbrt) (BOTH)
+ - Added rounding indicator (GUI)
+ - Added square function (BOTH)
 Mar 04 2002 - Kyle Wheeler
  - Added a base-drawer (GUI)
 Mar 02 2002 - Kyle Wheeler
