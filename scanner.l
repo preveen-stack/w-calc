@@ -111,7 +111,7 @@ re				{ yylval.number = W_ELECTRON_RADIUS; return(NUMBER); }
 [/]|[Ö]					{ return(WDIV); }
 [%]						{ return(WMOD); }
 [=]						{ return(WEQL); }
-\^						{ return(WEXP); }
+(\^)|([*][*])			{ return(WEXP); }
 (\|\|)|(or)				{ return(WOR); }
 (\&\&)|(and)			{ return(WAND); }
 (\=\=)|(equals)|(eq)	{ return(WEQUAL); }
