@@ -10,6 +10,8 @@ CFLAGS = -Wall -Werror ${OPT} -L/usr/lib -I/usr/include -DSOLARIS
 CC = gcc
 #YACC = yacc
 YACC = bison -b y
+PREFIX = /usr/local/bin
+MANPREFIX = /usr/share
 
 LFLAGS = -ll -lm
 
@@ -77,8 +79,8 @@ clean:
 	/bin/rm -f *.o lex.yy.c y.tab.c ${PROGRAM} parser.h y.output y.tab.h core parser.tab.c
 
 install: ${PROGRAM} ${PROGRAM:%=%.1}
-	install ${PROGRAM} /usr/local/bin/${PROGRAM}
-	install ${PROGRAM:%=%.1} /usr/share/man/man1/${PROGRAM:%=%.1}
+	install ${PROGRAM} ${PREFIX}/bin/${PROGRAM}
+	install ${PROGRAM:%=%.1} ${MANPREFIX}/man/man1/${PROGRAM:%=%.1}
 
 uninstall:
-	rm -f /usr/local/bin/${PROGRAM} /usr/share/man/man1/${PROGRAM:%=%.1}
+	rm -f ${PREFIX}/bin/${PROGRAM} ${MANPREFIX}/man/man1/${PROGRAM:%=%.1}
