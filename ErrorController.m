@@ -22,5 +22,6 @@
 	[errorMessage insertText:message];
 	[errorMessage insertText:[NSString stringWithCString:"\n"]];
 	[errorMessage setEditable:false];
+	NSBeep();
 }
 @end
