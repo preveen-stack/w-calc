@@ -141,6 +141,14 @@ int main (int argc, char *argv[])
 					parseme(readme);
 				}
 				putvar("a",last_answer);
+
+				{ extern char * errstring;
+				if (errstring && strlen(errstring)) {
+					fprintf(stderr,"%s",errstring);
+					free(errstring);
+					errstring=NULL;
+				}
+				}
 			}
 			free(readme);
 		}
