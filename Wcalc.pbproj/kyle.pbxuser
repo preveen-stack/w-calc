@@ -2,7 +2,7 @@
 {
 	29B97313FDCFA39411CA2CEA = {
 		activeBuildStyle = 4A9504CDFFE6A4B311CA0CBA;
-		activeTarget = 29B97326FDCFA39411CA2CEA;
+		activeTarget = F521993401F8D28701A80164;
 		addToTargets = (
 			29B97326FDCFA39411CA2CEA,
 		);
@@ -159,6 +159,11 @@
 			sepNavWindowFrame = "{{11, 366}, {750, 502}}";
 		};
 	};
+	F5B29D6501F7391601A80164 = {
+		uiCtxt = {
+			sepNavWindowFrame = "{{426, 428}, {1123, 683}}";
+		};
+	};
 	F5B29D6601F7391601A80164 = {
 		uiCtxt = {
 			sepNavWindowFrame = "{{383, 335}, {750, 502}}";
@@ -174,6 +179,11 @@
 			sepNavWindowFrame = "{{244, 609}, {750, 502}}";
 		};
 	};
+	F5B29D6D01F7393A01A80164 = {
+		uiCtxt = {
+			sepNavWindowFrame = "{{61, 629}, {750, 502}}";
+		};
+	};
 	F5B29D6E01F7393A01A80164 = {
 		uiCtxt = {
 			sepNavWindowFrame = "{{15, 671}, {750, 502}}";
@@ -187,6 +197,11 @@
 	F5B29D7401F7394501A80164 = {
 		uiCtxt = {
 			sepNavWindowFrame = "{{37, 546}, {750, 502}}";
+		};
+	};
+	F5B29D7701F7395001A80164 = {
+		uiCtxt = {
+			sepNavWindowFrame = "{{38, 650}, {750, 502}}";
 		};
 	};
 	F5B29D7801F7395001A80164 = {

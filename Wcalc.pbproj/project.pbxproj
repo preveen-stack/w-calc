@@ -247,7 +247,7 @@
 	<key>CFBundleExecutable</key>
 	<string>Wcalc</string>
 	<key>CFBundleGetInfoString</key>
-	<string>Wcalc Version 0.3</string>
+	<string>Wcalc Version 1.1.1</string>
 	<key>CFBundleIconFile</key>
 	<string>TheW</string>
 	<key>CFBundleIdentifier</key>
@@ -259,11 +259,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>Version 0.3</string>
+	<string>Wcalc 1.1.1</string>
 	<key>CFBundleSignature</key>
 	<string>Wcal</string>
 	<key>CFBundleVersion</key>
-	<string>0.3</string>
+	<string>1.1.1</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
