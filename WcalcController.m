@@ -595,6 +595,8 @@ NSTextField *ef;
 		case 13: // History length limit toggle
 		    olde = conf.history_limit;
 		    conf.history_limit = ([sender state]==NSOnState);
+		    [limitHistoryLen setEnabled:conf.history_limit];
+		    [limitHistoryLenTag setEnabled:conf.history_limit];
 		    if (olde != conf.history_limit) {
 			[prefs setObject:(conf.history_limit?@"YES":@"NO") forKey:@"historyLimit"];
 		    }

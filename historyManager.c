@@ -40,6 +40,7 @@ void clearHistory()
 void addToHistory(char * expression, double answer)
 {
 	if (! histlen) {
+	    if (! conf.history_limit || conf.history_limit_len > 0) {
 		history = malloc(sizeof(struct entry));
 		if (! history) return;
 		history->exp = strdup(expression);
@@ -49,9 +50,11 @@ void addToHistory(char * expression, double answer)
 			return;
 		}
 		histlen = 1;
+	    }
 	} else {
 		// eliminate duplicates
 		if (allow_duplicates || strcmp(history[histlen-1].exp,expression)) {
+		    if (! conf.history_limit || histlen < conf.history_limit_len) {
 			struct entry *temp = realloc(history, sizeof(struct entry) * (histlen+1));
 			if (! temp) {
 				// if it couldn't be realloced, try malloc and memcpy
@@ -61,10 +64,27 @@ void addToHistory(char * expression, double answer)
 				free(history);
 			}
 			history = temp;
-			history[histlen].exp = strdup(expression);
+			if (expression)
+			    history[histlen].exp = strdup(expression);
+			else
+			    history[histlen].exp = NULL;
 			history[histlen].ans = answer;
 			if (! temp[histlen].exp) return;
 			++histlen;
+		    } else {
+			int i;
+			if (history[0].exp)
+			    free(history[0].exp);
+			for (i=0;i<histlen-1;++i) {
+			    history[i] = history[i+1];
+			}
+			if (expression)
+			    history[histlen-1].exp = strdup(expression);
+			else
+			    history[histlen-1].exp = NULL;
+			history[histlen-1].ans = answer;
+			return;
+		    }
 		}
 	}
 }
