@@ -428,7 +428,7 @@ char *print_this_result (double result)
 			errstring = NULL;
                         scanerror = 0;
 		}
-		printf("%s%s\n",conf.print_equal?" = ":"",pa);
+		printf("%s%s\n",conf.print_equal?(not_all_displayed?" ~= ":" = "):(not_all_displayed?"~":""),pa);
 	}
 
 	return pa;
@@ -477,10 +477,10 @@ double uber_function (enum functions func, double input)
 			case wcos:		temp = cos(conf.use_radians?input:(input*W_PI/180)); break;
 			case wtan:		temp = tan(conf.use_radians?input:(input*W_PI/180)); break;
 			case wcot:      temp = 1.0/tan(conf.use_radians?input:(input*W_PI/180)); break;
-			case wasin:		temp = asin(conf.use_radians?input:(input*W_PI/180)); break;
-			case wacos:		temp = acos(conf.use_radians?input:(input*W_PI/180)); break;
-			case watan:		temp = atan(conf.use_radians?input:(input*W_PI/180)); break;
-			case wacot:     temp = atan(conf.use_radians?(1/input):(1/(input*W_PI/180)));
+			case wasin:		temp = asin(input)*(conf.use_radians?1:(180/W_PI)); break;
+			case wacos:		temp = acos(input)*(conf.use_radians?1:(180/W_PI)); break;
+			case watan:		temp = atan(input)*(conf.use_radians?1:(180/W_PI)); break;
+			case wacot:     temp = atan(1/input)*(conf.use_radians?1:(180/W_PI)); break;
 			case wsinh:		temp = sinh(input); break;
 			case wcosh:		temp = cosh(input); break;
 			case wtanh:		temp = tanh(input); break;
