@@ -21,7 +21,6 @@
 	int synerrors = 0;
 	short scanerror = 0;
 	char errstring[1000] = "";
-	short clamped = 0;
 
 	%}
 
@@ -69,18 +68,14 @@ lines : oneline
 oneline : exp
 {
 	if (scanerror) {
-		scanerror = synerrors = clamped = 0;
+		scanerror = synerrors = 0;
 		report_error("Error in scanner halts parser.");
 	} else {
 		push_value($1);
 		if (! synerrors) {
-			if (clamped) {
-				report_error("Value rounded, possibly inaccurate.");
-				clamped = 0;
-			}
 			print_result();
 		} else {
-			synerrors = clamped = 0;
+			synerrors = 0;
 			report_error("Too many errors.");
 		}
 	}
@@ -92,13 +87,9 @@ eoln
 	output_format = $1;
 	push_value(last_answer);
 	if (! synerrors) {
-		if (clamped) {
-			report_error("Value rounded, probably inaccurate");
-			clamped = 0;
-		}
 		print_result();
 	} else {
-		synerrors = clamped = 0;
+		synerrors = 0;
 		report_error("Too many errors.");
 	}
 }

@@ -10,7 +10,7 @@
 #ifndef WCALC_DEFINITIONS
 #define WCALC_DEFINITIONS
 
-#define VERSION "1.4.3"
+#define VERSION "1.4.4"
 
 #define W_EXTRA 5
 #define RAND_FILE "/dev/random"

@@ -1,3 +1,6 @@
+--- Version 1.4.4 ---
+Feb 27 2002 - Kyle Wheeler
+ - Fixed clamping errors
 --- Version 1.4.3 ---
 Feb 26 2002 - Kyle Wheeler
  - Added a preference to output numbers with a comma (BOTH)

@@ -34,14 +34,15 @@
 						SplitCount = 1;
 						Tab0 = {
 							Debugger = {
+								ActiveTab = 1;
 								Frame = "{{0, 0}, {960, 263}}";
 								Split0 = {
-									Frame = "{{0, 24}, {960, 239}}";
+									Frame = "{{0, 90}, {960, 173}}";
 									Split0 = {
-										Frame = "{{0, 0}, {471, 239}}";
+										Frame = "{{0, 0}, {471, 173}}";
 									};
 									Split1 = {
-										Frame = "{{480, 0}, {480, 239}}";
+										Frame = "{{480, 0}, {480, 173}}";
 									};
 									SplitCount = 2;
 								};

@@ -275,9 +275,8 @@ static char update_history = 0;
 		[errorController throwAlert:[NSString stringWithCString:errstring]];
 		free(errstring);
 		errstring = NULL;
-	} else {
-		[AnswerField setStringValue:[NSString stringWithFormat:@"%s",pretty_answer]];
 	}
+	[AnswerField setStringValue:[NSString stringWithFormat:@"%s",pretty_answer]];
 	// if the drawer is open, refresh the data.
 	// make sure the menu is correct for the state of the drawer
 	if (! [theDrawer state]) {

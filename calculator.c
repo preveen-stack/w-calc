@@ -205,7 +205,6 @@ double simple_exp (double first, enum operations op, double second)
 {
 	if (compute) {
 		double trash, temp;
-		extern short clamped;
 		switch (op) {
 			case wor:		temp = (first || second); break;
 			case wand:		temp = (first && second); break;
@@ -224,7 +223,6 @@ double simple_exp (double first, enum operations op, double second)
 			default:		temp = 0.0; break;
 		}
 		if (fabs(modf(temp,&trash)) <= DBL_EPSILON) {
-			if (modf(temp,&trash)) clamped = 1;
 			return trash;
 		}
 		return temp;
@@ -237,7 +235,6 @@ double uber_function (enum functions func, double input)
 {
 	if (compute) {
 		double temp, trash;
-		extern short clamped;
 		switch (func) {
 			case wsin:		temp = sin(use_radians?input:(input*W_PI/180)); break;
 			case wcos:		temp = cos(use_radians?input:(input*W_PI/180)); break;
@@ -260,7 +257,6 @@ double uber_function (enum functions func, double input)
 			default:		temp = input; break;
 		}
 		if (fabs(modf(temp, &trash)) <= DBL_EPSILON) {
-			if (modf(temp,&trash)) clamped = 1;
 			return trash;
 		}
 		return temp;

@@ -7,7 +7,7 @@
 
 \f0\fs28 \cf0 Hello!\
 \
-This is Wcalc 1.4.3!\
+This is Wcalc 1.4.4!\
 \
 1. What's New\
 2. Intro\
@@ -21,6 +21,15 @@ This is Wcalc 1.4.3!\
 * What's New *\
 **************
 \f0\b0 \
+\
+There was a really terrible bug in my clamp-warning code. It's fixed.\
+\
+Quick story:\
+Basically, I wanted to tell people when I threw away extra digits that were smaller than the calculator could handle. Unfortunately this is preposterous. So there were "value rounded, possibly inaccurate" messages all over the place.\
+\
+I really need to have a regiment of tests for this thing...\
+\
+Anyway - Here's the stuff from 1.4.3:\
 \
 This version I fixed some stuff I'm astonished that I (and nobody else) found earlier:\
 \
