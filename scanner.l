@@ -19,6 +19,14 @@
 #include "string_manip.h"
 
 	extern short scanerror;
+
+#ifdef REENTRANT_PARSER
+	/* Re-entrant */
+#define YY_DECL int yylex (YYSTYPE *yylval)
+#define YYLVALAC yylval
+#else
+#define YYLVALAC (&yylval)
+#endif
 	
 /* Everything up to the funny characters on the next line */
 /* goes directly into the lex.yy.c file */
@@ -29,7 +37,7 @@ DIGIT		[0123456789]
 NDIGIT		[123456789]
 LETTER		[a-zA-Z]
 WHITESPACE	[ \t]
-ACCEPTABLE	[_:]
+ACCEPTABLE	[_:0-9]
 
 /* The rest of this after the '%%' is lex rules */
 %%
@@ -43,16 +51,16 @@ ACCEPTABLE	[_:]
 
 \\b(in(ary)?)?			{ return(BIN_CMD); }
 \\d(ec(imal)?)?			{ return(DEC_CMD); }
-\\dsep.                 { yylval.character = yytext[5]; return(DSEP_CMD); }
+\\dsep.                 { YYLVALAC->character = yytext[5]; return(DSEP_CMD); }
 \\e(ng(ineering)?)?{DIGIT}*		{ char * foo = yytext;
 	while (*foo && ! isdigit((int)(*foo))) ++foo;
-	if (*foo != 0) yylval.number = atoi(foo);
-	else yylval.number = -1;
+	if (*foo != 0) YYLVALAC->number = atoi(foo);
+	else YYLVALAC->number = -1;
 	return(ENG_CMD);}
 \\cons(ervative)?       { return(GUARD_CMD); }
 \\h(ex(adecimal)?)?     { return(HEX_CMD); }
 \\help                  { return(PRINT_HELP_CMD); }
-\\hlimit{DIGIT}+        { yylval.number = atoi(yytext+7); return(HLIMIT_CMD); }
+\\hlimit{DIGIT}+        { YYLVALAC->number = atoi(yytext+7); return(HLIMIT_CMD); }
 \\ints?                 { return(INT_CMD); }
 \\x                     { return(HEX_CMD); }
 \\l(enient)?            { return(PICKY_CMD); }
@@ -60,6 +68,7 @@ ACCEPTABLE	[_:]
 \\o(ct(al)?)?           { return(OCT_CMD); }
 \\open[ ].*             {
 	char * curs = yytext+5, *returnme;
+	Dprintf("open\n");
 	while (curs && *curs && *curs == ' ')
 		curs++;
 	returnme = strdup(curs);
@@ -68,23 +77,24 @@ ACCEPTABLE	[_:]
 		*curs = 0;
 		curs--;
 	}
-	yylval.variable = returnme;
+	YYLVALAC->variable = returnme;
+	Dprintf("filename: %s\n",returnme);
 	return(OPEN_CMD); }
-\\p[-]?{DIGIT}+         { yylval.number = atoi(yytext+2); return(PRECISION_CMD);}
+\\p[-]?{DIGIT}+         { YYLVALAC->number = atoi(yytext+2); return(PRECISION_CMD);}
 \\p(icky)?              { return(PICKY_CMD); }
 \\pre(fix(es)?)?        { return(PREFIX_CMD); }
 \\pref(s|erences)?      { return(DISPLAY_PREFS_CMD); }
 \\r(ad(ians)?)?         { return(RADIAN_CMD); }
-\\rou(nd(ing)?)?{WHITESPACE}+no(ne)? { yylval.number = NO_ROUNDING_INDICATION;
+\\rou(nd(ing)?)?{WHITESPACE}+no(ne)? { YYLVALAC->number = NO_ROUNDING_INDICATION;
 	                      return(ROUNDING_INDICATION_CMD); }
-\\rou(nd(ing)?)?{WHITESPACE}+simple { yylval.number = SIMPLE_ROUNDING_INDICATION;
+\\rou(nd(ing)?)?{WHITESPACE}+simple { YYLVALAC->number = SIMPLE_ROUNDING_INDICATION;
 	                      return(ROUNDING_INDICATION_CMD); }
-\\rou(nd(ing)?)?{WHITESPACE}+sig_fig { yylval.number = SIG_FIG_ROUNDING_INDICATION;
+\\rou(nd(ing)?)?{WHITESPACE}+sig_fig { YYLVALAC->number = SIG_FIG_ROUNDING_INDICATION;
 	                      return(ROUNDING_INDICATION_CMD); }
-\\rou(nd(int)?)?        { yylval.number = -1;
+\\rou(nd(int)?)?        { YYLVALAC->number = -1;
 	                      return(ROUNDING_INDICATION_CMD); }
 \\re(member(_errors)?)? { return(REMEMBER_CMD); }
-\\save.*                { 
+\\save[ ].*                { 
 	char * curs = yytext+5, *returnme;
 	while (curs && *curs && *curs == ' ')
 		curs++;
@@ -94,9 +104,9 @@ ACCEPTABLE	[_:]
 		*curs = 0;
 		curs--;
 	}
-	yylval.variable = returnme;
+	YYLVALAC->variable = returnme;
 	return(SAVE_CMD); }
-\\tsep.                 { yylval.character = yytext[5]; return(TSEP_CMD); }
+\\tsep.                 { YYLVALAC->character = yytext[5]; return(TSEP_CMD); }
 \\c(onv(ert)?)?{WHITESPACE}+{LETTER}+{WHITESPACE}+{LETTER}+{WHITESPACE}+{LETTER}+ {}
 \?                      { return(PRINT_HELP_CMD); }
 [Hh][Ee][Ll][Pp]        { return(PRINT_HELP_CMD); }
@@ -110,39 +120,39 @@ ACCEPTABLE	[_:]
 
 %{ /* These are the constants (except random) */
 	%}
-(e)				{ yylval.number = W_E; return(NUMBER); }
-([pP][iI])|(¹)	{ yylval.number = W_PI; return(NUMBER); }
-random			{ yylval.number = kbw_rand(); return(NUMBER); }
-irandom			{ yylval.number = (double) kbw_int_rand(); return(NUMBER); }
-N[aA]			{ yylval.number = W_AVOGADROS_CONSTANT; return(NUMBER); }
-k				{ yylval.number = W_BOLTZMANN_CONSTANT; return(NUMBER); }
-Cc				{ yylval.number = W_COULOMB_CONSTANT; return(NUMBER); }
-ec				{ yylval.number = W_ELEMENTARY_CHARGE; return(NUMBER); }
-R				{ yylval.number = W_MOLAR_GAS_CONSTANT; return(NUMBER); }
-G				{ yylval.number = W_GRAVITATIONAL_CONSTANT; return(NUMBER); }
-g				{ yylval.number = W_GRAVITATIONAL_ACCELLERATION; return(NUMBER); }
-Me				{ yylval.number = W_ELECTRON_MASS; return(NUMBER); }
-Mp				{ yylval.number = W_PROTON_MASS; return(NUMBER); }
-Mn				{ yylval.number = W_NEUTRON_MASS; return(NUMBER); }
-Md				{ yylval.number = W_DEUTERON_MASS; return(NUMBER); }
-(u)|(amu)		{ yylval.number = W_ATOMIC_MASS;  return(NUMBER); }
-c				{ yylval.number = W_SPEED_OF_LIGHT; return(NUMBER); }
-h				{ yylval.number = W_PLANCK_CONSTANT; return(NUMBER); }
-(µ0)|(mu((0)|((zero)|(ZERO)))) { yylval.number = W_PERMEABILITY_OF_FREE_SPACE; return(NUMBER); }
-((epsilon)|(EPSILON))((0)|((zero)|(ZERO))) { yylval.number = W_PERMITTIVITY_OF_FREE_SPACE; return(NUMBER); }
-(µB)|(muB)		{ yylval.number = W_BOHR_MAGNETON; return(NUMBER); }
-(µN)|(muN)		{ yylval.number = W_NUCLEAR_MAGNETON; return(NUMBER); }
-b				{ yylval.number = W_WIEN_DISPLACEMENT; return(NUMBER); }
-mW				{ yylval.number = W_W_BOSON_MASS; return(NUMBER); }
-mZ				{ yylval.number = W_Z_BOSON_MASS; return(NUMBER); }
-ao				{ yylval.number = W_BOHR_RADIUS; return(NUMBER); }
-F				{ yylval.number = W_FARADAY_CONSTANT; return(NUMBER); }
-(Vm)|(NAk)		{ yylval.number = W_MOLAR_VOLUME_OF_IDEAL_GAS; return(NUMBER); }
-eV				{ yylval.number = W_ELECTRON_VOLT; return(NUMBER); }
-(sigma)|(SIGMA) { yylval.number = W_STEFAN_BOLTZMANN; return(NUMBER); }
-(alpha)|(ALPHA) { yylval.number = W_FINE_STRUCTURE; return(NUMBER); }
-(gamma)|(GAMMA) { yylval.number = W_EULER; return(NUMBER); }
-re				{ yylval.number = W_ELECTRON_RADIUS; return(NUMBER); }
+(e)				{ YYLVALAC->number = W_E; return(NUMBER); }
+([pP][iI])|(¹)	{ YYLVALAC->number = W_PI; return(NUMBER); }
+random			{ YYLVALAC->number = kbw_rand(); return(NUMBER); }
+irandom			{ YYLVALAC->number = (double) kbw_int_rand(); return(NUMBER); }
+N[aA]			{ YYLVALAC->number = W_AVOGADROS_CONSTANT; return(NUMBER); }
+k				{ YYLVALAC->number = W_BOLTZMANN_CONSTANT; return(NUMBER); }
+Cc				{ YYLVALAC->number = W_COULOMB_CONSTANT; return(NUMBER); }
+ec				{ YYLVALAC->number = W_ELEMENTARY_CHARGE; return(NUMBER); }
+R				{ YYLVALAC->number = W_MOLAR_GAS_CONSTANT; return(NUMBER); }
+G				{ YYLVALAC->number = W_GRAVITATIONAL_CONSTANT; return(NUMBER); }
+g				{ YYLVALAC->number = W_GRAVITATIONAL_ACCELLERATION; return(NUMBER); }
+Me				{ YYLVALAC->number = W_ELECTRON_MASS; return(NUMBER); }
+Mp				{ YYLVALAC->number = W_PROTON_MASS; return(NUMBER); }
+Mn				{ YYLVALAC->number = W_NEUTRON_MASS; return(NUMBER); }
+Md				{ YYLVALAC->number = W_DEUTERON_MASS; return(NUMBER); }
+(u)|(amu)		{ YYLVALAC->number = W_ATOMIC_MASS;  return(NUMBER); }
+c				{ YYLVALAC->number = W_SPEED_OF_LIGHT; return(NUMBER); }
+h				{ YYLVALAC->number = W_PLANCK_CONSTANT; return(NUMBER); }
+(µ0)|(mu((0)|((zero)|(ZERO)))) { YYLVALAC->number = W_PERMEABILITY_OF_FREE_SPACE; return(NUMBER); }
+((epsilon)|(EPSILON))((0)|((zero)|(ZERO))) { YYLVALAC->number = W_PERMITTIVITY_OF_FREE_SPACE; return(NUMBER); }
+(µB)|(muB)		{ YYLVALAC->number = W_BOHR_MAGNETON; return(NUMBER); }
+(µN)|(muN)		{ YYLVALAC->number = W_NUCLEAR_MAGNETON; return(NUMBER); }
+b				{ YYLVALAC->number = W_WIEN_DISPLACEMENT; return(NUMBER); }
+mW				{ YYLVALAC->number = W_W_BOSON_MASS; return(NUMBER); }
+mZ				{ YYLVALAC->number = W_Z_BOSON_MASS; return(NUMBER); }
+ao				{ YYLVALAC->number = W_BOHR_RADIUS; return(NUMBER); }
+F				{ YYLVALAC->number = W_FARADAY_CONSTANT; return(NUMBER); }
+(Vm)|(NAk)		{ YYLVALAC->number = W_MOLAR_VOLUME_OF_IDEAL_GAS; return(NUMBER); }
+eV				{ YYLVALAC->number = W_ELECTRON_VOLT; return(NUMBER); }
+(sigma)|(SIGMA) { YYLVALAC->number = W_STEFAN_BOLTZMANN; return(NUMBER); }
+(alpha)|(ALPHA) { YYLVALAC->number = W_FINE_STRUCTURE; return(NUMBER); }
+(gamma)|(GAMMA) { YYLVALAC->number = W_EULER; return(NUMBER); }
+re				{ YYLVALAC->number = W_ELECTRON_RADIUS; return(NUMBER); }
 
 %{ /* These are the grouping symbols */
 	%}
@@ -152,11 +162,11 @@ re				{ yylval.number = W_ELECTRON_RADIUS; return(NUMBER); }
 [}] { return(WKET); }
 \[  { return(WSBRA); }
 \]  { return(WSKET); }
-\|	{ return(WPIPE); }
 
 %{ /* These are the binary operations */
 	%}
-([!])|(not)				{ return(WNOT); }
+not						{ return(WNOT); }
+[!]						{ return(WBANG); }
 [*][*]					{ return(WSQR); }
 [+]						{ return(WPLUS); }
 [*]						{ return(WMULT); }
@@ -164,7 +174,7 @@ re				{ yylval.number = W_ELECTRON_RADIUS; return(NUMBER); }
 [%]						{ return(WMOD); }
 [=]						{ return(WEQL); }
 (\^)					{ return(WEXP); }
-'|'                     { return(WBOR); }
+\|                      { return(WBOR); }
 \&                      { return(WBAND); }
 \~                      { return(WBNOT); }
 (\|\|)|(or)				{ return(WOR); }
@@ -215,12 +225,12 @@ irand { return(WIRAND); }
 '.*' {
 	char * temp = strdup(yytext+1);
 	temp[(int)strlen(temp)-1] = 0;
-	yylval.variable = temp;
+	YYLVALAC->variable = temp;
 	return(STRING);
 }
 
 {LETTER}+({LETTER}|{ACCEPTABLE})* {
-	yylval.variable = strdup(yytext);
+	YYLVALAC->variable = strdup(yytext);
 	return(VAR);
 }
 
@@ -237,11 +247,14 @@ irand { return(WIRAND); }
 	if (yydebug)
 		printf("ambiguous %s\n", yytext);
 
-	yylval.number = strtod(yytext,NULL);
+	YYLVALAC->number = strtod(yytext,NULL);
 	
-	if (fabs(yylval.number) == HUGE_VAL)
+	if ((errno == ERANGE && YYLVALAC->number == 0) ||
+		(errno == ERANGE &&
+		(YYLVALAC->number == HUGE_VAL ||
+		YYLVALAC->number == HUGE_VALF))) {
 		report_error(strerror(errno));
-	else {
+	} else {
 		unsigned int t = count_digits(yytext);
 		if (t<sig_figs) sig_figs = t;
 	}
@@ -253,11 +266,14 @@ irand { return(WIRAND); }
 	extern int yydebug;
 
 	if (yydebug) printf("nonambiguous %s => ", yytext);
-	yylval.number = strtod(yytext,NULL);
-	if (yydebug) printf("%f\n", yylval.number);
-	if (fabs(yylval.number) == HUGE_VAL)
+	YYLVALAC->number = strtod(yytext,NULL);
+	if (yydebug) printf("%f\n", YYLVALAC->number);
+	if ((errno == ERANGE && YYLVALAC->number == 0) ||
+		(errno == ERANGE &&
+		(YYLVALAC->number == HUGE_VAL ||
+		YYLVALAC->number == HUGE_VALF))) {
 		report_error(strerror(errno));
-	else {
+	} else {
 		unsigned int t = count_digits(yytext) - (yytext[0]=='0')?1:0;
 		if (t<sig_figs) sig_figs = t;
 	}
@@ -272,12 +288,17 @@ irand { return(WIRAND); }
 	strstrip(strip,yytext);
 
 	if (yydebug) printf("complex one %s => ", yytext);
-	yylval.number = strtod(yytext,NULL);
-	if (yydebug) printf("%f\n",yylval.number);
+	YYLVALAC->number = strtod(yytext,NULL);
+	if (yydebug) {
+		printf("%f\n",YYLVALAC->number);
+	}
 
-	if (fabs(yylval.number) == HUGE_VAL)
+	if ((errno == ERANGE && YYLVALAC->number == 0) ||
+		(errno == ERANGE &&
+		(YYLVALAC->number == HUGE_VAL ||
+		YYLVALAC->number == HUGE_VALF))) {
 		report_error(strerror(errno));
-	else {
+	} else {
 		unsigned int t = count_digits(yytext);
 		if (t<sig_figs) sig_figs = t;
 	}
@@ -290,7 +311,7 @@ irand { return(WIRAND); }
 	char * curs = yytext+2;
 	
 	sscanf(yytext,"%lx",&value);
-	yylval.number = value;
+	YYLVALAC->number = value;
 
 	while (curs && *curs) {
 		++t;
@@ -302,7 +323,8 @@ irand { return(WIRAND); }
 
 0{DIGIT}* {
 	unsigned long int value;
-	char err[(int)strlen(yytext)+57];
+	char *err;
+	err = (char *)calloc(sizeof(char),(int)strlen(yytext)+57);
 	if (strchr(yytext,'8') || strchr(yytext,'9')) {
 		sprintf(err,"Incorrect number format (%s) - expected 0-7 for octal",yytext);
 		report_error(err);
@@ -310,17 +332,20 @@ irand { return(WIRAND); }
 	} else {
 		unsigned int t;
 		sscanf(yytext,"%lo",&value);
-		yylval.number = value;
+		YYLVALAC->number = value;
 		t = count_digits(yytext)-1;
 		if (t<sig_figs) sig_figs = t;
+		free(err);
 		return(NUMBER);
 	}
+	free(err);
 }
 
 0b[0-9]+ {
 	unsigned long int value = 0;
 	unsigned int i, place = 1, len = (unsigned int)strlen(yytext);
-	char err[(int)strlen(yytext)+57];
+	char *err;
+	err = (char *)calloc(sizeof(char),(int)strlen(yytext)+57);
 	if (strchr(yytext,'2') || strchr(yytext,'3') || strchr(yytext,'4') || strchr(yytext,'5') || strchr(yytext,'6') || strchr(yytext,'7') || strchr(yytext,'8') || strchr(yytext,'9')) {
 		sprintf(err,"Incorrect number format (%s) - expected 0 or 1 for binary",yytext);
 		report_error(err);
@@ -331,19 +356,22 @@ irand { return(WIRAND); }
 			value += ((yytext[i]=='0')?0:1) * place;
 			place = pow(2,len-i);
 		}
-		yylval.number = value;
+		YYLVALAC->number = value;
 		t = count_digits(yytext)-2;
 		if (t<sig_figs) sig_figs = t;
+		free(err);
 		return(NUMBER);
 	}
+	free(err);
 }
 
 (({DIGIT})|[,.])* {
 	/* This is the garbage-number collector */
 	/* char errmsg[] = "Confusing number format (%s)\nDecimal Separator: '%c'\nThousands Separator: '%c'"; */
 	char errmsg[] = "Confusing number format (%s)";
-	char err[(int)strlen(yytext)+(int)strlen(errmsg)-5];
+	char *err;
 	int i;
+	err = (char *)calloc(sizeof(char),(int)strlen(yytext)+(int)strlen(errmsg)-5);
 	for (i=0;i<(int)strlen(yytext);++i) {
 	    if (yytext[i] == ',')
 		yytext[i] = conf.thou_delimiter;
@@ -353,6 +381,7 @@ irand { return(WIRAND); }
 	sprintf(err,errmsg,yytext,conf.dec_delimiter,conf.thou_delimiter);
 	report_error(err);
 	scanerror = 1;
+	free(err);
 }
 
 %{ /* if we haven't matched anything yet, then it's illegal */
@@ -360,7 +389,7 @@ irand { return(WIRAND); }
 . { char error[26];
 	if (*yytext == ',') *yytext = conf.thou_delimiter;
 	else if (*yytext == '.') *yytext = conf.dec_delimiter;
-	sprintf(error, "scanner: cannot parse next token (%c)\n", *yytext);
+	sprintf(error, "scanner: cannot understand next token (%c)\n", *yytext);
 	report_error(error);
 	scanerror = 1;}
 

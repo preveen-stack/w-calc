@@ -1,4 +1,6 @@
+/*%pure-parser */
 %{
+/*#define REENTRANT_PARSER */
 #if STDC_HEADERS
 # include <string.h>
 #else
@@ -53,12 +55,12 @@ char character;
 %token PRINT_HELP_CMD PREFIX_CMD INT_CMD
 %token <number> PRECISION_CMD ENG_CMD HLIMIT_CMD ROUNDING_INDICATION_CMD
 
-%token EOLN PAR REN WBRA WKET WSBRA WSKET WPIPE
+%token EOLN PAR REN WBRA WKET WSBRA WSKET
 %token WPLUS WMINUS WMULT WDIV WMOD WEQL WEXP WSQR
 %token WOR WAND WEQUAL WNEQUAL WGT WLT WGEQ WLEQ
 %token WLSHFT WRSHFT WBOR WBAND
 
-%token WBNOT WNOT WLOG WLN WROUND WABS WSQRT WCEIL WFLOOR WCBRT WLOGTWO
+%token WBNOT WNOT WLOG WLN WROUND WABS WSQRT WCEIL WFLOOR WCBRT WLOGTWO WBANG
 %token WSIN WCOS WTAN WASIN WACOS WATAN WSINH WCOSH WTANH WASINH WACOSH WATANH
 %token WCOT WACOT WCOTH WACOTH WRAND WIRAND
 
@@ -66,7 +68,7 @@ char character;
 %token <variable> VAR STRING OPEN_CMD SAVE_CMD
 %token <character> DSEP_CMD TSEP_CMD
 
-%type <number> exp exp_l2 exp_l3 exp_l4
+%type <number> exp exp_l2 exp_l3
 %type <number> oval capsule sign
 %type <cmd> command
 %type <function> func
@@ -75,8 +77,9 @@ char character;
 %left WEQUAL WNEQUAL WGT WLT WGEQ WLEQ
 %left WMINUS WPLUS
 %left WMULT WDIV WMOD WLSHFT WRSHFT
+%right WBANG
 %left WEXP
-%left WNOT WBNOT
+%left WNOT WBNOT WNEG
 
 %expect 1185
 
@@ -316,7 +319,16 @@ command : HEX_CMD {
 		free(open_file);
 		open_file = NULL;
 		report_error("Please specify a file name to open.");
-	}
+	} /*else {
+		int retval;
+		retval = loadState(open_file);
+		if (retval) {
+			report_error("Could not open file.");
+			report_error((char*)strerror(retval));
+		}
+		free(open_file);
+		open_file = NULL;
+	}*/
 }
 | SAVE_CMD {
 	int retval;
@@ -402,15 +414,12 @@ exp : exp WMINUS exp { $$ = simple_exp($1, wminus, $3); }
 | exp WLEQ exp { $$ = simple_exp($1, wleq, $3); }
 | exp WLSHFT exp { $$ = simple_exp($1, wlshft, $3); }
 | exp WRSHFT exp { $$ = simple_exp($1, wrshft, $3); }
+| exp WMULT exp { $$ = simple_exp($1, wmult, $3); }
+| exp WDIV exp { $$ = simple_exp($1, wdiv, $3); }
+| exp WMOD exp { $$ = simple_exp($1, wmod, $3); }
 | WNOT exp { $$ = ! $2; }
 | WBNOT exp { $$ = ~ (int)$2; }
 | exp_l2
-;
-
-exp_l2 : exp_l2 WMULT exp_l2 { $$ = simple_exp($1, wmult, $3); }
-| exp_l2 WDIV exp_l2 { $$ = simple_exp($1, wdiv, $3); }
-| exp_l2 WMOD exp_l2 { $$ = simple_exp($1, wmod, $3); }
-| exp_l3
 ;
 
 func : WSIN { $$ = wsin; }
@@ -452,26 +461,27 @@ sign : WMINUS { $$ = -1; }
 | { $$ = 1; }
 ;
 
-exp_l3 : exp_l4
-| sign exp_l3 oval { $$ = $1 * $2 * $3; }
+exp_l2 : exp_l3
+| sign exp_l2 oval { $$ = $1 * $2 * $3; }
 ;
 
-oval : exp_l4 oval
+oval : exp_l3 oval
 | { $$ = 1; }
 ;
 
-exp_l4 : capsule oval { $$ = $1 * $2; }
-| capsule WEXP sign exp_l4 oval { $$ = pow($1,$3*$4) * $5; }
+exp_l3 : capsule oval { $$ = $1 * $2; }
+| capsule WEXP sign exp_l3 oval { $$ = pow($1,$3*$4) * $5; }
 ;
 
 capsule: PAR exp REN { $$ = $2; }
 | WBRA exp WKET { $$ = $2; }
 | WSBRA exp WSKET { $$ = $2; }
-| WPIPE exp WPIPE { $$ = fabs($2); }
 | null { $$ = 0; }
 | NUMBER
-| exp_l4 WNOT { $$ = fact($1); }
-| exp_l4 WSQR { $$ = pow($1,2); }
+| exp_l3 WBANG { $$ = fact($1); }
+| WBANG exp_l3 %prec WNOT { $$ = ! $2; }
+| WNOT exp_l3 %prec WNOT { $$ = ! $2; }
+| exp_l3 WSQR { $$ = pow($1,2); }
 | func sign capsule { $$ = uber_function($1,$2*$3); }
 | VAR
 {
@@ -506,7 +516,7 @@ yyerror(char *error_string, ...) {
     va_list ap;
     int line_nmb(void);
 
-	//    FILE *f = stderr;
+	/*    FILE *f = stderr; */
 	char error[1000];
 
     va_start(ap,error_string);
