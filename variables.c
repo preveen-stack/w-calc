@@ -100,6 +100,7 @@ struct variable * getrealnvar (int i)
 
 struct answer getvar (char * key)
 {
+	/* static struct answer ans; */
 	struct answer ans;
 	double *t = getvar_core(key, THE_VALUE);
 	if (t) {
