@@ -234,7 +234,7 @@ static struct variable_list * extract_vars (char * str)
 static char * flatten (char * str)
 {
 	struct variable_list *vlist = NULL;
-	char * curs = str, *eov, *nstr, *ncurs1, *ncurs2;
+	char * curs = str, *eov, *nstr;
 	char varname[500];
 	int i, olen, nlen, changedlen;
 	struct answer a;
@@ -284,34 +284,41 @@ static char * flatten (char * str)
 		nlen = strlen(varname);
 
 		// now, put it back in the string
-		changedlen = strlen(str) + nlen - olen + 1;
+		changedlen = strlen(str) + nlen - olen + 1 + 2; // make sure there's space for parenthesis
 		nstr = malloc(changedlen);
 		if (!nstr) { // not enough memory
+			perror("flatten: ");
 			exit(1);
 		}
-		ncurs2 = nstr;
-		ncurs1 = str;
-		while (ncurs1 != curs) {
-			*ncurs2 = *ncurs1;
-			++ncurs1;
-			++ncurs2;
+		{
+			char *fromstring = str;
+			char *tostring = nstr;
+			// nstr is the new string, str is the input string
+			tostring = nstr;
+			while (fromstring != curs) { // copy up to the curs (the beginning of the var name)
+				*tostring = *fromstring;
+				++fromstring;
+				++tostring;
+			}
+			*tostring = '(';
+			++tostring;
+			fromstring = varname;
+			while (fromstring && *fromstring) {
+				*tostring = *fromstring;
+				++fromstring;
+				++tostring;
+			}
+			curs = tostring;
+			fromstring = eov;
+			while (fromstring && *fromstring) {
+				*tostring = *fromstring;
+				++fromstring;
+				++tostring;
+			}
+			*tostring = 0;
+			free(str);
+			str = nstr;
 		}
-		ncurs1 = varname;
-		while (ncurs1 && *ncurs1) {
-			*ncurs2 = *ncurs1;
-			++ncurs1;
-			++ncurs2;
-		}
-		curs = ncurs2;
-		ncurs1 = eov;
-		while (ncurs1 && *ncurs1) {
-			*ncurs2 = *ncurs1;
-			++ncurs1;
-			++ncurs2;
-		}
-		*ncurs2 = 0;
-		free(str);
-		str = nstr;
 	}
 	// free up the vlist
 	while (vlist) {
