@@ -67,6 +67,7 @@
                 go = id; 
                 menuConstant = id; 
                 menuFunction = id; 
+                new = id; 
                 setPrecision = id; 
                 setPrefs = id; 
                 shConversions = id; 
@@ -111,7 +112,6 @@
                 roundingIndication = NSPopUpButton; 
                 shiftKey1 = NSButton; 
                 shiftKey2 = NSButton; 
-                strictSyntax = NSButton; 
                 theDrawer = NSDrawer; 
                 theKeyboard = id; 
                 thePrefPanel = NSPanel; 
