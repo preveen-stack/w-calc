@@ -198,7 +198,7 @@ command : HEX_CMD {
 		printf("          Precision Guard: %s\n",conf.precision_guard?"yes":"no");
 		printf("            History Limit: %s\n",conf.history_limit?"yes":"no");
 		if (conf.history_limit)
-			printf("       History Limited To: %i\n",conf.history_limit_len);
+			printf("       History Limited To: %lu\n",conf.history_limit_len);
 	}
 }
 | RADIAN_CMD {
