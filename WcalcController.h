@@ -30,6 +30,7 @@
 	IBOutlet NSButton *useCommas;
 	IBOutlet NSButton *strictSyntax;
 	IBOutlet NSButton *decimalKey;
+	IBOutlet NSButton *rememberErrors;
 	IBOutlet NSDrawer *baseDrawer;
 	IBOutlet NSMenuItem *baseMenu;
 	IBOutlet NSMatrix *outputFormat2;

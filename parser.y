@@ -35,7 +35,7 @@ char * variable;
 }
 
 %token DEC_CMD OCT_CMD HEX_CMD BIN_CMD COMMA_CMD
-%token RADIAN_CMD PICKY_CMD STRICT_CMD
+%token RADIAN_CMD PICKY_CMD STRICT_CMD REMEMBER_CMD
 %token <number> PRECISION_CMD ENG_CMD
 
 %token EOLN PAR REN WBRA WKET WSBRA WSKET WPIPE
@@ -181,6 +181,12 @@ command : HEX_CMD {
 	conf.strict_syntax = ! conf.strict_syntax;
 	if (standard_output)
 		printf("%s Syntax\n",conf.strict_syntax?"Strict":"Forgiving");
+}
+| REMEMBER_CMD {
+	$$ = nothing;
+	conf.remember_errors = ! conf.remember_errors;
+	if (standard_output)
+		printf("Statements that produce errors are %s.\n",conf.remember_errors?"recorded":"forgotten");
 }
 ;
 

@@ -66,6 +66,7 @@ struct _conf {
 	unsigned int print_prefixes:1;
 	unsigned int use_commas:1;
 	unsigned int rounding_indication:4;
+	unsigned int remember_errors:1;
 };
 
 /* configuration */

@@ -55,6 +55,7 @@ ACCEPTABLE	[_:]
 	return(PRECISION_CMD);}
 \\p(icky)?				{ return(PICKY_CMD); }
 \\r(ad(ians)?)?			{ return(RADIAN_CMD); }
+\\re(member(_errors)?)? { return(REMEMBER_CMD); }
 \\s(tr(ict)?)?			{ return(STRICT_CMD); }
 
 %{ /* These are the constants (except random) */

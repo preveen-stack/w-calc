@@ -108,18 +108,22 @@ int main (int argc, char *argv[])
 					perror("reading line");
 				break;
 			}
-			/* we need to add lines to the history */
+			/* if there is a line */
 			if (strlen(readme)) {
-				add_history(readme);
 				if (!strcmp(readme,"q") || !strcmp(readme,"quit") || !strcmp(readme,"\\q")) {
 					break;
 				} else if (!strncmp(readme,"\\yydebug",8)) {
+					add_history(readme);
 					yydebug = ! yydebug;
 					printf("Debug Mode %s\n",yydebug?"On":"Off");
 				} else if (!strncmp(readme,"?",1) || !strncmp(readme,"help",4)) {
+					add_history(readme);
 					print_interactive_help();
 				} else {
 					parseme(readme);
+					if (!errstring || (errstring && !strlen(errstring)) || remember_errors) {
+						add_history(readme);
+					}
 				}
 				putvar("a",last_answer);
 

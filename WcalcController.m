@@ -196,6 +196,7 @@ static char update_history = 0;
 		[prefs setObject:@"YES" forKey:@"strictSyntax"];
 		[prefs setObject:@"0" forKey:@"roundingIndication"];
 		[prefs setObject:@"NO" forKey:@"historyShowing"];
+		[prefs setObject:@"YES" forKey:@"rememberErrors"];
 		[prefs setObject:@"NO" forKey:@"baseShowing"];
 	}
 	conf.precision = [prefs integerForKey:@"precision"];
@@ -211,6 +212,7 @@ static char update_history = 0;
 	/* history preferences */
 	allow_duplicates = [prefs boolForKey:@"historyDuplicatesAllowed"];
 	update_history = [prefs boolForKey:@"updateHistory"];
+	conf.remember_errors = [prefs boolForKey:@"rememberErrors"];
 	
 	[PrecisionSlider setIntValue:conf.precision];
 	just_answered = FALSE;
@@ -304,10 +306,14 @@ static char update_history = 0;
 	expression = strdup([[ExpressionField stringValue] cString]);
 
 	val = parseme(expression);
-	addToHistory(expression, val);
-	free(expression);
 	putvar("a",val);
 
+	/* if it isn't an error (or if you want me to remember errors) record it in the history */
+	if (!errstring || (errstring && !strlen(errstring)) || conf.remember_errors) {
+		addToHistory(expression, val);
+		free(expression);
+	}
+	/* if there is an error, display it */
 	if (errstring && strlen(errstring)) {
 		[errorController throwAlert:[NSString stringWithCString:errstring]];
 		free(errstring);
@@ -519,6 +525,13 @@ static char update_history = 0;
 				[prefs setObject:[NSString stringWithFormat:@"%i",conf.rounding_indication] forKey:@"roundingIndication"];
 			}
 			break;
+		case 11: // Record errors in history
+			olde = conf.remember_errors;
+			conf.remember_errors = ([sender state]==NSOnState);
+			if (olde != conf.remember_errors) {
+				[prefs setObject:(conf.remember_errors?@"YES":@"NO") forKey:@"rememberErrors"];
+			}
+			break;
 		default: return;
 	}
 
@@ -579,6 +592,7 @@ static char update_history = 0;
 	[useCommas setState:(conf.use_commas?NSOnState:NSOffState)];
 	[strictSyntax setState:(conf.strict_syntax?NSOnState:NSOffState)];
 	[roundingIndication selectItemAtIndex:conf.rounding_indication];
+	[rememberErrors setState:(conf.remember_errors?NSOnState:NSOffState)];
 	
 	[printPrefixes setEnabled:(conf.output_format!=DECIMAL_FORMAT)];
 	[engineeringNotation setEnabled:(conf.output_format==DECIMAL_FORMAT)];
