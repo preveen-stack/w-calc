@@ -30,7 +30,12 @@
             SUPERCLASS = NSObject; 
         }, 
         {CLASS = Interpreter; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
-        {CLASS = MyTextField; LANGUAGE = ObjC; SUPERCLASS = NSTextField; }, 
+        {
+            CLASS = MyTextField; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {AnswerField = NSTextField; mainController = id; }; 
+            SUPERCLASS = NSTextField; 
+        }, 
         {
             ACTIONS = {displayPrefs = id; setPrefs = id; showPrefs = id; }; 
             CLASS = PrefsController; 
@@ -109,6 +114,7 @@
                 outputFormat = NSMatrix; 
                 outputFormat2 = NSMatrix; 
                 pickyVariables = NSButton; 
+                precisionGuard = NSButton; 
                 printInts = NSButton; 
                 printPrefixes = NSButton; 
                 rememberErrors = NSButton; 
@@ -117,6 +123,7 @@
                 saveMenuItem = NSMenuItem; 
                 shiftKey1 = NSButton; 
                 shiftKey2 = NSButton; 
+                simpleCalculator = NSButton; 
                 theDrawer = NSDrawer; 
                 theKeyboard = id; 
                 thePrefPanel = NSPanel; 
