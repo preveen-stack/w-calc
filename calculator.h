@@ -55,7 +55,6 @@ double uber_function (enum functions func, double input);
 double simple_exp (double first, enum operations op, double second);
 double kbw_rand ();
 
-
 double fact (int);
 
 struct _conf {
