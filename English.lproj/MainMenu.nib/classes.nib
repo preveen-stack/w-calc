@@ -24,7 +24,7 @@
         }, 
         {CLASS = Interpreter; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {
-            ACTIONS = {setPrefs = id; showPrefs = id; }; 
+            ACTIONS = {displayPrefs = id; setPrefs = id; showPrefs = id; }; 
             CLASS = PrefsController; 
             LANGUAGE = ObjC; 
             OUTLETS = {
@@ -75,6 +75,7 @@
                 historyList = id; 
                 keypad = id; 
                 mainWindow = NSWindow; 
+                prefsController = id; 
                 shiftKey1 = NSButton; 
                 shiftKey2 = NSButton; 
                 theDrawer = NSDrawer; 
