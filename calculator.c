@@ -183,7 +183,7 @@ char *print_this_result (double result)
 	}
 
 	// Internationalize it ;-)
-	if (use_commas) {
+	if (use_commas && strchr(pa,'.')) {
 		*strchr(pa,'.') = ',';
 	}
 
