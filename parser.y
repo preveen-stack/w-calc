@@ -39,7 +39,7 @@ char * variable;
 %token <number> PRECISION_CMD ENG_CMD
 
 %token EOLN PAR REN WBRA WKET WSBRA WSKET WPIPE
-%token WPLUS WMINUS WMULT WDIV WMOD WEQL WEXP
+%token WPLUS WMINUS WMULT WDIV WMOD WEQL WEXP WSQR
 %token WOR WAND WEQUAL WNEQUAL WGT WLT WGEQ WLEQ
 
 %token WNOT WLOG WLN WROUND WABS WSQRT WCEIL WFLOOR
@@ -122,62 +122,65 @@ eoln : EOLN
 
 command : HEX_CMD {
 	$$ = isatty(0)?redisplay:nothing;
-	output_format = HEXADECIMAL_FORMAT;
+	conf.output_format = HEXADECIMAL_FORMAT;
 	if (standard_output)
 		printf("Hexadecimal Formatted Output\n");}
 | OCT_CMD {
 	$$ = isatty(0)?redisplay:nothing;
-	output_format = OCTAL_FORMAT;
+	conf.output_format = OCTAL_FORMAT;
 	if (standard_output)
 		printf("Octal Formatted Output\n");}
 | BIN_CMD {
 	$$ = isatty(0)?redisplay:nothing;
-	output_format = BINARY_FORMAT;
+	conf.output_format = BINARY_FORMAT;
 	if (standard_output)
 		printf("Binary Formatted Output\n");}
 | DEC_CMD {
 	$$ = isatty(0)?redisplay:nothing;
-	output_format = DECIMAL_FORMAT;
+	conf.output_format = DECIMAL_FORMAT;
 	if (standard_output)
 		printf("Decimal Formatted Output\n");}
 | COMMA_CMD {
 	$$ = nothing;
-	use_commas = ! use_commas;
+	conf.use_commas = ! conf.use_commas;
 	if (standard_output)
-		printf("%s are the decimal separators.\n",use_commas?"Commas (,)":"Periods (.)");}
+		printf("%s are the decimal separators.\n",conf.use_commas?"Commas (,)":"Periods (.)");}
 | PICKY_CMD {
 	$$ = nothing;
-	picky_variables = ! picky_variables;
+	conf.picky_variables = ! conf.picky_variables;
 	if (standard_output) {
-		if (! picky_variables)
+		if (! conf.picky_variables)
 			printf("Unknown variables are assumed to be 0.\n");
 		else
 			printf("Strict variable parsing.\n");
 	}}
 | RADIAN_CMD {
 	$$ = nothing;
-	use_radians = ! use_radians;
+	conf.use_radians = ! conf.use_radians;
 	if (standard_output)
-		printf("%sUsing Radians\n", use_radians?"":"Not ");}
+		printf("%sUsing Radians\n", conf.use_radians?"":"Not ");}
 | PRECISION_CMD {
 	$$ = isatty(0)?redisplay:nothing;
-	precision = $1;
+	conf.precision = $1;
 	if (standard_output) {
 		printf("Precision = ");
-		if (precision == -1) printf("auto\n");
-		else printf("%i\n", precision);
+		if (conf.precision == -1) printf("auto\n");
+		else printf("%i\n", conf.precision);
 	}}
 | ENG_CMD {
 	$$ = isatty(0)?redisplay:nothing;
-	if ($1 < 0) engineering = ! engineering;
-	else engineering = $1;
+	if ($1 < 0) {
+		conf.engineering = ! conf.engineering;
+	} else {
+		conf.engineering = $1;
+	}
 	if (standard_output)
-		printf("Engineering notation is %s %s\n",engineering?"enabled":"disabled", (precision==-1)?"":"if the precision is set");}
+		printf("Engineering notation is %s %s\n",conf.engineering?"enabled":"disabled", (conf.precision==-1)?"":"if the precision is set");}
 | STRICT_CMD {
 	$$ = nothing;
-	strict_syntax = ! strict_syntax;
+	conf.strict_syntax = ! conf.strict_syntax;
 	if (standard_output)
-		printf("%s Syntax\n",strict_syntax?"Strict":"Forgiving");
+		printf("%s Syntax\n",conf.strict_syntax?"Strict":"Forgiving");
 }
 ;
 
@@ -274,6 +277,7 @@ capsule: PAR exp REN { $$ = $2; }
 | null { $$ = 0; }
 | NUMBER
 | exp_l4 WNOT { $$ = fact($1); }
+| exp_l4 WSQR { $$ = pow($1,2); }
 | func sign capsule { $$ = uber_function($1,$2*$3); }
 | VAR
 {
@@ -288,7 +292,7 @@ capsule: PAR exp REN { $$ = $2; }
 			$$ = *temp;
 		else {
 			$$ = 0;
-			if (picky_variables) {
+			if (conf.picky_variables) {
 				char * error = malloc(sizeof(char)*(strlen($1)+18));
 				sprintf(error,"%s does not exist.",$1);
 				report_error(error);
