@@ -57,3 +57,7 @@ history_limit = no
 # Should the equals sign be printed for results?
 # true/false or yes/no
 show_equals = true
+
+# Should integers be printed whole, or can long ones be compressed?
+# true/false or yes/no
+print_integers = yes

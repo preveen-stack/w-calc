@@ -7,7 +7,7 @@
 
 \f0\fs28 \cf0 Hello!\
 \
-This is Wcalc 1.6.1!\
+This is Wcalc 1.6.2!\
 \
 1. What's New\
 2. Intro\
@@ -22,16 +22,11 @@ This is Wcalc 1.6.1!\
 **************
 \f0\b0 \
 \
-NEW FEATURES:\
- - Added irandom, rand(), and irand() (random integer, random number between 0 and n, and random integer between 0 and n, respectively) (BOTH)\
- - Added bitwise operators &, |, and ~ (BOTH)\
-\
 BUGFIXES:\
- - Fixed flex-related crash in Linux (CLI)\
- - Fixed recursion detection (BOTH)\
- - Miscellaneous compilation fixes, platform fixes, and bug fixes (BOTH)\
- - log2 is now logtwo (BOTH)\
- - Added cot to the menus (GUI)\
+ - Fixed the print integers preference (GUI)\
+ - Fixed the recursion stuff, so symbols should work again (BOTH)\
+ - Fixed incorrect output on some errors (CLI)\
+ - Fixed a crash in Linux when errors are reported (CLI)\
 \
 
 \f1\b *********\
@@ -81,10 +76,11 @@ Wcalc supports the following functions:\
 sin cos tan cot asin acos atan acot\
 sinh cosh tanh coth asinh acosh atanh acoth\
 log ln logtwo abs round cbrt sqrt floor ceil\
+rand irand\
 \
 Wcalc has a few built-in constants:\
 pi e random Na k Cc ec R G g Me Mp Mn Md u c h mu0 epsilon0 muB muN b mW mZ ao\
-F Vm eV sigma alpha gamma re\
+F Vm eV sigma alpha gamma re irandom\
 \
 Wcalc supports user-defined variables. You define a variable like this:\
 mynewvariable=5\

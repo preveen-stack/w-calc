@@ -1,6 +1,6 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(wcalc, 1.6.1, kyle-wcalc@memoryhole.net)
-AM_INIT_AUTOMAKE(wcalc, 1.6.1)
+AC_INIT(wcalc, 1.6.2, kyle-wcalc@memoryhole.net)
+AM_INIT_AUTOMAKE(wcalc, 1.6.2)
 AC_CONFIG_SRCDIR([WcalcController.h])
 AM_CONFIG_HEADER([config.h])
 

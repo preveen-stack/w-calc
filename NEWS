@@ -1,3 +1,9 @@
+--- Version 1.6.2 ---
+Aug 21 2003 - Kyle Wheeler
+ - Fixed the print integers preference (GUI)
+ - Fixed the recursion detection, so symbols should work again (BOTH)
+ - Fixed incorrect output on some errors (CLI)
+ - Fixed a crash in Linux when errors are reported (CLI)
 --- Version 1.6.1 ---
 Aug 19 2003 - Kyle Wheeler
  - Avoid command/variable conflicts (BOTH)
