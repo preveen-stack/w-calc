@@ -7,7 +7,7 @@
 
 \f0\fs28 \cf0 Hello!\
 \
-This is Wcalc 1.5.1!\
+This is Wcalc 1.5.2!\
 \
 1. What's New\
 2. Intro\
@@ -22,15 +22,19 @@ This is Wcalc 1.5.1!\
 **************
 \f0\b0 \
 \
-SUPPORT: Command-line wcalc now works on MacOS 10.2 (Jaguar). This may make it stop working on earlier versions...\
+BUGFIX: Internationalization support was rewritten and should be more reliable.\
 \
-BUGFIX: The division symbol stopped working in the GUI, and has been replaced with the more standard "/".\
+NEW FEATURE: You can limit the length of your history now (this is a precursor to being able to save/load the history).\
 \
-BUGFIX: Added the ability to turn off precision guards, to allow you to work with very very small values.\
+NEW FEATURE: In the GUI, both the variable list and the history now have "Clear" buttons to remove all variables and empty the history (respectively).\
 \
-NEW FEATURE: You can list out the currently defined variables in command-line mode, with \\list.\
+NEW FEATURE: In the command-line, \\dsep and \\tsep were moved into the parser/scanner properly (so you can use them in piped files).\
 \
-NEW FEATURE: You can now specify hexadecimal output with \\x.\
+BUGFIX: Fixed a formatting problem in the error-reporting routines that could cause crashes in some forms of Unix (e.g. Linux).\
+\
+CHANGE: Alphabetized the units in the conversion tool.\
+\
+NEW FEATURE: Wcalc now supports autoconf and automake (makes compiling the command-line version across different Unixes easier, and can now be compiled without readline support).\
 \
 
 \f1\b *********\
@@ -121,15 +125,10 @@ Installing the regular version of Wcalc is easy - copy it to your Applications f
 ***********
 \f0\b0 \
 \
-I suppose I ought to have a license for this thing. Ah...\
+Wcalc is made available under the GNU Public License (GPL), version 2. The full text of the License is in the file titled COPYING as distributed with the source, or is available here:\
+http://www.gnu.org/copyleft/gpl.html\
 \
-Take a copy of this software, do what you like with it. I don't guarantee that it won't give you false answers, delete your hard drive, cause cancer, or even give you bad breath (but it's a calculator (*I* use it), and I'd be *really* impressed if it could do those things).\
-\
-If you like it - send me an email and tell me (it makes me feel good). If you don't like it\'d1send me an email and tell me why (it makes me improve the program). \
-\
-Enjoy! That's the license. If caught in violation, you will be persecuted to the full extent of the law (always wanted to say that).\
-\
-At some point (soon!) I'm going to GPL this thing. Hopefully, then, someone other than me can add the features that people have requested (like being able to print).\
+The general gist of the GPL is this: This program is free. You may do as you like with it, including sell the binaries. If, however, you download the source code of this program and either modify the source (for distribution) or use pieces of the source in your own program, you must distribute that program and its source code under the GPL as well.\
 \
 
 \f1\b **************\
@@ -137,9 +136,11 @@ At some point (soon!) I'm going to GPL this thing. Hopefully, then, someone othe
 **************
 \f0\b0 \
 \
-There are still some problems in the grammar with implicit multiplication... they aren't too big, because you can get around them by simply being explicit, but I'm working on fixing that. (The grammar is hard!)\
+There are still some problems in the grammar with implicit multiplication... they aren't too big, because you can get around them by simply being explicit, but I'm working on fixing that. (The grammar is hard!) Also, the grammar has two reduce/reduce conflicts. On older versions of bison/yacc, this is resolved correctly, and the code functions properly. On newer versions of bison, it refuses to compile.\
 \
 The command-line doesn't save it's preferences... it probably should, and I'll get to it someday.\
+\
+Variable expansion of "active" variables should detect loops.\
 \
 If you find more bugs, please LET ME KNOW!\
 \
@@ -150,9 +151,9 @@ If you find more bugs, please LET ME KNOW!\
 \f0\b0 \
 \
 The Wcalc homepage is 
-\f2 http://www.nd.edu/~kwheeler/wcalc/
+\f2 http://w-calc.sourceforge.net/
 \f0 \
 \
 Contact me at 
-\f2 kwheeler@cse.nd.edu\
+\f2 kyle-wcalc-sf@memoryhole.ncr.nd.edu\
 }
