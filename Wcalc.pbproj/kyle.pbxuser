@@ -27,13 +27,13 @@
 			PBXWorkspaceConfiguration = {
 				ContentSize = "{1265, 961}";
 				LeftSlideOut = {
-					ActiveTab = 0;
+					ActiveTab = 1;
 					Frame = "{{0, 23}, {1265, 938}}";
 					Split0 = {
 						ActiveTab = 2;
-						Frame = "{{305, 0}, {960, 938}}";
+						Frame = "{{224, 0}, {1041, 938}}";
 						Split0 = {
-							Frame = "{{0, 178}, {960, 760}}";
+							Frame = "{{0, 178}, {1041, 760}}";
 						};
 						SplitCount = 1;
 						Tab0 = {
@@ -70,9 +70,9 @@
 							};
 						};
 						Tab2 = {
-							BuildMessageFrame = "{{0, 0}, {962, 59}}";
-							BuildTranscriptFrame = "{{0, 68}, {962, 88}}";
-							Frame = "{{0, 0}, {960, 154}}";
+							BuildMessageFrame = "{{0, 0}, {1043, 59}}";
+							BuildTranscriptFrame = "{{0, 68}, {1043, 88}}";
+							Frame = "{{0, 0}, {1041, 154}}";
 						};
 						Tab3 = {
 							Frame = "{{0, 0}, {612, 295}}";
@@ -178,31 +178,31 @@
 	F529392C0230481C01A80164 = {
 		fileReference = F5B29D6E01F7393A01A80164;
 		isa = PBXFileBreakpoint;
-		lineNumber = 208;
+		lineNumber = 209;
 		state = 2;
 	};
 	F529392D02304B8101A80164 = {
 		fileReference = F5B29D6E01F7393A01A80164;
 		isa = PBXFileBreakpoint;
-		lineNumber = 233;
+		lineNumber = 234;
 		state = 2;
 	};
 	F529392E0230745801A80164 = {
 		fileReference = F5B29D7801F7395001A80164;
 		isa = PBXFileBreakpoint;
-		lineNumber = 402;
+		lineNumber = 411;
 		state = 2;
 	};
 	F540263C022947D101A80164 = {
 		fileReference = F5B29D7801F7395001A80164;
 		isa = PBXFileBreakpoint;
-		lineNumber = 467;
+		lineNumber = 476;
 		state = 2;
 	};
 	F540263D0229497601A80164 = {
 		fileReference = F574E09E01FD122F01A80164;
 		isa = PBXFileBreakpoint;
-		lineNumber = 66;
+		lineNumber = 65;
 		state = 2;
 	};
 	F540263E02294B3601A80164 = {
@@ -232,19 +232,19 @@
 	F5402644022C488701A80164 = {
 		fileReference = F5B29D6501F7391601A80164;
 		isa = PBXFileBreakpoint;
-		lineNumber = 239;
+		lineNumber = 249;
 		state = 1;
 	};
 	F5504989022EFD2B01A80164 = {
 		fileReference = F5B29D6501F7391601A80164;
 		isa = PBXFileBreakpoint;
-		lineNumber = 192;
+		lineNumber = 202;
 		state = 1;
 	};
 	F551A29F022D7F9201A80164 = {
 		fileReference = F5B29D6E01F7393A01A80164;
 		isa = PBXFileBreakpoint;
-		lineNumber = 245;
+		lineNumber = 246;
 		state = 2;
 	};
 	F574E09A01FD0FD701A80164 = {
@@ -336,13 +336,13 @@
 	F5DEAE9202125B9A01A80164 = {
 		fileReference = F5B29D6501F7391601A80164;
 		isa = PBXFileBreakpoint;
-		lineNumber = 116;
+		lineNumber = 126;
 		state = 2;
 	};
 	F5DEAE9302125C3F01A80164 = {
 		fileReference = F5B29D6501F7391601A80164;
 		isa = PBXFileBreakpoint;
-		lineNumber = 103;
+		lineNumber = 113;
 		state = 2;
 	};
 }

@@ -69,7 +69,7 @@
             CLASS = WcalcController; 
             LANGUAGE = ObjC; 
             OUTLETS = {
-                AnswerField = id; 
+                AnswerField = NSTextField; 
                 ExpressionField = NSTextField; 
                 PrecisionSlider = NSSlider; 
                 affectDrawerMenu = NSMenuItem; 
@@ -88,6 +88,8 @@
                 outputFormat2 = NSMatrix; 
                 pickyVariables = NSButton; 
                 printPrefixes = NSButton; 
+                rememberErrors = NSButton; 
+                roundingIndication = NSPopUpButton; 
                 shiftKey1 = NSButton; 
                 shiftKey2 = NSButton; 
                 strictSyntax = NSButton; 
@@ -95,7 +97,6 @@
                 theKeyboard = id; 
                 thePrefPanel = NSPanel; 
                 updateHistory = NSButton; 
-                useCommas = NSButton; 
                 useRadians = NSButton; 
                 variableList = id; 
             }; 

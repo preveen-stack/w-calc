@@ -22,6 +22,8 @@
 				F574E09E01FD122F01A80164,
 				F5EF54D302022A7001A80164,
 				F5EF54D202022A7001A80164,
+				F5D446D00263B46801A80164,
+				F5D446D10263B46801A80164,
 			);
 			isa = PBXGroup;
 			name = Classes;
@@ -284,6 +286,7 @@
 				F5EF54D402022A7001A80164,
 				F5DEAE90021254A501A80164,
 				F529392A023034CB01A80164,
+				F5D446D20263B46801A80164,
 			);
 			isa = PBXHeadersBuildPhase;
 			name = Headers;
@@ -317,6 +320,7 @@
 				F5EF54D502022A7001A80164,
 				F5DEAE8A0211DAA501A80164,
 				F529392B023034CB01A80164,
+				F5D446D30263B46801A80164,
 			);
 			isa = PBXSourcesBuildPhase;
 			name = Sources;
@@ -837,6 +841,28 @@
 		};
 		F5B29D8401F73C2701A80164 = {
 			fileRef = F5B29D8301F73C2701A80164;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5D446D00263B46801A80164 = {
+			isa = PBXFileReference;
+			path = MyTextField.h;
+			refType = 4;
+		};
+		F5D446D10263B46801A80164 = {
+			isa = PBXFileReference;
+			path = MyTextField.m;
+			refType = 4;
+		};
+		F5D446D20263B46801A80164 = {
+			fileRef = F5D446D00263B46801A80164;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5D446D30263B46801A80164 = {
+			fileRef = F5D446D10263B46801A80164;
 			isa = PBXBuildFile;
 			settings = {
 			};
