@@ -19,7 +19,6 @@
 #include "string_manip.h"
 
 	extern short scanerror;
-	extern short use_commas;
 	
 /* Everything up to the funny characters on the next line */
 /* goes directly into the lex.yy.c file */
@@ -106,12 +105,13 @@ re				{ yylval.number = W_ELECTRON_RADIUS; return(NUMBER); }
 %{ /* These are the binary operations */
 	%}
 ([!])|(not)				{ return(WNOT); }
+[*][*]					{ return(WSQR); }
 [+]						{ return(WPLUS); }
 [*]						{ return(WMULT); }
 [/]|[Ö]					{ return(WDIV); }
 [%]						{ return(WMOD); }
 [=]						{ return(WEQL); }
-(\^)|([*][*])			{ return(WEXP); }
+(\^)					{ return(WEXP); }
 (\|\|)|(or)				{ return(WOR); }
 (\&\&)|(and)			{ return(WAND); }
 (\=\=)|(equals)|(eq)	{ return(WEQUAL); }
@@ -156,13 +156,13 @@ floor { return(WFLOOR); }
 %}
 
 ({NDIGIT}{DIGIT}{0,2}[.,]{DIGIT}{3})(e[+-]?{DIGIT}+)? {
-	char strip = use_commas?'.':',';
+	char strip = conf.use_commas?'.':',';
 	extern int yydebug;
 
 	/* take out the ignored char */
 	strstrip(strip, yytext);
 	/* convert commas to periods if necessary for correct parsing */
-	if (use_commas)
+	if (conf.use_commas)
 		strswap(',', '.', yytext);
 	
 	if (yydebug)
@@ -172,6 +172,10 @@ floor { return(WFLOOR); }
 	
 	if (fabs(yylval.number) == HUGE_VAL)
 		report_error(strerror(errno));
+	else {
+		unsigned int t = count_digits(yytext);
+		if (t<sig_figs) sig_figs = t;
+	}
 	
 	return(NUMBER);
 }
@@ -180,11 +184,11 @@ floor { return(WFLOOR); }
 	char err[strlen(yytext)+50];
 	extern int yydebug;
 	
-	if (strict_syntax && strchr(yytext,',') && ! use_commas) {
+	if (conf.strict_syntax && strchr(yytext,',') && ! conf.use_commas) {
 		sprintf(err,"Incorrect number format (%s) - expected period (.)", yytext);
 		report_error(err);
 		scanerror = 1;
-	} else if (strict_syntax && strchr(yytext,'.') && use_commas) {
+	} else if (conf.strict_syntax && strchr(yytext,'.') && conf.use_commas) {
 		sprintf(err,"Incorrect number format (%s) - expected comma (,)", yytext);
 		report_error(err);
 		scanerror = 1;
@@ -194,6 +198,12 @@ floor { return(WFLOOR); }
 		if (yydebug) printf("nonambiguous %s => ", yytext);
 		yylval.number = strtod(yytext,NULL);
 		if (yydebug) printf("%f\n", yylval.number);
+		if (fabs(yylval.number) == HUGE_VAL)
+			report_error(strerror(errno));
+		else {
+			unsigned int t = count_digits(yytext) - (yytext[0]=='0')?1:0;
+			if (t<sig_figs) sig_figs = t;
+		}
 		return(NUMBER);
 	}
 }
@@ -205,7 +215,7 @@ floor { return(WFLOOR); }
 
 	/* if it got in here with the use_commas
 		it's wrong UNLESS it doesn't have any commas or periods */
-	if (strict_syntax && use_commas && (strchr(yytext,strip) || strchr(yytext,'.'))) {
+	if (conf.strict_syntax && conf.use_commas && (strchr(yytext,strip) || strchr(yytext,'.'))) {
 		sprintf(err,"Incorrect number format (%s)", yytext);
 		report_error(err);
 		scanerror = 1;
@@ -220,6 +230,10 @@ floor { return(WFLOOR); }
 
 		if (fabs(yylval.number) == HUGE_VAL)
 			report_error(strerror(errno));
+		else {
+			unsigned int t = count_digits(yytext);
+			if (t<sig_figs) sig_figs = t;
+		}
 		return(NUMBER);
 	}
 }
@@ -230,7 +244,7 @@ floor { return(WFLOOR); }
 
 	/* if it got in here without the use_commas variable
 		then it doesn't belong here */
-	if (strict_syntax && ! use_commas) {
+	if (conf.strict_syntax && ! conf.use_commas) {
 		sprintf(err,"Incorrect number format (%s)", yytext);
 		report_error(err);
 		scanerror = 1;
@@ -247,14 +261,27 @@ floor { return(WFLOOR); }
 
 		if (fabs(yylval.number) == HUGE_VAL)
 			report_error(strerror(errno));
+		else {
+			unsigned int t = count_digits(yytext);
+			if (t<sig_figs) sig_figs = t;
+		}
 		return(NUMBER);
 	}
 }
 
 0x[0-9a-fA-F]+ {
 	unsigned long int value;
+	unsigned int t = 0;
+	char * curs = yytext+2;
+	
 	sscanf(yytext,"%lx",&value);
 	yylval.number = value;
+
+	while (curs && *curs) {
+		++t;
+		++curs;
+	}
+	if (t<sig_figs) sig_figs = t;
 	return(NUMBER);
 }
 
@@ -266,8 +293,11 @@ floor { return(WFLOOR); }
 		report_error(err);
 		scanerror = 1;
 	} else {
+		unsigned int t;
 		sscanf(yytext,"%lo",&value);
 		yylval.number = value;
+		t = count_digits(yytext)-1;
+		if (t<sig_figs) sig_figs = t;
 		return(NUMBER);
 	}
 }
@@ -281,11 +311,14 @@ floor { return(WFLOOR); }
 		report_error(err);
 		scanerror = 1;
 	} else {
+		unsigned int t;
 		for (i=len-1;i>1;--i) {
 			value += ((yytext[i]=='0')?0:1) * place;
 			place = pow(2,len-i);
 		}
 		yylval.number = value;
+		t = count_digits(yytext)-2;
+		if (t<sig_figs) sig_figs = t;
 		return(NUMBER);
 	}
 }
