@@ -1,7 +1,24 @@
+Mar 04 2002 - Kyle Wheeler
+ - Added a base-drawer (GUI)
+Mar 02 2002 - Kyle Wheeler
+ - Fixed the live preference display (GUI)
+ - Fixed the menu's response to the drawer state (GUI)
+ - Made the preference Panel Modeless (GUI)
+ - Implemented strict_syntax preference (BOTH)
+Mar 01 2002 - Kyle Wheeler
+ - Removed all but one reserved variable (CLI)
+ - Period button becomes a comma button depending on comma preference (GUI)
+ - Added confusing-number garbage collector (BOTH)
+ - Moved commands to parser for GUI and piped file support (BOTH)
+ - Fixed division symbol & continuous expressions (GUI)
+ - Full international comma support (BOTH)
+ - CLI doesn't ignore some errors anymore (CLI)
+ - Fixed crasher in precision output (BOTH)
 Feb 28 2002 - Kyle Wheeler
  - Added CLI variable parsing strictness toggle (CLI)
  - Added sqrt, ceil, and floor functions (BOTH)
  - Fixed binary output (BOTH)
+ - Fixed crasher in comma output (BOTH)
 Feb 27 2002 - Kyle Wheeler
  - Fixed the comma parsing (BOTH)
 --- Version 1.4.4 ---
