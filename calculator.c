@@ -224,7 +224,7 @@ double simple_exp (double first, enum operations op, double second)
 			default:		temp = 0.0; break;
 		}
 		if (fabs(modf(temp,&trash)) <= DBL_EPSILON) {
-			clamped = 1;
+			if (modf(temp,&trash)) clamped = 1;
 			return trash;
 		}
 		return temp;
@@ -260,7 +260,7 @@ double uber_function (enum functions func, double input)
 			default:		temp = input; break;
 		}
 		if (fabs(modf(temp, &trash)) <= DBL_EPSILON) {
-			clamped = 1;
+			if (modf(temp,&trash)) clamped = 1;
 			return trash;
 		}
 		return temp;
