@@ -1,4 +1,5 @@
 # Process this file with autoconf to produce a configure script.
+AC_PREREQ(2.57)
 AC_INIT(wcalc, 1.7, kyle-wcalc@memoryhole.net)
 AM_INIT_AUTOMAKE(wcalc, 1.7)
 AC_CONFIG_SRCDIR([WcalcController.h])
@@ -36,11 +37,19 @@ AC_C_CONST
 # Checks for library functions.
 AC_FUNC_ALLOCA
 AC_FUNC_MALLOC
-#AC_FUNC_REALLOC
+AC_FUNC_REALLOC
 AC_FUNC_STAT
 AC_FUNC_STRTOD
 AC_FUNC_VPRINTF
-AC_CHECK_FUNCS([memset floor modf pow rint sqrt stpcpy strchr strdup strerror strrchr strtoul])
+AC_CHECK_FUNCS([memset floor modf pow rint sqrt strchr strdup strerror strrchr strtoul])
+
+if test "`(uname) 2>/dev/null`" = SunOS \
+	&& uname -r | grep '^5' >/dev/null; then
+	AC_CHECK_LIB(sunmath, isinf, ac_sunmath=-lsunmath, ac_sunmath="")
+	AC_CHECK_FUNCS(isinf)
+	AC_CHECK_HEADERS(ieeefp.h)
+	LDFLAGS="$LDFLAGS $ac_sunmath"
+fi
 
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
