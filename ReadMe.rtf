@@ -7,7 +7,7 @@
 
 \f0\fs28 \cf0 Hello!\
 \
-This is Wcalc 1.4.5!\
+This is Wcalc 1.5-beta1!\
 \
 1. What's New\
 2. Intro\
@@ -22,25 +22,15 @@ This is Wcalc 1.4.5!\
 **************
 \f0\b0 \
 \
-A lot of changes here - mostly bugfixes (there are *always* more <sigh>)\
+NEW FEATURE: Rewrote the number parser (again). Now handles internationalization by pulling the appropriate information out of the System Preferences, and pre-processes expressions. NEEDS TESTING!\
 \
-NEW FEATURE: Rewrote the number parser. Now handles commas correctly in all cases (i.e. 1,000 is either 1000 or 1 depending on the comma preference). Flags confusing numbers (e.g. 098 or 1.0.1)\
+NEW FEATURE: Command-line cannot pull it out of System Preferences (because it is made to be portable) and so you can change the separators with the \\tsep and \\dsep commands. For example, '\\tsep.' makes period (.) the thousands separator.\
 \
-NEW FEATURE: Command-line commands (like \\commas or \\hex or \\p4) now work everywhere - the GUI as well as in files that you pipe into the command-line version.\
+NEW FEATURE: Expressions that produce errors don't have to be added to the history (this is a preference) - the default is "no".\
 \
-NEW FEATURE: Added support for some more symbols (\'b3, \'b2, and \'ad).\
+NEW FEATURE: Saves the drawer state - so when you quit and open Wcalc again, the drawers that you left open are reopened.\
 \
-NEW FEATURE: p and e are not reserved variable names in the CLI anymore.\
-\
-BUGFIX: Made preference panel and keyboard panel placement more common-sense.\
-\
-BUGFIX: Fixed a crash in the comma-output printing.\
-\
-BUGFIX: Fixed a crash in the precision routines.\
-\
-BUGFIX: CLI prints all errors now (used to ignore some errors).\
-\
-BUGFIX: Fixed the menu's tracking of the state of the drawer (it was backwards).\
+NEW FEATURE: Added cube root (cbrt)\
 \
 
 \f1\b *********\
