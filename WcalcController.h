@@ -30,6 +30,9 @@
 	IBOutlet NSButton *useCommas;
 	IBOutlet NSButton *strictSyntax;
 	IBOutlet NSButton *decimalKey;
+	IBOutlet NSDrawer *baseDrawer;
+	IBOutlet NSMenuItem *baseMenu;
+	IBOutlet NSMatrix *outputFormat2;
 
 	bool just_answered;
 	NSView *superview;
@@ -46,4 +49,5 @@
 - (IBAction)setPrefs:(id)sender;
 - (IBAction)showPrefs:(id)sender;
 - (IBAction)displayPrefs:(id)sender;
+- (IBAction)showBaseDrawer:(id)sender;
 @end

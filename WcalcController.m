@@ -268,6 +268,7 @@ static char update_history = 0;
 	char * expression;
 	double val;
 	extern char * errstring;
+	int pout_fmt = output_format;
 
 	expression = strdup([[ExpressionField stringValue] cString]);
 
@@ -282,22 +283,28 @@ static char update_history = 0;
 		errstring = NULL;
 	}
 //	[AnswerField setTextColor:[NSColor redColor]];
-	[AnswerField setStringValue:[NSString stringWithFormat:@"%s",pretty_answer]];
-	// if the drawer is open, refresh the data.
-	// make sure the menu is correct for the state of the drawer
-	if (! [theDrawer state]) {
-		if (! [[affectDrawerMenu title] isEqualToString:@"Show Inspector Drawer"])
-			[affectDrawerMenu setTitle:@"Show Inspector Drawer"];
+	if (pout_fmt != output_format) {
+		char * temp;
+		if (pretty_answer) free(pretty_answer);
+		temp = print_this_result(last_answer);
+		if (temp) pretty_answer = strdup(temp);
+		else pretty_answer = NULL;
+		[AnswerField setStringValue:[NSString stringWithCString:(pretty_answer?pretty_answer:"Not Enough Memory")]];
 	} else {
+		[AnswerField setStringValue:[NSString stringWithFormat:@"%s",pretty_answer]];
+	}
+	// if the drawer is open, refresh the data.
+	if ([theDrawer state]) {
 		[variableList reloadData];
 		[historyList reloadData];
-		if (! [[affectDrawerMenu title] isEqualToString:@"Hide Inspector Drawer"])
-			[affectDrawerMenu setTitle:@"Hide Inspector Drawer"];
-	}	
+	}
 	just_answered = TRUE;
+	// refresh the prefs if necessary
 	if ([thePrefPanel isVisible])
 		[self displayPrefs:sender];
-	[ExpressionField selectText:sender];
+	if ([baseDrawer state])
+		[outputFormat2 selectCellWithTag:output_format];
+	[ExpressionField selectText:self];
 }
 
 - (IBAction)enterData:(id)sender
@@ -373,6 +380,17 @@ static char update_history = 0;
 		[theKeyboard setFrameAutosaveName:@"wcalc_keyboard"];
 	} else {
 		[theKeyboard close];
+	}
+}
+
+- (IBAction)showBaseDrawer:(id)sender
+{
+	if (! [baseDrawer state]) {
+		[baseDrawer open];
+		[baseMenu setTitle:@"Hide Base Drawer"];
+	} else {
+		[baseDrawer close];
+		[baseMenu setTitle:@"Open Base Drawer"];
 	}
 }
 
