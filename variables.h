@@ -7,14 +7,24 @@
 
 struct variable {
 	char * key;
+	char * expression;
 	double value;
+	unsigned int exp:1;
 	struct variable *next;
 };
 
-double * getvar (char * key);
-double * getnvar (int);
+struct answer {
+	double val;
+	char * exp;
+	unsigned int err:1;
+};
+
+struct answer getvar (char * key);
+struct answer getvar_full (char * key);
+struct answer getnvar (int);
 struct variable * getrealnvar (int);
-int putvar (char * key, double value);
+int putexp (char * key, char * value);
+int putval (char * key, double value);
 int putvarc (char * keyvalue);
 void initvar (void);
 void delnvar (int);
