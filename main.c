@@ -118,10 +118,13 @@ int main (int argc, char *argv[])
 				} else if (! strncmp(readme,"\\e",2)) {
 					engineering = readme[2]?atoi(readme+2)>0:!engineering;
 					printf("Engineering notation is %s %s\n",engineering?"enabled":"disabled", precision?"":"if the precision is set to a nonzero value");
-				} else if (!strcmp(readme,"\\yydebug")) {
+				} else if (!strncmp(readme,"\\yydebug",8)) {
 					yydebug = ! yydebug;
 					printf("Debug Mode %s\n",yydebug?"On":"Off");
-				} else if (!strcmp(readme,"?") || !strcmp(readme,"help")) {
+				} else if (!strncmp(readme,"\\radians",8)) {
+					use_radians = ! use_radians;
+					printf("%sUsing Radians\n",use_radians?"":"Not ");
+				} else if (!strncmp(readme,"?",1) || !strncmp(readme,"help",4)) {
 					print_interactive_help();
 				} else {
 					parseme(readme);
@@ -161,6 +164,7 @@ void print_interactive_help (void)
 		 "a   in an expression represents the previous answer.\n"
 		 "\\q  exits the program.\n"
 		 "?   displays this help screen.\n"
+		 "\\radians toggles radian mode.\n"
 		 "\\dec, \\hex, \\oct, \\bin set the output format.\n\n"
 		 "Variables are supported and may be assigned using the = operator.\n"
 		 "To assign a variable, use the form:\n"

@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h> /* for HUGE_VAL */
-#include <float.h> /* for LDBL_MIN */
+#include <float.h> /* for DBL_EPSILON */
 #include <string.h> /* for bzero() */
 /* these are for kbw_rand() */
 #include <sys/types.h> /* for stat() and read() */
@@ -106,6 +106,7 @@ char *print_this_result (double result)
 {
 	static char format[10];
 	static char *pa = NULL, *tmp;
+	extern char *errstring;
 
 	// Find the proper format
 	switch (output_format) {
@@ -178,6 +179,11 @@ char *print_this_result (double result)
 	}
 
 	if (standard_output) {
+		if (errstring && strlen(errstring)) {
+			fprintf(stderr,"%s\n",errstring);
+			free(errstring);
+			errstring = NULL;
+		}
 		printf(" = %s\n",pa);
 	}
 
@@ -190,6 +196,7 @@ double simple_exp (double first, enum operations op, double second)
 {
 	if (compute) {
 		double trash, temp;
+		extern short clamped;
 		switch (op) {
 			case wor:		temp = (first || second); break;
 			case wand:		temp = (first && second); break;
@@ -207,7 +214,10 @@ double simple_exp (double first, enum operations op, double second)
 			case wexp:		temp = pow(first, second); break;
 			default:		temp = 0.0; break;
 		}
-		if (modf(temp,&trash) <= DBL_EPSILON) return trash;
+		if (fabs(modf(temp,&trash)) <= DBL_EPSILON) {
+			clamped = 1;
+			return trash;
+		}
 		return temp;
 	} else {
 		return 0.0;
@@ -218,6 +228,7 @@ double uber_function (enum functions func, double input)
 {
 	if (compute) {
 		double temp, trash;
+		extern short clamped;
 		switch (func) {
 			case wsin:		temp = sin(use_radians?input:(input*W_PI/180)); break;
 			case wcos:		temp = cos(use_radians?input:(input*W_PI/180)); break;
@@ -239,7 +250,10 @@ double uber_function (enum functions func, double input)
 			case wabs:		temp = fabs(input); break;
 			default:		temp = input; break;
 		}
-		if (modf(temp, &trash) <= DBL_EPSILON) return trash;
+		if (fabs(modf(temp, &trash)) <= DBL_EPSILON) {
+			clamped = 1;
+			return trash;
+		}
 		return temp;
 	} else {
 		return 0;
