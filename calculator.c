@@ -349,48 +349,41 @@ int find_recursion (struct variable_list *vstack)
 	struct variable_list *vlist = NULL;
 	int retval = 0;
 	struct answer a;
-	
-	a = getvar_full(vstack->varname);
-	if (! a.err) { // it is a var
-		if (a.exp) { // expression
-			struct variable_list *vcurs, *vstackcurs;
-			
-			vlist = extract_vars(a.exp);
-			// for each entry in the vlist, see if it's in the vstack
-			for (vcurs=vlist; vcurs; vcurs = vcurs->next) {
-				for (vstackcurs=vstack; vstackcurs; vstackcurs = vstackcurs->next) {
-					if (! strcmp(vcurs->varname, vstackcurs->varname)) {
-						char * error = malloc(sizeof(char)*(strlen(vcurs->varname)+73));
-						sprintf(error,"%s was found twice in symbol descent. Recursive variables are not allowed.",vcurs->varname);
-						report_error(error);
-						free(error);
-						return 1;
-					}
-				}
-			}
-			// for each entry in the vlist, see if it has recursion
-			for (vcurs=vlist; vcurs && ! retval; vcurs = vcurs->next) {
-				struct variable_list *bookmark = vcurs->next;
+	struct variable_list *vcurs, *vstackcurs;
 
-				vcurs->next = vstack;
-				retval = find_recursion(vcurs);
-				vcurs->next = bookmark;
+	a = getvar_full(vstack->varname);
+	if (a.err || !a.exp) return 0;
+
+	vlist = extract_vars(a.exp);
+	// for each entry in the vlist, see if it's in the vstack
+	for (vcurs=vlist; vcurs; vcurs = vcurs->next) {
+		for (vstackcurs=vstack; vstackcurs; vstackcurs = vstackcurs->next) {
+			if (! strcmp(vcurs->varname, vstackcurs->varname)) {
+				char * error = malloc(sizeof(char)*(strlen(vcurs->varname)+73));
+				sprintf(error,"%s was found twice in symbol descent. Recursive variables are not allowed.",vcurs->varname);
+				report_error(error);
+				free(error);
+				return 1;
 			}
-			// free the vlist
-			vcurs = vlist;
-			while (vcurs) {
-				struct variable_list *bookmark = vcurs->next;
-				free(vcurs->varname);
-				free(vcurs);
-				vcurs = bookmark;
-			}
-			return retval;
-		} else { // value
-			return 0;
 		}
-	} else { // it is not a variable
-		return 0;
 	}
+	// for each entry in the vlist, see if it has recursion
+	for (vcurs=vlist; vcurs && ! retval; vcurs = vcurs->next) {
+		struct variable_list *bookmark = vcurs->next;
+
+		vcurs->next = vstack;
+		retval = find_recursion(vcurs);
+		vcurs->next = bookmark;
+	}
+	// free the vlist
+	vcurs = vlist;
+	while (vcurs) {
+		struct variable_list *bookmark = vcurs->next;
+		free(vcurs->varname);
+		free(vcurs);
+		vcurs = bookmark;
+	}
+	return retval;
 }
 
 void report_error (char * err)
