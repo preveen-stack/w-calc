@@ -8,6 +8,7 @@
 
 #define THE_VALUE 0
 #define THE_STRUCTURE 2
+#define THE_EXPRESSION 4
 #define HASH_LENGTH = 101
 
 struct variable *them = NULL;
@@ -50,9 +51,42 @@ void delnvar (int i)
 	contents--;
 }
 
-double * getnvar (int i)
+struct answer getnvar_full (int i)
 {
-	return &(getrealnvar(i)->value);
+	struct variable * t = getrealnvar(i);
+	struct answer ans;
+	if (! t) {
+		ans.val = 0.00;
+		ans.err = 1;
+		ans.exp = NULL;
+	} else if (t->exp) {
+		ans.val = 0.00;
+		ans.exp = t->expression;
+		ans.err = 0;
+	} else {
+		ans.val = t->value;
+		ans.err = 0;
+		ans.exp = NULL;
+	}
+	return ans;
+}
+
+struct answer getnvar (int i)
+{
+	struct variable * t = getrealnvar(i);
+	struct answer ans;
+	ans.exp = NULL;
+	if (!t) {
+		ans.val = 0.00;
+		ans.err = 1;
+	} else if (t->exp) {
+		ans.val = 0.00;
+		ans.err = 1;
+	} else {
+		ans.val = t->value;
+		ans.err = 0;
+	}
+	return ans;
 }
 
 struct variable * getrealnvar (int i)
@@ -66,9 +100,42 @@ struct variable * getrealnvar (int i)
 	return cursor;
 }
 
-double * getvar (char * key)
+struct answer getvar (char * key)
 {
-	return (double *) getvar_core(key, THE_VALUE);
+	struct answer ans;
+	double *t = getvar_core(key, THE_VALUE);
+	if (t) {
+		ans.val = *t;
+		ans.err = 0;
+		ans.exp = NULL;
+	} else {
+		ans.val = 0.00;
+		ans.exp = NULL;
+		ans.err = 1;
+	}
+	return ans;
+}
+
+struct answer getvar_full (char * key)
+{
+	struct answer ans;
+	double *t = getvar_core(key, THE_VALUE);
+	if (t) {
+		ans.val = *t;
+		ans.err = 0;
+		ans.exp = NULL;
+	} else {
+		char * c = getvar_core(key, THE_EXPRESSION);
+		ans.val = 0.00;
+		if (c) {
+			ans.exp = c;
+			ans.err = 0;
+		} else {
+			ans.exp = NULL;
+			ans.err = 1;
+		}
+	}
+	return ans;
 }
 
 struct variable * getvarptr (char *key)
@@ -81,6 +148,7 @@ static void * getvar_core (char * key, int all_or_nothing)
 	struct variable *cursor = them;
 
 	if (! cursor) return NULL;
+	if (! strlen(key)) return NULL;
 	
 	while (cursor && cursor->key && strncmp(cursor->key, key, strlen(key))) {
 		cursor = cursor->next;
@@ -88,15 +156,62 @@ static void * getvar_core (char * key, int all_or_nothing)
 	if (cursor && cursor->key && ! strncmp(cursor->key, key, strlen(key))) {
 		switch (all_or_nothing) {
 			case THE_VALUE:
-				return &(cursor->value);
+				if (cursor->exp) {
+					return NULL;
+				} else
+					return &(cursor->value);
 			case THE_STRUCTURE:
 				return cursor;
+			case THE_EXPRESSION:
+				return cursor->expression;
 		}
 	}
 	return NULL;
 }
 
-int putvar (char * key, double value)
+int putexp (char * key, char * value)
+{
+	struct variable *cursor = them;
+
+	if (! key) return -1;
+
+	if (cursor) {
+		while (cursor && strncmp(cursor->key,key,strlen(key))>0 && cursor->next) {
+			cursor = cursor->next;
+		}
+
+		if (strncmp(cursor->key,key,strlen(key))) { // add after cursor
+			struct variable *ntemp = cursor->next;
+			cursor->next = calloc(sizeof(struct variable),1);
+			if (! cursor->next) { // if we can't allocate memory
+				cursor->next = ntemp;
+				return -1;
+			}
+			cursor = cursor->next;
+			cursor->next = ntemp;
+		} else { // change this one
+
+		}
+	} else {
+		them = cursor = calloc(sizeof(struct variable),1);
+	}
+
+	if (cursor->key) {
+		if (cursor->expression)
+			free(cursor->expression);
+		cursor->expression = strdup(value);
+		cursor->exp = 1;
+		return 0;
+	} else {
+		contents++;
+		cursor->key = strdup(key);
+		cursor->expression = strdup(value);
+		cursor->exp = 1;
+		return 0;
+	}
+}
+
+int putval (char * key, double value)
 {
 	struct variable *cursor = them;
 
@@ -127,11 +242,15 @@ int putvar (char * key, double value)
 //		if (cursor->value)
 //			free(cursor->value);
 		cursor->value = value;
+		cursor->expression = NULL;
+		cursor->exp = 0;
 		return 0;
 	} else {
 		contents++;
 		cursor->key = strdup(key);
 		cursor->value = value;
+		cursor->expression = NULL;
+		cursor->exp = 0;
 		return 0;
 	}
 }
@@ -144,7 +263,7 @@ int putvarc (char * keyvalue)
 	if (value == NULL) return -1;
 	*value = 0;
 	++value;
-	retval = putvar(key, strtod(value,NULL));
+	retval = putval(key, strtod(value,NULL));
 	--value;
 	*value = '=';
 	return retval;
