@@ -262,7 +262,7 @@ irand { return(WIRAND); }
 	return(NUMBER);
 }
 
-(0?\.{DIGIT}+) {
+(0?\.{DIGIT}*) {
 	extern int yydebug;
 
 	if (yydebug) printf("nonambiguous %s => ", yytext);
