@@ -1,3 +1,7 @@
+--- Version 1.4.3 ---
+Feb 24 2002 - Kyle Wheeler
+ - Fixed the parser (0.9 now means 0.9 and not 0 * .9) (BOTH)
+ - History redisplay is configurable now
 --- Version 1.4.2 ---
 Feb 20 2002 - Kyle Wheeler
  - Fixed the editing-after-pressing-a-button error (I'm an idiot) (GUI)
