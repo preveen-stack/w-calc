@@ -281,6 +281,7 @@ static char update_history = 0;
 		free(errstring);
 		errstring = NULL;
 	}
+//	[AnswerField setTextColor:[NSColor redColor]];
 	[AnswerField setStringValue:[NSString stringWithFormat:@"%s",pretty_answer]];
 	// if the drawer is open, refresh the data.
 	// make sure the menu is correct for the state of the drawer
@@ -295,7 +296,7 @@ static char update_history = 0;
 	}	
 	just_answered = TRUE;
 	if ([thePrefPanel isVisible])
-		[prefsController displayPrefs:sender];
+		[self displayPrefs:sender];
 	[ExpressionField selectText:sender];
 }
 
@@ -354,10 +355,10 @@ static char update_history = 0;
 {
 	if (! [theDrawer state]) {
 		[theDrawer open];
-		[affectDrawerMenu setTitle:@"Show Inspector Drawer"];
+		[affectDrawerMenu setTitle:@"Hide Inspector Drawer"];
 	} else {
 		[theDrawer close];
-		[affectDrawerMenu setTitle:@"Hide Inspector Drawer"];
+		[affectDrawerMenu setTitle:@"Show Inspector Drawer"];
 	}
 }
 
@@ -491,8 +492,9 @@ static char update_history = 0;
 {
 	static char initialized = 0;
 	[self displayPrefs:sender];
-	[thePrefPanel makeKeyAndOrderFront:self];
-	// centering may not be necessary, but...
+	[thePrefPanel setBecomesKeyOnlyIfNeeded:TRUE];
+	[thePrefPanel orderFront:self];
+	// centering at first
 	if (! initialized) {
 		initialized=1;
 		[thePrefPanel center];
