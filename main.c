@@ -153,11 +153,12 @@ int main (int argc, char *argv[])
 				printf("-> ");
 				fflush(stdout);
 				c = fgetc(stdin);
-				while (c != '\n' && i < 1000) {
+				while (c != '\n' && i < 1000 && ! feof(stdin) && ! ferror(stdin)) {
 					readme[i] = c;
 					c = fgetc(stdin);
 					++i;
 				}
+				if (feof(stdin) || ferror(stdin)) exit(0);
 			}
 #endif
 			if (! readme) {
