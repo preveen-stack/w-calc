@@ -20,8 +20,6 @@
 				F574E09A01FD0FD701A80164,
 				F574E09D01FD122F01A80164,
 				F574E09E01FD122F01A80164,
-				F574E0A101FD273F01A80164,
-				F574E0A201FD273F01A80164,
 				F5EF54D302022A7001A80164,
 				F5EF54D202022A7001A80164,
 			);
@@ -285,6 +283,7 @@
 				F574E09F01FD122F01A80164,
 				F5EF54D402022A7001A80164,
 				F5DEAE90021254A501A80164,
+				F529392A023034CB01A80164,
 			);
 			isa = PBXHeadersBuildPhase;
 			name = Headers;
@@ -317,6 +316,7 @@
 				F574E09C01FD0FD701A80164,
 				F5EF54D502022A7001A80164,
 				F5DEAE8A0211DAA501A80164,
+				F529392B023034CB01A80164,
 			);
 			isa = PBXSourcesBuildPhase;
 			name = Sources;
@@ -447,6 +447,7 @@
 				F521993601F8D28801A80164,
 				F521993701F8D28801A80164,
 				F5DEAE91021254A501A80164,
+				F5293928023032E201A80164,
 			);
 			isa = PBXHeadersBuildPhase;
 			name = Headers;
@@ -471,6 +472,7 @@
 				F521993B01F8D28801A80164,
 				F521993C01F8D28801A80164,
 				F521994001F8D2B801A80164,
+				F5293929023032E201A80164,
 			);
 			isa = PBXSourcesBuildPhase;
 			name = Sources;
@@ -553,6 +555,40 @@
 			path = ChangeLog;
 			refType = 4;
 		};
+		F5293926023032E201A80164 = {
+			isa = PBXFileReference;
+			path = string_manip.h;
+			refType = 4;
+		};
+		F5293927023032E201A80164 = {
+			isa = PBXFileReference;
+			path = string_manip.c;
+			refType = 4;
+		};
+		F5293928023032E201A80164 = {
+			fileRef = F5293926023032E201A80164;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5293929023032E201A80164 = {
+			fileRef = F5293927023032E201A80164;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F529392A023034CB01A80164 = {
+			fileRef = F5293926023032E201A80164;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F529392B023034CB01A80164 = {
+			fileRef = F5293927023032E201A80164;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		F5459F57022612F901A80164 = {
 			fileRef = F510EE8C021716B401A80164;
 			isa = PBXBuildFile;
@@ -608,16 +644,6 @@
 			settings = {
 			};
 		};
-		F574E0A101FD273F01A80164 = {
-			isa = PBXFileReference;
-			path = PrefsController.h;
-			refType = 4;
-		};
-		F574E0A201FD273F01A80164 = {
-			isa = PBXFileReference;
-			path = PrefsController.m;
-			refType = 4;
-		};
 		F586ED3901FD41B201A80164 = {
 			fileRef = F521994801FA927601A80164;
 			isa = PBXBuildFile;
@@ -633,6 +659,8 @@
 				F5B29D6D01F7393A01A80164,
 				F5B29D6E01F7393A01A80164,
 				F5DEAE8F021254A501A80164,
+				F5293926023032E201A80164,
+				F5293927023032E201A80164,
 			);
 			isa = PBXGroup;
 			name = Math;

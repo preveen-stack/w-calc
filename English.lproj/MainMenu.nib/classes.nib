@@ -60,6 +60,7 @@
                 menuFunction = id; 
                 setPrecision = id; 
                 setPrefs = id; 
+                showBaseDrawer = id; 
                 showInspectorDrawer = id; 
                 showKeyboardDrawer = id; 
                 showPrefs = id; 
@@ -74,6 +75,7 @@
                 affectDrawerMenu = NSMenuItem; 
                 affectKeyboardMenu = NSMenuItem; 
                 capsLockKey = NSButton; 
+                decimalKey = NSButton; 
                 engineeringNotation = NSButton; 
                 errorController = id; 
                 historyDuplicates = NSButton; 
@@ -85,6 +87,7 @@
                 printPrefixes = NSButton; 
                 shiftKey1 = NSButton; 
                 shiftKey2 = NSButton; 
+                strictSyntax = NSButton; 
                 theDrawer = NSDrawer; 
                 theKeyboard = id; 
                 thePrefPanel = NSPanel; 
