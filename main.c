@@ -44,23 +44,23 @@ int main (int argc, char *argv[])
 
 	initvar();
 
-	precision = -1;
-	engineering = 0;
+	conf.precision = -1;
+	conf.engineering = 0;
 	standard_output = 1;
-	picky_variables = 1;
+	conf.picky_variables = 1;
 
 	/* Parse commandline options */
 	for (i = 1; i < argc; ++i) {
 		if (!strncmp(argv[i],"-P",2)) {
 			if ((isdigit(*(argv[i]+2))) || ((*(argv[i]+2) == '-') && (isdigit(*(argv[i]+3))))) {
-				precision = atoi((argv[i])+2);
+				conf.precision = atoi((argv[i])+2);
 			} else {
 				fprintf(stderr,"-P option requires a valid integer without spaces.\n");
 				fflush(stderr);
 				exit(0);
 			}
 		} else if (!strcmp(argv[i],"-E")) {
-			engineering = 1;
+			conf.engineering = 1;
 		} else if (!strcmp(argv[i],"-h") || !strcmp(argv[i],"--help")) {
 			print_command_help();
 			exit(0);
@@ -68,19 +68,19 @@ int main (int argc, char *argv[])
 			printf("wcalc %s\n", VERSION);
 			exit(0);
 		} else if (!strcmp(argv[i],"-d")||!strcmp(argv[i],"--decimal")||!strcmp(argv[i],"-dec")) {
-			output_format = DECIMAL_FORMAT;
+			conf.output_format = DECIMAL_FORMAT;
 		} else if (!strcmp(argv[i],"-h")||!strcmp(argv[i],"--hexadecimal")||!strcmp(argv[i],"-hex")) {
-			output_format = HEXADECIMAL_FORMAT;
+			conf.output_format = HEXADECIMAL_FORMAT;
 		} else if (!strcmp(argv[i],"-o")||!strcmp(argv[i],"--octal")||!strcmp(argv[i],"-oct")) {
-			output_format = OCTAL_FORMAT;
+			conf.output_format = OCTAL_FORMAT;
 		} else if (!strcmp(argv[i],"-b")||!strcmp(argv[i],"--binary")||!strcmp(argv[i],"-bin")) {
-			output_format = BINARY_FORMAT;
+			conf.output_format = BINARY_FORMAT;
 		} else if (!strcmp(argv[i],"-p")) {
-			print_prefixes = 1;
+			conf.print_prefixes = 1;
 		} else if (!strcmp(argv[i],"-l")||!strcmp(argv[i],"--lenient")) {
-			picky_variables = 0;
+			conf.picky_variables = 0;
 		} else if (!strcmp(argv[i],"-r")||!strcmp(argv[i],"--radians")) {
-			use_radians = 1;
+			conf.use_radians = 1;
 		} else if (!strcmp(argv[i],"--yydebug")) {
 			yydebug = 1;
 		} else {
