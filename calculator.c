@@ -42,6 +42,7 @@ char *strchr(), *strrchr ();
 #include "calculator.h"
 #include "variables.h"
 #include "string_manip.h"
+#include "files.h"
 
 static double *stack = NULL;
 static int stacksize = 0;

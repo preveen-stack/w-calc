@@ -27,9 +27,6 @@
 /* Define if you have a readline compatible library */
 #undef HAVE_LIBREADLINE
 
-/* Define if you have the `termcap' library (-ltermcap). */
-#undef HAVE_LIBTERMCAP
-
 /* Define if you have the <limits.h> header file. */
 #undef HAVE_LIMITS_H
 
@@ -72,6 +69,9 @@
 
 /* Define if you have the <stdint.h> header file. */
 #undef HAVE_STDINT_H
+
+/* Define if you have the <stdio.h> header file. */
+#undef HAVE_STDIO_H
 
 /* Define if you have the <stdlib.h> header file. */
 #undef HAVE_STDLIB_H

@@ -5,7 +5,6 @@ AC_DEFUN([VL_LIB_READLINE], [
   AC_CACHE_CHECK([for a readline compatible library],
                  vl_cv_lib_readline, [
     ORIG_LIBS="$LIBS"
-	echo
     for readline_lib in readline edit editline; do
       for termcap_lib in "" termcap curses ncurses; do
         if test -z "$termcap_lib"; then
@@ -14,6 +13,7 @@ AC_DEFUN([VL_LIB_READLINE], [
           TRY_LIB="-l$readline_lib -l$termcap_lib"
         fi
         LIBS="$ORIG_LIBS $TRY_LIB"
+		echo $LIBS
         AC_TRY_LINK_FUNC(readline, vl_cv_lib_readline="$TRY_LIB")
         if test -n "$vl_cv_lib_readline"; then
           break

@@ -1,6 +1,6 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(wcalc, 1.5.2, kwheeler@cse.nd.edu)
-AM_INIT_AUTOMAKE(wcalc, 1.5.2)
+AC_INIT(wcalc, 1.6, kwheeler@cse.nd.edu)
+AM_INIT_AUTOMAKE(wcalc, 1.6)
 AC_CONFIG_SRCDIR([WcalcController.h])
 AM_CONFIG_HEADER([config.h])
 
@@ -13,10 +13,8 @@ AC_PROG_INSTALL
 # Checks for libraries.
 # FIXME: Replace `main' with a function in `-ll':
 AC_CHECK_LIB([l], [main])
-# FIXME: Replace `main' with a function in `-lm':
 AC_CHECK_LIB([m], [acos])
-# FIXME: Replace `main' with a function in `-ltermcap':
-AC_CHECK_LIB([termcap], [clear])
+#AC_CHECK_LIB([termcap], [clear])
 # FIXME: Replace `main' with a function in `-lreadline':
 AC_ARG_WITH(readline,[  --without-readline      do not try to find and use the readline library],nc_cv_readline=$withval,nc_cv_readline=yes)
 if test $"$nc_cv_readline" = yes ; then
@@ -30,7 +28,7 @@ AC_HEADER_STDC
 AC_HEADER_SYS_WAIT
 AC_HEADER_TIME
 AC_HEADER_STAT
-AC_CHECK_HEADERS([fcntl.h float.h inttypes.h stdlib.h string.h strings.h unistd.h limits.h])
+AC_CHECK_HEADERS([fcntl.h float.h inttypes.h stdlib.h stdio.h string.h strings.h unistd.h limits.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST

@@ -1,3 +1,152 @@
+2003-03-22 20:20  memoryhole
+
+	* help.c, scanner.l, Wcalc.pbproj/kyle.pbxuser: Updated the scanner
+	to be more flexible with opening and saving filenames, and changed
+	the help text to reflect the new commands.
+
+2003-03-22 20:19  memoryhole
+
+	* files.c: Made it save variables in save-files as well as
+	expressions. The variables are saved first, so they'll always be
+	available (because I don't want to have to remember exactly at
+	which point they were saved).
+
+2003-03-22 17:37  memoryhole
+
+	* Makefile.am, Makefile.in, WcalcController.h, WcalcController.m,
+	calculator.c, files.c, files.h, main.c, parser.y, scanner.l,
+	English.lproj/MainMenu.nib/classes.nib,
+	English.lproj/MainMenu.nib/objects.nib, Wcalc.pbproj/kyle.pbxuser,
+	Wcalc.pbproj/project.pbxproj: Got file support working. Saves and
+	loads history. As it loads, it evaluates, so variables stored that
+	way are saved as well. Handles comments appropriately (read:
+	ignores them) when loading.
+
+2003-03-22 17:34  memoryhole
+
+	* HistoryList.m, historyManager.c, historyManager.h: Discovered
+	that history_length conflicts with readline. Fixed.
+
+2003-03-22 14:41  memoryhole
+
+	* WcalcController.h, WcalcController.m: Added an open, save, and
+	saveAs command that do predictable things. For the moment, only
+	open really does anything. save and saveAs display dialogs, but
+	don't do anything with the selection (yet). also added a
+	displayErrno function for reporting file-related errors.
+
+2003-03-22 14:10  memoryhole
+
+	* calculator.c: Fixed the flatten detection.
+
+2003-03-22 14:09  memoryhole
+
+	* parser.y: Fixed the history limit display (CLI)
+
+2003-03-22 14:08  memoryhole
+
+	* string_manip.c, string_manip.h: Added a function to remove
+	comments from strings.
+
+2003-03-22 12:35  memoryhole
+
+	* ErrorController.m: Errors should beep.
+
+2003-03-20 22:34  memoryhole
+
+	* WcalcController.m: Patch for decimal key from Thomas Steinhausen
+
+2003-03-19 13:40  memoryhole
+
+	* English.lproj/MainMenu.nib/classes.nib,
+	English.lproj/MainMenu.nib/info.nib,
+	English.lproj/MainMenu.nib/objects.nib, Wcalc.pbproj/kyle.pbxuser:
+	A few nib fixes - the drawer is now reconnected to the main window,
+	things like that.
+
+2003-03-19 13:35  memoryhole
+
+	* calculator.c: Added recursion detection.
+
+2003-03-19 13:25  memoryhole
+
+	* WcalcController.h, WcalcController.m: Removed some strict_syntax
+	stuff. Fixed printout of the history limit.  A few miscellaneous
+	changes.
+
+2003-02-28 11:39  memoryhole
+
+	* .cvsignore: Always more stuff to ignore.
+
+2003-02-28 11:39  memoryhole
+
+	* scanner.l: Improved precision specification.	Added a rounding
+	indication command.
+
+2003-02-28 11:38  memoryhole
+
+	* parser.y: Added a rounding indication command.
+
+2003-02-28 11:37  memoryhole
+
+	* main.c: Made readline pay attention to the history limit
+	preference.
+
+2003-02-28 11:36  memoryhole
+
+	* help.c: Updated the help screen.
+
+2003-02-28 11:36  memoryhole
+
+	* definitions.h: Added a newline to the help screen.
+
+2003-02-28 11:35  memoryhole
+
+	* calculator.c: Fixed the arc- trig functions in degree mode. 
+	Added a command-line rounding indicator.
+
+2003-02-24 14:37  memoryhole
+
+	* calculator.h, main.c, parser.y, scanner.l, wcalc.rc: Removed the
+	strict_syntax preference (it doesn't do anything anymore).
+
+2003-02-24 14:36  memoryhole
+
+	* calculator.c: Fixed integer output to respect the engineering
+	printout preference.  Made it use the builtin prefixes for octal
+	and hex.
+
+2003-02-24 13:44  memoryhole
+
+	* calculator.c: I'm an idiot. Simplified the integer-printing
+	stuff.
+
+2003-02-24 11:58  memoryhole
+
+	* main.c, wcalc.rc: Added support for persistent preferences
+	(~/.wcalcrc)
+
+2003-02-24 11:58  memoryhole
+
+	* calculator.c: If it's just an integer, print the whole thing.
+	(fix the prefs stuff)
+
+2003-02-21 17:42  memoryhole
+
+	* Makefile.in, aclocal.m4, calculator.c, calculator.h, config.h.in,
+	configure, configure.in, main.c, parser.y, scanner.l, variables.c,
+	Wcalc.pbproj/kyle.pbxuser: Added support for a ~/.wcalcrc. Changed
+	some error-message wording here and there. Miscellaneous fixes.
+
+2003-02-21 17:40  memoryhole
+
+	* definitions.h: Added cot acot coth acoth and reformatted a
+	little.
+
+2003-02-20 03:26  memoryhole
+
+	* ChangeLog, NEWS: Keeping things up to date.
+
 2003-02-19 11:38  memoryhole
 
 	* WcalcController.m, English.lproj/MainMenu.nib/info.nib,

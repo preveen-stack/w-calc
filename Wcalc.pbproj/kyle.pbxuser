@@ -239,7 +239,7 @@
 		isa = PBXTextBookmark;
 		name = "calculator.c: parseme";
 		rLen = 0;
-		rLoc = 2411;
+		rLoc = 2430;
 		rType = 0;
 		vrLen = 1065;
 		vrLoc = 1922;
@@ -259,7 +259,7 @@
 		isa = PBXTextBookmark;
 		name = "calculator.c: parseme";
 		rLen = 0;
-		rLoc = 2211;
+		rLoc = 2230;
 		rType = 0;
 		vrLen = 1071;
 		vrLoc = 1076;
@@ -279,7 +279,7 @@
 		isa = PBXTextBookmark;
 		name = "calculator.c: 57";
 		rLen = 0;
-		rLoc = 1617;
+		rLoc = 1636;
 		rType = 0;
 		vrLen = 1071;
 		vrLoc = 1076;
@@ -349,7 +349,7 @@
 		isa = PBXTextBookmark;
 		name = "calculator.c: 57";
 		rLen = 0;
-		rLoc = 1617;
+		rLoc = 1636;
 		rType = 0;
 		vrLen = 1037;
 		vrLoc = 1539;
@@ -369,7 +369,7 @@
 		isa = PBXTextBookmark;
 		name = "calculator.c: parseme";
 		rLen = 0;
-		rLoc = 2161;
+		rLoc = 2180;
 		rType = 0;
 		vrLen = 714;
 		vrLoc = 1778;
@@ -439,7 +439,7 @@
 		isa = PBXTextBookmark;
 		name = "calculator.c: parseme";
 		rLen = 0;
-		rLoc = 2161;
+		rLoc = 2180;
 		rType = 0;
 		vrLen = 892;
 		vrLoc = 1694;
@@ -509,7 +509,7 @@
 		isa = PBXTextBookmark;
 		name = "calculator.c: print_this_result";
 		rLen = 0;
-		rLoc = 9593;
+		rLoc = 9612;
 		rType = 0;
 		vrLen = 610;
 		vrLoc = 8671;
@@ -529,7 +529,7 @@
 		isa = PBXTextBookmark;
 		name = "calculator.c: print_this_result";
 		rLen = 39;
-		rLoc = 9555;
+		rLoc = 9574;
 		rType = 0;
 		vrLen = 547;
 		vrLoc = 8835;
@@ -589,7 +589,7 @@
 		isa = PBXTextBookmark;
 		name = "calculator.c: report_error";
 		rLen = 0;
-		rLoc = 4473;
+		rLoc = 4492;
 		rType = 0;
 		vrLen = 760;
 		vrLoc = 4010;
@@ -1239,7 +1239,7 @@
 		isa = PBXTextBookmark;
 		name = "definitions.h: 53";
 		rLen = 0;
-		rLoc = 1853;
+		rLoc = 1849;
 		rType = 0;
 		vrLen = 1170;
 		vrLoc = 814;
@@ -1313,7 +1313,7 @@
 		isa = PBXTextBookmark;
 		name = "calculator.c: kbw_rand";
 		rLen = 0;
-		rLoc = 15051;
+		rLoc = 15070;
 		rType = 0;
 		vrLen = 579;
 		vrLoc = 14270;
@@ -1403,7 +1403,7 @@
 		isa = PBXTextBookmark;
 		name = "calculator.c: kbw_rand";
 		rLen = 0;
-		rLoc = 15051;
+		rLoc = 15070;
 		rType = 0;
 		vrLen = 630;
 		vrLoc = 13684;
@@ -1573,7 +1573,7 @@
 		isa = PBXTextBookmark;
 		name = "definitions.h: 53";
 		rLen = 0;
-		rLoc = 1853;
+		rLoc = 1849;
 		rType = 0;
 		vrLen = 1170;
 		vrLoc = 814;
@@ -1920,7 +1920,7 @@
 		isa = PBXTextBookmark;
 		name = "calculator.c: output_string";
 		rLen = 0;
-		rLoc = 14998;
+		rLoc = 15017;
 		rType = 0;
 		vrLen = 658;
 		vrLoc = 14354;
@@ -1940,7 +1940,7 @@
 		isa = PBXTextBookmark;
 		name = "calculator.c: output_string";
 		rLen = 0;
-		rLoc = 14998;
+		rLoc = 15017;
 		rType = 0;
 		vrLen = 682;
 		vrLoc = 14365;
@@ -1980,7 +1980,7 @@
 		isa = PBXTextBookmark;
 		name = "calculator.c: flatten";
 		rLen = 0;
-		rLoc = 4647;
+		rLoc = 4666;
 		rType = 0;
 		vrLen = 1085;
 		vrLoc = 4106;
@@ -2000,7 +2000,7 @@
 		isa = PBXTextBookmark;
 		name = "calculator.c: flatten";
 		rLen = 0;
-		rLoc = 4647;
+		rLoc = 4666;
 		rType = 0;
 		vrLen = 1085;
 		vrLoc = 4106;
@@ -2084,7 +2084,7 @@
 		isa = PBXTextBookmark;
 		name = "definitions.h: 14";
 		rLen = 0;
-		rLoc = 234;
+		rLoc = 231;
 		rType = 0;
 		vrLen = 812;
 		vrLoc = 0;
@@ -2138,7 +2138,7 @@
 		vrLoc = 0;
 	};
 	29B97313FDCFA39411CA2CEA = {
-		activeBuildStyle = 4A9504CCFFE6A4B311CA0CBA;
+		activeBuildStyle = 4A9504CDFFE6A4B311CA0CBA;
 		activeExecutable = F5B29D7E01F739D501A80164;
 		activeTarget = 29B97326FDCFA39411CA2CEA;
 		addToTargets = (
@@ -3345,7 +3345,7 @@
 		isa = PBXTextBookmark;
 		name = "calculator.c: 532";
 		rLen = 0;
-		rLoc = 13355;
+		rLoc = 13374;
 		rType = 0;
 		vrLen = 813;
 		vrLoc = 12653;
@@ -3415,7 +3415,7 @@
 		isa = PBXTextBookmark;
 		name = "calculator.c: 502";
 		rLen = 0;
-		rLoc = 13355;
+		rLoc = 13374;
 		rType = 0;
 		vrLen = 959;
 		vrLoc = 0;
@@ -3815,7 +3815,7 @@
 		isa = PBXTextBookmark;
 		name = "calculator.c: parseme";
 		rLen = 0;
-		rLoc = 2411;
+		rLoc = 2430;
 		rType = 0;
 		vrLen = 826;
 		vrLoc = 1805;
@@ -3935,7 +3935,7 @@
 		isa = PBXTextBookmark;
 		name = "calculator.c: parseme";
 		rLen = 0;
-		rLoc = 2411;
+		rLoc = 2430;
 		rType = 0;
 		vrLen = 790;
 		vrLoc = 1805;

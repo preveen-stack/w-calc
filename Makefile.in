@@ -80,6 +80,7 @@ install_sh = @install_sh@
 bin_PROGRAMS = wcalc
 AM_YFLAGS = -dt
 wcalc_SOURCES = calculator.h variables.h string_manip.h help.h parser.y string_manip.h historyManager.h files.h scanner.l help.c calculator.c string_manip.c historyManager.c files.c variables.c main.c
+CFLAGS = -O2 -Wall @CFLAGS@
 wcalc_LDADD = @LEXLIB@
 man_MANS = wcalc.1
 subdir = .
@@ -114,7 +115,6 @@ COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CCLD = $(CC)
 LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
-CFLAGS = @CFLAGS@
 LEXCOMPILE = $(LEX) $(LFLAGS) $(AM_LFLAGS)
 YACCCOMPILE = $(YACC) $(YFLAGS) $(AM_YFLAGS)
 DIST_SOURCES = $(wcalc_SOURCES)

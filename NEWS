@@ -1,3 +1,21 @@
+--- Version 1.6 ---
+Mar 22 2003 - Kyle Wheeler
+ - Errors now beep. (GUI)
+ - Added open/save/saveAs to create/load script files. (BOTH)
+Mar 20 2003 - Thomas Steinhausen
+ - Fixed decimal key display in non-USA countries (GUI)
+Mar 19 2003 - Kyle Wheeler
+ - Added recursion detection. (BOTH)
+Feb 28 2003 - Kyle Wheeler
+ - Fixed the arc- trig functions in degree mode. (BOTH)
+ - Made readline respect the history length preference. (CLI)
+ - Added rounding indication to the CLI. (CLI)
+ - Added rounding indication command. (BOTH)
+Feb 24 2003 - Kyle Wheeler
+ - If it's just an integer, print the whole thing (BOTH)
+ - Added support for persistent preferences in ~/.wcalcrc (CLI)
+Feb 21 2003 - Kyle Wheeler
+ - Added cot acot coth acoth and reformatted a little (BOTH)
 Feb 19 2003 - Kyle Wheeler
  - Added some display functions for variables and prefs (CLI)
  - Finally fixed the bizarre window behavior (GUI)
