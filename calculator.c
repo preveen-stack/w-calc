@@ -329,6 +329,7 @@ static int recursion (char * str)
 		vstack_base.varname = strdup(vcurs->varname);
 		vstack_base.next = NULL;
 		retval = find_recursion(&vstack_base);
+		free(vstack_base.varname);
 	}
 	while (vlist) {
 		vcurs = vlist->next;
