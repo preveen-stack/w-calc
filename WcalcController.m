@@ -700,6 +700,15 @@ static NSString *curFile = NULL;
 					[ExpressionField setStringValue:@""];
 					[AnswerField setStringValue:@""];
 				}
+				/* disable irrelevant preferences */
+				[historyDuplicates setEnabled:!conf.simple_calc];
+				[limitHistory setEnabled:!conf.simple_calc];
+				[limitHistoryLen setEnabled:!conf.simple_calc];
+				[limitHistoryLenTag setEnabled:!conf.simple_calc];
+				[pickyVariables setEnabled:!conf.simple_calc];
+				[rememberErrors setEnabled:!conf.simple_calc];
+				[updateHistory setEnabled:!conf.simple_calc];
+				[useRadians setEnabled:!conf.simple_calc];
 			}
 		default: return;
 	}
@@ -851,11 +860,19 @@ static NSString *curFile = NULL;
 	[printInts setState:(conf.print_ints?NSOnState:NSOffState)];
 	[precisionGuard setState:(conf.precision_guard?NSOnState:NSOffState)];
 	[simpleCalculator setState:(conf.simple_calc?NSOnState:NSOffState)];
+				
 	
+	/* disable irrelevant preferences */
+	[historyDuplicates setEnabled:!conf.simple_calc];
+	[limitHistory setEnabled:!conf.simple_calc];
+	[pickyVariables setEnabled:!conf.simple_calc];
+	[rememberErrors setEnabled:!conf.simple_calc];
+	[updateHistory setEnabled:!conf.simple_calc];
+	[useRadians setEnabled:!conf.simple_calc];
 	[printPrefixes setEnabled:(conf.output_format!=DECIMAL_FORMAT)];
 	[engineeringNotation setEnabled:(conf.output_format==DECIMAL_FORMAT)];
-	[limitHistoryLen setEnabled:conf.history_limit];
-	[limitHistoryLenTag setEnabled:conf.history_limit];
+	[limitHistoryLen setEnabled:conf.history_limit&&!conf.simple_calc];
+	[limitHistoryLenTag setEnabled:conf.history_limit&&!conf.simple_calc];
 
 	{
 	    char len[6];
