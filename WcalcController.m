@@ -183,7 +183,11 @@ static NSString *curFile = NULL;
 		case 18: str2 = @"floor("; break;
 		case 19: str2 = @"ceil("; break;
 		case 20: str2 = @"cbrt("; break;
-		case 21: str2 = @"log2("; break;
+		case 21: str2 = @"logtwo("; break;
+		case 22: str2 = @"cot("; break;
+		case 23: str2 = @"acot("; break;
+		case 24: str2 = @"coth("; break;
+		case 25: str2 = @"acoth("; break;
 		default: return;
 	}
 	[ExpressionField setStringValue:[str2 stringByAppendingString:str]];

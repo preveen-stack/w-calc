@@ -169,6 +169,30 @@
 			settings = {
 			};
 		};
+		277DB27D042F5173004ACA36 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			path = COPYING;
+			refType = 4;
+		};
+		277DB27E042F5173004ACA36 = {
+			fileRef = 277DB27D042F5173004ACA36;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		277DB27F042F51A5004ACA36 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			path = NEWS;
+			refType = 4;
+		};
+		277DB280042F51A6004ACA36 = {
+			fileRef = 277DB27F042F51A5004ACA36;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		2799DA4303FAD61400CA71DD = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
@@ -267,6 +291,8 @@
 				F5463560020065B401A80164,
 				F5B29D8301F73C2701A80164,
 				F521994801FA927601A80164,
+				277DB27F042F51A5004ACA36,
+				277DB27D042F5173004ACA36,
 			);
 			isa = PBXGroup;
 			name = Resources;
@@ -331,7 +357,7 @@
 	<key>CFBundleExecutable</key>
 	<string>Wcalc</string>
 	<key>CFBundleGetInfoString</key>
-	<string>Wcalc Version 1.5.2.1</string>
+	<string>Wcalc Version 1.6</string>
 	<key>CFBundleIconFile</key>
 	<string>TheW</string>
 	<key>CFBundleIdentifier</key>
@@ -343,11 +369,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>Wcalc 1.5.2.1</string>
+	<string>Wcalc 1.6</string>
 	<key>CFBundleSignature</key>
 	<string>Wcal</string>
 	<key>CFBundleVersion</key>
-	<string>1.5.2.1</string>
+	<string>1.6</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
@@ -388,6 +414,8 @@
 				F5B29D8401F73C2701A80164,
 				F586ED3901FD41B201A80164,
 				F5463561020065B401A80164,
+				277DB27E042F5173004ACA36,
+				277DB280042F51A6004ACA36,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
