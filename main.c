@@ -208,6 +208,7 @@ void print_interactive_help (void)
 		 "\\dsepX sets the decimal separator character to X.\n"
 		 "\\tsepX sets the thousands-place separator character to X.\n"
 		 "\\dec, \\hex, \\oct, \\bin set the output format.\n"
+		 "\\cons or \\conservative toggles precision guards.\n"
 		 "\\li or \\list or \\listvars prints out the currently defined variables.\n\n"
 		 "Variables are supported and may be assigned using the = operator.\n"
 		 "To assign a variable, use the form:\n"
