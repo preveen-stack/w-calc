@@ -20,7 +20,6 @@
 	int lines = 1;
 	int synerrors = 0;
 	short scanerror = 0;
-	short compute = 1;
 	char errstring[1000] = "";
 
 	%}
@@ -38,14 +37,13 @@ char * variable;
 %token WPLUS WMINUS WMULT WDIV WMOD WEQL WEXP
 %token WOR WAND WEQUAL WNEQUAL WGT WLT WGEQ WLEQ
 %token WNOT WLOG WLN WROUND
-%token WNEG
 %token WSIN WCOS WTAN WASIN WACOS WATAN WSINH WCOSH WTANH WASINH WACOSH WATANH
 %token <number> NUMBER
 %token <variable> VAR
 
-%type <number> exp
-%type <number> value
-%type <operation> op postop
+%type <number> exp exp_l2 exp_l3 exp_l4
+%type <number> oval capsule sign
+%type <operation> op op_l2
 %type <function> func
 
 %left WAND WOR
@@ -53,9 +51,8 @@ char * variable;
 %left WMINUS WPLUS
 %left WMULT WDIV WMOD
 %left WEXP
-%left WNEG
 
-%expect 176
+%expect 345
 
 %% 	/* beginning of the parsing rules	*/
 
@@ -86,8 +83,8 @@ oneline : exp
 eoln
 | assignment eoln
 | eoln	/* blank line, do nothing */
-| error eoln
-/* if we got an error on the line, don't call the C program */
+| error eoln { compute = 0; }
+/* if we got an error on the line */
 ;
 
 eoln : EOLN
@@ -107,8 +104,6 @@ assignment : VAR WEQL exp
 		} else if (standard_output && !strcmp($1,"q")) {
 			printf("q cannot be assigned a value. q is used to exit.\n");
 		} else {
-//			static char temp[20];
-//			sprintf(temp,"%g", $3);
 			if (putvar($1,$3) == 0) {
 				if (standard_output) {
 					printf("%s = %g\n", $1, *getvar($1));
@@ -132,61 +127,13 @@ assignment : VAR WEQL exp
 *                 ;
 */
 
-exp : exp op exp
-{
-	if (compute) {
-        switch ($2) {
-            case wor: $$ = $1 || $3; break;
-            case wand: $$ = $1 && $3; break;
-			case wequal: $$ = ($1 == $3); break;
-			case wnequal: $$ = ($1 != $3); break;
-			case wgt: $$ = $1 > $3; break;
-			case wlt: $$ = $1 < $3; break;
-			case wgeq: $$ = $1 >= $3; break;
-			case wleq: $$ = $1 <= $3; break;
-			case wplus: $$ = $1 + $3; break;
-			case wminus: $$ = $1 - $3; break;
-			case wmult: $$ = $1 * $3; break;
-			case wdiv:
-				if ($3 != 0)
-					$$ = $1 / $3;
-				else
-					$$ = HUGE_VAL;
-				break;
-			case wmod:
-				/* first, are they both integers */
-				if (ceil($1) == floor($1) && ceil($3) == floor($3))
-					$$ = (int)$1 % (int)$3;
-				else {
-					$$ = fmod($1,$3);
-				}
-					break;
-			case wexp:
-				$$ = pow($1,$3);
-				break;
-				
-            default: $$ = 0;
-        }
-    } else {
-        $$ = 0;
-    }
-}
-| WMINUS exp %prec WNEG
-{ $$ = - $2; }
-| WPLUS exp %prec WNEG
-{ $$ = $2; }
-| PAR exp REN { $$ = $2; }
-| WBRA exp WKET { $$ = $2; }
-| WSBRA exp WSKET { $$ = $2; }
-| exp exp %prec WMULT
-{ $$ = $1 * $2; }
-| value postop %prec WNEG
-{
-	switch ($2) {
-		case wfact: $$ = fact($1); break;
-		default: $$ = $1;
-	}
-}
+exp : exp op exp { $$ = simple_exp($1, $2, $3); }
+| WNOT exp { $$ = ! $2; }
+| exp_l2
+;
+
+exp_l2 : exp_l2 op_l2 exp_l2 { $$ = simple_exp($1, $2, $3); }
+| exp_l3
 ;
 
 op : WAND { $$ = wand; }
@@ -199,18 +146,61 @@ op : WAND { $$ = wand; }
 | WLEQ { $$ = wleq; }
 | WPLUS { $$ = wplus; }
 | WMINUS { $$ = wminus; }
-| WMULT { $$ = wmult; }
+;
+
+op_l2 : WMULT { $$ = wmult; }
 | WDIV  { $$ = wdiv; }
 | WMOD  { $$ = wmod; }
-| WEXP { $$ = wexp; }
 ;
 
-postop : WNOT { $$ = wfact; }
-| { $$ = wnone; }
+func : WSIN { $$ = wsin; }
+| WCOS { $$ = wcos; }
+| WTAN { $$ = wtan; }
+| WASIN { $$ = wasin; }
+| WACOS { $$ = wacos; }
+| WATAN { $$ = watan; }
+| WSINH { $$ = wsinh; }
+| WCOSH { $$ = wcosh; }
+| WTANH { $$ = wtanh; }
+| WASINH { $$ = wasinh; }
+| WACOSH { $$ = wacosh; }
+| WATANH { $$ = watanh; }
+| WLOG { $$ = wlog; }
+| WLN { $$ = wln; }
+| WROUND { $$ = wround; }
 ;
 
-value : NUMBER
-| VAR {
+null : PAR REN
+| WBRA WKET
+| WSBRA WSKET
+;
+
+sign : WMINUS { $$ = -1; }
+| WPLUS { $$ = 1; }
+| { $$ = 1; }
+;
+
+exp_l3 : exp_l4
+| sign exp_l3 oval { $$ = $1 * $2 * $3; }
+;
+
+oval : exp_l4 oval
+| { $$ = 1; }
+;
+
+exp_l4 :  exp_l4 WNOT oval { $$ = fact($1) * $3; }
+| capsule oval { $$ = $1 * $2; }
+| capsule WEXP sign exp_l4 oval { $$ = pow($1,$3*$4) * $5; }
+;
+
+capsule: PAR exp REN { $$ = $2; }
+| WBRA exp WKET { $$ = $2; }
+| WSBRA exp WSKET { $$ = $2; }
+| null { $$ = 0; }
+| NUMBER
+| func sign capsule { $$ = uber_function($1,$2*$3); }
+| VAR
+{
 	/* Don't include reserved variables */
 	if (standard_output && (!strcmp($1,"P") || !strcmp($1,"E") || !strcmp($1,"M") || !strcmp($1,"q"))) {
 		fprintf(stderr,"%s is a reserved variable.\n",$1);
@@ -232,55 +222,7 @@ value : NUMBER
 		}
 	}
 }
-| null { $$ = 0; }
-| func exp
-{
-	  	if (compute) {
-			switch ($1) {
-				case wsin: $$ = sin(use_radians?$2:($2*WPI/180)); break;
-				case wcos: $$ = cos(use_radians?$2:($2*WPI/180)); break;
-				case wtan: $$ = tan(use_radians?$2:($2*WPI/180)); break;
-				case wasin: $$ = asin(use_radians?$2:($2*WPI/180)); break;
-				case wacos: $$ = acos(use_radians?$2:($2*WPI/180)); break;
-				case watan: $$ = atan(use_radians?$2:($2*WPI/180)); break;
-				case wsinh: $$ = sinh($2); break;
-				case wcosh: $$ = cosh($2); break;
-				case wtanh: $$ = tanh($2); break;
-				case wasinh: $$ = asinh($2); break;
-				case wacosh: $$ = acosh($2); break;
-				case watanh: $$ = atanh($2); break;
-				case wlog: $$ = log10($2); break;
-				case wln: $$ = log($2); break;
-				case wround: $$ = (fabs(floor($2)-$2)>=0.5)?ceil($2):floor($2); break;
-				case wneg: $$ = - $2; break;
-				case wnot: $$ = ! $2; break;
-				default: $$ = $2;
-			}
-		}
-}
-;
 
-func : WSIN { $$ = wsin; }
-| WCOS { $$ = wcos; }
-| WTAN { $$ = wtan; }
-| WASIN { $$ = wasin; }
-| WACOS { $$ = wacos; }
-| WATAN { $$ = watan; }
-| WSINH { $$ = wsinh; }
-| WCOSH { $$ = wcosh; }
-| WTANH { $$ = wtanh; }
-| WASINH { $$ = wasinh; }
-| WACOSH { $$ = wacosh; }
-| WATANH { $$ = watanh; }
-| WLOG { $$ = wlog; }
-| WLN { $$ = wln; }
-| WROUND { $$ = wround; }
-| WNOT { $$ = wnot; }
-;
-
-null : PAR REN
-| WBRA WKET
-| WSBRA WSKET
 ;
 
 %%
