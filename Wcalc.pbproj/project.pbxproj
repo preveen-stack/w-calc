@@ -22,8 +22,8 @@
 				F574E09E01FD122F01A80164,
 				F574E0A101FD273F01A80164,
 				F574E0A201FD273F01A80164,
-				F5EF54D202022A7001A80164,
 				F5EF54D302022A7001A80164,
+				F5EF54D202022A7001A80164,
 			);
 			isa = PBXGroup;
 			name = Classes;
@@ -247,7 +247,7 @@
 	<key>CFBundleExecutable</key>
 	<string>Wcalc</string>
 	<key>CFBundleGetInfoString</key>
-	<string>Wcalc Version 1.2</string>
+	<string>Wcalc Version 1.3</string>
 	<key>CFBundleIconFile</key>
 	<string>TheW</string>
 	<key>CFBundleIdentifier</key>
@@ -259,11 +259,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>Wcalc 1.2</string>
+	<string>Wcalc 1.3</string>
 	<key>CFBundleSignature</key>
 	<string>Wcal</string>
 	<key>CFBundleVersion</key>
-	<string>1.2</string>
+	<string>1.3</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>

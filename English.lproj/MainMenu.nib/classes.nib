@@ -32,8 +32,12 @@
                 engineeringNotation = NSButton; 
                 expressionField = NSTextField; 
                 historyDuplicates = NSButton; 
+                historyList = NSTableView; 
                 mainController = id; 
+                outputFormat = NSMatrix; 
                 pickyVariables = NSButton; 
+                precisionSlider = NSSlider; 
+                printPrefixes = NSButton; 
                 thePrefPanel = NSPanel; 
                 useRadians = NSButton; 
             }; 
