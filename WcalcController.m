@@ -6,6 +6,11 @@
 //#import <Foundation/NSRange.h>
 
 #define KEYPAD_HEIGHT 165
+#define MIN_WINDOW_WIDTH 171
+#define MIN_WINDOW_HEIGHT_TOGGLED 118
+#define MIN_WINDOW_HEIGHT_UNTOGGLED 283
+#define FIELD_WIDTH_DIFFERENCE 22
+#define MAX_WINDOW_SIZE 10000
 
 @implementation WcalcController
 
@@ -16,17 +21,18 @@
 	NSSize w;
 	NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
 
+
 	if (shrinking) {
 		f.size.height -= KEYPAD_HEIGHT;
 		f.origin.y += KEYPAD_HEIGHT;
+		e.size.height = f.size.height - 100;
 	} else {
 		f.size.height += KEYPAD_HEIGHT;
 		f.origin.y -= KEYPAD_HEIGHT;
+		f.size.width = MIN_WINDOW_WIDTH;
 	}
-	
-	f.size.width = 171;
-	e.size.width = 149;
-	p.size.width = 149;
+
+	e.size.width = p.size.width = f.size.width - FIELD_WIDTH_DIFFERENCE;
 	
 	if (shrinking) {
 		[keypad removeFromSuperview];
@@ -40,24 +46,29 @@
 	[ExpressionField removeFromSuperview];
 	[PrecisionSlider removeFromSuperview];
 
-	[mainWindow setFrame:f display:TRUE animate:TRUE];
+	if (sender != 0)
+		[mainWindow setFrame:f display:TRUE animate:TRUE];
+	else
+		[mainWindow setFrame:f display:FALSE animate:FALSE];
 
 	if (! shrinking) {
 		[superview addSubview:keypad];
-		w.width = 171;
-		w.height = 283;
+		w.width = MIN_WINDOW_WIDTH;
+		w.height = MIN_WINDOW_HEIGHT_UNTOGGLED;
 		[mainWindow setMinSize:w];
-		w.width = 171;
-		w.height = 1200;
+		w.width = MIN_WINDOW_WIDTH;
+		w.height = MAX_WINDOW_SIZE;
 		[mainWindow setMaxSize:w];
 		[prefs setObject:@"NO" forKey:@"toggled"];
 	} else {
-		w.width = 171;
-		w.height = 118;
+		w.width = 0;
+		w.height = MIN_WINDOW_HEIGHT_TOGGLED;
 		[mainWindow setMinSize:w];
-		w.width = 1600;
-		w.height = 1200;
+	w = [mainWindow minSize];
+		w.width = MAX_WINDOW_SIZE;
+		w.height = MAX_WINDOW_SIZE;
 		[mainWindow setMaxSize:w];
+	w = [mainWindow maxSize];
 		[prefs setObject:@"YES" forKey:@"toggled"];
 	}
 	
@@ -164,6 +175,7 @@
 {
 	NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
 	NSRect w;
+	NSSize bounds;
 	if (! [prefs integerForKey:@"initialized"]) {
 		[prefs setObject:@"1" forKey:@"initialized"];
 		[prefs setObject:@"-1" forKey:@"precision"];
@@ -184,7 +196,6 @@
 	print_prefixes = [prefs boolForKey:@"printPrefixes"];
 	
 	[PrecisionSlider setIntValue:precision];
-	[mainWindow setFrameAutosaveName:@"wcalc"];
 	just_answered = FALSE;
 
 	superview = [keypad superview];
@@ -192,14 +203,25 @@
 	[PrecisionSlider retain];
 	[ExpressionField retain];
 	[mainWindow useOptimizedDrawing:TRUE];
-	if ([prefs boolForKey:@"toggled"]) {
-		[self toggleSize:0];
-	}
-	[mainWindow setFrameUsingName:@"wcalc"];
+	[mainWindow setFrameAutosaveName:@"wcalc"];
 	w = [mainWindow frame];
-	if (! [prefs boolForKey:@"toggled"])
-		w.size.width = 171;
-	[mainWindow setFrame:w display:TRUE animate:FALSE];
+	if ([prefs boolForKey:@"toggled"]) {
+		w.size.height += KEYPAD_HEIGHT;
+		w.origin.y -= KEYPAD_HEIGHT;
+		[mainWindow setFrame:w display:FALSE animate:FALSE];
+		[self toggleSize:0];
+	} else {
+		w.size.width = MIN_WINDOW_WIDTH;
+		[mainWindow setFrame:w display:FALSE animate:FALSE];
+		bounds.width = MIN_WINDOW_WIDTH;
+		bounds.height = MIN_WINDOW_HEIGHT_UNTOGGLED;
+		[mainWindow setMinSize:bounds];
+		bounds.width = MIN_WINDOW_WIDTH;
+		bounds.height = 1200;
+		[mainWindow setMaxSize:bounds];
+	}
+	w = [mainWindow frame];
+	bounds = [mainWindow minSize];
 }
 
 - (IBAction)setPrecision:(id)sender
@@ -251,11 +273,21 @@
 	} else {
 		[AnswerField setStringValue:[NSString stringWithFormat:@"%s",pretty_answer]];
 	}
-	[variableList reloadData];
-	[historyList reloadData];
-	[ExpressionField selectText:sender];
+	// if the drawer is open, refresh the data.
+	// make sure the menu is correct for the state of the drawer
+	if (! [theDrawer state]) {
+		if (! [[affectDrawerMenu title] isEqualToString:@"Show Inspector Drawer"])
+			[affectDrawerMenu setTitle:@"Show Inspector Drawer"];
+	} else {
+		[variableList reloadData];
+		[historyList reloadData];
+		if (! [[affectDrawerMenu title] isEqualToString:@"Hide Inspector Drawer"])
+			[affectDrawerMenu setTitle:@"Hide Inspector Drawer"];
+	}	
 	just_answered = TRUE;
-	[prefsController displayPrefs:sender];
+	if ([thePrefPanel isVisible])
+		[prefsController displayPrefs:sender];
+	[ExpressionField selectText:sender];
 }
 
 - (IBAction)enterData:(id)sender
@@ -264,7 +296,7 @@
 	char * str = strdup([[ExpressionField stringValue] cString]);
 	static short shiftdown = 0, capsdown = 0;
 
-	[ExpressionField setSelectable:false];
+	[ExpressionField setSelectable:FALSE];
 	if ([sent isEqualToString:@"delete"]) {
 		if (strlen(str)) {
 			str[strlen(str)-1] = 0;
@@ -305,7 +337,7 @@
 		}
 		just_answered = FALSE;
 	}
-	[ExpressionField setSelectable:true];
+	[ExpressionField setEditable:TRUE];
 	free(str);
 }
 
@@ -327,6 +359,109 @@
 	} else {
 		[theKeyboard close];
 	}
+}
+
+- (IBAction)setPrefs:(id)sender
+{
+	short need_redraw = 0;
+	short olde;
+	NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+
+	switch ([sender tag]) {
+		case 1: // Flag Undefined Variables
+			olde = picky_variables;
+			picky_variables = ([pickyVariables state] == NSOffState)?0:1;
+			if (olde != picky_variables) {
+				[prefs setObject:(picky_variables?@"YES":@"NO") forKey:@"flagUndefinedVariables"];
+			}
+				break;
+		case 2: // Use Radians
+			olde = use_radians;
+			use_radians = ([useRadians state] == NSOffState)?0:1;
+			if (olde != use_radians) {
+				need_redraw = 2;
+				[prefs setObject:(use_radians?@"YES":@"NO") forKey:@"useRadians"];
+			}
+				break;
+		case 3: // Use Engineering Notation
+			olde = engineering;
+			engineering = ([engineeringNotation state] == NSOffState)?0:1;
+			if (olde != engineering) {
+				need_redraw = 1;
+				[prefs setObject:(engineering?@"YES":@"NO") forKey:@"engineeringNotation"];
+			}
+				break;
+		case 5: // Output Format
+			olde = output_format;
+			output_format = [[sender selectedCell] tag];
+			if (olde != output_format) {
+				need_redraw = 1;
+				[prefs setObject:[NSString stringWithFormat:@"%i",output_format] forKey:@"outputFormat"];
+				[PrecisionSlider setEnabled:(output_format==DECIMAL_FORMAT)];
+				[printPrefixes setEnabled:(output_format!=DECIMAL_FORMAT)];
+				[engineeringNotation setEnabled:(output_format==DECIMAL_FORMAT)];
+			}
+				break;
+		case 6: // Print Prefixes
+			olde = print_prefixes;
+			print_prefixes = ([sender state]==NSOnState);
+			if (olde != print_prefixes) {
+				need_redraw = 1;
+				[prefs setObject:(print_prefixes?@"YES":@"NO") forKey:@"printPrefixes"];
+			}
+			case 4: // Allow Duplicates in History
+				olde = allow_duplicates;
+				allow_duplicates = ([historyDuplicates state] == NSOffState)?0:1;
+				if (olde != allow_duplicates) {
+					[prefs setObject:(allow_duplicates?@"YES":@"NO") forKey:@"historyDuplicatesAllowed"];
+				}
+					break;
+			default: return;
+	}
+
+	switch (need_redraw) {
+		case 1:
+		{
+			char *temp;
+			if (pretty_answer) free(pretty_answer);
+
+			temp = print_this_result(last_answer);
+			if (temp)
+				pretty_answer = strdup(temp);
+			else
+				pretty_answer = NULL;
+
+			[AnswerField setStringValue:[NSString stringWithCString:(pretty_answer?pretty_answer:"Not Enough Memory")]];
+			[historyList reloadData];
+
+			[ExpressionField selectText:self];
+			break;
+		}
+		case 2:
+			[self go:sender];
+			break;
+    }
+}
+
+- (IBAction)showPrefs:(id)sender
+{
+	[self displayPrefs:sender];
+//	[thePrefPanel setBecomesKeyOnlyIfNeeded:TRUE];
+	[thePrefPanel makeKeyAndOrderFront:self];
+//    [thePrefPanel orderFront:self];
+    [thePrefPanel center];
+}
+
+- (IBAction)displayPrefs:(id)sender
+{
+	[engineeringNotation setState:(engineering?NSOnState:NSOffState)];
+    [pickyVariables setState:(picky_variables?NSOnState:NSOffState)];
+    [historyDuplicates setState:(allow_duplicates?NSOnState:NSOffState)];
+	[useRadians setState:(use_radians?NSOnState:NSOffState)];
+	[outputFormat selectCellWithTag:output_format];
+	[printPrefixes setState:(print_prefixes?NSOnState:NSOffState)];
+	[printPrefixes setEnabled:(output_format!=DECIMAL_FORMAT)];
+	[engineeringNotation setEnabled:(output_format==DECIMAL_FORMAT)];
 }
 
 @end
