@@ -32,12 +32,114 @@
 		vrLen = 1166;
 		vrLoc = 899;
 	};
+	2748AD3304F2D312004A1978 = {
+		fRef = F5B29D7801F7395001A80164;
+		isa = PBXTextBookmark;
+		name = "WcalcController.m: menuConstant:";
+		rLen = 0;
+		rLoc = 4123;
+		rType = 0;
+		vrLen = 737;
+		vrLoc = 3650;
+	};
+	2748AD3404F2D312004A1978 = {
+		fRef = 089C165DFE840E0CC02AAC07;
+		isa = PBXTextBookmark;
+		name = "English: 6";
+		rLen = 0;
+		rLoc = 245;
+		rType = 0;
+		vrLen = 262;
+		vrLoc = 0;
+	};
+	2748AD3504F2D312004A1978 = {
+		bstl = 4A9504CDFFE6A4B311CA0CBA;
+		isa = PBXBuildStyleBookmark;
+	};
+	2748AD3604F2D312004A1978 = {
+		isa = PBXTargetBookmark;
+		trg = 29B97326FDCFA39411CA2CEA;
+		uiCtxt = {
+			TOCViewDetailVisibleRect = "{{0, 0}, {513, 283}}";
+			TOCViewExpandedItems = (
+				"com.apple.target-editor-pane.settings",
+				"com.apple.target-editor-pane.settings.simple",
+				"com.apple.target-editor-pane.info-plist",
+				"com.apple.target-editor-pane.info-plist.simple",
+				"com.apple.target-editor-pane.buildphases",
+			);
+			TOCViewMasterVisibleRect = "{{0, 106}, {203, 326}}";
+			TOCViewSelectedItems = (
+				PBXBSExpertAspectModule,
+			);
+		};
+	};
+	2748AD3704F2D312004A1978 = {
+		fRef = F5B29D7801F7395001A80164;
+		isa = PBXTextBookmark;
+		name = "WcalcController.m: menuConstant:";
+		rLen = 0;
+		rLoc = 4123;
+		rType = 0;
+		vrLen = 737;
+		vrLoc = 3650;
+	};
+	2748AD3804F2D312004A1978 = {
+		fRef = 089C165DFE840E0CC02AAC07;
+		isa = PBXTextBookmark;
+		name = "English: 6";
+		rLen = 0;
+		rLoc = 245;
+		rType = 0;
+		vrLen = 262;
+		vrLoc = 0;
+	};
+	2748AD3904F2D312004A1978 = {
+		isa = PBXTargetBookmark;
+		trg = 29B97326FDCFA39411CA2CEA;
+		uiCtxt = {
+			TOCViewDetailVisibleRect = "{{0, 0}, {513, 283}}";
+			TOCViewExpandedItems = (
+				"com.apple.target-editor-pane.settings",
+				"com.apple.target-editor-pane.settings.simple",
+				"com.apple.target-editor-pane.info-plist",
+				"com.apple.target-editor-pane.info-plist.simple",
+				"com.apple.target-editor-pane.buildphases",
+			);
+			TOCViewMasterVisibleRect = "{{0, 106}, {203, 326}}";
+			TOCViewSelectedItems = (
+				PBXBSExpertAspectModule,
+			);
+		};
+	};
+	2748AD3A04F2D312004A1978 = {
+		bstl = 4A9504CDFFE6A4B311CA0CBA;
+		isa = PBXBuildStyleBookmark;
+	};
+	2748AD3B04F2D312004A1978 = {
+		isa = PBXTargetBookmark;
+		trg = 29B97326FDCFA39411CA2CEA;
+		uiCtxt = {
+			TOCViewDetailVisibleRect = "{{0, 0}, {513, 283}}";
+			TOCViewExpandedItems = (
+				"com.apple.target-editor-pane.settings",
+				"com.apple.target-editor-pane.settings.simple",
+				"com.apple.target-editor-pane.info-plist",
+				"com.apple.target-editor-pane.info-plist.simple",
+				"com.apple.target-editor-pane.buildphases",
+			);
+			TOCViewMasterVisibleRect = "{{0, 106}, {203, 326}}";
+			TOCViewSelectedItems = (
+				PBXBSExpertAspectModule,
+			);
+		};
+	};
 	27542A01040427D300A8FDFC = {
 		fRef = F5B29D7801F7395001A80164;
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: setPrecision:";
 		rLen = 0;
-		rLoc = 9457;
+		rLoc = 9607;
 		rType = 0;
 		vrLen = 616;
 		vrLoc = 8702;
@@ -57,7 +159,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: awakeFromNib";
 		rLen = 0;
-		rLoc = 8608;
+		rLoc = 8758;
 		rType = 0;
 		vrLen = 975;
 		vrLoc = 7785;
@@ -69,7 +171,7 @@
 	275710BB042CE895004ACA36 = {
 		fileReference = F5B29D7801F7395001A80164;
 		isa = PBXFileBreakpoint;
-		lineNumber = 692;
+		lineNumber = 695;
 		state = 1;
 	};
 	275710C2042D8970004ACA36 = {
@@ -226,10 +328,6 @@
 		bstl = 4A9504CCFFE6A4B311CA0CBA;
 		isa = PBXBuildStyleBookmark;
 	};
-	275710D5042D8970004ACA36 = {
-		bstl = 4A9504CDFFE6A4B311CA0CBA;
-		isa = PBXBuildStyleBookmark;
-	};
 	275710D6042D8970004ACA36 = {
 		fRef = F5DEAE8F021254A501A80164;
 		isa = PBXTextBookmark;
@@ -265,7 +363,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: new:";
 		rLen = 0;
-		rLoc = 21960;
+		rLoc = 22110;
 		rType = 0;
 		vrLen = 878;
 		vrLoc = 20101;
@@ -285,7 +383,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: saveAs:";
 		rLen = 0;
-		rLoc = 23060;
+		rLoc = 23210;
 		rType = 0;
 		vrLen = 1052;
 		vrLoc = 20530;
@@ -305,7 +403,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: open:";
 		rLen = 0;
-		rLoc = 21956;
+		rLoc = 22106;
 		rType = 0;
 		vrLen = 991;
 		vrLoc = 20403;
@@ -325,7 +423,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: open:";
 		rLen = 0;
-		rLoc = 21956;
+		rLoc = 22106;
 		rType = 0;
 		vrLen = 998;
 		vrLoc = 20522;
@@ -345,7 +443,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: displayErrno:";
 		rLen = 0;
-		rLoc = 22023;
+		rLoc = 22173;
 		rType = 0;
 		vrLen = 736;
 		vrLoc = 21103;
@@ -385,7 +483,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: displayErrno:forFile:";
 		rLen = 0;
-		rLoc = 22249;
+		rLoc = 22399;
 		rType = 0;
 		vrLen = 786;
 		vrLoc = 21103;
@@ -405,7 +503,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: open:";
 		rLen = 0;
-		rLoc = 21908;
+		rLoc = 22058;
 		rType = 0;
 		vrLen = 1052;
 		vrLoc = 20564;
@@ -425,7 +523,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: fd";
 		rLen = 0;
-		rLoc = 22715;
+		rLoc = 22865;
 		rType = 0;
 		vrLen = 1066;
 		vrLoc = 21569;
@@ -455,7 +553,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: saveAs:";
 		rLen = 0;
-		rLoc = 22606;
+		rLoc = 22756;
 		rType = 0;
 		vrLen = 851;
 		vrLoc = 21550;
@@ -475,7 +573,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: open:";
 		rLen = 0;
-		rLoc = 21391;
+		rLoc = 21541;
 		rType = 0;
 		vrLen = 847;
 		vrLoc = 21557;
@@ -495,7 +593,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: open:";
 		rLen = 0;
-		rLoc = 21391;
+		rLoc = 21541;
 		rType = 0;
 		vrLen = 789;
 		vrLoc = 21828;
@@ -515,7 +613,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: open:";
 		rLen = 0;
-		rLoc = 21391;
+		rLoc = 21541;
 		rType = 0;
 		vrLen = 816;
 		vrLoc = 21801;
@@ -555,7 +653,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: open:";
 		rLen = 0;
-		rLoc = 21391;
+		rLoc = 21541;
 		rType = 0;
 		vrLen = 788;
 		vrLoc = 21776;
@@ -575,7 +673,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: open:";
 		rLen = 0;
-		rLoc = 21391;
+		rLoc = 21541;
 		rType = 0;
 		vrLen = 805;
 		vrLoc = 21671;
@@ -595,7 +693,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: open:";
 		rLen = 0;
-		rLoc = 21391;
+		rLoc = 21541;
 		rType = 0;
 		vrLen = 812;
 		vrLoc = 21828;
@@ -625,7 +723,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: open:";
 		rLen = 0;
-		rLoc = 21391;
+		rLoc = 21541;
 		rType = 0;
 		vrLen = 766;
 		vrLoc = 21828;
@@ -695,7 +793,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: open:";
 		rLen = 0;
-		rLoc = 21391;
+		rLoc = 21541;
 		rType = 0;
 		vrLen = 836;
 		vrLoc = 21801;
@@ -735,7 +833,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: open:";
 		rLen = 0;
-		rLoc = 21391;
+		rLoc = 21541;
 		rType = 0;
 		vrLen = 688;
 		vrLoc = 21775;
@@ -755,7 +853,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: open:";
 		rLen = 0;
-		rLoc = 20850;
+		rLoc = 21000;
 		rType = 0;
 		vrLen = 1146;
 		vrLoc = 20507;
@@ -805,7 +903,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: save:";
 		rLen = 28;
-		rLoc = 23062;
+		rLoc = 23212;
 		rType = 0;
 		vrLen = 736;
 		vrLoc = 23526;
@@ -855,7 +953,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: save:";
 		rLen = 0;
-		rLoc = 23268;
+		rLoc = 23418;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 24262;
@@ -935,7 +1033,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: open:";
 		rLen = 0;
-		rLoc = 21391;
+		rLoc = 21541;
 		rType = 0;
 		vrLen = 872;
 		vrLoc = 21834;
@@ -965,7 +1063,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: save:";
 		rLen = 0;
-		rLoc = 23268;
+		rLoc = 23418;
 		rType = 0;
 		vrLen = 108;
 		vrLoc = 24154;
@@ -985,7 +1083,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: save:";
 		rLen = 0;
-		rLoc = 23060;
+		rLoc = 23210;
 		rType = 0;
 		vrLen = 526;
 		vrLoc = 23736;
@@ -1005,7 +1103,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: save:";
 		rLen = 0;
-		rLoc = 23056;
+		rLoc = 23206;
 		rType = 0;
 		vrLen = 526;
 		vrLoc = 23736;
@@ -1035,7 +1133,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: save:";
 		rLen = 0;
-		rLoc = 22965;
+		rLoc = 23115;
 		rType = 0;
 		vrLen = 526;
 		vrLoc = 23736;
@@ -1075,7 +1173,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: fd";
 		rLen = 0;
-		rLoc = 23267;
+		rLoc = 23417;
 		rType = 0;
 		vrLen = 83;
 		vrLoc = 24179;
@@ -1105,7 +1203,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: fd";
 		rLen = 0;
-		rLoc = 23267;
+		rLoc = 23417;
 		rType = 0;
 		vrLen = 83;
 		vrLoc = 24179;
@@ -1185,7 +1283,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: save:";
 		rLen = 0;
-		rLoc = 23204;
+		rLoc = 23354;
 		rType = 0;
 		vrLen = 44;
 		vrLoc = 24218;
@@ -1305,7 +1403,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: validateMenuItem:";
 		rLen = 0;
-		rLoc = 22980;
+		rLoc = 23130;
 		rType = 0;
 		vrLen = 409;
 		vrLoc = 23853;
@@ -1325,7 +1423,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: validateMenuItem:";
 		rLen = 0;
-		rLoc = 22980;
+		rLoc = 23130;
 		rType = 0;
 		vrLen = 409;
 		vrLoc = 23853;
@@ -1345,7 +1443,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: open:";
 		rLen = 0;
-		rLoc = 21937;
+		rLoc = 22087;
 		rType = 0;
 		vrLen = 966;
 		vrLoc = 20706;
@@ -1395,7 +1493,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: open:";
 		rLen = 0;
-		rLoc = 21296;
+		rLoc = 21446;
 		rType = 0;
 		vrLen = 1124;
 		vrLoc = 20834;
@@ -1415,7 +1513,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: open:";
 		rLen = 0;
-		rLoc = 21963;
+		rLoc = 22113;
 		rType = 0;
 		vrLen = 1092;
 		vrLoc = 20676;
@@ -1722,24 +1820,6 @@
 		vrLen = 1546;
 		vrLoc = 0;
 	};
-	27799226042F9079004ACA36 = {
-		isa = PBXTargetBookmark;
-		trg = 29B97326FDCFA39411CA2CEA;
-		uiCtxt = {
-			TOCViewDetailVisibleRect = "{{0, 0}, {460, 233}}";
-			TOCViewExpandedItems = (
-				"com.apple.target-editor-pane.settings",
-				"com.apple.target-editor-pane.settings.simple",
-				"com.apple.target-editor-pane.info-plist",
-				"com.apple.target-editor-pane.info-plist.simple",
-				"com.apple.target-editor-pane.buildphases",
-			);
-			TOCViewMasterVisibleRect = "{{0, 0}, {181, 385}}";
-			TOCViewSelectedItems = (
-				PBXTargetSummarySettingsModule,
-			);
-		};
-	};
 	27799227042F9079004ACA36 = {
 		fRef = F5B29D6E01F7393A01A80164;
 		isa = PBXTextBookmark;
@@ -1750,40 +1830,16 @@
 		vrLen = 888;
 		vrLoc = 6309;
 	};
-	27799228042F9079004ACA36 = {
-		fRef = F5B29D7801F7395001A80164;
-		isa = PBXTextBookmark;
-		name = "WcalcController.m: 191";
-		rLen = 0;
-		rLoc = 5382;
-		rType = 0;
-		vrLen = 982;
-		vrLoc = 4498;
-	};
 	27799229042F9079004ACA36 = {
 		isa = PBXTargetBookmark;
 		trg = 29B97326FDCFA39411CA2CEA;
-		uiCtxt = {
-			TOCViewDetailVisibleRect = "{{0, 0}, {460, 233}}";
-			TOCViewExpandedItems = (
-				"com.apple.target-editor-pane.settings",
-				"com.apple.target-editor-pane.settings.simple",
-				"com.apple.target-editor-pane.info-plist",
-				"com.apple.target-editor-pane.info-plist.simple",
-				"com.apple.target-editor-pane.buildphases",
-			);
-			TOCViewMasterVisibleRect = "{{0, 0}, {181, 385}}";
-			TOCViewSelectedItems = (
-				PBXTargetSummarySettingsModule,
-			);
-		};
 	};
 	2779922A042F9079004ACA36 = {
 		fRef = F5B29D7801F7395001A80164;
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: 191";
 		rLen = 0;
-		rLoc = 5382;
+		rLoc = 5532;
 		rType = 0;
 		vrLen = 982;
 		vrLoc = 4498;
@@ -1797,16 +1853,6 @@
 		rType = 0;
 		vrLen = 888;
 		vrLoc = 6309;
-	};
-	2779922C042F9079004ACA36 = {
-		fRef = F5B29D7801F7395001A80164;
-		isa = PBXTextBookmark;
-		name = "WcalcController.m: menuFunction:";
-		rLen = 0;
-		rLoc = 4848;
-		rType = 0;
-		vrLen = 918;
-		vrLoc = 4564;
 	};
 	277DB282042F641E004ACA36 = {
 		fRef = 277DB27D042F5173004ACA36;
@@ -1823,7 +1869,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: awakeFromNib";
 		rLen = 0;
-		rLoc = 8668;
+		rLoc = 8818;
 		rType = 0;
 		vrLen = 1039;
 		vrLoc = 7965;
@@ -2007,7 +2053,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: awakeFromNib";
 		rLen = 0;
-		rLoc = 7600;
+		rLoc = 7750;
 		rType = 0;
 		vrLen = 1980;
 		vrLoc = 5737;
@@ -2157,7 +2203,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: awakeFromNib";
 		rLen = 0;
-		rLoc = 7695;
+		rLoc = 7845;
 		rType = 0;
 		vrLen = 1266;
 		vrLoc = 5737;
@@ -2287,7 +2333,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: awakeFromNib";
 		rLen = 0;
-		rLoc = 7695;
+		rLoc = 7845;
 		rType = 0;
 		vrLen = 2199;
 		vrLoc = 5217;
@@ -2307,7 +2353,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: go:";
 		rLen = 0;
-		rLoc = 10731;
+		rLoc = 10881;
 		rType = 0;
 		vrLen = 793;
 		vrLoc = 9214;
@@ -2387,7 +2433,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: go:";
 		rLen = 0;
-		rLoc = 10731;
+		rLoc = 10881;
 		rType = 0;
 		vrLen = 793;
 		vrLoc = 9214;
@@ -2407,7 +2453,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: 498";
 		rLen = 32;
-		rLoc = 15473;
+		rLoc = 15623;
 		rType = 0;
 		vrLen = 669;
 		vrLoc = 18279;
@@ -2867,7 +2913,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: setPrefs:";
 		rLen = 0;
-		rLoc = 19349;
+		rLoc = 19499;
 		rType = 0;
 		vrLen = 719;
 		vrLoc = 17354;
@@ -2887,7 +2933,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: displayPrefs:";
 		rLen = 53;
-		rLoc = 24140;
+		rLoc = 24290;
 		rType = 0;
 		vrLen = 1188;
 		vrLoc = 19933;
@@ -2931,7 +2977,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: 177";
 		rLen = 0;
-		rLoc = 5214;
+		rLoc = 5265;
 		rType = 0;
 		vrLen = 1051;
 		vrLoc = 4359;
@@ -2951,7 +2997,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: menuFunction:";
 		rLen = 0;
-		rLoc = 5213;
+		rLoc = 5264;
 		rType = 0;
 		vrLen = 1002;
 		vrLoc = 4359;
@@ -3261,7 +3307,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: showPrefs:";
 		rLen = 0;
-		rLoc = 20555;
+		rLoc = 20705;
 		rType = 0;
 		vrLen = 1257;
 		vrLoc = 19920;
@@ -3291,7 +3337,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: setPrefs:";
 		rLen = 0;
-		rLoc = 19093;
+		rLoc = 19243;
 		rType = 0;
 		vrLen = 1100;
 		vrLoc = 18252;
@@ -3311,7 +3357,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: setPrefs:";
 		rLen = 0;
-		rLoc = 19093;
+		rLoc = 19243;
 		rType = 0;
 		vrLen = 1132;
 		vrLoc = 18220;
@@ -3331,7 +3377,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: setPrefs:";
 		rLen = 0;
-		rLoc = 19093;
+		rLoc = 19243;
 		rType = 0;
 		vrLen = 1147;
 		vrLoc = 18220;
@@ -3351,7 +3397,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: setPrefs:";
 		rLen = 0;
-		rLoc = 19093;
+		rLoc = 19243;
 		rType = 0;
 		vrLen = 1147;
 		vrLoc = 18220;
@@ -3371,7 +3417,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: setPrefs:";
 		rLen = 0;
-		rLoc = 19498;
+		rLoc = 19648;
 		rType = 0;
 		vrLen = 1015;
 		vrLoc = 18466;
@@ -3411,7 +3457,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: setPrefs:";
 		rLen = 0;
-		rLoc = 19072;
+		rLoc = 19222;
 		rType = 0;
 		vrLen = 952;
 		vrLoc = 18424;
@@ -3471,7 +3517,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: 652";
 		rLen = 0;
-		rLoc = 24351;
+		rLoc = 24501;
 		rType = 0;
 		vrLen = 585;
 		vrLoc = 3504;
@@ -3561,7 +3607,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: awakeFromNib";
 		rLen = 0;
-		rLoc = 8505;
+		rLoc = 8655;
 		rType = 0;
 		vrLen = 558;
 		vrLoc = 8761;
@@ -3581,7 +3627,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: displayPrefs:";
 		rLen = 0;
-		rLoc = 24236;
+		rLoc = 24386;
 		rType = 0;
 		vrLen = 1201;
 		vrLoc = 20346;
@@ -3746,18 +3792,17 @@
 			F5B29D7E01F739D501A80164,
 		);
 		perUserDictionary = {
-			PBXPerProjectTemplateStateSaveDate = 70225592;
+			PBXPerProjectTemplateStateSaveDate = 83021861;
 			PBXWorkspaceContents = (
 				{
 					LeftSlideOut = {
 						Split0 = {
 							Split0 = {
 								NavContent0 = {
-									bookmark = 2779922C042F9079004ACA36;
+									bookmark = 2748AD3B04F2D312004A1978;
 									history = (
 										F5A1698A0307532E01A80164,
 										F5A1698D0307532E01A80164,
-										F5A1699A0307532E01A80164,
 										2793434203DE0D0F00A95DB9,
 										2793434403DE0D0F00A95DB9,
 										2793434903DE0D0F00A95DB9,
@@ -3787,15 +3832,16 @@
 										275710D1042D8970004ACA36,
 										275710D2042D8970004ACA36,
 										275710D4042D8970004ACA36,
-										275710D5042D8970004ACA36,
 										275710D6042D8970004ACA36,
 										275710D7042D8970004ACA36,
 										275710D8042D8970004ACA36,
 										2786BA91042D8AC2004ACA36,
 										277DB282042F641E004ACA36,
-										27799226042F9079004ACA36,
 										27799227042F9079004ACA36,
-										27799228042F9079004ACA36,
+										2748AD3304F2D312004A1978,
+										2748AD3404F2D312004A1978,
+										2748AD3504F2D312004A1978,
+										2748AD3604F2D312004A1978,
 									);
 									prevStack = (
 										F5A1699D0307532E01A80164,
@@ -4208,11 +4254,15 @@
 										27799229042F9079004ACA36,
 										2779922A042F9079004ACA36,
 										2779922B042F9079004ACA36,
+										2748AD3704F2D312004A1978,
+										2748AD3804F2D312004A1978,
+										2748AD3904F2D312004A1978,
+										2748AD3A04F2D312004A1978,
 									);
 								};
 								NavCount = 1;
 								NavGeometry0 = {
-									Frame = "{{0, 0}, {680, 439}}";
+									Frame = "{{0, 0}, {755, 380}}";
 									NavBarVisible = YES;
 								};
 								NavSplitVertical = NO;
@@ -4245,19 +4295,19 @@
 			);
 			PBXWorkspaceGeometries = (
 				{
-					ContentSize = "{970, 664}";
+					ContentSize = "{970, 605}";
 					LeftSlideOut = {
-						ActiveTab = 0;
-						ActiveTabName = PBXGroupTreeModule;
+						ActiveTab = 3;
+						ActiveTabName = PBXTargetTreeModule;
 						Collapsed = NO;
-						Frame = "{{0, 23}, {970, 641}}";
+						Frame = "{{0, 23}, {970, 582}}";
 						Split0 = {
 							ActiveTab = 2;
 							ActiveTabName = PBXBuildResultsModule;
 							Collapsed = NO;
-							Frame = "{{290, 0}, {680, 641}}";
+							Frame = "{{215, 0}, {755, 582}}";
 							Split0 = {
-								Frame = "{{0, 202}, {680, 439}}";
+								Frame = "{{0, 202}, {755, 380}}";
 							};
 							SplitCount = 1;
 							Tab0 = {
@@ -4306,10 +4356,10 @@
 								};
 							};
 							Tab3 = {
-								BuildMessageFrame = "{{0, 0}, {682, 145}}";
-								BuildTranscriptFrame = "{{0, 154}, {682, 2}}";
+								BuildMessageFrame = "{{0, 0}, {757, 145}}";
+								BuildTranscriptFrame = "{{0, 154}, {757, 2}}";
 								BuildTranscriptFrameExpanded = YES;
-								Frame = "{{0, 0}, {680, 178}}";
+								Frame = "{{0, 0}, {755, 178}}";
 							};
 							Tab4 = {
 								Frame = "{{0, 0}, {612, 295}}";
@@ -4319,7 +4369,7 @@
 						};
 						SplitCount = 1;
 						Tab0 = {
-							Frame = "{{0, 0}, {266, 641}}";
+							Frame = "{{0, 0}, {266, 582}}";
 							GroupTreeTableConfiguration = (
 								SCMStatusColumn,
 								22,
@@ -4330,15 +4380,15 @@
 							);
 						};
 						Tab1 = {
-							ClassesFrame = "{{0, 0}, {247, 330}}";
+							ClassesFrame = "{{0, 0}, {247, 350}}";
 							ClassesTreeTableConfiguration = (
 								PBXBookColumnIdentifier,
 								20,
 								PBXClassColumnIdentifier,
 								204,
 							);
-							Frame = "{{0, 0}, {245, 549}}";
-							MembersFrame = "{{0, 339}, {247, 210}}";
+							Frame = "{{0, 0}, {245, 582}}";
+							MembersFrame = "{{0, 359}, {247, 223}}";
 							MembersTreeTableConfiguration = (
 								PBXBookColumnIdentifier,
 								20,
@@ -4350,7 +4400,7 @@
 							Frame = "{{0, 0}, {226, 549}}";
 						};
 						Tab3 = {
-							Frame = "{{0, 0}, {191, 641}}";
+							Frame = "{{0, 0}, {191, 582}}";
 							TargetTableConfiguration = (
 								ActiveObject,
 								16,
@@ -4374,10 +4424,10 @@
 					StatusViewVisible = YES;
 					Template = F5F68CF101725D4C0D7A8F4C;
 					ToolbarVisible = YES;
-					WindowLocation = "{-4, 20}";
+					WindowLocation = "{83, 79}";
 				},
 			);
-			PBXWorkspaceStateSaveDate = 70225592;
+			PBXWorkspaceStateSaveDate = 83021861;
 		};
 		perUserProjectItems = {
 			27014BD103F2F7A800A7B3FE = 27014BD103F2F7A800A7B3FE;
@@ -4385,6 +4435,15 @@
 			27014BD303F2F7A800A7B3FE = 27014BD303F2F7A800A7B3FE;
 			273E1A0C04150C3600508A38 = 273E1A0C04150C3600508A38;
 			273E1A0D04150C3600508A38 = 273E1A0D04150C3600508A38;
+			2748AD3304F2D312004A1978 = 2748AD3304F2D312004A1978;
+			2748AD3404F2D312004A1978 = 2748AD3404F2D312004A1978;
+			2748AD3504F2D312004A1978 = 2748AD3504F2D312004A1978;
+			2748AD3604F2D312004A1978 = 2748AD3604F2D312004A1978;
+			2748AD3704F2D312004A1978 = 2748AD3704F2D312004A1978;
+			2748AD3804F2D312004A1978 = 2748AD3804F2D312004A1978;
+			2748AD3904F2D312004A1978 = 2748AD3904F2D312004A1978;
+			2748AD3A04F2D312004A1978 = 2748AD3A04F2D312004A1978;
+			2748AD3B04F2D312004A1978 = 2748AD3B04F2D312004A1978;
 			27542A01040427D300A8FDFC = 27542A01040427D300A8FDFC;
 			27542A02040427D300A8FDFC = 27542A02040427D300A8FDFC;
 			27542A03040427D300A8FDFC = 27542A03040427D300A8FDFC;
@@ -4405,7 +4464,6 @@
 			275710D1042D8970004ACA36 = 275710D1042D8970004ACA36;
 			275710D2042D8970004ACA36 = 275710D2042D8970004ACA36;
 			275710D4042D8970004ACA36 = 275710D4042D8970004ACA36;
-			275710D5042D8970004ACA36 = 275710D5042D8970004ACA36;
 			275710D6042D8970004ACA36 = 275710D6042D8970004ACA36;
 			275710D7042D8970004ACA36 = 275710D7042D8970004ACA36;
 			275710D8042D8970004ACA36 = 275710D8042D8970004ACA36;
@@ -4560,13 +4618,10 @@
 			2757116E042D8970004ACA36 = 2757116E042D8970004ACA36;
 			276B29BA0406C31800A8FDFC = 276B29BA0406C31800A8FDFC;
 			276B29BB0406C31800A8FDFC = 276B29BB0406C31800A8FDFC;
-			27799226042F9079004ACA36 = 27799226042F9079004ACA36;
 			27799227042F9079004ACA36 = 27799227042F9079004ACA36;
-			27799228042F9079004ACA36 = 27799228042F9079004ACA36;
 			27799229042F9079004ACA36 = 27799229042F9079004ACA36;
 			2779922A042F9079004ACA36 = 2779922A042F9079004ACA36;
 			2779922B042F9079004ACA36 = 2779922B042F9079004ACA36;
-			2779922C042F9079004ACA36 = 2779922C042F9079004ACA36;
 			277DB282042F641E004ACA36 = 277DB282042F641E004ACA36;
 			277DB284042F641E004ACA36 = 277DB284042F641E004ACA36;
 			277DB285042F641E004ACA36 = 277DB285042F641E004ACA36;
@@ -4763,7 +4818,6 @@
 			F551EAB203075D4601A80164 = F551EAB203075D4601A80164;
 			F5A1698A0307532E01A80164 = F5A1698A0307532E01A80164;
 			F5A1698D0307532E01A80164 = F5A1698D0307532E01A80164;
-			F5A1699A0307532E01A80164 = F5A1699A0307532E01A80164;
 			F5A1699D0307532E01A80164 = F5A1699D0307532E01A80164;
 			F5A1699E0307532E01A80164 = F5A1699E0307532E01A80164;
 			F5A1699F0307532E01A80164 = F5A1699F0307532E01A80164;
@@ -5024,16 +5078,6 @@
 		vrLen = 770;
 		vrLoc = 0;
 	};
-	F5A1699A0307532E01A80164 = {
-		fRef = 089C165DFE840E0CC02AAC07;
-		isa = PBXTextBookmark;
-		name = "English: 6";
-		rLen = 0;
-		rLoc = 241;
-		rType = 0;
-		vrLen = 258;
-		vrLoc = 0;
-	};
 	F5A1699D0307532E01A80164 = {
 		fRef = F521994801FA927601A80164;
 		isa = PBXTextBookmark;
@@ -5219,7 +5263,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: shConversions:";
 		rLen = 0;
-		rLoc = 14203;
+		rLoc = 14353;
 		rType = 0;
 		vrLen = 789;
 		vrLoc = 12320;
@@ -5249,7 +5293,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: shConversions:";
 		rLen = 0;
-		rLoc = 14203;
+		rLoc = 14353;
 		rType = 0;
 		vrLen = 787;
 		vrLoc = 12320;
@@ -5269,7 +5313,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: shConversions:";
 		rLen = 0;
-		rLoc = 14207;
+		rLoc = 14357;
 		rType = 0;
 		vrLen = 799;
 		vrLoc = 12419;
@@ -5289,7 +5333,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: convert:";
 		rLen = 0;
-		rLoc = 12293;
+		rLoc = 12443;
 		rType = 0;
 		vrLen = 875;
 		vrLoc = 9925;
@@ -5369,7 +5413,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: setPrefs:";
 		rLen = 0;
-		rLoc = 18137;
+		rLoc = 18287;
 		rType = 0;
 		vrLen = 979;
 		vrLoc = 16075;
@@ -5499,7 +5543,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: go:";
 		rLen = 12;
-		rLoc = 11362;
+		rLoc = 11512;
 		rType = 0;
 		vrLen = 877;
 		vrLoc = 9925;
@@ -5519,7 +5563,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: convert:";
 		rLen = 0;
-		rLoc = 12293;
+		rLoc = 12443;
 		rType = 0;
 		vrLen = 985;
 		vrLoc = 10419;
@@ -5559,7 +5603,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: newval";
 		rLen = 319;
-		rLoc = 11889;
+		rLoc = 12039;
 		rType = 0;
 		vrLen = 992;
 		vrLoc = 10419;
@@ -5589,7 +5633,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: enterData:";
 		rLen = 0;
-		rLoc = 12293;
+		rLoc = 12443;
 		rType = 0;
 		vrLen = 988;
 		vrLoc = 10335;
@@ -5609,7 +5653,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: go:";
 		rLen = 0;
-		rLoc = 11410;
+		rLoc = 11560;
 		rType = 0;
 		vrLen = 987;
 		vrLoc = 10335;
@@ -5629,7 +5673,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: convert:";
 		rLen = 0;
-		rLoc = 12219;
+		rLoc = 12369;
 		rType = 0;
 		vrLen = 1063;
 		vrLoc = 10560;
@@ -5649,7 +5693,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: convert:";
 		rLen = 0;
-		rLoc = 11886;
+		rLoc = 12036;
 		rType = 0;
 		vrLen = 937;
 		vrLoc = 10560;
@@ -5709,7 +5753,7 @@
 		isa = PBXTextBookmark;
 		name = "English: 6";
 		rLen = 0;
-		rLoc = 241;
+		rLoc = 245;
 		rType = 0;
 		vrLen = 258;
 		vrLoc = 0;

@@ -1,39 +1,130 @@
+2003-08-19 12:09  memoryhole
+
+	* parser.y: Small bit of labelling.
+
+2003-08-19 12:06  memoryhole
+
+	* calculator.c: Fixed command/variable conflicts.
+
+2003-08-19 11:43  memoryhole
+
+	* calculator.c: Fixed a memory leak in the recursion detection.
+
+2003-08-18 21:51  memoryhole
+
+	* calculator.c: Fixed a repeatable crash on linux (flex is weird).
+	  Fixed the recursion detection.
+
+2003-08-18 21:38  memoryhole
+
+	* main.c: Missing a semicolon.
+
+2003-08-17 20:33  memoryhole
+
+	* main.c: Small, one-time, memory leak, before the main loop gets
+	  going.
+
+2003-08-09 03:22  memoryhole
+
+	* wcalc.info: Wcalc is not part of fink. This is the current .info
+	  file for creating the .deb file.
+
+2003-08-09 03:13  memoryhole
+
+	* calculator.c, calculator.h, parser.y, scanner.l: Added irandom,
+	  rand(), and irand(). rand(x) is a number between 0 and x.
+	  irand(x) is an integer between 0 and x. irandom is a random
+	  integer.
+
+2003-08-09 03:11  memoryhole
+
+	* files.c, historyManager.c: Fixed some signed/unsigned comparison
+	  warnings.
+
+2003-07-12 01:28  memoryhole
+
+	* calculator.c, calculator.h, parser.y, scanner.l: Added bitwise
+	  operators & and | and ~
+
+2003-04-19 11:56  memoryhole
+
+	* calculator.c, parser.y: Fixed the flatten problems. Removed some
+	  compile warnings on Solaris.
+
+2003-04-01 16:12  memoryhole
+
+	* main.c: Forgot to add the integer pref to the config file. (CLI)
+
+2003-04-01 16:09  memoryhole
+
+	* WcalcController.m, calculator.c, calculator.h, main.c, parser.y,
+	  scanner.l: Made it so you can turn on and off the "always print
+	  integers" thing. (CLI)
+
+2003-03-25 18:01  memoryhole
+
+	* calculator.c, main.c, scanner.l: Fixed some Solaris warnings.
+
+2003-03-24 14:14  memoryhole
+
+	* WcalcController.m, configure,
+	  English.lproj/MainMenu.nib/objects.nib,
+	  Wcalc.pbproj/kyle.pbxuser, Wcalc.pbproj/project.pbxproj: Version
+	  problem fixed. Added cot to the menus. Corrected the log2 thing.
+
+2003-03-22 23:35  memoryhole
+
+	* help.h, historyManager.c, historyManager.h: Linux compiling
+	  fixes.
+
+2003-03-22 23:15  memoryhole
+
+	* ChangeLog, Makefile.am, Makefile.in, NEWS, ReadMe.rtf,
+	  Wcalc.pmsp, acinclude.m4, aclocal.m4, calculator.c, config.h.in,
+	  configure, configure.in, definitions.h, wcalc.1, wcalc.spec,
+	  Wcalc.pbproj/kyle.pbxuser, Wcalc.pbproj/project.pbxproj: Updated
+	  everything for the new version (1.6)
+
+2003-03-22 22:28  memoryhole
+
+	* historyManager.c, main.c, parser.y: Fixing silly compile errors.
+
 2003-03-22 20:20  memoryhole
 
 	* help.c, scanner.l, Wcalc.pbproj/kyle.pbxuser: Updated the scanner
-	to be more flexible with opening and saving filenames, and changed
-	the help text to reflect the new commands.
+	  to be more flexible with opening and saving filenames, and
+	  changed the help text to reflect the new commands.
 
 2003-03-22 20:19  memoryhole
 
 	* files.c: Made it save variables in save-files as well as
-	expressions. The variables are saved first, so they'll always be
-	available (because I don't want to have to remember exactly at
-	which point they were saved).
+	  expressions. The variables are saved first, so they'll always be
+	  available (because I don't want to have to remember exactly at
+	  which point they were saved).
 
 2003-03-22 17:37  memoryhole
 
 	* Makefile.am, Makefile.in, WcalcController.h, WcalcController.m,
-	calculator.c, files.c, files.h, main.c, parser.y, scanner.l,
-	English.lproj/MainMenu.nib/classes.nib,
-	English.lproj/MainMenu.nib/objects.nib, Wcalc.pbproj/kyle.pbxuser,
-	Wcalc.pbproj/project.pbxproj: Got file support working. Saves and
-	loads history. As it loads, it evaluates, so variables stored that
-	way are saved as well. Handles comments appropriately (read:
-	ignores them) when loading.
+	  calculator.c, files.c, files.h, main.c, parser.y, scanner.l,
+	  English.lproj/MainMenu.nib/classes.nib,
+	  English.lproj/MainMenu.nib/objects.nib,
+	  Wcalc.pbproj/kyle.pbxuser, Wcalc.pbproj/project.pbxproj: Got file
+	  support working. Saves and loads history. As it loads, it
+	  evaluates, so variables stored that way are saved as well.
+	  Handles comments appropriately (read: ignores them) when loading.
 
 2003-03-22 17:34  memoryhole
 
 	* HistoryList.m, historyManager.c, historyManager.h: Discovered
-	that history_length conflicts with readline. Fixed.
+	  that history_length conflicts with readline. Fixed.
 
 2003-03-22 14:41  memoryhole
 
 	* WcalcController.h, WcalcController.m: Added an open, save, and
-	saveAs command that do predictable things. For the moment, only
-	open really does anything. save and saveAs display dialogs, but
-	don't do anything with the selection (yet). also added a
-	displayErrno function for reporting file-related errors.
+	  saveAs command that do predictable things. For the moment, only
+	  open really does anything. save and saveAs display dialogs, but
+	  don't do anything with the selection (yet). also added a
+	  displayErrno function for reporting file-related errors.
 
 2003-03-22 14:10  memoryhole
 
@@ -46,7 +137,7 @@
 2003-03-22 14:08  memoryhole
 
 	* string_manip.c, string_manip.h: Added a function to remove
-	comments from strings.
+	  comments from strings.
 
 2003-03-22 12:35  memoryhole
 
@@ -59,10 +150,10 @@
 2003-03-19 13:40  memoryhole
 
 	* English.lproj/MainMenu.nib/classes.nib,
-	English.lproj/MainMenu.nib/info.nib,
-	English.lproj/MainMenu.nib/objects.nib, Wcalc.pbproj/kyle.pbxuser:
-	A few nib fixes - the drawer is now reconnected to the main window,
-	things like that.
+	  English.lproj/MainMenu.nib/info.nib,
+	  English.lproj/MainMenu.nib/objects.nib,
+	  Wcalc.pbproj/kyle.pbxuser: A few nib fixes - the drawer is now
+	  reconnected to the main window, things like that.
 
 2003-03-19 13:35  memoryhole
 
@@ -71,8 +162,8 @@
 2003-03-19 13:25  memoryhole
 
 	* WcalcController.h, WcalcController.m: Removed some strict_syntax
-	stuff. Fixed printout of the history limit.  A few miscellaneous
-	changes.
+	  stuff. Fixed printout of the history limit.  A few miscellaneous
+	  changes.
 
 2003-02-28 11:39  memoryhole
 
@@ -81,7 +172,7 @@
 2003-02-28 11:39  memoryhole
 
 	* scanner.l: Improved precision specification.	Added a rounding
-	indication command.
+	  indication command.
 
 2003-02-28 11:38  memoryhole
 
@@ -90,7 +181,7 @@
 2003-02-28 11:37  memoryhole
 
 	* main.c: Made readline pay attention to the history limit
-	preference.
+	  preference.
 
 2003-02-28 11:36  memoryhole
 
@@ -102,46 +193,47 @@
 
 2003-02-28 11:35  memoryhole
 
-	* calculator.c: Fixed the arc- trig functions in degree mode. 
-	Added a command-line rounding indicator.
+	* calculator.c: Fixed the arc- trig functions in degree mode.
+	  Added a command-line rounding indicator.
 
 2003-02-24 14:37  memoryhole
 
 	* calculator.h, main.c, parser.y, scanner.l, wcalc.rc: Removed the
-	strict_syntax preference (it doesn't do anything anymore).
+	  strict_syntax preference (it doesn't do anything anymore).
 
 2003-02-24 14:36  memoryhole
 
 	* calculator.c: Fixed integer output to respect the engineering
-	printout preference.  Made it use the builtin prefixes for octal
-	and hex.
+	  printout preference.	Made it use the builtin prefixes for octal
+	  and hex.
 
 2003-02-24 13:44  memoryhole
 
 	* calculator.c: I'm an idiot. Simplified the integer-printing
-	stuff.
+	  stuff.
 
 2003-02-24 11:58  memoryhole
 
 	* main.c, wcalc.rc: Added support for persistent preferences
-	(~/.wcalcrc)
+	  (~/.wcalcrc)
 
 2003-02-24 11:58  memoryhole
 
 	* calculator.c: If it's just an integer, print the whole thing.
-	(fix the prefs stuff)
+	  (fix the prefs stuff)
 
 2003-02-21 17:42  memoryhole
 
 	* Makefile.in, aclocal.m4, calculator.c, calculator.h, config.h.in,
-	configure, configure.in, main.c, parser.y, scanner.l, variables.c,
-	Wcalc.pbproj/kyle.pbxuser: Added support for a ~/.wcalcrc. Changed
-	some error-message wording here and there. Miscellaneous fixes.
+	  configure, configure.in, main.c, parser.y, scanner.l,
+	  variables.c, Wcalc.pbproj/kyle.pbxuser: Added support for a
+	  ~/.wcalcrc. Changed some error-message wording here and there.
+	  Miscellaneous fixes.
 
 2003-02-21 17:40  memoryhole
 
 	* definitions.h: Added cot acot coth acoth and reformatted a
-	little.
+	  little.
 
 2003-02-20 03:26  memoryhole
 
@@ -150,15 +242,16 @@
 2003-02-19 11:38  memoryhole
 
 	* WcalcController.m, English.lproj/MainMenu.nib/info.nib,
-	English.lproj/MainMenu.nib/objects.nib, Wcalc.pbproj/kyle.pbxuser,
-	Wcalc.pbproj/project.pbxproj: Finally fixed the bizarre window
-	behavior. Replaced it with some bizarre window behavior behind the
-	scenes (see WcalcController.m), but I can hide that from the user.
+	  English.lproj/MainMenu.nib/objects.nib,
+	  Wcalc.pbproj/kyle.pbxuser, Wcalc.pbproj/project.pbxproj: Finally
+	  fixed the bizarre window behavior. Replaced it with some bizarre
+	  window behavior behind the scenes (see WcalcController.m), but I
+	  can hide that from the user.
 
 2003-02-19 11:35  memoryhole
 
 	* calculator.c, calculator.h: Added output_string... just for
-	convenience.
+	  convenience.
 
 2003-02-19 11:32  memoryhole
 
@@ -175,30 +268,31 @@
 2003-02-19 11:25  memoryhole
 
 	* Makefile.am, Makefile.in, help.c, help.h: Moved help to be
-	generic.
+	  generic.
 
 2003-02-06 15:48  memoryhole
 
 	* ReadMe.rtf, Wcalc.pmsp, definitions.h, main.c, wcalc.spec,
-	English.lproj/MainMenu.nib/objects.nib, Wcalc.pbproj/kyle.pbxuser,
-	Wcalc.pbproj/project.pbxproj: Tiny version update.
+	  English.lproj/MainMenu.nib/objects.nib,
+	  Wcalc.pbproj/kyle.pbxuser, Wcalc.pbproj/project.pbxproj: Tiny
+	  version update.
 
 2003-02-06 14:49  memoryhole
 
 	* main.c: Fixed the ^D bug when it's compiled without readline
-	support.
+	  support.
 
 2003-02-06 14:43  memoryhole
 
 	* ChangeLog, calculator.c, calculator.h, conversion.c,
-	definitions.h, historyManager.c, string_manip.c, variables.c,
-	Wcalc.pbproj/kyle.pbxuser, Wcalc.pbproj/project.pbxproj: Got the
-	GUI to build properly.
+	  definitions.h, historyManager.c, string_manip.c, variables.c,
+	  Wcalc.pbproj/kyle.pbxuser, Wcalc.pbproj/project.pbxproj: Got the
+	  GUI to build properly.
 
 2003-01-29 12:02  memoryhole
 
 	* wcalc.spec: Uses more standard rpm macros for cross-distro
-	goodness.
+	  goodness.
 
 2003-01-28 15:11  memoryhole
 
@@ -215,7 +309,7 @@
 2003-01-27 22:52  memoryhole
 
 	* calculator.c, main.c, parser.y, scanner.l: Moved \dsep and \tsep
-	into the parser/scanner and fixed some configuration issues.
+	  into the parser/scanner and fixed some configuration issues.
 
 2003-01-27 22:43  memoryhole
 
@@ -236,67 +330,92 @@
 2003-01-27 13:51  memoryhole
 
 	* Makefile.am, Makefile.in, acinclude.m4, aclocal.m4: Added the man
-	page to automake.
+	  page to automake.
 
 2003-01-27 13:47  memoryhole
 
 	* configure: More autoconf/automake
 
+2003-01-27 13:43  memoryhole
+
+	* English.lproj/MainMenu~.nib/: classes.nib, info.nib, objects.nib:
+	  Ridding the world of superfluous files
+
+2003-01-27 13:40  memoryhole
+
+	* build/: .cvsignore, intermediates/.cvsignore,
+	  intermediates/Wcalc.build/.cvsignore,
+	  intermediates/Wcalc.build/DerivedSources/.cvsignore,
+	  intermediates/Wcalc.build/Headermaps/.cvsignore,
+	  intermediates/Wcalc.build/Objects/.cvsignore,
+	  intermediates/Wcalc.pbxindex/.cvsignore,
+	  intermediates/Wcalc.pbxindex/strings.pbxstrings/.cvsignore:
+	  Trying to get rid of the build directory
+
 2003-01-27 13:35  memoryhole
 
 	* AUTHORS, COPYING, ChangeLog, INSTALL, README, acinclude.m4,
-	aclocal.m4, depcomp, install-sh, missing, mkinstalldirs: More
-	pieces of autoconf/automake compatability.
+	  aclocal.m4, depcomp, install-sh, missing, mkinstalldirs: More
+	  pieces of autoconf/automake compatability.
+
+2003-01-27 12:52  memoryhole
+
+	* website/: .cvsignore, contact.html, download.html, index.html,
+	  screenshots.html, w.png, wcalc.html: Doesn't need to be CVS'd
+	  anymore - it's on sourceforge.
 
 2003-01-27 12:14  memoryhole
 
 	* Makefile, Makefile.am, calculator.c, calculator.h, config.h.in,
-	configure.in, conversion.c, definitions.h, historyManager.c,
-	libreadline.a, main.c, parser.y, scanner.l, string_manip.c,
-	variables.c, variables.h, English.lproj/MainMenu.nib/info.nib,
-	English.lproj/MainMenu.nib/objects.nib, Wcalc.pbproj/kyle.pbxuser,
-	Wcalc.pbproj/project.pbxproj: Modified it for automake/autoconf
+	  configure.in, conversion.c, definitions.h, historyManager.c,
+	  libreadline.a, main.c, parser.y, scanner.l, string_manip.c,
+	  variables.c, variables.h, English.lproj/MainMenu.nib/info.nib,
+	  English.lproj/MainMenu.nib/objects.nib,
+	  Wcalc.pbproj/kyle.pbxuser, Wcalc.pbproj/project.pbxproj: Modified
+	  it for automake/autoconf
 
 2003-01-25 15:19  memoryhole
 
 	* ChangeLog, NEWS: Moved ChangeLog to NEWS (since I discovered the
-	ChangeLog format is very strict)
+	  ChangeLog format is very strict)
 
 2003-01-23 15:25  memoryhole
 
 	* WcalcController.m, historyManager.c: Finished (I think) history
-	length limiting.
+	  length limiting.
 
 2003-01-23 14:05  memoryhole
 
 	* WcalcController.h, WcalcController.m, calculator.c, calculator.h,
-	scanner.l, English.lproj/MainMenu.nib/classes.nib,
-	English.lproj/MainMenu.nib/info.nib,
-	English.lproj/MainMenu.nib/objects.nib, Wcalc.pbproj/kyle.pbxuser:
-	Fixed (I think) the internationalization stuff. Also began work on
-	limiting the history length.
+	  scanner.l, English.lproj/MainMenu.nib/classes.nib,
+	  English.lproj/MainMenu.nib/info.nib,
+	  English.lproj/MainMenu.nib/objects.nib,
+	  Wcalc.pbproj/kyle.pbxuser, build/.cvsignore: Fixed (I think) the
+	  internationalization stuff. Also began work on limiting the
+	  history length.
 
 2003-01-17 14:00  memoryhole
 
 	* historyManager.h, English.lproj/MainMenu.nib/classes.nib,
-	English.lproj/MainMenu.nib/info.nib,
-	English.lproj/MainMenu.nib/objects.nib, Wcalc.pbproj/kyle.pbxuser,
-	Wcalc.pbproj/project.pbxproj: Fixed a copyright notice. Added clear
-	buttons to the interface. Updated the project file for use with
-	newer versions of Project Builder.
+	  English.lproj/MainMenu.nib/info.nib,
+	  English.lproj/MainMenu.nib/objects.nib,
+	  Wcalc.pbproj/kyle.pbxuser, Wcalc.pbproj/project.pbxproj,
+	  build/.cvsignore: Fixed a copyright notice. Added clear buttons
+	  to the interface. Updated the project file for use with newer
+	  versions of Project Builder.
 
 2003-01-17 12:01  memoryhole
 
 	* historyManager.h, VariableList.h, historyManager.c,
-	HistoryList.h, HistoryList.m, VariableList.m: Added clearing
-	functions for the History and the list of variables.
+	  HistoryList.h, HistoryList.m, VariableList.m: Added clearing
+	  functions for the History and the list of variables.
 
 2003-01-16 16:20  memoryhole
 
 	* WcalcController.m, calculator.c, calculator.h, main.c, scanner.l:
-	Attempted fix to thousands/decimal separator handling. Also got rid
-	of some sticky error messages (one error caused another error
-	later).
+	  Attempted fix to thousands/decimal separator handling. Also got
+	  rid of some sticky error messages (one error caused another error
+	  later).
 
 2003-01-16 13:08  memoryhole
 
@@ -309,7 +428,7 @@
 2002-12-18 12:32  memoryhole
 
 	* calculator.c, calculator.h, parser.y, scanner.l: Added the log2
-	command. (Should it be logtwo?)
+	  command. (Should it be logtwo?)
 
 2002-11-12 16:13  memoryhole
 
@@ -318,11 +437,16 @@
 2002-11-12 16:12  memoryhole
 
 	* Makefile, calculator.c, main.c, string_manip.c: Fixes to get it
-	to compile on Solaris.
+	  to compile on Solaris.
 
 2002-11-01 01:05  memoryhole
 
 	* parser.y: Fixed a crasher in error reporting.
+
+2002-10-21 00:32  kyle
+
+	* website/: contact.html, download.html, screenshots.html,
+	  wcalc.html: Just general updates
 
 2002-10-20 15:48  kyle
 
@@ -343,7 +467,7 @@
 2002-10-20 14:56  kyle
 
 	* calculator.c, calculator.h, WcalcController.m: Implemented
-	toggling precision control
+	  toggling precision control
 
 2002-10-20 14:55  kyle
 
@@ -356,7 +480,7 @@
 2002-10-20 14:54  kyle
 
 	* parser.y, scanner.l: Added the \conservative command, to toggle
-	conservative precision
+	  conservative precision
 
 2002-10-20 14:47  kyle
 
@@ -374,20 +498,26 @@
 
 	* Makefile: Alternate compiling for redhat
 
+2002-08-11 23:29  kyle
+
+	* website/: contact.html, download.html, index.html,
+	  screenshots.html, wcalc.html: New version
+
 2002-08-11 22:43  kyle
 
 	* English.lproj/MainMenu.nib/info.nib,
-	English.lproj/MainMenu.nib/objects.nib, Wcalc.pbproj/kyle.pbxuser:
-	[no log message]
+	  English.lproj/MainMenu.nib/objects.nib,
+	  Wcalc.pbproj/kyle.pbxuser: [no log message]
 
 2002-08-11 22:43  kyle
 
 	* ChangeLog, Makefile, MyTextField.m, ReadMe.rtf, Wcalc.pmsp,
-	main.c, wcalc.1: Distribution
+	  main.c, wcalc.1: Distribution
 
 2002-08-11 21:24  kyle
 
-	* Wcalc.pbproj/: kyle.pbxuser, project.pbxproj: [no log message]
+	* Wcalc.pbproj/kyle.pbxuser, Wcalc.pbproj/project.pbxproj,
+	  website/.cvsignore, website/wcalc.html: [no log message]
 
 2002-08-11 21:24  kyle
 
@@ -396,9 +526,10 @@
 2002-08-11 21:21  kyle
 
 	* definitions.h, English.lproj/InfoPlist.strings,
-	English.lproj/MainMenu.nib/classes.nib,
-	English.lproj/MainMenu.nib/info.nib,
-	English.lproj/MainMenu.nib/objects.nib: Changed the version numbers
+	  English.lproj/MainMenu.nib/classes.nib,
+	  English.lproj/MainMenu.nib/info.nib,
+	  English.lproj/MainMenu.nib/objects.nib: Changed the version
+	  numbers
 
 2002-08-11 17:53  kyle
 
@@ -407,7 +538,7 @@
 2002-08-11 17:53  kyle
 
 	* ConversionList.h, ConversionList.m, WcalcController.h,
-	WcalcController.m: Conversion functions are available in the GUI.
+	  WcalcController.m: Conversion functions are available in the GUI.
 
 2002-08-11 17:52  kyle
 
@@ -420,12 +551,12 @@
 2002-08-02 01:13  kyle
 
 	* calculator.c, calculator.h, conversion.c, conversion.h,
-	scanner.l: Getting a start on the conversions stuff.
+	  scanner.l: Getting a start on the conversions stuff.
 
 2002-07-31 11:34  kyle
 
 	* string_manip.h: Stupid gcc and it's end of line at end of file
-	nonsense.
+	  nonsense.
 
 2002-07-31 01:05  kyle
 
@@ -438,8 +569,8 @@
 2002-07-31 00:55  kyle
 
 	* calculator.c: Fixed variable reassignment.  Fixed exessive
-	printouts in command-line mode.  Added expression support
-	(command-line mode).
+	  printouts in command-line mode.  Added expression support
+	  (command-line mode).
 
 2002-07-31 00:25  kyle
 
@@ -452,13 +583,13 @@
 2002-07-30 23:50  kyle
 
 	* main.c: Made the default to print prefixes (0x, etc) Added the
-	standard -h argument support.  Changed to match variables.c
-	changes.
+	  standard -h argument support.  Changed to match variables.c
+	  changes.
 
 2002-07-30 23:47  kyle
 
-	* MyTextField.m: Removed spacebar actions (now it's normal again). 
-	Removed errors from arrow keys.
+	* MyTextField.m: Removed spacebar actions (now it's normal again).
+	  Removed errors from arrow keys.
 
 2002-07-30 23:46  kyle
 
@@ -479,22 +610,22 @@
 2002-07-30 23:37  kyle
 
 	* variables.h: Added expressions to the variable struct.  Added the
-	answer struct.	Synched the function definitions with variables.c
+	  answer struct.  Synched the function definitions with variables.c
 
 2002-07-30 23:35  kyle
 
 	* variables.c: Added the _full functions for pulling out
-	expressions too.  Made the getvar functions return answer structs,
-	to provide more information (expressions, errors, etc.) Made
-	getvar_core exit early for zero-length keys.  Added a putexp
-	function for inserting expressions.  Renamed putvar to putval (for
-	consistency)
+	  expressions too.  Made the getvar functions return answer
+	  structs, to provide more information (expressions, errors, etc.)
+	  Made getvar_core exit early for zero-length keys.  Added a putexp
+	  function for inserting expressions.  Renamed putvar to putval
+	  (for consistency)
 
 2002-07-30 23:25  kyle
 
 	* calculator.c: Added the flatten function to pre-parse variables
-	(and handle "active" variables recursively).  Fixed the bitshift
-	functions.
+	  (and handle "active" variables recursively).	Fixed the bitshift
+	  functions.
 
 2002-07-29 20:35  kyle
 
@@ -503,14 +634,23 @@
 2002-05-21 10:04  kyle
 
 	* WcalcController.h, WcalcController.m: Handles '=' and 'clear' at
-	input-time now (sorta). (also a small change getting ready for
-	dynamic variables... probably breaks it - will commit more later
-	that fix it again)
+	  input-time now (sorta). (also a small change getting ready for
+	  dynamic variables... probably breaks it - will commit more later
+	  that fix it again)
 
 2002-05-21 09:51  kyle
 
 	* MyTextField.h, MyTextField.m: Handles '=' and 'clear' at
-	input-time now (sorta).
+	  input-time now (sorta).
+
+2002-05-16 00:30  kyle
+
+	* website/download.html: Removed old versions (to save web space).
+
+2002-04-12 16:13  kyle
+
+	* website/: contact.html, download.html, index.html,
+	  screenshots.html, wcalc.html: Version 1.4.5
 
 2002-04-12 15:53  kyle
 
@@ -519,9 +659,10 @@
 2002-04-12 15:45  kyle
 
 	* English.lproj/MainMenu.nib/classes.nib,
-	English.lproj/MainMenu.nib/info.nib,
-	English.lproj/MainMenu.nib/objects.nib, Wcalc.pbproj/kyle.pbxuser,
-	Wcalc.pbproj/project.pbxproj: [no log message]
+	  English.lproj/MainMenu.nib/info.nib,
+	  English.lproj/MainMenu.nib/objects.nib,
+	  Wcalc.pbproj/kyle.pbxuser, Wcalc.pbproj/project.pbxproj: [no log
+	  message]
 
 2002-04-12 15:44  kyle
 
@@ -530,7 +671,7 @@
 2002-04-12 15:29  kyle
 
 	* main.c: Setup reverse-lookup table for characters (we'll need it
-	when we print errors/numbers back out)
+	  when we print errors/numbers back out)
 
 2002-04-12 15:26  kyle
 
@@ -543,8 +684,8 @@
 2002-04-12 15:23  kyle
 
 	* WcalcController.m, calculator.h, variables.c: Setup
-	reverse-lookup table for characters (we'll need it when we print
-	errors/numbers back out)
+	  reverse-lookup table for characters (we'll need it when we print
+	  errors/numbers back out)
 
 2002-04-12 15:03  kyle
 
@@ -569,7 +710,7 @@
 2002-04-12 14:57  kyle
 
 	* scanner.l: Back to American-only (may be some cruft left in
-	there... I'll get it later)
+	  there... I'll get it later)
 
 2002-04-12 14:56  kyle
 
@@ -578,13 +719,13 @@
 2002-04-12 13:03  kyle
 
 	* WcalcController.m, calculator.c, calculator.h, variables.c:
-	Initial preprocessor support!
+	  Initial preprocessor support!
 
 2002-04-10 00:03  kyle
 
 	* WcalcController.h, WcalcController.m, calculator.h, main.c,
-	parser.y, scanner.l: Added a preference to optionally forget
-	expressions that produce errors and don't return values.
+	  parser.y, scanner.l: Added a preference to optionally forget
+	  expressions that produce errors and don't return values.
 
 2002-04-09 18:40  kyle
 
@@ -609,23 +750,23 @@
 2002-03-07 19:10  kyle
 
 	* WcalcController.m, calculator.c, calculator.h, parser.y,
-	scanner.l: Added cube root (cbrt)
+	  scanner.l: Added cube root (cbrt)
 
 2002-03-07 18:41  kyle
 
 	* scanner.l: Added square function and fixed it up with the new
-	configuration stuff. Counting digits for sig-fig rounding
-	indication.
+	  configuration stuff. Counting digits for sig-fig rounding
+	  indication.
 
 2002-03-07 18:40  kyle
 
 	* parser.y: Added square function and fixed it up with the new
-	configuration stuff.
+	  configuration stuff.
 
 2002-03-07 18:39  kyle
 
 	* WcalcController.m, calculator.c, calculator.h: Implemented the
-	Rounding indications (Simple and Significant Figure)
+	  Rounding indications (Simple and Significant Figure)
 
 2002-03-07 18:38  kyle
 
@@ -634,12 +775,12 @@
 2002-03-07 16:38  kyle
 
 	* WcalcController.h, WcalcController.m, calculator.c, calculator.h:
-	Redid preferences as a struct to make it easier to maintain.
+	  Redid preferences as a struct to make it easier to maintain.
 
 2002-03-07 03:03  kyle
 
 	* WcalcController.m, calculator.c, calculator.h: Visual indication
-	of rounding. (next: sig figs)
+	  of rounding. (next: sig figs)
 
 2002-03-06 10:49  kyle
 
@@ -648,7 +789,7 @@
 2002-03-04 21:00  kyle
 
 	* English.lproj/: MainMenu.nib/classes.nib, MainMenu.nib/info.nib,
-	MainMenu.nib/objects.nib, .cvsignore: [no log message]
+	  MainMenu.nib/objects.nib, .cvsignore: [no log message]
 
 2002-03-04 21:00  kyle
 
@@ -657,6 +798,19 @@
 2002-03-04 20:45  kyle
 
 	* Wcalc.pbproj/: kyle.pbxuser, project.pbxproj: [no log message]
+
+2002-03-04 20:37  kyle
+
+	* website/w.png: The Logo
+
+2002-03-04 20:37  kyle
+
+	* build/intermediates/: .cvsignore, Wcalc.build/.cvsignore,
+	  Wcalc.build/DerivedSources/.cvsignore,
+	  Wcalc.build/Headermaps/.cvsignore,
+	  Wcalc.build/Objects/.cvsignore, Wcalc.pbxindex/.cvsignore,
+	  Wcalc.pbxindex/strings.pbxstrings/.cvsignore: More ignores to
+	  make life easier
 
 2002-03-04 20:30  kyle
 
@@ -672,7 +826,7 @@
 
 2002-03-03 14:57  kyle
 
-	* Wcalc.pbproj/kyle.pbxuser: [no log message]
+	* Wcalc.pbproj/kyle.pbxuser, website/wcalc.html: [no log message]
 
 2002-03-03 14:57  kyle
 
@@ -681,14 +835,18 @@
 2002-03-02 12:22  kyle
 
 	* English.lproj/MainMenu.nib/classes.nib,
-	English.lproj/MainMenu.nib/info.nib,
-	English.lproj/MainMenu.nib/objects.nib, Wcalc.pbproj/kyle.pbxuser,
-	Wcalc.pbproj/project.pbxproj: stuff
+	  English.lproj/MainMenu.nib/info.nib,
+	  English.lproj/MainMenu.nib/objects.nib,
+	  Wcalc.pbproj/kyle.pbxuser, Wcalc.pbproj/project.pbxproj: stuff
 
 2002-03-02 12:22  kyle
 
 	* Makefile: Switched to yacc and flex. Added the new string
-	manipulation files.
+	  manipulation files.
+
+2002-03-02 12:20  kyle
+
+	* website/wcalc.html: Posted notice of the mailing list I just made
 
 2002-03-02 00:49  kyle
 
@@ -697,8 +855,8 @@
 2002-03-02 00:48  kyle
 
 	* WcalcController.m: Fixed the live preference display. Fixed the
-	menu's response the the drawer state. Made the preference panel
-	modeless.
+	  menu's response the the drawer state. Made the preference panel
+	  modeless.
 
 2002-03-02 00:46  kyle
 
@@ -723,34 +881,35 @@
 2002-03-01 22:09  kyle
 
 	* WcalcController.h, WcalcController.m: Changes the period button
-	to a comma button depending on the state. Displays the current
-	comma preference, too.
+	  to a comma button depending on the state. Displays the current
+	  comma preference, too.
 
 2002-03-01 21:22  kyle
 
 	* scanner.l: Moved commands from main.c. Added some acceptable,
-	equivalent symbols. Fixed (I think) comma support. Added a garbage
-	collector for goofily-formatted numbers.
+	  equivalent symbols. Fixed (I think) comma support. Added a
+	  garbage collector for goofily-formatted numbers.
 
 2002-03-01 21:18  kyle
 
 	* parser.y: Added smarts for piped files. Moved commands here from
-	main.c.
+	  main.c.
 
 2002-03-01 21:16  kyle
 
 	* WcalcController.m: Added a preference for comma parsing
-	pickiness. Fixed a continuous expression bug (new division symbol).
+	  pickiness. Fixed a continuous expression bug (new division
+	  symbol).
 
 2002-03-01 21:14  kyle
 
 	* WcalcController.h, calculator.c, calculator.h: Added a preference
-	for comma parsing pickiness.
+	  for comma parsing pickiness.
 
 2002-03-01 21:14  kyle
 
 	* main.c: Moved commands to the parser (so they'll work with piped
-	files).
+	  files).
 
 2002-03-01 21:12  kyle
 
@@ -759,24 +918,24 @@
 2002-03-01 17:58  kyle
 
 	* calculator.h, main.c, parser.y, scanner.l, string_manip.c,
-	string_manip.h: Continued fixing international comma support.
-	Started migrating commands from main.c to the parser/scanner.
+	  string_manip.h: Continued fixing international comma support.
+	  Started migrating commands from main.c to the parser/scanner.
 
 2002-03-01 01:42  kyle
 
 	* ReadMe.rtf, libreadline.a, English.lproj/MainMenu.nib/info.nib,
-	English.lproj/MainMenu.nib/objects.nib, Wcalc.pbproj/kyle.pbxuser:
-	stuff
+	  English.lproj/MainMenu.nib/objects.nib,
+	  Wcalc.pbproj/kyle.pbxuser: stuff
 
 2002-03-01 01:30  kyle
 
 	* main.c: More CLI error printing (were previously ignoring
-	errorstring.
+	  errorstring.
 
 2002-03-01 01:29  kyle
 
 	* scanner.l: Added sanity/error checking to alternate bases,
-	started complete support for commas/periods in decimal numbers
+	  started complete support for commas/periods in decimal numbers
 
 2002-03-01 01:28  kyle
 
@@ -801,12 +960,12 @@
 2002-02-28 02:05  kyle
 
 	* WcalcController.m, calculator.c, calculator.h, main.c, parser.y,
-	scanner.l: Added sqrt, ceil, floor functions
+	  scanner.l: Added sqrt, ceil, floor functions
 
 2002-02-28 01:52  kyle
 
 	* main.c: Added an interactive CLI "strict variable parsing"
-	toggle.
+	  toggle.
 
 2002-02-27 16:06  kyle
 
@@ -815,15 +974,16 @@
 2002-02-27 14:55  kyle
 
 	* WcalcController.m: Made preference panel and keyboard panel
-	placement more commonsensical.
+	  placement more commonsensical.
 
 2002-02-27 12:05  kyle
 
 	* ChangeLog, ReadMe.rtf, Wcalc.pmsp, WcalcController.m,
-	calculator.c, definitions.h, parser.y,
-	English.lproj/InfoPlist.strings, Wcalc.pbproj/kyle.pbxuser,
-	Wcalc.pbproj/project.pbxproj: Excessive error reporting fixed (good
-	god)
+	  calculator.c, definitions.h, parser.y,
+	  English.lproj/InfoPlist.strings, Wcalc.pbproj/kyle.pbxuser,
+	  Wcalc.pbproj/project.pbxproj, website/contact.html,
+	  website/download.html, website/screenshots.html,
+	  website/wcalc.html: Excessive error reporting fixed (good god)
 
 2002-02-27 11:35  kyle
 
@@ -832,6 +992,11 @@
 2002-02-27 02:49  kyle
 
 	* .cvsignore, Wcalc.pmsp: New stuff to ignore, new version
+
+2002-02-27 02:48  kyle
+
+	* website/: contact.html, download.html, screenshots.html,
+	  wcalc.html: Updating the website for the new version
 
 2002-02-27 02:45  kyle
 
@@ -845,6 +1010,10 @@
 
 	* ReadMe.rtf: Just describing the new version (1.4.3)
 
+2002-02-26 18:45  kyle
+
+	* build/intermediates/.cvsignore: More stuff to ignore
+
 2002-02-26 18:43  kyle
 
 	* Wcalc.pbproj/: kyle.pbxuser, project.pbxproj: stuff
@@ -852,7 +1021,7 @@
 2002-02-26 18:43  kyle
 
 	* English.lproj/MainMenu.nib/: classes.nib, info.nib, objects.nib:
-	Changed the preferences layout, added comma option
+	  Changed the preferences layout, added comma option
 
 2002-02-26 18:43  kyle
 
@@ -873,7 +1042,7 @@
 2002-02-26 18:37  kyle
 
 	* libreadline.a: Ran "ranlib" on it. (What does that do? it was
-	complaining about it)
+	  complaining about it)
 
 2002-02-26 18:35  kyle
 
@@ -882,18 +1051,23 @@
 2002-02-26 18:32  kyle
 
 	* WcalcController.h, WcalcController.m, calculator.c, calculator.h,
-	main.c: Added the preference to output with a comma instead of a
-	period.
+	  main.c: Added the preference to output with a comma instead of a
+	  period.
 
 2002-02-26 18:10  kyle
 
 	* calculator.c, main.c, parser.y: Fixed a rounding error (all
-	negative decimals were removed!). (BOTH) Added error reporting to
-	the command-line. (CLI) Added a radians toggle (CLI)
+	  negative decimals were removed!). (BOTH) Added error reporting to
+	  the command-line. (CLI) Added a radians toggle (CLI)
 
 2002-02-26 17:18  kyle
 
 	* ChangeLog: logging changes
+
+2002-02-24 19:01  kyle
+
+	* website/: contact.html, download.html, screenshots.html,
+	  wcalc.html: These belong here
 
 2002-02-24 15:41  kyle
 
@@ -902,17 +1076,18 @@
 2002-02-24 12:31  kyle
 
 	* Makefile, WcalcController.h, WcalcController.m, historyManager.c,
-	historyManager.h, English.lproj/.cvsignore,
-	English.lproj/MainMenu.nib/classes.nib,
-	English.lproj/MainMenu.nib/info.nib,
-	English.lproj/MainMenu.nib/objects.nib, Wcalc.pbproj/kyle.pbxuser:
-	Fixed a bug or two, made small speed improvements on preference
-	changes.  Made history redisplay configurable.
+	  historyManager.h, English.lproj/.cvsignore,
+	  English.lproj/MainMenu.nib/classes.nib,
+	  English.lproj/MainMenu.nib/info.nib,
+	  English.lproj/MainMenu.nib/objects.nib,
+	  Wcalc.pbproj/kyle.pbxuser: Fixed a bug or two, made small speed
+	  improvements on preference changes.  Made history redisplay
+	  configurable.
 
 2002-02-24 10:53  kyle
 
 	* scanner.l: Fixed the parsing (0.9 is now 0.9 and not octal 0
-	times .9)
+	  times .9)
 
 2002-02-24 00:22  kyle
 
@@ -921,7 +1096,7 @@
 2002-02-23 23:57  kyle
 
 	* calculator.c: to make gcc on linux be quiet, i added a newline at
-	the end of the file
+	  the end of the file
 
 2002-02-23 23:46  kyle
 
@@ -929,17 +1104,25 @@
 
 2002-02-23 23:44  kyle
 
+	* build/.cvsignore: more files to ignore
+
+2002-02-23 23:44  kyle
+
 	* Makefile: strips automatically now
+
+2002-02-23 23:30  kyle
+
+	* build/.cvsignore: needs to be there
 
 2002-02-23 23:28  kyle
 
 	* English.lproj/InfoPlist.strings, Wcalc.pbproj/project.pbxproj:
-	stuff
+	  stuff
 
 2002-02-23 23:28  kyle
 
 	* .cvsignore, README.txt, ReadMe.rtf: getting ready for release of
-	1.4.2, and tidying up
+	  1.4.2, and tidying up
 
 2002-02-23 23:20  kyle
 
@@ -948,7 +1131,7 @@
 2002-02-23 16:13  kyle
 
 	* .gdb_history, definitions.h, theDelegate.h, theDelegate.m:
-	Rectifying the repository
+	  Rectifying the repository
 
 2002-02-23 16:10  kyle
 
@@ -961,16 +1144,19 @@
 2002-02-23 15:59  kyle
 
 	* WcalcController.m: Fixed the editing-after-pressing-a-button
-	error (I'm an idiot) (GUI) Fixed the window-position saving
-	routines (GUI) The problem with window sizing has gotten WORSE
-	(OSX's fault?) (GUI)
+	  error (I'm an idiot) (GUI) Fixed the window-position saving
+	  routines (GUI) The problem with window sizing has gotten WORSE
+	  (OSX's fault?) (GUI)
 
 2002-02-23 15:57  kyle
 
 	* English.lproj/MainMenu.nib/classes.nib,
-	English.lproj/MainMenu.nib/info.nib,
-	English.lproj/MainMenu.nib/objects.nib, Wcalc.pbproj/kyle.pbxuser,
-	Wcalc.pbproj/project.pbxproj: stuff
+	  English.lproj/MainMenu.nib/info.nib,
+	  English.lproj/MainMenu.nib/objects.nib,
+	  English.lproj/MainMenu~.nib/classes.nib,
+	  English.lproj/MainMenu~.nib/info.nib,
+	  English.lproj/MainMenu~.nib/objects.nib,
+	  Wcalc.pbproj/kyle.pbxuser, Wcalc.pbproj/project.pbxproj: stuff
 
 2002-02-23 15:57  kyle
 
@@ -983,7 +1169,7 @@
 2002-02-23 15:56  kyle
 
 	* WcalcController.h: Merged the pref panel to be controlled more
-	centrally (splitting it was just a pain in the butt)
+	  centrally (splitting it was just a pain in the butt)
 
 2002-02-23 15:54  kyle
 
@@ -996,12 +1182,12 @@
 2002-02-23 15:47  kyle
 
 	* Makefile, PrefsController.h, PrefsController.m,
-	WcalcController.h, WcalcController.m, calculator.c, calculator.h,
-	historyManager.c, main.c, parser.y, scanner.l, wcalc.spec: Added
-	output commands to the GUI too (GUI) Fixed debug output in the CLI
-	(CLI) Tried to compile statically (BOTH) Supports real division
-	symbol (BOTH) Random is now truly random, if the system supports it
-	- relies on /dev/random (BOTH)
+	  WcalcController.h, WcalcController.m, calculator.c, calculator.h,
+	  historyManager.c, main.c, parser.y, scanner.l, wcalc.spec: Added
+	  output commands to the GUI too (GUI) Fixed debug output in the
+	  CLI (CLI) Tried to compile statically (BOTH) Supports real
+	  division symbol (BOTH) Random is now truly random, if the system
+	  supports it - relies on /dev/random (BOTH)
 
 2002-02-23 15:46  kyle
 
@@ -1010,27 +1196,26 @@
 2002-02-23 15:45  kyle
 
 	* English.lproj/InfoPlist.strings,
-	English.lproj/MainMenu.nib/classes.nib,
-	English.lproj/MainMenu.nib/info.nib,
-	English.lproj/MainMenu.nib/objects.nib, Wcalc.pbproj/kyle.pbxuser,
-	Wcalc.pbproj/project.pbxproj, English.lproj/InfoPlist.strings,
-	English.lproj/MainMenu.nib/classes.nib,
-	English.lproj/MainMenu.nib/info.nib,
-	English.lproj/MainMenu.nib/objects.nib, Wcalc.pbproj/kyle.pbxuser,
-	Wcalc.pbproj/project.pbxproj: stuff
+	  English.lproj/MainMenu.nib/classes.nib,
+	  English.lproj/MainMenu.nib/info.nib,
+	  English.lproj/MainMenu.nib/objects.nib,
+	  English.lproj/MainMenu~.nib/classes.nib,
+	  English.lproj/MainMenu~.nib/info.nib,
+	  English.lproj/MainMenu~.nib/objects.nib,
+	  Wcalc.pbproj/kyle.pbxuser, Wcalc.pbproj/project.pbxproj: stuff
 
 2002-02-23 15:45  kyle
 
 	* HistoryList.m, PrefsController.h, PrefsController.m,
-	VariableList.m, WcalcController.m, calculator.c, calculator.h,
-	historyManager.c, historyManager.h, main.c, parser.y, scanner.l:
-	Saves the history (max of 1000 lines - should this be
-	configurable?) (CLI) New commands in the CLI - (most) old ones will
-	disappear next version (CLI) Supports hex (0x), octal (0), and
-	binary (0b) input and output (BOTH) Cleared out some pointless
-	error messages (CLI) Improved factorials (BOTH) Miscellaneous
-	Bugfixes (BOTH) Tried to fix a window drifting problem (GUI) Added
-	a "Result" column to the history (GUI)
+	  VariableList.m, WcalcController.m, calculator.c, calculator.h,
+	  historyManager.c, historyManager.h, main.c, parser.y, scanner.l:
+	  Saves the history (max of 1000 lines - should this be
+	  configurable?) (CLI) New commands in the CLI - (most) old ones
+	  will disappear next version (CLI) Supports hex (0x), octal (0),
+	  and binary (0b) input and output (BOTH) Cleared out some
+	  pointless error messages (CLI) Improved factorials (BOTH)
+	  Miscellaneous Bugfixes (BOTH) Tried to fix a window drifting
+	  problem (GUI) Added a "Result" column to the history (GUI)
 
 2002-02-23 15:43  kyle
 
@@ -1042,25 +1227,29 @@
 
 2002-02-23 15:41  kyle
 
-	* .DS_Store: Doesn't belong in repository
+	* .DS_Store, build/.DS_Store: Doesn't belong in repository
 
 2002-02-23 15:40  kyle
 
 	* English.lproj/InfoPlist.strings,
-	English.lproj/MainMenu.nib/classes.nib,
-	English.lproj/MainMenu.nib/info.nib,
-	English.lproj/MainMenu.nib/objects.nib, Wcalc.pbproj/kyle.pbxuser,
-	Wcalc.pbproj/project.pbxproj: stuff
+	  English.lproj/MainMenu.nib/classes.nib,
+	  English.lproj/MainMenu.nib/info.nib,
+	  English.lproj/MainMenu.nib/objects.nib,
+	  English.lproj/MainMenu~.nib/classes.nib,
+	  English.lproj/MainMenu~.nib/info.nib,
+	  English.lproj/MainMenu~.nib/objects.nib,
+	  Wcalc.pbproj/kyle.pbxuser, Wcalc.pbproj/project.pbxproj,
+	  build/.DS_Store: stuff
 
 2002-02-23 15:40  kyle
 
 	* WcalcController.h, WcalcController.m, calculator.c, calculator.h,
-	main.m, parser.y, scanner.l, wcalc.spec: More improvements to the
-	parser (BOTH) Added LOTS of constants (BOTH) Added menus for
-	functions and symbols (GUI) Added absolute value abs() (BOTH) Added
-	a bunch of physical constants to the symbols (BOTH) Saves toggled
-	status (GUI) Added the ability to toggle the presence of the keypad
-	(GUI)
+	  main.m, parser.y, scanner.l, wcalc.spec: More improvements to the
+	  parser (BOTH) Added LOTS of constants (BOTH) Added menus for
+	  functions and symbols (GUI) Added absolute value abs() (BOTH)
+	  Added a bunch of physical constants to the symbols (BOTH) Saves
+	  toggled status (GUI) Added the ability to toggle the presence of
+	  the keypad (GUI)
 
 2002-02-23 15:38  kyle
 
@@ -1073,7 +1262,7 @@
 2002-02-23 15:35  kyle
 
 	* WcalcController.h, WcalcController.m, calculator.c, calculator.h,
-	main.c: Began work on continuous calculations
+	  main.c: Began work on continuous calculations
 
 2002-02-23 15:34  kyle
 
@@ -1093,8 +1282,10 @@
 
 2002-02-23 15:31  kyle
 
-	* English.lproj/MainMenu.nib/: classes.nib, info.nib, objects.nib:
-	Added the version number to the about box
+	* English.lproj/: MainMenu.nib/classes.nib, MainMenu.nib/info.nib,
+	  MainMenu.nib/objects.nib, MainMenu~.nib/classes.nib,
+	  MainMenu~.nib/info.nib, MainMenu~.nib/objects.nib: Added the
+	  version number to the about box
 
 2002-02-23 15:30  kyle
 
@@ -1107,17 +1298,17 @@
 2002-02-23 15:29  kyle
 
 	* variables.c: Added newline at the end of the file to make gcc on
-	linux shut up
+	  linux shut up
 
 2002-02-23 15:29  kyle
 
 	* variables.h, wcalc.spec: Added newlines at the end of the file to
-	make gcc on linux shut up
+	  make gcc on linux shut up
 
 2002-02-23 15:28  kyle
 
 	* AboutBoxController.h, AboutBoxController.m: Added the version
-	number to the about box
+	  number to the about box
 
 2002-02-23 15:27  kyle
 
@@ -1127,14 +1318,34 @@
 
 	* ChangeLog: Logging changes
 
+2002-02-23 15:24  kyle
+
+	* build/intermediates/: Wcalc.indexed-headers,
+	  Wcalc.indexed-precomps, Wcalc.build/Info.plist,
+	  Wcalc.build/PkgInfo, Wcalc.build/TrustedPrecomps.txt,
+	  Wcalc.build/pbdevelopment.plist,
+	  Wcalc.build/Headermaps/Wcalc.hmap,
+	  Wcalc.build/Objects/LinkFileList,
+	  Wcalc.build/Objects/LinkFileListPrelink,
+	  Wcalc.pbxindex/categories.pbxbtree,
+	  Wcalc.pbxindex/decls.pbxbtree, Wcalc.pbxindex/files.pbxbtree,
+	  Wcalc.pbxindex/imports.pbxbtree, Wcalc.pbxindex/pbxindex.header,
+	  Wcalc.pbxindex/protocols.pbxbtree, Wcalc.pbxindex/refs.pbxbtree,
+	  Wcalc.pbxindex/subclasses.pbxbtree,
+	  Wcalc.pbxindex/symbols0.pbxsymbols,
+	  Wcalc.pbxindex/strings.pbxstrings/control,
+	  Wcalc.pbxindex/strings.pbxstrings/strings: None of this belongs
+	  in the repository
+
 2002-02-23 15:19  kyle
 
 	* Wcalc.pbproj/: kyle.pbxuser, project.pbxproj: Dunno
 
 2002-02-23 15:19  kyle
 
-	* English.lproj/MainMenu.nib/: classes.nib, info.nib, objects.nib:
-	GUI changes
+	* English.lproj/: MainMenu.nib/classes.nib, MainMenu.nib/info.nib,
+	  MainMenu.nib/objects.nib, MainMenu~.nib/classes.nib,
+	  MainMenu~.nib/info.nib, MainMenu~.nib/objects.nib: GUI changes
 
 2002-02-23 15:19  kyle
 
@@ -1143,52 +1354,124 @@
 2002-02-23 15:18  kyle
 
 	* HistoryList.m, PrefsController.h, PrefsController.m,
-	WcalcController.h, WcalcController.m, calculator.c, calculator.h,
-	historyManager.c, main.c, main.m, parser.y, scanner.l, variables.c,
-	variables.h, wcalc.spec: Fixed the grammar (or broke it) (BOTH)
-	Added checks to catch values with too much precision (BOTH)
-	Precision slider won't go too far anymore (GUI) Remembers the
-	window position (GUI) Quits when the window is closed (GUI) Saves
-	Preferences! (GUI) Expanded the vocabulary (asin,arcsin,sin^-1)
-	(BOTH) Added a preference to toggle using Radians (GUI) Made the
-	history font smaller (GUI) Fixed a crasher in the history list.
-	(GUI) Can now do floating point mods (BOTH) "random" means a random
-	value (BOTH) added round() to round a value to the nearest whole
-	number (BOTH)
+	  WcalcController.h, WcalcController.m, calculator.c, calculator.h,
+	  historyManager.c, main.c, main.m, parser.y, scanner.l,
+	  variables.c, variables.h, wcalc.spec: Fixed the grammar (or broke
+	  it) (BOTH) Added checks to catch values with too much precision
+	  (BOTH) Precision slider won't go too far anymore (GUI) Remembers
+	  the window position (GUI) Quits when the window is closed (GUI)
+	  Saves Preferences! (GUI) Expanded the vocabulary
+	  (asin,arcsin,sin^-1) (BOTH) Added a preference to toggle using
+	  Radians (GUI) Made the history font smaller (GUI) Fixed a crasher
+	  in the history list. (GUI) Can now do floating point mods (BOTH)
+	  "random" means a random value (BOTH) added round() to round a
+	  value to the nearest whole number (BOTH)
 
 2002-02-23 15:15  kyle
 
 	* ChangeLog: Logging changes
 
-2002-02-23 15:03  kyle
+2002-02-23 15:14  kyle
 
-	* .DS_Store, .gdb_history, AboutBoxController.h,
-	AboutBoxController.m, ChangeLog, ErrorController.h,
-	ErrorController.m, HistoryList.h, HistoryList.m, Makefile,
-	OldVariableList.h, OldVariableList.m, PrefsController.h,
-	PrefsController.m, README.txt, TheW.icns, VariableList.h,
-	VariableList.m, WcalcController.h, WcalcController.m, calculator.c,
-	calculator.h, historyManager.c, historyManager.h, main.c, main.m,
-	parser.y, scanner.l, variables.c, variables.h, w.png, wcalc.1,
-	wcalc.spec, English.lproj/InfoPlist.strings,
-	English.lproj/MainMenu.nib/classes.nib,
-	English.lproj/MainMenu.nib/info.nib,
-	English.lproj/MainMenu.nib/objects.nib, Wcalc.pbproj/kyle.pbxuser,
-	Wcalc.pbproj/project.pbxproj: Initial revision
+	* build/intermediates/: Wcalc.indexed-headers,
+	  Wcalc.build/TrustedPrecomps.txt,
+	  Wcalc.build/DerivedSources/parser.c,
+	  Wcalc.build/DerivedSources/parser.h,
+	  Wcalc.build/DerivedSources/scanner.c,
+	  Wcalc.build/DerivedSources/y.tab.c,
+	  Wcalc.build/DerivedSources/y.tab.h,
+	  Wcalc.build/Headermaps/Wcalc.hmap,
+	  Wcalc.build/Objects/LinkFileListPrelink,
+	  Wcalc.pbxindex/pbxindex.header: Deleting derived source from the
+	  repository
 
 2002-02-23 15:03  kyle
 
 	* .DS_Store, .gdb_history, AboutBoxController.h,
-	AboutBoxController.m, ChangeLog, ErrorController.h,
-	ErrorController.m, HistoryList.h, HistoryList.m, Makefile,
-	OldVariableList.h, OldVariableList.m, PrefsController.h,
-	PrefsController.m, README.txt, TheW.icns, VariableList.h,
-	VariableList.m, WcalcController.h, WcalcController.m, calculator.c,
-	calculator.h, historyManager.c, historyManager.h, main.c, main.m,
-	parser.y, scanner.l, variables.c, variables.h, w.png, wcalc.1,
-	wcalc.spec, English.lproj/InfoPlist.strings,
-	English.lproj/MainMenu.nib/classes.nib,
-	English.lproj/MainMenu.nib/info.nib,
-	English.lproj/MainMenu.nib/objects.nib, Wcalc.pbproj/kyle.pbxuser,
-	Wcalc.pbproj/project.pbxproj: Initial Import
+	  AboutBoxController.m, ChangeLog, ErrorController.h,
+	  ErrorController.m, HistoryList.h, HistoryList.m, Makefile,
+	  OldVariableList.h, OldVariableList.m, PrefsController.h,
+	  PrefsController.m, README.txt, TheW.icns, VariableList.h,
+	  VariableList.m, WcalcController.h, WcalcController.m,
+	  calculator.c, calculator.h, historyManager.c, historyManager.h,
+	  main.c, main.m, parser.y, scanner.l, variables.c, variables.h,
+	  w.png, wcalc.1, wcalc.spec, English.lproj/InfoPlist.strings,
+	  English.lproj/MainMenu.nib/classes.nib,
+	  English.lproj/MainMenu.nib/info.nib,
+	  English.lproj/MainMenu.nib/objects.nib,
+	  English.lproj/MainMenu~.nib/classes.nib,
+	  English.lproj/MainMenu~.nib/info.nib,
+	  English.lproj/MainMenu~.nib/objects.nib,
+	  Wcalc.pbproj/kyle.pbxuser, Wcalc.pbproj/project.pbxproj,
+	  build/.DS_Store, build/intermediates/Wcalc.indexed-headers,
+	  build/intermediates/Wcalc.indexed-precomps,
+	  build/intermediates/Wcalc.build/Info.plist,
+	  build/intermediates/Wcalc.build/PkgInfo,
+	  build/intermediates/Wcalc.build/TrustedPrecomps.txt,
+	  build/intermediates/Wcalc.build/pbdevelopment.plist,
+	  build/intermediates/Wcalc.build/DerivedSources/parser.c,
+	  build/intermediates/Wcalc.build/DerivedSources/parser.h,
+	  build/intermediates/Wcalc.build/DerivedSources/scanner.c,
+	  build/intermediates/Wcalc.build/DerivedSources/y.tab.c,
+	  build/intermediates/Wcalc.build/DerivedSources/y.tab.h,
+	  build/intermediates/Wcalc.build/Headermaps/Wcalc.hmap,
+	  build/intermediates/Wcalc.build/Objects/LinkFileList,
+	  build/intermediates/Wcalc.build/Objects/LinkFileListPrelink,
+	  build/intermediates/Wcalc.pbxindex/categories.pbxbtree,
+	  build/intermediates/Wcalc.pbxindex/decls.pbxbtree,
+	  build/intermediates/Wcalc.pbxindex/files.pbxbtree,
+	  build/intermediates/Wcalc.pbxindex/imports.pbxbtree,
+	  build/intermediates/Wcalc.pbxindex/pbxindex.header,
+	  build/intermediates/Wcalc.pbxindex/protocols.pbxbtree,
+	  build/intermediates/Wcalc.pbxindex/refs.pbxbtree,
+	  build/intermediates/Wcalc.pbxindex/subclasses.pbxbtree,
+	  build/intermediates/Wcalc.pbxindex/symbols0.pbxsymbols,
+	  build/intermediates/Wcalc.pbxindex/strings.pbxstrings/control,
+	  build/intermediates/Wcalc.pbxindex/strings.pbxstrings/strings:
+	  Initial Import
+
+2002-02-23 15:03  kyle
+
+	* .DS_Store, .gdb_history, AboutBoxController.h,
+	  AboutBoxController.m, ChangeLog, ErrorController.h,
+	  ErrorController.m, HistoryList.h, HistoryList.m, Makefile,
+	  OldVariableList.h, OldVariableList.m, PrefsController.h,
+	  PrefsController.m, README.txt, TheW.icns, VariableList.h,
+	  VariableList.m, WcalcController.h, WcalcController.m,
+	  calculator.c, calculator.h, historyManager.c, historyManager.h,
+	  main.c, main.m, parser.y, scanner.l, variables.c, variables.h,
+	  w.png, wcalc.1, wcalc.spec, English.lproj/InfoPlist.strings,
+	  English.lproj/MainMenu.nib/classes.nib,
+	  English.lproj/MainMenu.nib/info.nib,
+	  English.lproj/MainMenu.nib/objects.nib,
+	  English.lproj/MainMenu~.nib/classes.nib,
+	  English.lproj/MainMenu~.nib/info.nib,
+	  English.lproj/MainMenu~.nib/objects.nib,
+	  Wcalc.pbproj/kyle.pbxuser, Wcalc.pbproj/project.pbxproj,
+	  build/.DS_Store, build/intermediates/Wcalc.indexed-headers,
+	  build/intermediates/Wcalc.indexed-precomps,
+	  build/intermediates/Wcalc.build/Info.plist,
+	  build/intermediates/Wcalc.build/PkgInfo,
+	  build/intermediates/Wcalc.build/TrustedPrecomps.txt,
+	  build/intermediates/Wcalc.build/pbdevelopment.plist,
+	  build/intermediates/Wcalc.build/DerivedSources/parser.c,
+	  build/intermediates/Wcalc.build/DerivedSources/parser.h,
+	  build/intermediates/Wcalc.build/DerivedSources/scanner.c,
+	  build/intermediates/Wcalc.build/DerivedSources/y.tab.c,
+	  build/intermediates/Wcalc.build/DerivedSources/y.tab.h,
+	  build/intermediates/Wcalc.build/Headermaps/Wcalc.hmap,
+	  build/intermediates/Wcalc.build/Objects/LinkFileList,
+	  build/intermediates/Wcalc.build/Objects/LinkFileListPrelink,
+	  build/intermediates/Wcalc.pbxindex/categories.pbxbtree,
+	  build/intermediates/Wcalc.pbxindex/decls.pbxbtree,
+	  build/intermediates/Wcalc.pbxindex/files.pbxbtree,
+	  build/intermediates/Wcalc.pbxindex/imports.pbxbtree,
+	  build/intermediates/Wcalc.pbxindex/pbxindex.header,
+	  build/intermediates/Wcalc.pbxindex/protocols.pbxbtree,
+	  build/intermediates/Wcalc.pbxindex/refs.pbxbtree,
+	  build/intermediates/Wcalc.pbxindex/subclasses.pbxbtree,
+	  build/intermediates/Wcalc.pbxindex/symbols0.pbxsymbols,
+	  build/intermediates/Wcalc.pbxindex/strings.pbxstrings/control,
+	  build/intermediates/Wcalc.pbxindex/strings.pbxstrings/strings:
+	  Initial revision
 

@@ -1,3 +1,24 @@
+--- Version 1.6.1 ---
+Aug 19 2003 - Kyle Wheeler
+ - Avoid command/variable conflicts (BOTH)
+Aug 18 2003 - Kyle Wheeler
+ - Fixed repeatable crash on Linux (CLI)
+ - Fixed recursion detection (BOTH)
+Aug 17 2003 - Kyle Wheeler
+ - Fixed small, one time, memory leak (CLI)
+Aug 09 2003 - Kyle Wheeler
+ - Added irandom, rand(), and irand() (BOTH)
+Jul 12 2003 - Kyle Wheeler
+ - Added bitwise operators & and | and ~ (BOTH)
+Apr 19 2003 - Kyle Wheeler
+ - Fix some flatten problems (BOTH)
+ - Compilation fixes (Solaris)
+Mar 25 2003 - Kyle Wheeler
+ - Made "always print integers" a preference (BOTH)
+ - Compilation fixes (Linux)
+Mar 24 2003 - Kyle Wheeler
+ - Added cot to the menus (GUI)
+ - Fixed log2 silliness (BOTH)
 --- Version 1.6 ---
 Mar 22 2003 - Kyle Wheeler
  - Errors now beep. (GUI)

@@ -145,6 +145,7 @@ static NSString *curFile = NULL;
 		case 30: str2 = @"F"; break;
 		case 31: str2 = @"Vm"; break;
 		case 32: str2 = @"re"; break;
+                case 33: str2 = @"irandom"; break;
 		default: return;
 	}
 	if ([str length]) {
@@ -188,6 +189,8 @@ static NSString *curFile = NULL;
 		case 23: str2 = @"acot("; break;
 		case 24: str2 = @"coth("; break;
 		case 25: str2 = @"acoth("; break;
+                case 26: str2 = @"rand("; break;
+                case 27: str2 = @"irand("; break;
 		default: return;
 	}
 	[ExpressionField setStringValue:[str2 stringByAppendingString:str]];

@@ -7,7 +7,7 @@
 
 \f0\fs28 \cf0 Hello!\
 \
-This is Wcalc 1.6!\
+This is Wcalc 1.6.1!\
 \
 1. What's New\
 2. Intro\
@@ -23,17 +23,15 @@ This is Wcalc 1.6!\
 \f0\b0 \
 \
 NEW FEATURES:\
- - Open/Save files works! (BOTH)\
- - Detects loops in active variables! (BOTH)\
- - Added a rounding indication to the CLI (CLI)\
- - \\prefs prints the preferences (CLI)\
-\
-REFINEMENTS:\
- - Errors now beep (GUI)\
+ - Added irandom, rand(), and irand() (random integer, random number between 0 and n, and random integer between 0 and n, respectively) (BOTH)\
+ - Added bitwise operators &, |, and ~ (BOTH)\
 \
 BUGFIXES:\
- - Decimal key now works properly in non-USA countries thanks to Thomas Steinhausen. (GUI)\
- - Fixed the arc-trig functions in degree mode. (BOTH)\
+ - Fixed flex-related crash in Linux (CLI)\
+ - Fixed recursion detection (BOTH)\
+ - Miscellaneous compilation fixes, platform fixes, and bug fixes (BOTH)\
+ - log2 is now logtwo (BOTH)\
+ - Added cot to the menus (GUI)\
 \
 
 \f1\b *********\
@@ -73,6 +71,9 @@ Wcalc recognizes the following symbols:\
 || (logical or)\
 << (bitshift left)\
 >> (bitshift right)\
+| (bitwise or)\
+~ (bitwise not)\
+& (bitwise and)\
 \
 Wcalc also allows you to group operations with parenthesis (), brackets [], and braces \{\}.\
 \
