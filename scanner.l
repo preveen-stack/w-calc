@@ -17,6 +17,7 @@
 #include "parser.h"
 
 	extern short scanerror;
+	extern short use_commas;
 	
 /* Everything up to the funny characters on the next line */
 /* goes directly into the lex.yy.c file */
@@ -138,15 +139,83 @@ floor { return(WFLOOR); }
 	return(VAR);
 }
 
-(({NDIGIT}{DIGIT}*(e[-+]?{DIGIT}+)?)|([.,]{DIGIT}+(e[-+]?{DIGIT}+)?)|((({NDIGIT}{DIGIT}*)|(0))[.,]{DIGIT}*(e[-+]?{DIGIT}+)?)) {
-	if (strchr(yytext,',')) {
-		*strchr(yytext,',') = '.';
+%{ /* international */
+%}
+
+({DIGIT}{0,3}[.,]{DIGIT}{3})(e[+-]?{DIGIT}+)? {
+	char strip = use_commas?'.':',', repl = use_commas?',':'.', *left, *right;
+
+	/* take out the ignored char */
+	for (left=right=yytext; *right; ++right) {
+		if (*right && *right != strip) {
+			*left = *right;
+			++left;
+		}
 	}
-	yylval.number = strtod(yytext,NULL);
+	while (left != right) { *left = 0; ++left; }
+
+	/* convert commas to periods if necessary for correct parsing */
+	if (use_commas && strchr(yytext,repl)) {
+		*strchr(yytext,repl) = strip;
+	}
+	
+	printf("ambiguous %s\n", yytext);
+}
+
+(({NDIGIT}(({DIGIT}*)|({DIGIT}{0,2}([,]{DIGIT}{3})+)))|({NDIGIT}(({DIGIT}*)|({DIGIT}{0,2}([,]{DIGIT}{3})+))[.]{DIGIT}+))(e[+-]?{DIGIT}+)? {
+	char err[strlen(yytext)+50];
+//	printf("american %s\n", yytext);
+
+	if (use_commas && ((strchr(yytext,',') && strchr(yytext,'.')) || yytext[strlen(yytext)-1]==',')) {
+		sprintf(err,"Incorrect number format (%s) - expected comma (,)", yytext);
+		report_error(err);
+		yylval.number = 0;
+		return(NUMBER);
+	}
+	
+}
+
+(({NDIGIT}(({DIGIT}*)|({DIGIT}{0,2}([.]{DIGIT}{3})+)))|({NDIGIT}(({DIGIT}*)|({DIGIT}{0,2}([.]{DIGIT}{3})+))[,]{DIGIT}+))(e[+-]?{DIGIT}+)? {
+	char strip = use_commas?'.':',', sepr = use_commas?',':'.';
+	char *left, *right;
+	char err[strlen(yytext)+50];
+	extern int yydebug;
+	char *manip = strdup(yytext);
+
+	printf("non-american %s\n", yytext);
+
+	if (! use_commas) {
+		sprintf(err,"Incorrect number format (%s) - expected period (.)", yytext);
+		report_error(err);
+		yylval.number = 0;
+		return(NUMBER);
+	}
+	/* Turn it into standard decimal form */
+	for (left=right=manip; *right; ++right) {
+		if (*right && *right != strip) {
+			*left = *right;
+			++left;
+		}
+	}
+	while (left != right) { *left = 0; ++left; }
+
+	if (! strchr(manip,sepr) && manip[0] == '0') {
+		sprintf(err,"Incorrect number format (%s) - expected period (.)", yytext);
+		report_error(err);
+		yylval.number = 0;
+		return(NUMBER);
+	}
+
+	if (use_commas && strrchr(manip,','))
+		*strrchr(manip,',') = '.';
+
+	yylval.number = strtod(manip,NULL);
+	free(manip);
+	if (yydebug) printf("%f\n",yylval.number);
 	if ((yylval.number != HUGE_VAL) && (yylval.number != -HUGE_VAL)) {
 		return(NUMBER);
 	} else {
-		perror("parsing numbers");
+		report_error(strerror(errno));
 		return(NUMBER);
 	}
 }
@@ -158,21 +227,35 @@ floor { return(WFLOOR); }
 	return(NUMBER);
 }
 
-0[0-7]* {
+0[0-9]* {
 	unsigned long int value;
+	char err[strlen(yytext)+57];
+	if (strchr(yytext,'8') || strchr(yytext,'9')) {
+		sprintf(err,"Incorrect number format (%s) - expected 0-7 for octal",yytext);
+		report_error(err);
+		yylval.number = 0;
+		return(NUMBER);
+	}
 	sscanf(yytext,"%lo",&value);
 	yylval.number = value;
 	return(NUMBER);
 }
 
-0b[01]+ {
+0b[0-9]+ {
 	unsigned long int value = 0;
 	unsigned int i, place = 1, len = strlen(yytext);
-	for (i=len-1;i>1;--i) {
-		value += ((yytext[i]=='0')?0:1) * place;
-		place = pow(2,len-i);
+	char err[strlen(yytext)+57];
+	if (strchr(yytext,'2') || strchr(yytext,'3') || strchr(yytext,'4') || strchr(yytext,'5') || strchr(yytext,'6') || strchr(yytext,'7') || strchr(yytext,'8') || strchr(yytext,'9')) {
+		sprintf(err,"Incorrect number format (%s) - expected 0 or 1 for binary",yytext);
+		report_error(err);
+		yylval.number = 0;
+	} else {
+		for (i=len-1;i>1;--i) {
+			value += ((yytext[i]=='0')?0:1) * place;
+			place = pow(2,len-i);
+		}
+		yylval.number = value;
 	}
-	yylval.number = value;
 	return(NUMBER);
 }
 
