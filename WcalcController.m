@@ -191,6 +191,7 @@ static char update_history = 0;
 		[prefs setObject:@"NO" forKey:@"printPrefixes"];
 		[prefs setObject:@"NO" forKey:@"updateHistory"];
 		[prefs setObject:@"NO" forKey:@"useCommas"];
+		[prefs setObject:@"YES" forKey:@"strictSyntax"];
 	}
 	precision = [prefs integerForKey:@"precision"];
 	engineering = [prefs boolForKey:@"engineeringNotation"];
@@ -202,6 +203,7 @@ static char update_history = 0;
 	print_prefixes = [prefs boolForKey:@"printPrefixes"];
 	update_history = [prefs boolForKey:@"updateHistory"];
 	use_commas = [prefs boolForKey:@"useCommas"];
+	strict_syntax = [prefs boolForKey:@"strictSyntax"];
 	
 	[PrecisionSlider setIntValue:precision];
 	just_answered = FALSE;
@@ -332,7 +334,7 @@ static char update_history = 0;
 	} else {
 		if (just_answered == FALSE) {
 			[ExpressionField setStringValue:[[ExpressionField stringValue] stringByAppendingString:sent]];
-		} else if ([sent isEqualToString:@"+"] || [sent isEqualToString:@"-"]||[sent isEqualToString:@"*"]||[sent isEqualToString:@"/"]||[sent isEqualToString:@"%"]||[sent isEqualToString:@"+"]||[sent isEqualToString:@"("]||[sent isEqualToString:@"&"]||[sent isEqualToString:@"|"]) {
+		} else if ([sent isEqualToString:@"+"] || [sent isEqualToString:@"-"]||[sent isEqualToString:@"*"]||[sent isEqualToString:@"/"]||[sent isEqualToString:@"%"]||[sent isEqualToString:@"+"]||[sent isEqualToString:@"("]||[sent isEqualToString:@"&"]||[sent isEqualToString:@"|"]||[sent isEqualToString:@"Ö"]) {
 			[ExpressionField setStringValue:[[@"a" self] stringByAppendingString:sent]];
 		} else {
 			[ExpressionField setStringValue:sent];
@@ -444,6 +446,12 @@ static char update_history = 0;
 				[prefs setObject:(use_commas?@"YES":@"NO") forKey:@"useCommas"];
 			}
 				break;
+		case 9: // Flag Confusing Numbers
+			olde = strict_syntax;
+			strict_syntax = ([sender state]==NSOnState);
+			if (olde != strict_syntax) {
+				[prefs setObject:(strict_syntax?@"YES":@"NO") forKey:@"strictSyntax"];
+			}
 		default: return;
 	}
 
@@ -499,6 +507,7 @@ static char update_history = 0;
 	[useRadians setState:(use_radians?NSOnState:NSOffState)];
 	[outputFormat selectCellWithTag:output_format];
 	[printPrefixes setState:(print_prefixes?NSOnState:NSOffState)];
+	[strictSyntax setState:(strict_syntax?NSOnState:NSOffState)];
 	[printPrefixes setEnabled:(output_format!=DECIMAL_FORMAT)];
 	[engineeringNotation setEnabled:(output_format==DECIMAL_FORMAT)];
 }
