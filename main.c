@@ -308,6 +308,8 @@ int read_prefs(char * filename)
 			conf.remember_errors = TRUEFALSE;
 		else if (!strcmp(key,"precision_guard"))
 			conf.precision_guard = TRUEFALSE;
+		else if (!strcmp(key,"print_integers"))
+			conf.print_prefixes = TRUEFALSE;
 		else if (!strcmp(key,"thousands_delimiter"))
 			conf.thou_delimiter = value[0];
 		else if (!strcmp(key,"decimal_delimiter"))
