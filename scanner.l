@@ -45,7 +45,7 @@ ACCEPTABLE	[_:]
 \\d(ec(imal)?)?			{ return(DEC_CMD); }
 \\dsep.                 { yylval.character = yytext[5]; return(DSEP_CMD); }
 \\e(ng(ineering)?)?{DIGIT}*		{ char * foo = yytext;
-	while (*foo && ! isdigit(*foo)) ++foo;
+	while (*foo && ! isdigit((int)(*foo))) ++foo;
 	if (*foo != 0) yylval.number = atoi(foo);
 	else yylval.number = -1;
 	return(ENG_CMD);}

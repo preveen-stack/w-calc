@@ -249,7 +249,7 @@ int read_prefs(char * filename)
 				// read until the end of line
 				while (read(fd,curs,1) == 1 && *curs != '\n')
 					;
-			else if (isalpha(*curs))
+			else if (isalpha((int)(*curs)))
 				break;
 			retval = read(fd,curs,1);
 		}
@@ -261,7 +261,7 @@ int read_prefs(char * filename)
 		}
 		while (retval == 1) {
 			retval = read(fd,curs,1);
-			if ((! quoted && isspace(*curs)) ||
+			if ((! quoted && isspace((int)(*curs))) ||
 				(quoted && *curs != '\''))
 				break;
 			++curs;
@@ -270,7 +270,7 @@ int read_prefs(char * filename)
 		while (retval == 1 && *curs != '=') {
 			retval = read(fd,curs,1);
 		}
-		while (retval == 1 && (isspace(*curs) || *curs == '=')) {
+		while (retval == 1 && (isspace((int)(*curs)) || *curs == '=')) {
 			retval = read(fd,curs,1);
 		}
 		value[0] = *curs;
@@ -284,7 +284,7 @@ int read_prefs(char * filename)
 		}
 		while (retval == 1) {
 			retval = read(fd,curs,1);
-			if ((! quoted && isspace(*curs)) ||
+			if ((! quoted && isspace((int)(*curs))) ||
 				(  quoted && *curs != '\''))
 				break;
 			++curs;

@@ -99,7 +99,7 @@ double parseme (char * pthis)
 	/* Convert to standard notation if there are numbers */
 	// are there numbers?
 	for (i=0;i<strlen(sanitized);++i) {
-		if (isdigit(sanitized[i])) {
+		if (isdigit((int)(sanitized[i]))) {
 			numbers = 1;
 			break;
 		}
