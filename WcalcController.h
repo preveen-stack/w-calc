@@ -19,7 +19,6 @@
     IBOutlet id variableList;
 	IBOutlet NSWindow *mainWindow;
 	IBOutlet id keypad;
-	IBOutlet id prefsController;
 	IBOutlet NSButton *engineeringNotation;
 	IBOutlet NSButton *historyDuplicates;
 	IBOutlet NSButton *pickyVariables;
