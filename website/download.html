@@ -10,7 +10,7 @@
 					<td valign="middle" align="left">
 						<h1>Wcalc</h1>
 					</td>
-					<td width="100">Version: 1.4.4
+					<td width="100">Version: 1.4.5
 					</td>
 				</tr>
 				<tr>
@@ -26,7 +26,8 @@
 					<table border=1 bgcolor="#EEEEEE" width="150">
 						<tr><td>
 								<h3>News</h3>
-								<b>27 Feb - 1.4.4</b><br>-&nbsp;Bugfixes&nbsp;n&nbsp;Commas!<br>
+								<b>7 Mar - 1.4.5</b><br>-&nbsp;Bugfixes!<br>
+								<b>27 Feb - 1.4.4</b><br>-&nbsp;Bugfixes&nbsp;n&nbsp;Commas<br>
 								<b>24 Feb - 1.4.2</b><br>-&nbsp;Bugfixes<br>
 								<b>11 Feb - 1.4.1</b><br>-&nbsp;Bugfixes<br>
 								<b>7 Feb - 1.4</b><br>-&nbsp;Hex,&nbsp;CLI&nbsp;Cleanup<br>
@@ -42,7 +43,19 @@
 				<td width="100%">
 					<h3>Download</h3>
 					<ul>
-						<li>Wcalc 1.4.4 (<a href="Wcalc-1.4.4.dmg.sit">MacOS X</a>)(Linux-x86)(Linux-ppc)
+						<li>Wcalc 1.4.5 (<a href="Wcalc-1.4.5.dmg.sit">MacOS X</a>)(<a href="Wcalc-1.4.5-1.i386.rpm">Linux-x86</a>)(<a href="Wcalc-1.4.5-1.ppc.rpm">Linux-ppc</a>)
+						<ul>
+							<li>Rewrote the number parser. Now handles commas correctly in all cases (i.e. 1,000 is either 1000 or 1 depending on the comma preference). Flags confusing numbers (e.g. 098 or 1.0.1). (BOTH)
+							<li>Command-line commands (like \commas or \hex) now work everywhere - the GUI as well as in files that you pipe into the CLI. (BOTH)
+							<li>Added support for some more symbols. (BOTH)
+							<li>Rounding indicator in the GUI (GUI)
+							<li>Added a base drawer (GUI)
+							<li>Preference panel and keyboard panel placement make sense now (GUI)
+							<li>Fixed two crashes in the output routines. (BOTH)
+							<li>CLI prints all errors now (CLI)
+							<li>Fixed menu's tracking of the state of the drawer (GUI)
+						</ul>
+						<li>Wcalc 1.4.4 (<a href="Wcalc-1.4.4.dmg.sit">MacOS X</a>)
 						<ul>
 							<li>Fixed erroneous error reporting
 						</ul>
