@@ -15,7 +15,7 @@
 			//[self selectText:self];
 			break;
 		case 81: // =
-		case 24:
+//		case 24:
 		{
 			char * temp;
 			extern NSButton *e;
@@ -29,6 +29,11 @@
 			[e performClick:self];
 			break;
 		}
+		case 123: // leftarrow
+		case 124: // rightarrow
+		case 126: // uparrow
+		case 125: // downarrow
+			break;
 		default:
 			printf("keyup %i => ", keycode);
 			fflush(NULL);
