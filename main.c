@@ -48,6 +48,7 @@ int main (int argc, char *argv[])
 	conf.engineering = 0;
 	standard_output = 1;
 	conf.picky_variables = 1;
+	conf.print_prefixes = 1;
 
 	/* Parse commandline options */
 	for (i = 1; i < argc; ++i) {
@@ -61,7 +62,7 @@ int main (int argc, char *argv[])
 			}
 		} else if (!strcmp(argv[i],"-E")) {
 			conf.engineering = 1;
-		} else if (!strcmp(argv[i],"-h") || !strcmp(argv[i],"--help")) {
+		} else if (!strcmp(argv[i],"--help")) {
 			print_command_help();
 			exit(0);
 		} else if (!strcmp(argv[i],"-v") || !strcmp(argv[i],"--version")) {
@@ -76,7 +77,7 @@ int main (int argc, char *argv[])
 		} else if (!strcmp(argv[i],"-b")||!strcmp(argv[i],"--binary")||!strcmp(argv[i],"-bin")) {
 			conf.output_format = BINARY_FORMAT;
 		} else if (!strcmp(argv[i],"-p")) {
-			conf.print_prefixes = 1;
+			conf.print_prefixes = 0;
 		} else if (!strcmp(argv[i],"-l")||!strcmp(argv[i],"--lenient")) {
 			conf.picky_variables = 0;
 		} else if (!strcmp(argv[i],"-r")||!strcmp(argv[i],"--radians")) {
@@ -154,7 +155,7 @@ int main (int argc, char *argv[])
 						}
 					}
 				}
-				putvar("a",last_answer);
+				putval("a",last_answer);
 
 				{ extern char * errstring;
 				if (errstring && strlen(errstring)) {
