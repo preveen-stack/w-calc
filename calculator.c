@@ -82,6 +82,7 @@ double parseme (char * pthis)
 	short numbers = 0;
 	int len = strlen(pthis);
 	char * sanitized;
+	extern char* open_file;
 
 	synerrors = 0;
 	sig_figs = UINT32_MAX;
@@ -137,6 +138,16 @@ double parseme (char * pthis)
 	yy_scan_string(sanitized);
 	yyparse();
 
+	if (open_file) {
+		char * filename = open_file;
+		int retval;
+		open_file = NULL;
+		retval = loadState(filename);
+		if (retval) {
+			report_error("Could not load file.");
+			report_error(strerror(retval));
+		}
+	}
 	/* return success */
 	free(sanitized);
 	return last_answer;
@@ -282,14 +293,17 @@ char *print_this_result (double result)
 {
 	static char format[10];
 	static char *pa = NULL, *tmp;
+	static char pa_dyn = 1;
 	extern char *errstring;
 	unsigned int decimal_places = 0;
 
 	/* Build the "format" string, that will be used in an sprintf later */
 	switch (conf.output_format) {
 		case DECIMAL_FORMAT:
-			tmp = realloc(pa, sizeof(char)*310);
-			if (! tmp) { free(pa); pa = "Not Enough Memory"; return pa; } else pa = tmp;
+			if (pa_dyn) tmp = realloc(pa, sizeof(char)*310);
+			else { tmp = pa = malloc(sizeof(char)*310); pa_dyn = 1; }
+			if (! tmp) { free(pa); pa = "Not Enough Memory"; pa_dyn = 0; return pa; }
+				else pa = tmp;
 			if (conf.precision > -1 && ! conf.engineering) {
 				sprintf(format, "%%1.%if", conf.precision);
 				decimal_places = conf.precision;
@@ -314,27 +328,34 @@ char *print_this_result (double result)
 			}
 			break;
 		case OCTAL_FORMAT:
-			tmp = realloc(pa,sizeof(char)*14);
-			if (! tmp) { free(pa); pa = "Not Enough Memory"; return pa; } else pa = tmp;
+			if (pa_dyn) tmp = realloc(pa,sizeof(char)*14);
+			else { tmp = pa = malloc(sizeof(char)*14); pa_dyn = 1; }
+			if (! tmp) { free(pa); pa = "Not Enough Memory"; pa_dyn = 0; return pa; }
+				else pa = tmp;
 			sprintf(format,conf.print_prefixes?"%%#o":"%%o");
 			break;
 		case HEXADECIMAL_FORMAT:
-			tmp = realloc(pa,sizeof(char)*11);
-			if (! tmp) { free(pa); pa = "Not Enough Memory"; return pa; } else pa = tmp;
+			if (pa_dyn) tmp = realloc(pa,sizeof(char)*11);
+			else { tmp = pa = malloc(sizeof(char)*11); pa_dyn = 1; }
+			if (! tmp) { free(pa); pa = "Not Enough Memory"; pa_dyn = 0; return pa; }
+				else pa = tmp;
 			sprintf(format,conf.print_prefixes?"%%#x":"%%x");
 			break;
 		case BINARY_FORMAT:
 			// Binary Format can't just use a format string, so
 			// we have to handle it later
-			free(pa);
+			if (pa_dyn) free(pa);
 			pa = NULL;
+			pa_dyn = 1;
 			break;
 	}
 
 	if (result == HUGE_VAL) {
 		// if it is infinity, print "Infinity", regardless of format
-		tmp = realloc(pa,sizeof(char)*11);
-		if (! tmp) { free(pa); pa = "Not Enough Memory"; return pa; } else pa = tmp;
+		if (pa_dyn) tmp = realloc(pa,sizeof(char)*11);
+		else { tmp = pa = malloc(sizeof(char)*11); pa_dyn = 1; }
+		if (! tmp) { free(pa); pa = "Not Enough Memory"; pa_dyn = 0; return pa; }
+		else pa = tmp;
 		sprintf(pa,"Infinity");
 		not_all_displayed = 0;
 	} else {
@@ -414,6 +435,7 @@ char *print_this_result (double result)
 				pa = calloc(sizeof(char),(place+(conf.print_prefixes*2)+1));
 				if (! pa) {
 					pa = "Not Enough Memory";
+					pa_dyn = 0;
 					return pa;
 				}
 				if (conf.print_prefixes) {

@@ -1,6 +1,3 @@
-#include <fcntl.h>  /* for open() */
-#include <unistd.h> /* for close() */
-#include <errno.h>  /* for errno */
 #import "calculator.h"
 #import "variables.h"
 #import "conversion.h"
@@ -8,6 +5,7 @@
 #import "historyManager.h"
 #import "WcalcController.h"
 #import "string_manip.h"
+#import "files.h"
 
 #define KEYPAD_HEIGHT 165
 #define MIN_WINDOW_WIDTH 171
@@ -683,75 +681,28 @@ static NSString *curFile = NULL;
 		/* loop through the files to open (there should only be one, but
 			it's good to be able to handle multiple anyway */
 		for (i=0; i<count; i++) {
-			int fd;
+			int retval;
+			extern char * errstring;
 			curFile = [filesToOpen objectAtIndex:i];
-			fd = open([curFile cString], O_RDONLY);
-			if (fd >= 0) { // success
-				char * linebuf;
-				int retval;
-				double val;
-				unsigned int linelen = 0, maxlinelen = 100;
-
-				printf("file selected: %s\n",[curFile cString]);
-				
-				linebuf = calloc(sizeof(char),100);
-				retval = read(fd,linebuf+linelen,1);
-				while (retval == 1) {
-					while (retval == 1 && linebuf[linelen] != '\n') {
-						linelen++;
-						if (linelen == maxlinelen) {
-							char * newlinebuf = realloc( linebuf, sizeof(maxlinelen+100));
-							if (newlinebuf) {
-								maxlinelen += 100;
-								linebuf = newlinebuf;
-							} else {
-								[self displayErrno:errno forFile:curFile];
-								retval = -1;
-								break;
-							}
-						}
-						retval = read(fd,linebuf+linelen,1);
-					}
-					linebuf[linelen] = 0;
-					stripComments(linebuf);
-					if (strlen(linebuf)) {
-						extern char * errstring;
-						val = parseme(linebuf);
-						putval("a",val);
-						val = 0;
-						if (!errstring || (errstring && !strlen(errstring)) || conf.remember_errors) {
-							addToHistory(linebuf, val);
-						}
-						/* if there is an error, display it */
-						if (errstring && strlen(errstring)) {
-							extern int scanerror;
-							scanerror = 0;
-							[errorController throwAlert:[NSString stringWithCString:errstring]];
-							free(errstring);
-							errstring = NULL;
-						}
-						// refresh the prefs if necessary
-						if ([thePrefPanel isVisible])
-							[self displayPrefs:sender];
-						[outputFormat2 selectCellWithTag:conf.output_format];
-					}
-					linelen = 0;
-					linebuf[linelen] = 0;
-					if (retval == 1)
-						retval = read(fd,linebuf+linelen,1);
-				}
-				
-				if ([theDrawer state]) {
-					[variableList reloadData];
-					[historyList reloadData];
-				}
-				
-				if (close(fd) != 0) {
-					[self displayErrno:errno forFile:curFile];
-				}
-			} else { // failure
-				[self displayErrno:errno forFile:curFile];
+			retval = loadState(strdup([curFile cString]));
+			if ([theDrawer state]) {
+				[variableList reloadData];
+				[historyList reloadData];
 			}
+			/* if there is an error, display it */
+			if (errstring && strlen(errstring)) {
+				extern int scanerror;
+				scanerror = 0;
+				[errorController throwAlert:[NSString stringWithCString:errstring]];
+				free(errstring);
+				errstring = NULL;
+			}
+			// refresh the prefs if necessary
+			if ([thePrefPanel isVisible])
+				[self displayPrefs:sender];
+			[outputFormat2 selectCellWithTag:conf.output_format];
+			if (retval)
+				[self displayErrno:retval forFile:curFile];
 		}
 	}
 }
@@ -761,6 +712,7 @@ static NSString *curFile = NULL;
 	char * errstr;
 	errstr = malloc(strlen(strerror(errno))+[filename cStringLength]+3);
 	sprintf(errstr,"%s: %s",[filename cString], strerror(errno));
+	printf("errno = %i\n",errno);
 	[errorController throwAlert:[NSString stringWithCString:errstr]];
 	free(errstr);				
 }
@@ -785,20 +737,28 @@ static NSString *curFile = NULL;
 	}
 }
 
+- (BOOL)validateMenuItem:(NSMenuItem *)anItem
+{
+	switch ([anItem tag]) {
+		case 1001: // save
+		case 1002: // save as
+			if (historyLength()) return YES;
+			else return NO;
+			break;
+		default:
+			return YES;
+	}
+}
+
 - (IBAction)save:(id)sender
 {
 	if (! curFile) {
 		[self saveAs:sender];
 	} else {
-		int fd = open([curFile cString], O_WRONLY|O_CREAT|O_TRUNC);
-		if (fd >= 0) { // success
-			printf("file: %s\n",[curFile cString]);
-			if (close(fd) != 0) {
-				[self displayErrno:errno forFile:curFile];
-			}
-		} else { // failure
-			[self displayErrno:errno forFile:curFile];
-		}
+		int retval;
+		retval = saveState(strdup([curFile cString]));
+		if (retval)
+			[self displayErrno:retval forFile:curFile];
 	}		
 }
 

@@ -18,6 +18,7 @@ char *strchr (), *strrchr ();
 #include "calculator.h"
 #include "variables.h"
 #include "help.h"
+#include "files.h"
 
 	/* Based on the headstart code by Shawn Ostermann
 	* modified by Kyle Wheeler
@@ -60,7 +61,7 @@ char character;
 %token WCOT WACOT WCOTH WACOTH
 
 %token <number> NUMBER
-%token <variable> VAR STRING
+%token <variable> VAR STRING OPEN_CMD SAVE_CMD
 %token <character> DSEP_CMD TSEP_CMD
 
 %type <number> exp exp_l2 exp_l3 exp_l4
@@ -285,6 +286,30 @@ command : HEX_CMD {
 	$$ = nothing;
 	if (standard_output) {
 		print_interactive_help();
+	}
+}
+| OPEN_CMD {
+	extern char* open_file;
+	int i, f;
+	open_file = malloc(strlen($1)+1);
+	sprintf(open_file,"%s",$1);
+	/* strip trailing spaces */
+	for (i=strlen(open_file)-1;i>=0;i--) {
+		if (open_file[i] != ' ') break;
+		open_file[i] = 0;
+	}
+	if (strlen(open_file) == 0) {
+		free(open_file);
+		open_file = NULL;
+		report_error("Please specify a file name to open.");
+	}
+}
+| SAVE_CMD {
+	int retval;
+	retval = saveState($1);
+	if (retval) {
+		report_error("Could not save file.");
+		report_error(strerror(retval));
 	}
 }
 ;

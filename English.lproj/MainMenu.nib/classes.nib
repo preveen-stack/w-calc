@@ -67,7 +67,9 @@
                 go = id; 
                 menuConstant = id; 
                 menuFunction = id; 
-                new = id; 
+                open = id; 
+                save = id; 
+                saveAs = id; 
                 setPrecision = id; 
                 setPrefs = id; 
                 shConversions = id; 
@@ -110,6 +112,8 @@
                 printPrefixes = NSButton; 
                 rememberErrors = NSButton; 
                 roundingIndication = NSPopUpButton; 
+                saveAsMenuItem = NSMenuItem; 
+                saveMenuItem = NSMenuItem; 
                 shiftKey1 = NSButton; 
                 shiftKey2 = NSButton; 
                 theDrawer = NSDrawer; 

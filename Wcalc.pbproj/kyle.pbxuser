@@ -25,7 +25,7 @@
 		isa = PBXTextBookmark;
 		name = "main.c: 304";
 		rLen = 0;
-		rLoc = 7980;
+		rLoc = 7878;
 		rType = 0;
 		vrLen = 916;
 		vrLoc = 5662;
@@ -35,7 +35,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.h: 73";
 		rLen = 0;
-		rLoc = 2059;
+		rLoc = 2134;
 		rType = 0;
 		vrLen = 1166;
 		vrLoc = 899;
@@ -45,7 +45,7 @@
 		isa = PBXTextBookmark;
 		name = "main.c: 304";
 		rLen = 0;
-		rLoc = 7980;
+		rLoc = 7878;
 		rType = 0;
 		vrLen = 916;
 		vrLoc = 5662;
@@ -55,7 +55,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.h: 73";
 		rLen = 0;
-		rLoc = 2059;
+		rLoc = 2134;
 		rType = 0;
 		vrLen = 1166;
 		vrLoc = 899;
@@ -79,7 +79,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: setPrecision:";
 		rLen = 0;
-		rLoc = 9218;
+		rLoc = 9315;
 		rType = 0;
 		vrLen = 616;
 		vrLoc = 8702;
@@ -99,7 +99,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: awakeFromNib";
 		rLen = 0;
-		rLoc = 8369;
+		rLoc = 8466;
 		rType = 0;
 		vrLen = 975;
 		vrLoc = 7785;
@@ -107,6 +107,12 @@
 	27542A04040427D300A8FDFC = {
 		isa = PBXTargetBookmark;
 		trg = 29B97326FDCFA39411CA2CEA;
+	};
+	275710BB042CE895004ACA36 = {
+		fileReference = F5B29D7801F7395001A80164;
+		isa = PBXFileBreakpoint;
+		lineNumber = 688;
+		state = 1;
 	};
 	276B29BA0406C31800A8FDFC = {
 		fRef = 2799DA4403FAD61400CA71DD;
@@ -156,16 +162,6 @@
 		rLoc = 523;
 		rType = 0;
 		vrLen = 541;
-		vrLoc = 0;
-	};
-	2793434503DE0D0F00A95DB9 = {
-		fRef = F521994301FA86B001A80164;
-		isa = PBXTextBookmark;
-		name = "VariableList.m: clearVariables:";
-		rLen = 0;
-		rLoc = 2242;
-		rType = 0;
-		vrLen = 677;
 		vrLoc = 0;
 	};
 	2793434603DE0D0F00A95DB9 = {
@@ -303,7 +299,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: awakeFromNib";
 		rLen = 0;
-		rLoc = 7382;
+		rLoc = 7458;
 		rType = 0;
 		vrLen = 1980;
 		vrLoc = 5737;
@@ -313,7 +309,7 @@
 		isa = PBXTextBookmark;
 		name = "main.c: 144";
 		rLen = 0;
-		rLoc = 4892;
+		rLoc = 4788;
 		rType = 0;
 		vrLen = 1457;
 		vrLoc = 3516;
@@ -343,7 +339,7 @@
 		isa = PBXTextBookmark;
 		name = "scanner.l: 295";
 		rLen = 0;
-		rLoc = 8885;
+		rLoc = 9049;
 		rType = 0;
 		vrLen = 1247;
 		vrLoc = 7653;
@@ -363,7 +359,7 @@
 		isa = PBXTextBookmark;
 		name = "scanner.l: 288";
 		rLen = 0;
-		rLoc = 8683;
+		rLoc = 8847;
 		rType = 0;
 		vrLen = 714;
 		vrLoc = 7653;
@@ -403,7 +399,7 @@
 		isa = PBXTextBookmark;
 		name = "scanner.l: 293";
 		rLen = 0;
-		rLoc = 8804;
+		rLoc = 8968;
 		rType = 0;
 		vrLen = 511;
 		vrLoc = 105;
@@ -423,7 +419,7 @@
 		isa = PBXTextBookmark;
 		name = "scanner.l: 213";
 		rLen = 0;
-		rLoc = 6848;
+		rLoc = 7012;
 		rType = 0;
 		vrLen = 893;
 		vrLoc = 6103;
@@ -453,7 +449,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: awakeFromNib";
 		rLen = 0;
-		rLoc = 7477;
+		rLoc = 7553;
 		rType = 0;
 		vrLen = 1266;
 		vrLoc = 5737;
@@ -463,7 +459,7 @@
 		isa = PBXTextBookmark;
 		name = "scanner.l: 281";
 		rLen = 0;
-		rLoc = 8565;
+		rLoc = 8729;
 		rType = 0;
 		vrLen = 884;
 		vrLoc = 7683;
@@ -473,7 +469,7 @@
 		isa = PBXTextBookmark;
 		name = "parser.y: 110";
 		rLen = 9;
-		rLoc = 2187;
+		rLoc = 2224;
 		rType = 0;
 		vrLen = 497;
 		vrLoc = 1886;
@@ -483,7 +479,7 @@
 		isa = PBXTextBookmark;
 		name = "scanner.l: 300";
 		rLen = 9;
-		rLoc = 9012;
+		rLoc = 9176;
 		rType = 0;
 		vrLen = 739;
 		vrLoc = 8188;
@@ -493,7 +489,7 @@
 		isa = PBXTextBookmark;
 		name = "parser.y: 209";
 		rLen = 9;
-		rLoc = 6059;
+		rLoc = 6097;
 		rType = 0;
 		vrLen = 776;
 		vrLoc = 4321;
@@ -503,7 +499,7 @@
 		isa = PBXTextBookmark;
 		name = "scanner.l: 189";
 		rLen = 12;
-		rLoc = 6247;
+		rLoc = 6411;
 		rType = 0;
 		vrLen = 601;
 		vrLoc = 5638;
@@ -513,7 +509,7 @@
 		isa = PBXTextBookmark;
 		name = "calculator.c: print_this_result";
 		rLen = 0;
-		rLoc = 9190;
+		rLoc = 9593;
 		rType = 0;
 		vrLen = 610;
 		vrLoc = 8671;
@@ -523,7 +519,7 @@
 		isa = PBXTextBookmark;
 		name = "scanner.l: 189";
 		rLen = 12;
-		rLoc = 6247;
+		rLoc = 6411;
 		rType = 0;
 		vrLen = 684;
 		vrLoc = 8247;
@@ -533,7 +529,7 @@
 		isa = PBXTextBookmark;
 		name = "calculator.c: print_this_result";
 		rLen = 39;
-		rLoc = 9152;
+		rLoc = 9555;
 		rType = 0;
 		vrLen = 547;
 		vrLoc = 8835;
@@ -543,7 +539,7 @@
 		isa = PBXTextBookmark;
 		name = "scanner.l: 300";
 		rLen = 9;
-		rLoc = 9012;
+		rLoc = 9176;
 		rType = 0;
 		vrLen = 599;
 		vrLoc = 0;
@@ -563,7 +559,7 @@
 		isa = PBXTextBookmark;
 		name = "scanner.l: 255";
 		rLen = 9;
-		rLoc = 7776;
+		rLoc = 7940;
 		rType = 0;
 		vrLen = 1080;
 		vrLoc = 7013;
@@ -573,7 +569,7 @@
 		isa = PBXTextBookmark;
 		name = "parser.y: 23";
 		rLen = 9;
-		rLoc = 496;
+		rLoc = 515;
 		rType = 0;
 		vrLen = 1001;
 		vrLoc = 3;
@@ -583,7 +579,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: awakeFromNib";
 		rLen = 0;
-		rLoc = 7477;
+		rLoc = 7553;
 		rType = 0;
 		vrLen = 2199;
 		vrLoc = 5217;
@@ -603,7 +599,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: go:";
 		rLen = 0;
-		rLoc = 10492;
+		rLoc = 10589;
 		rType = 0;
 		vrLen = 793;
 		vrLoc = 9214;
@@ -625,7 +621,7 @@
 		rLen = 0;
 		rLoc = 413;
 		rType = 0;
-		vrLen = 457;
+		vrLen = 418;
 		vrLoc = 0;
 	};
 	2793437F03DE0D0F00A95DB9 = {
@@ -633,7 +629,7 @@
 		isa = PBXTextBookmark;
 		name = "HistoryList.m: 38";
 		rLen = 0;
-		rLoc = 899;
+		rLoc = 898;
 		rType = 0;
 		vrLen = 676;
 		vrLoc = 81;
@@ -643,7 +639,7 @@
 		isa = PBXTextBookmark;
 		name = "historyManager.c: 111";
 		rLen = 0;
-		rLoc = 2692;
+		rLoc = 2782;
 		rType = 0;
 		vrLen = 435;
 		vrLoc = 1712;
@@ -653,7 +649,7 @@
 		isa = PBXTextBookmark;
 		name = "HistoryList.m: clearHistory:";
 		rLen = 0;
-		rLoc = 899;
+		rLoc = 898;
 		rType = 0;
 		vrLen = 521;
 		vrLoc = 387;
@@ -663,7 +659,7 @@
 		isa = PBXTextBookmark;
 		name = "historyManager.c: 111";
 		rLen = 0;
-		rLoc = 2692;
+		rLoc = 2782;
 		rType = 0;
 		vrLen = 546;
 		vrLoc = 262;
@@ -673,7 +669,7 @@
 		isa = PBXTextBookmark;
 		name = "HistoryList.m: clearHistory:";
 		rLen = 0;
-		rLoc = 899;
+		rLoc = 898;
 		rType = 0;
 		vrLen = 573;
 		vrLoc = 335;
@@ -683,7 +679,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: go:";
 		rLen = 0;
-		rLoc = 10492;
+		rLoc = 10589;
 		rType = 0;
 		vrLen = 793;
 		vrLoc = 9214;
@@ -693,7 +689,7 @@
 		isa = PBXTextBookmark;
 		name = "HistoryList.m: clearHistory:";
 		rLen = 0;
-		rLoc = 899;
+		rLoc = 898;
 		rType = 0;
 		vrLen = 607;
 		vrLoc = 0;
@@ -703,7 +699,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: 498";
 		rLen = 32;
-		rLoc = 15260;
+		rLoc = 15331;
 		rType = 0;
 		vrLen = 669;
 		vrLoc = 18279;
@@ -725,7 +721,7 @@
 		rLen = 0;
 		rLoc = 413;
 		rType = 0;
-		vrLen = 457;
+		vrLen = 418;
 		vrLoc = 0;
 	};
 	2793438903DE0D0F00A95DB9 = {
@@ -733,7 +729,7 @@
 		isa = PBXTextBookmark;
 		name = "HistoryList.m: clearHistory:";
 		rLen = 0;
-		rLoc = 899;
+		rLoc = 898;
 		rType = 0;
 		vrLen = 483;
 		vrLoc = 425;
@@ -743,7 +739,7 @@
 		isa = PBXTextBookmark;
 		name = "historyManager.h: clearHistory";
 		rLen = 0;
-		rLoc = 203;
+		rLoc = 175;
 		rType = 0;
 		vrLen = 350;
 		vrLoc = 0;
@@ -753,7 +749,7 @@
 		isa = PBXTextBookmark;
 		name = "HistoryList.m: 42";
 		rLen = 0;
-		rLoc = 902;
+		rLoc = 901;
 		rType = 0;
 		vrLen = 573;
 		vrLoc = 335;
@@ -765,7 +761,7 @@
 		rLen = 0;
 		rLoc = 413;
 		rType = 0;
-		vrLen = 457;
+		vrLen = 418;
 		vrLoc = 0;
 	};
 	2793438D03DE0D0F00A95DB9 = {
@@ -795,7 +791,7 @@
 		rLen = 0;
 		rLoc = 413;
 		rType = 0;
-		vrLen = 457;
+		vrLen = 418;
 		vrLoc = 0;
 	};
 	2793439003DE0D0F00A95DB9 = {
@@ -843,7 +839,7 @@
 		isa = PBXTextBookmark;
 		name = "historyManager.c: 111";
 		rLen = 0;
-		rLoc = 2692;
+		rLoc = 2782;
 		rType = 0;
 		vrLen = 653;
 		vrLoc = 204;
@@ -853,7 +849,7 @@
 		isa = PBXTextBookmark;
 		name = "historyManager.h: clearHistory";
 		rLen = 0;
-		rLoc = 203;
+		rLoc = 175;
 		rType = 0;
 		vrLen = 350;
 		vrLoc = 0;
@@ -903,7 +899,7 @@
 		isa = PBXTextBookmark;
 		name = "historyManager.h: clearHistory";
 		rLen = 0;
-		rLoc = 203;
+		rLoc = 175;
 		rType = 0;
 		vrLen = 350;
 		vrLoc = 0;
@@ -973,7 +969,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.h: 46";
 		rLen = 0;
-		rLoc = 1347;
+		rLoc = 1421;
 		rType = 0;
 		vrLen = 782;
 		vrLoc = 0;
@@ -1013,7 +1009,7 @@
 		isa = PBXTextBookmark;
 		name = "HistoryList.m: 42";
 		rLen = 0;
-		rLoc = 902;
+		rLoc = 901;
 		rType = 0;
 		vrLen = 572;
 		vrLoc = 0;
@@ -1033,7 +1029,7 @@
 		isa = PBXTextBookmark;
 		name = "historyManager.c: 111";
 		rLen = 0;
-		rLoc = 2692;
+		rLoc = 2782;
 		rType = 0;
 		vrLen = 480;
 		vrLoc = 0;
@@ -1113,7 +1109,7 @@
 		isa = PBXTextBookmark;
 		name = "main.c: 144";
 		rLen = 0;
-		rLoc = 4892;
+		rLoc = 4788;
 		rType = 0;
 		vrLen = 864;
 		vrLoc = 3516;
@@ -1163,7 +1159,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: setPrefs:";
 		rLen = 0;
-		rLoc = 19136;
+		rLoc = 19207;
 		rType = 0;
 		vrLen = 719;
 		vrLoc = 17354;
@@ -1173,7 +1169,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.h: 46";
 		rLen = 0;
-		rLoc = 1347;
+		rLoc = 1421;
 		rType = 0;
 		vrLen = 566;
 		vrLoc = 0;
@@ -1183,7 +1179,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: displayPrefs:";
 		rLen = 53;
-		rLoc = 21344;
+		rLoc = 23998;
 		rType = 0;
 		vrLen = 1188;
 		vrLoc = 19933;
@@ -1213,7 +1209,7 @@
 		isa = PBXTextBookmark;
 		name = "scanner.l: 70";
 		rLen = 0;
-		rLoc = 2080;
+		rLoc = 2162;
 		rType = 0;
 		vrLen = 1323;
 		vrLoc = 1313;
@@ -1257,7 +1253,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: 177";
 		rLen = 0;
-		rLoc = 5136;
+		rLoc = 5212;
 		rType = 0;
 		vrLen = 1051;
 		vrLoc = 4359;
@@ -1267,7 +1263,7 @@
 		isa = PBXTextBookmark;
 		name = "scanner.l: 69";
 		rLen = 4;
-		rLoc = 2205;
+		rLoc = 2287;
 		rType = 0;
 		vrLen = 1689;
 		vrLoc = 1946;
@@ -1277,7 +1273,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: menuFunction:";
 		rLen = 0;
-		rLoc = 5135;
+		rLoc = 5211;
 		rType = 0;
 		vrLen = 1002;
 		vrLoc = 4359;
@@ -1287,7 +1283,7 @@
 		isa = PBXTextBookmark;
 		name = "scanner.l: 60";
 		rLen = 0;
-		rLoc = 1602;
+		rLoc = 1684;
 		rType = 0;
 		vrLen = 1261;
 		vrLoc = 684;
@@ -1297,7 +1293,7 @@
 		isa = PBXTextBookmark;
 		name = "parser.y: 47";
 		rLen = 0;
-		rLoc = 919;
+		rLoc = 938;
 		rType = 0;
 		vrLen = 873;
 		vrLoc = 738;
@@ -1317,7 +1313,7 @@
 		isa = PBXTextBookmark;
 		name = "calculator.c: kbw_rand";
 		rLen = 0;
-		rLoc = 14631;
+		rLoc = 15051;
 		rType = 0;
 		vrLen = 579;
 		vrLoc = 14270;
@@ -1327,7 +1323,7 @@
 		isa = PBXTextBookmark;
 		name = "parser.y: 47";
 		rLen = 0;
-		rLoc = 919;
+		rLoc = 938;
 		rType = 0;
 		vrLen = 854;
 		vrLoc = 738;
@@ -1337,7 +1333,7 @@
 		isa = PBXTextBookmark;
 		name = "scanner.l: 67";
 		rLen = 0;
-		rLoc = 2048;
+		rLoc = 2130;
 		rType = 0;
 		vrLen = 1276;
 		vrLoc = 1049;
@@ -1357,7 +1353,7 @@
 		isa = PBXTextBookmark;
 		name = "scanner.l: 70";
 		rLen = 0;
-		rLoc = 2080;
+		rLoc = 2162;
 		rType = 0;
 		vrLen = 1386;
 		vrLoc = 1313;
@@ -1367,7 +1363,7 @@
 		isa = PBXTextBookmark;
 		name = "parser.y: 268";
 		rLen = 0;
-		rLoc = 6869;
+		rLoc = 6907;
 		rType = 0;
 		vrLen = 788;
 		vrLoc = 6216;
@@ -1387,7 +1383,7 @@
 		isa = PBXTextBookmark;
 		name = "scanner.l: 70";
 		rLen = 0;
-		rLoc = 2080;
+		rLoc = 2162;
 		rType = 0;
 		vrLen = 1323;
 		vrLoc = 1313;
@@ -1407,7 +1403,7 @@
 		isa = PBXTextBookmark;
 		name = "calculator.c: kbw_rand";
 		rLen = 0;
-		rLoc = 14631;
+		rLoc = 15051;
 		rType = 0;
 		vrLen = 630;
 		vrLoc = 13684;
@@ -1437,7 +1433,7 @@
 		isa = PBXTextBookmark;
 		name = "main.c: 166";
 		rLen = 0;
-		rLoc = 4892;
+		rLoc = 4788;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 5926;
@@ -1487,7 +1483,7 @@
 		isa = PBXTextBookmark;
 		name = "parser.y: 268";
 		rLen = 0;
-		rLoc = 6869;
+		rLoc = 6907;
 		rType = 0;
 		vrLen = 744;
 		vrLoc = 6216;
@@ -1507,7 +1503,7 @@
 		isa = PBXTextBookmark;
 		name = "parser.y: 268";
 		rLen = 0;
-		rLoc = 6869;
+		rLoc = 6907;
 		rType = 0;
 		vrLen = 744;
 		vrLoc = 6216;
@@ -1587,7 +1583,7 @@
 		isa = PBXTextBookmark;
 		name = "HistoryList.m: 42";
 		rLen = 0;
-		rLoc = 902;
+		rLoc = 901;
 		rType = 0;
 		vrLen = 607;
 		vrLoc = 0;
@@ -1617,7 +1613,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: showPrefs:";
 		rLen = 0;
-		rLoc = 20342;
+		rLoc = 20413;
 		rType = 0;
 		vrLen = 1257;
 		vrLoc = 19920;
@@ -1627,7 +1623,7 @@
 		isa = PBXTextBookmark;
 		name = "HistoryList.m: 42";
 		rLen = 0;
-		rLoc = 902;
+		rLoc = 901;
 		rType = 0;
 		vrLen = 607;
 		vrLoc = 0;
@@ -1647,7 +1643,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: setPrefs:";
 		rLen = 0;
-		rLoc = 18880;
+		rLoc = 18951;
 		rType = 0;
 		vrLen = 1100;
 		vrLoc = 18252;
@@ -1657,7 +1653,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.h: 51";
 		rLen = 0;
-		rLoc = 1347;
+		rLoc = 1421;
 		rType = 0;
 		vrLen = 1185;
 		vrLoc = 0;
@@ -1667,7 +1663,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: setPrefs:";
 		rLen = 0;
-		rLoc = 18880;
+		rLoc = 18951;
 		rType = 0;
 		vrLen = 1132;
 		vrLoc = 18220;
@@ -1677,7 +1673,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.h: 51";
 		rLen = 0;
-		rLoc = 1347;
+		rLoc = 1421;
 		rType = 0;
 		vrLen = 1170;
 		vrLoc = 389;
@@ -1687,7 +1683,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: setPrefs:";
 		rLen = 0;
-		rLoc = 18880;
+		rLoc = 18951;
 		rType = 0;
 		vrLen = 1147;
 		vrLoc = 18220;
@@ -1697,7 +1693,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.h: 51";
 		rLen = 0;
-		rLoc = 1347;
+		rLoc = 1421;
 		rType = 0;
 		vrLen = 1170;
 		vrLoc = 389;
@@ -1707,7 +1703,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: setPrefs:";
 		rLen = 0;
-		rLoc = 18880;
+		rLoc = 18951;
 		rType = 0;
 		vrLen = 1147;
 		vrLoc = 18220;
@@ -1717,7 +1713,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.h: 51";
 		rLen = 0;
-		rLoc = 1347;
+		rLoc = 1421;
 		rType = 0;
 		vrLen = 1170;
 		vrLoc = 389;
@@ -1727,7 +1723,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: setPrefs:";
 		rLen = 0;
-		rLoc = 19285;
+		rLoc = 19356;
 		rType = 0;
 		vrLen = 1015;
 		vrLoc = 18466;
@@ -1757,7 +1753,7 @@
 		isa = PBXTextBookmark;
 		name = "historyManager.c: addToHistory";
 		rLen = 0;
-		rLoc = 1135;
+		rLoc = 1218;
 		rType = 0;
 		vrLen = 910;
 		vrLoc = 767;
@@ -1767,7 +1763,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: setPrefs:";
 		rLen = 0;
-		rLoc = 18859;
+		rLoc = 18930;
 		rType = 0;
 		vrLen = 952;
 		vrLoc = 18424;
@@ -1777,7 +1773,7 @@
 		isa = PBXTextBookmark;
 		name = "historyManager.c: temp";
 		rLen = 0;
-		rLoc = 1248;
+		rLoc = 1331;
 		rType = 0;
 		vrLen = 1016;
 		vrLoc = 686;
@@ -1797,7 +1793,7 @@
 		isa = PBXTextBookmark;
 		name = "parser.y: 158";
 		rLen = 0;
-		rLoc = 3402;
+		rLoc = 3439;
 		rType = 0;
 		vrLen = 891;
 		vrLoc = 2900;
@@ -1812,12 +1808,49 @@
 		vrLen = 747;
 		vrLoc = 0;
 	};
+	279F2D63042ABF81005489ED = {
+		fRef = F521994301FA86B001A80164;
+		isa = PBXTextBookmark;
+		name = "VariableList.m: tableView:setObjectValue:forTableColumn:row:";
+		rLen = 0;
+		rLoc = 1394;
+		rType = 0;
+		vrLen = 957;
+		vrLoc = 469;
+	};
+	279F2D64042ABF81005489ED = {
+		fRef = F5B29D7801F7395001A80164;
+		isa = PBXTextBookmark;
+		rLen = 1;
+		rLoc = 0;
+		rType = 1;
+	};
+	279F2D65042ABF81005489ED = {
+		fRef = F521994301FA86B001A80164;
+		isa = PBXTextBookmark;
+		name = "VariableList.m: tableView:setObjectValue:forTableColumn:row:";
+		rLen = 0;
+		rLoc = 1394;
+		rType = 0;
+		vrLen = 957;
+		vrLoc = 469;
+	};
+	279F2D66042ABF81005489ED = {
+		fRef = F5B29D7801F7395001A80164;
+		isa = PBXTextBookmark;
+		name = "WcalcController.m: awakeFromNib";
+		rLen = 0;
+		rLoc = 7782;
+		rType = 0;
+		vrLen = 1212;
+		vrLoc = 6868;
+	};
 	27A15CC803D70D7500B4636F = {
 		fRef = F5B29D7801F7395001A80164;
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: 652";
 		rLen = 0;
-		rLoc = 21555;
+		rLoc = 24209;
 		rType = 0;
 		vrLen = 585;
 		vrLoc = 3504;
@@ -1847,7 +1880,7 @@
 		isa = PBXTextBookmark;
 		name = "parser.y: 20";
 		rLen = 0;
-		rLoc = 358;
+		rLoc = 377;
 		rType = 0;
 		vrLen = 589;
 		vrLoc = 0;
@@ -1877,7 +1910,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: toggleSize:";
 		rLen = 0;
-		rLoc = 710;
+		rLoc = 786;
 		rType = 0;
 		vrLen = 875;
 		vrLoc = 593;
@@ -1887,7 +1920,7 @@
 		isa = PBXTextBookmark;
 		name = "calculator.c: output_string";
 		rLen = 0;
-		rLoc = 14578;
+		rLoc = 14998;
 		rType = 0;
 		vrLen = 658;
 		vrLoc = 14354;
@@ -1897,7 +1930,7 @@
 		isa = PBXTextBookmark;
 		name = "parser.y: 268";
 		rLen = 28;
-		rLoc = 6842;
+		rLoc = 6880;
 		rType = 0;
 		vrLen = 772;
 		vrLoc = 6416;
@@ -1907,7 +1940,7 @@
 		isa = PBXTextBookmark;
 		name = "calculator.c: output_string";
 		rLen = 0;
-		rLoc = 14578;
+		rLoc = 14998;
 		rType = 0;
 		vrLen = 682;
 		vrLoc = 14365;
@@ -1917,7 +1950,7 @@
 		isa = PBXTextBookmark;
 		name = "parser.y: 20";
 		rLen = 0;
-		rLoc = 358;
+		rLoc = 377;
 		rType = 0;
 		vrLen = 589;
 		vrLoc = 0;
@@ -1927,7 +1960,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: awakeFromNib";
 		rLen = 0;
-		rLoc = 8266;
+		rLoc = 8363;
 		rType = 0;
 		vrLen = 558;
 		vrLoc = 8761;
@@ -1942,22 +1975,12 @@
 		vrLen = 375;
 		vrLoc = 0;
 	};
-	27D9BF120428BFFF00470CF0 = {
-		fRef = F5B29D7801F7395001A80164;
-		isa = PBXTextBookmark;
-		name = "WcalcController.m: displayPrefs:";
-		rLen = 0;
-		rLoc = 21440;
-		rType = 0;
-		vrLen = 1201;
-		vrLoc = 20346;
-	};
 	27D9BF130428BFFF00470CF0 = {
 		fRef = F5B29D6501F7391601A80164;
 		isa = PBXTextBookmark;
 		name = "calculator.c: flatten";
 		rLen = 0;
-		rLoc = 4646;
+		rLoc = 4647;
 		rType = 0;
 		vrLen = 1085;
 		vrLoc = 4106;
@@ -1967,7 +1990,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: displayPrefs:";
 		rLen = 0;
-		rLoc = 21440;
+		rLoc = 24094;
 		rType = 0;
 		vrLen = 1201;
 		vrLoc = 20346;
@@ -1977,20 +2000,10 @@
 		isa = PBXTextBookmark;
 		name = "calculator.c: flatten";
 		rLen = 0;
-		rLoc = 4646;
+		rLoc = 4647;
 		rType = 0;
 		vrLen = 1085;
 		vrLoc = 4106;
-	};
-	27D9BF160428BFFF00470CF0 = {
-		fRef = F521994301FA86B001A80164;
-		isa = PBXTextBookmark;
-		name = "VariableList.m: tableView:setObjectValue:forTableColumn:row:";
-		rLen = 0;
-		rLoc = 1394;
-		rType = 0;
-		vrLen = 1274;
-		vrLoc = 469;
 	};
 	27F9C0AF03E721F500000203 = {
 		fRef = F5B29D6201F7391001A80164;
@@ -2017,7 +2030,7 @@
 		isa = PBXTextBookmark;
 		name = "historyManager.c: 12";
 		rLen = 0;
-		rLoc = 189;
+		rLoc = 210;
 		rType = 0;
 		vrLen = 495;
 		vrLoc = 0;
@@ -2037,7 +2050,7 @@
 		isa = PBXTextBookmark;
 		name = "parser.y: 178";
 		rLen = 0;
-		rLoc = 3909;
+		rLoc = 3946;
 		rType = 0;
 		vrLen = 924;
 		vrLoc = 3412;
@@ -2109,7 +2122,7 @@
 		isa = PBXTextBookmark;
 		name = "historyManager.c: 12";
 		rLen = 0;
-		rLoc = 189;
+		rLoc = 210;
 		rType = 0;
 		vrLen = 495;
 		vrLoc = 0;
@@ -2149,7 +2162,6 @@
 			F529392D02304B8101A80164,
 			F529392E0230745801A80164,
 			F57B9A930267F33A01A80164,
-			F57B9A950267F55401A80164,
 			F57B9A9B0267F95101A80164,
 			F5DD320102F790BE01A80164,
 			F5DD320B02F790FE01A80164,
@@ -2157,20 +2169,147 @@
 			F5DD321102F79B2001A80164,
 			F5DD321302F79C4D01A80164,
 			F5DD321502F79E8C01A80164,
+			275710BB042CE895004ACA36,
 		);
 		executables = (
 			F521994101F8D2CA01A80164,
 			F5B29D7E01F739D501A80164,
 		);
 		perUserDictionary = {
-			PBXPerProjectTemplateStateSaveDate = 69778867;
+			PBXPerProjectTemplateStateSaveDate = 70000862;
+			"PBXTemplateGeometry-F5CA7ECB015C094F0DCA290F" = {
+				ContentSize = "{668, 621}";
+				LeftSlideOut = {
+					Collapsed = NO;
+					Frame = "{{0, 0}, {668, 621}}";
+					Split0 = {
+						Collapsed = NO;
+						Frame = "{{0, 0}, {668, 621}}";
+						Split0 = {
+							Frame = "{{0, 0}, {668, 621}}";
+						};
+						SplitCount = 1;
+						Tab0 = {
+							Frame = "{{0, 0}, {484, 208}}";
+						};
+						Tab1 = {
+							Debugger = {
+								Collapsed = NO;
+								Frame = "{{0, 0}, {664, 208}}";
+								Split0 = {
+									Frame = "{{0, 24}, {664, 184}}";
+									Split0 = {
+										Frame = "{{0, 0}, {325, 184}}";
+									};
+									Split1 = {
+										DebugVariablesTableConfiguration = (
+											Name,
+											123,
+											Value,
+											85,
+											Summary,
+											96.123,
+										);
+										Frame = "{{334, 0}, {330, 184}}";
+									};
+									SplitCount = 2;
+								};
+								SplitCount = 1;
+								Tab0 = {
+									Frame = "{{0, 0}, {100, 50}}";
+								};
+								Tab1 = {
+									Frame = "{{0, 0}, {100, 50}}";
+								};
+								TabCount = 2;
+								TabsVisible = YES;
+							};
+							Frame = "{{0, 0}, {664, 208}}";
+							LauncherConfigVersion = 7;
+						};
+						Tab2 = {
+							Frame = "{{0, 0}, {664, 50}}";
+							LauncherConfigVersion = 3;
+							Runner = {
+								Frame = "{{0, 0}, {664, 50}}";
+							};
+						};
+						Tab3 = {
+							BuildMessageFrame = "{{0, 0}, {614, 203}}";
+							BuildTranscriptFrame = "{{0, 212}, {614, 85}}";
+							BuildTranscriptFrameExpanded = YES;
+							Frame = "{{0, 0}, {612, 295}}";
+						};
+						Tab4 = {
+							Frame = "{{0, 0}, {612, 295}}";
+						};
+						TabCount = 5;
+						TabsVisible = NO;
+					};
+					SplitCount = 1;
+					Tab0 = {
+						Frame = "{{0, 0}, {313, 531}}";
+						GroupTreeTableConfiguration = (
+							TargetStatusColumn,
+							18,
+							MainColumn,
+							280,
+						);
+					};
+					Tab1 = {
+						ClassesFrame = "{{0, 0}, {280, 398}}";
+						ClassesTreeTableConfiguration = (
+							PBXBookColumnIdentifier,
+							20,
+							PBXClassColumnIdentifier,
+							237,
+						);
+						Frame = "{{0, 0}, {278, 659}}";
+						MembersFrame = "{{0, 407}, {280, 252}}";
+						MembersTreeTableConfiguration = (
+							PBXBookColumnIdentifier,
+							20,
+							PBXMethodColumnIdentifier,
+							236,
+						);
+					};
+					Tab2 = {
+						Frame = "{{0, 0}, {200, 100}}";
+					};
+					Tab3 = {
+						Frame = "{{0, 0}, {200, 557}}";
+						TargetTableConfiguration = (
+							ActiveObject,
+							16,
+							ObjectNames,
+							202.296,
+						);
+					};
+					Tab4 = {
+						BreakpointsTreeTableConfiguration = (
+							breakpointColumn,
+							197,
+							enabledColumn,
+							31,
+						);
+						Frame = "{{0, 0}, {250, 100}}";
+					};
+					TabCount = 5;
+					TabsVisible = NO;
+				};
+				NavBarShownByDefault = YES;
+				StatusViewVisible = NO;
+				Template = F5CA7ECB015C094F0DCA290F;
+				ToolbarVisible = NO;
+				WindowLocation = "{334, 103}";
+			};
 			PBXWorkspaceContents = (
 				{
 					LeftSlideOut = {
 						Split0 = {
 							Split0 = {
 								NavContent0 = {
-									bookmark = 27D9BF160428BFFF00470CF0;
+									bookmark = 279F2D66042ABF81005489ED;
 									history = (
 										F5A1698A0307532E01A80164,
 										F5A1698D0307532E01A80164,
@@ -2206,9 +2345,9 @@
 										276B29BA0406C31800A8FDFC,
 										273E1A0904150C3600508A38,
 										273E1A0A04150C3600508A38,
-										27D9BF120428BFFF00470CF0,
 										27D9BF130428BFFF00470CF0,
-										2793434503DE0D0F00A95DB9,
+										279F2D63042ABF81005489ED,
+										279F2D64042ABF81005489ED,
 									);
 									prevStack = (
 										F5A1699D0307532E01A80164,
@@ -2464,11 +2603,12 @@
 										273E1A0D04150C3600508A38,
 										27D9BF140428BFFF00470CF0,
 										27D9BF150428BFFF00470CF0,
+										279F2D65042ABF81005489ED,
 									);
 								};
 								NavCount = 1;
 								NavGeometry0 = {
-									Frame = "{{0, 0}, {679, 617}}";
+									Frame = "{{0, 0}, {679, 439}}";
 									NavBarVisible = YES;
 								};
 								NavSplitVertical = NO;
@@ -2508,10 +2648,12 @@
 						Collapsed = NO;
 						Frame = "{{0, 23}, {970, 641}}";
 						Split0 = {
+							ActiveTab = 2;
+							ActiveTabName = PBXBuildResultsModule;
 							Collapsed = NO;
 							Frame = "{{291, 0}, {679, 641}}";
 							Split0 = {
-								Frame = "{{0, 24}, {679, 617}}";
+								Frame = "{{0, 202}, {679, 439}}";
 							};
 							SplitCount = 1;
 							Tab0 = {
@@ -2631,7 +2773,7 @@
 					WindowLocation = "{20, 20}";
 				},
 			);
-			PBXWorkspaceStateSaveDate = 69778867;
+			PBXWorkspaceStateSaveDate = 70000862;
 		};
 		perUserProjectItems = {
 			27014BCE03F2F7A800A7B3FE = 27014BCE03F2F7A800A7B3FE;
@@ -2654,7 +2796,6 @@
 			2793433C03DE0D0F00A95DB9 = 2793433C03DE0D0F00A95DB9;
 			2793434203DE0D0F00A95DB9 = 2793434203DE0D0F00A95DB9;
 			2793434403DE0D0F00A95DB9 = 2793434403DE0D0F00A95DB9;
-			2793434503DE0D0F00A95DB9 = 2793434503DE0D0F00A95DB9;
 			2793434603DE0D0F00A95DB9 = 2793434603DE0D0F00A95DB9;
 			2793434903DE0D0F00A95DB9 = 2793434903DE0D0F00A95DB9;
 			2793434B03DE0D0F00A95DB9 = 2793434B03DE0D0F00A95DB9;
@@ -2820,6 +2961,10 @@
 			279D443303E09EBE00BDE080 = 279D443303E09EBE00BDE080;
 			279D443403E09EBE00BDE080 = 279D443403E09EBE00BDE080;
 			279D443503E09EBE00BDE080 = 279D443503E09EBE00BDE080;
+			279F2D63042ABF81005489ED = 279F2D63042ABF81005489ED;
+			279F2D64042ABF81005489ED = 279F2D64042ABF81005489ED;
+			279F2D65042ABF81005489ED = 279F2D65042ABF81005489ED;
+			279F2D66042ABF81005489ED = 279F2D66042ABF81005489ED;
 			27A15CC803D70D7500B4636F = 27A15CC803D70D7500B4636F;
 			27B8851903E82A1E00000203 = 27B8851903E82A1E00000203;
 			27B8851A03E82A1E00000203 = 27B8851A03E82A1E00000203;
@@ -2833,11 +2978,9 @@
 			27CAC8CE0402FE31004B1AB1 = 27CAC8CE0402FE31004B1AB1;
 			27CAC8CF0402FE31004B1AB1 = 27CAC8CF0402FE31004B1AB1;
 			27CAC8D00402FE31004B1AB1 = 27CAC8D00402FE31004B1AB1;
-			27D9BF120428BFFF00470CF0 = 27D9BF120428BFFF00470CF0;
 			27D9BF130428BFFF00470CF0 = 27D9BF130428BFFF00470CF0;
 			27D9BF140428BFFF00470CF0 = 27D9BF140428BFFF00470CF0;
 			27D9BF150428BFFF00470CF0 = 27D9BF150428BFFF00470CF0;
-			27D9BF160428BFFF00470CF0 = 27D9BF160428BFFF00470CF0;
 			27F9C0AF03E721F500000203 = 27F9C0AF03E721F500000203;
 			27F9C0B203E721F500000203 = 27F9C0B203E721F500000203;
 			27F9C0B403E721F500000203 = 27F9C0B403E721F500000203;
@@ -2996,31 +3139,31 @@
 	F529392C0230481C01A80164 = {
 		fileReference = F5B29D6E01F7393A01A80164;
 		isa = PBXFileBreakpoint;
-		lineNumber = 213;
+		lineNumber = 215;
 		state = 2;
 	};
 	F529392D02304B8101A80164 = {
 		fileReference = F5B29D6E01F7393A01A80164;
 		isa = PBXFileBreakpoint;
-		lineNumber = 228;
+		lineNumber = 230;
 		state = 2;
 	};
 	F529392E0230745801A80164 = {
 		fileReference = F5B29D7801F7395001A80164;
 		isa = PBXFileBreakpoint;
-		lineNumber = 467;
+		lineNumber = 1;
 		state = 2;
 	};
 	F540263C022947D101A80164 = {
 		fileReference = F5B29D7801F7395001A80164;
 		isa = PBXFileBreakpoint;
-		lineNumber = 533;
+		lineNumber = 1;
 		state = 2;
 	};
 	F540263D0229497601A80164 = {
 		fileReference = F574E09E01FD122F01A80164;
 		isa = PBXFileBreakpoint;
-		lineNumber = 95;
+		lineNumber = 100;
 		state = 2;
 	};
 	F540263E02294B3601A80164 = {
@@ -3044,7 +3187,7 @@
 	F5402643022C456501A80164 = {
 		fileReference = F5B29D7801F7395001A80164;
 		isa = PBXFileBreakpoint;
-		lineNumber = 297;
+		lineNumber = 1;
 		state = 2;
 	};
 	F5402644022C488701A80164 = {
@@ -3062,7 +3205,7 @@
 	F551A29F022D7F9201A80164 = {
 		fileReference = F5B29D6E01F7393A01A80164;
 		isa = PBXFileBreakpoint;
-		lineNumber = 235;
+		lineNumber = 237;
 		state = 2;
 	};
 	F551EAB203075D4601A80164 = {
@@ -3091,16 +3234,10 @@
 		lineNumber = 17;
 		state = 2;
 	};
-	F57B9A950267F55401A80164 = {
-		fileReference = F5B29D6D01F7393A01A80164;
-		isa = PBXFileBreakpoint;
-		lineNumber = 349;
-		state = 1;
-	};
 	F57B9A9B0267F95101A80164 = {
 		fileReference = F521993F01F8D2B801A80164;
 		isa = PBXFileBreakpoint;
-		lineNumber = 102;
+		lineNumber = 96;
 		state = 1;
 	};
 	F5A1698A0307532E01A80164 = {
@@ -3208,7 +3345,7 @@
 		isa = PBXTextBookmark;
 		name = "calculator.c: 532";
 		rLen = 0;
-		rLoc = 12935;
+		rLoc = 13355;
 		rType = 0;
 		vrLen = 813;
 		vrLoc = 12653;
@@ -3278,7 +3415,7 @@
 		isa = PBXTextBookmark;
 		name = "calculator.c: 502";
 		rLen = 0;
-		rLoc = 12935;
+		rLoc = 13355;
 		rType = 0;
 		vrLen = 959;
 		vrLoc = 0;
@@ -3308,7 +3445,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.h: 63";
 		rLen = 37;
-		rLoc = 1968;
+		rLoc = 2042;
 		rType = 0;
 		vrLen = 916;
 		vrLoc = 818;
@@ -3318,7 +3455,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: shConversions:";
 		rLen = 0;
-		rLoc = 13990;
+		rLoc = 14061;
 		rType = 0;
 		vrLen = 789;
 		vrLoc = 12320;
@@ -3348,7 +3485,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: shConversions:";
 		rLen = 0;
-		rLoc = 13990;
+		rLoc = 14061;
 		rType = 0;
 		vrLen = 787;
 		vrLoc = 12320;
@@ -3358,7 +3495,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.h: 42";
 		rLen = 0;
-		rLoc = 1192;
+		rLoc = 1266;
 		rType = 0;
 		vrLen = 948;
 		vrLoc = 818;
@@ -3368,7 +3505,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: shConversions:";
 		rLen = 0;
-		rLoc = 13994;
+		rLoc = 14065;
 		rType = 0;
 		vrLen = 799;
 		vrLoc = 12419;
@@ -3377,8 +3514,8 @@
 		fRef = F5B29D7701F7395001A80164;
 		isa = PBXTextBookmark;
 		name = "WcalcController.h: 65";
-		rLen = 59;
-		rLoc = 2006;
+		rLen = 227;
+		rLoc = 2080;
 		rType = 0;
 		vrLen = 951;
 		vrLoc = 852;
@@ -3388,7 +3525,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: convert:";
 		rLen = 0;
-		rLoc = 12080;
+		rLoc = 12151;
 		rType = 0;
 		vrLen = 875;
 		vrLoc = 9925;
@@ -3468,7 +3605,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: setPrefs:";
 		rLen = 0;
-		rLoc = 17924;
+		rLoc = 17995;
 		rType = 0;
 		vrLen = 979;
 		vrLoc = 16075;
@@ -3497,8 +3634,8 @@
 		fRef = F574E09D01FD122F01A80164;
 		isa = PBXTextBookmark;
 		name = "historyManager.h: 10";
-		rLen = 27;
-		rLoc = 151;
+		rLen = 0;
+		rLoc = 150;
 		rType = 0;
 		vrLen = 330;
 		vrLoc = 0;
@@ -3598,7 +3735,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: go:";
 		rLen = 12;
-		rLoc = 11123;
+		rLoc = 11220;
 		rType = 0;
 		vrLen = 877;
 		vrLoc = 9925;
@@ -3618,7 +3755,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: convert:";
 		rLen = 0;
-		rLoc = 12080;
+		rLoc = 12151;
 		rType = 0;
 		vrLen = 985;
 		vrLoc = 10419;
@@ -3628,7 +3765,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.h: 49";
 		rLen = 0;
-		rLoc = 1454;
+		rLoc = 1528;
 		rType = 0;
 		vrLen = 865;
 		vrLoc = 566;
@@ -3658,7 +3795,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: newval";
 		rLen = 319;
-		rLoc = 11676;
+		rLoc = 11747;
 		rType = 0;
 		vrLen = 992;
 		vrLoc = 10419;
@@ -3668,7 +3805,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.h: 46";
 		rLen = 0;
-		rLoc = 1347;
+		rLoc = 1421;
 		rType = 0;
 		vrLen = 756;
 		vrLoc = 600;
@@ -3688,7 +3825,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: enterData:";
 		rLen = 0;
-		rLoc = 12080;
+		rLoc = 12151;
 		rType = 0;
 		vrLen = 988;
 		vrLoc = 10335;
@@ -3708,7 +3845,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: go:";
 		rLen = 0;
-		rLoc = 11171;
+		rLoc = 11268;
 		rType = 0;
 		vrLen = 987;
 		vrLoc = 10335;
@@ -3728,7 +3865,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: convert:";
 		rLen = 0;
-		rLoc = 12006;
+		rLoc = 12077;
 		rType = 0;
 		vrLen = 1063;
 		vrLoc = 10560;
@@ -3748,7 +3885,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.m: convert:";
 		rLen = 0;
-		rLoc = 11673;
+		rLoc = 11744;
 		rType = 0;
 		vrLen = 937;
 		vrLoc = 10560;
@@ -3758,7 +3895,7 @@
 		isa = PBXTextBookmark;
 		name = "WcalcController.h: 46";
 		rLen = 0;
-		rLoc = 1347;
+		rLoc = 1421;
 		rType = 0;
 		vrLen = 842;
 		vrLoc = 600;
@@ -3886,7 +4023,7 @@
 	F5C3DB0D02248D2001A80164 = {
 		fileReference = F5B29D7801F7395001A80164;
 		isa = PBXFileBreakpoint;
-		lineNumber = 230;
+		lineNumber = 1;
 		state = 2;
 	};
 	F5DD320102F790BE01A80164 = {

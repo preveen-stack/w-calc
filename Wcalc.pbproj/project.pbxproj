@@ -18,8 +18,6 @@
 				F521994301FA86B001A80164,
 				F574E09901FD0FD701A80164,
 				F574E09A01FD0FD701A80164,
-				F574E09D01FD122F01A80164,
-				F574E09E01FD122F01A80164,
 				F5EF54D302022A7001A80164,
 				F5EF54D202022A7001A80164,
 				F5D446D00263B46801A80164,
@@ -135,6 +133,42 @@
 //272
 //273
 //274
+		275710BC042D0472004ACA36 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			path = files.h;
+			refType = 4;
+		};
+		275710BD042D0472004ACA36 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			path = files.c;
+			refType = 4;
+		};
+		275710BE042D0472004ACA36 = {
+			fileRef = 275710BC042D0472004ACA36;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		275710BF042D0472004ACA36 = {
+			fileRef = 275710BD042D0472004ACA36;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		275710C0042D0472004ACA36 = {
+			fileRef = 275710BC042D0472004ACA36;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		275710C1042D0472004ACA36 = {
+			fileRef = 275710BD042D0472004ACA36;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		2799DA4303FAD61400CA71DD = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
@@ -339,6 +373,7 @@
 				F5DD321902F8F43501A80164,
 				F5A165F9030711ED01A80164,
 				2799DA4503FAD61400CA71DD,
+				275710BE042D0472004ACA36,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -376,6 +411,7 @@
 				F5DD321802F8F43501A80164,
 				F5A165FA030711ED01A80164,
 				2799DA4603FAD61400CA71DD,
+				275710BF042D0472004ACA36,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -509,6 +545,7 @@
 				F5293928023032E201A80164,
 				F5DD321B02F8F43501A80164,
 				2799DA4703FAD61400CA71DD,
+				275710C0042D0472004ACA36,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -536,6 +573,7 @@
 				F5293929023032E201A80164,
 				F5DD321A02F8F43501A80164,
 				2799DA4803FAD61400CA71DD,
+				275710C1042D0472004ACA36,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -762,9 +800,13 @@
 				F5293927023032E201A80164,
 				F5DD321702F8F43501A80164,
 				F5DD321602F8F43501A80164,
+				275710BC042D0472004ACA36,
+				275710BD042D0472004ACA36,
+				F574E09D01FD122F01A80164,
+				F574E09E01FD122F01A80164,
 			);
 			isa = PBXGroup;
-			name = Math;
+			name = "Shared Code";
 			refType = 4;
 		};
 		F5B29D6101F7391001A80164 = {

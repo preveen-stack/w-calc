@@ -7,6 +7,8 @@
     IBOutlet NSMenuItem *affectDrawerMenu;
     IBOutlet NSMenuItem *affectKeyboardMenu;
 	IBOutlet NSMenuItem *baseMenu;
+	IBOutlet NSMenuItem *saveMenuItem;
+	IBOutlet NSMenuItem *saveAsMenuItem;
 	
 	IBOutlet NSWindow *mainWindow;
 	
@@ -73,5 +75,7 @@
 - (IBAction)open:(id)sender;
 - (IBAction)save:(id)sender;
 - (IBAction)saveAs:(id)sender;
+
 - (void)displayErrno:(int)err forFile:(NSString*)filename;
+- (BOOL)validateMenuItem:(NSMenuItem *)anItem;
 @end

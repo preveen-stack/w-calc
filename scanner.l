@@ -57,6 +57,7 @@ ACCEPTABLE	[_:]
 \\l(enient)?            { return(PICKY_CMD); }
 \\li(st(vars)?)?        { return(LISTVAR_CMD); }
 \\o(ct(al)?)?           { return(OCT_CMD); }
+\\open[ ].*             { yylval.variable = strdup(yytext+6); return(OPEN_CMD); }
 \\p[-]?{DIGIT}+         { yylval.number = atoi(yytext+2); return(PRECISION_CMD);}
 \\p(icky)?              { return(PICKY_CMD); }
 \\pre(fix(es)?)?        { return(PREFIX_CMD); }
@@ -71,6 +72,7 @@ ACCEPTABLE	[_:]
 \\rou(nd(int)?)?        { yylval.number = -1;
 	                      return(ROUNDING_INDICATION_CMD); }
 \\re(member(_errors)?)? { return(REMEMBER_CMD); }
+\\save[ ].*             { yylval.variable = strdup(yytext+6); return(SAVE_CMD); }
 \\tsep.                 { yylval.character = yytext[5]; return(TSEP_CMD); }
 \\c(onv(ert)?)?{WHITESPACE}+{LETTER}+{WHITESPACE}+{LETTER}+{WHITESPACE}+{LETTER}+ {}
 \?                      { return(PRINT_HELP_CMD); }

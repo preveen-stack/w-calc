@@ -45,12 +45,6 @@ extern int read_history ();
 #include "variables.h"
 #include "help.h"
 
-#ifdef HAVE_READLINE_HISTORY
-#define ADD_HISTORY(x) add_history(x)
-#else
-#define ADD_HISTORY(x)
-#endif
-
 #define TRUEFALSE (! strcmp(value,"yes") || ! strcmp(value,"true"))
 
 int read_prefs(char* filename);
@@ -187,7 +181,7 @@ int main (int argc, char *argv[])
 				if (!strcmp(readme,"q") || !strcmp(readme,"quit") || !strcmp(readme,"\\q")) {
 					break;
 				} else if (!strncmp(readme,"\\yydebug",8)) {
-					ADD_HISTORY(readme);
+					addToHistory(readme);
 					yydebug = ! yydebug;
 					printf("Debug Mode %s\n",yydebug?"On":"Off");
 				} else {
@@ -195,7 +189,7 @@ int main (int argc, char *argv[])
 					{
 						extern char * errstring;
 						if (!errstring || (errstring && !strlen(errstring)) || conf.remember_errors) {
-							ADD_HISTORY(readme);
+							addToHistory(readme);
 						}
 					}
 				}
@@ -344,3 +338,4 @@ int read_prefs(char * filename)
 	}
 	return 0;
 }
+
