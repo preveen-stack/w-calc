@@ -7,6 +7,7 @@
  *
  */
 
+#include <ctype.h>
 #include "string_manip.h"
 
 void strstrip (char strip, char * str)
@@ -42,4 +43,14 @@ void strswap2 (char sw, char ap, char * str)
 			*str = sw;
 		++str;
 	}
+}
+
+unsigned int count_digits(char * curs)
+{
+	unsigned int counter = 0;
+	while (curs && *curs && *curs != 'e' && *curs != 'E') {
+		counter += isdigit(*curs);
+		++curs;
+	}
+	return counter;
 }
