@@ -234,6 +234,7 @@ NSTextField *ef;
 	/* Set up the character translation */	
 	conf.dec_delimiter = [[prefs objectForKey:NSDecimalSeparator] characterAtIndex:0];
 	conf.thou_delimiter = [[prefs objectForKey:NSThousandsSeparator] characterAtIndex:0];
+	[decimalKey setAttributedTitle:[prefs objectForKey:NSDecimalSeparator]];
 
 	/* reset the window to the saved setting */
 	superview = [keypad superview];
