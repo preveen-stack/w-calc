@@ -7,7 +7,7 @@
 
 \f0\fs28 \cf0 Hello!\
 \
-This is Wcalc 1.4.2!\
+This is Wcalc 1.4.3!\
 \
 1. What's New\
 2. Intro\
@@ -22,15 +22,21 @@ This is Wcalc 1.4.2!\
 **************
 \f0\b0 \
 \
-This version I fixed the three most irritating things about Wcalc, namely:\
+This version I fixed some stuff I'm astonished that I (and nobody else) found earlier:\
 \
-BUG FIX: Doesn't complain of an "Unexpected Quit" when you close the window.\
+BUG FIX: Fixed the scanner (0.9 now means 0.9 and not 0 * .9) (BOTH)\
 \
-BUG FIX: Pressing buttons doesn't stop you from typing anymore.\
+BUG FIX: Fixed a rounding error (negative decimals were getting removed!) (BOTH)\
 \
-NEW FEATURE: Commas are treated as identical to periods.\
+And just to round things out, I added a few small things:\
 \
-I'm working on an additional drawer to hold functions and symbols (hopefully, user-defined). We'll see how that works out.\
+NEW FEATURE: Output can be formatted with commas instead of periods (BOTH)\
+\
+NEW FEATURE: Added error-reporting to the commandline (CLI)\
+\
+NEW FEATURE: History redisplay is more functional and also configurable (GUI)\
+\
+The thing to do now is FILES (unless there are more bugs). This is, apparently, hard to do perfectly. We'll see. It's also been suggested that I map the "clear" button on the keypad to the "clear" function... this involves getting waist-deep in Apple's event handling (I think). If anyone has any advice on this one, I'd love to hear it.\
 \
 Comments? Suggestions? Let me know!\
 \
