@@ -38,6 +38,8 @@ enum operations {wplus,
 	wnequal,
 	wgt,
 	wlt,
+	wrshft,
+	wlshft,
 	wgeq,
 	wleq,
 	wnone};

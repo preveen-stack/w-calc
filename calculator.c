@@ -290,6 +290,8 @@ double simple_exp (double first, enum operations op, double second)
 			case wnequal:	temp = (first != second); break;
 			case wgt:		temp = (first > second); break;
 			case wlt:		temp = (first < second); break;
+			case wlshft:    temp = (first << second); break;
+			case wrshft:    temp = (first >> second); break;
 			case wgeq:		temp = (first >= second); break;
 			case wleq:		temp = (first <= second); break;
 			case wplus:		temp = (first + second); break;
