@@ -16,8 +16,6 @@
 #include "parser.h"
 #include "variables.h"
 
-#define VERSION "1.0"
-
 #define SUPPORTED_SYMBOLS "+ - () {} [] * %% / ! ^ > >= < <= == != && ||\nsin cos tan asin acos atan sinh cosh tanh asinh acosh atanh\nlog ln e pi\n"
 
 void print_command_help(void);

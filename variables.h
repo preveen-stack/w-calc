@@ -20,4 +20,3 @@ void initvar (void);
 void delnvar (int);
 
 #endif
-

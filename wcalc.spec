@@ -1,5 +1,5 @@
 %define name Wcalc
-%define version 1.0
+%define version 1.1
 
 Summary: A flexible command-line calculator
 Name: %{name}
@@ -7,7 +7,7 @@ Version: %{version}
 Release: 1
 Group: Applications
 Url: http://homepage.mac.com/memoryhole/wcalc
-Source: http://homepage.mac.com/memoryhole/wcalc/Wcalc-1.0.tar.bz2
+Source: http://homepage.mac.com/memoryhole/wcalc/Wcalc-%{version}.tar.bz2
 Copyright: GPL
 Vendor: Kyle Wheeler <memoryhole@mac.com>
 Packager: Kyle Wheeler <memoryhole@mac.com>

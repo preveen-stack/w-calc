@@ -18,8 +18,5 @@ int main(int argc, const char *argv[])
 {
 	initvar();
 	standard_output = 0;
-	engineering = 0;
-	precision = -1;
-	[WcalcController initialize];
     return NSApplicationMain(argc, argv);
 }

@@ -5,6 +5,7 @@
 
 - (int)numberOfRowsInTableView:(NSTableView *)atv
 {
+//	printf("history length = %i\n",history_length());
 	return history_length();
 }
 
@@ -20,8 +21,11 @@
 
 - (IBAction)rowSelected:(id)sender
 {
+	int row = [sender selectedRow];
 //	printf("selected: %i\n",[sender selectedRow]);
-	[expressionField setStringValue:[NSString stringWithCString:historynum([sender selectedRow])]];
+	if (row > -1) {
+		[expressionField setStringValue:[NSString stringWithCString:historynum([sender selectedRow])]];
+	}
 	[expressionField selectText:self];
 }
 

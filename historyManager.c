@@ -52,4 +52,3 @@ int history_length (void)
 {
 	return histlen;
 }
-

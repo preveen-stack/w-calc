@@ -17,11 +17,11 @@
     IBOutlet NSDrawer *theDrawer;
     IBOutlet id theKeyboard;
     IBOutlet id variableList;
+	IBOutlet NSWindow *mainWindow;
 }
 - (IBAction)clear:(id)sender;
 - (IBAction)enterData:(id)sender;
 - (IBAction)go:(id)sender;
-- (IBAction)initialize:(id)sender;
 - (IBAction)setPrecision:(id)sender;
 - (IBAction)showInspectorDrawer:(id)sender;
 - (IBAction)showKeyboardDrawer:(id)sender;

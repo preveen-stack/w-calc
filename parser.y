@@ -4,6 +4,7 @@
 #include <stdarg.h>
 #include <string.h>
 #include <math.h>
+#include <float.h>
 #include "calculator.h"
 #include "variables.h"
 
@@ -33,22 +34,31 @@ char * variable;
 }
 
 
-
 %token EOLN PAR REN WBRA WKET WSBRA WSKET
 %token WPLUS WMINUS WMULT WDIV WMOD WEQL WEXP
 %token WOR WAND WEQUAL WNEQUAL WGT WLT WGEQ WLEQ
-%token WFACT WLOG WLN
+%token WNOT WLOG WLN WROUND
+%token WNEG
 %token WSIN WCOS WTAN WASIN WACOS WATAN WSINH WCOSH WTANH WASINH WACOSH WATANH
 %token <number> NUMBER
-%token <operation> OPER
 %token <variable> VAR
 
-%type <number> expression expression_ltwo expression_lthree expression_lfour expression_lfive
+%type <number> exp
 %type <number> value
-%type <operation> base_level_op level_two_op level_three_op level_four_op level_five_op
+%type <operation> op postop
 %type <function> func
 
+%left WAND WOR
+%left WEQUAL WNEQUAL WGT WLT WGEQ WLEQ
+%left WMINUS WPLUS
+%left WMULT WDIV WMOD
+%left WEXP
+%left WNEG
+
+%expect 113
+
 %% 	/* beginning of the parsing rules	*/
+
 input : lines
 |
 ;
@@ -57,7 +67,7 @@ lines : oneline
 | oneline lines
 ;
 
-oneline : expression
+oneline : exp
 {
 	if (scanerror) {
 		scanerror = synerrors = 0;
@@ -84,7 +94,7 @@ eoln : EOLN
 { ++lines; }
 ;
 
-assignment : VAR WEQL expression
+assignment : VAR WEQL exp
 {
 	if (compute && ! scanerror) {
 		/* if standard_error, P, E, and q are reserved */
@@ -121,62 +131,21 @@ assignment : VAR WEQL expression
 *                 | expressionlevel thisleveloperations nextexpressionlevel
 *                 ;
 */
-expression : expression_ltwo
-| expression base_level_op expression_ltwo
-{
-	if (compute) {
-		switch ($2) {
-			case wor: $$ = $1 || $3; break;
-			case wand: $$ = $1 && $3; break;
-			default: $$ = 0;
-		}
-	} else {
-		$$ = 0;
-	}
-}
-;
 
-expression_ltwo : expression_lthree
-| WMINUS expression_lthree { $$ = - $2; }
-| WFACT expression_lthree { $$ = ! $2; }
-| expression_ltwo level_two_op expression_lthree
+exp : exp op exp
 {
 	if (compute) {
-		switch ($2) {
+        switch ($2) {
+            case wor: $$ = $1 || $3; break;
+            case wand: $$ = $1 && $3; break;
 			case wequal: $$ = ($1 == $3); break;
 			case wnequal: $$ = ($1 != $3); break;
 			case wgt: $$ = $1 > $3; break;
 			case wlt: $$ = $1 < $3; break;
 			case wgeq: $$ = $1 >= $3; break;
 			case wleq: $$ = $1 <= $3; break;
-			default: $$ = 0;
-		}
-	} else {
-		$$ = 0;
-	}
-}
-;
-
-expression_lthree : expression_lfour
-| expression_lthree level_three_op expression_lfour
-{
-	if (compute) {
-					  	switch ($2) {
-							case wplus: $$ = $1 + $3; break;
-							case wminus: $$ = $1 - $3; break;
-							default: $$ = $1;
-						}
-	} else {
-		$$ = 0;
-	}
-}
-;
-
-expression_lfour : expression_lfive
-| expression_lfour level_four_op expression_lfive
-{
-	if (compute) {
-		switch ($2) {
+			case wplus: $$ = $1 + $3; break;
+			case wminus: $$ = $1 - $3; break;
 			case wmult: $$ = $1 * $3; break;
 			case wdiv:
 				if ($3 != 0)
@@ -189,57 +158,55 @@ expression_lfour : expression_lfive
 				if (ceil($1) == floor($1) && ceil($3) == floor($3))
 					$$ = (int)$1 % (int)$3;
 				else {
-					report_error("Non-integer arguments to mod are illegal.");
-					$$ = 0;
+					$$ = fmod($1,$3);
 				}
 					break;
-			default: $$ = $1;
-		}
-	} else {
-		$$ = 0;
-	}
-}
-;
-
-expression_lfive : value
-| expression_lfive level_five_op value
-{
-	if (compute) {
-		switch ($2) {
 			case wexp:
 				$$ = pow($1,$3);
 				break;
-			default: $$ = $1;
-		}
-	} else {
-		$$ = 0;
+				
+            default: $$ = 0;
+        }
+    } else {
+        $$ = 0;
+    }
+}
+| WMINUS exp %prec WNEG
+{ $$ = - $2; }
+| WPLUS exp %prec WNEG
+{ $$ = $2; }
+| PAR exp REN { $$ = $2; }
+| WBRA exp WKET { $$ = $2; }
+| WSBRA exp WSKET { $$ = $2; }
+| exp value %prec WMULT
+{ $$ = $1 * $2; }
+| value postop %prec WNEG
+{
+	switch ($2) {
+		case wfact: $$ = fact($1); break;
+		default: $$ = $1;
 	}
 }
 ;
 
-base_level_op : WAND { $$ = wand; }
+op : WAND { $$ = wand; }
 | WOR { $$ = wor; }
-;
-
-level_two_op : WEQUAL { $$ = wequal; }
+| WEQUAL { $$ = wequal; }
 | WNEQUAL { $$ = wnequal; }
 | WGT { $$ = wgt; }
 | WLT { $$ = wlt; }
 | WGEQ { $$ = wgeq; }
 | WLEQ { $$ = wleq; }
-;
-
-level_three_op : WPLUS { $$ = wplus; }
+| WPLUS { $$ = wplus; }
 | WMINUS { $$ = wminus; }
-;
-
-level_four_op : WMULT { $$ = wmult; }
+| WMULT { $$ = wmult; }
 | WDIV  { $$ = wdiv; }
 | WMOD  { $$ = wmod; }
-|       { $$ = wmult; }
+| WEXP { $$ = wexp; }
 ;
 
-level_five_op : WEXP { $$ = wexp; }
+postop : WNOT { $$ = wfact; }
+| { $$ = wnone; }
 ;
 
 value : NUMBER
@@ -266,19 +233,16 @@ value : NUMBER
 	}
 }
 | null { $$ = 0; }
-| PAR expression REN { $$ = $2; }
-| WBRA expression WKET { $$ = $2; }
-| WSBRA expression WSKET { $$ = $2; }
-| func value
+| func exp
 {
 	  	if (compute) {
 			switch ($1) {
-				case wsin: $$ = sin($2); break;
-				case wcos: $$ = cos($2); break;
-				case wtan: $$ = tan($2); break;
-				case wasin: $$ = asin($2); break;
-				case wacos: $$ = acos($2); break;
-				case watan: $$ = atan($2); break;
+				case wsin: $$ = sin(use_radians?$2:($2*WPI/180)); break;
+				case wcos: $$ = cos(use_radians?$2:($2*WPI/180)); break;
+				case wtan: $$ = tan(use_radians?$2:($2*WPI/180)); break;
+				case wasin: $$ = asin(use_radians?$2:($2*WPI/180)); break;
+				case wacos: $$ = acos(use_radians?$2:($2*WPI/180)); break;
+				case watan: $$ = atan(use_radians?$2:($2*WPI/180)); break;
 				case wsinh: $$ = sinh($2); break;
 				case wcosh: $$ = cosh($2); break;
 				case wtanh: $$ = tanh($2); break;
@@ -287,6 +251,9 @@ value : NUMBER
 				case watanh: $$ = atanh($2); break;
 				case wlog: $$ = log10($2); break;
 				case wln: $$ = log($2); break;
+				case wround: $$ = (fabs(floor($2)-$2)>=0.5)?ceil($2):floor($2); break;
+				case wneg: $$ = - $2; break;
+				case wnot: $$ = ! $2; break;
 				default: $$ = $2;
 			}
 		}
@@ -307,6 +274,8 @@ func : WSIN { $$ = wsin; }
 | WATANH { $$ = watanh; }
 | WLOG { $$ = wlog; }
 | WLN { $$ = wln; }
+| WROUND { $$ = wround; }
+| WNOT { $$ = wnot; }
 ;
 
 null : PAR REN

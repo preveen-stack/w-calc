@@ -34,14 +34,18 @@ ACCEPTABLE	[_:]
 
 "\n" 	        { return(EOLN); } 
 
-%{ /* These are the constants */
+%{ /* These are the constants (except random) */
 	%}
-e {
+(e) {
 	yylval.number = WE;
 	return(NUMBER);
 }
-pi {
+([pP][iI])|(¹) {
 	yylval.number = WPI;
+	return(NUMBER);
+}
+random {
+	yylval.number = rand();
 	return(NUMBER);
 }
 
@@ -56,17 +60,17 @@ pi {
 
 %{ /* These are the binary operations */
 	%}
-[!]  { return(WFACT); }
+([!])|(not)  { return(WNOT); }
 [+]  { return(WPLUS); }
 [*]  { return(WMULT); }
 [/]  { return(WDIV); }
 [%]  { return(WMOD); }
 [=]  { return(WEQL); }
 \^   { return(WEXP); }
-\|\| { return(WOR); }
-\&\& { return(WAND); }
-\=\= { return(WEQUAL); }
-\!\= { return(WNEQUAL); }
+(\|\|)|(or) { return(WOR); }
+(\&\&)|(and) { return(WAND); }
+(\=\=)|(equals)|(eq) { return(WEQUAL); }
+(\!\=)|(ne) { return(WNEQUAL); }
 \>   { return(WGT); }
 \<   { return(WLT); }
 \>\= { return(WGEQ); }
@@ -81,30 +85,26 @@ pi {
 sin { return(WSIN); }
 cos { return(WCOS); }
 tan { return(WTAN); }
-asin { return(WASIN); }
-acos { return(WACOS); }
-atan { return(WATAN); }
+(asin)|(arcsin)|(sin^-1) { return(WASIN); }
+(acos)|(arccos)|(cos^-1) { return(WACOS); }
+(atan)|(arctan)|(tan^-1) { return(WATAN); }
 sinh { return(WSINH); }
 cosh { return(WCOSH); }
 tanh { return(WTANH); }
-asinh { return(WASINH); }
-acosh { return(WACOSH); }
-atanh { return(WATANH); }
+(asinh)|(arcsinh)|(sinh^-1) { return(WASINH); }
+(acosh)|(arccosh)|(cosh^-1) { return(WACOSH); }
+(atanh)|(arctanh)|(tanh^-1) { return(WATANH); }
 log { return(WLOG); }
 ln { return(WLN); }
+round { return(WROUND); }
 
 {LETTER}+({LETTER}|{ACCEPTABLE})* {
 	yylval.variable = strdup(yytext);
 	return(VAR);
 								  }
 
-(({DIGIT}+)|({DIGIT}+e{DIGIT}+)|(\.{DIGIT}+)|(\.{DIGIT}+e-?{DIGIT}+)|({DIGIT}+\.{DIGIT}*)|({DIGIT}+\.{DIGIT}*e-?{DIGIT}+))\!?	{
-	int fct = (yytext[strlen(yytext)-1]=='!')?1:0;
-	if (fct) yytext[strlen(yytext)] = 0;
-
+(({DIGIT}+)|({DIGIT}+e{DIGIT}+)|(\.{DIGIT}+)|(\.{DIGIT}+e-?{DIGIT}+)|({DIGIT}+\.{DIGIT}*)|({DIGIT}+\.{DIGIT}*e-?{DIGIT}+))	{
 	yylval.number = strtod(yytext,NULL);
-	if (fct)
-		yylval.number = fact(yylval.number);
 	if ((yylval.number != HUGE_VAL) && (yylval.number != -HUGE_VAL)) {
 		return(NUMBER);
 	} else {

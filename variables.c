@@ -144,4 +144,3 @@ int putvarc (char * keyvalue)
 	*value = '=';
 	return retval;
 }
-

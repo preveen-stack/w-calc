@@ -18,14 +18,31 @@
 	}
 }
 
-- (IBAction)initialize:(id)sender
+- (void)awakeFromNib
 {
+	NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+	if (! [prefs integerForKey:@"initialized"]) {
+		[prefs setObject:@"1" forKey:@"initialized"];
+		[prefs setObject:@"-1" forKey:@"precision"];
+		[prefs setObject:@"NO" forKey:@"engineeringNotation"];
+		[prefs setObject:@"NO" forKey:@"historyDuplicatesAllowed"];
+		[prefs setObject:@"NO" forKey:@"flagUndefinedVariables"];
+		[prefs setObject:@"YES" forKey:@"useRadians"];
+	}
+	precision = [prefs integerForKey:@"precision"];
+	engineering = [prefs boolForKey:@"engineeringNotation"];
+	allow_duplicates = [prefs boolForKey:@"historyDuplicatesAllowed"];
+	picky_variables = [prefs boolForKey:@"flagUndefinedVariables"];
+	use_radians = [prefs boolForKey:@"useRadians"];
+	
 	[PrecisionSlider setIntValue:precision];
+	[mainWindow setFrameAutosaveName:@"wcalc"];
 }
 
 - (IBAction)setPrecision:(id)sender
 {
 	static int last_pres=0;
+	NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
 
 	if (last_pres == [PrecisionSlider intValue])
 		return;
@@ -33,6 +50,7 @@
 		last_pres = [PrecisionSlider intValue];
 
 	precision = last_pres;
+	[prefs setObject:[NSString stringWithFormat:@"%i",precision] forKey:@"precision"];
 
 	print_this_result(last_answer);
 

@@ -15,6 +15,7 @@ short standard_output = 1;
 int precision = -1;
 short engineering = 0;
 short picky_variables = 0;
+short use_radians = 1;
 
 /*
  * These are declared here because they're not in any header files.
