@@ -22,7 +22,7 @@ Thereafter, that variable name is the same as the literal value it represents.
 Expressions can be stored in variables like this:
 .I "foo = 'anylegalexpression'
 Expressions stored this way will be interpreted at evaluation time, rather
-than assignment-time.
+than assignment-time. Note that these cannot be recursive.
 .SS OPTIONS
 .TP
 .I "\-h \-\-help"
@@ -61,11 +61,206 @@ Makes the parser assume that uninitialized variables have a value of zero.
 .TP
 .I "\-r \-\-radians"
 Makes all trigonometric functions work in radians.
+.SH FUNCTIONS
+The functions supported in wcalc are almost all self-explanatory. For those few that are not, here is a full description.
+.TP
+.I "sin cos tan cot"
+The standard trigonometric functions
+.TP
+.I "asin acos atan acot"
+The standard arc- trigonometric functions.
+.TP
+.I "sinh cosh tanh coth"
+The standard hyperbolic trigonometric functions.
+.TP
+.I "asinh acosh atanh acoth"
+The standard arc- hyperbolic trigonometric functions.
+.TP
+.I "log ln logtwo"
+Log-base-ten, log-base-e and log-base-two, respectively. Remember, you can also construct log-base-X of number Y by computing log(Y)/log(X).
+.TP
+.I "round"
+Returns the integral value nearest to the argument according to the prevailing rounding mode.
+.TP
+.I "abs"
+Returns the absolute value of the argument.
+.TP
+.I "ceil floor"
+Returns the ceiling or floor of the argument.
+.TP
+.I "sqrt cbrt"
+The square and cube root functions.
+.TP
+.I "rand"
+Returns a random number between 0 and the argument.
+.TP
+.I "irand"
+Returns a random integer between 0 and the argument.
+.SH SYMBOLS
+Wcalc supports a lot of symbols.
+.TP
+.I "e"
+The logarithm constant: 2.718281828459045235360287471352662497757247093699959574966
+.TP
+.I "pi"
+3.14159265358979323846264338327950288419716939937510582097
+.TP
+.I "gamma"
+Euler's Constant: 0.577215664901532861
+.TP
+.I "c"
+Speed of Light: 299792458
+.TP
+.I "mu0 muzero"
+Permeability of Free Space: 1.25663706144e-6
+.TP
+.I "epsilon0 epsilonzero"
+Permittivity of Free Space: 8.854187817e-12
+.TP
+.I "h"
+Planck Constant: 6.6260755e-34
+.TP
+.I "ec"
+Elementary Charge: 1.60217616263e-19
+.TP
+.I "Me"
+Electron Mass: 9.1093897e-31
+.TP
+.I "Mp"
+Proton Mass: 1.6726231e-27
+.TP
+.I "Mn"
+Neutron Mass: 1.6749286e-27
+.TP
+.I "Md"
+Deuteron Mass: 1875.61276275
+.TP
+.I "alpha"
+Fine Structure Constant: 7.29735253327e-3
+.TP
+.I "re"
+Classical Electron Radius: 2.81794028531e-15
+.TP
+.I "ao"
+Bohr Radius: 0.529177208319e-10
+.TP
+.I "muB"
+Bohr Magneton: 5.78838174943e-11
+.TP
+.I "muN"
+Nuclear Magneton: 3.15245123824e-14
+.TP
+.I "G"
+Gravitational Constant: 6.67259e-11
+.TP
+.I "g"
+Accelleration Due to Gravity: 9.80665
+.TP
+.I "Na NA"
+Avogadro's Constant: 6.0221367e23
+.TP
+.I "u"
+Atomic Mass Constant: 1.6605387313e-27
+.TP
+.I "F"
+Faraday Constant: 96485.31
+.TP
+.I "k"
+Boltzmann Constant: 1.380658e-23
+.TP
+.I "sigma"
+Stephan-Boltzmann Constant: 5.67040040e-8
+.TP
+.I "Vm NAk"
+Molar Volume of Ideal Gas: 22.4141
+.TP
+.I "b"
+Wien Displacement Law Constant: 2.897768651e-3
+.TP
+.I "R"
+Molar Gas Constant: 8.31451
+.TP
+.I "Cc"
+Coulomb Constant: 8987551787.37
+.TP
+.I "mW"
+W+- Boson Mass: 80.41956
+.TP
+.I "mZ"
+Z Boson Mass: 91.188222
+.TP
+.I "eV"
+Electron Volt: 1.602177250e-12
+.TP
+.I "random"
+A Random Value
+.TP
+.I "irandom"
+A Random Integer
+.SH COMMANDS
+There are several commands that are supported in wcalc.
+.TP
+.I "\epX"
+Sets the precision, where X in the desired precision. This setting only affects output, not internal representations. A setting of -1 means formats output in whatever precision seems appropriate.
+.TP
+.I "\ee \eeng \eengineering"
+Toggles the formatting of output between decimal and scientific notation.
+.TP
+.I "\ehelp"
+Displays a help screen.
+.TP
+.I "\eprefs"
+Prints out the current preference settings.
+.TP
+.I "\eli \elist \elistvars"
+Prints out the currently defined variables.
+.TP
+.I "\er \eradians"
+Toggles between using and not using radians for trigonometric calculations.
+.TP
+.I "\econs \econservative"
+Toggles precision guards. Because of the way double-precision floating point numbers are stored, the equation 1-.9-.1 can return an extremely small number that is less than the precision of the double-precision floating point numbers, thus for all intents and purposes, it is 0. However, sometimes numbers that small or smaller need to be manipulated.
+.TP
+.I "\ep \epicky \el \elenient"
+Toggles variable parsing rules. When wcalc is "picky" it will complain if you use undefined variables. If it is "lenient", wcalc will assume a value of 0 for undefined variables.
+.TP
+.I "\ere \eremember \eremember_errors"
+Toggles whether or not expressions that produce errors are remembered in the history.
+.TP
+.I "\eb \ebin \ebinary"
+Prints numbers in binary notation.
+.TP
+.I "\ed \edec \edecimal"
+Prints numbers in decimal notation.
+.TP
+.I "\eh \ex \ehex \ehexadecimal"
+Prints numbers in hexadecimal notation.
+.TP
+.I "\eo \eoct \eoctal"
+Prints numbers in octal notation.
+.TP
+.I "\eround none|simple|sig_fig"
+Wcalc can attempt to warn you when numbers have been rounded in the output display. It has two methods of keeping track---either by using significant figures (sig_fig), or by a simple digit-counting algorithm. Rounding in the command-line version is denoted by a tilde before the equals sign (~=). Rounding in the GUI version is denoted by changing the text color to red.
+.TP
+.I "\edsepX"
+Sets the decimal separator character to be X.
+.TP
+.I "\etsepX"
+Sets the thousands-place separator character to be X.
+.TP
+.I "\ehlimitX"
+Sets the limit on the length of the history.
+.TP
+.I "\eopenXXXXX"
+Loads file XXXXX.
+.TP
+.I "\esaveXXXXX"
+Saves the history and variable list to a file.
 .SH COPYRIGHT
-wcalc is Copyright (C) 2000, 2001, 2002 Kyle Wheeler.
+wcalc is Copyright (C) 2000, 2001, 2002, 2003 Kyle Wheeler.
 .br
 It is freely distributed, and can be modified and used freely for any purpose,
-as long as a copy of the modification is sent to Kyle Wheeler at kwheeler@cse.nd.edu.
+as long as a copy of the modification is sent to Kyle Wheeler at kyle-wcalc@memoryhole.net.
 .SH SUGGESTIONS AND BUG REPORTS
 Any bugs found should be reported to
 .br
