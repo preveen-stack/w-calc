@@ -50,4 +50,7 @@
 #define W_EULER 0.577215664901532861
 #define W_ELECTRON_RADIUS 2.81794028531e-15
 
+#define SUPPORTED_SYMBOLS "+ - () {} [] * %% / ! ^ > >= < <= == != && || << >>\nsin cos tan asin acos atan sinh cosh tanh asinh acosh atanh\nlog ln log2 round abs ceil floor sqrt cbrt\ne pi Na k Cc ec R G g Me Mp Mn Md u amu c h mu0 epsilon0\nmuB muN b mW mZ ao F Vm NAk eV sigma alpha gamma re random\n"
+
+
 #endif
