@@ -34,7 +34,7 @@ enum commands cmd;
 char * variable;
 }
 
-%token DEC_CMD OCT_CMD HEX_CMD BIN_CMD COMMA_CMD
+%token DEC_CMD OCT_CMD HEX_CMD BIN_CMD
 %token RADIAN_CMD PICKY_CMD STRICT_CMD REMEMBER_CMD
 %token <number> PRECISION_CMD ENG_CMD
 
@@ -140,11 +140,6 @@ command : HEX_CMD {
 	conf.output_format = DECIMAL_FORMAT;
 	if (standard_output)
 		printf("Decimal Formatted Output\n");}
-| COMMA_CMD {
-	$$ = nothing;
-	conf.use_commas = ! conf.use_commas;
-	if (standard_output)
-		printf("%s are the decimal separators.\n",conf.use_commas?"Commas (,)":"Periods (.)");}
 | PICKY_CMD {
 	$$ = nothing;
 	conf.picky_variables = ! conf.picky_variables;

@@ -64,7 +64,6 @@ struct _conf {
 	unsigned int use_radians:1;
 	unsigned int output_format:4;
 	unsigned int print_prefixes:1;
-	unsigned int use_commas:1;
 	unsigned int rounding_indication:4;
 	unsigned int remember_errors:1;
 	unsigned char charkey[256];
