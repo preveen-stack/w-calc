@@ -3,11 +3,18 @@
  *  Wcalc
  *
  *  Created by Kyle Wheeler on Wed Jul 31 2002.
- *  Copyright (c) 2002 __MyCompanyName__. All rights reserved.
+ *  Copyright (c) 2002 Kyle Wheeler. All rights reserved.
  *
  */
+#ifndef WCALC_CONVERSIONS
+#define WCALC_CONVERSIONS
 
 double uber_conversion (int utype, int fromunit, int tounit, double value);
+
+struct conversion {
+	double factor;
+	char * name;
+};
 
 /* Conversion Types */
 #define MAX_TYPE        9
@@ -19,8 +26,8 @@ double uber_conversion (int utype, int fromunit, int tounit, double value);
 #define POWER_C         5 /*-*/
 #define FORCE_C         6 /*-*/
 #define ACCELERATION_C  7 /*-*/
-#define TEMPERATURE_C   8 /**/
-#define ASTRONOMICAL_C  9 /*-*/
+#define ASTRONOMICAL_C  8 /*-*/
+#define TEMPERATURE_C   9 /**/
 
 /* Length Units */
 #define MAX_LENGTH_UNIT 26
@@ -132,8 +139,8 @@ double uber_conversion (int utype, int fromunit, int tounit, double value);
 #define TEASPOON_UK   36
 #define TABLESPOON_US 37
 #define TABLESPOON_UK 38
-#define 2_5_CAN       39
-#define 10_CAN        40
+#define NUM2_5_CAN    39
+#define NUM10_CAN     40
 
 /* Mass Units */
 #define MAX_MASS_UNIT 19
@@ -224,7 +231,7 @@ double uber_conversion (int utype, int fromunit, int tounit, double value);
 #define CELSIUS     1
 #define RANKINE     2
 #define FARENHEIT   3
-#define REAMUR      4
+#define REAUMUR     4
 
 /* Astronomical Units */
 #define MAX_ASTRONOMICAL_UNIT 5
@@ -234,3 +241,8 @@ double uber_conversion (int utype, int fromunit, int tounit, double value);
 #define ASTRONOMICAL_UNIT 3
 #define LIGHT_YEAR        4
 #define PARSEC            5
+
+extern const struct conversion * conversions[MAX_TYPE+1];
+
+#endif
+

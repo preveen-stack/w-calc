@@ -3,217 +3,262 @@
  *  Wcalc
  *
  *  Created by Kyle Wheeler on Wed Jul 31 2002.
- *  Copyright (c) 2002 __MyCompanyName__. All rights reserved.
+ *  Copyright (c) 2002 Kyle Wheeler. All rights reserved.
  *
  */
 
+#include <stdio.h>
+#include "calculator.h"
 #include "conversion.h"
 
-/* The conversion table */
-char *** conversions[MAX_TYPE+1];
+/* The conversion tables */
 
-double lengths[MAX_LENGTH_UNIT+1] = {
-	10000000000,     // angstroms
-	1000000000,      // nanometers
-	39370078.740157, // microinches
-	1000000,         // microns
-	39370.07874,     // mils
-	1000,            // millimeters
-	100,             // centimeters
-	39.370079,       // inches
-	4.97097,         // links
-	4.374453,        // spans
-	3.28084,         // feet
-	2.187227,        // cubits
-	1.1811,          // varas
-	1.093613,        // yards
-	1.00,            // meters *********
-	0.546807,        // fathoms
-	0.198839,        // rods
-	0.04971,         // chains
-	0.004971,        // furlongs
-	0.004557,        // cable lengths
-	0.001,           // kilometers
-	0.000621,        // miles
-	0.000539957,     // nautical miles
-	0.000207,        // leagues
-	0.00018,         // nautical leagues
-	2834.6457,       // points
-	236.2205         // pica
+const struct conversion lengths[MAX_LENGTH_UNIT+1] = {
+	{10000000000,     "Angstroms"},
+	{1000000000,      "Nanometers"},
+	{39370078.740157, "Microinches"},
+	{1000000,         "Microns"},
+	{39370.07874,     "Mils"},
+	{1000,            "Millimeters"},
+	{100,             "Centimeters"},
+	{39.370079,       "Inches"},
+	{4.97097,         "Links"},
+	{4.374453,        "Spans"},
+	{3.28084,         "Feet"},
+	{2.187227,        "Cubits"},
+	{1.1811,          "Varas"},
+	{1.093613,        "Yards"},
+	{1.00,            "Meters"},
+	{0.546807,        "Fathoms"},
+	{0.198839,        "Rods"},
+	{0.04971,         "Chains"},
+	{0.004971,        "Furlongs"},
+	{0.004557,        "Cable Lengths"},
+	{0.001,           "Kilometers"},
+	{0.000621,        "Miles"},
+	{0.000539957,     "Nautical Miles"},
+	{0.000207,        "Leagues"},
+	{0.00018,         "Nautical leagues"},
+	{2834.6457,       "Points"},
+	{236.2205,        "Pica"}
 };
 
-double areas[MAX_AREA_UNIT+1] = {
-	1.00,            // acre
-	1.21,            // commercial acre
-	0.617369,        // irish acre
-	0.999996,        // survey acre
-	40.468564,       // are
-	200.020406,      // base box (tin plated steel)
-	1224.0945,       // bin (Taiwan)
-	1224.0945,       // bu (Japan)
-	9.176545,        // cantero (Ecuador)
-	11.241268,       // cao (Vietnam)
-	4046.8564,       // centaire
-	0.404686,        // hectare
-	5.645726,        // labor (Canada)
-	0.005645,        // labor (US)
-	0.579036,        // manzana (Costa Rica)
-	0.404686,        // manzana (Argentina)
-	2.529285,        // rai (Thailand)
-	3.999984,        // rood
-	11.241268,       // sao (Vietnam)
-	463.027064,      // scruple (ancient Rome)
-	0.001562,        // section (US Survey)
-	435.599981,      // square
-	48.401584,       // square (Sri Lanka)
-	62726399652.54841 // square caliber
-	40468564,        // square centimeter
-	11151360.073126, // square digit
-	43559.999759,    // square international foot
-	43559.825338,    // square US Survey foot
-	6272639.96528,   // square international inch
-	6272614.848634,  // square US Survey inch
-	4046.8564,       // square meter
-	0.004047,        // square kilometer
-	4839.980766,     // square US Survey yard
-	0.001562,        // square miles
-	38,358.828494,   // square Paris foot (Canada)
-	0.000043         // township
+const struct conversion areas[MAX_AREA_UNIT+1] = {
+	{1.00,              "Acre"},
+	{1.21,              "Commercial acre"},
+	{0.617369,          "Irish acre"},
+	{0.999996,          "Survey acre"},
+	{40.468564,         "Are"},
+	{200.020406,        "Base box (tin plated steel)"},
+	{1224.0945,         "Bin (Taiwan)"},
+	{1224.0945,         "Bu (Japan)"},
+	{9.176545,          "Cantero (Ecuador)"},
+	{11.241268,         "Cao (Vietnam)"},
+	{4046.8564,         "Centaire"},
+	{0.404686,          "Hectare"},
+	{5.645726,          "Labor (Canada)"},
+	{0.005645,          "Labor (US)"},
+	{0.579036,          "Manzana (Costa Rica)"},
+	{0.404686,          "Manzana (Argentina)"},
+	{2.529285,          "Rai (Thailand)"},
+	{3.999984,          "Rood"},
+	{11.241268,         "Sao (Vietnam)"},
+	{463.027064,        "Scruple (ancient Rome)"},
+	{0.001562,          "Section (US Survey)"},
+	{435.599981,        "Square"},
+	{48.401584,         "Square (Sri Lanka)"},
+	{62726399652.54841, "Square Caliber"},
+	{40468564,          "Square centimeter"},
+	{11151360.073126,   "Square digit"},
+	{43559.999759,      "Square international foot"},
+	{43559.825338,      "Square US Survey foot"},
+	{6272639.96528,     "Square international inch"},
+	{6272614.848634,    "Square US Survey inch"},
+	{4046.8564,         "Square meter"},
+	{0.004047,          "Square kilometer"},
+	{4839.980766,       "Square US Survey yard"},
+	{0.001562,          "Square miles"},
+	{38358.828494,      "Square Paris foot (Canada)"},
+	{0.000043,          "Township"}
 };
 
-double volumes[MAX_VOLUME_UNIT+1] = {
-	3785.411784,     // milliliters
-	3785.411784,     // cubic centimeters (cc)
-	3.785411784,     // cubic decimeter
-	3.785411784,     // liter
-	0.03785411784,   // hectoliter
-	0.003785411784,  // cubic meters
-	231,             // cubic inches
-	127.999998,      // fluid ounce (US)
-	133.227867,      // fluid ounce (UK)
-	16,              // cup (US)
-	8,               // pint (US)
-	1,               // gallons (US)
-	0.133681,        // cubic feet
-	0.031746,        // barrel (US, liquid)
-	1.604167,        // board foot
-	0.107421,        // bushel (US)
-	0.001044,        // cord (firewood)
-	0.008355,        // cord foot (timber)
-	5,               // fifth
-	32,              // gill (US)
-	0.015873,        // hogshead (US)
-	85.333334,       // jigger
-	0.491612,        // measure (ancient hebrew)
-	0.429684,        // peck (US)
-	0.007937,        // pipe (US)
-	127.999998,      // pony
-	4,               // quart (US)
-	0.013011,        // quarter (UK)
-	0.003785411784,  // stere
-	3197.46888,      // scruple (UK)
-	58350.801541,    // drop
-	12284.379957,    // dash
-	6142.189979,     // pinch
-	3784.296607,     // cooking milliliter (cc)
-	3071.09474,      // coffee spoon
-	768,             // teaspoon (US)
-	818.981651,      // teaspoon (UK)
-	256,             // tablespoon (US)
-	204.745415,      // tablespoon (UK)
-	4,               // #2.5 can
-	1                // #10 can
+const struct conversion volumes[MAX_VOLUME_UNIT+1] = {
+	{3785.411784,    "Milliliter"},
+	{3785.411784,    "Cubic Centimeter (cc)"},
+	{3.785411784,    "Cubic Decimeter"},
+	{3.785411784,    "Liter"},
+	{0.03785411784,  "Hectoliter"},
+	{0.003785411784, "Cubic Meter"},
+	{231,            "Cubic Inch"},
+	{127.999998,     "Fluid Ounce (US)"},
+	{133.227867,     "Fluid Ounce (UK)"},
+	{16,             "Cup (US)"},
+	{8,              "Pint (US)"},
+	{1,              "Gallon (US)"},
+	{0.133681,       "Cubic Foot"},
+	{0.031746,       "Barrel (US, liquid)"},
+	{1.604167,       "Board Foot"},
+	{0.107421,       "Bushel (US)"},
+	{0.001044,       "Cord (firewood)"},
+	{0.008355,       "Cord Foot (timber)"},
+	{5,              "Fifth"},
+	{32,             "Gill (US)"},
+	{0.015873,       "Hogshead (US)"},
+	{85.333334,      "Jigger"},
+	{0.491612,       "Measure (Ancient Hebrew)"},
+	{0.429684,       "Peck (US)"},
+	{0.007937,       "Pipe (US)"},
+	{127.999998,     "Pony"},
+	{4,              "Quart (US)"},
+	{0.013011,       "Quarter (UK)"},
+	{0.003785411784, "Stere"},
+	{3197.46888,     "Scruple (UK)"},
+	{58350.801541,   "Drop"},
+	{12284.379957,   "Dash"},
+	{6142.189979,    "Pinch"},
+	{3784.296607,    "Cooking milliliter (cc)"},
+	{3071.09474,     "Coffee spoon"},
+	{768,            "Teaspoon (US)"},
+	{818.981651,     "Teaspoon (UK)"},
+	{256,            "Tablespoon (US)"},
+	{204.745415,     "Tablespoon (UK)"},
+	{4,              "#2.5 can"},
+	{1,              "#10 can"}
 };
 
-double masses[MAX_MASS_UNIT+1] = {
-	7000,            // grains
-	350,             // scruples (Apothecaries, aka. Druggists)
-	2268,            // carats
-	453.6,           // grams
-	291.666666666667,// pennyweight
-	256,             // dram (Avoirdupois, aka. Commerce)
-	116.666666666667,// dram (Apoth.)
-	16,              // ounces (Avoir.)
-	14.5833333333334,// ounces (Apoth. & Troy)
-	32.2,            // poundals
-	1.21527777777777,// pounds (Troy (for gold))
-	1,               // pounds (Avoir.)
-	0.4536,          // kilograms
-	0.07142857142857142,// stones
-	0.04,            // quarter (US)
-	0.03105590062111801,// slugs
-	0.01,            // hundredweight (US)
-	0.0005,          // short ton
-	0.0004536,       // metric ton / tonne
-	0.0004464285714285714// long ton
+const struct conversion masses[MAX_MASS_UNIT+1] = {
+	{7000,                 "Grains"},
+	{350,                  "Scruples (Apothecaries)"},
+	{2268,                 "Carats"},
+	{453.6,                "Grams"},
+	{291.666666666667,     "Pennyweight"},
+	{256,                  "Dram (Avoirdupois)"},
+	{116.666666666667,     "Dram (Apoth.)"},
+	{16,                   "Ounces (Avoir.)"},
+	{14.5833333333334,     "Ounces (Apoth. & Troy)"},
+	{32.2,                 "Poundals"},
+	{1.21527777777777,     "Pounds (Troy)"},
+	{1,                    "Pounds (Avoir.)"},
+	{0.4536,               "Kilograms"},
+	{0.07142857142857142,  "Stones"},
+	{0.04,                 "Quarter (US)"},
+	{0.03105590062111801,  "Slugs"},
+	{0.01,                 "Hundredweight (US)"},
+	{0.0005,               "Short Ton"},
+	{0.0004536,            "Metric Ton / Tonne"},
+	{0.0004464285714285714,"Long Ton"}
 };
 
-double speeds[MAX_SPEED_UNIT+1] = {
-	30.48,                  // centimeters/second
-	0.3048,                 // meters/second
-	1,                      // feet/second
-	60,                     // feet/minute
-	0.68181818181818181819, // miles/hour
-	1.0972853161278995,     // kilometers/hour
-	0.0909090909090909091,  // furlongs/min
-	0.5924837511331251,     // knots
-	5.454644629902362,      // leagues/day
-	0.0009191187537183524   // Mach (dry air, 273 kelvin)
+const struct conversion speeds[MAX_SPEED_UNIT+1] = {
+	{30.48,                  "Centimeters/second"},
+	{0.3048,                 "Meters/second"},
+	{1,                      "Feet/second"},
+	{60,                     "Feet/minute"},
+	{0.68181818181818181819, "Miles/hour"},
+	{1.0972853161278995,     "Kilometers/hour"},
+	{0.0909090909090909091,  "Furlongs/min"},
+	{0.5924837511331251,     "Knots"},
+	{5.454644629902362,      "Leagues/day"},
+	{0.0009191187537183524,  "Mach (dry air, 273 kelvin)"}
 };
 
-double powers[MAX_POWER_UNIT+1] = {
-	7460000000,       // ergs/sec
-	746000,           // milliwatts (mW)
-	746,              // watts (joules/sec)
-	10.697948,        // kiloCalories/min
-	0.178299,         // kiloCalories/sec
-	2547.160889,      // BTU/hour
-	550.221342,       // foot-lbs/sec
-	1,                // horsepower
-	0.746,            // kilowatts
-	0.000746,         // megawatts
-	0.000001          // gigawatts
+const struct conversion powers[MAX_POWER_UNIT+1] = {
+	{7460000000,  "Ergs/sec"},
+	{746000,      "Milliwatts (mW)"},
+	{746,         "Watts (joules/sec)"},
+	{10.697948,   "KiloCalories/min"},
+	{0.178299,    "KiloCalories/sec"},
+	{2547.160889, "BTU/hour"},
+	{550.221342,  "Foot-lbs/sec"},
+	{1,           "Horsepower"},
+	{0.746,       "Kilowatts"},
+	{0.000746,    "Megawatts"},
+	{0.000001,    "Gigawatts"}
 };
 
-double forces[MAX_FORCE_UNIT+1] = {
-	100000,           // dyne
-	101.971621,       // gram-force
-	7.233011,         // poundal
-	1,                // newton
-	0.224809,         // pound
-	0.101972,         // kilopond (kgm-force)
-	0.000225          // kip
+const struct conversion forces[MAX_FORCE_UNIT+1] = {
+	{100000,     "Dyne"},
+	{101.971621, "Gram-force"},
+	{7.233011,   "Poundal"},
+	{1,          "Newton"},
+	{0.224809,   "Pound"},
+	{0.101972,   "Kilopond (kgm-force)"},
+	{0.000225,   "Kip"}
 };
 
-double accelerations[MAX_ACCELERATION_UNIT+1] = {
-	3.28084,          // celo
-	10000,            // centigal
-	100,              // centimeter/square second
-	1000,             // decigal
-	3.28084,          // foot/square second
-	0.101972,         // g-unit (G)
-	100,              // gal
-	100,              // galileo
-	0.101972,         // gn
-	0.101972,         // grav
-	39.370079,        // inch/square second
-	3.6,              // kilometer/hour/second
-	0.001,            // kilometer/square second
-	0.1,              // leo
-	1,                // meter/square second
-	134.216178,       // mile/hour/minute
-	2.236936,         // mile/hour/second
-	0.000621,         // mile/square second
-	100000,           // millegal
-	1000              // millimeter/square second
+const struct conversion accelerations[MAX_ACCELERATION_UNIT+1] = {
+	{3.28084,    "Celo"},
+	{10000,      "Centigal"},
+	{100,        "Centimeter/square second"},
+	{1000,       "Decigal"},
+	{3.28084,    "Foot/square second"},
+	{0.101972,   "G-unit (G)"},
+	{100,        "Gal"},
+	{100,        "Galileo"},
+	{0.101972,   "Gn"},
+	{0.101972,   "Grav"},
+	{39.370079,  "Inch/square second"},
+	{3.6,        "Kilometer/hour/second"},
+	{0.001,      "Kilometer/square second"},
+	{0.1,        "Leo"},
+	{1,          "Meter/square second"},
+	{134.216178, "Mile/hour/minute"},
+	{2.236936,   "Mile/hour/second"},
+	{0.000621,   "Mile/square second"},
+	{100000,     "Millegal"},
+	{1000,       "Millimeter/square second"}
 };
 
-double astronomicals[MAX_ASTRONOMICAL_UNIT+1] = {
-	149598073000,    // meters
-	149598073,       // kilometers
-	92955932.976418, // miles
-	1,               // astronomical unit (AU)
-	0.000016,        // light-year
-	0.000005,        // parsec
+const struct conversion astronomicals[MAX_ASTRONOMICAL_UNIT+1] = {
+	{149598073000,    "Meters"},
+	{149598073,       "Kilometers"},
+	{92955932.976418, "Miles"},
+	{1,               "Astronomical Unit (AU)"},
+	{0.000016,        "Light-year"},
+	{0.000005,        "Parsec"}
 };
+
+char * from_temperatures[MAX_TEMPERATURE_UNIT+1] = {
+	"[%1.15f]",                     // kelvin
+	"[%1.15f + 273.15]",            // celsius
+	"[%1.15f / 1.8]",               // rankine
+	"[(%1.15f - 32)/1.8 + 273.15]", // farenheit
+	"[((5/4) * %1.15f) + 273.15]"   // reaumur
+};
+
+char * to_temperatures[MAX_TEMPERATURE_UNIT+1] = {
+	"%s",                 // kelvin
+	"%s - 273.15",        // celsius
+	"%s * 1.8",           // rankine
+	"1.8*(%s-273.15)+32", // farenheit
+	"(%s-273.15)*(4/5)"   // reaumur
+};
+
+const struct conversion * conversions[MAX_TYPE+1] = {
+	lengths,
+	areas,
+	volumes,
+	masses,
+	speeds,
+	powers,
+	forces,
+	accelerations,
+	astronomicals,
+};
+
+double uber_conversion (int utype, int fromunit, int tounit, double value)
+{
+	if (utype != TEMPERATURE_C) {
+		const struct conversion *ltable = conversions[utype];
+		return (ltable[tounit].factor/ltable[fromunit].factor)*value;
+	} else {
+		char stage1[100];
+		char composite[100];
+		sprintf(stage1,from_temperatures[fromunit],value);
+		sprintf(composite,to_temperatures[tounit],stage1);
+		return parseme(composite);
+	}
+}
+
+
 
