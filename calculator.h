@@ -3,7 +3,7 @@
 
 #include "definitions.h"
 
-enum functions {wnot,wsin,wcos,wtan,wasin,wacos,watan,wsinh,wcosh,wtanh,wasinh,wacosh,watanh,wlog,wln,wround,wneg,wabs};
+enum functions {wnot,wsin,wcos,wtan,wasin,wacos,watan,wsinh,wcosh,wtanh,wasinh,wacosh,watanh,wlog,wln,wround,wneg,wabs,wsqrt,wfloor,wceil};
 enum operations {wplus,wminus,wmult,wdiv,wmod,wfact,wexp,wor,wand,wequal,wnequal,wgt,wlt,wgeq,wleq,wnone};
 
 double parseme (char *);

@@ -17,7 +17,7 @@
 #include "parser.h"
 #include "variables.h"
 
-#define SUPPORTED_SYMBOLS "+ - () {} [] * %% / ! ^ > >= < <= == != && ||\nsin cos tan asin acos atan sinh cosh tanh asinh acosh atanh\nlog ln round abs\ne pi Na k Cc ec R G g Me Mp Mn Md u amu c h mu0 epsilon0\nmuB muN b mW mZ ao F Vm NAk eV sigma alpha gamma re\n"
+#define SUPPORTED_SYMBOLS "+ - () {} [] * %% / ! ^ > >= < <= == != && ||\nsin cos tan asin acos atan sinh cosh tanh asinh acosh atanh\nlog ln round abs ceil floor sqrt\ne pi Na k Cc ec R G g Me Mp Mn Md u amu c h mu0 epsilon0\nmuB muN b mW mZ ao F Vm NAk eV sigma alpha gamma re\n"
 
 void print_command_help(void);
 void print_interactive_help(void);

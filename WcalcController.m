@@ -167,6 +167,9 @@ static char update_history = 0;
 		case 14: str2 = @"ln("; break;
 		case 15: str2 = @"round("; break;
 		case 16: str2 = @"abs("; break;
+		case 17: str2 = @"sqrt("; break;
+		case 18: str2 = @"floor("; break;
+		case 19: str2 = @"ceil("; break;
 		default: return;
 	}
 	[ExpressionField setStringValue:[str2 stringByAppendingString:str]];

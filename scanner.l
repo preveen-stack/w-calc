@@ -129,6 +129,9 @@ log { return(WLOG); }
 ln { return(WLN); }
 round { return(WROUND); }
 abs { return(WABS); }
+(sqrt)|(Ã) { return(WSQRT); }
+floor { return(WFLOOR); }
+(ceil)|(ceiling) { return(WCEIL); }
 
 {LETTER}+({LETTER}|{ACCEPTABLE})* {
 	yylval.variable = strdup(yytext);

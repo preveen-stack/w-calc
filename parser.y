@@ -36,7 +36,7 @@ char * variable;
 %token EOLN PAR REN WBRA WKET WSBRA WSKET WPIPE
 %token WPLUS WMINUS WMULT WDIV WMOD WEQL WEXP
 %token WOR WAND WEQUAL WNEQUAL WGT WLT WGEQ WLEQ
-%token WNOT WLOG WLN WROUND WABS
+%token WNOT WLOG WLN WROUND WABS WSQRT WCEIL WFLOOR
 %token WSIN WCOS WTAN WASIN WACOS WATAN WSINH WCOSH WTANH WASINH WACOSH WATANH
 %token <number> NUMBER
 %token <variable> VAR
@@ -188,6 +188,9 @@ func : WSIN { $$ = wsin; }
 | WLN { $$ = wln; }
 | WROUND { $$ = wround; }
 | WABS { $$ = wabs; }
+| WSQRT { $$ = wsqrt; }
+| WFLOOR { $$ = wfloor; }
+| WCEIL { $$ = wceil; }
 ;
 
 null : PAR REN

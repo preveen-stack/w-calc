@@ -254,6 +254,9 @@ double uber_function (enum functions func, double input)
 			case wneg:		temp = - input; break;
 			case wnot:		temp = ! input; break;
 			case wabs:		temp = fabs(input); break;
+			case wsqrt:		temp = sqrt(input); break;
+			case wfloor:	temp = floor(input); break;
+			case wceil:		temp = ceil(input); break;
 			default:		temp = input; break;
 		}
 		if (fabs(modf(temp, &trash)) <= DBL_EPSILON) {
