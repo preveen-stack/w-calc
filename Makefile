@@ -8,7 +8,7 @@ CC = gcc
 #YACC = yacc
 YACC = bison -b y
 
-LFLAGS = -lm -lreadline -ltermcap -static
+LFLAGS = -ll
 
 PROGRAM = wcalc
 CFILES = main.c calculator.c variables.c
@@ -30,9 +30,9 @@ OBJECTS = y.tab.o lex.yy.o ${OFILES}
 
 # How to make the whole program
 # (don't forget the Lex Library "-ll")
-${PROGRAM} : ${OBJECTS}
-	${CC} ${CFLAGS} ${OBJECTS} -o ${PROGRAM} -ll ${LFLAGS}
-	strip ${PROGRAM}
+${PROGRAM} : ${OBJECTS} libreadline.a
+	${CC} ${OBJECTS} libreadline.a -o ${PROGRAM} ${LFLAGS}
+
 
 # 
 # Turn the parser.y file into y.tab.c using "yacc"
@@ -55,7 +55,7 @@ parser.h: y.tab.h
 lex.yy.c : scanner.l parser.h ${HFILE}
 	lex scanner.l
 lex.yy.o: lex.yy.c
-	${CC} -g -c lex.yy.c
+	${CC} -g -c -Wno-long-double lex.yy.c
 
 #
 # File dependencies
