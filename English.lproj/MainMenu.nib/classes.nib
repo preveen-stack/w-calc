@@ -74,6 +74,8 @@
                 PrecisionSlider = NSSlider; 
                 affectDrawerMenu = NSMenuItem; 
                 affectKeyboardMenu = NSMenuItem; 
+                baseDrawer = NSDrawer; 
+                baseMenu = NSMenuItem; 
                 capsLockKey = NSButton; 
                 decimalKey = NSButton; 
                 engineeringNotation = NSButton; 
@@ -83,6 +85,7 @@
                 keypad = id; 
                 mainWindow = NSWindow; 
                 outputFormat = NSMatrix; 
+                outputFormat2 = NSMatrix; 
                 pickyVariables = NSButton; 
                 printPrefixes = NSButton; 
                 shiftKey1 = NSButton; 

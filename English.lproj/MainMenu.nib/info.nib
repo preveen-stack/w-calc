@@ -12,22 +12,22 @@
 		<string>462 1092 446 44 0 0 1600 1178 </string>
 		<key>886</key>
 		<string>665 637 270 342 0 0 1600 1178 </string>
-		<key>961</key>
-		<string>734 533 170 116 0 0 1600 1178 </string>
+		<key>981</key>
+		<string>716 750 167 116 0 0 1600 1178 </string>
 	</dict>
 	<key>IBFramework Version</key>
 	<string>248.0</string>
 	<key>IBLockedObjects</key>
 	<array>
 		<integer>412</integer>
-		<integer>961</integer>
 	</array>
 	<key>IBOpenObjects</key>
 	<array>
-		<integer>271</integer>
+		<integer>604</integer>
 		<integer>29</integer>
 		<integer>21</integer>
 		<integer>886</integer>
+		<integer>981</integer>
 	</array>
 	<key>IBSystem Version</key>
 	<string>5Q45</string>
