@@ -218,7 +218,7 @@ NSTextField *ef;
 	conf.output_format = [prefs integerForKey:@"outputFormat"];
 	[PrecisionSlider setEnabled:(conf.output_format==DECIMAL_FORMAT)];
 	conf.print_prefixes = [prefs boolForKey:@"printPrefixes"];
-	conf.strict_syntax = [prefs boolForKey:@"strictSyntax"];
+/*	conf.strict_syntax = [prefs boolForKey:@"strictSyntax"]; */
 	conf.rounding_indication = [prefs integerForKey:@"roundingIndication"];
 	conf.precision_guard = [prefs boolForKey:@"precisionGuard"];
 	/* history preferences */
@@ -567,13 +567,13 @@ NSTextField *ef;
 				[prefs setObject:(update_history?@"YES":@"NO") forKey:@"updateHistory"];
 			}
 				break;
-		case 9: // Flag Confusing Numbers
+/*		case 9: // Flag Confusing Numbers
 			olde = conf.strict_syntax;
 			conf.strict_syntax = ([sender state]==NSOnState);
 			if (olde != conf.strict_syntax) {
 				[prefs setObject:(conf.strict_syntax?@"YES":@"NO") forKey:@"strictSyntax"];
 			}
-				break;
+				break;*/
 		case 10: // Rounding Indication
 			olde = conf.rounding_indication;
 			conf.rounding_indication = [sender indexOfSelectedItem];
@@ -662,6 +662,11 @@ NSTextField *ef;
 	[thePrefPanel setFrameAutosaveName:@"wcalc_prefs"];
 }
 
+- (IBAction)new:(id)sender
+{
+	NSOpenPanel * foo = [NSOpenPanel openPanel];
+}
+
 - (IBAction)displayPrefs:(id)sender
 {
 	[engineeringNotation setState:(conf.engineering?NSOnState:NSOffState)];
@@ -670,7 +675,7 @@ NSTextField *ef;
 	[useRadians setState:(conf.use_radians?NSOnState:NSOffState)];
 	[outputFormat selectCellWithTag:conf.output_format];
 	[printPrefixes setState:(conf.print_prefixes?NSOnState:NSOffState)];
-	[strictSyntax setState:(conf.strict_syntax?NSOnState:NSOffState)];
+/*	[strictSyntax setState:(conf.strict_syntax?NSOnState:NSOffState)]; */
 	[roundingIndication selectItemAtIndex:conf.rounding_indication];
 	[rememberErrors setState:(conf.remember_errors?NSOnState:NSOffState)];
 	[limitHistory setState:(conf.history_limit?NSOnState:NSOffState)];
@@ -682,7 +687,7 @@ NSTextField *ef;
 
 	{
 	    char len[6];
-	    sprintf(len,"%i",conf.history_limit_len);
+	    sprintf(len,"%lu",conf.history_limit_len);
 	    [limitHistoryLen setStringValue:[NSString stringWithFormat:@"%s",len]];
 	}
 }

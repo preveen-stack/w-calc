@@ -70,4 +70,5 @@
 - (IBAction)showBaseDrawer:(id)sender;
 - (IBAction)shConversions:(id)sender;
 - (IBAction)convert:(id)sender;
+- (IBAction)new:(id)sender;
 @end
