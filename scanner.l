@@ -46,10 +46,12 @@ ACCEPTABLE	[_:]
 \\dsep.                 { yylval.character = yytext[5]; return(DSEP_CMD); }
 \\e(ng(ineering)?)?{DIGIT}*		{ char * foo = yytext;
 	while (*foo && ! isdigit(*foo)) ++foo;
-	yylval.number = atoi(foo);
+	if (*foo != 0) yylval.number = atoi(foo);
+	else yylval.number = -1;
 	return(ENG_CMD);}
 \\cons(ervative)?       { return(GUARD_CMD); }
 \\h(ex(adecimal)?)?     { return(HEX_CMD); }
+\\help                  { return(PRINT_HELP_CMD); }
 \\hlimit{DIGIT}+        { yylval.number = atoi(yytext+7); return(HLIMIT_CMD); }
 \\x                     { return(HEX_CMD); }
 \\l(enient)?            { return(PICKY_CMD); }
@@ -57,10 +59,10 @@ ACCEPTABLE	[_:]
 \\o(ct(al)?)?           { return(OCT_CMD); }
 \\p({DIGIT}|[-])+       { yylval.number = atoi(yytext+2); return(PRECISION_CMD);}
 \\p(icky)?              { return(PICKY_CMD); }
-\\pr(ef(s|erences))?    { return(DISPLAY_PREFS_CMD); }
+\\pre(fix(es)?)?        { return(PREFIX_CMD); }
+\\pref(s|erences)?      { return(DISPLAY_PREFS_CMD); }
 \\r(ad(ians)?)?         { return(RADIAN_CMD); }
 \\re(member(_errors)?)? { return(REMEMBER_CMD); }
-\\s(tr(ict)?)?          { return(STRICT_CMD); }
 \\tsep.                 { yylval.character = yytext[5]; return(TSEP_CMD); }
 \\c(onv(ert)?)?{WHITESPACE}+{LETTER}+{WHITESPACE}+{LETTER}+{WHITESPACE}+{LETTER}+ {}
 \?                      { return(PRINT_HELP_CMD); }

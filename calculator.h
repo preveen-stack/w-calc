@@ -70,7 +70,6 @@ struct _conf {
 	int precision;
 	unsigned int engineering:1;
 	unsigned int picky_variables:1;
-	unsigned int strict_syntax:1;
 	unsigned int use_radians:1;
 	unsigned int output_format:4;
 	unsigned int print_prefixes:1;

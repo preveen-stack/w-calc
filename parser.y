@@ -46,8 +46,8 @@ char character;
 }
 
 %token DEC_CMD OCT_CMD HEX_CMD BIN_CMD GUARD_CMD DISPLAY_PREFS_CMD
-%token RADIAN_CMD PICKY_CMD STRICT_CMD REMEMBER_CMD LISTVAR_CMD
-%token PRINT_HELP_CMD
+%token RADIAN_CMD PICKY_CMD REMEMBER_CMD LISTVAR_CMD
+%token PRINT_HELP_CMD PREFIX_CMD
 %token <number> PRECISION_CMD ENG_CMD HLIMIT_CMD
 
 %token EOLN PAR REN WBRA WKET WSBRA WSKET WPIPE
@@ -189,7 +189,6 @@ command : HEX_CMD {
 		printf("       Engineering Output: %s\n",conf.engineering?"yes":"no");
 		printf("            Output Format: %s\n",output_string(conf.output_format));
 		printf("Flag Undeclared Variables: %s\n",conf.picky_variables?"yes":"no");
-		printf("            Strict Syntax: %s\n",conf.strict_syntax?"yes":"no");
 		printf("              Use Radians: %s\n",conf.use_radians?"yes":"no");
 		printf("           Print Prefixes: %s\n",conf.print_prefixes?"yes":"no");
 		printf("      Rounding Indication: %s\n",conf.rounding_indication?"yes":"no");
@@ -252,11 +251,11 @@ command : HEX_CMD {
 	}
 	if (standard_output)
 		printf("Engineering notation is %s %s\n",conf.engineering?"enabled":"disabled", (conf.precision==-1)?"":"if the precision is set");}
-| STRICT_CMD {
+| PREFIX_CMD {
 	$$ = nothing;
-	conf.strict_syntax = ! conf.strict_syntax;
+	conf.print_prefixes = ! conf.print_prefixes;
 	if (standard_output)
-		printf("%s Syntax\n",conf.strict_syntax?"Strict":"Forgiving");
+		printf("Will %sprint number prefixes\n",conf.print_prefixes?"":"not ");
 }
 | REMEMBER_CMD {
 	$$ = nothing;

@@ -301,8 +301,6 @@ int read_prefs(char * filename)
 			conf.engineering = TRUEFALSE;
 		else if (!strcmp(key,"flag_undeclared"))
 			conf.picky_variables = TRUEFALSE;
-		else if (!strcmp(key,"strict_syntax"))
-			conf.strict_syntax = TRUEFALSE;
 		else if (!strcmp(key,"use_radians"))
 			conf.use_radians = TRUEFALSE;
 		else if (!strcmp(key,"print_prefixes"))

@@ -12,10 +12,6 @@ engineering = false
 # true/false or yes/no
 flag_undeclared = yes
 
-# Don't think it does anything at the moment
-# true/false or yes/no
-strict_syntax = yes
-
 # Whether trig functions use radians or not
 # true/false or yes/no
 use_radians = no
