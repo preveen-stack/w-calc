@@ -6,6 +6,15 @@
 #endif
 #include "definitions.h"
 
+#ifdef EBUG
+#include <stdio.h>
+#define Dprintf(fmt, ...) \
+	fprintf(stderr, "[%s:%d] " fmt, __FILE__, __LINE__, ##__VA_ARGS__); \
+	fflush(stderr);
+#else
+#define Dprintf(fmt, ...) ;
+#endif
+
 enum functions {wnot,
 	wbnot,
 	wsin,
