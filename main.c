@@ -96,6 +96,7 @@ int main (int argc, char *argv[])
 		sprintf(filename,"%s/.wcalcrc",getenv("HOME"));
 		if (read_prefs(filename))
 			perror("Writing Preferences");
+		free(filename)
 	}
 
 	/* Parse commandline options */
