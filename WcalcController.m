@@ -225,6 +225,9 @@ NSTextField *ef;
 	conf.charunkey[([[prefs objectForKey:NSDecimalSeparator] characterAtIndex:0])] = '.';
 	conf.charkey[','] = [[prefs objectForKey:NSThousandsSeparator] characterAtIndex:0];
 	conf.charunkey[([[prefs objectForKey:NSThousandsSeparator] characterAtIndex:0])] = ',';
+	
+	conf.dec_delimiter = [[prefs objectForKey:NSDecimalSeparator] characterAtIndex:0];
+	conf.thou_delimiter = [[prefs objectForKey:NSThousandsSeparator] characterAtIndex:0];
 
 	/* reset the window to the saved setting */
 	superview = [keypad superview];
@@ -327,6 +330,8 @@ NSTextField *ef;
 	}
 	/* if there is an error, display it */
 	if (errstring && strlen(errstring)) {
+	    extern int scanerror;
+	    scanerror = 0;
 		[errorController throwAlert:[NSString stringWithCString:errstring]];
 		free(errstring);
 		errstring = NULL;

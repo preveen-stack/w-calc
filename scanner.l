@@ -289,7 +289,11 @@ cbrt { return(WCBRT); }
 	char err[strlen(yytext)+25];
 	int i;
 	for (i=0;i<strlen(yytext);++i) {
-		yytext[i] = conf.charunkey[(int)yytext[i]];
+	    if (yytext[i] == ',')
+		yytext[i] = conf.thou_delimiter;
+	    else if (yytext[i] == '.')
+		yytext[i] = conf.dec_delimiter;
+//		yytext[i] = conf.charunkey[(int)yytext[i]];
 	}	
 	sprintf(err,"Confusing number format (%s)",yytext);
 	report_error(err);

@@ -75,7 +75,11 @@ double parseme (char * pthis)
 	
 	/* Convert to standard notation via lookuptable */
 	for (i=0;i<strlen(sanitized);++i) {
-		sanitized[i] = conf.charkey[(int)sanitized[i]];
+            if (sanitized[i] == conf.thou_delimiter)
+                sanitized[i] = ',';
+            else if (sanitized[i] == conf.dec_delimiter)
+                sanitized[i] = '.';
+//		sanitized[i] = conf.charkey[(int)sanitized[i]];
 	}
 
 	/* Now, eliminate recursion */
@@ -359,9 +363,11 @@ char *print_this_result (double result)
 
 	if (standard_output) {
 		if (errstring && strlen(errstring)) {
+                    extern int scanerror;
 			fprintf(stderr,"%s\n",errstring);
 			free(errstring);
 			errstring = NULL;
+                        scanerror = 0;
 		}
 		printf(" = %s\n",pa);
 	}

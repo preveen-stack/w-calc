@@ -127,6 +127,7 @@ int main (int argc, char *argv[])
 					conf.charkey[(int)readme[5]] = '.';
 					conf.charunkey[(int)'.'] = readme[5];
 					olddsep = readme[5];
+					conf.dec_delimiter = readme[5];
 					if (conf.charkey[(int)','] != ',' && readme[5]!='.') {
 						conf.charkey[(int)'.'] = '@';
 						conf.charunkey[(int)'@'] = '.';
@@ -140,6 +141,7 @@ int main (int argc, char *argv[])
 					conf.charkey[(int)readme[5]] = ',';
 					conf.charunkey[(int)','] = readme[5];
 					oldtsep = readme[5];
+					conf.thou_delimiter = readme[5];
 					if (conf.charkey[(int)','] != '.' && readme[5]!=',') {
 						conf.charkey[(int)','] = '#';
 						conf.charunkey[(int)'#'] = ',';
