@@ -15,6 +15,7 @@
 #include <errno.h>
 #include "calculator.h"
 #include "parser.h"
+#include "string_manip.h"
 
 	extern short scanerror;
 	extern short use_commas;
@@ -40,10 +41,11 @@ ACCEPTABLE	[_:]
 %{ /* These are commands */
 %}
 
-\\h((ex)|(exadecimal))?		{ return(HEX_CMD); }
-\\o((ct)|(ctal))?			{ return(OCT_CMD); }
-\\d((ec)|(ecimal))?			{ return(DEC_CMD); }
-\\b((in)|(inary))?			{ return(BIN_CMD); }
+\\h(ex(adecimal)?)?		{ return(HEX_CMD); }
+\\o(ct(al)?)?			{ return(OCT_CMD); }
+\\d(ec(imal)?)?			{ return(DEC_CMD); }
+\\b(in(ary)?)?			{ return(BIN_CMD); }
+\\c(omma(s)?)?			{ return(COMMA_CMD); }
 
 %{ /* These are the constants (except random) */
 	%}
@@ -142,29 +144,52 @@ floor { return(WFLOOR); }
 %{ /* international */
 %}
 
-({DIGIT}{0,3}[.,]{DIGIT}{3})(e[+-]?{DIGIT}+)? {
-	char strip = use_commas?'.':',', repl = use_commas?',':'.', *left, *right;
+({NDIGIT}{DIGIT}{0,2}[.,]{DIGIT}{3})(e[+-]?{DIGIT}+)? {
+	char strip = use_commas?'.':',';
+	extern int yydebug;
 
 	/* take out the ignored char */
-	for (left=right=yytext; *right; ++right) {
-		if (*right && *right != strip) {
-			*left = *right;
-			++left;
-		}
-	}
-	while (left != right) { *left = 0; ++left; }
-
+	strstrip(strip, yytext);
 	/* convert commas to periods if necessary for correct parsing */
-	if (use_commas && strchr(yytext,repl)) {
-		*strchr(yytext,repl) = strip;
-	}
+	if (use_commas)
+		strswap(',', '.', yytext);
 	
-	printf("ambiguous %s\n", yytext);
+	if (yydebug)
+		printf("ambiguous %s\n", yytext);
+
+	yylval.number = strtod(yytext,NULL);
+	
+	if (fabs(yylval.number) == HUGE_VAL)
+		report_error(strerror(errno));
+	
+	return(NUMBER);
+}
+
+(0?[.,]{DIGIT}+) {
+	char err[strlen(yytext)+50];
+	
+	if (strchr(yytext,',') && ! use_commas) {
+		sprintf(err,"Incorrect number format (%s) - expected period (.)", yytext);
+		report_error(err);
+		yylval.number=0;
+		return(NUMBER);
+	} else if (strchr(yytext,'.') && use_commas) {
+		sprintf(err,"Incorrect number format (%s) - expected comma (,)", yytext);
+		report_error(err);
+		yylval.number=0;
+		return(NUMBER);
+	}
+
+	strswap(',','.',yytext);
+
+	yylval.number = strtod(yytext,NULL);
+	return(NUMBER);	
 }
 
 (({NDIGIT}(({DIGIT}*)|({DIGIT}{0,2}([,]{DIGIT}{3})+)))|({NDIGIT}(({DIGIT}*)|({DIGIT}{0,2}([,]{DIGIT}{3})+))[.]{DIGIT}+))(e[+-]?{DIGIT}+)? {
+	char strip = ',', *left, *right;
 	char err[strlen(yytext)+50];
-//	printf("american %s\n", yytext);
+	extern int yydebug;
 
 	if (use_commas && ((strchr(yytext,',') && strchr(yytext,'.')) || yytext[strlen(yytext)-1]==',')) {
 		sprintf(err,"Incorrect number format (%s) - expected comma (,)", yytext);
@@ -172,7 +197,22 @@ floor { return(WFLOOR); }
 		yylval.number = 0;
 		return(NUMBER);
 	}
+
+	/* strip out ignored characters */
+	for (left=right=yytext; *right; ++right) {
+		if (*right && *right != strip) {
+			*left = *right;
+			++left;
+		}
+	}
+	while (left != right) { *left = 0; ++left; }
 	
+	if (yydebug) printf("american %s\n", yytext);
+
+	yylval.number = strtod(yytext,NULL);
+	if (fabs(yylval.number) == HUGE_VAL)
+		report_error(strerror(errno));
+	return(NUMBER);
 }
 
 (({NDIGIT}(({DIGIT}*)|({DIGIT}{0,2}([.]{DIGIT}{3})+)))|({NDIGIT}(({DIGIT}*)|({DIGIT}{0,2}([.]{DIGIT}{3})+))[,]{DIGIT}+))(e[+-]?{DIGIT}+)? {
@@ -185,7 +225,7 @@ floor { return(WFLOOR); }
 	printf("non-american %s\n", yytext);
 
 	if (! use_commas) {
-		sprintf(err,"Incorrect number format (%s) - expected period (.)", yytext);
+		sprintf(err,"Incorrect number format (%s)", yytext);
 		report_error(err);
 		yylval.number = 0;
 		return(NUMBER);

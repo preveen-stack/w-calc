@@ -125,9 +125,6 @@ int main (int argc, char *argv[])
 				} else if (!strncmp(readme,"\\radians",8)) {
 					use_radians = ! use_radians;
 					printf("%sUsing Radians\n",use_radians?"":"Not ");
-				} else if (!strncmp(readme,"\\commas",7)) {
-					use_commas = ! use_commas;
-					printf("%s are the decimal delineation.\n", use_commas?"Commas (,)":"Periods (.)");
 				} else if (!strncmp(readme,"\\lenient",7)) {
 					picky_variables = ! picky_variables;
 					if (! picky_variables) {
@@ -145,6 +142,8 @@ int main (int argc, char *argv[])
 				{ extern char * errstring;
 				if (errstring && strlen(errstring)) {
 					fprintf(stderr,"%s",errstring);
+					if (errstring[strlen(errstring)-1] != '\n')
+						fprintf(stderr,"\n");
 					free(errstring);
 					errstring=NULL;
 				}
