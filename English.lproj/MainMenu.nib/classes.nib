@@ -23,7 +23,7 @@
         }, 
         {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {
-            ACTIONS = {rowSelected = id; }; 
+            ACTIONS = {clearHistory = id; rowSelected = id; }; 
             CLASS = HistoryList; 
             LANGUAGE = ObjC; 
             OUTLETS = {expressionField = NSTextField; theList = NSTableView; }; 
@@ -52,7 +52,7 @@
             SUPERCLASS = NSObject; 
         }, 
         {
-            ACTIONS = {delVariable = id; newVariable = id; }; 
+            ACTIONS = {clearVariables = id; delVariable = id; newVariable = id; }; 
             CLASS = VariableList; 
             LANGUAGE = ObjC; 
             OUTLETS = {theList = NSTableView; }; 

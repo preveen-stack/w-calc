@@ -140,6 +140,7 @@
 				4A9504CCFFE6A4B311CA0CBA,
 				4A9504CDFFE6A4B311CA0CBA,
 			);
+			hasScannedForEncodings = 1;
 			isa = PBXProject;
 			mainGroup = 29B97314FDCFA39411CA2CEA;
 			projectDirPath = "";
@@ -173,6 +174,7 @@
 			refType = 4;
 		};
 		29B97316FDCFA39411CA2CEA = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = main.m;
 			refType = 4;
@@ -241,8 +243,8 @@
 			productName = Wcalc;
 			productReference = 17587328FF379C6511CA2CBB;
 			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-<!DOCTYPE plist SYSTEM \"file://localhost/System/Library/DTDs/PropertyList.dtd\">
-<plist version=\"0.9\">
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
@@ -273,7 +275,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 1;
 		};
 		29B97327FDCFA39411CA2CEA = {
 			buildActionMask = 2147483647;
@@ -294,6 +295,7 @@
 				F5A165F9030711ED01A80164,
 			);
 			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		29B97328FDCFA39411CA2CEA = {
 			buildActionMask = 2147483647;
@@ -306,6 +308,7 @@
 				F5463561020065B401A80164,
 			);
 			isa = PBXResourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		29B9732BFDCFA39411CA2CEA = {
 			buildActionMask = 2147483647;
@@ -328,6 +331,7 @@
 				F5A165FA030711ED01A80164,
 			);
 			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		29B9732CFDCFA39411CA2CEA = {
 			fileRef = 29B97316FDCFA39411CA2CEA;
@@ -344,6 +348,7 @@
 				F510EE8D021716B401A80164,
 			);
 			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 //290
 //291
@@ -361,7 +366,6 @@
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
 				OPTIMIZATION_CFLAGS = "-O0";
-				USE_GCC3 = YES;
 			};
 			isa = PBXBuildStyle;
 			name = Development;
@@ -448,7 +452,6 @@
 			name = wcalc;
 			productName = wcalc;
 			productReference = F521993301F8D28701A80164;
-			shouldUseHeadermap = 0;
 		};
 		F521993501F8D28801A80164 = {
 			buildActionMask = 2147483647;
@@ -460,6 +463,7 @@
 				F5DD321B02F8F43501A80164,
 			);
 			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F521993601F8D28801A80164 = {
 			fileRef = F5B29D6601F7391601A80164;
@@ -485,6 +489,7 @@
 				F5DD321A02F8F43501A80164,
 			);
 			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F521993901F8D28801A80164 = {
 			fileRef = F5B29D6501F7391601A80164;
@@ -518,14 +523,17 @@
 				F57B9A980267F76201A80164,
 			);
 			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F521993E01F8D28801A80164 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXRezBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F521993F01F8D2B801A80164 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = main.c;
 			refType = 4;
@@ -537,6 +545,7 @@
 			};
 		};
 		F521994301FA86B001A80164 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = VariableList.m;
 			refType = 4;
@@ -548,6 +557,7 @@
 			};
 		};
 		F521994601FA8EC401A80164 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = VariableList.h;
 			refType = 4;
@@ -559,16 +569,19 @@
 			};
 		};
 		F521994801FA927601A80164 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ChangeLog;
 			refType = 4;
 		};
 		F5293926023032E201A80164 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = string_manip.h;
 			refType = 4;
 		};
 		F5293927023032E201A80164 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = string_manip.c;
 			refType = 4;
@@ -615,11 +628,13 @@
 			};
 		};
 		F574E09901FD0FD701A80164 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = HistoryList.h;
 			refType = 4;
 		};
 		F574E09A01FD0FD701A80164 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = HistoryList.m;
 			refType = 4;
@@ -637,11 +652,13 @@
 			};
 		};
 		F574E09D01FD122F01A80164 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = historyManager.h;
 			refType = 4;
 		};
 		F574E09E01FD122F01A80164 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = historyManager.c;
 			refType = 4;
@@ -670,11 +687,13 @@
 			};
 		};
 		F5A165F7030711ED01A80164 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ConversionList.h;
 			refType = 4;
 		};
 		F5A165F8030711ED01A80164 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ConversionList.m;
 			refType = 4;
@@ -694,27 +713,29 @@
 		F5B29D6001F738F601A80164 = {
 			children = (
 				F5DEAE8F021254A501A80164,
-				F5B29D6501F7391601A80164,
 				F5B29D6601F7391601A80164,
-				F5B29D7301F7394501A80164,
+				F5B29D6501F7391601A80164,
 				F5B29D7401F7394501A80164,
+				F5B29D7301F7394501A80164,
 				F5B29D6D01F7393A01A80164,
 				F5B29D6E01F7393A01A80164,
 				F5293926023032E201A80164,
 				F5293927023032E201A80164,
-				F5DD321602F8F43501A80164,
 				F5DD321702F8F43501A80164,
+				F5DD321602F8F43501A80164,
 			);
 			isa = PBXGroup;
 			name = Math;
 			refType = 4;
 		};
 		F5B29D6101F7391001A80164 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = AboutBoxController.h;
 			refType = 4;
 		};
 		F5B29D6201F7391001A80164 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = AboutBoxController.m;
 			refType = 4;
@@ -732,11 +753,13 @@
 			};
 		};
 		F5B29D6501F7391601A80164 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = calculator.c;
 			refType = 4;
 		};
 		F5B29D6601F7391601A80164 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = calculator.h;
 			refType = 4;
@@ -754,11 +777,13 @@
 			};
 		};
 		F5B29D6901F7392301A80164 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ErrorController.h;
 			refType = 4;
 		};
 		F5B29D6A01F7392301A80164 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ErrorController.m;
 			refType = 4;
@@ -776,11 +801,13 @@
 			};
 		};
 		F5B29D6D01F7393A01A80164 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = parser.y;
 			refType = 4;
 		};
 		F5B29D6E01F7393A01A80164 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = scanner.l;
 			refType = 4;
@@ -803,11 +830,13 @@
 			};
 		};
 		F5B29D7301F7394501A80164 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = variables.c;
 			refType = 4;
 		};
 		F5B29D7401F7394501A80164 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = variables.h;
 			refType = 4;
@@ -825,11 +854,13 @@
 			};
 		};
 		F5B29D7701F7395001A80164 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = WcalcController.h;
 			refType = 4;
 		};
 		F5B29D7801F7395001A80164 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = WcalcController.m;
 			refType = 4;
@@ -891,11 +922,13 @@
 			};
 		};
 		F5D446D00263B46801A80164 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = MyTextField.h;
 			refType = 4;
 		};
 		F5D446D10263B46801A80164 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = MyTextField.m;
 			refType = 4;
@@ -907,11 +940,13 @@
 			};
 		};
 		F5DD321602F8F43501A80164 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = conversion.c;
 			refType = 4;
 		};
 		F5DD321702F8F43501A80164 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = conversion.h;
 			refType = 4;
@@ -947,6 +982,7 @@
 			};
 		};
 		F5DEAE8F021254A501A80164 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = definitions.h;
 			refType = 4;
@@ -964,11 +1000,13 @@
 			};
 		};
 		F5EF54D202022A7001A80164 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = theDelegate.m;
 			refType = 4;
 		};
 		F5EF54D302022A7001A80164 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = theDelegate.h;
 			refType = 4;

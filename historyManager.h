@@ -3,7 +3,7 @@
  *  Wcalc
  *
  *  Created by Kyle Wheeler on Mon Jan 21 2002.
- *  Copyright (c) 2001 __MyCompanyName__. All rights reserved.
+ *  Copyright (c) 2001 Kyle Wheeler. All rights reserved.
  *
  */
 
