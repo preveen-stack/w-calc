@@ -14,3 +14,4 @@ char * historynum(int,int);
 int history_length(void);
 
 extern short allow_duplicates;
+extern short recalculate;

@@ -12,16 +12,22 @@
 
 /* Configuration Variables */
 short allow_duplicates = 0;
+short recalculate = 0;
 
 /* Data Types */
 struct entry {
 	char * exp;
 	double ans;
+	unsigned int calc:1;
 };
 
 /* Private Variables */
 static struct entry *history = NULL;
 static int histlen = 0;
+
+/* Private Functions */
+static int all_calculated (void);
+static void clear_calculated (void);
 
 void addToHistory(char * expression, double answer)
 {
@@ -60,8 +66,34 @@ char * historynum (int step, int col)
 	if (col == 1)
 		return history[step].exp;
 	else {
-		char * temp = print_this_result(history[step].ans);
+		char * temp;
+		if (recalculate) {
+			history[step].ans = parseme(history[step].exp);
+			history[step].calc = 1;
+			if (all_calculated()) {
+				recalculate = 0;
+				clear_calculated();
+			}
+		}
+		temp = print_this_result(history[step].ans);
 		return (temp?temp:"Not Enough Memory");
+	}
+}
+
+static int all_calculated (void)
+{
+	int i,ret=0;
+	for (i=0;i<histlen;++i) {
+		if (history[i].calc) ++ret;
+	}
+	return (ret == histlen);
+}
+
+static void clear_calculated (void)
+{
+	int i;
+	for (i=0;i<histlen;++i) {
+		history[i].calc = 0;
 	}
 }
 

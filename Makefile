@@ -55,7 +55,7 @@ parser.h: y.tab.h
 lex.yy.c : scanner.l parser.h ${HFILE}
 	lex scanner.l
 lex.yy.o: lex.yy.c
-	${CC} -g -c -Wno-long-double lex.yy.c
+	${CC} -g -c lex.yy.c
 
 #
 # File dependencies

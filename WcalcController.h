@@ -27,6 +27,7 @@
 	IBOutlet NSButton *useRadians;
 	IBOutlet NSMatrix *outputFormat;
 	IBOutlet NSPanel *thePrefPanel;
+	IBOutlet NSButton *updateHistory;
 
 	bool just_answered;
 	NSView *superview;

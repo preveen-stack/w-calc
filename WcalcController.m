@@ -3,7 +3,6 @@
 #import "ErrorController.h"
 #import "historyManager.h"
 #import "WcalcController.h"
-//#import <Foundation/NSRange.h>
 
 #define KEYPAD_HEIGHT 165
 #define MIN_WINDOW_WIDTH 171
@@ -11,6 +10,8 @@
 #define MIN_WINDOW_HEIGHT_UNTOGGLED 283
 #define FIELD_WIDTH_DIFFERENCE 22
 #define MAX_WINDOW_SIZE 10000
+
+static char update_history = 0;
 
 @implementation WcalcController
 
@@ -185,6 +186,7 @@
 		[prefs setObject:@"YES" forKey:@"useRadians"];
 		[prefs setObject:@"0" forKey:@"outputFormat"];
 		[prefs setObject:@"NO" forKey:@"printPrefixes"];
+		[prefs setObject:@"NO" forKey:@"updateHistory"];
 	}
 	precision = [prefs integerForKey:@"precision"];
 	engineering = [prefs boolForKey:@"engineeringNotation"];
@@ -194,6 +196,7 @@
 	output_format = [prefs integerForKey:@"outputFormat"];
 	[PrecisionSlider setEnabled:(output_format==DECIMAL_FORMAT)];
 	print_prefixes = [prefs boolForKey:@"printPrefixes"];
+	update_history = [prefs boolForKey:@"updateHistory"];
 	
 	[PrecisionSlider setIntValue:precision];
 	just_answered = FALSE;
@@ -370,14 +373,14 @@
 	switch ([sender tag]) {
 		case 1: // Flag Undefined Variables
 			olde = picky_variables;
-			picky_variables = ([pickyVariables state] == NSOffState)?0:1;
+			picky_variables = ([pickyVariables state]==NSOnState);
 			if (olde != picky_variables) {
 				[prefs setObject:(picky_variables?@"YES":@"NO") forKey:@"flagUndefinedVariables"];
 			}
 				break;
 		case 2: // Use Radians
 			olde = use_radians;
-			use_radians = ([useRadians state] == NSOffState)?0:1;
+			use_radians = ([useRadians state]==NSOnState);
 			if (olde != use_radians) {
 				need_redraw = 2;
 				[prefs setObject:(use_radians?@"YES":@"NO") forKey:@"useRadians"];
@@ -385,10 +388,17 @@
 				break;
 		case 3: // Use Engineering Notation
 			olde = engineering;
-			engineering = ([engineeringNotation state] == NSOffState)?0:1;
+			engineering = ([engineeringNotation state]==NSOnState);
 			if (olde != engineering) {
 				need_redraw = 1;
 				[prefs setObject:(engineering?@"YES":@"NO") forKey:@"engineeringNotation"];
+			}
+				break;
+		case 4: // Allow Duplicates in History
+			olde = allow_duplicates;
+			allow_duplicates = ([historyDuplicates state]==NSOnState);
+			if (olde != allow_duplicates) {
+				[prefs setObject:(allow_duplicates?@"YES":@"NO") forKey:@"historyDuplicatesAllowed"];
 			}
 				break;
 		case 5: // Output Format
@@ -409,17 +419,22 @@
 				need_redraw = 1;
 				[prefs setObject:(print_prefixes?@"YES":@"NO") forKey:@"printPrefixes"];
 			}
-			case 4: // Allow Duplicates in History
-				olde = allow_duplicates;
-				allow_duplicates = ([historyDuplicates state] == NSOffState)?0:1;
-				if (olde != allow_duplicates) {
-					[prefs setObject:(allow_duplicates?@"YES":@"NO") forKey:@"historyDuplicatesAllowed"];
-				}
-					break;
-			default: return;
+				break;
+		case 7: // Update History
+			olde = update_history;
+			update_history = ([sender state]==NSOnState);
+			if (olde != update_history) {
+				[prefs setObject:(update_history?@"YES":@"NO") forKey:@"updateHistory"];
+			}
+			break;
+		default: return;
 	}
 
 	switch (need_redraw) {
+		case 2:
+			if (update_history)
+				recalculate = 1;
+			[self go:sender];
 		case 1:
 		{
 			char *temp;
@@ -432,23 +447,25 @@
 				pretty_answer = NULL;
 
 			[AnswerField setStringValue:[NSString stringWithCString:(pretty_answer?pretty_answer:"Not Enough Memory")]];
-			[historyList reloadData];
 
+			if ([theDrawer state] || recalculate) {
+				[historyList reloadData];
+			}
+			
 			[ExpressionField selectText:self];
 			break;
 		}
-		case 2:
-			[self go:sender];
-			break;
+//		case 2:
+//			[self go:sender];
+//			break;
     }
 }
 
 - (IBAction)showPrefs:(id)sender
 {
 	[self displayPrefs:sender];
-//	[thePrefPanel setBecomesKeyOnlyIfNeeded:TRUE];
 	[thePrefPanel makeKeyAndOrderFront:self];
-//    [thePrefPanel orderFront:self];
+	// centering may not be necessary, but...
     [thePrefPanel center];
 }
 
