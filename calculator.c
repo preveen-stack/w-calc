@@ -145,6 +145,7 @@ char * flatten (char * str)
 			++ncurs1;
 			++ncurs2;
 		}
+		curs = ncurs2;
 		ncurs1 = eov;
 		while (ncurs1 && *ncurs1) {
 			*ncurs2 = *ncurs1;
@@ -154,7 +155,6 @@ char * flatten (char * str)
 		*ncurs2 = 0;
 		free(str);
 		str = nstr;
-		curs = str;
 	}
 	return str;
 }
