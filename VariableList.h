@@ -11,4 +11,5 @@
 - (void)tableView:(NSTableView*)aTableView setObjectValue:(id)anObject forTableColumn:(NSTableColumn*)aTableColumn row:(int)rowIndex;
 - (IBAction)newVariable:(id)sender;
 - (IBAction)delVariable:(id)sender;
+- (IBAction)clearVariables:(id)sender;
 @end

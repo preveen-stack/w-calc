@@ -29,6 +29,14 @@ static int histlen = 0;
 static int all_calculated (void);
 static void clear_calculated (void);
 
+void clearHistory()
+{
+    if (histlen) {
+	free(history);
+	histlen = 0;
+    }
+}
+
 void addToHistory(char * expression, double answer)
 {
 	if (! histlen) {

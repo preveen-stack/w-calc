@@ -82,4 +82,16 @@
 		[theList reloadData];
 	}
 }
+
+- (IBAction)clearVariables:(id)sender
+{
+    extern int contents;
+    int i, total=contents;
+
+    for (i=0; i<total; ++i) {
+	delnvar(0);
+    }
+    [theList reloadData];
+}
+
 @end

@@ -8,6 +8,7 @@
 	return history_length();
 }
 
+/* returns the correct text for a given column and row */
 - (id)tableView:(NSTableView *)atv objectValueForTableColumn:(NSTableColumn*)col row:(int)rowIndex
 {
 	char * val;
@@ -31,6 +32,12 @@
 		[expressionField setStringValue:[NSString stringWithCString:historynum([sender selectedRow],1)]];
 	}
 	[expressionField selectText:self];
+}
+
+- (IBAction)clearHistory:(id)sender
+{
+    clearHistory();
+    [theList reloadData];
 }
 
 @end
