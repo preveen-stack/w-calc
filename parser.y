@@ -47,7 +47,7 @@ char * variable;
 %token WSIN WCOS WTAN WASIN WACOS WATAN WSINH WCOSH WTANH WASINH WACOSH WATANH
 
 %token <number> NUMBER
-%token <variable> VAR
+%token <variable> VAR STRING
 
 %type <number> exp exp_l2 exp_l3 exp_l4
 %type <number> oval capsule sign
@@ -206,6 +206,27 @@ assignment : VAR WEQL exp
 		report_error("Scanner error halts parser.");
 	}
 	free($1);
+}
+| VAR WEQL STRING
+{
+	if (compute && ! scanerror) {
+		if (standard_output && !strcmp($1,"q")) {
+			printf("q cannot be assigned a value. q is used to exit.\n");
+		} else {
+			if (putexp($1,$3) == 0) {
+				if (standard_output) {
+					printf("%s = %s\n", $1, getvar_full($1).exp);
+				}
+			} else {
+				report_error("There was a problem assigning variables.");
+			}
+		}
+	} else {
+		scanerror = 0;
+		report_error("Scanner error halts parser.");
+	}
+	free($1);
+	free($3);
 }
 ;
 

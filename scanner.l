@@ -152,6 +152,13 @@ floor { return(WFLOOR); }
 (ceil)|(ceiling) { return(WCEIL); }
 cbrt { return(WCBRT); }
 
+'.*' {
+	char * temp = strdup(yytext+1);
+	temp[strlen(temp)-1] = 0;
+	yylval.variable = temp;
+	return(STRING);
+}
+
 {LETTER}+({LETTER}|{ACCEPTABLE})* {
 	yylval.variable = strdup(yytext);
 	return(VAR);
