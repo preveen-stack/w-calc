@@ -308,6 +308,8 @@ static char * flatten (char * str)
 				++fromstring;
 				++tostring;
 			}
+			*tostring = ')';
+			++tostring;
 			curs = tostring;
 			fromstring = eov;
 			while (fromstring && *fromstring) {
