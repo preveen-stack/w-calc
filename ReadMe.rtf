@@ -7,7 +7,7 @@
 
 \f0\fs28 \cf0 Hello!\
 \
-This is Wcalc 1.4.4!\
+This is Wcalc 1.4.5!\
 \
 1. What's New\
 2. Intro\
@@ -22,32 +22,25 @@ This is Wcalc 1.4.4!\
 **************
 \f0\b0 \
 \
-There was a really terrible bug in my clamp-warning code. It's fixed.\
+A lot of changes here - mostly bugfixes (there are *always* more <sigh>)\
 \
-Quick story:\
-Basically, I wanted to tell people when I threw away extra digits that were smaller than the calculator could handle. Unfortunately this is preposterous. So there were "value rounded, possibly inaccurate" messages all over the place.\
+NEW FEATURE: Rewrote the number parser. Now handles commas correctly in all cases (i.e. 1,000 is either 1000 or 1 depending on the comma preference). Flags confusing numbers (e.g. 098 or 1.0.1)\
 \
-I really need to have a regiment of tests for this thing...\
+NEW FEATURE: Command-line commands (like \\commas or \\hex or \\p4) now work everywhere - the GUI as well as in files that you pipe into the command-line version.\
 \
-Anyway - Here's the stuff from 1.4.3:\
+NEW FEATURE: Added support for some more symbols (\'b3, \'b2, and \'ad).\
 \
-This version I fixed some stuff I'm astonished that I (and nobody else) found earlier:\
+NEW FEATURE: p and e are not reserved variable names in the CLI anymore.\
 \
-BUG FIX: Fixed the scanner (0.9 now means 0.9 and not 0 * .9) (BOTH)\
+BUGFIX: Made preference panel and keyboard panel placement more common-sense.\
 \
-BUG FIX: Fixed a rounding error (negative decimals were getting removed!) (BOTH)\
+BUGFIX: Fixed a crash in the comma-output printing.\
 \
-And just to round things out, I added a few small things:\
+BUGFIX: Fixed a crash in the precision routines.\
 \
-NEW FEATURE: Output can be formatted with commas instead of periods (BOTH)\
+BUGFIX: CLI prints all errors now (used to ignore some errors).\
 \
-NEW FEATURE: Added error-reporting to the commandline (CLI)\
-\
-NEW FEATURE: History redisplay is more functional and also configurable (GUI)\
-\
-The thing to do now is FILES (unless there are more bugs). This is, apparently, hard to do perfectly. We'll see. It's also been suggested that I map the "clear" button on the keypad to the "clear" function... this involves getting waist-deep in Apple's event handling (I think). If anyone has any advice on this one, I'd love to hear it.\
-\
-Comments? Suggestions? Let me know!\
+BUGFIX: Fixed the menu's tracking of the state of the drawer (it was backwards).\
 \
 
 \f1\b *********\
