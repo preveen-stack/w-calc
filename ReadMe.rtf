@@ -7,7 +7,7 @@
 
 \f0\fs28 \cf0 Hello!\
 \
-This is Wcalc 1.5-beta1!\
+This is Wcalc 1.5!\
 \
 1. What's New\
 2. Intro\
@@ -22,15 +22,19 @@ This is Wcalc 1.5-beta1!\
 **************
 \f0\b0 \
 \
-NEW FEATURE: Rewrote the number parser (again). Now handles internationalization by pulling the appropriate information out of the System Preferences, and pre-processes expressions. NEEDS TESTING!\
+NEW FEATURE: Active Variables! You can store expressions in a variable as well as just a value. These expressions may contain other variables which may change (try to avoid recursion, there aren't any safeguards yet), and are evaluated when you use them, rather than when you create them (read: functions).\
 \
-NEW FEATURE: Command-line cannot pull it out of System Preferences (because it is made to be portable) and so you can change the separators with the \\tsep and \\dsep commands. For example, '\\tsep.' makes period (.) the thousands separator.\
+NEW FEATURE: Conversions! You can now convert between virtually anything and virtually anything else. If any unit is missing or wrong LET ME KNOW (it's an easy fix). GUI only, for now (until I can figure out a good interface for them on the command-line).\
 \
-NEW FEATURE: Expressions that produce errors don't have to be added to the history (this is a preference) - the default is "no".\
+BUG FIX: Commas and periods are now treated as defined in the System Preferences.\
 \
-NEW FEATURE: Saves the drawer state - so when you quit and open Wcalc again, the drawers that you left open are reopened.\
+BEHAVIOR: The '=' and 'clear' buttons (clear is on the number-pad) act similarly to Apple's calculator now.\
 \
-NEW FEATURE: Added cube root (cbrt)\
+NEW FEATURE: Left and right bitshift operations now work (<< and >>).\
+\
+BEHAVIOR: Prints prefixes by default in the command-line. Just seemed more intuitive that way.\
+\
+NEW FEATURE: Drawer status\'d1whether in or out\'d1is now saved.\
 \
 
 \f1\b *********\
@@ -66,12 +70,14 @@ Wcalc recognizes the following symbols:\
 != (not equal)\
 && (logical and)\
 || (logical or)\
+<< (bitshift left)\
+>> (bitshift right)\
 \
 Wcalc also allows you to group operations with parenthesis (), brackets [], and braces \{\}.\
 \
 Wcalc supports the following functions:\
 sin cos tan asin acos atan sinh cosh tanh asinh acosh atanh\
-log ln abs round\
+log ln abs round cbrt sqrt floor ceil\
 \
 Wcalc has a few built-in constants:\
 pi e random Na k Cc ec R G g Me Mp Mn Md u c h mu0 epsilon0 muB muN b mW mZ ao\
@@ -80,6 +86,9 @@ F Vm eV sigma alpha gamma re\
 Wcalc supports user-defined variables. You define a variable like this:\
 mynewvariable=5\
 Then you can use it in an expression like this: 1+3*mynewvariable/4\
+\
+You can also define "active" variables. In the GUI, just type an expression into the appropriate spot of the variable list. In the command-line, when you assign a variable, put it in single-quotes, like this:\
+twicepreviousanswer='a * 2'\
 \
 Some special notes about variables - two things are reserved:\
 a - this variable represents the last answer, and may be used in expressions.\
@@ -100,7 +109,7 @@ When you type a number into Wcalc, the number is normally assumed to be in decim
 \
 This prefix affects only the number it prefixes, and none of the other numbers in the expression.\
 \
-Answers are, by default, displayed in decimal form. This can be changed in the preferences window - and display of the prefixes can be toggled in the preferences window as well.\
+Answers are, by default, displayed in decimal form. This can be changed in the preferences window - and display of the prefixes can be toggled in the preferences window as well. You can also change the display using the \\hex, \\oct, \\bin, or \\dec commands.\
 \
 
 \f1\b ****************\
@@ -108,7 +117,7 @@ Answers are, by default, displayed in decimal form. This can be changed in the p
 ****************
 \f0\b0 \
 \
-Installing the regular version of Wcalc is easy - copy it to your Applications folder! <grin>\
+Installing the regular version of Wcalc is easy - copy it to your Applications folder! To install the command-line version on OSX, use the .pkg file.\
 \
 
 \f1\b ***********\
@@ -120,9 +129,9 @@ I suppose I ought to have a license for this thing. Ah...\
 \
 Take a copy of this software, do what you like with it. I don't guarantee that it won't give you false answers, delete your hard drive, cause cancer, or even give you bad breath (but it's a calculator (*I* use it), and I'd be *really* impressed if it could do those things).\
 \
-If you like it - send me an email and tell me (it makes me feel good). If you don't like it\'d1send me an email and tell me (it makes me improve the program). \
+If you like it - send me an email and tell me (it makes me feel good). If you don't like it\'d1send me an email and tell me why (it makes me improve the program). \
 \
-Enjoy! That's the license. If caught in violation, you will be persecuted to the full extent of the law (read: not at all, but it's fun to say).\
+Enjoy! That's the license. If caught in violation, you will be persecuted to the full extent of the law (always wanted to say that).\
 \
 
 \f1\b **************\
@@ -132,7 +141,7 @@ Enjoy! That's the license. If caught in violation, you will be persecuted to the
 \
 There are still some problems in the grammar with implicit multiplication... they aren't too big, because you can get around them by simply being explicit, but I'm working on fixing that. (The grammar is hard!)\
 \
-The command-line doesn't save it's preferences... it probably should, and I'll get to it soon.\
+The command-line doesn't save it's preferences... it probably should, and I'll get to it someday.\
 \
 If you find more bugs, please LET ME KNOW!\
 \
@@ -143,9 +152,9 @@ If you find more bugs, please LET ME KNOW!\
 \f0\b0 \
 \
 The Wcalc homepage is 
-\f2 http://homepage.mac.com/memoryhole/wcalc/
+\f2 http://www.nd.edu/~kwheeler/wcalc/
 \f0 \
 \
 Contact me at 
-\f2 memoryhole@mac.com\
+\f2 kwheeler@cse.nd.edu\
 }

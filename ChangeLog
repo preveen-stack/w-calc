@@ -1,3 +1,22 @@
+Aug 08 2002 - Kyle Wheeler
+ - Added conversions (GUI)
+Jul 31 2002 - Kyle Wheeler
+ - Added support for comments (#, //, /* */) (BOTH)
+ - Supports "active" variables (BOTH)
+Jul 30 2002 - Kyle Wheeler
+ - Prints prefixes (0x, etc) by default. (CLI)
+Jul 29 2002 - Kyle Wheeler
+ - Added left and right bitshift operations (BOTH)
+May 21 2002 - Kyle Wheeler
+ - '=' and 'clear' work when you press the keys (GUI)
+Apr 12 2002 - Kyle Wheeler
+ - Pre-process input to solve comma/period problem (BOTH)
+ - Specify separators on the fly in the command-line (CLI)
+Apr 10 2002 - Kyle Wheeler
+ - Added a preference to ignore erroneous expressions (GUI)
+Mar 28 2002 - Kyle Wheeler
+ - Saves drawer states (GUI)
+--- Version 1.4.5 ---
 Mar 07 2002 - Kyle Wheeler
  - Added cube root (cbrt) (BOTH)
  - Added rounding indicator (GUI)

@@ -3,7 +3,7 @@
 wcalc - a natural-expression command-line calculator
 .SH SYNOPSIS
 .B wcalc
-[-h|--help] [-E] [-P#] [-M#] [-v|--version]
+[--help] [-E] [-P#] [-M#] [-v|--version] [-d] [-h] [-o] [-p] [-l] [-r]
 .SH DESCRIPTION
 wcalc is a command-line calculator designed to accept all valid mathematical
 expressions. It supports all standard mathematical operations, parenthesis,
@@ -14,6 +14,15 @@ If no mathematical expression is given at the commandline, wcalc enters
 "interactive" mode. Interactive mode has more features and accepts
 expressions with spaces. Also, files may be piped to wcalc, and they will be
 interpreted.
+.br
+Variables are supported and may be assigned using the = operator. To assign
+a variable use the form:
+.I "foo = anylegalexpression"
+Thereafter, that variable name is the same as the literal value it represents.
+Expressions can be stored in variables like this:
+.I "foo = 'anylegalexpression'
+Expressions stored this way will be interpreted at evaluation time, rather
+than assignment-time.
 .SS OPTIONS
 .TP
 .I "\-h \-\-help"
@@ -31,12 +40,33 @@ Example: wcalc -P6
 .TP
 .I "\-v \-\-version"
 Either one prints the version number and exits.
+.TP
+.I "\-d \-dec \-\-decimal"
+Prints the output in decimal form.
+.TP
+.I "\-h \-hex \-\-hexadecimal"
+Prints the output in hexadecimal form.
+.TP
+.I "\-o \-oct \-\-octal"
+Prints the output in octal form.
+.TP
+.I "\-b \-bin \-\-binary"
+Prints the output in binary form.
+.TP
+.I "\-p"
+Toggles printing prefixes for hexadecimal, octal, and binary forms.
+.TP
+.I "\-l \-\-lenient"
+Makes the parser assume that uninitialized variables have a value of zero.
+.TP
+.I "\-r \-\-radians"
+Makes all trigonometric functions work in radians.
 .SH COPYRIGHT
-wcalc is Copyright (C) 2000 Kyle Wheeler.
+wcalc is Copyright (C) 2000, 2001, 2002 Kyle Wheeler.
 .br
 It is freely distributed, and can be modified and used freely for any purpose,
-as long as a copy of the modification is sent to Kyle Wheeler at memoryhole@cheerful.com.
+as long as a copy of the modification is sent to Kyle Wheeler at kwheeler@cse.nd.edu.
 .SH SUGGESTIONS AND BUG REPORTS
 Any bugs found should be reported to
 .br
-Kyle Wheeler at memoryhole@mac.com.
+Kyle Wheeler at kwheeler@cse.nd.edu.

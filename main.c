@@ -17,7 +17,7 @@
 #include "parser.h"
 #include "variables.h"
 
-#define SUPPORTED_SYMBOLS "+ - () {} [] * %% / ! ^ > >= < <= == != && ||\nsin cos tan asin acos atan sinh cosh tanh asinh acosh atanh\nlog ln round abs ceil floor sqrt\ne pi Na k Cc ec R G g Me Mp Mn Md u amu c h mu0 epsilon0\nmuB muN b mW mZ ao F Vm NAk eV sigma alpha gamma re\n"
+#define SUPPORTED_SYMBOLS "+ - () {} [] * %% / ! ^ > >= < <= == != && || << >>\nsin cos tan asin acos atan sinh cosh tanh asinh acosh atanh\nlog ln round abs ceil floor sqrt\ne pi Na k Cc ec R G g Me Mp Mn Md u amu c h mu0 epsilon0\nmuB muN b mW mZ ao F Vm NAk eV sigma alpha gamma re\n"
 
 void print_command_help(void);
 void print_interactive_help(void);
@@ -202,6 +202,11 @@ void print_interactive_help (void)
 		 "?   displays this help screen.\n"
 		 "\\radians toggles radian mode.\n"
 		 "\\commas toggles output delineation between commas and periods.\n"
+		 "\\p or \\picky toggles stricter variable parsing rules.\n"
+		 "\\r or \\radians toggles radian mode for sin-related functions.\n"
+		 "\\s or \\strict toggles stricter number parsing rules.\n"
+		 "\\dsepX sets the decimal separator character to X.\n"
+		 "\\tsepX sets the thousands-place separator character to X.\n"
 		 "\\dec, \\hex, \\oct, \\bin set the output format.\n\n"
 		 "Variables are supported and may be assigned using the = operator.\n"
 		 "To assign a variable, use the form:\n"
@@ -220,6 +225,7 @@ void print_command_help (void)
 		 "Spaces are ignored (unknown symbols cause errors or are treated as variables)\n"
 		 "This calculator accepts input in decimal (1.00), scientific notation (1.0e5),\n"
 		 "octal (088), hexadecimal (0xff), and in binary (0b11).\n\n"
+		 "-v, --version            Prints the version number.\n"
 		 "-Px                      Sets the precision, where x is the desired precision.\n"
 		 "                         This setting only affects output.\n"
 		 "-E                       Toggles the formatting of output between decimal\n"

@@ -21,10 +21,10 @@
 			extern NSButton *e;
 			extern NSTextField *ef;
 			temp = strdup([[ef stringValue] cString]);
-			if (strlen(temp)) {
+			while (strlen(temp) && temp[strlen(temp)-1]=='=') {
 				temp[strlen(temp)-1] = '\0';
-				[ef setStringValue:[NSString stringWithCString:temp]];
 			}
+			[ef setStringValue:[NSString stringWithCString:temp]];
 			if (temp) free(temp);
 			[e performClick:self];
 			break;

@@ -3,7 +3,9 @@
 # Shawn Ostermann - Mon Sep 24, 2001
 # Modified by Kyle Wheeler
 #
-CFLAGS = -g -Wall -Werror -O0 -L/sw/lib -I/sw/include
+OPT=-O3
+#OPT=-O0 -g
+CFLAGS = -Wall -Werror ${OPT} -L/sw/lib -I/sw/include
 CC = gcc
 YACC = yacc
 #YACC = bison -b y
@@ -46,7 +48,7 @@ distro : ${PROGRAM}
 y.tab.c : parser.y ${HFILES}
 	${YACC} -dvt ${YFLAGS} parser.y
 y.tab.o: y.tab.c
-	${CC} -g -c y.tab.c
+	${CC} ${OPT} -c y.tab.c
 y.tab.h: y.tab.c
 parser.h: y.tab.h
 	cmp -s y.tab.h parser.h || cp y.tab.h parser.h
@@ -57,7 +59,7 @@ parser.h: y.tab.h
 lex.yy.c : scanner.l parser.h ${HFILE}
 	flex scanner.l
 lex.yy.o: lex.yy.c
-	${CC} -g -c lex.yy.c
+	${CC} ${OPT} -c lex.yy.c
 
 #
 # File dependencies
