@@ -41,6 +41,7 @@ enum operations operation;
 double number;
 enum commands cmd;
 char * variable;
+char character;
 }
 
 %token DEC_CMD OCT_CMD HEX_CMD BIN_CMD GUARD_CMD
@@ -57,6 +58,7 @@ char * variable;
 
 %token <number> NUMBER
 %token <variable> VAR STRING
+%token <character> DSEP_CMD TSEP_CMD
 
 %type <number> exp exp_l2 exp_l3 exp_l4
 %type <number> oval capsule sign
@@ -150,6 +152,24 @@ command : HEX_CMD {
 	conf.output_format = DECIMAL_FORMAT;
 	if (standard_output)
 		printf("Decimal Formatted Output\n");}
+| DSEP_CMD {
+	$$ = nothing;
+	if (conf.thou_delimiter != $1) {
+		conf.dec_delimiter = $1;
+		if (standard_output)
+			printf("%c is now the decimal separator.\n", $1);
+	} else if (standard_output) {
+		printf("%c cannot be the decimal separator. It is the thousands separator.\n", $1);
+	}}
+| TSEP_CMD {
+	$$ = nothing;
+	if (conf.dec_delimiter != $1) {
+		conf.thou_delimiter = $1;
+		if (standard_output)
+			printf("%c is now the thousands separator.\n", $1);
+	} else if (standard_output) {
+		printf("%c cannot be the thousands separator. It is the decimal separator.\n", $1);
+	}}
 | PICKY_CMD {
 	$$ = nothing;
 	conf.picky_variables = ! conf.picky_variables;
@@ -163,12 +183,12 @@ command : HEX_CMD {
 	$$ = nothing;
 	conf.use_radians = ! conf.use_radians;
 	if (standard_output)
-		printf("%sUsing Radians\n", conf.use_radians?"":"Not ");}
+		printf("Now Using %s\n", conf.use_radians?"Radians":"Degrees");}
 | GUARD_CMD {
 	$$ = nothing;
 	conf.precision_guard = ! conf.precision_guard;
 	if (standard_output)
-		printf("%sUsing Conservative Precision\n", conf.precision_guard?"":"Not ");}
+		printf("Now %sUsing Conservative Precision\n", conf.precision_guard?"":"Not ");}
 | PRECISION_CMD {
 	$$ = isatty(0)?redisplay:nothing;
 	conf.precision = $1;
@@ -372,8 +392,7 @@ capsule: PAR exp REN { $$ = $2; }
 %%
 
 int
-yyerror(char *error_string, ...)
-{
+yyerror(char *error_string, ...) {
     va_list ap;
     int line_nmb(void);
 

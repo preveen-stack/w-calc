@@ -11,14 +11,44 @@
 #include <sys/types.h>
 #include <ctype.h> /* for isdigit */
 #include <errno.h>
-#include <readline/readline.h>
-#include <readline/history.h>
+
+#ifdef HAVE_LIBREADLINE
+# if defined(HAVE_READLINE_READLINE_H)
+#  include <readline/readline.h>
+# elif defined(HAVE_READLINE_H)
+#  include <readline.h>
+# else /* !defined(HAVE_READLINE_H) */
+extern char *readline();
+# endif /* !defined(HAVE_READLINE_H) */
+char *cmdline = NULL;
+#else /* !defined(HAVE_READLINE_READLINE_H) */
+/* no readline */
+#endif /* HAVE_LIBREADLINE */
+
+#ifdef HAVE_READLINE_HISTORY
+# if defined(HAVE_READLINE_HISTORY_H)
+#  include <readline/history.h>
+# elif defined(HAVE_HISTORY_H)
+#  include <history.h>
+# else /* ! defined(HAVE_HISTORY_H) */
+extern void add_history ();
+extern int write_history ();
+extern int read_history ();
+# endif /* defined(HAVE_READLINE_HISTORY_H) */
+/* no history */
+#endif /* HAVE_READLINE_HISTORY */
 
 #include "calculator.h"
 #include "parser.h"
 #include "variables.h"
 
 #define SUPPORTED_SYMBOLS "+ - () {} [] * %% / ! ^ > >= < <= == != && || << >>\nsin cos tan asin acos atan sinh cosh tanh asinh acosh atanh\nlog ln round abs ceil floor sqrt\ne pi Na k Cc ec R G g Me Mp Mn Md u amu c h mu0 epsilon0\nmuB muN b mW mZ ao F Vm NAk eV sigma alpha gamma re\n"
+
+#ifdef HAVE_READLINE_HISTORY
+#define ADD_HISTORY(x) add_history(x)
+#else
+#define ADD_HISTORY(x)
+#endif
 
 void print_command_help(void);
 void print_interactive_help(void);
@@ -36,7 +66,11 @@ int main (int argc, char *argv[])
 {
 	extern int yydebug;
 	extern int lines;
-	char *readme = NULL, oldtsep=',', olddsep='.';
+#ifdef HAVE_LIBREADLINE
+	char *readme = NULL;
+#else
+	char readme[1000];
+#endif
 	int tty, i;
 	short cmdline_input = 0;
 
@@ -51,6 +85,8 @@ int main (int argc, char *argv[])
 	conf.picky_variables = 1;
 	conf.print_prefixes = 1;
 	conf.precision_guard = 1;
+	conf.thou_delimiter = ',';
+	conf.dec_delimiter = '.';
 
 	/* Parse commandline options */
 	for (i = 1; i < argc; ++i) {
@@ -97,15 +133,33 @@ int main (int argc, char *argv[])
 	tty = isatty(0); /* Find out where stdin is coming from... */
 	if (tty > 0) {
 		/* if stdin is a keyboard or terminal, then use readline and prompts */
+#ifdef HAVE_READLINE_HISTORY
 		char filename[1000];
 		sprintf(filename,"%s/.wcalc_history",getenv("HOME"));
 		if (read_history(filename) && errno != ENOENT)
 			perror("Reading History");
+#endif
 		printf("Enter an expression to evaluate, q to quit, or ? for help:\n");
 		while (1) {
 			lines = 1;
 			fflush(NULL);
+#ifdef HAVE_LIBREADLINE
 			readme = readline("-> ");
+#else
+			{
+				char c;
+				unsigned int i = 0;
+				memset(readme,0,1000);
+				printf("-> ");
+				fflush(stdout);
+				c = fgetc(stdin);
+				while (c != '\n' && i < 1000) {
+					readme[i] = c;
+					c = fgetc(stdin);
+					++i;
+				}
+			}
+#endif
 			if (! readme) {
 				if (errno != 2)
 					perror("reading line");
@@ -116,46 +170,18 @@ int main (int argc, char *argv[])
 				if (!strcmp(readme,"q") || !strcmp(readme,"quit") || !strcmp(readme,"\\q")) {
 					break;
 				} else if (!strncmp(readme,"\\yydebug",8)) {
-					add_history(readme);
+					ADD_HISTORY(readme);
 					yydebug = ! yydebug;
 					printf("Debug Mode %s\n",yydebug?"On":"Off");
 				} else if (!strncmp(readme,"?",1) || !strncmp(readme,"help",4)) {
-					add_history(readme);
+					ADD_HISTORY(readme);
 					print_interactive_help();
-				} else if (!strncmp(readme,"\\dsep",5) && readme[5] != '\n') {
-					add_history(readme);
-					conf.charkey[(int)olddsep] = olddsep;
-					conf.charkey[(int)readme[5]] = '.';
-					conf.charunkey[(int)'.'] = readme[5];
-					olddsep = readme[5];
-					conf.dec_delimiter = readme[5];
-					if (conf.charkey[(int)','] != ',' && readme[5]!='.') {
-						conf.charkey[(int)'.'] = '@';
-						conf.charunkey[(int)'@'] = '.';
-					} else {
-						conf.charunkey[(int)'@'] = '@';
-					}
-					printf("%c is now the decimal separator.\n", readme[5]);
-				} else if (!strncmp(readme,"\\tsep",5) && readme[5] != '\n') {
-					add_history(readme);
-					conf.charkey[(int)oldtsep] = oldtsep;
-					conf.charkey[(int)readme[5]] = ',';
-					conf.charunkey[(int)','] = readme[5];
-					oldtsep = readme[5];
-					conf.thou_delimiter = readme[5];
-					if (conf.charkey[(int)','] != '.' && readme[5]!=',') {
-						conf.charkey[(int)','] = '#';
-						conf.charunkey[(int)'#'] = ',';
-					} else {
-						conf.charunkey[(int)'#'] = '#';
-					}
-					printf("%c is now the thousands separator.\n",readme[5]);
 				} else {
 					parseme(readme);
 					{
 						extern char * errstring;
 						if (!errstring || (errstring && !strlen(errstring)) || conf.remember_errors) {
-							add_history(readme);
+							ADD_HISTORY(readme);
 						}
 					}
 				}
@@ -171,12 +197,16 @@ int main (int argc, char *argv[])
 				}
 				}
 			}
+#ifdef HAVE_LIBREADLINE
 			free(readme);
+#endif
 		}
+#ifdef HAVE_READLINE_HISTORY
 		if (write_history(filename))
 			perror("Saving History");
 		if (history_truncate_file(filename,1000))
 			perror("Truncating History");
+#endif
 	} else if (tty < 0) {
 		fprintf(stderr, "Could not determine terminal type.\n");
 	} else {

@@ -43,6 +43,7 @@ ACCEPTABLE	[_:]
 
 \\b(in(ary)?)?			{ return(BIN_CMD); }
 \\d(ec(imal)?)?			{ return(DEC_CMD); }
+\\dsep.                 { yylval.character = yytext[5]; return(DSEP_CMD); }
 \\e(ng(ineering)?)?{DIGIT}*		{ char * foo = yytext;
 	while (*foo && ! isdigit(*foo)) ++foo;
 	yylval.number = atoi(foo);
@@ -59,6 +60,7 @@ ACCEPTABLE	[_:]
 \\r(ad(ians)?)?         { return(RADIAN_CMD); }
 \\re(member(_errors)?)? { return(REMEMBER_CMD); }
 \\s(tr(ict)?)?          { return(STRICT_CMD); }
+\\tsep.                 { yylval.character = yytext[5]; return(TSEP_CMD); }
 \\c(onv(ert)?)?{WHITESPACE}+{LETTER}+{WHITESPACE}+{LETTER}+{WHITESPACE}+{LETTER}+ {}
 \/\*.*\*\/              { }
 \/\/.*                  { }

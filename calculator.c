@@ -76,8 +76,8 @@ char * flatten (char * str);
 double parseme (char * pthis)
 {
 	extern int synerrors;
-//	int stackcur;
 	int i;
+	short numbers = 0;
 	int len = strlen(pthis);
 	char * sanitized;
 
@@ -92,26 +92,34 @@ double parseme (char * pthis)
 	}
 	sprintf(sanitized,"%s\n",pthis);
 	
-	/* Convert to standard notation via lookuptable */
+	/* Convert to standard notation if there are numbers */
+	// are there numbers?
 	for (i=0;i<strlen(sanitized);++i) {
-		if (conf.thou_delimiter != '.' &&
-				conf.dec_delimiter != '.' &&
-				sanitized[i] == '.') {
-			// throw an error
-			report_error("Improperly formatted numbers!");
-			synerrors = 1;
+		if (isdigit(sanitized[i])) {
+			numbers = 1;
 			break;
-		} else if (conf.thou_delimiter != ',' &&
-				conf.dec_delimiter != ',' &&
-				sanitized[i] == ',') {
-			// throw an error
-			report_error("Improperly formatted numbers!");
-			synerrors = 1;
-		} else if (sanitized[i] == conf.thou_delimiter)
-			sanitized[i] = ',';
-		else if (sanitized[i] == conf.dec_delimiter)
-			sanitized[i] = '.';
-//		sanitized[i] = conf.charkey[(int)sanitized[i]];
+		}
+	}
+	if (numbers) {
+		for (i=0;i<strlen(sanitized);++i) {
+			char errmsg[1000];
+			if ((conf.thou_delimiter != '.' &&
+					conf.dec_delimiter != '.' &&
+					sanitized[i] == '.') ||
+					(conf.thou_delimiter != ',' &&
+					 conf.dec_delimiter != ',' &&
+					 sanitized[i] == ',')) {
+				// throw an error
+				sprintf(errmsg,"Improperly formatted numbers! (%c,%c)\n",conf.thou_delimiter, conf.dec_delimiter);
+				report_error(errmsg);
+				synerrors = 1;
+				break;
+			} else if (sanitized[i] == conf.thou_delimiter)
+				sanitized[i] = ',';
+			else if (sanitized[i] == conf.dec_delimiter)
+				sanitized[i] = '.';
+			//		sanitized[i] = conf.charkey[(int)sanitized[i]];
+		}
 	}
 
 	/* Now, eliminate recursion */
@@ -224,7 +232,7 @@ void report_error (char * err)
 		free(errstring);
 		errstring = tempstring;
 	} else {
-		errstring = strdup(err);
+		errstring = (char*)strdup(err);
 	}
 }
 
@@ -237,7 +245,7 @@ void print_result (void) {
 
 	if (pretty_answer) free(pretty_answer);
 	temp = print_this_result(last_answer);
-	if (temp) pretty_answer = strdup(temp);
+	if (temp) pretty_answer = (char*)strdup(temp);
 	else pretty_answer = NULL;
 }
 
