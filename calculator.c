@@ -421,6 +421,7 @@ double uber_function (enum functions func, double input)
 			case wacosh:	temp = acosh(input); break;
 			case watanh:	temp = atanh(input); break;
 			case wlog:		temp = log10(input); break;
+			case wlogtwo:	temp = log(input)/log(2); break;
 			case wln:		temp = log(input); break;
 			case wround:	temp = rint(input); break;
 //			case wround:	temp = (fabs(floor(input)-input)>=0.5)?ceil(input):floor(input); break;

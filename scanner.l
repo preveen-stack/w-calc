@@ -149,6 +149,7 @@ tanh { return(WTANH); }
 (acosh)|(argcosh)|(cosh^-1) { return(WACOSH); }
 (atanh)|(argtanh)|(tanh^-1) { return(WATANH); }
 log { return(WLOG); }
+log2 { return(WLOGTWO); }
 ln { return(WLN); }
 round { return(WROUND); }
 abs { return(WABS); }
