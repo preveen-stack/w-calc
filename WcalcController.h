@@ -18,8 +18,10 @@
     IBOutlet id theKeyboard;
     IBOutlet id variableList;
 	IBOutlet NSWindow *mainWindow;
+	IBOutlet id keypad;
 
 	bool just_answered;
+	NSView *superview;
 }
 - (IBAction)clear:(id)sender;
 - (IBAction)enterData:(id)sender;
@@ -27,4 +29,7 @@
 - (IBAction)setPrecision:(id)sender;
 - (IBAction)showInspectorDrawer:(id)sender;
 - (IBAction)showKeyboardDrawer:(id)sender;
+- (IBAction)toggleSize:(id)sender;
+- (IBAction)menuFunction:(id)sender;
+- (IBAction)menuConstant:(id)sender;
 @end

@@ -142,12 +142,12 @@ double uber_function (enum functions func, double input)
 {
 	if (compute) {
 		switch (func) {
-			case wsin:		return sin(use_radians?input:(input*WPI/180));
-			case wcos:		return cos(use_radians?input:(input*WPI/180));
-			case wtan:		return tan(use_radians?input:(input*WPI/180));
-			case wasin:		return asin(use_radians?input:(input*WPI/180));
-			case wacos:		return acos(use_radians?input:(input*WPI/180));
-			case watan:		return atan(use_radians?input:(input*WPI/180));
+			case wsin:		return sin(use_radians?input:(input*W_PI/180));
+			case wcos:		return cos(use_radians?input:(input*W_PI/180));
+			case wtan:		return tan(use_radians?input:(input*W_PI/180));
+			case wasin:		return asin(use_radians?input:(input*W_PI/180));
+			case wacos:		return acos(use_radians?input:(input*W_PI/180));
+			case watan:		return atan(use_radians?input:(input*W_PI/180));
 			case wsinh:		return sinh(input);
 			case wcosh:		return cosh(input);
 			case wtanh:		return tanh(input);
@@ -159,6 +159,7 @@ double uber_function (enum functions func, double input)
 			case wround:	return (fabs(floor(input)-input)>=0.5)?ceil(input):floor(input);
 			case wneg:		return - input;
 			case wnot:		return ! input;
+			case wabs:		return fabs(input);
 			default:		return input;
 		}
 	} else {

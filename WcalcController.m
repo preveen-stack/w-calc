@@ -4,8 +4,72 @@
 #import "historyManager.h"
 #import "WcalcController.h"
 
+#define KEYPAD_HEIGHT 165
 
 @implementation WcalcController
+
+- (IBAction)toggleSize:(id)sender
+{
+	static BOOL shrinking = TRUE;
+	NSRect f = [mainWindow frame], e = [ExpressionField frame], p = [PrecisionSlider frame];
+	NSSize w;
+	NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+
+	if (shrinking) {
+		f.size.height -= KEYPAD_HEIGHT;
+		f.origin.y += KEYPAD_HEIGHT;
+	} else {
+		f.size.height += KEYPAD_HEIGHT;
+		f.origin.y -= KEYPAD_HEIGHT;
+	}
+	
+	f.size.width = 171;
+	e.size.width = 149;
+	p.size.width = 149;
+	
+	if (shrinking) {
+		[keypad removeFromSuperview];
+		e.origin.y -= KEYPAD_HEIGHT;
+		p.origin.y -= KEYPAD_HEIGHT;
+	} else {
+		e.origin.y += KEYPAD_HEIGHT;
+		p.origin.y += KEYPAD_HEIGHT;
+	}
+	
+	[ExpressionField removeFromSuperview];
+	[PrecisionSlider removeFromSuperview];
+
+	[mainWindow setFrame:f display:TRUE animate:TRUE];
+
+	if (! shrinking) {
+		[superview addSubview:keypad];
+		w.width = 171;
+		w.height = 283;
+		[mainWindow setMinSize:w];
+		w.width = 171;
+		w.height = 1200;
+		[mainWindow setMaxSize:w];
+		[prefs setObject:@"NO" forKey:@"toggled"];
+	} else {
+		w.width = 171;
+		w.height = 118;
+		[mainWindow setMinSize:w];
+		w.width = 1600;
+		w.height = 1200;
+		[mainWindow setMaxSize:w];
+		[prefs setObject:@"YES" forKey:@"toggled"];
+	}
+	
+	[ExpressionField setFrame:e];
+	[PrecisionSlider setFrame:p];
+
+	[superview addSubview:ExpressionField];
+	[superview addSubview:PrecisionSlider];
+
+	[ExpressionField selectText:sender];
+
+	shrinking = ! shrinking;
+}
 
 - (IBAction)clear:(id)sender
 {
@@ -18,9 +82,87 @@
 	}
 }
 
+- (IBAction)menuConstant:(id)sender
+{
+	NSString *str = [ExpressionField stringValue];
+	NSString *str2;
+	
+	switch ([sender tag]) {
+		case 1: str2 = @"¹"; break;
+		case 2: str2 = @"e"; break;
+		case 3: str2 = @"Na"; break;
+		case 4: str2 = @"k"; break;
+		case 5: str2 = @"Cc"; break;
+		case 6: str2 = @"ec"; break;
+		case 7: str2 = @"R"; break;
+		case 8: str2 = @"G"; break;
+		case 9: str2 = @"g"; break;
+		case 10: str2 = @"Me"; break;
+		case 11: str2 = @"Mp"; break;
+		case 12: str2 = @"u"; break;
+		case 13: str2 = @"c"; break;
+		case 14: str2 = @"µ0"; break;
+		case 15: str2 = @"random"; break;
+		case 16: str2 = @"u"; break;
+		case 17: str2 = @"Mn"; break;
+		case 18: str2 = @"epsilon0"; break;
+		case 19: str2 = @"Md"; break;
+		case 20: str2 = @"alpha"; break;
+		case 21: str2 = @"µB"; break;
+		case 22: str2 = @"µN"; break;
+		case 23: str2 = @"b"; break;
+		case 24: str2 = @"sigma"; break;
+		case 25: str2 = @"mW"; break;
+		case 26: str2 = @"mZ"; break;
+		case 27: str2 = @"gamma"; break;
+		case 28: str2 = @"eV"; break;
+		case 29: str2 = @"ao"; break;
+		case 30: str2 = @"F"; break;
+		case 31: str2 = @"Vm"; break;
+		case 32: str2 = @"re"; break;
+		default: return;
+	}
+	if ([str length]) {
+		NSString *str3 = @" ";
+		[ExpressionField setStringValue:[str stringByAppendingString:[str3 stringByAppendingString:str2]]];
+	} else {
+		[ExpressionField setStringValue:str2];
+	}
+}
+
+- (IBAction)menuFunction:(id)sender
+{
+	NSString *str = [[ExpressionField stringValue] stringByAppendingString:@")"];
+	NSString *str2;
+	
+	if ([str length] == 1) str = @"";
+	
+	switch ([sender tag]) {
+		case 1: str2 = @"sin("; break;
+		case 2: str2 = @"cos("; break;
+		case 3: str2 = @"tan("; break;
+		case 4: str2 = @"asin("; break;
+		case 5: str2 = @"acos("; break;
+		case 6: str2 = @"atan("; break;
+		case 7: str2 = @"sinh("; break;
+		case 8: str2 = @"cosh("; break;
+		case 9: str2 = @"tanh("; break;
+		case 10: str2 = @"asinh("; break;
+		case 11: str2 = @"acosh("; break;
+		case 12: str2 = @"atanh("; break;
+		case 13: str2 = @"log("; break;
+		case 14: str2 = @"ln("; break;
+		case 15: str2 = @"round("; break;
+		case 16: str2 = @"abs("; break;
+		default: return;
+	}
+	[ExpressionField setStringValue:[str2 stringByAppendingString:str]];
+}
+
 - (void)awakeFromNib
 {
 	NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+	NSRect w;
 	if (! [prefs integerForKey:@"initialized"]) {
 		[prefs setObject:@"1" forKey:@"initialized"];
 		[prefs setObject:@"-1" forKey:@"precision"];
@@ -38,6 +180,21 @@
 	[PrecisionSlider setIntValue:precision];
 	[mainWindow setFrameAutosaveName:@"wcalc"];
 	just_answered = FALSE;
+
+	superview = [keypad superview];
+	[keypad retain];
+	[PrecisionSlider retain];
+	[ExpressionField retain];
+	[mainWindow useOptimizedDrawing:TRUE];
+	if ([prefs boolForKey:@"toggled"]) {
+		[self toggleSize:0];
+	}
+	[mainWindow setFrameUsingName:@"wcalc"];
+	if (! [prefs boolForKey:@"toggled"]) {
+		w = [mainWindow frame];
+		w.size.width = 171;
+		[mainWindow setFrame:w display:TRUE animate:FALSE];
+	}
 }
 
 - (IBAction)setPrecision:(id)sender

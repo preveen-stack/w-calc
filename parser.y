@@ -33,17 +33,16 @@ char * variable;
 }
 
 
-%token EOLN PAR REN WBRA WKET WSBRA WSKET
+%token EOLN PAR REN WBRA WKET WSBRA WSKET WPIPE
 %token WPLUS WMINUS WMULT WDIV WMOD WEQL WEXP
 %token WOR WAND WEQUAL WNEQUAL WGT WLT WGEQ WLEQ
-%token WNOT WLOG WLN WROUND
+%token WNOT WLOG WLN WROUND WABS
 %token WSIN WCOS WTAN WASIN WACOS WATAN WSINH WCOSH WTANH WASINH WACOSH WATANH
 %token <number> NUMBER
 %token <variable> VAR
 
 %type <number> exp exp_l2 exp_l3 exp_l4
 %type <number> oval capsule sign
-%type <operation> op op_l2
 %type <function> func
 
 %left WAND WOR
@@ -51,6 +50,7 @@ char * variable;
 %left WMINUS WPLUS
 %left WMULT WDIV WMOD
 %left WEXP
+%left WNOT
 
 %expect 345
 
@@ -127,30 +127,24 @@ assignment : VAR WEQL exp
 *                 ;
 */
 
-exp : exp op exp { $$ = simple_exp($1, $2, $3); }
+exp : exp WMINUS exp { $$ = simple_exp($1, wminus, $3); }
+| exp WPLUS exp { $$ = simple_exp($1, wplus, $3); }
+| exp WAND exp { $$ = simple_exp($1, wand, $3); }
+| exp WOR exp { $$ = simple_exp($1, wor, $3); }
+| exp WEQUAL exp { $$ = simple_exp($1, wequal, $3); }
+| exp WNEQUAL exp { $$ = simple_exp($1, wnequal, $3); }
+| exp WGT exp { $$ = simple_exp($1, wgt, $3); }
+| exp WLT exp { $$ = simple_exp($1, wlt, $3); }
+| exp WGEQ exp { $$ = simple_exp($1, wgeq, $3); }
+| exp WLEQ exp { $$ = simple_exp($1, wleq, $3); }
 | WNOT exp { $$ = ! $2; }
 | exp_l2
 ;
 
-exp_l2 : exp_l2 op_l2 exp_l2 { $$ = simple_exp($1, $2, $3); }
+exp_l2 : exp_l2 WMULT exp_l2 { $$ = simple_exp($1, wmult, $3); }
+| exp_l2 WDIV exp_l2 { $$ = simple_exp($1, wdiv, $3); }
+| exp_l2 WMOD exp_l2 { $$ = simple_exp($1, wmod, $3); }
 | exp_l3
-;
-
-op : WAND { $$ = wand; }
-| WOR { $$ = wor; }
-| WEQUAL { $$ = wequal; }
-| WNEQUAL { $$ = wnequal; }
-| WGT { $$ = wgt; }
-| WLT { $$ = wlt; }
-| WGEQ { $$ = wgeq; }
-| WLEQ { $$ = wleq; }
-| WPLUS { $$ = wplus; }
-| WMINUS { $$ = wminus; }
-;
-
-op_l2 : WMULT { $$ = wmult; }
-| WDIV  { $$ = wdiv; }
-| WMOD  { $$ = wmod; }
 ;
 
 func : WSIN { $$ = wsin; }
@@ -168,6 +162,7 @@ func : WSIN { $$ = wsin; }
 | WLOG { $$ = wlog; }
 | WLN { $$ = wln; }
 | WROUND { $$ = wround; }
+| WABS { $$ = wabs; }
 ;
 
 null : PAR REN
@@ -188,16 +183,17 @@ oval : exp_l4 oval
 | { $$ = 1; }
 ;
 
-exp_l4 :  exp_l4 WNOT oval { $$ = fact($1) * $3; }
-| capsule oval { $$ = $1 * $2; }
+exp_l4 : capsule oval { $$ = $1 * $2; }
 | capsule WEXP sign exp_l4 oval { $$ = pow($1,$3*$4) * $5; }
 ;
 
 capsule: PAR exp REN { $$ = $2; }
 | WBRA exp WKET { $$ = $2; }
 | WSBRA exp WSKET { $$ = $2; }
+| WPIPE exp WPIPE { $$ = fabs($2); }
 | null { $$ = 0; }
 | NUMBER
+| exp_l4 WNOT { $$ = fact($1); }
 | func sign capsule { $$ = uber_function($1,$2*$3); }
 | VAR
 {
