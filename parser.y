@@ -32,7 +32,7 @@ double number;
 char * variable;
 }
 
-
+%token DEC_CMD OCT_CMD HEX_CMD BIN_CMD
 %token EOLN PAR REN WBRA WKET WSBRA WSKET WPIPE
 %token WPLUS WMINUS WMULT WDIV WMOD WEQL WEXP
 %token WOR WAND WEQUAL WNEQUAL WGT WLT WGEQ WLEQ
@@ -43,6 +43,7 @@ char * variable;
 
 %type <number> exp exp_l2 exp_l3 exp_l4
 %type <number> oval capsule sign
+%type <number> command
 %type <function> func
 
 %left WAND WOR
@@ -82,6 +83,16 @@ oneline : exp
 }
 eoln
 | assignment eoln
+| command eoln {
+	output_format = $1;
+	push_value(last_answer);
+	if (! synerrors)
+		print_result();
+	else {
+		synerrors = 0;
+		report_error("Too many errors.");
+	}
+}
 | eoln	/* blank line, do nothing */
 | error eoln { compute = 0; }
 /* if we got an error on the line */
@@ -89,6 +100,20 @@ eoln
 
 eoln : EOLN
 { ++lines; }
+;
+
+command : HEX_CMD {
+	$$ = HEXADECIMAL_FORMAT;
+	printf("%s",standard_output?"Hexadecimal Formatted Output\n":"");}
+| OCT_CMD {
+	$$ = OCTAL_FORMAT;
+	printf("%s",standard_output?"Octal Formatted Output\n":"");}
+| BIN_CMD {
+	$$ = BINARY_FORMAT;
+	printf("%s",standard_output?"Binary Formatted Output\n":"");}
+| DEC_CMD {
+	$$ = DECIMAL_FORMAT;
+	printf("%s",standard_output?"Decimal Formatted Output\n":"");}
 ;
 
 assignment : VAR WEQL exp

@@ -64,14 +64,22 @@
 
 	switch (need_redraw) {
 		case 1:
+		{
+			char *temp;
 			if (pretty_answer) free(pretty_answer);
-			pretty_answer = strdup(print_this_result(last_answer));
 
-			[answerField setStringValue:[NSString stringWithCString:pretty_answer]];
+			temp = print_this_result(last_answer);
+			if (temp)
+				pretty_answer = strdup(temp);
+			else
+				pretty_answer = NULL;
+
+			[answerField setStringValue:[NSString stringWithCString:(pretty_answer?pretty_answer:"Not Enough Memory")]];
 			[historyList reloadData];
 
 			[expressionField selectText:self];
 			break;
+		}
 		case 2:
 			[mainController go:sender];
 			break;
@@ -80,6 +88,13 @@
 
 - (IBAction)showPrefs:(id)sender
 {
+	[self displayPrefs:sender];
+    [thePrefPanel makeKeyAndOrderFront:self];
+    [thePrefPanel center];	
+}
+
+- (IBAction)displayPrefs:(id)sender
+{
 	[engineeringNotation setState:(engineering?NSOnState:NSOffState)];
     [pickyVariables setState:(picky_variables?NSOnState:NSOffState)];
     [historyDuplicates setState:(allow_duplicates?NSOnState:NSOffState)];
@@ -87,10 +102,7 @@
 	[outputFormat selectCellWithTag:output_format];
 	[printPrefixes setState:(print_prefixes?NSOnState:NSOffState)];
 	[printPrefixes setEnabled:(output_format!=DECIMAL_FORMAT)];
-	[engineeringNotation setEnabled:(output_format==DECIMAL_FORMAT)];
-
-    [thePrefPanel makeKeyAndOrderFront:self];
-    [thePrefPanel center];	
+	[engineeringNotation setEnabled:(output_format==DECIMAL_FORMAT)];	
 }
 
 @end

@@ -1,5 +1,8 @@
 /* PrefsController */
 
+#ifndef PREFS_CONTROLLER
+#define PREFS_CONTROLLER
+
 #import <Cocoa/Cocoa.h>
 #import "WcalcController.h"
 
@@ -20,4 +23,7 @@
 }
 - (IBAction)setPrefs:(id)sender;
 - (IBAction)showPrefs:(id)sender;
+- (IBAction)displayPrefs:(id)sender;
 @end
+
+#endif

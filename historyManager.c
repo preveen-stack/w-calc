@@ -60,7 +60,8 @@ char * historynum (int step, int col)
 	if (col == 1)
 		return history[step].exp;
 	else {
-		return print_this_result(history[step].ans);
+		char * temp = print_this_result(history[step].ans);
+		return (temp?temp:"Not Enough Memory");
 	}
 }
 

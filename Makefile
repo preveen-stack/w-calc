@@ -8,7 +8,7 @@ CC = gcc
 #YACC = yacc
 YACC = bison -b y
 
-LFLAGS = -lreadline -lm -ltermcap
+LFLAGS = -lm -lreadline -ltermcap -static
 
 PROGRAM = wcalc
 CFILES = main.c calculator.c variables.c
@@ -32,7 +32,7 @@ OBJECTS = y.tab.o lex.yy.o ${OFILES}
 # (don't forget the Lex Library "-ll")
 ${PROGRAM} : ${OBJECTS}
 	${CC} ${CFLAGS} ${OBJECTS} -o ${PROGRAM} -ll ${LFLAGS}
-
+	strip ${PROGRAM}
 
 # 
 # Turn the parser.y file into y.tab.c using "yacc"
@@ -63,7 +63,7 @@ lex.yy.o: lex.yy.c
 ${OFILES}: ${HFILE} parser.h
 
 clean:
-	/bin/rm -f *.o lex.yy.c y.tab.c ${PROGRAM} parser.h y.output y.tab.h core
+	/bin/rm -f *.o lex.yy.c y.tab.c ${PROGRAM} parser.h y.output y.tab.h core parser.tab.c
 
 install: ${PROGRAM} ${PROGRAM:%=%.1}
 	install ${PROGRAM} /usr/local/bin/${PROGRAM}

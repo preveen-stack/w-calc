@@ -2,7 +2,16 @@
 #include <stdio.h>
 #include <math.h> /* for HUGE_VAL */
 #include <float.h> /* for LDBL_MIN */
-#include <string.h> /* for bzero */
+#include <string.h> /* for bzero() */
+/* these are for kbw_rand() */
+#include <sys/types.h> /* for stat() and read() */
+#include <sys/stat.h>  /* for stat() */
+#include <fcntl.h>     /* for open() */
+#include <sys/uio.h>   /* for read() */
+#include <unistd.h>    /* for read() and close */
+#include <time.h>      /* for time() */
+
+
 #include "calculator.h"
 #include "variables.h"
 
@@ -25,11 +34,13 @@ short print_prefixes = 0;
  * These are declared here because they're not in any header files.
  * yyparse() is declared with an empty argument list so that it is
  * compatible with the generated C code from yacc/bison.
- * This part is taken from http://www.bgw.org/tutorials/programming/c/lex_yacc/main.c
+ * These two lines are taken from http://www.bgw.org/tutorials/programming/c/lex_yacc/main.c
  */
 extern int yyparse();
 extern int yy_scan_string(const char*);
 
+/* declared here so other people don't mess with it */
+static int seed_random (void);
 
 double parseme (char * pthis)
 {
@@ -79,13 +90,16 @@ void report_error (char * err)
 }
 
 void print_result (void) {
+	char * temp;
 	if ((! stack) || (stacklast < 0)) return;
 
 	last_answer = stack[stacklast];
 	stacklast --;
 
 	if (pretty_answer) free(pretty_answer);
-	pretty_answer = strdup(print_this_result(last_answer));
+	temp = print_this_result(last_answer);
+	if (temp) pretty_answer = strdup(temp);
+	else pretty_answer = NULL;
 }
 
 char *print_this_result (double result)
@@ -140,7 +154,6 @@ char *print_this_result (double result)
 			if (result < pow(2.0,i))
 				place = i-1;
 		}
-		printf("place=%i\n",place);
 		pa = malloc(sizeof(char)*(place+(print_prefixes*2)+1));
 		if (! pa) {
 			pa = "Not Enough Memory";
@@ -283,5 +296,39 @@ double fact (int in)
 		} else
 			return 1;
 		return lookup[in-1];
+	}
+}
+
+static int seed_random (void)
+{
+	static char seeded = 0;
+	if (! seeded) {
+		srandom(time(NULL));
+		seeded = 1;
+	}
+	return 1;
+}
+
+double kbw_rand (void)
+{
+	struct stat ex;
+	int fd;
+	
+	if (! stat(RAND_FILE,&ex) && ex.st_ino) { // if could stat it and it has an inode
+		fd = open(RAND_FILE, O_RDONLY);
+		if (fd < 0) { // could not open it
+			return seed_random && random();
+		} else {
+			double retval;
+			int sizeread = read(fd,&retval,sizeof(double));
+			close(fd); // I should check a return value here - but I wouldn't do much with it :-)
+			if (sizeread != sizeof(double))
+				return seed_random && random();
+			else {
+				return retval;
+			}
+		}
+	} else {
+		return seed_random && random();
 	}
 }

@@ -36,11 +36,19 @@ ACCEPTABLE	[_:]
 
 "\n" 	        { return(EOLN); } 
 
+%{ /* These are commands */
+%}
+
+\\h((ex)|(exadecimal))?		{ return(HEX_CMD); }
+\\o((ct)|(ctal))?			{ return(OCT_CMD); }
+\\d((ec)|(ecimal))?			{ return(DEC_CMD); }
+\\b((in)|(inary))?			{ return(BIN_CMD); }
+
 %{ /* These are the constants (except random) */
 	%}
 (e)				{ yylval.number = W_E; return(NUMBER); }
 ([pP][iI])|(¹)	{ yylval.number = W_PI; return(NUMBER); }
-random			{ yylval.number = rand(); return(NUMBER); }
+random			{ yylval.number = kbw_rand(); return(NUMBER); }
 N[aA]			{ yylval.number = W_AVOGADROS_CONSTANT; return(NUMBER); }
 k				{ yylval.number = W_BOLTZMANN_CONSTANT; return(NUMBER); }
 Cc				{ yylval.number = W_COULOMB_CONSTANT; return(NUMBER); }
@@ -83,21 +91,21 @@ re				{ yylval.number = W_ELECTRON_RADIUS; return(NUMBER); }
 
 %{ /* These are the binary operations */
 	%}
-([!])|(not)  { return(WNOT); }
-[+]  { return(WPLUS); }
-[*]  { return(WMULT); }
-[/]  { return(WDIV); }
-[%]  { return(WMOD); }
-[=]  { return(WEQL); }
-\^   { return(WEXP); }
-(\|\|)|(or) { return(WOR); }
+([!])|(not)	{ return(WNOT); }
+[+]			{ return(WPLUS); }
+[*]			{ return(WMULT); }
+[/]|[Ö]		{ return(WDIV); }
+[%]			{ return(WMOD); }
+[=]			{ return(WEQL); }
+\^			{ return(WEXP); }
+(\|\|)|(or)	{ return(WOR); }
 (\&\&)|(and) { return(WAND); }
 (\=\=)|(equals)|(eq) { return(WEQUAL); }
 (\!\=)|(ne) { return(WNEQUAL); }
-\>   { return(WGT); }
-\<   { return(WLT); }
-\>\= { return(WGEQ); }
-\<\= { return(WLEQ); }
+\>			{ return(WGT); }
+\<			{ return(WLT); }
+\>\=		{ return(WGEQ); }
+\<\=		{ return(WLEQ); }
 
 %{ /* This is a special operator/function */
 	%}

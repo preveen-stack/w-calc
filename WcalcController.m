@@ -218,10 +218,15 @@
 //	printf("precision = %i\n",precision);
 	[prefs setObject:[NSString stringWithFormat:@"%i",precision] forKey:@"precision"];
 
-	if (pretty_answer) free(pretty_answer);
-	pretty_answer = strdup(print_this_result(last_answer));
+	{
+		char * temp;
+		if (pretty_answer) free(pretty_answer);
+		temp = print_this_result(last_answer);
+		if (temp) pretty_answer = strdup(temp);
+		else pretty_answer = NULL;
+	}
 
-	[AnswerField setStringValue:[NSString stringWithCString:pretty_answer]];
+	[AnswerField setStringValue:[NSString stringWithCString:(pretty_answer?pretty_answer:"Not Enough Memory")]];
 
 	[ExpressionField selectText:self];
 }
@@ -250,6 +255,7 @@
 	[historyList reloadData];
 	[ExpressionField selectText:sender];
 	just_answered = TRUE;
+	[prefsController displayPrefs:sender];
 }
 
 - (IBAction)enterData:(id)sender

@@ -80,6 +80,8 @@ int main (int argc, char *argv[])
 			picky_variables = 1;
 		} else if (!strcmp(argv[i],"-r")||!strcmp(argv[i],"--radians")) {
 			use_radians = 1;
+		} else if (!strcmp(argv[i],"--yydebug")) {
+			yydebug = 1;
 		} else {
 			cmdline_input = 1;
 			parseme(argv[i]);
@@ -116,26 +118,9 @@ int main (int argc, char *argv[])
 				} else if (! strncmp(readme,"\\e",2)) {
 					engineering = readme[2]?atoi(readme+2)>0:!engineering;
 					printf("Engineering notation is %s %s\n",engineering?"enabled":"disabled", precision?"":"if the precision is set to a nonzero value");
-				} else if (!strcmp(readme,"\\hex")||!strcmp(readme,"\\hexadecimal")) {
-					output_format = HEXADECIMAL_FORMAT;
-					printf("Hexadecimal Formatted Output\n");
-					if (pretty_answer) free(pretty_answer);
-					pretty_answer = strdup(print_this_result(last_answer));
-				} else if (!strcmp(readme,"\\dec")||!strcmp(readme,"\\decimal")) {
-					output_format = DECIMAL_FORMAT;
-					printf("Decimal Formatted Output\n");
-					if (pretty_answer) free(pretty_answer);
-					pretty_answer = strdup(print_this_result(last_answer));
-				} else if (!strcmp(readme,"\\oct")||!strcmp(readme,"\\octal")) {
-					output_format = OCTAL_FORMAT;
-					printf("Octal Formatted Output\n");
-					if (pretty_answer) free(pretty_answer);
-					pretty_answer = strdup(print_this_result(last_answer));
-				} else if (!strcmp(readme,"\\bin")||!strcmp(readme,"\\binary")) {
-					output_format = BINARY_FORMAT;
-					printf("Binary Formatted Output\n");
-					if (pretty_answer) free(pretty_answer);
-					pretty_answer = strdup(print_this_result(last_answer));
+				} else if (!strcmp(readme,"\\yydebug")) {
+					yydebug = ! yydebug;
+					printf("Debug Mode %s\n",yydebug?"On":"Off");
 				} else if (!strcmp(readme,"?") || !strcmp(readme,"help")) {
 					print_interactive_help();
 				} else {

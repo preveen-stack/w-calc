@@ -19,6 +19,7 @@
     IBOutlet id variableList;
 	IBOutlet NSWindow *mainWindow;
 	IBOutlet id keypad;
+	IBOutlet id prefsController;
 
 	bool just_answered;
 	NSView *superview;
