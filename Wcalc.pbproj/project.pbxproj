@@ -244,7 +244,7 @@
 	<key>CFBundleExecutable</key>
 	<string>Wcalc</string>
 	<key>CFBundleGetInfoString</key>
-	<string>Wcalc Version 1.4.4</string>
+	<string>Wcalc Version 1.4.5</string>
 	<key>CFBundleIconFile</key>
 	<string>TheW</string>
 	<key>CFBundleIdentifier</key>
@@ -256,11 +256,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>Wcalc 1.4.4</string>
+	<string>Wcalc 1.4.5</string>
 	<key>CFBundleSignature</key>
 	<string>Wcal</string>
 	<key>CFBundleVersion</key>
-	<string>1.4.4</string>
+	<string>1.4.5</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
@@ -652,13 +652,13 @@
 		};
 		F5B29D6001F738F601A80164 = {
 			children = (
+				F5DEAE8F021254A501A80164,
 				F5B29D6501F7391601A80164,
 				F5B29D6601F7391601A80164,
 				F5B29D7301F7394501A80164,
 				F5B29D7401F7394501A80164,
 				F5B29D6D01F7393A01A80164,
 				F5B29D6E01F7393A01A80164,
-				F5DEAE8F021254A501A80164,
 				F5293926023032E201A80164,
 				F5293927023032E201A80164,
 			);
