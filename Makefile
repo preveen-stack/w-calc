@@ -36,7 +36,7 @@ rh: ${PROGRAM}-rh
 # How to make the whole program
 # (don't forget the Lex Library "-ll")
 ${PROGRAM} : ${OBJECTS} libreadline.a
-	${CC} ${OBJECTS} libreadline.a -o ${PROGRAM} ${LFLAGS}
+	${CC} ${OBJECTS} libreadline.a -ltermcap -o ${PROGRAM} ${LFLAGS}
 
 ${PROGRAM}-rh : ${OBJECTS}
 	${CC} ${OBJECTS} -lreadline -lm -ltermcap -o ${PROGRAM} ${LFLAGS}
