@@ -226,7 +226,44 @@ int main (int argc, char *argv[])
 		fprintf(stderr, "Could not determine terminal type.\n");
 	} else {
 		/* if stdin is ANYTHING ELSE (a pipe, a file, etc), don't prompt */
-		yyparse();
+		char *line, gotten;
+		unsigned int linelen = 0, maxlinelen = 100;
+		while (1) {
+			line = calloc(maxlinelen,sizeof(char));
+			gotten = fgetc(stdin);
+			while (gotten != '\n' && ! feof(stdin) && ! ferror(stdin)) {
+				line[linelen] = gotten;
+				gotten = fgetc(stdin);
+				linelen++;
+				if (linelen > maxlinelen) {
+					char * temp;
+					temp = realloc(line, (maxlinelen+100)*sizeof(char));
+					if (! temp) {
+						free(line);
+						fprintf(stderr,"Ran out of memory. Line too long.\n");
+						exit(-1);
+					}
+					memset(temp+maxlinelen,0,100);
+					maxlinelen += 100;
+					line = temp;
+				}
+			}
+			if (ferror(stdin) || (feof(stdin) && linelen == 0)) break;
+			parseme(line);
+			putval("a",last_answer);
+			{
+				extern char * errstring;
+				if (errstring && strlen(errstring)) {
+					fprintf(stderr,"%s",errstring);
+					if (errstring[strlen(errstring)-1] != '\n')
+						fprintf(stderr,"\n");
+					free(errstring);
+					errstring=NULL;
+				}
+			}
+			free(line);
+			linelen = 0;
+		}
 	}
 
 	exit(0);
