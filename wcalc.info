@@ -4,7 +4,7 @@ Revision: 1
 Maintainer: Kyle Wheeler <kyle-fink-wcalc@memoryhole.net>
 Source: mirror:sourceforge:w-calc/Wcalc-%v.tar.bz2
 #Source-MD5: 727a4d8be1e5fa553340398c1bca8dce
-DocFiles: AUTHORS COPYING COPYRIGHT INSTALL NEWS ReadMe.rtf
+DocFiles: AUTHORS COPYING COPYRIGHT INSTALL NEWS ReadMe.rtf wcalc.rc
 ConfigureParams: --mandir=%i/share/man/
 Depends: readline-shlibs
 BuildDepends: readline
