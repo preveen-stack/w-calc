@@ -195,6 +195,7 @@ static char update_history = 0;
 		[prefs setObject:@"YES" forKey:@"strictSyntax"];
 		[prefs setObject:@"0" forKey:@"roundingIndication"];
 		[prefs setObject:@"NO" forKey:@"historyShowing"];
+		[prefs setObject:@"NO" forKey:@"baseShowing"];
 	}
 	conf.precision = [prefs integerForKey:@"precision"];
 	conf.engineering = [prefs boolForKey:@"engineeringNotation"];
@@ -240,11 +241,19 @@ static char update_history = 0;
 
 	/* suggested by cocoa-dev */
 	if ([prefs boolForKey:@"historyShowing"]) {
-		[NSTimer scheduledTimerWithTimeInterval:0 target:self selector:@selector(performOpen:) userInfo:nil repeats:NO];
+		[NSTimer scheduledTimerWithTimeInterval:0 target:self selector:@selector(openIDrawer:) userInfo:nil repeats:NO];
+	}
+	if ([prefs boolForKey:@"baseShowing"]) {
+		[NSTimer scheduledTimerWithTimeInterval:0 target:self selector:@selector(openBDrawer:) userInfo:nil repeats:NO];
 	}
 }
 
-- (void)performOpen: (id) sender
+- (void)openBDrawer: (id) sender
+{
+	[baseDrawer open];
+}
+
+- (void)openIDrawer: (id) sender
 {
 	[theDrawer open];
 }
@@ -409,11 +418,14 @@ static char update_history = 0;
 
 - (IBAction)showBaseDrawer:(id)sender
 {
+	NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
 	if (! [baseDrawer state]) {
 		[baseDrawer open];
+		[prefs setObject:@"YES" forKey:@"baseShowing"];
 		[baseMenu setTitle:@"Hide Base Drawer"];
 	} else {
 		[baseDrawer close];
+		[prefs setObject:@"NO" forKey:@"baseShowing"];
 		[baseMenu setTitle:@"Open Base Drawer"];
 	}
 }
