@@ -181,6 +181,7 @@ static char update_history = 0;
 	NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
 	NSRect w;
 	NSSize bounds;
+	
 	if (! [prefs integerForKey:@"initialized"]) {
 		[prefs setObject:@"1" forKey:@"initialized"];
 		[prefs setObject:@"-1" forKey:@"precision"];
@@ -214,6 +215,7 @@ static char update_history = 0;
 	[PrecisionSlider setIntValue:conf.precision];
 	just_answered = FALSE;
 
+	/* reset the window to the saved setting */
 	superview = [keypad superview];
 	[keypad retain];
 	[PrecisionSlider retain];
@@ -239,7 +241,7 @@ static char update_history = 0;
 //	w = [mainWindow frame];
 //	bounds = [mainWindow minSize];
 
-	/* suggested by cocoa-dev */
+	/* this restores the drawer states */
 	if ([prefs boolForKey:@"historyShowing"]) {
 		[NSTimer scheduledTimerWithTimeInterval:0 target:self selector:@selector(openIDrawer:) userInfo:nil repeats:NO];
 	}
