@@ -1,3 +1,13 @@
+--- Version 1.5.1 ---
+Oct 20 2002 - Kyle Wheeler
+ - Added an option to avoid precision pitfalls (BOTH).
+ - Recompiled for Jaguar (BOTH).
+Oct 03 2002 - Kyle Wheeler
+ - Lists variables in command-line mode (CLI)
+Sep 08 2002 - Kyle Wheeler
+ - Another way to tell it "hex" (BOTH)
+ - Fixed the division thing (GUI)
+--- Version 1.5 ---
 Aug 08 2002 - Kyle Wheeler
  - Added conversions (GUI)
 Jul 31 2002 - Kyle Wheeler
