@@ -6,6 +6,8 @@
 #import "WcalcController.h"
 #import "string_manip.h"
 #import "files.h"
+#import "MyTextField.h"
+#import "simpleCalc.h"
 
 #define KEYPAD_HEIGHT 165
 #define MIN_WINDOW_WIDTH 171
@@ -221,6 +223,7 @@ static NSString *curFile = NULL;
 		[prefs setObject:@"NO" forKey:@"historyLimit"];
 		[prefs setObject:@"1000" forKey:@"historyLimitLength"];
 		[prefs setObject:@"NO" forKey:@"printInts"];
+		[prefs setObject:@"NO" forKey:@"simpleCalc"];
 	}
 	conf.precision = [prefs integerForKey:@"precision"];
 	conf.engineering = [prefs boolForKey:@"engineeringNotation"];
@@ -233,6 +236,7 @@ static NSString *curFile = NULL;
 	conf.rounding_indication = [prefs integerForKey:@"roundingIndication"];
 	conf.precision_guard = [prefs boolForKey:@"precisionGuard"];
 	conf.print_ints = [prefs boolForKey:@"printInts"];
+	conf.simple_calc = [prefs boolForKey:@"simpleCalc"];
 	/* history preferences */
 	allow_duplicates = [prefs boolForKey:@"historyDuplicatesAllowed"];
 	update_history = [prefs boolForKey:@"updateHistory"];
@@ -287,6 +291,13 @@ static NSString *curFile = NULL;
 	if ([prefs boolForKey:@"baseShowing"]) {
 		[NSTimer scheduledTimerWithTimeInterval:0 target:self selector:@selector(openBDrawer:) userInfo:nil repeats:NO];
 	}
+	
+	/* set the correct expression display for simple_calc */
+	if (conf.simple_calc) {
+		[ExpressionField setStringValue:@"0"];
+		[AnswerField setStringValue:@"0"];
+		simpleClearAll();
+	}
 }
 
 - (void)openBDrawer: (id) sender
@@ -312,16 +323,9 @@ static NSString *curFile = NULL;
 		last_pres = [PrecisionSlider intValue];
 
 	conf.precision = last_pres;
-//	printf("precision = %i\n",precision);
 	[prefs setObject:[NSString stringWithFormat:@"%i",conf.precision] forKey:@"precision"];
 
-	{
-		char * temp;
-		if (pretty_answer) free(pretty_answer);
-		temp = print_this_result(last_answer);
-		if (temp) pretty_answer = strdup(temp);
-		else pretty_answer = NULL;
-	}
+	set_prettyanswer(last_answer);
 
 	[AnswerField setStringValue:[NSString stringWithCString:(pretty_answer?pretty_answer:"Not Enough Memory")]];
 	if (not_all_displayed) {
@@ -338,40 +342,37 @@ static NSString *curFile = NULL;
 	char * expression;
 	double val;
 	extern char * errstring;
-	int pout_fmt = conf.output_format;
-
+	
 	expression = strdup([[ExpressionField stringValue] cString]);
-
+	
 	val = parseme(expression);
 	putval("a",val);
-
+	
 	/* if it isn't an error (or if you want me to remember errors) record it in the history */
 	if (!errstring || (errstring && !strlen(errstring)) || conf.remember_errors) {
 		addToHistory(expression, val);
 		free(expression);
 	}
+	
+	[self displayAnswer];
+}
+
+- (void)displayAnswer
+{
+	extern char * errstring;
+
 	/* if there is an error, display it */
 	if (errstring && strlen(errstring)) {
-	    extern int scanerror;
-	    scanerror = 0;
+		extern int scanerror;
+		scanerror = 0;
 		[errorController throwAlert:[NSString stringWithCString:errstring]];
 		free(errstring);
 		errstring = NULL;
 	}
-	/* why is this if here? */
-	if (pout_fmt != conf.output_format) {
-		char * temp;
-		if (pretty_answer) free(pretty_answer);
-		temp = print_this_result(last_answer);
-		if (temp) pretty_answer = strdup(temp);
-		else pretty_answer = NULL;
-		[AnswerField setStringValue:[NSString stringWithCString:(pretty_answer?pretty_answer:"Not Enough Memory")]];
-	} else {
-		/* display the answer */
-		[AnswerField setStringValue:[NSString stringWithFormat:@"%s",pretty_answer]];
-	}
+	/* display the answer */
+	[AnswerField setStringValue:[NSString stringWithFormat:@"%s",pretty_answer]];
 	[AnswerField setTextColor:(not_all_displayed?[NSColor redColor]:[NSColor blackColor])];
-	
+
 	// if the drawer is open, refresh the data.
 	if ([theDrawer state]) {
 		[variableList reloadData];
@@ -380,14 +381,13 @@ static NSString *curFile = NULL;
 	just_answered = TRUE;
 	// refresh the prefs if necessary
 	if ([thePrefPanel isVisible])
-		[self displayPrefs:sender];
+		[self displayPrefs:0];
 	[outputFormat2 selectCellWithTag:conf.output_format];
 	[ExpressionField selectText:self];
 }
 
 - (IBAction)convert:(id)sender
 {
-	char * temp;
 	int type = [convertType indexOfSelectedItem];
 	int from = [convertFrom selectedRow];
 	int to = [convertTo selectedRow];
@@ -397,10 +397,7 @@ static NSString *curFile = NULL;
 	if (to < 0) return;
 	
 	last_answer = uber_conversion(type, from, to, last_answer);
-	if (pretty_answer) free(pretty_answer);
-	temp = print_this_result(last_answer);
-	if (temp) pretty_answer = strdup(temp);
-	else pretty_answer = NULL;
+	set_prettyanswer(last_answer);
 	[AnswerField setStringValue:[NSString stringWithCString:(pretty_answer?pretty_answer:"Not Enough Memory")]];
 	putval("a",last_answer);
 	if ([theDrawer state]) {
@@ -413,47 +410,111 @@ static NSString *curFile = NULL;
 	NSString * sent = [[sender attributedTitle] string];
 	char * str = strdup([[ExpressionField stringValue] cString]);
 	static short shiftdown = 0, capsdown = 0;
-
+	int tag;
+	
 	[ExpressionField setSelectable:FALSE];
-	if ([sent isEqualToString:@"delete"]) {
-		if (strlen(str)) {
-			str[strlen(str)-1] = 0;
-			[ExpressionField setStringValue:[NSString stringWithCString:str]];
-		}
-	} else if ([sent isEqualToString:@"caps"]) {
-		if (capsdown) {
-			[shiftKey1 setEnabled:true];
-			[shiftKey2 setEnabled:true];
-			capsdown = 0;
-		} else {
-			[shiftKey1 setEnabled:false];
-			[shiftKey2 setEnabled:false];
-			capsdown = 1;
-		}
-	} else if ([sent isEqualToString:@"shift"]) {
-		if (shiftdown) {
-			[shiftKey1 setState:NSOffState];
-			[shiftKey2 setState:NSOffState];
-			shiftdown = 0;
-		} else {
-			[shiftKey1 setState:NSOnState];
-			[shiftKey2 setState:NSOnState];
-			shiftdown = 1;
-		}
-	} else {
-		if (just_answered == FALSE) {
-			[ExpressionField setStringValue:[[ExpressionField stringValue] stringByAppendingString:sent]];
-		} else if ([sent isEqualToString:@"+"] || [sent isEqualToString:@"-"]||[sent isEqualToString:@"*"]||[sent isEqualToString:@"/"]||[sent isEqualToString:@"%"]||[sent isEqualToString:@"+"]||[sent isEqualToString:@"("]||[sent isEqualToString:@"&"]||[sent isEqualToString:@"|"]||[sent isEqualToString:@"Ö"]) {
-			[ExpressionField setStringValue:[[@"a" self] stringByAppendingString:sent]];
-		} else {
-			[ExpressionField setStringValue:sent];
-		}
-		if (shiftdown) {
-			[shiftKey1 setState:NSOffState];
-			[shiftKey2 setState:NSOffState];
-			shiftdown = 0;
-		}
-		just_answered = FALSE;
+	tag = [sender tag];
+	switch (tag) {
+		case 101: /* delete key on the onscreen keyboard */
+			if (strlen(str)) {
+				str[strlen(str)-1] = 0;
+				[ExpressionField setStringValue:[NSString stringWithCString:str]];
+			}
+			break;
+		case 100: /* clear key on the onscreen keypad */
+			if (!conf.simple_calc) {
+				if ([[ExpressionField stringValue] cStringLength]) {
+					[ExpressionField setStringValue:@""];
+					[ExpressionField selectText:self];
+				} else if ([[AnswerField stringValue] cStringLength]) {
+					[AnswerField setStringValue:@""];
+					[ExpressionField selectText:self];
+				}
+			} else {
+				if (! [[ExpressionField stringValue] isEqualToString:@"0"]) {
+					[ExpressionField setStringValue:@"0"];
+					[ExpressionField selectText:self];
+					simpleClearEntry();
+				} else if (! [[AnswerField stringValue] isEqualToString:@"0"]) {
+					[AnswerField setStringValue:@"0"];
+					[ExpressionField selectText:self];
+					simpleClearAll();
+				}
+			}
+			break;
+		case 102: /* caps lock key on onscreen keyboard */
+			if (capsdown) {
+				[shiftKey1 setEnabled:true];
+				[shiftKey2 setEnabled:true];
+				capsdown = 0;
+			} else {
+				[shiftKey1 setEnabled:false];
+				[shiftKey2 setEnabled:false];
+				capsdown = 1;
+			}
+			break;
+		case 103: /* shift key on onscreen keyboard */
+			if (shiftdown) {
+				[shiftKey1 setState:NSOffState];
+				[shiftKey2 setState:NSOffState];
+				shiftdown = 0;
+			} else {
+				[shiftKey1 setState:NSOnState];
+				[shiftKey2 setState:NSOnState];
+				shiftdown = 1;
+			}
+			break;
+		case 104: /* = key on onscreen keypad */
+			if (! conf.simple_calc) {
+				[self go:sender];
+			} else {
+				char * exp = strdup([[ExpressionField stringValue] cString]);
+				char * ret;
+				ret = simpleCalc('=',exp);
+				if (ret) {
+					[ExpressionField setStringValue:[NSString stringWithCString:ret]];
+					free(ret);
+				} else {
+					[self displayAnswer];
+					[ExpressionField setStringValue:[AnswerField stringValue]];
+				}
+				free(exp);
+			}
+			break;
+		case 105: /* the divide key on the onscreen keypad */
+		default:
+			if (! conf.simple_calc) { /* the real power of Wcalc */
+				if (just_answered == FALSE) {
+					[ExpressionField setStringValue:[[ExpressionField stringValue] stringByAppendingString:sent]];
+				} else if ([sent isEqualToString:@"+"] || [sent isEqualToString:@"-"]||[sent isEqualToString:@"*"]||[sent isEqualToString:@"/"]||[sent isEqualToString:@"%"]||[sent isEqualToString:@"+"]||[sent isEqualToString:@"("]||[sent isEqualToString:@"&"]||[sent isEqualToString:@"|"]||[sent isEqualToString:@"Ö"]) {
+					[ExpressionField setStringValue:[[@"a" self] stringByAppendingString:sent]];
+				} else {
+					[ExpressionField setStringValue:sent];
+				}
+				if (shiftdown) {
+					[shiftKey1 setState:NSOffState];
+					[shiftKey2 setState:NSOffState];
+					shiftdown = 0;
+				}
+				just_answered = FALSE;
+			} else { /* stupid calculator */
+				char *ret, *exp;
+				exp = strdup([[ExpressionField stringValue] cString]);
+				if (tag == 105) {
+					ret = simpleCalc('/',exp);
+				} else {
+					ret = simpleCalc([sent characterAtIndex:0],exp);
+				}
+				free(exp);
+				if (ret) {
+					[ExpressionField setStringValue:[NSString stringWithCString:ret]];
+					free(ret);
+				} else {
+					[self displayAnswer];
+					[ExpressionField setStringValue:[AnswerField stringValue]];
+				}
+			}
+			break;
 	}
 	[ExpressionField setEditable:TRUE];
 	free(str);
@@ -579,13 +640,6 @@ static NSString *curFile = NULL;
 				[prefs setObject:(update_history?@"YES":@"NO") forKey:@"updateHistory"];
 			}
 				break;
-/*		case 9: // Flag Confusing Numbers
-			olde = conf.strict_syntax;
-			conf.strict_syntax = ([sender state]==NSOnState);
-			if (olde != conf.strict_syntax) {
-				[prefs setObject:(conf.strict_syntax?@"YES":@"NO") forKey:@"strictSyntax"];
-			}
-				break;*/
 		case 10: // Rounding Indication
 			olde = conf.rounding_indication;
 			conf.rounding_indication = [sender indexOfSelectedItem];
@@ -615,24 +669,38 @@ static NSString *curFile = NULL;
 		    [limitHistoryLen setEnabled:conf.history_limit];
 		    [limitHistoryLenTag setEnabled:conf.history_limit];
 		    if (olde != conf.history_limit) {
-			[prefs setObject:(conf.history_limit?@"YES":@"NO") forKey:@"historyLimit"];
+				[prefs setObject:(conf.history_limit?@"YES":@"NO") forKey:@"historyLimit"];
 		    }
 			break;
 		case 14: // History length limit
 		    olde = conf.history_limit_len;
 		    conf.history_limit_len = [sender intValue];
 		    if (olde != conf.history_limit_len) {
-			[prefs setObject:[NSString stringWithFormat:@"%i",conf.history_limit_len] forKey:@"historyLimitLength"];
+				[prefs setObject:[NSString stringWithFormat:@"%i",conf.history_limit_len] forKey:@"historyLimitLength"];
 		    }
-                        break;
-                case 15: // Print ints
-                    olde = conf.print_ints;
-                    conf.print_ints = ([sender state]==NSOnState);
-                    if (olde != conf.print_ints) {
-                        need_redraw = 1;
-                        [prefs setObject:(conf.print_ints?@"YES":@"NO") forKey:@"printInts"];
-                    }
-                        break;
+				break;
+		case 15: // Print ints
+			olde = conf.print_ints;
+			conf.print_ints = ([sender state]==NSOnState);
+			if (olde != conf.print_ints) {
+				need_redraw = 1;
+				[prefs setObject:(conf.print_ints?@"YES":@"NO") forKey:@"printInts"];
+			}
+				break;
+		case 16: // Simple calculator
+			olde = conf.simple_calc;
+			conf.simple_calc = ([sender state]==NSOnState);
+			if (olde != conf.simple_calc) {
+				[prefs setObject:(conf.simple_calc?@"YES":@"NO") forKey:@"simpleCalc"];
+				if (conf.simple_calc) {
+					[ExpressionField setStringValue:@"0"];
+					[AnswerField setStringValue:@"0"];
+					simpleClearAll();
+				} else {
+					[ExpressionField setStringValue:@""];
+					[AnswerField setStringValue:@""];
+				}
+			}
 		default: return;
 	}
 
@@ -642,15 +710,7 @@ static NSString *curFile = NULL;
 				recalculate = 1;
 			[self go:sender];
 		case 1:
-		{
-			char *temp;
-			if (pretty_answer) free(pretty_answer);
-
-			temp = print_this_result(last_answer);
-			if (temp)
-				pretty_answer = strdup(temp);
-			else
-				pretty_answer = NULL;
+			set_prettyanswer(last_answer);
 
 			[AnswerField setStringValue:[NSString stringWithCString:(pretty_answer?pretty_answer:"Not Enough Memory")]];
 			[AnswerField setTextColor:((not_all_displayed)?([NSColor redColor]):([NSColor blackColor]))];
@@ -661,7 +721,6 @@ static NSString *curFile = NULL;
 			
 			[ExpressionField selectText:self];
 			break;
-		}
 //		case 2:
 //			[self go:sender];
 //			break;
@@ -729,7 +788,6 @@ static NSString *curFile = NULL;
 	char * errstr;
 	errstr = malloc(strlen(strerror(errno))+[filename cStringLength]+3);
 	sprintf(errstr,"%s: %s",[filename cString], strerror(errno));
-	printf("errno = %i\n",errno);
 	[errorController throwAlert:[NSString stringWithCString:errstr]];
 	free(errstr);				
 }
@@ -790,7 +848,9 @@ static NSString *curFile = NULL;
 	[roundingIndication selectItemAtIndex:conf.rounding_indication];
 	[rememberErrors setState:(conf.remember_errors?NSOnState:NSOffState)];
 	[limitHistory setState:(conf.history_limit?NSOnState:NSOffState)];
-        [printInts setState:(conf.print_ints?NSOnState:NSOffState)];
+	[printInts setState:(conf.print_ints?NSOnState:NSOffState)];
+	[precisionGuard setState:(conf.precision_guard?NSOnState:NSOffState)];
+	[simpleCalculator setState:(conf.simple_calc?NSOnState:NSOffState)];
 	
 	[printPrefixes setEnabled:(conf.output_format!=DECIMAL_FORMAT)];
 	[engineeringNotation setEnabled:(conf.output_format==DECIMAL_FORMAT)];

@@ -26,7 +26,9 @@
 	IBOutlet NSButton *rememberErrors;
 	IBOutlet NSButton *enterKey;
 	IBOutlet NSButton *limitHistory;
-        IBOutlet NSButton *printInts;
+	IBOutlet NSButton *precisionGuard;
+	IBOutlet NSButton *printInts;
+	IBOutlet NSButton *simpleCalculator;
 	
     IBOutlet NSTextField *AnswerField;
     IBOutlet NSTextField *ExpressionField;
@@ -77,6 +79,7 @@
 - (IBAction)save:(id)sender;
 - (IBAction)saveAs:(id)sender;
 
+- (void)displayAnswer;
 - (void)displayErrno:(int)err forFile:(NSString*)filename;
 - (BOOL)validateMenuItem:(NSMenuItem *)anItem;
 @end
