@@ -500,35 +500,6 @@ static int seed_random (void)
 	return 1;
 }
 
-double uber_conversion (int utype, int fromunit, int tounit, double value)
-{
-	int max_unit_val = 0;
-	char conversion_string[1024];
-
-	if (fromunit < 0 || tounit < 0) {
-		report_error("Invalid unit types.");
-		return 0.00;
-	}
-	
-	switch (utype) {
-		case LENGTH_C:      max_unit_val = MAX_LENGTH_UNIT;      break;
-		case AREA_C:        max_unit_val = MAX_AREA_UNIT;        break;
-		case VOLUME_C:      max_unit_val = MAX_VOLUME_UNIT;      break;
-		case MASS_C:        max_unit_val = MAX_MASS_UNIT;        break;
-		case TEMPERATURE_C: max_unit_val = MAX_TEMPERATURE_UNIT; break;
-		default:
-			report_error("Invalid category of units.");
-			return 0.00;
-	}
-	if (fromunit > max_unit_val || tounit > max_unit_val) {
-		report_error("Invalid unit types.");
-		return 0.00;
-	}
-
-	sprintf(conversion_string,conversions[utype][fromunit][tounit],value);
-	return parseme(conversion_string);
-}
-
 double kbw_rand (void)
 {
 	struct stat ex;
