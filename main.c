@@ -35,7 +35,7 @@ int main (int argc, char *argv[])
 {
 	extern int yydebug;
 	extern int lines;
-	char *readme = NULL;
+	char *readme = NULL, oldtsep=',', olddsep='.';
 	int tty, i;
 	short cmdline_input = 0;
 
@@ -119,10 +119,31 @@ int main (int argc, char *argv[])
 				} else if (!strncmp(readme,"?",1) || !strncmp(readme,"help",4)) {
 					add_history(readme);
 					print_interactive_help();
+				} else if (!strncmp(readme,"\\dsep",5) && readme[5] != '\n') {
+					add_history(readme);
+					conf.charkey[(int)olddsep] = olddsep;
+					conf.charkey[(int)readme[5]] = '.';
+					olddsep = readme[5];
+					if (conf.charkey[(int)','] != ',' && readme[5]!='.') {
+						conf.charkey[(int)'.'] = '@';
+					}
+					printf("%c is now the decimal separator.\n", readme[5]);
+				} else if (!strncmp(readme,"\\tsep",5) && readme[5] != '\n') {
+					add_history(readme);
+					conf.charkey[(int)oldtsep] = oldtsep;
+					conf.charkey[(int)readme[5]] = ',';
+					oldtsep = readme[5];
+					if (conf.charkey[(int)','] != '.' && readme[5]!=',') {
+						conf.charkey[(int)','] = '#';
+					}
+					printf("%c is now the thousands separator.\n",readme[5]);
 				} else {
 					parseme(readme);
-					if (!errstring || (errstring && !strlen(errstring)) || remember_errors) {
-						add_history(readme);
+					{
+						extern char * errstring;
+						if (!errstring || (errstring && !strlen(errstring)) || conf.remember_errors) {
+							add_history(readme);
+						}
 					}
 				}
 				putvar("a",last_answer);
