@@ -135,7 +135,7 @@ abs { return(WABS); }
 	return(VAR);
 }
 
-(({NDIGIT}{DIGIT}*(e[-+]?{DIGIT}+)?)|([.,]{DIGIT}+(e[-+]?{DIGIT}+)?)|({NDIGIT}{DIGIT}*[.,]{DIGIT}*(e[-+]?{DIGIT}+)?)) {
+(({NDIGIT}{DIGIT}*(e[-+]?{DIGIT}+)?)|([.,]{DIGIT}+(e[-+]?{DIGIT}+)?)|((({NDIGIT}{DIGIT}*)|(0))[.,]{DIGIT}*(e[-+]?{DIGIT}+)?)) {
 	yylval.number = strtod(yytext,NULL);
 	if ((yylval.number != HUGE_VAL) && (yylval.number != -HUGE_VAL)) {
 		return(NUMBER);
