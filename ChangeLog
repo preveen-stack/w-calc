@@ -1,3 +1,14 @@
+Feb  3 2002 - Kyle Wheeler
+ - More improvements to the parser (BOTH)
+ - Added LOTS of constants (BOTH)
+Feb  2 2002 - Kyle Wheeler
+ - Added menus for functions and symbols (GUI)
+ - Added absolute value "|expression|" (BOTH)
+ - Added a bunch of physical constants to the symbols (BOTH)
+ - Saves toggled status (GUI)
+Jan 30 2002 - Kyle Wheeler
+ - Added the ability to toggle the presence of the keypad (GUI)
+--- Version 1.2 ---
 Jan 29 2002 - Kyle Wheeler
  - Fixed the grammar again (BOTH)
  - Began work on continuous calculations (GUI)
