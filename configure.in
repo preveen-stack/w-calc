@@ -1,0 +1,48 @@
+# Process this file with autoconf to produce a configure script.
+AC_INIT(wcalc, 1.5.2, kwheeler@cse.nd.edu)
+AM_INIT_AUTOMAKE(wcalc, 1.5.2)
+AC_CONFIG_SRCDIR([WcalcController.h])
+AM_CONFIG_HEADER([config.h])
+
+# Checks for programs.
+AC_PROG_YACC
+AC_PROG_CC
+AM_PROG_LEX
+AC_PROG_INSTALL
+
+# Checks for libraries.
+# FIXME: Replace `main' with a function in `-ll':
+AC_CHECK_LIB([l], [main])
+# FIXME: Replace `main' with a function in `-lm':
+AC_CHECK_LIB([m], [acos])
+# FIXME: Replace `main' with a function in `-ltermcap':
+AC_CHECK_LIB([termcap], [clear])
+# FIXME: Replace `main' with a function in `-lreadline':
+AC_ARG_WITH(readline,[  --without-readline      do not try to find and use the readline library],nc_cv_readline=$withval,nc_cv_readline=yes)
+if test $"$nc_cv_readline" = yes ; then
+dnl	AC_CHECK_LIB([readline], [_readline])
+	VL_LIB_READLINE
+dnl	PGAC_CHECK_READLINE
+fi
+
+# Checks for header files.
+AC_HEADER_STDC
+AC_HEADER_SYS_WAIT
+AC_HEADER_TIME
+AC_HEADER_STAT
+AC_CHECK_HEADERS([fcntl.h float.h inttypes.h stdlib.h string.h strings.h unistd.h])
+
+# Checks for typedefs, structures, and compiler characteristics.
+AC_C_CONST
+
+# Checks for library functions.
+AC_FUNC_MALLOC
+AC_FUNC_REALLOC
+AC_FUNC_STAT
+AC_FUNC_STRTOD
+AC_FUNC_VPRINTF
+AC_CHECK_FUNCS([memset floor modf pow rint sqrt strchr strdup strerror])
+
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT
+

@@ -7,6 +7,7 @@
  *
  */
 
+#include "config.h"
 #include "historyManager.h"
 #include "calculator.h"
 

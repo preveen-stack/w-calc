@@ -1,22 +1,41 @@
+#include "config.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>		/* for HUGE_VAL */
 #include <float.h>		/* for DBL_EPSILON */
-#ifndef SOLARIS
-#include <string.h>		/* for bzero() */
-#include <stdint.h>		/* for UINT32_MAX */
-#else
-#include <strings.h>	/* for bzero() */
-#include <sys/int_limits.h> /* for UINT32_MAX */
-#endif
+#include <inttypes.h>	/* for UINT32_MAX */
 #include <ctype.h>      /* for isalpha() */
 /* these are for kbw_rand() */
-#include <sys/types.h>	/* for stat() and read() */
-#include <sys/stat.h>	/* for stat() */
-#include <fcntl.h>		/* for open() */
-#include <sys/uio.h>	/* for read() */
-#include <unistd.h>		/* for read() and close */
-#include <time.h>		/* for time() */
+#if !STAT_MACROS_BROKEN
+# include <sys/types.h>	/* for stat() and read() */
+# include <sys/stat.h>	/* for stat() */
+# include <fcntl.h>		/* for open() */
+# include <sys/uio.h>	/* for read() */
+# include <unistd.h>		/* for read() and close */
+#else
+#define kbw_rand random
+#endif
+
+#if STDC_HEADERS
+# include <string.h>	/* for memset() */
+#else
+# if !HAVE_STRCHR
+#  define strchr index
+#  define strrchr rindex
+# endif
+char *strchr(), *strrchr ();
+#endif
+
+#if TIME_WITH_SYS_TIME	/* for time() */
+# include <sys/time.h>
+# include <time.h>
+#else
+# if HAVE_SYS_TIME_H
+#  include <sys/time.h>
+# else
+#  include <time.h>
+# endif
+#endif
 
 #include "calculator.h"
 #include "variables.h"
@@ -517,7 +536,7 @@ double fact (int in)
 		if (in > 0) {
 			if (lookuplen < in) {
 				lookup = realloc(lookup,sizeof(double)*(in+1));
-				bzero(lookup+lookuplen, sizeof(double)*(in+1-lookuplen));
+				memset(lookup+lookuplen, 0, sizeof(double)*(in+1-lookuplen));
 			}
 			lookup[in-1] = in * fact(in-1);
 		} else
@@ -536,6 +555,7 @@ static int seed_random (void)
 	return 1;
 }
 
+#if !STAT_MACROS_BROKEN
 double kbw_rand (void)
 {
 	struct stat ex;
@@ -559,4 +579,5 @@ double kbw_rand (void)
 		return seed_random && random();
 	}
 }
+#endif
 

@@ -7,6 +7,7 @@
  *
  */
 
+#include "config.h"
 #include <stdio.h>
 #include "calculator.h"
 #include "conversion.h"

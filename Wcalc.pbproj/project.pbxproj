@@ -181,7 +181,6 @@
 		};
 		29B97317FDCFA39411CA2CEA = {
 			children = (
-				F57B9A970267F76201A80164,
 				F5B29D6F01F7393A01A80164,
 				F5B29D7B01F7398A01A80164,
 				089C165CFE840E0CC02AAC07,
@@ -520,7 +519,6 @@
 			files = (
 				F510EE8B0217160601A80164,
 				F5459F57022612F901A80164,
-				F57B9A980267F76201A80164,
 			);
 			isa = PBXFrameworksBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -665,17 +663,6 @@
 		};
 		F574E09F01FD122F01A80164 = {
 			fileRef = F574E09D01FD122F01A80164;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F57B9A970267F76201A80164 = {
-			isa = PBXFileReference;
-			path = libreadline.a;
-			refType = 4;
-		};
-		F57B9A980267F76201A80164 = {
-			fileRef = F57B9A970267F76201A80164;
 			isa = PBXBuildFile;
 			settings = {
 			};

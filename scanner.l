@@ -48,17 +48,17 @@ ACCEPTABLE	[_:]
 	yylval.number = atoi(foo);
 	return(ENG_CMD);}
 \\cons(ervative)?       { return(GUARD_CMD); }
-\\h(ex(adecimal)?)?		{ return(HEX_CMD); }
+\\h(ex(adecimal)?)?     { return(HEX_CMD); }
+\\hlimit{DIGIT}+        { yylval.number = atoi(yytext+7); return(HLIMIT_CMD); }
 \\x                     { return(HEX_CMD); }
-\\l(enient)?			{ return(PICKY_CMD); }
+\\l(enient)?            { return(PICKY_CMD); }
 \\li(st(vars)?)?        { return(LISTVAR_CMD); }
-\\o(ct(al)?)?			{ return(OCT_CMD); }
-\\p({DIGIT}|[-])+		{ yylval.number = atoi(yytext+2);
-	return(PRECISION_CMD);}
-\\p(icky)?				{ return(PICKY_CMD); }
-\\r(ad(ians)?)?			{ return(RADIAN_CMD); }
+\\o(ct(al)?)?           { return(OCT_CMD); }
+\\p({DIGIT}|[-])+       { yylval.number = atoi(yytext+2); return(PRECISION_CMD);}
+\\p(icky)?              { return(PICKY_CMD); }
+\\r(ad(ians)?)?         { return(RADIAN_CMD); }
 \\re(member(_errors)?)? { return(REMEMBER_CMD); }
-\\s(tr(ict)?)?			{ return(STRICT_CMD); }
+\\s(tr(ict)?)?          { return(STRICT_CMD); }
 \\c(onv(ert)?)?{WHITESPACE}+{LETTER}+{WHITESPACE}+{LETTER}+{WHITESPACE}+{LETTER}+ {}
 \/\*.*\*\/              { }
 \/\/.*                  { }

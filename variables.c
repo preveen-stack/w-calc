@@ -1,3 +1,4 @@
+#include "config.h"
 #include <ctype.h>
 #include <pwd.h>        /* for getpwent */
 #include <sys/types.h>  /* for getpwent */

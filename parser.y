@@ -1,8 +1,17 @@
 %{
+#if STDC_HEADERS
+# include <string.h>
+#else
+# if !HAVE_STRCHR
+#  define strchr index
+#  define strrchr rindex
+# endif
+char *strchr (), *strrchr ();
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
-#include <string.h>
 #include <math.h>
 #include <float.h>
 #include <unistd.h> /* for isatty() */
@@ -36,7 +45,7 @@ char * variable;
 
 %token DEC_CMD OCT_CMD HEX_CMD BIN_CMD GUARD_CMD
 %token RADIAN_CMD PICKY_CMD STRICT_CMD REMEMBER_CMD LISTVAR_CMD
-%token <number> PRECISION_CMD ENG_CMD
+%token <number> PRECISION_CMD ENG_CMD HLIMIT_CMD
 
 %token EOLN PAR REN WBRA WKET WSBRA WSKET WPIPE
 %token WPLUS WMINUS WMULT WDIV WMOD WEQL WEXP WSQR
@@ -168,6 +177,16 @@ command : HEX_CMD {
 		if (conf.precision == -1) printf("auto\n");
 		else printf("%i\n", conf.precision);
 	}}
+| HLIMIT_CMD {
+    $$ = nothing;
+	if ($1) {
+		conf.history_limit = 1;
+		conf.history_limit_len = $1;
+	} else {
+		conf.history_limit = 0;
+		conf.history_limit_len = 0;
+	}
+}
 | LISTVAR_CMD {
 	extern int contents;
 	int i;

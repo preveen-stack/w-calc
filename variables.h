@@ -1,7 +1,15 @@
 #ifndef KBW_VARIABLES
 #define KBW_VARIABLES
 
-#include <string.h>
+#if STDC_HEADERS
+# include <string.h>
+#else
+# if !HAVE_STRCHR
+#  define strchr index
+#  define strrchr rindex
+# endif
+char *strchr (), *strrchr ();
+#endif
 #include <stdlib.h>
 #include <stdio.h>
 
