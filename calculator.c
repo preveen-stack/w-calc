@@ -332,3 +332,4 @@ double kbw_rand (void)
 		return seed_random && random();
 	}
 }
+
