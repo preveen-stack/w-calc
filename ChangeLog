@@ -1,3 +1,8 @@
+Jan 28 2002 - Kyle Wheeler
+ - Fixed a typo in the grammar (BOTH)
+ - Added a command-equivalent to the preferences window (GUI)
+ - Added the version number to the about box (GUI)
+ - Corrected the version number display
 Jan 26 2002 - Kyle Wheeler
  - Fixed the grammar (MUCH better now) (BOTH)
 Jan 25 2002 - Kyle Wheeler
