@@ -7,7 +7,9 @@
  *
  */
 
+#ifndef GUI
 #include "config.h"
+#endif
 #include <ctype.h>
 #include "string_manip.h"
 

@@ -1,4 +1,6 @@
+#ifndef GUI
 #include "config.h"
+#endif
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>		/* for HUGE_VAL */

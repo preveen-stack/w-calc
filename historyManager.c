@@ -7,7 +7,9 @@
  *
  */
 
+#ifndef GUI
 #include "config.h"
+#endif
 #include "historyManager.h"
 #include "calculator.h"
 

@@ -1,7 +1,9 @@
 #ifndef WCALC_H
 #define WCALC_H
 
+#ifndef GUI
 #include "config.h"
+#endif
 #include "definitions.h"
 
 enum functions {wnot,
