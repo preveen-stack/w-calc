@@ -1,9 +1,9 @@
 Package: wcalc
-Version: 1.6.2
+Version: 1.7
 Revision: 1
 Maintainer: Kyle Wheeler <kyle-fink-wcalc@memoryhole.net>
 Source: mirror:sourceforge:w-calc/Wcalc-%v.tar.bz2
-#Source-MD5: 727a4d8be1e5fa553340398c1bca8dce
+Source-MD5: 227b1222483520316063925970aa0565
 DocFiles: AUTHORS COPYING COPYRIGHT INSTALL NEWS ReadMe.rtf wcalc.rc
 ConfigureParams: --mandir=%i/share/man/
 Depends: readline-shlibs

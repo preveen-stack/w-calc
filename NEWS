@@ -1,3 +1,18 @@
+--- Version 1.7 ---
+Dec 29 2003 - Kyle Wheeler
+ - Added a "simple" calculator feature (GUI)
+ - Updated autoconf/automake (CLI)
+ - Committed old fix for bad variable substitution (BOTH)
+ - Misc bug fixes (BOTH)
+ - Accepts numbers of the form "5." without the quotes (BOTH)
+Dec 25 2003 - Kyle Wheeler
+ - More informative math errors. (BOTH)
+ - Code cleanup (BOTH)
+Sep 30 2003 - Kyle Wheeler
+ - Fixed file loading (CLI)
+Aug 25 2003 - Kyle Wheeler
+ - Fixed error stickyness. Thanks Ingo van Lil! (CLI)
+ - Cleaned up variable recursion detection. Thanks Ingo! (BOTH)
 --- Version 1.6.2 ---
 Aug 21 2003 - Kyle Wheeler
  - Fixed the print integers preference (GUI)
