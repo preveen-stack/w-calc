@@ -12,6 +12,8 @@
 #define MAX_WINDOW_SIZE 10000
 
 static char update_history = 0;
+NSButton *e;
+NSTextField *ef;
 
 @implementation WcalcController
 
@@ -247,6 +249,9 @@ static char update_history = 0;
 //	w = [mainWindow frame];
 //	bounds = [mainWindow minSize];
 
+	e = enterKey;
+	ef = ExpressionField;
+	
 	/* this restores the drawer states */
 	if ([prefs boolForKey:@"historyShowing"]) {
 		[NSTimer scheduledTimerWithTimeInterval:0 target:self selector:@selector(openIDrawer:) userInfo:nil repeats:NO];
@@ -310,7 +315,7 @@ static char update_history = 0;
 	expression = strdup([[ExpressionField stringValue] cString]);
 
 	val = parseme(expression);
-	putvar("a",val);
+	putval("a",val);
 
 	/* if it isn't an error (or if you want me to remember errors) record it in the history */
 	if (!errstring || (errstring && !strlen(errstring)) || conf.remember_errors) {

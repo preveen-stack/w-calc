@@ -22,6 +22,7 @@
 	IBOutlet NSButton *strictSyntax;
 	IBOutlet NSButton *decimalKey;
 	IBOutlet NSButton *rememberErrors;
+	IBOutlet NSButton *enterKey;
 	
     IBOutlet NSTextField *AnswerField;
     IBOutlet NSTextField *ExpressionField;
