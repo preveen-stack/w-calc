@@ -237,7 +237,7 @@ floor { return(WFLOOR); }
 	} else {
 
 		/* strip out ignored characters */
-		strstrip(',',yytext);
+		strstrip('.',yytext);
 		/* convert commas to periods if necessary for correct parsing */
 		strswap(',','.',yytext);
 
