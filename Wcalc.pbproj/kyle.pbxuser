@@ -1,7 +1,7 @@
 // !$*UTF8*$!
 {
 	29B97313FDCFA39411CA2CEA = {
-		activeBuildStyle = 4A9504CCFFE6A4B311CA0CBA;
+		activeBuildStyle = 4A9504CDFFE6A4B311CA0CBA;
 		activeExecutable = F5B29D7E01F739D501A80164;
 		activeTarget = 29B97326FDCFA39411CA2CEA;
 		addToTargets = (
@@ -39,17 +39,17 @@
 			F5B29D7E01F739D501A80164,
 		);
 		perUserDictionary = {
-			PBXPerProjectTemplateStateSaveDate = 50773787;
+			PBXPerProjectTemplateStateSaveDate = 50814655;
 			"PBXTemplateGeometry-F5CA7ECB015C094F0DCA290F" = {
-				ContentSize = "{675, 931}";
+				ContentSize = "{938, 675}";
 				LeftSlideOut = {
 					Collapsed = NO;
-					Frame = "{{0, 0}, {675, 931}}";
+					Frame = "{{0, 0}, {938, 675}}";
 					Split0 = {
 						Collapsed = NO;
-						Frame = "{{0, 0}, {675, 931}}";
+						Frame = "{{0, 0}, {938, 675}}";
 						Split0 = {
-							Frame = "{{0, 0}, {675, 931}}";
+							Frame = "{{0, 0}, {938, 675}}";
 						};
 						SplitCount = 1;
 						Tab0 = {
@@ -183,7 +183,7 @@
 				StatusViewVisible = NO;
 				Template = F5CA7ECB015C094F0DCA290F;
 				ToolbarVisible = NO;
-				WindowLocation = "{134, 129}";
+				WindowLocation = "{722, 481}";
 			};
 			PBXWorkspaceContents = (
 				{
@@ -191,7 +191,7 @@
 						Split0 = {
 							Split0 = {
 								NavContent0 = {
-									bookmark = F5A169E20307532E01A80164;
+									bookmark = F551EAB303075D4601A80164;
 									history = (
 										F5A1698A0307532E01A80164,
 										F5A1698B0307532E01A80164,
@@ -204,14 +204,13 @@
 										F5A169920307532E01A80164,
 										F5A169930307532E01A80164,
 										F5A169940307532E01A80164,
-										F5A169950307532E01A80164,
 										F5A169960307532E01A80164,
 										F5A169970307532E01A80164,
 										F5A169980307532E01A80164,
 										F5A169990307532E01A80164,
 										F5A1699A0307532E01A80164,
-										F5A1699B0307532E01A80164,
-										F5A1699C0307532E01A80164,
+										F551EAB103075D4601A80164,
+										F5A169950307532E01A80164,
 									);
 									prevStack = (
 										F5A1699D0307532E01A80164,
@@ -282,7 +281,7 @@
 										F5A169DE0307532E01A80164,
 										F5A169DF0307532E01A80164,
 										F5A169E00307532E01A80164,
-										F5A169E10307532E01A80164,
+										F551EAB203075D4601A80164,
 									);
 								};
 								NavCount = 1;
@@ -470,9 +469,12 @@
 					WindowLocation = "{160, 236}";
 				},
 			);
-			PBXWorkspaceStateSaveDate = 50773787;
+			PBXWorkspaceStateSaveDate = 50814655;
 		};
 		perUserProjectItems = {
+			F551EAB103075D4601A80164 = F551EAB103075D4601A80164;
+			F551EAB203075D4601A80164 = F551EAB203075D4601A80164;
+			F551EAB303075D4601A80164 = F551EAB303075D4601A80164;
 			F5A1698A0307532E01A80164 = F5A1698A0307532E01A80164;
 			F5A1698B0307532E01A80164 = F5A1698B0307532E01A80164;
 			F5A1698C0307532E01A80164 = F5A1698C0307532E01A80164;
@@ -490,8 +492,6 @@
 			F5A169980307532E01A80164 = F5A169980307532E01A80164;
 			F5A169990307532E01A80164 = F5A169990307532E01A80164;
 			F5A1699A0307532E01A80164 = F5A1699A0307532E01A80164;
-			F5A1699B0307532E01A80164 = F5A1699B0307532E01A80164;
-			F5A1699C0307532E01A80164 = F5A1699C0307532E01A80164;
 			F5A1699D0307532E01A80164 = F5A1699D0307532E01A80164;
 			F5A1699E0307532E01A80164 = F5A1699E0307532E01A80164;
 			F5A1699F0307532E01A80164 = F5A1699F0307532E01A80164;
@@ -560,8 +560,6 @@
 			F5A169DE0307532E01A80164 = F5A169DE0307532E01A80164;
 			F5A169DF0307532E01A80164 = F5A169DF0307532E01A80164;
 			F5A169E00307532E01A80164 = F5A169E00307532E01A80164;
-			F5A169E10307532E01A80164 = F5A169E10307532E01A80164;
-			F5A169E20307532E01A80164 = F5A169E20307532E01A80164;
 		};
 		projectwideBuildSettings = {
 		};
@@ -697,6 +695,36 @@
 		isa = PBXFileBreakpoint;
 		lineNumber = 228;
 		state = 2;
+	};
+	F551EAB103075D4601A80164 = {
+		fRef = F5DEAE8F021254A501A80164;
+		isa = PBXTextBookmark;
+		name = "definitions.h: VERSION";
+		rLen = 0;
+		rLoc = 221;
+		rType = 0;
+		vrLen = 1048;
+		vrLoc = 0;
+	};
+	F551EAB203075D4601A80164 = {
+		fRef = F5DEAE8F021254A501A80164;
+		isa = PBXTextBookmark;
+		name = "definitions.h: VERSION";
+		rLen = 0;
+		rLoc = 221;
+		rType = 0;
+		vrLen = 1048;
+		vrLoc = 0;
+	};
+	F551EAB303075D4601A80164 = {
+		fRef = F5B29D7801F7395001A80164;
+		isa = PBXTextBookmark;
+		name = "WcalcController.m: 149";
+		rLen = 12;
+		rLoc = 3870;
+		rType = 0;
+		vrLen = 984;
+		vrLoc = 3855;
 	};
 	F574E09A01FD0FD701A80164 = {
 		uiCtxt = {
@@ -861,7 +889,7 @@
 		isa = PBXTextBookmark;
 		name = "MyTextField.m: keyUp:";
 		rLen = 0;
-		rLoc = 799;
+		rLoc = 830;
 		rType = 0;
 		vrLen = 636;
 		vrLoc = 299;
@@ -894,52 +922,6 @@
 		rLoc = 241;
 		rType = 0;
 		vrLen = 258;
-		vrLoc = 0;
-	};
-	F5A1699B0307532E01A80164 = {
-		isa = PBXTargetBookmark;
-		trg = 29B97326FDCFA39411CA2CEA;
-		uiCtxt = {
-			buildPhasesExpandedSubviews = (
-				0,
-				1,
-				2,
-				3,
-			);
-			buildPhasesVisRect = "{{0, 0}, {840, 611}}";
-			buildSettingsExpandedSubviews = (
-				0,
-				1,
-				2,
-				3,
-				4,
-				5,
-				8,
-			);
-			buildSettingsVisRect = "{{0, 0}, {840, 611}}";
-			expertProductSettingsVisRect = "{{0, 0}, {464, 403}}";
-			guiProductSettingsExpandedSubviews = (
-				0,
-				1,
-				2,
-				3,
-				4,
-				5,
-				6,
-			);
-			guiProductSettingsVisRect = "{{0, 0}, {771, 580}}";
-			productSettingsIsSimple = YES;
-			selectedTab = productSettings;
-		};
-	};
-	F5A1699C0307532E01A80164 = {
-		fRef = F5DEAE8F021254A501A80164;
-		isa = PBXTextBookmark;
-		name = "definitions.h: VERSION";
-		rLen = 0;
-		rLoc = 221;
-		rType = 0;
-		vrLen = 1048;
 		vrLoc = 0;
 	};
 	F5A1699D0307532E01A80164 = {
@@ -1527,7 +1509,7 @@
 		isa = PBXTextBookmark;
 		name = "MyTextField.m: keyUp:";
 		rLen = 0;
-		rLoc = 799;
+		rLoc = 830;
 		rType = 0;
 		vrLen = 636;
 		vrLoc = 299;
@@ -1577,7 +1559,7 @@
 		isa = PBXTextBookmark;
 		name = "MyTextField.m: keyUp:";
 		rLen = 0;
-		rLoc = 799;
+		rLoc = 830;
 		rType = 0;
 		vrLen = 636;
 		vrLoc = 299;
@@ -1620,52 +1602,6 @@
 		rLoc = 241;
 		rType = 0;
 		vrLen = 258;
-		vrLoc = 0;
-	};
-	F5A169E10307532E01A80164 = {
-		isa = PBXTargetBookmark;
-		trg = 29B97326FDCFA39411CA2CEA;
-		uiCtxt = {
-			buildPhasesExpandedSubviews = (
-				0,
-				1,
-				2,
-				3,
-			);
-			buildPhasesVisRect = "{{0, 0}, {840, 611}}";
-			buildSettingsExpandedSubviews = (
-				0,
-				1,
-				2,
-				3,
-				4,
-				5,
-				8,
-			);
-			buildSettingsVisRect = "{{0, 0}, {840, 611}}";
-			expertProductSettingsVisRect = "{{0, 0}, {464, 403}}";
-			guiProductSettingsExpandedSubviews = (
-				0,
-				1,
-				2,
-				3,
-				4,
-				5,
-				6,
-			);
-			guiProductSettingsVisRect = "{{0, 0}, {771, 580}}";
-			productSettingsIsSimple = YES;
-			selectedTab = productSettings;
-		};
-	};
-	F5A169E20307532E01A80164 = {
-		fRef = F5DEAE8F021254A501A80164;
-		isa = PBXTextBookmark;
-		name = "definitions.h: VERSION";
-		rLen = 0;
-		rLoc = 221;
-		rType = 0;
-		vrLen = 1048;
 		vrLoc = 0;
 	};
 	F5B29D6501F7391601A80164 = {
