@@ -4,6 +4,7 @@
 #include <float.h>		/* for DBL_EPSILON */
 #include <string.h>		/* for bzero() */
 #include <stdint.h>		/* for UINT32_MAX */
+#include <ctype.h>      /* for isalpha() */
 /* these are for kbw_rand() */
 #include <sys/types.h>	/* for stat() and read() */
 #include <sys/stat.h>	/* for stat() */
@@ -46,6 +47,8 @@ extern int yy_scan_string(const char*);
 /* declared here so other people don't mess with it */
 static int seed_random (void);
 
+char * flatten (char * str);
+
 double parseme (char * pthis)
 {
 	extern int synerrors;
@@ -57,7 +60,7 @@ double parseme (char * pthis)
 	synerrors = 0;
 	sig_figs = UINT32_MAX;
 
-	/* Sanitize the input */
+	/* Sanitize the input (add a newline) */
 	sanitized = calloc(sizeof(char),len+1);
 	if (! sanitized) {
 		perror("resizing buffer");
@@ -70,6 +73,9 @@ double parseme (char * pthis)
 		sanitized[i] = conf.charkey[(int)sanitized[i]];
 	}
 
+	/* Now, eliminate recursion */
+	sanitized = flatten(sanitized);
+	
 	/* Hold my Place */
 //	stackcur = stacklast + 1;
 	/* Evaluate the Expression
@@ -83,6 +89,74 @@ double parseme (char * pthis)
 	/* return success */
 	free(sanitized);
 	return last_answer;
+}
+
+char * flatten (char * str)
+{
+	char * curs = str, *eov, *nstr, *ncurs1, *ncurs2;
+	char varname[500];
+	int i, olen, nlen, changedlen;
+	struct answer a;
+	
+	while (curs && *curs) {
+		// search for the first letter of a possible variable
+		while (curs && *curs && ! isalpha(*curs)) curs++;
+		if (! *curs) break;
+
+		// pull out that variable
+		eov = curs;
+		i = 0;
+		while (eov && *eov && (isalpha(*eov) || *eov == '_' || *eov == ':')) {
+			varname[i++] = *eov;
+			eov++;
+		}
+		if (i == 0) break;
+		varname[i] = 0;
+		olen = strlen(varname);
+
+		// if it's a variable, evaluate it
+		a = getvar_full(varname);
+		if (! a.err) { // it is a var
+			if (a.exp) { // it is an expression
+				double f = parseme(a.exp);
+				sprintf(varname,"%1.30f",f);
+			} else { // it is a value
+				sprintf(varname,"%1.30f",a.val);
+			}
+		}
+		nlen = strlen(varname);
+
+		// now, put it back in the string
+		changedlen = strlen(str) + nlen - olen + 1;
+		nstr = malloc(changedlen);
+		if (!nstr) { // not enough memory
+			exit(1);
+		}
+		ncurs2 = nstr;
+		ncurs1 = str;
+		while (ncurs1 != curs) {
+			*ncurs2 = *ncurs1;
+			++ncurs1;
+			++ncurs2;
+		}
+		ncurs1 = varname;
+		while (ncurs1 && *ncurs1) {
+			*ncurs2 = *ncurs1;
+			++ncurs1;
+			++ncurs2;
+		}
+		ncurs1 = eov;
+		while (ncurs1 && *ncurs1) {
+			*ncurs2 = *ncurs1;
+			++ncurs1;
+			++ncurs2;
+		}
+		*ncurs2 = 0;
+		free(str);
+		str = nstr;
+		curs = str;
+	}
+	return str;
 }
 
 void report_error (char * err)
@@ -290,8 +364,8 @@ double simple_exp (double first, enum operations op, double second)
 			case wnequal:	temp = (first != second); break;
 			case wgt:		temp = (first > second); break;
 			case wlt:		temp = (first < second); break;
-			case wlshft:    temp = (first << second); break;
-			case wrshft:    temp = (first >> second); break;
+			case wlshft:    temp = ((int)first << (int)second); break;
+			case wrshft:    temp = ((int)first >> (int)second); break;
 			case wgeq:		temp = (first >= second); break;
 			case wleq:		temp = (first <= second); break;
 			case wplus:		temp = (first + second); break;
