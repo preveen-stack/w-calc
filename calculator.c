@@ -92,6 +92,7 @@ double parseme (char * pthis)
 	extern char* open_file;
 
 	synerrors = 0;
+	compute = 1;
 	sig_figs = UINT32_MAX;
 
 	sanitized = strdup(pthis);

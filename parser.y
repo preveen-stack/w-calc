@@ -106,7 +106,9 @@ oneline : exp eoln
 	}
 	compute = 1;
 }
-| assignment eoln
+| assignment eoln {
+	compute = 1;
+}
 | command eoln {
 	switch ($1) {
 		case redisplay:
@@ -120,20 +122,19 @@ oneline : exp eoln
 				break;
 		case nothing: break;
 	}
+	compute = 1;
 }
 | eoln	/* blank line */
 {
 	if (scanerror) {
 		scanerror = synerrors = 0;
-		report_error("Error in scanner halts parser.");
+		report_error("2 Error in scanner halts parser.");
 	}
 	compute = 1;
 }	
 | error eoln {
-	report_error("Error in scanner halts parser.");
-	scanerror=1;
-	synerrors++;
-	compute = 0;
+	report_error("3 Error in scanner halts parser.");
+	compute = 1;
 }
 /* if we got an error on the line */
 ;
