@@ -195,7 +195,7 @@ command : HEX_CMD {
 | DISPLAY_PREFS_CMD {
 	$$ = nothing;
 	if (standard_output) {
-		printf("                Precision: %i\n",conf.precision);
+		printf("                Precision: %i %s\n",conf.precision,((conf.precision==-1)?"(auto)":""));
 		printf("       Engineering Output: %s\n",conf.engineering?"yes":"no");
 		printf("            Output Format: %s\n",output_string(conf.output_format));
 		printf("Flag Undeclared Variables: %s\n",conf.picky_variables?"yes":"no");
