@@ -269,11 +269,6 @@ char *print_this_result (double result)
 		} // switch
 	} // if
 
-	// Internationalize it ;-)
-	if (conf.use_commas && strchr(pa,'.')) {
-		*strchr(pa,'.') = ',';
-	}
-
 	if (standard_output) {
 		if (errstring && strlen(errstring)) {
 			fprintf(stderr,"%s\n",errstring);
