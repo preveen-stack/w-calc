@@ -32,6 +32,8 @@ OBJECTS = y.tab.o lex.yy.o ${OFILES}
 # (don't forget the Lex Library "-ll")
 ${PROGRAM} : ${OBJECTS} libreadline.a
 	${CC} ${OBJECTS} libreadline.a -o ${PROGRAM} ${LFLAGS}
+
+distro : ${PROGRAM}
 	strip ${PROGRAM}
 
 # 
