@@ -5,14 +5,14 @@
 #
 CFLAGS = -g -Wall -Werror -O0 -L/sw/lib -I/sw/include
 CC = gcc
-#YACC = yacc
-YACC = bison -b y
+YACC = yacc
+#YACC = bison -b y
 
 LFLAGS = -ll
 
 PROGRAM = wcalc
-CFILES = main.c calculator.c variables.c
-HFILES = calculator.h variables.h
+CFILES = main.c calculator.c variables.c string_manip.c
+HFILES = calculator.h variables.h string_manip.h
 
 
 ##################################################
@@ -55,7 +55,7 @@ parser.h: y.tab.h
 #  Turn the scanner.l file into lex.yy.c using "lex"
 # 
 lex.yy.c : scanner.l parser.h ${HFILE}
-	lex scanner.l
+	flex scanner.l
 lex.yy.o: lex.yy.c
 	${CC} -g -c lex.yy.c
 
