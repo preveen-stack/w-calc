@@ -101,8 +101,9 @@
 	[useRadians setState:(use_radians?NSOnState:NSOffState)];
 	[outputFormat selectCellWithTag:output_format];
 	[printPrefixes setState:(print_prefixes?NSOnState:NSOffState)];
+	[useCommas setState:(use_commas?NSOnState:NSOffState)];
 	[printPrefixes setEnabled:(output_format!=DECIMAL_FORMAT)];
-	[engineeringNotation setEnabled:(output_format==DECIMAL_FORMAT)];	
+	[engineeringNotation setEnabled:(output_format==DECIMAL_FORMAT)];
 }
 
 @end
