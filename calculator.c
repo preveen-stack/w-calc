@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h> /* for HUGE_VAL */
+#include <float.h> /* for LDBL_MIN */
 #include <string.h> /* for bzero */
 #include "calculator.h"
 #include "variables.h"
@@ -10,13 +11,15 @@ static int stacksize = 0;
 static int stacklast = -1;
 
 double last_answer = 0;
-char pretty_answer[200];
+char *pretty_answer = NULL;
 short standard_output = 1;
 int precision = -1;
 short engineering = 0;
 short picky_variables = 0;
-short use_radians = 1;
+short use_radians = 0;
 short compute = 1;
+short output_format = 0;
+short print_prefixes = 0;
 
 /*
  * These are declared here because they're not in any header files.
@@ -81,87 +84,150 @@ void print_result (void) {
 	last_answer = stack[stacklast];
 	stacklast --;
 
-	print_this_result(last_answer);
+	if (pretty_answer) free(pretty_answer);
+	pretty_answer = strdup(print_this_result(last_answer));
 }
 
-void print_this_result (double result)
+char *print_this_result (double result)
 {
 	static char format[10];
+	static char *pa = NULL, *tmp;
 
-/*	if (result != HUGE_VAL)
-		sprintf(format,"%g",result);
-	else
-		sprintf(format,"Infinity");*/
-//	putvar("a",result);
-
-	if (precision > -1 && ! engineering) {
-		sprintf(format, "%%1.%if", precision);
-	} else if (precision > -1 && engineering) {
-		sprintf(format, "%%1.%iE", precision);
-	} else {
-		sprintf(format,"%%G");
+	// Find the proper format
+	switch (output_format) {
+		case DECIMAL_FORMAT:
+			tmp = realloc(pa, sizeof(char)*310);
+			if (! tmp) { free(pa); pa = "Not Enough Memory"; return pa; } else pa = tmp;
+			if (precision > -1 && ! engineering) {
+				sprintf(format, "%%1.%if", precision);
+			} else if (precision > -1 && engineering) {
+				sprintf(format, "%%1.%iE", precision);
+			} else {
+				sprintf(format,"%%G");
+			}
+			break;
+		case OCTAL_FORMAT:
+			tmp = realloc(pa,sizeof(char)*14);
+			if (! tmp) { free(pa); pa = "Not Enough Memory"; return pa; } else pa = tmp;
+			sprintf(format,print_prefixes?"0%%o":"%%o");
+			break;
+		case HEXADECIMAL_FORMAT:
+			tmp = realloc(pa,sizeof(char)*11);
+			if (! tmp) { free(pa); pa = "Not Enough Memory"; return pa; } else pa = tmp;
+			sprintf(format,print_prefixes?"0x%%x":"%%x");
+			break;
+		case BINARY_FORMAT:
+			free(pa);
+			pa = NULL;
+			break;
 	}
-	if (result != HUGE_VAL)
-		sprintf(pretty_answer,format,result);
-	else
-		sprintf(pretty_answer,"Infinity");
+
+	if (result == HUGE_VAL) {
+		// if it is infinity, print it, regardless of format
+		tmp = realloc(pa,sizeof(char)*11);
+		if (! tmp) { free(pa); pa = "Not Enough Memory"; return pa; } else pa = tmp;
+		sprintf(pa,"Infinity");
+	} else if (output_format == DECIMAL_FORMAT) {
+		sprintf(pa,format,result);
+	} else if (output_format != BINARY_FORMAT) {
+		long int temp = result;
+		sprintf(pa,format,temp);
+	} else {
+		int i, place=-1;
+		// if it is binary, format it, and print it
+		// first, find the upper limit
+		for (i=1;place==-1;++i) {
+			if (result < pow(2.0,i))
+				place = i-1;
+		}
+		printf("place=%i\n",place);
+		pa = malloc(sizeof(char)*(place+(print_prefixes*2)+1));
+		if (! pa) {
+			pa = "Not Enough Memory";
+			return pa;
+		}
+		if (print_prefixes) {
+			pa[0] = '0';
+			pa[1] = 'b';
+		}
+		// print it
+		for (i=print_prefixes*2; place>=0; ++i) {
+			double t = pow(2.0,place);
+			if (result >= t) {
+				pa[i] = '1';
+				result -= t;
+			} else {
+				pa[i] = '0';
+			}
+			--place;
+		}
+		pa[i+1] = 0;
+	}
 
 	if (standard_output) {
-		printf(" = %s\n",pretty_answer);
+		printf(" = %s\n",pa);
 	}
 
+	return pa;
+	
 	fflush(stdout);
 }
 
 double simple_exp (double first, enum operations op, double second)
 {
 	if (compute) {
+		double trash, temp;
 		switch (op) {
-			case wor:		return (first || second);
-			case wand:		return (first && second);
-			case wequal:	return (first == second);
-			case wnequal:	return (first != second);
-			case wgt:		return (first > second);
-			case wlt:		return (first < second);
-			case wgeq:		return (first >= second);
-			case wleq:		return (first <= second);
-			case wplus:		return (first + second);
-			case wminus:	return (first - second);
-			case wmult:		return (first * second);
-			case wdiv:		return ((second != 0)?(first/second):HUGE_VAL);
-			case wmod:		return ((second != 0)?(fmod(first, second)):HUGE_VAL);
-			case wexp:		return pow(first, second);
-			default:		return 0;
+			case wor:		temp = (first || second); break;
+			case wand:		temp = (first && second); break;
+			case wequal:	temp = (first == second); break;
+			case wnequal:	temp = (first != second); break;
+			case wgt:		temp = (first > second); break;
+			case wlt:		temp = (first < second); break;
+			case wgeq:		temp = (first >= second); break;
+			case wleq:		temp = (first <= second); break;
+			case wplus:		temp = (first + second); break;
+			case wminus:	temp = (first - second); break;
+			case wmult:		temp = (first * second); break;
+			case wdiv:		temp = ((second != 0)?(first/second):HUGE_VAL); break;
+			case wmod:		temp = ((second != 0)?(fmod(first, second)):HUGE_VAL); break;
+			case wexp:		temp = pow(first, second); break;
+			default:		temp = 0.0; break;
 		}
+		if (modf(temp,&trash) <= DBL_EPSILON) return trash;
+		return temp;
 	} else {
-		return 0;
+		return 0.0;
 	}
 }
 
 double uber_function (enum functions func, double input)
 {
 	if (compute) {
+		double temp, trash;
 		switch (func) {
-			case wsin:		return sin(use_radians?input:(input*W_PI/180));
-			case wcos:		return cos(use_radians?input:(input*W_PI/180));
-			case wtan:		return tan(use_radians?input:(input*W_PI/180));
-			case wasin:		return asin(use_radians?input:(input*W_PI/180));
-			case wacos:		return acos(use_radians?input:(input*W_PI/180));
-			case watan:		return atan(use_radians?input:(input*W_PI/180));
-			case wsinh:		return sinh(input);
-			case wcosh:		return cosh(input);
-			case wtanh:		return tanh(input);
-			case wasinh:	return asinh(input);
-			case wacosh:	return acosh(input);
-			case watanh:	return atanh(input);
-			case wlog:		return log10(input);
-			case wln:		return log(input);
-			case wround:	return (fabs(floor(input)-input)>=0.5)?ceil(input):floor(input);
-			case wneg:		return - input;
-			case wnot:		return ! input;
-			case wabs:		return fabs(input);
-			default:		return input;
+			case wsin:		temp = sin(use_radians?input:(input*W_PI/180)); break;
+			case wcos:		temp = cos(use_radians?input:(input*W_PI/180)); break;
+			case wtan:		temp = tan(use_radians?input:(input*W_PI/180)); break;
+			case wasin:		temp = asin(use_radians?input:(input*W_PI/180)); break;
+			case wacos:		temp = acos(use_radians?input:(input*W_PI/180)); break;
+			case watan:		temp = atan(use_radians?input:(input*W_PI/180)); break;
+			case wsinh:		temp = sinh(input); break;
+			case wcosh:		temp = cosh(input); break;
+			case wtanh:		temp = tanh(input); break;
+			case wasinh:	temp = asinh(input); break;
+			case wacosh:	temp = acosh(input); break;
+			case watanh:	temp = atanh(input); break;
+			case wlog:		temp = log10(input); break;
+			case wln:		temp = log(input); break;
+			case wround:	temp = (fabs(floor(input)-input)>=0.5)?ceil(input):floor(input); break;
+			case wneg:		temp = - input; break;
+			case wnot:		temp = ! input; break;
+			case wabs:		temp = fabs(input); break;
+			default:		temp = input; break;
 		}
+		if (modf(temp, &trash) <= DBL_EPSILON) return trash;
+		return temp;
 	} else {
 		return 0;
 	}
@@ -194,9 +260,9 @@ void push_value (double in)
 	stack[++stacklast] = in;
 }
 
-long fact (int in)
+double fact (int in)
 {
-	static long *lookup = NULL;
+	static double *lookup = NULL;
 	static int lookuplen = 0;
 	if (in < 0) return 0;
 	if (in == 0) return 1;
@@ -204,14 +270,14 @@ long fact (int in)
 		return lookup[in-1];
 	else {
 		if (! lookup) {
-			lookup = calloc(sizeof(long),in);
+			lookup = calloc(sizeof(double),in);
 			lookuplen = in;
 			lookup[0] = 1;
 		}
 		if (in > 0) {
 			if (lookuplen < in) {
-				lookup = realloc(lookup,sizeof(long)*(in+1));
-				bzero(lookup+lookuplen, sizeof(long)*(in+1-lookuplen));
+				lookup = realloc(lookup,sizeof(double)*(in+1));
+				bzero(lookup+lookuplen, sizeof(double)*(in+1-lookuplen));
 			}
 			lookup[in-1] = in * fact(in-1);
 		} else

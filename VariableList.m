@@ -17,10 +17,10 @@
 
 	if (! keyval)
 		return @"BAD ROW";
-	
-	if (! strcmp([[col identifier] cString],"value")) {
+
+	if ([[col identifier] isEqualToString:@"value"]) {
 		return [NSString localizedStringWithFormat:@"%g",(keyval->value)];
-	} else if (! strcmp([[col identifier] cString],"variable")) {
+	} else if ([[col identifier] isEqualToString:@"variable"]) {
 		return [NSString stringWithCString:(keyval->key)];
 	} else {
 		return @"BAD COLUMN";
@@ -33,11 +33,11 @@
 	NSString *ch = [col identifier];
 	
 //	printf("Column %s, Row %i was %s,%s becomes %s\n", [ch cString], rowIndex, theval->key, theval->value, [anObject cString]);
-	if (! strcmp([ch cString],"value")) {
+	if ([ch isEqualToString:@"value"]) {
 		char * input=strdup([anObject cString]);
 		theval->value = parseme(input);
 		free(input);
-	} else if (! strcmp([ch cString],"variable")) {
+	} else if ([ch isEqualToString:@"variable"]) {
 		int i,j;
 		free(theval->key);
 		theval->key = strdup([anObject cString]);

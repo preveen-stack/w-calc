@@ -3,6 +3,7 @@
 #import "ErrorController.h"
 #import "historyManager.h"
 #import "WcalcController.h"
+//#import <Foundation/NSRange.h>
 
 #define KEYPAD_HEIGHT 165
 
@@ -123,7 +124,7 @@
 		default: return;
 	}
 	if ([str length]) {
-		NSString *str3 = @" ";
+		NSString *str3 = @"*";
 		[ExpressionField setStringValue:[str stringByAppendingString:[str3 stringByAppendingString:str2]]];
 	} else {
 		[ExpressionField setStringValue:str2];
@@ -170,12 +171,17 @@
 		[prefs setObject:@"NO" forKey:@"historyDuplicatesAllowed"];
 		[prefs setObject:@"NO" forKey:@"flagUndefinedVariables"];
 		[prefs setObject:@"YES" forKey:@"useRadians"];
+		[prefs setObject:@"0" forKey:@"outputFormat"];
+		[prefs setObject:@"NO" forKey:@"printPrefixes"];
 	}
 	precision = [prefs integerForKey:@"precision"];
 	engineering = [prefs boolForKey:@"engineeringNotation"];
 	allow_duplicates = [prefs boolForKey:@"historyDuplicatesAllowed"];
 	picky_variables = [prefs boolForKey:@"flagUndefinedVariables"];
 	use_radians = [prefs boolForKey:@"useRadians"];
+	output_format = [prefs integerForKey:@"outputFormat"];
+	[PrecisionSlider setEnabled:(output_format==DECIMAL_FORMAT)];
+	print_prefixes = [prefs boolForKey:@"printPrefixes"];
 	
 	[PrecisionSlider setIntValue:precision];
 	[mainWindow setFrameAutosaveName:@"wcalc"];
@@ -190,27 +196,30 @@
 		[self toggleSize:0];
 	}
 	[mainWindow setFrameUsingName:@"wcalc"];
-	if (! [prefs boolForKey:@"toggled"]) {
-		w = [mainWindow frame];
+	w = [mainWindow frame];
+	if (! [prefs boolForKey:@"toggled"])
 		w.size.width = 171;
-		[mainWindow setFrame:w display:TRUE animate:FALSE];
-	}
+	[mainWindow setFrame:w display:TRUE animate:FALSE];
 }
 
 - (IBAction)setPrecision:(id)sender
 {
-	static int last_pres=0;
+	int last_pres=0;
 	NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
 
+	last_pres = [prefs integerForKey:@"precision"];
+	
 	if (last_pres == [PrecisionSlider intValue])
 		return;
 	else
 		last_pres = [PrecisionSlider intValue];
 
 	precision = last_pres;
+//	printf("precision = %i\n",precision);
 	[prefs setObject:[NSString stringWithFormat:@"%i",precision] forKey:@"precision"];
 
-	print_this_result(last_answer);
+	if (pretty_answer) free(pretty_answer);
+	pretty_answer = strdup(print_this_result(last_answer));
 
 	[AnswerField setStringValue:[NSString stringWithCString:pretty_answer]];
 
@@ -225,8 +234,8 @@
 
 	expression = strdup([[ExpressionField stringValue] cString]);
 
-	addToHistory(expression);
 	val = parseme(expression);
+	addToHistory(expression, val);
 	free(expression);
 	putvar("a",val);
 
@@ -235,11 +244,11 @@
 		free(errstring);
 		errstring = NULL;
 	} else {
-		[AnswerField setStringValue:[NSString stringWithCString:pretty_answer]];
+		[AnswerField setStringValue:[NSString stringWithFormat:@"%s",pretty_answer]];
 	}
 	[variableList reloadData];
 	[historyList reloadData];
-	[ExpressionField selectText:self];
+	[ExpressionField selectText:sender];
 	just_answered = TRUE;
 }
 

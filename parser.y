@@ -52,7 +52,7 @@ char * variable;
 %left WEXP
 %left WNOT
 
-%expect 345
+%expect 641
 
 %% 	/* beginning of the parsing rules	*/
 

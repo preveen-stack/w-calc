@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
+#include <errno.h>
 #include "calculator.h"
 #include "parser.h"
 
@@ -23,6 +24,7 @@
 
 /* shorthand definitions for later */
 DIGIT		[0123456789]
+NDIGIT		[123456789]
 LETTER		[a-zA-Z]
 WHITESPACE	[ \t]
 ACCEPTABLE	[_:]
@@ -123,9 +125,9 @@ abs { return(WABS); }
 {LETTER}+({LETTER}|{ACCEPTABLE})* {
 	yylval.variable = strdup(yytext);
 	return(VAR);
-								  }
+}
 
-(({DIGIT}+)|({DIGIT}+e{DIGIT}+)|(\.{DIGIT}+)|(\.{DIGIT}+e-?{DIGIT}+)|({DIGIT}+\.{DIGIT}*)|({DIGIT}+\.{DIGIT}*e-?{DIGIT}+))	{
+(({NDIGIT}{DIGIT}*(e[-+]?{DIGIT}+)?)|(\.{DIGIT}+(e[-+]?{DIGIT}+)?)|({NDIGIT}{DIGIT}*\.{DIGIT}*(e[-+]?{DIGIT}+)?)) {
 	yylval.number = strtod(yytext,NULL);
 	if ((yylval.number != HUGE_VAL) && (yylval.number != -HUGE_VAL)) {
 		return(NUMBER);
@@ -135,7 +137,30 @@ abs { return(WABS); }
 	}
 }
 
+0x[0-9a-fA-F]+ {
+	unsigned long int value;
+	sscanf(yytext,"%lx",&value);
+	yylval.number = value;
+	return(NUMBER);
+}
 
+0[0-7]* {
+	unsigned long int value;
+	sscanf(yytext,"%lo",&value);
+	yylval.number = value;
+	return(NUMBER);
+}
+
+0b[01]+ {
+	unsigned long int value = 0;
+	unsigned int i, place = 1, len = strlen(yytext);
+	for (i=len-1;i>1;--i) {
+		value += ((yytext[i]=='0')?0:1) * place;
+		place = pow(2,len-i);
+	}
+	yylval.number = value;
+	return(NUMBER);
+}
 
 %{ /* if we haven't matched anything yet, then it's illegal */
 	%}

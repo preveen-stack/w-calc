@@ -9,8 +9,8 @@
 
 #include <Carbon/Carbon.h>
 
-void addToHistory(char * expression);
-char * historynum(int);
+void addToHistory(char *, double);
+char * historynum(int,int);
 int history_length(void);
 
 extern short allow_duplicates;
