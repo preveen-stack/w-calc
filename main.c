@@ -87,6 +87,7 @@ int main (int argc, char *argv[])
 	conf.thou_delimiter = ',';
 	conf.dec_delimiter = '.';
 	conf.print_equal = 1;
+	conf.print_ints = 0;
 
 	/* load the preferences */
 	{

@@ -53,6 +53,7 @@ ACCEPTABLE	[_:]
 \\h(ex(adecimal)?)?     { return(HEX_CMD); }
 \\help                  { return(PRINT_HELP_CMD); }
 \\hlimit{DIGIT}+        { yylval.number = atoi(yytext+7); return(HLIMIT_CMD); }
+\\ints?                 { return(INT_CMD); }
 \\x                     { return(HEX_CMD); }
 \\l(enient)?            { return(PICKY_CMD); }
 \\li(st(vars)?)?        { return(LISTVAR_CMD); }

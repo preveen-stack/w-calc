@@ -367,7 +367,7 @@ char *print_this_result (double result)
 				double junk;
 				/* This is the big call */
 				if (fabs(modf(result, &junk)) != 0.0 ||
-						conf.engineering) {
+						conf.engineering || ! conf.print_ints) {
 					sprintf(pa,format,result);
 				} else {
 					sprintf(pa,"%1.0f",result);

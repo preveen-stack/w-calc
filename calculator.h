@@ -81,6 +81,7 @@ struct _conf {
 	unsigned int history_limit:1;
 	unsigned long history_limit_len;
 	unsigned int print_equal:1;
+	unsigned int print_ints:1;
 };
 
 /* configuration */

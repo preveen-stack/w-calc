@@ -50,7 +50,7 @@ char character;
 
 %token DEC_CMD OCT_CMD HEX_CMD BIN_CMD GUARD_CMD DISPLAY_PREFS_CMD
 %token RADIAN_CMD PICKY_CMD REMEMBER_CMD LISTVAR_CMD
-%token PRINT_HELP_CMD PREFIX_CMD
+%token PRINT_HELP_CMD PREFIX_CMD INT_CMD
 %token <number> PRECISION_CMD ENG_CMD HLIMIT_CMD ROUNDING_INDICATION_CMD
 
 %token EOLN PAR REN WBRA WKET WSBRA WSKET WPIPE
@@ -185,6 +185,13 @@ command : HEX_CMD {
 		else
 			printf("Strict variable parsing.\n");
 	}}
+| INT_CMD {
+	$$ = nothing;
+	conf.print_ints = ! conf.print_ints;
+	if (standard_output) {
+		printf("Will %suse abbreviations for large integers.\n",conf.print_ints?"not ":"");
+	}
+}
 | DISPLAY_PREFS_CMD {
 	$$ = nothing;
 	if (standard_output) {

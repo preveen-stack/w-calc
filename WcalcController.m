@@ -217,6 +217,7 @@ static NSString *curFile = NULL;
 		[prefs setObject:@"YES" forKey:@"precisionGuard"];
 		[prefs setObject:@"NO" forKey:@"historyLimit"];
 		[prefs setObject:@"1000" forKey:@"historyLimitLength"];
+		[prefs setObject:@"NO" forKey:@"printInts"];
 	}
 	conf.precision = [prefs integerForKey:@"precision"];
 	conf.engineering = [prefs boolForKey:@"engineeringNotation"];
@@ -228,6 +229,7 @@ static NSString *curFile = NULL;
 /*	conf.strict_syntax = [prefs boolForKey:@"strictSyntax"]; */
 	conf.rounding_indication = [prefs integerForKey:@"roundingIndication"];
 	conf.precision_guard = [prefs boolForKey:@"precisionGuard"];
+	conf.print_ints = [prefs boolForKey:@"printInts"];
 	/* history preferences */
 	allow_duplicates = [prefs boolForKey:@"historyDuplicatesAllowed"];
 	update_history = [prefs boolForKey:@"updateHistory"];
