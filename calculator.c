@@ -146,7 +146,7 @@ double parseme (char * pthis)
 		retval = loadState(filename);
 		if (retval) {
 			report_error("Could not load file.");
-			report_error(strerror(retval));
+			report_error((char*)strerror(retval));
 		}
 	}
 	/* return success */
@@ -168,6 +168,7 @@ char * flatten (char * str)
 
 	standard_output = 0;
 
+	if (*str == '\\') return str;
 	curs = strchr(str,'=');
 	if (! curs || ! *curs) curs = str;
 	
@@ -179,6 +180,17 @@ char * flatten (char * str)
 				while (curs && *curs && *curs != '\'') curs++;
 			}
 			curs++;
+			// skip hex numbers
+			if (*curs == 'x' && curs != str && *(curs-1) == '0') {
+				curs++;
+				while (curs && *curs && ( isdigit((int)(*curs)) ||
+							(*curs >= 'a' && *curs <= 'f') ||
+							(*curs >= 'A' && *curs <= 'F')))
+					curs++;
+			}
+			// skip binary (not strictly necessary, since b is reserved, but just in case)
+			if (*curs == 'b' && curs != str && *(curs-1) == '0')
+				curs++;
 		}
 		if (! *curs) break;
 
@@ -209,7 +221,7 @@ char * flatten (char * str)
 			}
 			// add it to the varlist
 			vcurs = malloc(sizeof(struct variable_list));
-			vcurs->varname = strdup(varname);
+			vcurs->varname = (char*)strdup(varname);
 			vcurs->next = vlist;
 			vlist = vcurs;
 			if (a.exp) { // it is an expression

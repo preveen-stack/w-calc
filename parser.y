@@ -318,7 +318,7 @@ command : HEX_CMD {
 	retval = saveState($1);
 	if (retval) {
 		report_error("Could not save file.");
-		report_error(strerror(retval));
+		report_error((char*)strerror(retval));
 	}
 }
 ;
