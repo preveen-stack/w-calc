@@ -7,6 +7,7 @@
  *
  */
 
+#ifndef WCALC_HISTORY_MANAGER
 void clearHistory(void);
 void addToHistory(char *, double);
 char * historynum(int,int);
@@ -14,3 +15,5 @@ int historyLength(void);
 
 extern short allow_duplicates;
 extern short recalculate;
+#endif
+

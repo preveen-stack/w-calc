@@ -9,6 +9,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h> /* might make readline happy */
 
 #ifndef GUI
 #include "config.h"
