@@ -365,6 +365,14 @@ assignment : VAR WEQL exp
 	free($1);
 	free($3);
 }
+| NUMBER WEQL exp
+{
+	report_error("Constants cannot be assigned to other values.");
+}
+| NUMBER WEQL STRING
+{
+	report_error("Constants cannot be assigned to other values.");
+}
 ;
 
 exp : exp WMINUS exp { $$ = simple_exp($1, wminus, $3); }
