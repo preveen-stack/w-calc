@@ -21,39 +21,45 @@ NSTextField *ef;
 - (IBAction)toggleSize:(id)sender
 {
 	static BOOL shrinking = TRUE;
-	NSRect f = [mainWindow frame], e = [ExpressionField frame], p = [PrecisionSlider frame];
+	NSRect mainwindow = [mainWindow frame];
+	NSRect exp = [ExpressionField frame];
+	NSRect prec = [PrecisionSlider frame];
 	NSSize w;
 	NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
 
 
 	if (shrinking) {
-		f.size.height -= KEYPAD_HEIGHT;
-		f.origin.y += KEYPAD_HEIGHT;
-		e.size.height = f.size.height - 100;
+		// if removing the keypad, change the window height
+		mainwindow.size.height -= KEYPAD_HEIGHT;
+		mainwindow.origin.y += KEYPAD_HEIGHT;
+		// this is set in case the calc starts up toggled
+		exp.size.height = mainwindow.size.height - 100;
 	} else {
-		f.size.height += KEYPAD_HEIGHT;
-		f.origin.y -= KEYPAD_HEIGHT;
-		f.size.width = MIN_WINDOW_WIDTH;
+		// if adding the keypad, change the window height 
+		mainwindow.size.height += KEYPAD_HEIGHT;
+		mainwindow.origin.y -= KEYPAD_HEIGHT;
+		// when adding the keypad, the window must be this width
+		mainwindow.size.width = MIN_WINDOW_WIDTH;
 	}
 
-	e.size.width = p.size.width = f.size.width - FIELD_WIDTH_DIFFERENCE;
+	exp.size.width = prec.size.width = mainwindow.size.width - FIELD_WIDTH_DIFFERENCE;
 	
 	if (shrinking) {
 		[keypad removeFromSuperview];
-		e.origin.y -= KEYPAD_HEIGHT;
-		p.origin.y -= KEYPAD_HEIGHT;
+		exp.origin.y -= KEYPAD_HEIGHT;
+		prec.origin.y -= KEYPAD_HEIGHT;
 	} else {
-		e.origin.y += KEYPAD_HEIGHT;
-		p.origin.y += KEYPAD_HEIGHT;
+		exp.origin.y += KEYPAD_HEIGHT;
+		prec.origin.y += KEYPAD_HEIGHT;
 	}
 	
 	[ExpressionField removeFromSuperview];
 	[PrecisionSlider removeFromSuperview];
 
 	if (sender != 0)
-		[mainWindow setFrame:f display:TRUE animate:TRUE];
+		[mainWindow setFrame:mainwindow display:TRUE animate:TRUE];
 	else
-		[mainWindow setFrame:f display:FALSE animate:FALSE];
+		[mainWindow setFrame:mainwindow display:FALSE animate:FALSE];
 
 	if (! shrinking) {
 		[superview addSubview:keypad];
@@ -65,7 +71,7 @@ NSTextField *ef;
 		[mainWindow setMaxSize:w];
 		[prefs setObject:@"NO" forKey:@"toggled"];
 	} else {
-		w.width = 0;
+		w.width = MIN_WINDOW_WIDTH;
 		w.height = MIN_WINDOW_HEIGHT_TOGGLED;
 		[mainWindow setMinSize:w];
 	w = [mainWindow minSize];
@@ -76,8 +82,8 @@ NSTextField *ef;
 		[prefs setObject:@"YES" forKey:@"toggled"];
 	}
 	
-	[ExpressionField setFrame:e];
-	[PrecisionSlider setFrame:p];
+	[ExpressionField setFrame:exp];
+	[PrecisionSlider setFrame:prec];
 
 	[superview addSubview:ExpressionField];
 	[superview addSubview:PrecisionSlider];
@@ -174,6 +180,7 @@ NSTextField *ef;
 		case 18: str2 = @"floor("; break;
 		case 19: str2 = @"ceil("; break;
 		case 20: str2 = @"cbrt("; break;
+		case 21: str2 = @"log2("; break;
 		default: return;
 	}
 	[ExpressionField setStringValue:[str2 stringByAppendingString:str]];
@@ -224,12 +231,7 @@ NSTextField *ef;
 	[PrecisionSlider setIntValue:conf.precision];
 	just_answered = FALSE;
 
-	/* Set up the character translation table */
-	conf.charkey['.'] = [[prefs objectForKey:NSDecimalSeparator] characterAtIndex:0];
-	conf.charunkey[([[prefs objectForKey:NSDecimalSeparator] characterAtIndex:0])] = '.';
-	conf.charkey[','] = [[prefs objectForKey:NSThousandsSeparator] characterAtIndex:0];
-	conf.charunkey[([[prefs objectForKey:NSThousandsSeparator] characterAtIndex:0])] = ',';
-	
+	/* Set up the character translation */	
 	conf.dec_delimiter = [[prefs objectForKey:NSDecimalSeparator] characterAtIndex:0];
 	conf.thou_delimiter = [[prefs objectForKey:NSThousandsSeparator] characterAtIndex:0];
 
@@ -253,8 +255,11 @@ NSTextField *ef;
 		bounds.height = MIN_WINDOW_HEIGHT_UNTOGGLED;
 		[mainWindow setMinSize:bounds];
 		bounds.width = MIN_WINDOW_WIDTH;
-		bounds.height = 1200;
+		bounds.height = 0;
 		[mainWindow setMaxSize:bounds];
+		// if I don't do this, resizing makes the window disappear (????)
+		[self toggleSize:0];
+		[self toggleSize:0];
 	}
 //	w = [mainWindow frame];
 //	bounds = [mainWindow minSize];
