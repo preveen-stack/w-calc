@@ -251,30 +251,6 @@ void print_result (void) {
 	else pretty_answer = NULL;
 }
 
-void print_int_a(double d,char *c,int offset)
-{
-	double intpart,spec;
-	modf(d, &intpart);
-	modf(intpart/10,&spec);
-	c[offset] = '0'+(int)(intpart - spec*10);
-	if (d >= 10) print_int_a(d/10,c,offset+1);
-}
-
-void print_int(double d, char *c)
-{
-	char buf[500];
-	int i, len;
-	memset(buf,0,500);
-	print_int_a(d,buf,0);
-	for (i=0; buf[i]!=0; ++i) ;
-	len = i-1;
-	for (i=len; i>=0; --i) {
-		c[len-i] = buf[i];
-	}
-	c[len+1]=0;
-}
-
-
 char *print_this_result (double result)
 {
 	static char format[10];
@@ -345,7 +321,7 @@ char *print_this_result (double result)
 				if (fabs(modf(result, &junk)) != 0.0) {
 					sprintf(pa,format,result);
 				} else {
-					print_int(result,pa);
+					sprintf(pa,"%1.0f",result);
 				}
 				/* was it as good for you as it was for me?
 				 * now, you must localize it */
