@@ -35,9 +35,9 @@
 		case 125: // downarrow
 			break;
 		default:
-			printf("keyup %i => ", keycode);
-			fflush(NULL);
-			printf("%s\n", [[theEvent characters] cString]);
+//			printf("keyup %i => ", keycode);
+//			fflush(NULL);
+//			printf("%s\n", [[theEvent characters] cString]);
 			break;
 	}
 }
