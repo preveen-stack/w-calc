@@ -144,6 +144,10 @@ double parseme (char * pthis)
 
 char * flatten (char * str)
 {
+	struct variable_list {
+		char * varname;
+		struct variable_list *next;
+	} *vlist = NULL;
 	char * curs = str, *eov, *nstr, *ncurs1, *ncurs2;
 	char varname[500];
 	int i, olen, nlen, changedlen;
@@ -180,6 +184,22 @@ char * flatten (char * str)
 		// if it's a variable, evaluate it
 		a = getvar_full(varname);
 		if (! a.err) { // it is a var
+			// is it in the varlist?
+			struct variable_list *vcurs = vlist;
+			while (vcurs) {
+				if (strcmp(varname,vcurs->varname))
+					break;
+				vcurs = vcurs->next;
+			}
+			if (curs) {
+				report_error("Variable recursion is not allowed.");
+				return str;
+			}
+			// add it to the varlist
+			vcurs = malloc(sizeof(struct variable_list));
+			vcurs->varname = strdup(varname);
+			vcurs->next = vlist;
+			vlist = vcurs;
 			if (a.exp) { // it is an expression
 				double f = parseme(a.exp);
 				sprintf(varname,"%1.15f",f);
@@ -219,6 +239,13 @@ char * flatten (char * str)
 		free(str);
 		str = nstr;
 	}
+	// free up the vlist
+	while (vlist) {
+		struct variable_list * freeme = vlist;
+		free(vlist->varname);
+		vlist = vlist->next;
+		free(freeme);
+	}
 	standard_output = standard_output_save;
 	return str;
 }
@@ -257,7 +284,6 @@ char *print_this_result (double result)
 	static char *pa = NULL, *tmp;
 	extern char *errstring;
 	unsigned int decimal_places = 0;
-	double trash;
 
 	/* Build the "format" string, that will be used in an sprintf later */
 	switch (conf.output_format) {
