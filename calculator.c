@@ -407,7 +407,7 @@ void report_error (char * err)
 	char * tempstring;
 
 	if (errstring) {
-		tempstring = calloc(strlen(errstring) + 1 + strlen(err),sizeof(char));
+		tempstring = calloc(strlen(errstring) + 2 + strlen(err),sizeof(char));
 		sprintf(tempstring,"%s\n%s", errstring, err);
 		free(errstring);
 		errstring = tempstring;
