@@ -13,6 +13,7 @@ static double prev_number = 0.0;
 
 void simpleEval()
 {
+	Dprintf("operator: %c\n",operator);
 	switch (operator) {
 		case '+':
 			prev_number = simple_exp(prev_number, wplus, cur_number);
@@ -34,6 +35,8 @@ void simpleEval()
 
 char *simpleCalc(unsigned char input, char *expStr)
 {
+	Dprintf("simpleCalc: %c, %s\n",input,expStr);
+	Dprintf(" ~ cur: %f, prev: %f\n",cur_number, prev_number);
 	if (input == '+' || input == '-' || input == '*' || input == '/') {
 		// if the input is one of the operators
 		append = 0;
@@ -82,7 +85,7 @@ char *simpleCalc(unsigned char input, char *expStr)
 void simpleClearEntry()
 {
 	cur_number = 0.0;
-	operator = 0;
+//	operator = 0;
 	lastchar = 0;
 }
 
