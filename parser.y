@@ -56,9 +56,9 @@ char character;
 %token EOLN PAR REN WBRA WKET WSBRA WSKET WPIPE
 %token WPLUS WMINUS WMULT WDIV WMOD WEQL WEXP WSQR
 %token WOR WAND WEQUAL WNEQUAL WGT WLT WGEQ WLEQ
-%token WLSHFT WRSHFT
+%token WLSHFT WRSHFT WBOR WBAND
 
-%token WNOT WLOG WLN WROUND WABS WSQRT WCEIL WFLOOR WCBRT WLOGTWO
+%token WBNOT WNOT WLOG WLN WROUND WABS WSQRT WCEIL WFLOOR WCBRT WLOGTWO
 %token WSIN WCOS WTAN WASIN WACOS WATAN WSINH WCOSH WTANH WASINH WACOSH WATANH
 %token WCOT WACOT WCOTH WACOTH
 
@@ -71,14 +71,14 @@ char character;
 %type <cmd> command
 %type <function> func
 
-%left WAND WOR
+%left WAND WOR WBAND WBOR
 %left WEQUAL WNEQUAL WGT WLT WGEQ WLEQ
 %left WMINUS WPLUS
 %left WMULT WDIV WMOD WLSHFT WRSHFT
 %left WEXP
-%left WNOT
+%left WNOT WBNOT
 
-%expect 952
+%expect 1051
 
 %% 	/* beginning of the parsing rules	*/
 
@@ -371,6 +371,8 @@ exp : exp WMINUS exp { $$ = simple_exp($1, wminus, $3); }
 | exp WPLUS exp { $$ = simple_exp($1, wplus, $3); }
 | exp WAND exp { $$ = simple_exp($1, wand, $3); }
 | exp WOR exp { $$ = simple_exp($1, wor, $3); }
+| exp WBOR exp { $$ = simple_exp($1, wbor, $3); }
+| exp WBAND exp { $$ = simple_exp($1, wband, $3); }
 | exp WEQUAL exp { $$ = simple_exp($1, wequal, $3); }
 | exp WNEQUAL exp { $$ = simple_exp($1, wnequal, $3); }
 | exp WGT exp { $$ = simple_exp($1, wgt, $3); }
@@ -380,6 +382,7 @@ exp : exp WMINUS exp { $$ = simple_exp($1, wminus, $3); }
 | exp WLSHFT exp { $$ = simple_exp($1, wlshft, $3); }
 | exp WRSHFT exp { $$ = simple_exp($1, wrshft, $3); }
 | WNOT exp { $$ = ! $2; }
+| WBNOT exp { $$ = ~ (int)$2; }
 | exp_l2
 ;
 

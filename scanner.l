@@ -63,7 +63,7 @@ ACCEPTABLE	[_:]
 	while (curs && *curs && *curs == ' ')
 		curs++;
 	returnme = strdup(curs);
-	curs = returnme+strlen(returnme)-1;
+	curs = returnme+(int)strlen(returnme)-1;
 	while (curs && *curs && *curs == ' ') {
 		*curs = 0;
 		curs--;
@@ -89,7 +89,7 @@ ACCEPTABLE	[_:]
 	while (curs && *curs && *curs == ' ')
 		curs++;
 	returnme = strdup(curs);
-	curs = returnme+strlen(returnme)-1;
+	curs = returnme+(int)strlen(returnme)-1;
 	while (curs && *curs && *curs == ' ') {
 		*curs = 0;
 		curs--;
@@ -163,6 +163,9 @@ re				{ yylval.number = W_ELECTRON_RADIUS; return(NUMBER); }
 [%]						{ return(WMOD); }
 [=]						{ return(WEQL); }
 (\^)					{ return(WEXP); }
+'|'                     { return(WBOR); }
+\&                      { return(WBAND); }
+\~                      { return(WBNOT); }
 (\|\|)|(or)				{ return(WOR); }
 (\&\&)|(and)			{ return(WAND); }
 (\=\=)|(equals)|(eq)	{ return(WEQUAL); }
@@ -208,7 +211,7 @@ cbrt { return(WCBRT); }
 
 '.*' {
 	char * temp = strdup(yytext+1);
-	temp[strlen(temp)-1] = 0;
+	temp[(int)strlen(temp)-1] = 0;
 	yylval.variable = temp;
 	return(STRING);
 }
@@ -296,7 +299,7 @@ cbrt { return(WCBRT); }
 
 0{DIGIT}* {
 	unsigned long int value;
-	char err[strlen(yytext)+57];
+	char err[(int)strlen(yytext)+57];
 	if (strchr(yytext,'8') || strchr(yytext,'9')) {
 		sprintf(err,"Incorrect number format (%s) - expected 0-7 for octal",yytext);
 		report_error(err);
@@ -313,8 +316,8 @@ cbrt { return(WCBRT); }
 
 0b[0-9]+ {
 	unsigned long int value = 0;
-	unsigned int i, place = 1, len = strlen(yytext);
-	char err[strlen(yytext)+57];
+	unsigned int i, place = 1, len = (unsigned int)strlen(yytext);
+	char err[(int)strlen(yytext)+57];
 	if (strchr(yytext,'2') || strchr(yytext,'3') || strchr(yytext,'4') || strchr(yytext,'5') || strchr(yytext,'6') || strchr(yytext,'7') || strchr(yytext,'8') || strchr(yytext,'9')) {
 		sprintf(err,"Incorrect number format (%s) - expected 0 or 1 for binary",yytext);
 		report_error(err);
@@ -336,9 +339,9 @@ cbrt { return(WCBRT); }
 	/* This is the garbage-number collector */
 	/* char errmsg[] = "Confusing number format (%s)\nDecimal Separator: '%c'\nThousands Separator: '%c'"; */
 	char errmsg[] = "Confusing number format (%s)";
-	char err[strlen(yytext)+strlen(errmsg)-5];
+	char err[(int)strlen(yytext)+(int)strlen(errmsg)-5];
 	int i;
-	for (i=0;i<strlen(yytext);++i) {
+	for (i=0;i<(int)strlen(yytext);++i) {
 	    if (yytext[i] == ',')
 		yytext[i] = conf.thou_delimiter;
 	    else if (yytext[i] == '.')

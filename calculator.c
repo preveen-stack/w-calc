@@ -518,6 +518,8 @@ double simple_exp (double first, enum operations op, double second)
 			case wdiv:		temp = ((second != 0)?(first/second):HUGE_VAL); break;
 			case wmod:		temp = ((second != 0)?(fmod(first, second)):HUGE_VAL); break;
 			case wexp:		temp = pow(first, second); break;
+			case wbor:		temp = (int)first | (int)second; break;
+			case wband:		temp = (int)first & (int)second; break;
 			default:		temp = 0.0; break;
 		}
 		if (conf.precision_guard && fabs(modf(temp,&trash)) <= DBL_EPSILON) {

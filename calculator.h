@@ -7,6 +7,7 @@
 #include "definitions.h"
 
 enum functions {wnot,
+	wbnot,
 	wsin,
 	wcos,
 	wtan,
@@ -41,7 +42,9 @@ enum operations {wplus,
 	wfact,
 	wexp,
 	wor,
+	wbor,
 	wand,
+	wband,
 	wequal,
 	wnequal,
 	wgt,
