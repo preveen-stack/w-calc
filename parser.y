@@ -78,7 +78,7 @@ char character;
 %left WEXP
 %left WNOT WBNOT
 
-%expect 1115
+%expect 1185
 
 %% 	/* beginning of the parsing rules	*/
 
@@ -90,14 +90,14 @@ lines : oneline
 | oneline lines
 ;
 
-oneline : exp
+oneline : exp eoln
 {
 	if (scanerror) {
 		scanerror = synerrors = 0;
 		report_error("Error in scanner halts parser.");
 	} else {
 		push_value($1);
-		if (! synerrors) {
+		if (! synerrors && ! yynerrs) {
 			print_result();
 		} else {
 			synerrors = 0;
@@ -106,7 +106,6 @@ oneline : exp
 	}
 	compute = 1;
 }
-eoln
 | assignment eoln
 | command eoln {
 	switch ($1) {
@@ -130,7 +129,12 @@ eoln
 	}
 	compute = 1;
 }	
-| error eoln { compute = 0; }
+| error eoln {
+	report_error("Error in scanner halts parser.");
+	scanerror=1;
+	synerrors++;
+	compute = 0;
+}
 /* if we got an error on the line */
 ;
 
