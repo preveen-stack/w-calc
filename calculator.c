@@ -389,7 +389,7 @@ double simple_exp (double first, enum operations op, double second)
 			case wexp:		temp = pow(first, second); break;
 			default:		temp = 0.0; break;
 		}
-		if (fabs(modf(temp,&trash)) <= DBL_EPSILON) {
+		if (conf.precision_guard && fabs(modf(temp,&trash)) <= DBL_EPSILON) {
 			return trash;
 		}
 		return temp;
@@ -428,7 +428,7 @@ double uber_function (enum functions func, double input)
 			case wcbrt:		temp = cbrt(input); break;
 			default:		temp = input; break;
 		}
-		if (fabs(modf(temp, &trash)) <= DBL_EPSILON) {
+		if (conf.precision_guard && fabs(modf(temp, &trash)) <= DBL_EPSILON) {
 			return trash;
 		}
 		return temp;

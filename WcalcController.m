@@ -200,6 +200,7 @@ NSTextField *ef;
 		[prefs setObject:@"NO" forKey:@"historyShowing"];
 		[prefs setObject:@"YES" forKey:@"rememberErrors"];
 		[prefs setObject:@"NO" forKey:@"baseShowing"];
+		[prefs setObject:@"YES" forKey:@"precisionGuard"];
 	}
 	conf.precision = [prefs integerForKey:@"precision"];
 	conf.engineering = [prefs boolForKey:@"engineeringNotation"];
@@ -210,6 +211,7 @@ NSTextField *ef;
 	conf.print_prefixes = [prefs boolForKey:@"printPrefixes"];
 	conf.strict_syntax = [prefs boolForKey:@"strictSyntax"];
 	conf.rounding_indication = [prefs integerForKey:@"roundingIndication"];
+	conf.precision_guard = [prefs boolForKey:@"precisionGuard"];
 	/* history preferences */
 	allow_duplicates = [prefs boolForKey:@"historyDuplicatesAllowed"];
 	update_history = [prefs boolForKey:@"updateHistory"];
@@ -571,6 +573,14 @@ NSTextField *ef;
 			conf.remember_errors = ([sender state]==NSOnState);
 			if (olde != conf.remember_errors) {
 				[prefs setObject:(conf.remember_errors?@"YES":@"NO") forKey:@"rememberErrors"];
+			}
+			break;
+		case 12: // Conservative precision
+			olde = conf.precision_guard;
+			conf.precision_guard = ([sender state]==NSOnState);
+			if (olde != conf.precision_guard) {
+				need_redraw = 2;
+				[prefs setObject:(conf.precision_guard?@"YES":@"NO") forKey:@"precisionGuard"];
 			}
 			break;
 		default: return;

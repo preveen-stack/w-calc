@@ -69,6 +69,7 @@ struct _conf {
 	unsigned int remember_errors:1;
 	unsigned char charkey[256];
 	unsigned char charunkey[256];
+	unsigned int precision_guard:1;
 };
 
 /* configuration */
