@@ -48,7 +48,7 @@ char character;
 %token DEC_CMD OCT_CMD HEX_CMD BIN_CMD GUARD_CMD DISPLAY_PREFS_CMD
 %token RADIAN_CMD PICKY_CMD REMEMBER_CMD LISTVAR_CMD
 %token PRINT_HELP_CMD PREFIX_CMD
-%token <number> PRECISION_CMD ENG_CMD HLIMIT_CMD
+%token <number> PRECISION_CMD ENG_CMD HLIMIT_CMD ROUNDING_INDICATION_CMD
 
 %token EOLN PAR REN WBRA WKET WSBRA WSKET WPIPE
 %token WPLUS WMINUS WMULT WDIV WMOD WEQL WEXP WSQR
@@ -251,6 +251,24 @@ command : HEX_CMD {
 	}
 	if (standard_output)
 		printf("Engineering notation is %s %s\n",conf.engineering?"enabled":"disabled", (conf.precision==-1)?"":"if the precision is set");}
+| ROUNDING_INDICATION_CMD {
+	$$ = nothing;
+	if ($1 != -1)
+		conf.rounding_indication = $1;
+	else {
+		conf.rounding_indication += 1;
+		conf.rounding_indication %= 3;
+	}
+	if (standard_output) {
+		printf("Will display ");
+		switch(conf.rounding_indication) {
+			case NO_ROUNDING_INDICATION: printf("no"); break;
+			case SIMPLE_ROUNDING_INDICATION: printf("simple"); break;
+			case SIG_FIG_ROUNDING_INDICATION: printf("significant figure"); break;
+		}
+		printf(" rounding indication\n");
+	}
+}
 | PREFIX_CMD {
 	$$ = nothing;
 	conf.print_prefixes = ! conf.print_prefixes;
