@@ -565,6 +565,22 @@ static int seed_random (void)
 	return 1;
 }
 
+char * output_string (unsigned int o)
+{
+	switch (o) {
+		case HEXADECIMAL_FORMAT:
+			return "hexadecimal format (0xf)";
+		case OCTAL_FORMAT:
+			return "octal format (08)";
+		case BINARY_FORMAT:
+			return "binary format (0b1)";
+		case DECIMAL_FORMAT:
+			return "decimal format (9)";
+		default:
+			return "error, unknown format";
+	}
+}
+
 #if !STAT_MACROS_BROKEN
 double kbw_rand (void)
 {
