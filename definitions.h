@@ -11,7 +11,7 @@
 #define WCALC_DEFINITIONS
 
 #ifdef GUI
-#define VERSION "1.6"
+#define VERSION "1.6.2"
 #endif
 
 #define W_EXTRA 5

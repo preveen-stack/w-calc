@@ -26,6 +26,7 @@
 	IBOutlet NSButton *rememberErrors;
 	IBOutlet NSButton *enterKey;
 	IBOutlet NSButton *limitHistory;
+        IBOutlet NSButton *printInts;
 	
     IBOutlet NSTextField *AnswerField;
     IBOutlet NSTextField *ExpressionField;

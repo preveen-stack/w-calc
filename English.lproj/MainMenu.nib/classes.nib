@@ -109,6 +109,7 @@
                 outputFormat = NSMatrix; 
                 outputFormat2 = NSMatrix; 
                 pickyVariables = NSButton; 
+                printInts = NSButton; 
                 printPrefixes = NSButton; 
                 rememberErrors = NSButton; 
                 roundingIndication = NSPopUpButton; 

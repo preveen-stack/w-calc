@@ -624,7 +624,15 @@ static NSString *curFile = NULL;
 		    if (olde != conf.history_limit_len) {
 			[prefs setObject:[NSString stringWithFormat:@"%i",conf.history_limit_len] forKey:@"historyLimitLength"];
 		    }
-			break;
+                        break;
+                case 15: // Print ints
+                    olde = conf.print_ints;
+                    conf.print_ints = ([sender state]==NSOnState);
+                    if (olde != conf.print_ints) {
+                        need_redraw = 1;
+                        [prefs setObject:(conf.print_ints?@"YES":@"NO") forKey:@"printInts"];
+                    }
+                        break;
 		default: return;
 	}
 
@@ -779,10 +787,10 @@ static NSString *curFile = NULL;
 	[useRadians setState:(conf.use_radians?NSOnState:NSOffState)];
 	[outputFormat selectCellWithTag:conf.output_format];
 	[printPrefixes setState:(conf.print_prefixes?NSOnState:NSOffState)];
-/*	[strictSyntax setState:(conf.strict_syntax?NSOnState:NSOffState)]; */
 	[roundingIndication selectItemAtIndex:conf.rounding_indication];
 	[rememberErrors setState:(conf.remember_errors?NSOnState:NSOffState)];
 	[limitHistory setState:(conf.history_limit?NSOnState:NSOffState)];
+        [printInts setState:(conf.print_ints?NSOnState:NSOffState)];
 	
 	[printPrefixes setEnabled:(conf.output_format!=DECIMAL_FORMAT)];
 	[engineeringNotation setEnabled:(conf.output_format==DECIMAL_FORMAT)];
