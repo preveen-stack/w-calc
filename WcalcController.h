@@ -70,5 +70,8 @@
 - (IBAction)showBaseDrawer:(id)sender;
 - (IBAction)shConversions:(id)sender;
 - (IBAction)convert:(id)sender;
-- (IBAction)new:(id)sender;
+- (IBAction)open:(id)sender;
+- (IBAction)save:(id)sender;
+- (IBAction)saveAs:(id)sender;
+- (void)displayErrno:(int)err forFile:(NSString*)filename;
 @end
