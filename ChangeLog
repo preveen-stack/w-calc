@@ -1,3 +1,11 @@
+--- Version 1.4.1 ---
+Feb 10 2002 - Kyle Wheeler
+ - Added output commands to the GUI too (GUI)
+ - Fixed debug output in the CLI (CLI)
+ - Compiled everything statically - no more library problems! (BOTH)
+ - Supports real division symbol (Ö) (BOTH)
+ - Random is now truly random, if the system supports it - relies on /dev/random (BOTH)
+--- Version 1.4 ---
 Feb  6 2002 - Kyle Wheeler
  - Saves the history (max of 1000 lines - should this be configurable?) (CLI)
  - New commands in the CLI - (most) old ones will disappear next version (CLI)
