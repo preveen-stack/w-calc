@@ -22,19 +22,15 @@ static int stacklast = -1;
 /* variables everyone needs to get to */
 double last_answer = 0;
 char *pretty_answer = NULL;
+
+/* communication with the parser */
+char compute = 1;
+
+/* communication with the frontend */
+char standard_output = 1;
 char not_all_displayed = 0;
 
-/* configuration variables */
-short standard_output = 1;
-int precision = -1;
-short engineering = 0;
-short picky_variables = 0;
-short strict_syntax = 1;
-short use_radians = 0;
-short compute = 1;
-short output_format = 0;
-short print_prefixes = 0;
-short use_commas = 0;
+struct _conf conf;
 
 /*
  * These are declared here because they're not in any header files.
@@ -116,16 +112,16 @@ char *print_this_result (double result)
 	unsigned int decimal_places = 0;
 
 	// Find the proper format
-	switch (output_format) {
+	switch (conf.output_format) {
 		case DECIMAL_FORMAT:
 			tmp = realloc(pa, sizeof(char)*310);
 			if (! tmp) { free(pa); pa = "Not Enough Memory"; return pa; } else pa = tmp;
-			if (precision > -1 && ! engineering) {
-				sprintf(format, "%%1.%if", precision);
-				decimal_places = precision;
-			} else if (precision > -1 && engineering) {
-				sprintf(format, "%%1.%iE", precision);
-				decimal_places = precision;
+			if (conf.precision > -1 && ! conf.engineering) {
+				sprintf(format, "%%1.%if", conf.precision);
+				decimal_places = conf.precision;
+			} else if (conf.precision > -1 && conf.engineering) {
+				sprintf(format, "%%1.%iE", conf.precision);
+				decimal_places = conf.precision;
 			} else {
 				sprintf(format,"%%G");
 				if (fabs(result) < 10.0) {
@@ -146,12 +142,12 @@ char *print_this_result (double result)
 		case OCTAL_FORMAT:
 			tmp = realloc(pa,sizeof(char)*14);
 			if (! tmp) { free(pa); pa = "Not Enough Memory"; return pa; } else pa = tmp;
-			sprintf(format,print_prefixes?"0%%o":"%%o");
+			sprintf(format,conf.print_prefixes?"0%%o":"%%o");
 			break;
 		case HEXADECIMAL_FORMAT:
 			tmp = realloc(pa,sizeof(char)*11);
 			if (! tmp) { free(pa); pa = "Not Enough Memory"; return pa; } else pa = tmp;
-			sprintf(format,print_prefixes?"0x%%x":"%%x");
+			sprintf(format,conf.print_prefixes?"0x%%x":"%%x");
 			break;
 		case BINARY_FORMAT:
 			free(pa);
@@ -164,7 +160,7 @@ char *print_this_result (double result)
 		tmp = realloc(pa,sizeof(char)*11);
 		if (! tmp) { free(pa); pa = "Not Enough Memory"; return pa; } else pa = tmp;
 		sprintf(pa,"Infinity");
-	} else if (output_format == DECIMAL_FORMAT) {
+	} else if (conf.output_format == DECIMAL_FORMAT) {
 		double junk;
 		sprintf(pa,format,result);
 		if (modf(result*pow(10,decimal_places),&junk)) {
@@ -172,7 +168,7 @@ char *print_this_result (double result)
 		} else {
 			not_all_displayed = 0;
 		}
-	} else if (output_format != BINARY_FORMAT) {
+	} else if (conf.output_format != BINARY_FORMAT) {
 		long int temp = result;
 		sprintf(pa,format,temp);
 	} else {
@@ -183,17 +179,17 @@ char *print_this_result (double result)
 			if (result < pow(2.0,i))
 				place = i-1;
 		}
-		pa = calloc(sizeof(char),(place+(print_prefixes*2)+1));
+		pa = calloc(sizeof(char),(place+(conf.print_prefixes*2)+1));
 		if (! pa) {
 			pa = "Not Enough Memory";
 			return pa;
 		}
-		if (print_prefixes) {
+		if (conf.print_prefixes) {
 			pa[0] = '0';
 			pa[1] = 'b';
 		}
 		// print it
-		for (i=print_prefixes*2; place>=0; ++i) {
+		for (i=conf.print_prefixes*2; place>=0; ++i) {
 			double t = pow(2.0,place);
 			if (result >= t) {
 				pa[i] = '1';
@@ -207,7 +203,7 @@ char *print_this_result (double result)
 	}
 
 	// Internationalize it ;-)
-	if (use_commas && strchr(pa,'.')) {
+	if (conf.use_commas && strchr(pa,'.')) {
 		*strchr(pa,'.') = ',';
 	}
 
@@ -260,12 +256,12 @@ double uber_function (enum functions func, double input)
 	if (compute) {
 		double temp, trash;
 		switch (func) {
-			case wsin:		temp = sin(use_radians?input:(input*W_PI/180)); break;
-			case wcos:		temp = cos(use_radians?input:(input*W_PI/180)); break;
-			case wtan:		temp = tan(use_radians?input:(input*W_PI/180)); break;
-			case wasin:		temp = asin(use_radians?input:(input*W_PI/180)); break;
-			case wacos:		temp = acos(use_radians?input:(input*W_PI/180)); break;
-			case watan:		temp = atan(use_radians?input:(input*W_PI/180)); break;
+			case wsin:		temp = sin(conf.use_radians?input:(input*W_PI/180)); break;
+			case wcos:		temp = cos(conf.use_radians?input:(input*W_PI/180)); break;
+			case wtan:		temp = tan(conf.use_radians?input:(input*W_PI/180)); break;
+			case wasin:		temp = asin(conf.use_radians?input:(input*W_PI/180)); break;
+			case wacos:		temp = acos(conf.use_radians?input:(input*W_PI/180)); break;
+			case watan:		temp = atan(conf.use_radians?input:(input*W_PI/180)); break;
 			case wsinh:		temp = sinh(input); break;
 			case wcosh:		temp = cosh(input); break;
 			case wtanh:		temp = tanh(input); break;

@@ -20,24 +20,45 @@ double kbw_rand ();
 
 double fact (int);
 
-/* configuration variables */
+struct _conf {
+	int precision;
+	int engineering:1;
+	int picky_variables:1;
+	int strict_syntax:1;
+	int use_radians:1;
+	int output_format:4;
+	int print_prefixes:1;
+	int use_commas:1;
+	int rounding_indication:1;
+};
+
+/* configuration */
+extern struct _conf conf;
+
+/* results */
 extern double last_answer;
 extern char *pretty_answer;
-extern short standard_output;
-extern short compute;
+
+/* communication with parser */
+extern char compute;
+
+/* communication with the frontend */
+extern char standard_output;
 extern char not_all_displayed;
 
+/*extern char not_all_displayed;
+
 extern int precision;
-extern short engineering;
-extern short picky_variables;
-extern short strict_syntax;
-extern short use_radians;
-extern short output_format;
+extern char engineering;
+extern char picky_variables;
+extern char strict_syntax;
+extern char use_radians;
+extern char output_format;*/
 #define DECIMAL_FORMAT 0
 #define OCTAL_FORMAT 1
 #define HEXADECIMAL_FORMAT 2
 #define BINARY_FORMAT 3
-extern short print_prefixes;
-extern short use_commas;
+//extern char print_prefixes;
+//extern char use_commas;
 
 #endif

@@ -192,20 +192,23 @@ static char update_history = 0;
 		[prefs setObject:@"NO" forKey:@"updateHistory"];
 		[prefs setObject:@"NO" forKey:@"useCommas"];
 		[prefs setObject:@"YES" forKey:@"strictSyntax"];
+		[prefs setObject:@"0" forKey:@"roundingIndication"];
 	}
-	precision = [prefs integerForKey:@"precision"];
-	engineering = [prefs boolForKey:@"engineeringNotation"];
+	conf.precision = [prefs integerForKey:@"precision"];
+	conf.engineering = [prefs boolForKey:@"engineeringNotation"];
+	conf.picky_variables = [prefs boolForKey:@"flagUndefinedVariables"];
+	conf.use_radians = [prefs boolForKey:@"useRadians"];
+	conf.output_format = [prefs integerForKey:@"outputFormat"];
+	[PrecisionSlider setEnabled:(conf.output_format==DECIMAL_FORMAT)];
+	conf.print_prefixes = [prefs boolForKey:@"printPrefixes"];
+	conf.use_commas = [prefs boolForKey:@"useCommas"];
+	conf.strict_syntax = [prefs boolForKey:@"strictSyntax"];
+	conf.rounding_indication = [prefs integerForKey:@"roundingIndication"];
+	/* history preferences */
 	allow_duplicates = [prefs boolForKey:@"historyDuplicatesAllowed"];
-	picky_variables = [prefs boolForKey:@"flagUndefinedVariables"];
-	use_radians = [prefs boolForKey:@"useRadians"];
-	output_format = [prefs integerForKey:@"outputFormat"];
-	[PrecisionSlider setEnabled:(output_format==DECIMAL_FORMAT)];
-	print_prefixes = [prefs boolForKey:@"printPrefixes"];
 	update_history = [prefs boolForKey:@"updateHistory"];
-	use_commas = [prefs boolForKey:@"useCommas"];
-	strict_syntax = [prefs boolForKey:@"strictSyntax"];
 	
-	[PrecisionSlider setIntValue:precision];
+	[PrecisionSlider setIntValue:conf.precision];
 	just_answered = FALSE;
 
 	superview = [keypad superview];
@@ -246,9 +249,9 @@ static char update_history = 0;
 	else
 		last_pres = [PrecisionSlider intValue];
 
-	precision = last_pres;
+	conf.precision = last_pres;
 //	printf("precision = %i\n",precision);
-	[prefs setObject:[NSString stringWithFormat:@"%i",precision] forKey:@"precision"];
+	[prefs setObject:[NSString stringWithFormat:@"%i",conf.precision] forKey:@"precision"];
 
 	{
 		char * temp;
@@ -273,7 +276,7 @@ static char update_history = 0;
 	char * expression;
 	double val;
 	extern char * errstring;
-	int pout_fmt = output_format;
+	int pout_fmt = conf.output_format;
 
 	expression = strdup([[ExpressionField stringValue] cString]);
 
@@ -287,7 +290,7 @@ static char update_history = 0;
 		free(errstring);
 		errstring = NULL;
 	}
-	if (pout_fmt != output_format) {
+	if (pout_fmt != conf.output_format) {
 		char * temp;
 		if (pretty_answer) free(pretty_answer);
 		temp = print_this_result(last_answer);
@@ -312,7 +315,7 @@ static char update_history = 0;
 	if ([thePrefPanel isVisible])
 		[self displayPrefs:sender];
 	if ([baseDrawer state])
-		[outputFormat2 selectCellWithTag:output_format];
+		[outputFormat2 selectCellWithTag:conf.output_format];
 	[ExpressionField selectText:self];
 }
 
@@ -411,26 +414,26 @@ static char update_history = 0;
 
 	switch ([sender tag]) {
 		case 1: // Flag Undefined Variables
-			olde = picky_variables;
-			picky_variables = ([pickyVariables state]==NSOnState);
-			if (olde != picky_variables) {
-				[prefs setObject:(picky_variables?@"YES":@"NO") forKey:@"flagUndefinedVariables"];
+			olde = conf.picky_variables;
+			conf.picky_variables = ([pickyVariables state]==NSOnState);
+			if (olde != conf.picky_variables) {
+				[prefs setObject:(conf.picky_variables?@"YES":@"NO") forKey:@"flagUndefinedVariables"];
 			}
 				break;
 		case 2: // Use Radians
-			olde = use_radians;
-			use_radians = ([useRadians state]==NSOnState);
-			if (olde != use_radians) {
+			olde = conf.use_radians;
+			conf.use_radians = ([useRadians state]==NSOnState);
+			if (olde != conf.use_radians) {
 				need_redraw = 2;
-				[prefs setObject:(use_radians?@"YES":@"NO") forKey:@"useRadians"];
+				[prefs setObject:(conf.use_radians?@"YES":@"NO") forKey:@"useRadians"];
 			}
 				break;
 		case 3: // Use Engineering Notation
-			olde = engineering;
-			engineering = ([engineeringNotation state]==NSOnState);
-			if (olde != engineering) {
+			olde = conf.engineering;
+			conf.engineering = ([engineeringNotation state]==NSOnState);
+			if (olde != conf.engineering) {
 				need_redraw = 1;
-				[prefs setObject:(engineering?@"YES":@"NO") forKey:@"engineeringNotation"];
+				[prefs setObject:(conf.engineering?@"YES":@"NO") forKey:@"engineeringNotation"];
 			}
 				break;
 		case 4: // Allow Duplicates in History
@@ -441,22 +444,22 @@ static char update_history = 0;
 			}
 				break;
 		case 5: // Output Format
-			olde = output_format;
-			output_format = [[sender selectedCell] tag];
-			if (olde != output_format) {
+			olde = conf.output_format;
+			conf.output_format = [[sender selectedCell] tag];
+			if (olde != conf.output_format) {
 				need_redraw = 1;
-				[prefs setObject:[NSString stringWithFormat:@"%i",output_format] forKey:@"outputFormat"];
-				[PrecisionSlider setEnabled:(output_format==DECIMAL_FORMAT)];
-				[printPrefixes setEnabled:(output_format!=DECIMAL_FORMAT)];
-				[engineeringNotation setEnabled:(output_format==DECIMAL_FORMAT)];
+				[prefs setObject:[NSString stringWithFormat:@"%i",conf.output_format] forKey:@"outputFormat"];
+				[PrecisionSlider setEnabled:(conf.output_format==DECIMAL_FORMAT)];
+				[printPrefixes setEnabled:(conf.output_format!=DECIMAL_FORMAT)];
+				[engineeringNotation setEnabled:(conf.output_format==DECIMAL_FORMAT)];
 			}
 				break;
 		case 6: // Print Prefixes
-			olde = print_prefixes;
-			print_prefixes = ([sender state]==NSOnState);
-			if (olde != print_prefixes) {
+			olde = conf.print_prefixes;
+			conf.print_prefixes = ([sender state]==NSOnState);
+			if (olde != conf.print_prefixes) {
 				need_redraw = 1;
-				[prefs setObject:(print_prefixes?@"YES":@"NO") forKey:@"printPrefixes"];
+				[prefs setObject:(conf.print_prefixes?@"YES":@"NO") forKey:@"printPrefixes"];
 			}
 				break;
 		case 7: // Update History
@@ -467,19 +470,19 @@ static char update_history = 0;
 			}
 				break;
 		case 8: // Use Commas
-			olde = use_commas;
-			use_commas = ([sender state]==NSOnState);
-			if (olde != use_commas) {
+			olde = conf.use_commas;
+			conf.use_commas = ([sender state]==NSOnState);
+			if (olde != conf.use_commas) {
 				need_redraw = 1;
-				[prefs setObject:(use_commas?@"YES":@"NO") forKey:@"useCommas"];
-				[decimalKey setTitle:(use_commas?@",":@".")];
+				[prefs setObject:(conf.use_commas?@"YES":@"NO") forKey:@"useCommas"];
+				[decimalKey setTitle:(conf.use_commas?@",":@".")];
 			}
 				break;
 		case 9: // Flag Confusing Numbers
-			olde = strict_syntax;
-			strict_syntax = ([sender state]==NSOnState);
-			if (olde != strict_syntax) {
-				[prefs setObject:(strict_syntax?@"YES":@"NO") forKey:@"strictSyntax"];
+			olde = conf.strict_syntax;
+			conf.strict_syntax = ([sender state]==NSOnState);
+			if (olde != conf.strict_syntax) {
+				[prefs setObject:(conf.strict_syntax?@"YES":@"NO") forKey:@"strictSyntax"];
 			}
 		default: return;
 	}
@@ -531,16 +534,16 @@ static char update_history = 0;
 
 - (IBAction)displayPrefs:(id)sender
 {
-	[engineeringNotation setState:(engineering?NSOnState:NSOffState)];
-    [pickyVariables setState:(picky_variables?NSOnState:NSOffState)];
+	[engineeringNotation setState:(conf.engineering?NSOnState:NSOffState)];
+    [pickyVariables setState:(conf.picky_variables?NSOnState:NSOffState)];
     [historyDuplicates setState:(allow_duplicates?NSOnState:NSOffState)];
-	[useRadians setState:(use_radians?NSOnState:NSOffState)];
-	[outputFormat selectCellWithTag:output_format];
-	[printPrefixes setState:(print_prefixes?NSOnState:NSOffState)];
-	[useCommas setState:(use_commas?NSOnState:NSOffState)];
-	[strictSyntax setState:(strict_syntax?NSOnState:NSOffState)];
-	[printPrefixes setEnabled:(output_format!=DECIMAL_FORMAT)];
-	[engineeringNotation setEnabled:(output_format==DECIMAL_FORMAT)];
+	[useRadians setState:(conf.use_radians?NSOnState:NSOffState)];
+	[outputFormat selectCellWithTag:conf.output_format];
+	[printPrefixes setState:(conf.print_prefixes?NSOnState:NSOffState)];
+	[useCommas setState:(conf.use_commas?NSOnState:NSOffState)];
+	[strictSyntax setState:(conf.strict_syntax?NSOnState:NSOffState)];
+	[printPrefixes setEnabled:(conf.output_format!=DECIMAL_FORMAT)];
+	[engineeringNotation setEnabled:(conf.output_format==DECIMAL_FORMAT)];
 }
 
 @end

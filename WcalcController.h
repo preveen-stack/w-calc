@@ -33,6 +33,7 @@
 	IBOutlet NSDrawer *baseDrawer;
 	IBOutlet NSMenuItem *baseMenu;
 	IBOutlet NSMatrix *outputFormat2;
+	IBOutlet NSPopUpButton *roundingIndication;
 
 	bool just_answered;
 	NSView *superview;
