@@ -61,6 +61,12 @@ I reworked it after learning lex and yacc (powerful string parsing tools for C p
 \
 Wcalc takes "expressions" and calculates the answer. My goal was to make the expressions relatively intutive - no reverse polish, or anything like that. So, by way of a record, here is what Wcalc can do:\
 \
+
+\f1\b **********\
+* Syntax *\
+**********
+\f0\b0 \
+\
 Wcalc recognizes the following symbols:\
 + (plus)\
 - (minus)\
@@ -96,6 +102,22 @@ Some special notes about variables - two things are reserved:\
 a - this variable represents the last answer, and may be used in expressions.\
 q - this variable is reserved in the command-line version (it means quit), and cannot be used in expressions.\
 Also, built-in constants cannot be re-defined, although they are treated as variables in all other cases.\
+\
+
+\f1\b *********\
+* Bases *\
+*********\
+
+\f0\b0 \
+When you type a number into Wcalc, the number is normally assumed to be in decimal form. However, if the number has a prefix, it may be interpreted as a different form number. Specifically:\
+\
+0x - this means "the following is a hexadecimal"\
+0 - this means "the following is octal"\
+0b - this means "the following is binary"\
+\
+This prefix affects only the number it prefixes, and none of the other numbers in the expression.\
+\
+Answers are, by default, displayed in decimal form. This can be changed in the preferences window - and display of the prefixes can be toggled in the preferences window as well.\
 \
 
 \f1\b ****************\
