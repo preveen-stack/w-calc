@@ -64,15 +64,11 @@ double parseme (char * pthis)
 		return 0.00;
 	}
 	sprintf(sanitized,"%s\n",pthis);
-
-	printf("sanitized: %s\n", sanitized);
 	
 	/* Convert to standard notation via lookuptable */
 	for (i=0;i<strlen(sanitized);++i) {
 		sanitized[i] = conf.charkey[(int)sanitized[i]];
 	}
-
-	printf("converted: %s\n", sanitized);
 
 	/* Hold my Place */
 //	stackcur = stacklast + 1;
