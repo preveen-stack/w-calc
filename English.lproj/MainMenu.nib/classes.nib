@@ -89,6 +89,7 @@
                 theKeyboard = id; 
                 thePrefPanel = NSPanel; 
                 updateHistory = NSButton; 
+                useCommas = NSButton; 
                 useRadians = NSButton; 
                 variableList = id; 
             }; 
