@@ -1,6 +1,12 @@
+Feb 28 2002 - Kyle Wheeler
+ - Added CLI variable parsing strictness toggle (CLI)
+ - Added sqrt, ceil, and floor functions (BOTH)
+ - Fixed binary output (BOTH)
+Feb 27 2002 - Kyle Wheeler
+ - Fixed the comma parsing (BOTH)
 --- Version 1.4.4 ---
 Feb 27 2002 - Kyle Wheeler
- - Fixed clamping errors
+ - Fixed clamping errors (BOTH)
 --- Version 1.4.3 ---
 Feb 26 2002 - Kyle Wheeler
  - Added a preference to output numbers with a comma (BOTH)
