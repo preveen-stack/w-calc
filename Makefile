@@ -32,7 +32,7 @@ OBJECTS = y.tab.o lex.yy.o ${OFILES}
 # (don't forget the Lex Library "-ll")
 ${PROGRAM} : ${OBJECTS} libreadline.a
 	${CC} ${OBJECTS} libreadline.a -o ${PROGRAM} ${LFLAGS}
-
+	strip ${PROGRAM}
 
 # 
 # Turn the parser.y file into y.tab.c using "yacc"
