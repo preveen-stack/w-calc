@@ -180,11 +180,11 @@ floor { return(WFLOOR); }
 	char err[strlen(yytext)+50];
 	extern int yydebug;
 	
-	if (strchr(yytext,',') && ! use_commas) {
+	if (strict_syntax && strchr(yytext,',') && ! use_commas) {
 		sprintf(err,"Incorrect number format (%s) - expected period (.)", yytext);
 		report_error(err);
 		scanerror = 1;
-	} else if (strchr(yytext,'.') && use_commas) {
+	} else if (strict_syntax && strchr(yytext,'.') && use_commas) {
 		sprintf(err,"Incorrect number format (%s) - expected comma (,)", yytext);
 		report_error(err);
 		scanerror = 1;
@@ -199,13 +199,13 @@ floor { return(WFLOOR); }
 }
 
 (({NDIGIT}(({DIGIT}*)|({DIGIT}{0,2}([,]{DIGIT}{3})+)))|({NDIGIT}(({DIGIT}*)|({DIGIT}{0,2}([,]{DIGIT}{3})+))[.]{DIGIT}*))(e[+-]?{DIGIT}+)? {
-	char strip = ',';
+	const char strip = ',';
 	char err[strlen(yytext)+50];
 	extern int yydebug;
 
 	/* if it got in here with the use_commas
 		it's wrong UNLESS it doesn't have any commas or periods */
-	if (use_commas && (strchr(yytext,',') || strchr(yytext,'.'))) {
+	if (strict_syntax && use_commas && (strchr(yytext,strip) || strchr(yytext,'.'))) {
 		sprintf(err,"Incorrect number format (%s)", yytext);
 		report_error(err);
 		scanerror = 1;
@@ -230,7 +230,7 @@ floor { return(WFLOOR); }
 
 	/* if it got in here without the use_commas variable
 		then it doesn't belong here */
-	if (! use_commas) {
+	if (strict_syntax && ! use_commas) {
 		sprintf(err,"Incorrect number format (%s)", yytext);
 		report_error(err);
 		scanerror = 1;
