@@ -20,6 +20,13 @@
 	IBOutlet NSWindow *mainWindow;
 	IBOutlet id keypad;
 	IBOutlet id prefsController;
+	IBOutlet NSButton *engineeringNotation;
+	IBOutlet NSButton *historyDuplicates;
+	IBOutlet NSButton *pickyVariables;
+	IBOutlet NSButton *printPrefixes;
+	IBOutlet NSButton *useRadians;
+	IBOutlet NSMatrix *outputFormat;
+	IBOutlet NSPanel *thePrefPanel;
 
 	bool just_answered;
 	NSView *superview;
@@ -33,4 +40,7 @@
 - (IBAction)toggleSize:(id)sender;
 - (IBAction)menuFunction:(id)sender;
 - (IBAction)menuConstant:(id)sender;
+- (IBAction)setPrefs:(id)sender;
+- (IBAction)showPrefs:(id)sender;
+- (IBAction)displayPrefs:(id)sender;
 @end
