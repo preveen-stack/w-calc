@@ -283,7 +283,6 @@
 				F521994701FA8EC401A80164,
 				F574E09B01FD0FD701A80164,
 				F574E09F01FD122F01A80164,
-				F574E0A301FD273F01A80164,
 				F5EF54D402022A7001A80164,
 				F5DEAE90021254A501A80164,
 			);
@@ -316,7 +315,6 @@
 				F5B29D7A01F7395001A80164,
 				F521994501FA86B001A80164,
 				F574E09C01FD0FD701A80164,
-				F574E0A401FD273F01A80164,
 				F5EF54D502022A7001A80164,
 				F5DEAE8A0211DAA501A80164,
 			);
@@ -404,12 +402,6 @@
 			settings = {
 			};
 		};
-		F510EE8E021716B401A80164 = {
-			fileRef = F510EE8C021716B401A80164;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		F510EE8F021717DF01A80164 = {
 			children = (
 				F510EE8A0217160601A80164,
@@ -434,21 +426,17 @@
 			);
 			buildSettings = {
 				HEADER_SEARCH_PATHS = /sw/include;
-				INSTALL_PATH = "";
 				LIBRARY_SEARCH_PATHS = /sw/lib;
-				OTHER_CFLAGS = "-Wall -Wunused";
 				OTHER_REZFLAGS = "";
-				PREBINDING = NO;
 				PRODUCT_NAME = wcalc;
 				REZ_EXECUTABLE = YES;
 				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+				WARNING_CFLAGS = "-Wall -Wunused -Wno-four-char-constants -Wno-unknown-pragmas";
 			};
 			dependencies = (
 			);
 			isa = PBXToolTarget;
 			name = wcalc;
-			productInstallPath = "";
 			productName = wcalc;
 			productReference = F521993301F8D28701A80164;
 			shouldUseHeadermap = 0;
@@ -515,7 +503,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F510EE8B0217160601A80164,
-				F510EE8E021716B401A80164,
+				F5459F57022612F901A80164,
 			);
 			isa = PBXFrameworksBuildPhase;
 			name = "Frameworks & Libraries";
@@ -564,6 +552,12 @@
 			isa = PBXFileReference;
 			path = ChangeLog;
 			refType = 4;
+		};
+		F5459F57022612F901A80164 = {
+			fileRef = F510EE8C021716B401A80164;
+			isa = PBXBuildFile;
+			settings = {
+			};
 		};
 		F5463560020065B401A80164 = {
 			isa = PBXFileReference;
@@ -623,18 +617,6 @@
 			isa = PBXFileReference;
 			path = PrefsController.m;
 			refType = 4;
-		};
-		F574E0A301FD273F01A80164 = {
-			fileRef = F574E0A101FD273F01A80164;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F574E0A401FD273F01A80164 = {
-			fileRef = F574E0A201FD273F01A80164;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 		F586ED3901FD41B201A80164 = {
 			fileRef = F521994801FA927601A80164;

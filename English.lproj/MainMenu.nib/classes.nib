@@ -53,13 +53,16 @@
         {
             ACTIONS = {
                 clear = id; 
+                displayPrefs = id; 
                 enterData = id; 
                 go = id; 
                 menuConstant = id; 
                 menuFunction = id; 
                 setPrecision = id; 
+                setPrefs = id; 
                 showInspectorDrawer = id; 
                 showKeyboardDrawer = id; 
+                showPrefs = id; 
                 toggleSize = id; 
             }; 
             CLASS = WcalcController; 
@@ -71,15 +74,21 @@
                 affectDrawerMenu = NSMenuItem; 
                 affectKeyboardMenu = NSMenuItem; 
                 capsLockKey = NSButton; 
+                engineeringNotation = NSButton; 
                 errorController = id; 
+                historyDuplicates = NSButton; 
                 historyList = id; 
                 keypad = id; 
                 mainWindow = NSWindow; 
-                prefsController = id; 
+                outputFormat = NSMatrix; 
+                pickyVariables = NSButton; 
+                printPrefixes = NSButton; 
                 shiftKey1 = NSButton; 
                 shiftKey2 = NSButton; 
                 theDrawer = NSDrawer; 
                 theKeyboard = id; 
+                thePrefPanel = NSPanel; 
+                useRadians = NSButton; 
                 variableList = id; 
             }; 
             SUPERCLASS = NSObject; 
