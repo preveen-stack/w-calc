@@ -74,27 +74,28 @@ extern int yy_scan_string(const char*);
 /* declared here so other people don't mess with it */
 static int seed_random (void);
 
-char * flatten (char * str);
+struct variable_list {
+	char * varname;
+	struct variable_list *next;
+};
+
+static struct variable_list * extract_vars (char * str);
+static int recursion (char * str);
+static int find_recursion (struct variable_list *vstack);
+static char * flatten (char * str);
 
 double parseme (char * pthis)
 {
 	extern int synerrors;
 	short numbers = 0;
-	int len = strlen(pthis);
 	char * sanitized;
 	extern char* open_file;
 
 	synerrors = 0;
 	sig_figs = UINT32_MAX;
 
-	/* Sanitize the input (add a newline) */
-	sanitized = calloc(sizeof(char),len+1);
-	if (! sanitized) {
-		perror("resizing buffer");
-		return 0.00;
-	}
-	sprintf(sanitized,"%s\n",pthis);
-	
+	sanitized = strdup(pthis);
+
 	/* Convert to standard notation if there are numbers */
 	// are there numbers?
 	{
@@ -129,8 +130,27 @@ double parseme (char * pthis)
 		}
 	}
 
-	/* Now, eliminate recursion */
+	/* Now, check for recursion */
+	if (recursion(sanitized)) {
+		goto exiting;
+	}
+	
+	/* now resolve the variables */
 	sanitized = flatten(sanitized);
+	
+	/* Sanitize the input (add a newline) */
+	{
+		char * temp;
+		temp = calloc(sizeof(char),strlen(sanitized)+3);
+		if (! temp) {
+			perror("resizing buffer");
+			goto exiting;
+		}
+		sprintf(temp,"%s\n",sanitized);
+		free(sanitized);
+		sanitized = temp;
+	}
+	
 	
 	/* Hold my Place */
 //	stackcur = stacklast + 1;
@@ -152,17 +172,67 @@ double parseme (char * pthis)
 			report_error((char*)strerror(retval));
 		}
 	}
-	/* return success */
+exiting:
+	/* exiting */
 	free(sanitized);
 	return last_answer;
 }
 
-char * flatten (char * str)
+static struct variable_list * extract_vars (char * str)
 {
-	struct variable_list {
-		char * varname;
-		struct variable_list *next;
-	} *vlist = NULL;
+	char * curs, * eov, save_char;
+	struct variable_list *vlist = NULL, *vcurs;
+	char * varname;
+
+	if (*str == '\\') return NULL;
+	curs = strchr(str,'=');
+	if (! curs || ! *curs) curs = str;
+
+	while (curs && *curs) {
+		// search for the first letter of a possible variable
+		while (curs && *curs && ! isalpha((int)(*curs))) {
+			if (*curs == '\'') return NULL;
+			curs++;
+			// skip hex numbers
+			if ((*curs == 'x'||*curs == 'X') && curs != str && *(curs-1) == '0') {
+				curs ++;
+				while (curs && *curs && ( isdigit((int)(*curs)) ||
+							(*curs >= 'a' && *curs <= 'f') ||
+							(*curs >= 'A' && *curs <= 'F'))) {
+					curs++;
+				}
+			}
+			// skip binary (not strictly necessary, since b is reserved, but just in case)
+			if (*curs == 'b' && curs != str && *(curs-1) == '0')
+				curs++;
+		}
+
+		// if we didn't find any, we're done looking
+		if (! *curs) break;
+
+		// if we did find something, pull out the variable name
+		eov = curs;
+		while (eov && *eov && (isalpha((int)(*eov)) || *eov == '_' || *eov == ':')) {
+			eov++;
+		}
+		save_char = *eov;
+		*eov = 0;
+		varname = strdup(curs);
+		*eov = save_char;
+		curs = eov;
+
+		// add it to the varlist
+		vcurs = malloc(sizeof(struct variable_list));
+		vcurs->varname = varname;
+		vcurs->next = vlist;
+		vlist = vcurs;
+	}
+	return vlist;
+}
+
+static char * flatten (char * str)
+{
+	struct variable_list *vlist = NULL;
 	char * curs = str, *eov, *nstr, *ncurs1, *ncurs2;
 	char varname[500];
 	int i, olen, nlen, changedlen;
@@ -171,29 +241,17 @@ char * flatten (char * str)
 
 	standard_output = 0;
 
-	if (*str == '\\') return str;
 	curs = strchr(str,'=');
 	if (! curs || ! *curs) curs = str;
-	
+
 	while (curs && *curs) {
-		// search for the first letter of a possible variable
+		// search for the fist letter of a possible variable
 		while (curs && *curs && ! isalpha((int)(*curs))) {
 			if (*curs == '\'') {
 				curs++;
 				while (curs && *curs && *curs != '\'') curs++;
 			}
 			curs++;
-			// skip hex numbers
-			if (*curs == 'x' && curs != str && *(curs-1) == '0') {
-				curs++;
-				while (curs && *curs && ( isdigit((int)(*curs)) ||
-							(*curs >= 'a' && *curs <= 'f') ||
-							(*curs >= 'A' && *curs <= 'F')))
-					curs++;
-			}
-			// skip binary (not strictly necessary, since b is reserved, but just in case)
-			if (*curs == 'b' && curs != str && *(curs-1) == '0')
-				curs++;
 		}
 		if (! *curs) break;
 
@@ -211,22 +269,6 @@ char * flatten (char * str)
 		// if it's a variable, evaluate it
 		a = getvar_full(varname);
 		if (! a.err) { // it is a var
-			// is it in the varlist?
-			struct variable_list *vcurs = vlist;
-			while (vcurs) {
-				if (strcmp(varname,vcurs->varname))
-					break;
-				vcurs = vcurs->next;
-			}
-			if (vcurs) {
-				report_error("Variable recursion is not allowed.");
-				return str;
-			}
-			// add it to the varlist
-			vcurs = malloc(sizeof(struct variable_list));
-			vcurs->varname = (char*)strdup(varname);
-			vcurs->next = vlist;
-			vlist = vcurs;
 			if (a.exp) { // it is an expression
 				double f = parseme(a.exp);
 				sprintf(varname,"%1.15f",f);
@@ -275,6 +317,83 @@ char * flatten (char * str)
 	}
 	standard_output = standard_output_save;
 	return str;
+}
+
+static int recursion (char * str)
+{
+	struct variable_list *vlist, *vcurs, vstack_base;
+	int retval = 0;
+	
+	vlist = extract_vars(str);
+	for (vcurs=vlist; vcurs && !retval; vcurs=vcurs->next) {
+		vstack_base.varname = strdup(vcurs->varname);
+		vstack_base.next = NULL;
+		retval = find_recursion(&vstack_base);
+	}
+	while (vlist) {
+		vcurs = vlist->next;
+		free(vlist->varname);
+		free(vlist);
+		vlist = vcurs;
+	}
+	return retval;
+}
+
+int find_recursion (struct variable_list *vstack)
+{
+	struct variable_list *vlist = NULL;
+	int retval = 0;
+	struct answer a;
+	
+	a = getvar_full(vstack->varname);
+	if (! a.err) { // it is a var
+		if (a.exp) { // expression
+			struct variable_list *vcurs, *vstackcurs;
+			
+			vlist = extract_vars(a.exp);
+			// for each entry in the vlist, see if it's in the vstack
+			for (vcurs=vlist; vcurs; vcurs = vcurs->next) {
+				for (vstackcurs=vstack; vstackcurs; vstackcurs = vstackcurs->next) {
+					if (! strcmp(vcurs->varname, vstackcurs->varname)) {
+						char * error = malloc(sizeof(char)*(strlen(vcurs->varname)+73));
+						sprintf(error,"%s was found twice in symbol descent. Recursive variables are not allowed.",vcurs->varname);
+						report_error(error);
+						free(error);
+						return 1;
+					}
+				}
+			}
+			// for each entry in the vlist, see if it has recursion
+			for (vcurs=vlist; vcurs && ! retval; vcurs = vcurs->next) {
+				struct variable_list *bookmark = vcurs->next;
+
+				vcurs->next = vstack;
+				retval = find_recursion(vcurs);
+				vcurs->next = bookmark;
+			}
+			// free the vlist
+			vcurs = vlist;
+			while (vcurs) {
+				struct variable_list *bookmark = vcurs->next;
+				free(vcurs->varname);
+				free(vcurs);
+				vcurs = bookmark;
+			}
+			return retval;
+		} else { // value
+			return 0;
+		}
+	} else { // it is not a variable
+		if (conf.picky_variables) {
+			char * error = malloc(sizeof(char)*(strlen(vstack->varname)+45));
+			sprintf(error,"%s does not exist or was not properly parsed.",vstack->varname);
+			report_error(error);
+			free(error);
+			return -1;
+		} else {
+			return 0;
+		}
+	}
 }
 
 void report_error (char * err)
