@@ -1,3 +1,26 @@
+Feb 19 2003 - Kyle Wheeler
+ - Added some display functions for variables and prefs (CLI)
+ - Finally fixed the bizarre window behavior (GUI)
+--- Version 1.5.2.1 ---
+Feb 02 2003 - Kyle Wheeler
+ - Fixed the ^D bug when compiled without readline (CLI)
+Jan 29 2003 - Kyle Wheeler
+ - Uses more standard rpm macros (CLI)
+--- Version 1.5.2 ---
+Jan 27 2003 - Kyle Wheeler
+ - Modified to use automake/autoconf (CLI)
+Jan 23 2003 - Kyle Wheeler
+ - Fixed the internationalization stuff (BOTH).
+ - Added history length limiting.
+Jan 17 2003 - Kyle Wheeler
+ - Added clearing functions for History and Variables (BOTH)
+Jan 16 2003 - Kyle Wheeler
+ - Alphabetized conversion listings (GUI)
+ - Fixed sticky error messages (BOTH)
+Dec 18 2002 - Kyle Wheeler
+ - Added the log2 command (BOTH).
+Nov 01 2002 - Kyle Wheeler
+ - Fixed a crasher in error reporting (BOTH).
 --- Version 1.5.1 ---
 Oct 20 2002 - Kyle Wheeler
  - Added an option to avoid precision pitfalls (BOTH).

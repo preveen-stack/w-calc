@@ -1,3 +1,56 @@
+2003-02-19 11:38  memoryhole
+
+	* WcalcController.m, English.lproj/MainMenu.nib/info.nib,
+	English.lproj/MainMenu.nib/objects.nib, Wcalc.pbproj/kyle.pbxuser,
+	Wcalc.pbproj/project.pbxproj: Finally fixed the bizarre window
+	behavior. Replaced it with some bizarre window behavior behind the
+	scenes (see WcalcController.m), but I can hide that from the user.
+
+2003-02-19 11:35  memoryhole
+
+	* calculator.c, calculator.h: Added output_string... just for
+	convenience.
+
+2003-02-19 11:32  memoryhole
+
+	* parser.y, scanner.l: Added some display functions.
+
+2003-02-19 11:29  memoryhole
+
+	* definitions.h: Updated the list of supported symbols.
+
+2003-02-19 11:27  memoryhole
+
+	* main.c: Moved the help functions.
+
+2003-02-19 11:25  memoryhole
+
+	* Makefile.am, Makefile.in, help.c, help.h: Moved help to be
+	generic.
+
+2003-02-06 15:48  memoryhole
+
+	* ReadMe.rtf, Wcalc.pmsp, definitions.h, main.c, wcalc.spec,
+	English.lproj/MainMenu.nib/objects.nib, Wcalc.pbproj/kyle.pbxuser,
+	Wcalc.pbproj/project.pbxproj: Tiny version update.
+
+2003-02-06 14:49  memoryhole
+
+	* main.c: Fixed the ^D bug when it's compiled without readline
+	support.
+
+2003-02-06 14:43  memoryhole
+
+	* ChangeLog, calculator.c, calculator.h, conversion.c,
+	definitions.h, historyManager.c, string_manip.c, variables.c,
+	Wcalc.pbproj/kyle.pbxuser, Wcalc.pbproj/project.pbxproj: Got the
+	GUI to build properly.
+
+2003-01-29 12:02  memoryhole
+
+	* wcalc.spec: Uses more standard rpm macros for cross-distro
+	goodness.
+
 2003-01-28 15:11  memoryhole
 
 	* Wcalc.pmsp: New version.
