@@ -148,17 +148,21 @@ re				{ yylval.number = W_ELECTRON_RADIUS; return(NUMBER); }
 sin { return(WSIN); }
 cos { return(WCOS); }
 tan { return(WTAN); }
+cot { return(WCOT); }
 (asin)|(arcsin)|(sin^-1) { return(WASIN); }
 (acos)|(arccos)|(cos^-1) { return(WACOS); }
 (atan)|(arctan)|(tan^-1) { return(WATAN); }
+(acot)|(arccot)|(cot^-1) { return(WACOT); }
 sinh { return(WSINH); }
 cosh { return(WCOSH); }
 tanh { return(WTANH); }
-(asinh)|(argsinh)|(sinh^-1) { return(WASINH); }
-(acosh)|(argcosh)|(cosh^-1) { return(WACOSH); }
-(atanh)|(argtanh)|(tanh^-1) { return(WATANH); }
+coth { return(WCOTH); }
+(asinh)|(arcsinh)|(sinh^-1) { return(WASINH); }
+(acosh)|(arccosh)|(cosh^-1) { return(WACOSH); }
+(atanh)|(arctanh)|(tanh^-1) { return(WATANH); }
+(acoth)|(arccoth)|(tanh^-1) { return(WACOTH); }
 log { return(WLOG); }
-log2 { return(WLOGTWO); }
+logtwo { return(WLOGTWO); }
 ln { return(WLN); }
 round { return(WROUND); }
 abs { return(WABS); }
@@ -295,7 +299,8 @@ cbrt { return(WCBRT); }
 
 (({DIGIT})|[,.])* {
 	/* This is the garbage-number collector */
-	char errmsg[] = "Confusing number format (%s)\nDecimal Separator: '%c'\nThousands Separator: '%c'";
+	/* char errmsg[] = "Confusing number format (%s)\nDecimal Separator: '%c'\nThousands Separator: '%c'"; */
+	char errmsg[] = "Confusing number format (%s)";
 	char err[strlen(yytext)+strlen(errmsg)-5];
 	int i;
 	for (i=0;i<strlen(yytext);++i) {
@@ -303,7 +308,6 @@ cbrt { return(WCBRT); }
 		yytext[i] = conf.thou_delimiter;
 	    else if (yytext[i] == '.')
 		yytext[i] = conf.dec_delimiter;
-//		yytext[i] = conf.charunkey[(int)yytext[i]];
 	}	
 	sprintf(err,errmsg,yytext,conf.dec_delimiter,conf.thou_delimiter);
 	report_error(err);
@@ -313,7 +317,9 @@ cbrt { return(WCBRT); }
 %{ /* if we haven't matched anything yet, then it's illegal */
 	%}
 . { char error[26];
-	sprintf(error, "scanner: cannot parse next token (%c)\n", conf.charunkey[(int)*yytext]);
+	if (*yytext == ',') *yytext = conf.thou_delimiter;
+	else if (*yytext == '.') *yytext = conf.dec_delimiter;
+	sprintf(error, "scanner: cannot parse next token (%c)\n", *yytext);
 	report_error(error);
 	scanerror = 1;}
 

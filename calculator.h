@@ -10,15 +10,19 @@ enum functions {wnot,
 	wsin,
 	wcos,
 	wtan,
+	wcot,
 	wasin,
 	wacos,
 	watan,
+	wacot,
 	wsinh,
 	wcosh,
 	wtanh,
+	wcoth,
 	wasinh,
 	wacosh,
 	watanh,
+	wacoth,
 	wlog,
 	wlogtwo,
 	wln,
@@ -72,13 +76,12 @@ struct _conf {
 	unsigned int print_prefixes:1;
 	unsigned int rounding_indication:4;
 	unsigned int remember_errors:1;
-	unsigned char charkey[256];
-	unsigned char charunkey[256];
 	unsigned char thou_delimiter;
 	unsigned char dec_delimiter;
 	unsigned int precision_guard:1;
 	unsigned int history_limit:1;
-	unsigned int history_limit_len;
+	unsigned long history_limit_len;
+	unsigned int print_equal:1;
 };
 
 /* configuration */

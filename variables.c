@@ -22,11 +22,6 @@ static void * getvar_core (char * key, int all_or_nothing);
 
 void initvar (void)
 {
-	int i;
-	for (i=0;i<256;++i) {
-		conf.charkey[i] = i;
-	}
-	memcpy(conf.charunkey, conf.charkey, sizeof(conf.charkey));
 }
 
 void delnvar (int i)

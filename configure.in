@@ -30,7 +30,7 @@ AC_HEADER_STDC
 AC_HEADER_SYS_WAIT
 AC_HEADER_TIME
 AC_HEADER_STAT
-AC_CHECK_HEADERS([fcntl.h float.h inttypes.h stdlib.h string.h strings.h unistd.h])
+AC_CHECK_HEADERS([fcntl.h float.h inttypes.h stdlib.h string.h strings.h unistd.h limits.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST

@@ -57,6 +57,7 @@ char character;
 
 %token WNOT WLOG WLN WROUND WABS WSQRT WCEIL WFLOOR WCBRT WLOGTWO
 %token WSIN WCOS WTAN WASIN WACOS WATAN WSINH WCOSH WTANH WASINH WACOSH WATANH
+%token WCOT WACOT WCOTH WACOTH
 
 %token <number> NUMBER
 %token <variable> VAR STRING
@@ -193,8 +194,8 @@ command : HEX_CMD {
 		printf("           Print Prefixes: %s\n",conf.print_prefixes?"yes":"no");
 		printf("      Rounding Indication: %s\n",conf.rounding_indication?"yes":"no");
 		printf("   Save Errors in History: %s\n",conf.remember_errors?"yes":"no");
-		printf("      Thousands Delimiter: %c\n",conf.thou_delimiter);
-		printf("        Decimal Delimiter: %c\n",conf.dec_delimiter);
+		printf("      Thousands Delimiter: '%c'\n",conf.thou_delimiter);
+		printf("        Decimal Delimiter: '%c'\n",conf.dec_delimiter);
 		printf("          Precision Guard: %s\n",conf.precision_guard?"yes":"no");
 		printf("            History Limit: %s\n",conf.history_limit?"yes":"no");
 		if (conf.history_limit)
@@ -340,15 +341,19 @@ exp_l2 : exp_l2 WMULT exp_l2 { $$ = simple_exp($1, wmult, $3); }
 func : WSIN { $$ = wsin; }
 | WCOS { $$ = wcos; }
 | WTAN { $$ = wtan; }
+| WCOT { $$ = wcot; }
 | WASIN { $$ = wasin; }
 | WACOS { $$ = wacos; }
 | WATAN { $$ = watan; }
+| WACOT { $$ = wacot; }
 | WSINH { $$ = wsinh; }
 | WCOSH { $$ = wcosh; }
 | WTANH { $$ = wtanh; }
+| WCOTH { $$ = wcoth; }
 | WASINH { $$ = wasinh; }
 | WACOSH { $$ = wacosh; }
 | WATANH { $$ = watanh; }
+| WACOTH { $$ = wacoth; }
 | WLOG { $$ = wlog; }
 | WLOGTWO { $$ = wlogtwo; }
 | WLN { $$ = wln; }

@@ -422,7 +422,7 @@ char *print_this_result (double result)
 			errstring = NULL;
                         scanerror = 0;
 		}
-		printf(" = %s\n",pa);
+		printf("%s%s\n",conf.print_equal?" = ":"",pa);
 	}
 
 	return pa;
@@ -470,15 +470,19 @@ double uber_function (enum functions func, double input)
 			case wsin:		temp = sin(conf.use_radians?input:(input*W_PI/180)); break;
 			case wcos:		temp = cos(conf.use_radians?input:(input*W_PI/180)); break;
 			case wtan:		temp = tan(conf.use_radians?input:(input*W_PI/180)); break;
+			case wcot:      temp = 1.0/tan(conf.use_radians?input:(input*W_PI/180)); break;
 			case wasin:		temp = asin(conf.use_radians?input:(input*W_PI/180)); break;
 			case wacos:		temp = acos(conf.use_radians?input:(input*W_PI/180)); break;
 			case watan:		temp = atan(conf.use_radians?input:(input*W_PI/180)); break;
+			case wacot:     temp = atan(conf.use_radians?(1/input):(1/(input*W_PI/180)));
 			case wsinh:		temp = sinh(input); break;
 			case wcosh:		temp = cosh(input); break;
 			case wtanh:		temp = tanh(input); break;
+			case wcoth:     temp = 1/tanh(input); break;
 			case wasinh:	temp = asinh(input); break;
 			case wacosh:	temp = acosh(input); break;
 			case watanh:	temp = atanh(input); break;
+			case wacoth:    temp = atanh(1/input); break;
 			case wlog:		temp = log10(input); break;
 			case wlogtwo:	temp = log(input)/log(2); break;
 			case wln:		temp = log(input); break;

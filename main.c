@@ -9,8 +9,10 @@
 
 #include <unistd.h>
 #include <sys/types.h>
-#include <ctype.h> /* for isdigit */
+#include <ctype.h> /* for isdigit and isalpha */
 #include <errno.h>
+#include <fcntl.h> /* for open() */
+#include <limits.h> /* for stroul() */
 
 #ifdef HAVE_LIBREADLINE
 # if defined(HAVE_READLINE_READLINE_H)
@@ -49,8 +51,9 @@ extern int read_history ();
 #define ADD_HISTORY(x)
 #endif
 
-void print_command_help(void);
-void print_interactive_help(void);
+#define TRUEFALSE (! strcmp(value,"yes") || ! strcmp(value,"true"))
+
+int read_prefs(char* filename);
 
 /*
  * These are declared here because they're not in any header files.
@@ -78,6 +81,7 @@ int main (int argc, char *argv[])
 
 	initvar();
 
+	/* initialize the preferences */
 	conf.precision = -1;
 	conf.engineering = 0;
 	standard_output = 1;
@@ -86,6 +90,16 @@ int main (int argc, char *argv[])
 	conf.precision_guard = 1;
 	conf.thou_delimiter = ',';
 	conf.dec_delimiter = '.';
+	conf.print_equal = 1;
+
+	/* load the preferences */
+	{
+		char *filename;
+		filename = malloc((strlen(getenv("HOME"))+16)*sizeof(char));
+		sprintf(filename,"%s/.wcalcrc",getenv("HOME"));
+		if (read_prefs(filename))
+			perror("Writing Preferences");
+	}
 
 	/* Parse commandline options */
 	for (i = 1; i < argc; ++i) {
@@ -121,6 +135,8 @@ int main (int argc, char *argv[])
 			conf.use_radians = 1;
 		} else if (!strcmp(argv[i],"--yydebug")) {
 			yydebug = 1;
+		} else if (!strcmp(argv[i],"-n")) {
+			conf.print_equal = 0;
 		} else {
 			cmdline_input = 1;
 			parseme(argv[i]);
@@ -133,7 +149,8 @@ int main (int argc, char *argv[])
 	if (tty > 0) {
 		/* if stdin is a keyboard or terminal, then use readline and prompts */
 #ifdef HAVE_READLINE_HISTORY
-		char filename[1000];
+		char *filename;
+		filename = malloc((strlen(getenv("HOME"))+16)*sizeof(char));
 		sprintf(filename,"%s/.wcalc_history",getenv("HOME"));
 		if (read_history(filename) && errno != ENOENT)
 			perror("Reading History");
@@ -203,6 +220,7 @@ int main (int argc, char *argv[])
 			perror("Saving History");
 		if (history_truncate_file(filename,1000))
 			perror("Truncating History");
+		free(filename);
 #endif
 	} else if (tty < 0) {
 		fprintf(stderr, "Could not determine terminal type.\n");
@@ -212,4 +230,120 @@ int main (int argc, char *argv[])
 	}
 
 	exit(0);
+}
+
+int read_prefs(char * filename)
+{
+	int fd = open(filename,O_RDONLY);
+	char key[1000], value[100];
+	char cur, *curs = key;
+	int retval = 1;
+	printf("read_prefs\n");
+	fd = open(filename,O_RDONLY);
+	if (fd < 0) return 0;
+	retval = read(fd,curs,1);
+	while (retval == 1) {
+		char quoted = 0;
+		curs = key;
+		// read until we find a non-comment
+		while (retval == 1) {
+			// if we find a comment
+			if (*curs == '#')
+				// read until the end of line
+				while (read(fd,curs,1) == 1 && *curs != '\n')
+					;
+			else if (isalpha(*curs))
+				break;
+			retval = read(fd,curs,1);
+		}
+		// read in the key
+		quoted = 1;
+		if (*curs != '\'') {
+			++curs;
+			quoted = 0;
+		}
+		while (retval == 1) {
+			retval = read(fd,curs,1);
+			if ((! quoted && isspace(*curs)) ||
+				(quoted && *curs != '\''))
+				break;
+			++curs;
+		}
+		// read in the =
+		while (retval == 1 && *curs != '=') {
+			retval = read(fd,curs,1);
+		}
+		while (retval == 1 && (isspace(*curs) || *curs == '=')) {
+			retval = read(fd,curs,1);
+		}
+		value[0] = *curs;
+		*curs = 0;
+		curs = value;
+		// read in the value
+		quoted = 1;
+		if (*curs != '\'') {
+			++curs;
+			quoted = 0;
+		}
+		while (retval == 1) {
+			retval = read(fd,curs,1);
+			printf("read in the value: (%c)\n",*curs);
+			if ((! quoted && isspace(*curs)) ||
+				(  quoted && *curs != '\''))
+				break;
+			++curs;
+		}
+		if (*curs == '\n')
+			*curs = 0;
+		printf("key: <%s>\nvalue: <%s>\n",key,value);
+		if (!strcmp(key,"precision"))
+			conf.precision = atoi(value);
+		else if (!strcmp(key,"show_equals"))
+			conf.print_equal = TRUEFALSE;
+		else if (!strcmp(key,"engineering"))
+			conf.engineering = TRUEFALSE;
+		else if (!strcmp(key,"flag_undeclared"))
+			conf.picky_variables = TRUEFALSE;
+		else if (!strcmp(key,"strict_syntax"))
+			conf.strict_syntax = TRUEFALSE;
+		else if (!strcmp(key,"use_radians"))
+			conf.use_radians = TRUEFALSE;
+		else if (!strcmp(key,"print_prefixes"))
+			conf.print_prefixes = TRUEFALSE;
+		else if (!strcmp(key,"save_errors"))
+			conf.remember_errors = TRUEFALSE;
+		else if (!strcmp(key,"precision_guard"))
+			conf.precision_guard = TRUEFALSE;
+		else if (!strcmp(key,"thousands_delimiter"))
+			conf.thou_delimiter = value[0];
+		else if (!strcmp(key,"decimal_delimiter"))
+			conf.dec_delimiter = value[0];
+		else if (!strcmp(key,"history_limit")) {
+			if (!strcmp(value,"no")) 
+				conf.history_limit = conf.history_limit_len = 0;
+			else {
+				conf.history_limit = 1;
+				conf.history_limit_len = strtoul(value,NULL,0);
+			}
+		} else if (!strcmp(key,"output_format")) {
+			if (! strcmp(value, "decimal"))
+				conf.output_format = DECIMAL_FORMAT;
+			else if (!strcmp(value, "octal"))
+				conf.output_format = OCTAL_FORMAT;
+			else if (!strcmp(value, "binary"))
+				conf.output_format = BINARY_FORMAT;
+			else if (!strcmp(value, "hex") || !strcmp(value,"hexadecimal"))
+				conf.output_format = HEXADECIMAL_FORMAT;
+		} else if (!strcmp(key,"rounding_indication")) {
+			if (! strcmp(value, "no"))
+				conf.rounding_indication = NO_ROUNDING_INDICATION;
+			else if (! strcmp(value, "simple"))
+				conf.rounding_indication = SIMPLE_ROUNDING_INDICATION;
+			else if (! strcmp(value, "sig_fig"))
+				conf.rounding_indication = SIG_FIG_ROUNDING_INDICATION;
+		}
+		memset(key,0,sizeof(key));
+		memset(value,0,sizeof(value));
+	}
+	return 0;
 }
