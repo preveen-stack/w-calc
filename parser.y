@@ -185,13 +185,7 @@ assignment : VAR WEQL exp
 {
 	if (compute && ! scanerror) {
 		/* if standard_error, P, E, and q are reserved */
-		if (standard_output && !strcmp($1,"P")) {
-			precision = $3;
-			printf("Precision = %i\n",precision);
-		} else if (standard_output && !strcmp($1,"E")) {
-			engineering = $3;
-			printf("Engineering notation is %s %s\n",engineering?"enabled":"disabled", precision?"":"if the precision is set to a nonzero value");
-		} else if (standard_output && !strcmp($1,"q")) {
+		if (standard_output && !strcmp($1,"q")) {
 			printf("q cannot be assigned a value. q is used to exit.\n");
 		} else {
 			if (putvar($1,$3) == 0) {
