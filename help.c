@@ -21,42 +21,49 @@ void print_interactive_help (void)
 	printf("Version 0.2.x rewritten for lex/yacc in C, Nov 25 2001\n");
 	printf( "This calculator recognized the following symbols:\n"
 		 SUPPORTED_SYMBOLS
-		 "The ! is factorial or boolean, depending on use.\n"
+		 "\nThe ! is factorial or boolean, depending on use.\n"
 		 "Spaces are ignored (unknown symbols cause errors or are treated as variables)\n"
 		 "This calculator accepts input in decimal (1.00), scientific notation (1.0e5),\n"
 		 "octal (088), hexadecimal (0xff), and binary (0b11).\n\n"
+		 "a   is a reserved variable that represents the previous answer.\n"
 		 "\\pX is the way to set the precision, where X is the desired precision.\n"
 		 "    This setting only affects output.\n"
-		 "\\e  toggles the formatting of output between decimal and scientific notation.\n"
+		 "\\e or \\eng or \\engineering or \\eX or \\engX or \\engineeringX\n"
+		 "    toggles the formatting of output between decimal and scientific notation.\n"
+		 "    If X is used, 0 turns it off, anything else turns it on.\n"
 		 "    This setting only applies when precision is specified.\n"
-		 "a   in an expression represents the previous answer.\n"
-		 "\\q  exits the program.\n"
-		 "?   displays this help screen.\n"
+		 "\\q or q exits the program.\n"
+		 "? or \\help or help  displays this help screen.\n\n"
+		 "\\prefs prints out the current preference settings.\n"
 		 "\\radians toggles radian mode.\n"
-		 "\\commas toggles output delineation between commas and periods.\n"
-		 "\\p or \\picky toggles stricter variable parsing rules.\n"
+		 "\\cons or \\conservative toggles precision guards.\n"
+		 "\\p or \\picky or \\l or \\lenient toggles stricter variable parsing rules.\n"
 		 "\\b or \\bin or \\binary prints numbers in binary.\n"
 		 "\\d or \\dec or \\decimal prints numbers in decimal notation.\n"
 		 "\\h or \\x or \\hex or \\hexadecimal prints numbers in hex notation.\n"
 		 "\\o or \\oct or \\octal prints numbers in octal notation.\n"
 		 "\\r or \\radians toggles radian mode for sin-related functions.\n"
-		 "\\s or \\strict toggles stricter number parsing rules.\n"
+		 "\\re or \\remember or \\remember_errors toggles whether errors are\n"
+		 "    remembered in the history.\n"
+		 "\\round none|simple|sig_fig sets the rounding indication\n"
 		 "\\dsepX sets the decimal separator character to X.\n"
 		 "\\tsepX sets the thousands-place separator character to X.\n"
-		 "\\cons or \\conservative toggles precision guards.\n"
 		 "\\hlimitX sets the limit on the length of the history.\n"
 		 "\\li or \\list or \\listvars prints out the currently defined variables.\n\n"
 		 "Variables are supported and may be assigned using the = operator.\n"
 		 "To assign a variable, use the form:\n"
 		 "foo = anylegalexpression\n"
-		 "Thereafter, that variable name is the same as the literal value it represents.\n"
+		 "Thereafter, that variable name is the same as the literal value it represents.\n\n"
+		 "Comments (ignored expressions) are either between /* and */ or\n"
+		 "after a // or #\n"
 		 );
 }
 
 
 void print_command_help (void)
 {
-	printf("Wcalc %s by Kyle Wheeler.\nVersion 0.1.x written in C++ for CS240C at Ohio University, Jan 14 2000\n",VERSION);
+	printf("Wcalc %s by Kyle Wheeler.\n",VERSION);
+	printf("Version 0.1.x written in C++ for CS240C at Ohio University, Jan 14 2000\n");
 	printf("Version 0.2.x rewritten for lex/yacc in C, Nov 25 2001\n\n");
 	printf( "This calculator recognized the following symbols:\n"
 		 SUPPORTED_SYMBOLS
