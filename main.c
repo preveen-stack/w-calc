@@ -123,18 +123,26 @@ int main (int argc, char *argv[])
 					add_history(readme);
 					conf.charkey[(int)olddsep] = olddsep;
 					conf.charkey[(int)readme[5]] = '.';
+					conf.charunkey[(int)'.'] = readme[5];
 					olddsep = readme[5];
 					if (conf.charkey[(int)','] != ',' && readme[5]!='.') {
 						conf.charkey[(int)'.'] = '@';
+						conf.charunkey[(int)'@'] = '.';
+					} else {
+						conf.charunkey[(int)'@'] = '@';
 					}
 					printf("%c is now the decimal separator.\n", readme[5]);
 				} else if (!strncmp(readme,"\\tsep",5) && readme[5] != '\n') {
 					add_history(readme);
 					conf.charkey[(int)oldtsep] = oldtsep;
 					conf.charkey[(int)readme[5]] = ',';
+					conf.charunkey[(int)','] = readme[5];
 					oldtsep = readme[5];
 					if (conf.charkey[(int)','] != '.' && readme[5]!=',') {
 						conf.charkey[(int)','] = '#';
+						conf.charunkey[(int)'#'] = ',';
+					} else {
+						conf.charunkey[(int)'#'] = '#';
 					}
 					printf("%c is now the thousands separator.\n",readme[5]);
 				} else {

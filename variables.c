@@ -22,6 +22,7 @@ void initvar (void)
 	for (i=0;i<256;++i) {
 		conf.charkey[i] = i;
 	}
+	memcpy(conf.charunkey, conf.charkey, sizeof(conf.charkey));
 }
 
 void delnvar (int i)
