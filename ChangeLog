@@ -1,9 +1,20 @@
+Feb  6 2002 - Kyle Wheeler
+ - Saves the history (max of 1000 lines - should this be configurable?) (CLI)
+ - New commands in the CLI - (most) old ones will disappear next version (CLI)
+ - Supports hex (0x), octal (0), and binary (0b) input and output (BOTH)
+ - Cleared out some pointless error messages (CLI)
+ - Improved factorials (BOTH)
+ - Miscellaneous Bugfixes (BOTH)
+ - Tried to fix a window drifting problem (GUI)
+Feb  4 2002 - Kyle Wheeler
+ - Added a "Result" column to the history (GUI)
+--- Version 1.3 ---
 Feb  3 2002 - Kyle Wheeler
  - More improvements to the parser (BOTH)
  - Added LOTS of constants (BOTH)
 Feb  2 2002 - Kyle Wheeler
  - Added menus for functions and symbols (GUI)
- - Added absolute value "|expression|" (BOTH)
+ - Added absolute value "abs()" (BOTH)
  - Added a bunch of physical constants to the symbols (BOTH)
  - Saves toggled status (GUI)
 Jan 30 2002 - Kyle Wheeler
