@@ -5,6 +5,7 @@
 #include <string.h>
 #include <math.h>
 #include <float.h>
+#include <unistd.h> /* for isatty() */
 #include "calculator.h"
 #include "variables.h"
 
@@ -34,11 +35,16 @@ char * variable;
 }
 
 %token DEC_CMD OCT_CMD HEX_CMD BIN_CMD COMMA_CMD
+%token RADIAN_CMD PICKY_CMD STRICT_CMD
+%token <number> PRECISION_CMD ENG_CMD
+
 %token EOLN PAR REN WBRA WKET WSBRA WSKET WPIPE
 %token WPLUS WMINUS WMULT WDIV WMOD WEQL WEXP
 %token WOR WAND WEQUAL WNEQUAL WGT WLT WGEQ WLEQ
+
 %token WNOT WLOG WLN WROUND WABS WSQRT WCEIL WFLOOR
 %token WSIN WCOS WTAN WASIN WACOS WATAN WSINH WCOSH WTANH WASINH WACOSH WATANH
+
 %token <number> NUMBER
 %token <variable> VAR
 
@@ -54,7 +60,7 @@ char * variable;
 %left WEXP
 %left WNOT
 
-%expect 641
+%expect 722
 
 %% 	/* beginning of the parsing rules	*/
 
@@ -108,22 +114,22 @@ eoln : EOLN
 ;
 
 command : HEX_CMD {
-	$$ = redisplay;
+	$$ = isatty(0)?redisplay:nothing;
 	output_format = HEXADECIMAL_FORMAT;
 	if (standard_output)
 		printf("Hexadecimal Formatted Output\n");}
 | OCT_CMD {
-	$$ = redisplay;
+	$$ = isatty(0)?redisplay:nothing;
 	output_format = OCTAL_FORMAT;
 	if (standard_output)
 		printf("Octal Formatted Output\n");}
 | BIN_CMD {
-	$$ = redisplay;
+	$$ = isatty(0)?redisplay:nothing;
 	output_format = BINARY_FORMAT;
 	if (standard_output)
 		printf("Binary Formatted Output\n");}
 | DEC_CMD {
-	$$ = redisplay;
+	$$ = isatty(0)?redisplay:nothing;
 	output_format = DECIMAL_FORMAT;
 	if (standard_output)
 		printf("Decimal Formatted Output\n");}
@@ -132,6 +138,40 @@ command : HEX_CMD {
 	use_commas = ! use_commas;
 	if (standard_output)
 		printf("%s are the decimal separators.\n",use_commas?"Commas (,)":"Periods (.)");}
+| PICKY_CMD {
+	$$ = nothing;
+	picky_variables = ! picky_variables;
+	if (standard_output) {
+		if (! picky_variables)
+			printf("Unknown variables are assumed to be 0.\n");
+		else
+			printf("Strict variable parsing.\n");
+	}}
+| RADIAN_CMD {
+	$$ = nothing;
+	use_radians = ! use_radians;
+	if (standard_output)
+		printf("%sUsing Radians\n", use_radians?"":"Not ");}
+| PRECISION_CMD {
+	$$ = isatty(0)?redisplay:nothing;
+	precision = $1;
+	if (standard_output) {
+		printf("Precision = ");
+		if (precision == -1) printf("auto\n");
+		else printf("%i\n", precision);
+	}}
+| ENG_CMD {
+	$$ = isatty(0)?redisplay:nothing;
+	if ($1 < 0) engineering = ! engineering;
+	else engineering = $1;
+	if (standard_output)
+		printf("Engineering notation is %s %s\n",engineering?"enabled":"disabled", (precision==-1)?"":"if the precision is set");}
+| STRICT_CMD {
+	$$ = nothing;
+	strict_syntax = ! strict_syntax;
+	if (standard_output)
+		printf("%s Syntax\n",strict_syntax?"Strict":"Forgiving");
+}
 ;
 
 assignment : VAR WEQL exp
