@@ -37,6 +37,7 @@
 	
 	[PrecisionSlider setIntValue:precision];
 	[mainWindow setFrameAutosaveName:@"wcalc"];
+	just_answered = FALSE;
 }
 
 - (IBAction)setPrecision:(id)sender
@@ -82,6 +83,7 @@
 	[variableList reloadData];
 	[historyList reloadData];
 	[ExpressionField selectText:self];
+	just_answered = TRUE;
 }
 
 - (IBAction)enterData:(id)sender
@@ -117,12 +119,19 @@
 			shiftdown = 1;
 		}
 	} else {
-		[ExpressionField setStringValue:[[ExpressionField stringValue] stringByAppendingString:sent]];
+		if (just_answered == FALSE) {
+			[ExpressionField setStringValue:[[ExpressionField stringValue] stringByAppendingString:sent]];
+		} else if ([sent isEqualToString:@"+"] || [sent isEqualToString:@"-"]||[sent isEqualToString:@"*"]||[sent isEqualToString:@"/"]||[sent isEqualToString:@"%"]||[sent isEqualToString:@"+"]||[sent isEqualToString:@"("]||[sent isEqualToString:@"&"]||[sent isEqualToString:@"|"]) {
+			[ExpressionField setStringValue:[[@"a" self] stringByAppendingString:sent]];
+		} else {
+			[ExpressionField setStringValue:sent];
+		}
 		if (shiftdown) {
 			[shiftKey1 setState:NSOffState];
 			[shiftKey2 setState:NSOffState];
 			shiftdown = 0;
 		}
+		just_answered = FALSE;
 	}
 	[ExpressionField setSelectable:true];
 	free(str);

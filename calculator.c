@@ -16,6 +16,7 @@ int precision = -1;
 short engineering = 0;
 short picky_variables = 0;
 short use_radians = 1;
+short compute = 1;
 
 /*
  * These are declared here because they're not in any header files.
@@ -110,6 +111,59 @@ void print_this_result (double result)
 	}
 
 	fflush(stdout);
+}
+
+double simple_exp (double first, enum operations op, double second)
+{
+	if (compute) {
+		switch (op) {
+			case wor:		return (first || second);
+			case wand:		return (first && second);
+			case wequal:	return (first == second);
+			case wnequal:	return (first != second);
+			case wgt:		return (first > second);
+			case wlt:		return (first < second);
+			case wgeq:		return (first >= second);
+			case wleq:		return (first <= second);
+			case wplus:		return (first + second);
+			case wminus:	return (first - second);
+			case wmult:		return (first * second);
+			case wdiv:		return ((second != 0)?(first/second):HUGE_VAL);
+			case wmod:		return ((second != 0)?(fmod(first, second)):HUGE_VAL);
+			case wexp:		return pow(first, second);
+			default:		return 0;
+		}
+	} else {
+		return 0;
+	}
+}
+
+double uber_function (enum functions func, double input)
+{
+	if (compute) {
+		switch (func) {
+			case wsin:		return sin(use_radians?input:(input*WPI/180));
+			case wcos:		return cos(use_radians?input:(input*WPI/180));
+			case wtan:		return tan(use_radians?input:(input*WPI/180));
+			case wasin:		return asin(use_radians?input:(input*WPI/180));
+			case wacos:		return acos(use_radians?input:(input*WPI/180));
+			case watan:		return atan(use_radians?input:(input*WPI/180));
+			case wsinh:		return sinh(input);
+			case wcosh:		return cosh(input);
+			case wtanh:		return tanh(input);
+			case wasinh:	return asinh(input);
+			case wacosh:	return acosh(input);
+			case watanh:	return atanh(input);
+			case wlog:		return log10(input);
+			case wln:		return log(input);
+			case wround:	return (fabs(floor(input)-input)>=0.5)?ceil(input):floor(input);
+			case wneg:		return - input;
+			case wnot:		return ! input;
+			default:		return input;
+		}
+	} else {
+		return 0;
+	}
 }
 
 void push_value (double in)

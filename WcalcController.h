@@ -18,6 +18,8 @@
     IBOutlet id theKeyboard;
     IBOutlet id variableList;
 	IBOutlet NSWindow *mainWindow;
+
+	bool just_answered;
 }
 - (IBAction)clear:(id)sender;
 - (IBAction)enterData:(id)sender;

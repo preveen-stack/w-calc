@@ -38,8 +38,8 @@ int main (int argc, char *argv[])
 	int tty, i;
 	short cmdline_input = 0;
 
-	yydebug = 0;  /* turn off ugly YACC debugging */
 	yydebug = 1;  /* turn on ugly YACC debugging */
+	yydebug = 0;  /* turn off ugly YACC debugging */
 
 	initvar();
 
