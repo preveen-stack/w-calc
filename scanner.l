@@ -278,7 +278,7 @@ cbrt { return(WCBRT); }
 %{ /* if we haven't matched anything yet, then it's illegal */
 	%}
 . { char error[26];
-	sprintf(error, "scanner: Bad character '%c'\n", *yytext);
+	sprintf(error, "scanner: cannot parse next token\n");
 	report_error(error);
 	scanerror = 1;}
 
