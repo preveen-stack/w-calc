@@ -1,0 +1,63 @@
+# What precision should the numbers print in?
+# -1 : automatic
+# n  : n decimal places
+precision = -1
+
+# Should the numbers be printed in engineering notation?
+# true/false or yes/no
+engineering = false
+
+# Should undeclared variables be considered errors?
+# if no, the undeclared variables are considered 0.
+# true/false or yes/no
+flag_undeclared = yes
+
+# Don't think it does anything at the moment
+# true/false or yes/no
+strict_syntax = yes
+
+# Whether trig functions use radians or not
+# true/false or yes/no
+use_radians = no
+
+# What format (base) should numbers be printed in
+# decimal : the number is printed "normally", in base 10
+# octal   : the number is printed like 031
+# binary  : the number is printed like 0b1101101
+# hexadecimal : the number is printed like 0x3af913
+output_format = decimal # octal, binary, hexadecimal
+
+# Should alternate-format numbers be printed with the indicative prefixes
+# true/false or yes/no
+print_prefixes = yes
+
+# Should there be any indication or warning that things have been rounded
+# no      : there is no indication
+# simple  : was there any rounding at all
+# sig_fig : only if a significant figure has been rounded
+rounding_indication = no # simple, sig_fig
+
+# Should errors be remembered in the history
+# true/false or yes/no
+save_errors = no
+
+# This specifies the thousands and decimal delimiters
+# for international numbers. This affects input and output.
+# For spaces, use ' ' - may only be one character.
+thousands_delimiter = ,
+decimal_delimiter = .
+
+# Should numbers be rounded to the pre-defined precision limit of
+# the computer
+# true/false or yes/no
+precision_guard = no
+
+# Should the history be limited in length, and if so, how?
+# no : no limit
+# n  : some number
+# eg. history_limit = 1000
+history_limit = no
+
+# Should the equals sign be printed for results?
+# true/false or yes/no
+show_equals = true

@@ -238,7 +238,6 @@ int read_prefs(char * filename)
 	char key[1000], value[100];
 	char cur, *curs = key;
 	int retval = 1;
-	printf("read_prefs\n");
 	fd = open(filename,O_RDONLY);
 	if (fd < 0) return 0;
 	retval = read(fd,curs,1);
@@ -287,7 +286,6 @@ int read_prefs(char * filename)
 		}
 		while (retval == 1) {
 			retval = read(fd,curs,1);
-			printf("read in the value: (%c)\n",*curs);
 			if ((! quoted && isspace(*curs)) ||
 				(  quoted && *curs != '\''))
 				break;
@@ -295,7 +293,6 @@ int read_prefs(char * filename)
 		}
 		if (*curs == '\n')
 			*curs = 0;
-		printf("key: <%s>\nvalue: <%s>\n",key,value);
 		if (!strcmp(key,"precision"))
 			conf.precision = atoi(value);
 		else if (!strcmp(key,"show_equals"))
