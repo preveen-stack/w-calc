@@ -13,6 +13,7 @@
 #include <string.h>
 #include <math.h>
 #include <errno.h>
+#include <ctype.h> /* for isdigit() */
 #include "calculator.h"
 #include "parser.h"
 #include "string_manip.h"
@@ -41,11 +42,21 @@ ACCEPTABLE	[_:]
 %{ /* These are commands */
 %}
 
-\\h(ex(adecimal)?)?		{ return(HEX_CMD); }
-\\o(ct(al)?)?			{ return(OCT_CMD); }
-\\d(ec(imal)?)?			{ return(DEC_CMD); }
 \\b(in(ary)?)?			{ return(BIN_CMD); }
 \\c(omma(s)?)?			{ return(COMMA_CMD); }
+\\d(ec(imal)?)?			{ return(DEC_CMD); }
+\\e(ng(ineering)?)?{DIGIT}*		{ char * foo = yytext;
+	while (*foo && ! isdigit(*foo)) ++foo;
+	yylval.number = atoi(foo);
+	return(ENG_CMD);}
+\\h(ex(adecimal)?)?		{ return(HEX_CMD); }
+\\l(enient)?			{ return(PICKY_CMD); }
+\\o(ct(al)?)?			{ return(OCT_CMD); }
+\\p{DIGIT}+				{ yylval.number = atoi(yytext+2);
+	return(PRECISION_CMD);}
+\\p(icky)?				{ return(PICKY_CMD); }
+\\r(ad(ians)?)?			{ return(RADIAN_CMD); }
+\\s(tr(ict)?)?			{ return(STRICT_CMD); }
 
 %{ /* These are the constants (except random) */
 	%}
@@ -94,21 +105,21 @@ re				{ yylval.number = W_ELECTRON_RADIUS; return(NUMBER); }
 
 %{ /* These are the binary operations */
 	%}
-([!])|(not)	{ return(WNOT); }
-[+]			{ return(WPLUS); }
-[*]			{ return(WMULT); }
-[/]|[Ö]		{ return(WDIV); }
-[%]			{ return(WMOD); }
-[=]			{ return(WEQL); }
-\^			{ return(WEXP); }
-(\|\|)|(or)	{ return(WOR); }
-(\&\&)|(and) { return(WAND); }
-(\=\=)|(equals)|(eq) { return(WEQUAL); }
-(\!\=)|(ne) { return(WNEQUAL); }
-\>			{ return(WGT); }
-\<			{ return(WLT); }
-\>\=		{ return(WGEQ); }
-\<\=		{ return(WLEQ); }
+([!])|(not)				{ return(WNOT); }
+[+]						{ return(WPLUS); }
+[*]						{ return(WMULT); }
+[/]|[Ö]					{ return(WDIV); }
+[%]						{ return(WMOD); }
+[=]						{ return(WEQL); }
+\^						{ return(WEXP); }
+(\|\|)|(or)				{ return(WOR); }
+(\&\&)|(and)			{ return(WAND); }
+(\=\=)|(equals)|(eq)	{ return(WEQUAL); }
+(\!\=)|(ne)|(­)			{ return(WNEQUAL); }
+\>						{ return(WGT); }
+\<						{ return(WLT); }
+(\>\=)|(³)				{ return(WGEQ); }
+(\<\=)|(²)				{ return(WLEQ); }
 
 %{ /* This is a special operator/function */
 	%}
@@ -167,95 +178,75 @@ floor { return(WFLOOR); }
 
 (0?[.,]{DIGIT}+) {
 	char err[strlen(yytext)+50];
+	extern int yydebug;
 	
 	if (strchr(yytext,',') && ! use_commas) {
 		sprintf(err,"Incorrect number format (%s) - expected period (.)", yytext);
 		report_error(err);
-		yylval.number=0;
-		return(NUMBER);
+		scanerror = 1;
 	} else if (strchr(yytext,'.') && use_commas) {
 		sprintf(err,"Incorrect number format (%s) - expected comma (,)", yytext);
 		report_error(err);
-		yylval.number=0;
+		scanerror = 1;
+	} else {
+		strswap(',','.',yytext);
+
+		if (yydebug) printf("nonambiguous %s => ", yytext);
+		yylval.number = strtod(yytext,NULL);
+		if (yydebug) printf("%f\n", yylval.number);
 		return(NUMBER);
 	}
-
-	strswap(',','.',yytext);
-
-	yylval.number = strtod(yytext,NULL);
-	return(NUMBER);	
 }
 
-(({NDIGIT}(({DIGIT}*)|({DIGIT}{0,2}([,]{DIGIT}{3})+)))|({NDIGIT}(({DIGIT}*)|({DIGIT}{0,2}([,]{DIGIT}{3})+))[.]{DIGIT}+))(e[+-]?{DIGIT}+)? {
-	char strip = ',', *left, *right;
+(({NDIGIT}(({DIGIT}*)|({DIGIT}{0,2}([,]{DIGIT}{3})+)))|({NDIGIT}(({DIGIT}*)|({DIGIT}{0,2}([,]{DIGIT}{3})+))[.]{DIGIT}*))(e[+-]?{DIGIT}+)? {
+	char strip = ',';
 	char err[strlen(yytext)+50];
 	extern int yydebug;
 
-	if (use_commas && ((strchr(yytext,',') && strchr(yytext,'.')) || yytext[strlen(yytext)-1]==',')) {
-		sprintf(err,"Incorrect number format (%s) - expected comma (,)", yytext);
+	/* if it got in here with the use_commas
+		it's wrong UNLESS it doesn't have any commas or periods */
+	if (use_commas && (strchr(yytext,',') || strchr(yytext,'.'))) {
+		sprintf(err,"Incorrect number format (%s)", yytext);
 		report_error(err);
-		yylval.number = 0;
+		scanerror = 1;
+	} else {
+
+		/* strip out ignored characters */
+		strstrip(strip,yytext);
+
+		if (yydebug) printf("complex one %s => ", yytext);
+		yylval.number = strtod(yytext,NULL);
+		if (yydebug) printf("%f\n",yylval.number);
+
+		if (fabs(yylval.number) == HUGE_VAL)
+			report_error(strerror(errno));
 		return(NUMBER);
 	}
-
-	/* strip out ignored characters */
-	for (left=right=yytext; *right; ++right) {
-		if (*right && *right != strip) {
-			*left = *right;
-			++left;
-		}
-	}
-	while (left != right) { *left = 0; ++left; }
-	
-	if (yydebug) printf("american %s\n", yytext);
-
-	yylval.number = strtod(yytext,NULL);
-	if (fabs(yylval.number) == HUGE_VAL)
-		report_error(strerror(errno));
-	return(NUMBER);
 }
 
-(({NDIGIT}(({DIGIT}*)|({DIGIT}{0,2}([.]{DIGIT}{3})+)))|({NDIGIT}(({DIGIT}*)|({DIGIT}{0,2}([.]{DIGIT}{3})+))[,]{DIGIT}+))(e[+-]?{DIGIT}+)? {
-	char strip = use_commas?'.':',', sepr = use_commas?',':'.';
-	char *left, *right;
+(({NDIGIT}({DIGIT}{0,2}([.]{DIGIT}{3})+))|({NDIGIT}(({DIGIT}*)|({DIGIT}{0,2}([.]{DIGIT}{3})+))[,]{DIGIT}*))(e[+-]?{DIGIT}+)? {
 	char err[strlen(yytext)+50];
 	extern int yydebug;
-	char *manip = strdup(yytext);
 
-	printf("non-american %s\n", yytext);
-
+	/* if it got in here without the use_commas variable
+		then it doesn't belong here */
 	if (! use_commas) {
 		sprintf(err,"Incorrect number format (%s)", yytext);
 		report_error(err);
-		yylval.number = 0;
-		return(NUMBER);
-	}
-	/* Turn it into standard decimal form */
-	for (left=right=manip; *right; ++right) {
-		if (*right && *right != strip) {
-			*left = *right;
-			++left;
-		}
-	}
-	while (left != right) { *left = 0; ++left; }
-
-	if (! strchr(manip,sepr) && manip[0] == '0') {
-		sprintf(err,"Incorrect number format (%s) - expected period (.)", yytext);
-		report_error(err);
-		yylval.number = 0;
-		return(NUMBER);
-	}
-
-	if (use_commas && strrchr(manip,','))
-		*strrchr(manip,',') = '.';
-
-	yylval.number = strtod(manip,NULL);
-	free(manip);
-	if (yydebug) printf("%f\n",yylval.number);
-	if ((yylval.number != HUGE_VAL) && (yylval.number != -HUGE_VAL)) {
-		return(NUMBER);
+		scanerror = 1;
 	} else {
-		report_error(strerror(errno));
+
+		/* strip out ignored characters */
+		strstrip(',',yytext);
+		/* convert commas to periods if necessary for correct parsing */
+		strswap(',','.',yytext);
+
+		if (yydebug) printf("complex two %s => ", yytext);
+		yylval.number = strtod(yytext,NULL);
+		if (yydebug) printf("%f\n",yylval.number);
+
+		if (fabs(yylval.number) == HUGE_VAL)
+			report_error(strerror(errno));
 		return(NUMBER);
 	}
 }
@@ -267,18 +258,18 @@ floor { return(WFLOOR); }
 	return(NUMBER);
 }
 
-0[0-9]* {
+0{DIGIT}* {
 	unsigned long int value;
 	char err[strlen(yytext)+57];
 	if (strchr(yytext,'8') || strchr(yytext,'9')) {
 		sprintf(err,"Incorrect number format (%s) - expected 0-7 for octal",yytext);
 		report_error(err);
-		yylval.number = 0;
+		scanerror = 1;
+	} else {
+		sscanf(yytext,"%lo",&value);
+		yylval.number = value;
 		return(NUMBER);
 	}
-	sscanf(yytext,"%lo",&value);
-	yylval.number = value;
-	return(NUMBER);
 }
 
 0b[0-9]+ {
@@ -288,15 +279,23 @@ floor { return(WFLOOR); }
 	if (strchr(yytext,'2') || strchr(yytext,'3') || strchr(yytext,'4') || strchr(yytext,'5') || strchr(yytext,'6') || strchr(yytext,'7') || strchr(yytext,'8') || strchr(yytext,'9')) {
 		sprintf(err,"Incorrect number format (%s) - expected 0 or 1 for binary",yytext);
 		report_error(err);
-		yylval.number = 0;
+		scanerror = 1;
 	} else {
 		for (i=len-1;i>1;--i) {
 			value += ((yytext[i]=='0')?0:1) * place;
 			place = pow(2,len-i);
 		}
 		yylval.number = value;
+		return(NUMBER);
 	}
-	return(NUMBER);
+}
+
+(({DIGIT})|[,.])* {
+	/* This is the garbage-number collector */
+	char err[strlen(yytext)+25];
+	sprintf(err,"Confusing number format (%s)",yytext);
+	report_error(err);
+	scanerror = 1;
 }
 
 %{ /* if we haven't matched anything yet, then it's illegal */
