@@ -29,11 +29,10 @@ AC_HEADER_STDC
 AC_HEADER_SYS_WAIT
 AC_HEADER_TIME
 AC_HEADER_STAT
-AC_CHECK_HEADERS([fcntl.h float.h inttypes.h stdlib.h stdio.h string.h sys/time.h unistd.h limits.h])
+AC_CHECK_HEADERS([fcntl.h float.h inttypes.h stdlib.h stdio.h string.h sys/time.h unistd.h limits.h malloc.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
-AC_HEADER_STDBOOL
 
 # Checks for library functions.
 AC_FUNC_ALLOCA
