@@ -20,6 +20,10 @@
 
 	extern short scanerror;
 
+#ifndef HUGE_VALF
+#define HUGE_VALF HUGE_VAL
+#endif
+
 #ifdef REENTRANT_PARSER
 	/* Re-entrant */
 #define YY_DECL int yylex (YYSTYPE *yylval)
