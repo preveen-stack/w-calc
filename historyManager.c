@@ -44,7 +44,7 @@ struct entry {
 
 /* Private Variables */
 static struct entry *history = NULL;
-static int histlen = 0;
+static unsigned long histlen = 0;
 
 /* Private Functions */
 static int all_calculated (void);
@@ -96,7 +96,7 @@ void addToHistory(char * expression, double answer)
 			if (! temp[histlen].exp) return;
 			++histlen;
 		    } else {
-			int i;
+			unsigned long i;
 			if (history[0].exp)
 			    free(history[0].exp);
 			for (i=0;i<histlen-1;++i) {
@@ -134,7 +134,7 @@ char * historynum (int step, int col)
 
 static int all_calculated (void)
 {
-	int i,ret=0;
+	unsigned long i,ret=0;
 	for (i=0;i<histlen;++i) {
 		if (history[i].calc) ++ret;
 	}
@@ -143,7 +143,7 @@ static int all_calculated (void)
 
 static void clear_calculated (void)
 {
-	int i;
+	unsigned long i;
 	for (i=0;i<histlen;++i) {
 		history[i].calc = 0;
 	}

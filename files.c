@@ -41,7 +41,7 @@ int saveState(char* filename)
 			if (! keyval) continue;
 			if (!strcmp(keyval->key,"a")) continue;
 			retval = write(fd,keyval->key,strlen(keyval->key));
-			if (retval < strlen(keyval->key)) {
+			if (retval < (int) strlen(keyval->key)) {
 				return_error = errno;
 				break;
 			}
@@ -57,7 +57,7 @@ int saveState(char* filename)
 				cptr = value;
 			}
 			retval = write(fd,cptr,strlen(cptr));
-			if (retval < strlen(cptr)) {
+			if (retval < (int) strlen(cptr)) {
 				return_error = errno;
 				break;
 			}
@@ -71,7 +71,7 @@ int saveState(char* filename)
 		for (hindex=0;hindex<historyLength();hindex++) {
 			char * history_entry = historynum(hindex,1);
 			retval = write(fd,history_entry,strlen(history_entry));
-			if (retval < strlen(history_entry)) {
+			if (retval < (int) strlen(history_entry)) {
 				return_error = errno;
 				break;
 			}
@@ -82,7 +82,7 @@ int saveState(char* filename)
 			}
 			history_entry = historynum(hindex,2);
 			retval = write(fd,history_entry,strlen(history_entry));
-			if (retval < strlen(history_entry)) {
+			if (retval < (int) strlen(history_entry)) {
 				return_error = errno;
 				break;
 			}
