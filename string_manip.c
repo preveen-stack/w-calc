@@ -67,3 +67,30 @@ int justnumbers (char * curs)
 	else
 		return 0;
 }
+
+void stripComments (char * curs)
+{
+	char * follower = curs;
+	char update_follower = 1;
+	while (curs && *curs) {
+		if (*curs == '#') {
+			*curs = 0;
+			return;
+		} else if (*curs == '/' && *(curs+1) == '/') {
+			*curs = 0;
+			return;
+		} else if (*curs == '/' && *(curs+1) == '*') {
+			update_follower = 0;
+			curs ++;
+		} else if (*curs == '*' && *(curs+1) == '/') {
+			update_follower = 1;
+			curs += 2;
+		}
+		if (update_follower) {
+			*follower = *curs;
+			++follower;
+		}
+		curs++;
+	}
+	*follower = 0;
+}
