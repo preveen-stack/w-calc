@@ -42,7 +42,6 @@ ACCEPTABLE	[_:]
 %}
 
 \\b(in(ary)?)?			{ return(BIN_CMD); }
-\\c(omma(s)?)?			{ return(COMMA_CMD); }
 \\d(ec(imal)?)?			{ return(DEC_CMD); }
 \\e(ng(ineering)?)?{DIGIT}*		{ char * foo = yytext;
 	while (*foo && ! isdigit(*foo)) ++foo;
@@ -157,15 +156,12 @@ cbrt { return(WCBRT); }
 %{ /* international */
 %}
 
-({NDIGIT}{DIGIT}{0,2}[.,]{DIGIT}{3})(e[+-]?{DIGIT}+)? {
-	char strip = conf.use_commas?'.':',';
+({NDIGIT}{DIGIT}{0,2}\.{DIGIT}{3})(e[+-]?{DIGIT}+)? {
+	/* simple decimals */
 	extern int yydebug;
 
 	/* take out the ignored char */
-	strstrip(strip, yytext);
-	/* convert commas to periods if necessary for correct parsing */
-	if (conf.use_commas)
-		strswap(',', '.', yytext);
+	strstrip(',', yytext);
 	
 	if (yydebug)
 		printf("ambiguous %s\n", yytext);
@@ -182,93 +178,39 @@ cbrt { return(WCBRT); }
 	return(NUMBER);
 }
 
-(0?[.,]{DIGIT}+) {
-	char err[strlen(yytext)+50];
+(0?\.{DIGIT}+) {
 	extern int yydebug;
-	
-	if (conf.strict_syntax && strchr(yytext,',') && ! conf.use_commas) {
-		sprintf(err,"Incorrect number format (%s) - expected period (.)", yytext);
-		report_error(err);
-		scanerror = 1;
-	} else if (conf.strict_syntax && strchr(yytext,'.') && conf.use_commas) {
-		sprintf(err,"Incorrect number format (%s) - expected comma (,)", yytext);
-		report_error(err);
-		scanerror = 1;
-	} else {
-		strswap(',','.',yytext);
 
-		if (yydebug) printf("nonambiguous %s => ", yytext);
-		yylval.number = strtod(yytext,NULL);
-		if (yydebug) printf("%f\n", yylval.number);
-		if (fabs(yylval.number) == HUGE_VAL)
-			report_error(strerror(errno));
-		else {
-			unsigned int t = count_digits(yytext) - (yytext[0]=='0')?1:0;
-			if (t<sig_figs) sig_figs = t;
-		}
-		return(NUMBER);
+	if (yydebug) printf("nonambiguous %s => ", yytext);
+	yylval.number = strtod(yytext,NULL);
+	if (yydebug) printf("%f\n", yylval.number);
+	if (fabs(yylval.number) == HUGE_VAL)
+		report_error(strerror(errno));
+	else {
+		unsigned int t = count_digits(yytext) - (yytext[0]=='0')?1:0;
+		if (t<sig_figs) sig_figs = t;
 	}
+	return(NUMBER);
 }
 
 (({NDIGIT}(({DIGIT}*)|({DIGIT}{0,2}([,]{DIGIT}{3})+)))|({NDIGIT}(({DIGIT}*)|({DIGIT}{0,2}([,]{DIGIT}{3})+))[.]{DIGIT}*))(e[+-]?{DIGIT}+)? {
 	const char strip = ',';
-	char err[strlen(yytext)+50];
 	extern int yydebug;
 
-	/* if it got in here with the use_commas
-		it's wrong UNLESS it doesn't have any commas or periods */
-	if (conf.strict_syntax && conf.use_commas && (strchr(yytext,strip) || strchr(yytext,'.'))) {
-		sprintf(err,"Incorrect number format (%s)", yytext);
-		report_error(err);
-		scanerror = 1;
-	} else {
+	/* strip out ignored characters */
+	strstrip(strip,yytext);
 
-		/* strip out ignored characters */
-		strstrip(strip,yytext);
+	if (yydebug) printf("complex one %s => ", yytext);
+	yylval.number = strtod(yytext,NULL);
+	if (yydebug) printf("%f\n",yylval.number);
 
-		if (yydebug) printf("complex one %s => ", yytext);
-		yylval.number = strtod(yytext,NULL);
-		if (yydebug) printf("%f\n",yylval.number);
-
-		if (fabs(yylval.number) == HUGE_VAL)
-			report_error(strerror(errno));
-		else {
-			unsigned int t = count_digits(yytext);
-			if (t<sig_figs) sig_figs = t;
-		}
-		return(NUMBER);
+	if (fabs(yylval.number) == HUGE_VAL)
+		report_error(strerror(errno));
+	else {
+		unsigned int t = count_digits(yytext);
+		if (t<sig_figs) sig_figs = t;
 	}
-}
-
-(({NDIGIT}({DIGIT}{0,2}([.]{DIGIT}{3})+))|({NDIGIT}(({DIGIT}*)|({DIGIT}{0,2}([.]{DIGIT}{3})+))[,]{DIGIT}*))(e[+-]?{DIGIT}+)? {
-	char err[strlen(yytext)+50];
-	extern int yydebug;
-
-	/* if it got in here without the use_commas variable
-		then it doesn't belong here */
-	if (conf.strict_syntax && ! conf.use_commas) {
-		sprintf(err,"Incorrect number format (%s)", yytext);
-		report_error(err);
-		scanerror = 1;
-	} else {
-
-		/* strip out ignored characters */
-		strstrip('.',yytext);
-		/* convert commas to periods if necessary for correct parsing */
-		strswap(',','.',yytext);
-
-		if (yydebug) printf("complex two %s => ", yytext);
-		yylval.number = strtod(yytext,NULL);
-		if (yydebug) printf("%f\n",yylval.number);
-
-		if (fabs(yylval.number) == HUGE_VAL)
-			report_error(strerror(errno));
-		else {
-			unsigned int t = count_digits(yytext);
-			if (t<sig_figs) sig_figs = t;
-		}
-		return(NUMBER);
-	}
+	return(NUMBER);
 }
 
 0x[0-9a-fA-F]+ {
