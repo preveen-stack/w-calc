@@ -36,6 +36,7 @@ char *cmdline = NULL;
 extern void add_history ();
 extern int write_history ();
 extern int read_history ();
+extern int history_truncate_file(char*,int);
 # endif /* defined(HAVE_READLINE_HISTORY_H) */
 /* no history */
 #endif /* HAVE_READLINE_HISTORY */
@@ -44,6 +45,7 @@ extern int read_history ();
 #include "parser.h"
 #include "variables.h"
 #include "help.h"
+#include "historyManager.h"
 
 #define TRUEFALSE (! strcmp(value,"yes") || ! strcmp(value,"true"))
 
@@ -181,7 +183,7 @@ int main (int argc, char *argv[])
 				if (!strcmp(readme,"q") || !strcmp(readme,"quit") || !strcmp(readme,"\\q")) {
 					break;
 				} else if (!strncmp(readme,"\\yydebug",8)) {
-					addToHistory(readme);
+					addToHistory(readme,0);
 					yydebug = ! yydebug;
 					printf("Debug Mode %s\n",yydebug?"On":"Off");
 				} else {
@@ -189,7 +191,7 @@ int main (int argc, char *argv[])
 					{
 						extern char * errstring;
 						if (!errstring || (errstring && !strlen(errstring)) || conf.remember_errors) {
-							addToHistory(readme);
+							addToHistory(readme,last_answer);
 						}
 					}
 				}
@@ -232,7 +234,7 @@ int read_prefs(char * filename)
 {
 	int fd = open(filename,O_RDONLY);
 	char key[1000], value[100];
-	char cur, *curs = key;
+	char *curs = key;
 	int retval = 1;
 	fd = open(filename,O_RDONLY);
 	if (fd < 0) return 0;

@@ -27,7 +27,9 @@ char *strchr (), *strrchr ();
 	/* include debugging code, in case we want it */
 #define YYDEBUG 1
 
-	int yylex(); /* to make it stop complaining about undeclared functions */
+	/* to make it stop complaining about undeclared functions */
+	int yylex(); 
+	int yyerror(char *error_string, ...);
 
 	int lines = 1;
 	int synerrors = 0;
@@ -76,7 +78,7 @@ char character;
 %left WEXP
 %left WNOT
 
-%expect 836
+%expect 952
 
 %% 	/* beginning of the parsing rules	*/
 
@@ -290,7 +292,7 @@ command : HEX_CMD {
 }
 | OPEN_CMD {
 	extern char* open_file;
-	int i, f;
+	int i;
 	open_file = malloc(strlen($1)+1);
 	sprintf(open_file,"%s",$1);
 	/* strip trailing spaces */

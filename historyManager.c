@@ -16,6 +16,20 @@
 #include "historyManager.h"
 #include "calculator.h"
 
+#ifdef HAVE_READLINE_HISTORY
+# if defined(HAVE_READLINE_HISTORY_H)
+#  include <readline/history.h>
+# elif defined(HAVE_HISTORY_H)
+#  include <history.h>
+# else /* ! defined(HAVE_HISTORY_H) */
+extern void add_history ();
+extern int write_history ();
+extern int read_history ();
+extern int history_truncate_file(char*,int);
+# endif /* defined(HAVE_READLINE_HISTORY_H) */
+/* no history */
+#endif /* HAVE_READLINE_HISTORY */
+
 /* Configuration Variables */
 short allow_duplicates = 0;
 short recalculate = 0;
