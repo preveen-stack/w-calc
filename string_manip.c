@@ -54,3 +54,13 @@ unsigned int count_digits(char * curs)
 	}
 	return counter;
 }
+
+int justnumbers (char * curs)
+{
+	while (curs && *curs && (isdigit(*curs) || ispunct(*curs)))
+		curs ++;
+	if (curs && ! *curs) // if we reached the end of the string
+		return 1;
+	else
+		return 0;
+}

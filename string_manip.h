@@ -14,5 +14,6 @@ void strstrip (char, char *);
 void strswap (char, char, char*);
 void strswap2 (char, char, char*);
 unsigned int count_digits(char*);
+int justnumbers(char*);
 
 #endif
