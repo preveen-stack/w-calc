@@ -34,8 +34,8 @@ enum commands cmd;
 char * variable;
 }
 
-%token DEC_CMD OCT_CMD HEX_CMD BIN_CMD
-%token RADIAN_CMD PICKY_CMD STRICT_CMD REMEMBER_CMD
+%token DEC_CMD OCT_CMD HEX_CMD BIN_CMD 
+%token RADIAN_CMD PICKY_CMD STRICT_CMD REMEMBER_CMD LISTVAR_CMD
 %token <number> PRECISION_CMD ENG_CMD
 
 %token EOLN PAR REN WBRA WKET WSBRA WSKET WPIPE
@@ -163,6 +163,19 @@ command : HEX_CMD {
 		if (conf.precision == -1) printf("auto\n");
 		else printf("%i\n", conf.precision);
 	}}
+| LISTVAR_CMD {
+	extern int contents;
+	int i;
+	for (i=0;i<=contents;i++) {
+		struct variable *keyval = getrealnvar(i);
+		if (! keyval) continue;
+		printf("%s = ", keyval->key);
+		if (keyval->exp)
+			printf("%s\n", keyval->expression);
+		else
+			printf("%g\n", keyval->value);
+	}
+}
 | ENG_CMD {
 	$$ = isatty(0)?redisplay:nothing;
 	if ($1 < 0) {

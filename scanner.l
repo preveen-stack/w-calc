@@ -50,6 +50,7 @@ ACCEPTABLE	[_:]
 \\h(ex(adecimal)?)?		{ return(HEX_CMD); }
 \\x                     { return(HEX_CMD); }
 \\l(enient)?			{ return(PICKY_CMD); }
+\\li(st(vars)?)?        { return(LISTVAR_CMD); }
 \\o(ct(al)?)?			{ return(OCT_CMD); }
 \\p({DIGIT}|[-])+		{ yylval.number = atoi(yytext+2);
 	return(PRECISION_CMD);}
