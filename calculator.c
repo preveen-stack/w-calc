@@ -290,12 +290,12 @@ char *print_this_result (double result)
 		case OCTAL_FORMAT:
 			tmp = realloc(pa,sizeof(char)*14);
 			if (! tmp) { free(pa); pa = "Not Enough Memory"; return pa; } else pa = tmp;
-			sprintf(format,conf.print_prefixes?"0%%o":"%%o");
+			sprintf(format,conf.print_prefixes?"%%#o":"%%o");
 			break;
 		case HEXADECIMAL_FORMAT:
 			tmp = realloc(pa,sizeof(char)*11);
 			if (! tmp) { free(pa); pa = "Not Enough Memory"; return pa; } else pa = tmp;
-			sprintf(format,conf.print_prefixes?"0x%%x":"%%x");
+			sprintf(format,conf.print_prefixes?"%%#x":"%%x");
 			break;
 		case BINARY_FORMAT:
 			// Binary Format can't just use a format string, so
@@ -318,7 +318,8 @@ char *print_this_result (double result)
 			{
 				double junk;
 				/* This is the big call */
-				if (fabs(modf(result, &junk)) != 0.0) {
+				if (fabs(modf(result, &junk)) != 0.0 ||
+						conf.engineering) {
 					sprintf(pa,format,result);
 				} else {
 					sprintf(pa,"%1.0f",result);
