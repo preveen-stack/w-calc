@@ -168,6 +168,7 @@ void print_interactive_help (void)
 		 "\\q  exits the program.\n"
 		 "?   displays this help screen.\n"
 		 "\\radians toggles radian mode.\n"
+		 "\\commas toggles output delineation between commas and periods.\n"
 		 "\\dec, \\hex, \\oct, \\bin set the output format.\n\n"
 		 "Variables are supported and may be assigned using the = operator.\n"
 		 "To assign a variable, use the form:\n"
