@@ -55,7 +55,7 @@ char * variable;
 %left WEXP
 %left WNEG
 
-%expect 113
+%expect 176
 
 %% 	/* beginning of the parsing rules	*/
 
@@ -178,7 +178,7 @@ exp : exp op exp
 | PAR exp REN { $$ = $2; }
 | WBRA exp WKET { $$ = $2; }
 | WSBRA exp WSKET { $$ = $2; }
-| exp value %prec WMULT
+| exp exp %prec WMULT
 { $$ = $1 * $2; }
 | value postop %prec WNEG
 {

@@ -1,7 +1,7 @@
 #ifndef WCALC_H
 #define WCALC_H
 
-#define VERSION "1.1"
+#define VERSION "1.1.1"
 
 #define W_EXTRA 5
 
