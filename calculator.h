@@ -25,6 +25,7 @@ extern double last_answer;
 extern char *pretty_answer;
 extern short standard_output;
 extern short compute;
+extern char not_all_displayed;
 
 extern int precision;
 extern short engineering;

@@ -22,6 +22,7 @@ static int stacklast = -1;
 /* variables everyone needs to get to */
 double last_answer = 0;
 char *pretty_answer = NULL;
+char not_all_displayed = 0;
 
 /* configuration variables */
 short standard_output = 1;
@@ -112,6 +113,7 @@ char *print_this_result (double result)
 	static char format[10];
 	static char *pa = NULL, *tmp;
 	extern char *errstring;
+	unsigned int decimal_places = 0;
 
 	// Find the proper format
 	switch (output_format) {
@@ -120,10 +122,25 @@ char *print_this_result (double result)
 			if (! tmp) { free(pa); pa = "Not Enough Memory"; return pa; } else pa = tmp;
 			if (precision > -1 && ! engineering) {
 				sprintf(format, "%%1.%if", precision);
+				decimal_places = precision;
 			} else if (precision > -1 && engineering) {
 				sprintf(format, "%%1.%iE", precision);
+				decimal_places = precision;
 			} else {
 				sprintf(format,"%%G");
+				if (fabs(result) < 10.0) {
+					decimal_places = 6;
+				} else if (fabs(result) < 100.0) {
+					decimal_places = 4;
+				} else if (fabs(result) < 1000.0) {
+					decimal_places = 3;
+				} else if (fabs(result) < 10000.0) {
+					decimal_places = 2;
+				} else if (fabs(result) < 100000.0) {
+					decimal_places = 1;
+				} else {
+					decimal_places = 0;
+				}
 			}
 			break;
 		case OCTAL_FORMAT:
@@ -148,7 +165,13 @@ char *print_this_result (double result)
 		if (! tmp) { free(pa); pa = "Not Enough Memory"; return pa; } else pa = tmp;
 		sprintf(pa,"Infinity");
 	} else if (output_format == DECIMAL_FORMAT) {
+		double junk;
 		sprintf(pa,format,result);
+		if (modf(result*pow(10,decimal_places),&junk)) {
+			not_all_displayed = 1;
+		} else {
+			not_all_displayed = 0;
+		}
 	} else if (output_format != BINARY_FORMAT) {
 		long int temp = result;
 		sprintf(pa,format,temp);

@@ -259,6 +259,11 @@ static char update_history = 0;
 	}
 
 	[AnswerField setStringValue:[NSString stringWithCString:(pretty_answer?pretty_answer:"Not Enough Memory")]];
+	if (not_all_displayed) {
+		[AnswerField setTextColor:[NSColor redColor]];
+	} else {
+		[AnswerField setTextColor:[NSColor blackColor]];
+	}	
 
 	[ExpressionField selectText:self];
 }
@@ -282,7 +287,6 @@ static char update_history = 0;
 		free(errstring);
 		errstring = NULL;
 	}
-//	[AnswerField setTextColor:[NSColor redColor]];
 	if (pout_fmt != output_format) {
 		char * temp;
 		if (pretty_answer) free(pretty_answer);
@@ -292,6 +296,11 @@ static char update_history = 0;
 		[AnswerField setStringValue:[NSString stringWithCString:(pretty_answer?pretty_answer:"Not Enough Memory")]];
 	} else {
 		[AnswerField setStringValue:[NSString stringWithFormat:@"%s",pretty_answer]];
+	}
+	if (not_all_displayed) {
+		[AnswerField setTextColor:[NSColor redColor]];
+	} else {
+		[AnswerField setTextColor:[NSColor blackColor]];
 	}
 	// if the drawer is open, refresh the data.
 	if ([theDrawer state]) {
