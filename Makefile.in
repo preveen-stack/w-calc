@@ -80,7 +80,7 @@ am__quote = @am__quote@
 install_sh = @install_sh@
 bin_PROGRAMS = wcalc
 AM_YFLAGS = -dt
-wcalc_SOURCES = calculator.h variables.h string_manip.h parser.y string_manip.h scanner.l calculator.c string_manip.c variables.c main.c
+wcalc_SOURCES = calculator.h variables.h string_manip.h help.h parser.y string_manip.h scanner.l help.c calculator.c string_manip.c variables.c main.c
 wcalc_LDADD = @LEXLIB@
 man_MANS = wcalc.1
 subdir = .
@@ -91,7 +91,7 @@ CONFIG_CLEAN_FILES =
 bin_PROGRAMS = wcalc$(EXEEXT)
 PROGRAMS = $(bin_PROGRAMS)
 
-am_wcalc_OBJECTS = parser.$(OBJEXT) scanner.$(OBJEXT) \
+am_wcalc_OBJECTS = parser.$(OBJEXT) scanner.$(OBJEXT) help.$(OBJEXT) \
 	calculator.$(OBJEXT) string_manip.$(OBJEXT) variables.$(OBJEXT) \
 	main.$(OBJEXT)
 wcalc_OBJECTS = $(am_wcalc_OBJECTS)
@@ -105,9 +105,9 @@ LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
-@AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/calculator.Po ./$(DEPDIR)/main.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/parser.Po ./$(DEPDIR)/scanner.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/string_manip.Po \
+@AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/calculator.Po ./$(DEPDIR)/help.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/main.Po ./$(DEPDIR)/parser.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/scanner.Po ./$(DEPDIR)/string_manip.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/variables.Po
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -199,6 +199,7 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/calculator.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/help.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/parser.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/scanner.Po@am__quote@
