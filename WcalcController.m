@@ -300,11 +300,8 @@ static char update_history = 0;
 	} else {
 		[AnswerField setStringValue:[NSString stringWithFormat:@"%s",pretty_answer]];
 	}
-	if (not_all_displayed) {
-		[AnswerField setTextColor:[NSColor redColor]];
-	} else {
-		[AnswerField setTextColor:[NSColor blackColor]];
-	}
+	[AnswerField setTextColor:(not_all_displayed?[NSColor redColor]:[NSColor blackColor])];
+	
 	// if the drawer is open, refresh the data.
 	if ([theDrawer state]) {
 		[variableList reloadData];
@@ -484,6 +481,15 @@ static char update_history = 0;
 			if (olde != conf.strict_syntax) {
 				[prefs setObject:(conf.strict_syntax?@"YES":@"NO") forKey:@"strictSyntax"];
 			}
+				break;
+		case 10: // Rounding Indication
+			olde = conf.rounding_indication;
+			conf.rounding_indication = [sender indexOfSelectedItem];
+			if (olde != conf.rounding_indication) {
+				need_redraw = 1;
+				[prefs setObject:[NSString stringWithFormat:@"%i",conf.rounding_indication] forKey:@"roundingIndication"];
+			}
+			break;
 		default: return;
 	}
 
@@ -504,6 +510,7 @@ static char update_history = 0;
 				pretty_answer = NULL;
 
 			[AnswerField setStringValue:[NSString stringWithCString:(pretty_answer?pretty_answer:"Not Enough Memory")]];
+			[AnswerField setTextColor:((not_all_displayed)?([NSColor redColor]):([NSColor blackColor]))];
 
 			if ([theDrawer state] || recalculate) {
 				[historyList reloadData];
@@ -542,6 +549,8 @@ static char update_history = 0;
 	[printPrefixes setState:(conf.print_prefixes?NSOnState:NSOffState)];
 	[useCommas setState:(conf.use_commas?NSOnState:NSOffState)];
 	[strictSyntax setState:(conf.strict_syntax?NSOnState:NSOffState)];
+	[roundingIndication selectItemAtIndex:conf.rounding_indication];
+	
 	[printPrefixes setEnabled:(conf.output_format!=DECIMAL_FORMAT)];
 	[engineeringNotation setEnabled:(conf.output_format==DECIMAL_FORMAT)];
 }

@@ -1,19 +1,20 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <math.h> /* for HUGE_VAL */
-#include <float.h> /* for DBL_EPSILON */
-#include <string.h> /* for bzero() */
+#include <math.h>		/* for HUGE_VAL */
+#include <float.h>		/* for DBL_EPSILON */
+#include <string.h>		/* for bzero() */
+#include <stdint.h>		/* for UINT32_MAX */
 /* these are for kbw_rand() */
-#include <sys/types.h> /* for stat() and read() */
-#include <sys/stat.h>  /* for stat() */
-#include <fcntl.h>     /* for open() */
-#include <sys/uio.h>   /* for read() */
-#include <unistd.h>    /* for read() and close */
-#include <time.h>      /* for time() */
-
+#include <sys/types.h>	/* for stat() and read() */
+#include <sys/stat.h>	/* for stat() */
+#include <fcntl.h>		/* for open() */
+#include <sys/uio.h>	/* for read() */
+#include <unistd.h>		/* for read() and close */
+#include <time.h>		/* for time() */
 
 #include "calculator.h"
 #include "variables.h"
+#include "string_manip.h"
 
 static double *stack = NULL;
 static int stacksize = 0;
@@ -25,6 +26,7 @@ char *pretty_answer = NULL;
 
 /* communication with the parser */
 char compute = 1;
+unsigned int sig_figs = UINT32_MAX;
 
 /* communication with the frontend */
 char standard_output = 1;
@@ -52,6 +54,7 @@ double parseme (char * pthis)
 	char * sanitized;
 
 	synerrors = 0;
+	sig_figs = UINT32_MAX;
 
 	/* Sanitize the input */
 	sanitized = calloc(sizeof(char),len+2);
@@ -160,47 +163,101 @@ char *print_this_result (double result)
 		tmp = realloc(pa,sizeof(char)*11);
 		if (! tmp) { free(pa); pa = "Not Enough Memory"; return pa; } else pa = tmp;
 		sprintf(pa,"Infinity");
-	} else if (conf.output_format == DECIMAL_FORMAT) {
-		double junk;
-		sprintf(pa,format,result);
-		if (modf(result*pow(10,decimal_places),&junk)) {
-			not_all_displayed = 1;
-		} else {
-			not_all_displayed = 0;
-		}
-	} else if (conf.output_format != BINARY_FORMAT) {
-		long int temp = result;
-		sprintf(pa,format,temp);
+		not_all_displayed = 0;
 	} else {
-		int i, place=-1;
-		// if it is binary, format it, and print it
-		// first, find the upper limit
-		for (i=1;place==-1;++i) {
-			if (result < pow(2.0,i))
-				place = i-1;
-		}
-		pa = calloc(sizeof(char),(place+(conf.print_prefixes*2)+1));
-		if (! pa) {
-			pa = "Not Enough Memory";
-			return pa;
-		}
-		if (conf.print_prefixes) {
-			pa[0] = '0';
-			pa[1] = 'b';
-		}
-		// print it
-		for (i=conf.print_prefixes*2; place>=0; ++i) {
-			double t = pow(2.0,place);
-			if (result >= t) {
-				pa[i] = '1';
-				result -= t;
-			} else {
-				pa[i] = '0';
+		switch (conf.output_format) {
+			char * curs;
+			case DECIMAL_FORMAT:
+			{
+				double junk;
+				sprintf(pa,format,result);
+				switch (conf.rounding_indication) {
+					case SIMPLE_ROUNDING_INDICATION:
+						not_all_displayed = (modf(result*pow(10,decimal_places),&junk))?1:0;
+						break;
+					case SIG_FIG_ROUNDING_INDICATION:
+						if (sig_figs < UINT32_MAX) {
+							unsigned int t = count_digits(pa);
+							if (pa[0] == '0') --t;
+							else if (pa[0] == '-' && pa[1] == '0') --t;
+							not_all_displayed = t != sig_figs;
+						} else {
+							not_all_displayed = 0;
+						}
+						break;
+					default:
+					case NO_ROUNDING_INDICATION:
+						not_all_displayed = 0;
+						break;
+				}
 			}
-			--place;
-		}
-		pa[i+1] = 0;
-	}
+				break;
+			case HEXADECIMAL_FORMAT:
+				curs = pa+(conf.print_prefixes?2:0);
+			case OCTAL_FORMAT:
+				curs = pa+(conf.print_prefixes?1:0);
+				{
+					long int temp = result;
+					unsigned int t = 0;
+					sprintf(pa,format,temp);
+					if (conf.rounding_indication == SIG_FIG_ROUNDING_INDICATION) {
+						if (sig_figs < UINT32_MAX) {
+							while (curs && *curs) {
+								++t;
+								++curs;
+							}
+							not_all_displayed = t != sig_figs;
+						} else {
+							not_all_displayed = 0;
+						}
+					} else {
+						not_all_displayed = 0;
+					}
+				}
+					break;
+			case BINARY_FORMAT:
+			{
+				int i, place=-1;
+				// if it is binary, format it, and print it
+				// first, find the upper limit
+				for (i=1;place==-1;++i) {
+					if (result < pow(2.0,i))
+						place = i-1;
+				}
+				pa = calloc(sizeof(char),(place+(conf.print_prefixes*2)+1));
+				if (! pa) {
+					pa = "Not Enough Memory";
+					return pa;
+				}
+				if (conf.print_prefixes) {
+					pa[0] = '0';
+					pa[1] = 'b';
+				}
+				// print it
+				for (i=conf.print_prefixes*2; place>=0; ++i) {
+					double t = pow(2.0,place);
+					if (result >= t) {
+						pa[i] = '1';
+						result -= t;
+					} else {
+						pa[i] = '0';
+					}
+					--place;
+				}
+				pa[i+1] = 0;
+
+				if (sig_figs < UINT32_MAX) {
+					if (conf.rounding_indication == SIG_FIG_ROUNDING_INDICATION) {
+						not_all_displayed = count_digits(pa+(conf.print_prefixes?2:0)) != sig_figs;
+					} else {
+						not_all_displayed = 0;
+					}
+				} else {
+					not_all_displayed = 0;
+				}
+			} // binary format
+		} // switch
+	} // if
 
 	// Internationalize it ;-)
 	if (conf.use_commas && strchr(pa,'.')) {
@@ -270,7 +327,8 @@ double uber_function (enum functions func, double input)
 			case watanh:	temp = atanh(input); break;
 			case wlog:		temp = log10(input); break;
 			case wln:		temp = log(input); break;
-			case wround:	temp = (fabs(floor(input)-input)>=0.5)?ceil(input):floor(input); break;
+			case wround:	temp = rint(input); break;
+//			case wround:	temp = (fabs(floor(input)-input)>=0.5)?ceil(input):floor(input); break;
 			case wneg:		temp = - input; break;
 			case wnot:		temp = ! input; break;
 			case wabs:		temp = fabs(input); break;

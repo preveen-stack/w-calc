@@ -22,14 +22,14 @@ double fact (int);
 
 struct _conf {
 	int precision;
-	int engineering:1;
-	int picky_variables:1;
-	int strict_syntax:1;
-	int use_radians:1;
-	int output_format:4;
-	int print_prefixes:1;
-	int use_commas:1;
-	int rounding_indication:1;
+	unsigned int engineering:1;
+	unsigned int picky_variables:1;
+	unsigned int strict_syntax:1;
+	unsigned int use_radians:1;
+	unsigned int output_format:4;
+	unsigned int print_prefixes:1;
+	unsigned int use_commas:1;
+	unsigned int rounding_indication:4;
 };
 
 /* configuration */
@@ -41,24 +41,19 @@ extern char *pretty_answer;
 
 /* communication with parser */
 extern char compute;
+extern unsigned int sig_figs;
 
 /* communication with the frontend */
 extern char standard_output;
 extern char not_all_displayed;
 
-/*extern char not_all_displayed;
-
-extern int precision;
-extern char engineering;
-extern char picky_variables;
-extern char strict_syntax;
-extern char use_radians;
-extern char output_format;*/
 #define DECIMAL_FORMAT 0
 #define OCTAL_FORMAT 1
 #define HEXADECIMAL_FORMAT 2
 #define BINARY_FORMAT 3
-//extern char print_prefixes;
-//extern char use_commas;
+
+#define NO_ROUNDING_INDICATION 0
+#define SIMPLE_ROUNDING_INDICATION 1
+#define SIG_FIG_ROUNDING_INDICATION 2
 
 #endif
