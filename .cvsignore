@@ -1,0 +1,8 @@
+build
+.DS_Store
+lex.yy.c
+parser.h
+wcalc
+y.output
+y.tab.c
+y.tab.h

@@ -1,0 +1,131 @@
+{\rtf1\mac\ansicpg10000\cocoartf100
+{\fonttbl\f0\fnil\fcharset77 LucidaGrande;\f1\fmodern\fcharset77 Courier-Bold;\f2\fmodern\fcharset77 Courier;
+}
+{\colortbl;\red255\green255\blue255;}
+\margl1440\margr1440\vieww12620\viewh10000\viewkind0
+\pard\tx1440\tx2880\tx4320\tx5760\tx7200\ql\qnatural
+
+\f0\fs28 \cf0 Hello!\
+\
+This is Wcalc 1.4.2!\
+\
+1. What's New\
+2. Intro\
+3. Installation\
+4. License\
+5. Known Bugs\
+6. Contact Info\
+\
+
+\f1\b **************\
+* What's New *\
+**************
+\f0\b0 \
+\
+This version I fixed the three most irritating things about Wcalc, namely:\
+\
+BUG FIX: Doesn't complain of an "Unexpected Quit" when you close the window.\
+\
+BUG FIX: Pressing buttons doesn't stop you from typing anymore.\
+\
+NEW FEATURE: Commas are treated as identical to periods.\
+\
+I'm working on an additional drawer to hold functions and symbols (hopefully, user-defined). We'll see how that works out.\
+\
+Comments? Suggestions? Let me know!\
+\
+
+\f1\b *********\
+* INTRO *\
+*********\
+
+\f0\b0 \
+Wcalc started as a project written for my C++ class at Ohio University (CS 240B), way back on January 14th, 2000. I made it to be a "natural language" calculator - in that it would successfully interpret any valid mathematical expression. As you can imagine, being a beginner programmer, the code was rather heinous, to say the least!\
+\
+I reworked it after learning lex and yacc (powerful string parsing tools for C programmers - if you're a C programmer and you don't know them... go google!) in November 2001. Then I thought to myself - I have MacOS X, the standard calculator leaves something to be desired, and they say Cocoa programming is easy... what the heck, I'll give it a shot. Wcalc has turned out better than I thought it would - so I'm putting it on the web, for you! (If you're curious, yes, Cocoa is as wonderful as they say.)\
+\
+Wcalc takes "expressions" and calculates the answer. My goal was to make the expressions relatively intutive - no reverse polish, or anything like that. So, by way of a record, here is what Wcalc can do:\
+\
+Wcalc recognizes the following symbols:\
++ (plus)\
+- (minus)\
+* (multiply)\
+/ (divide)\
+% (modulo (read: the remainder when integers are divided))\
+! (factorial or boolean NOT)\
+^ (exponent. four squared is 4^2)\
+> (less than)\
+< (greater than)\
+<= (less than or equal to)\
+>= (greater than or equal to)\
+== (equal)\
+!= (not equal)\
+&& (logical and)\
+|| (logical or)\
+\
+Wcalc also allows you to group operations with parenthesis (), brackets [], and braces \{\}.\
+\
+Wcalc supports the following functions:\
+sin cos tan asin acos atan sinh cosh tanh asinh acosh atanh\
+log ln abs round\
+\
+Wcalc has a few built-in constants:\
+pi e random Na k Cc ec R G g Me Mp Mn Md u c h mu0 epsilon0 muB muN b mW mZ ao\
+F Vm eV sigma alpha gamma re\
+\
+Wcalc supports user-defined variables. You define a variable like this:\
+mynewvariable=5\
+Then you can use it in an expression like this: 1+3*mynewvariable/4\
+\
+Some special notes about variables - two things are reserved:\
+a - this variable represents the last answer, and may be used in expressions.\
+q - this variable is reserved in the command-line version (it means quit), and cannot be used in expressions.\
+Also, built-in constants cannot be re-defined, although they are treated as variables in all other cases.\
+\
+
+\f1\b ****************\
+* Installation *\
+****************
+\f0\b0 \
+\
+Installing the regular version of Wcalc is easy - copy it to your Applications folder! <grin>\
+\
+
+\f1\b ***********\
+* License *\
+***********
+\f0\b0 \
+\
+I suppose I ought to have a license for this thing. Ah...\
+\
+Take a copy of this software, do what you like with it. I don't guarantee that it won't give you false answers, delete your hard drive, cause cancer, or even give you bad breath (but it's a calculator (*I* use it), and I'd be *really* impressed if it could do those things).\
+\
+If you like it - send me an email and tell me (it makes me feel good). If you don't like it\'d1send me an email and tell me (it makes me improve the program). \
+\
+Enjoy! That's the license. If caught in violation, you will be persecuted to the full extent of the law (read: not at all, but it's fun to say).\
+\
+
+\f1\b **************\
+* Known Bugs *\
+**************
+\f0\b0 \
+\
+There are still some problems in the grammar with implicit multiplication... they aren't too big, because you can get around them by simply being explicit, but I'm working on fixing that. (The grammar is hard!)\
+\
+The command-line doesn't save it's preferences... it probably should, and I'll get to it soon.\
+\
+If you find more bugs, please LET ME KNOW!\
+\
+
+\f1\b ****************\
+* Contact Info *\
+****************
+\f0\b0 \
+\
+The Wcalc homepage is 
+\f2 http://homepage.mac.com/memoryhole/wcalc/
+\f0 \
+\
+Contact me at 
+\f2 memoryhole@mac.com\
+}
