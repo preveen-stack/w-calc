@@ -337,7 +337,7 @@ capsule: PAR exp REN { $$ = $2; }
 		} else {
 			$$ = 0;
 			if (conf.picky_variables) {
-				char * error = malloc(sizeof(char)*(strlen($1)+18));
+				char * error = malloc(sizeof(char)*(strlen($1)+45));
 				sprintf(error,"%s does not exist or was not properly parsed.",$1);
 				report_error(error);
 				compute = 0;
