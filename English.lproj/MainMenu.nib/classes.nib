@@ -8,6 +8,13 @@
             SUPERCLASS = NSObject; 
         }, 
         {
+            ACTIONS = {newType = id; }; 
+            CLASS = ConversionList; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {fromList = NSTableView; theType = NSPopUpButton; toList = NSTableView; }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
             ACTIONS = {closeAlert = id; showAlert = id; }; 
             CLASS = ErrorController; 
             LANGUAGE = ObjC; 
@@ -23,6 +30,7 @@
             SUPERCLASS = NSObject; 
         }, 
         {CLASS = Interpreter; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {CLASS = MyTextField; LANGUAGE = ObjC; SUPERCLASS = NSTextField; }, 
         {
             ACTIONS = {displayPrefs = id; setPrefs = id; showPrefs = id; }; 
             CLASS = PrefsController; 
@@ -53,6 +61,7 @@
         {
             ACTIONS = {
                 clear = id; 
+                convert = id; 
                 displayPrefs = id; 
                 enterData = id; 
                 go = id; 
@@ -60,6 +69,7 @@
                 menuFunction = id; 
                 setPrecision = id; 
                 setPrefs = id; 
+                shConversions = id; 
                 showBaseDrawer = id; 
                 showInspectorDrawer = id; 
                 showKeyboardDrawer = id; 
@@ -77,8 +87,14 @@
                 baseDrawer = NSDrawer; 
                 baseMenu = NSMenuItem; 
                 capsLockKey = NSButton; 
+                conversionMenu = NSMenuItem; 
+                conversionWindow = NSPanel; 
+                convertFrom = NSTableView; 
+                convertTo = NSTableView; 
+                convertType = NSPopUpButton; 
                 decimalKey = NSButton; 
                 engineeringNotation = NSButton; 
+                enterKey = NSButton; 
                 errorController = id; 
                 historyDuplicates = NSButton; 
                 historyList = NSTableView; 
