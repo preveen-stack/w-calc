@@ -104,13 +104,15 @@ int saveState(char* filename)
 int loadState (char* filename)
 {
 	int fd, return_error = 0;
+	int standard_output_save = standard_output;
+
+	standard_output = 0;
 	fd = open(filename, O_RDONLY);
-	free(filename);
 	if (fd >= 0) { // success
 		char * linebuf;
 		int retval;
 		double val;
-		unsigned int linelen = 0, maxlinelen = 100;
+		unsigned int linelen = 0, maxlinelen = 99;
 
 		linebuf = calloc(sizeof(char),100);
 		retval = read(fd,linebuf+linelen,1);
@@ -118,7 +120,7 @@ int loadState (char* filename)
 			while (retval == 1 && linebuf[linelen] != '\n') {
 				linelen++;
 				if (linelen == maxlinelen) {
-					char * newlinebuf = realloc( linebuf, sizeof(maxlinelen+100));
+					char * newlinebuf = realloc( linebuf, sizeof(char)*(maxlinelen+100));
 					if (newlinebuf) {
 						maxlinelen += 100;
 						linebuf = newlinebuf;
@@ -144,15 +146,19 @@ int loadState (char* filename)
 				}
 			}
 			linelen = 0;
-			linebuf[linelen] = 0;
-			if (retval == 1)
+			memset(linebuf,0,maxlinelen);
+			if (retval == 1) {
 				retval = read(fd,linebuf+linelen,1);
+			}
 		}
 
 		if (close(fd) != 0) {
 			return_error = errno;
 		}
+	} else {
+		return_error = errno;
 	}
+	standard_output = standard_output_save;
 	return return_error;
 }
 		
