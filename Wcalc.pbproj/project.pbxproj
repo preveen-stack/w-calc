@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 34;
+	objectVersion = 38;
 	objects = {
 		080E96DDFE201D6D7F000001 = {
 			children = (
@@ -24,6 +24,8 @@
 				F5EF54D202022A7001A80164,
 				F5D446D00263B46801A80164,
 				F5D446D10263B46801A80164,
+				F5A165F7030711ED01A80164,
+				F5A165F8030711ED01A80164,
 			);
 			isa = PBXGroup;
 			name = Classes;
@@ -177,6 +179,7 @@
 		};
 		29B97317FDCFA39411CA2CEA = {
 			children = (
+				F57B9A970267F76201A80164,
 				F5B29D6F01F7393A01A80164,
 				F5B29D7B01F7398A01A80164,
 				089C165CFE840E0CC02AAC07,
@@ -246,7 +249,7 @@
 	<key>CFBundleExecutable</key>
 	<string>Wcalc</string>
 	<key>CFBundleGetInfoString</key>
-	<string>Wcalc Version 1.4.5</string>
+	<string>Wcalc Version 1.5</string>
 	<key>CFBundleIconFile</key>
 	<string>TheW</string>
 	<key>CFBundleIdentifier</key>
@@ -258,11 +261,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>Wcalc 1.4.5</string>
+	<string>Wcalc 1.5</string>
 	<key>CFBundleSignature</key>
 	<string>Wcal</string>
 	<key>CFBundleVersion</key>
-	<string>1.4.5</string>
+	<string>1.5</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
@@ -286,10 +289,11 @@
 				F5EF54D402022A7001A80164,
 				F5DEAE90021254A501A80164,
 				F529392A023034CB01A80164,
-				F5D446D20263B46801A80164,
+				F5CF4CF1026A383D01A80164,
+				F5DD321902F8F43501A80164,
+				F5A165F9030711ED01A80164,
 			);
 			isa = PBXHeadersBuildPhase;
-			name = Headers;
 		};
 		29B97328FDCFA39411CA2CEA = {
 			buildActionMask = 2147483647;
@@ -302,7 +306,6 @@
 				F5463561020065B401A80164,
 			);
 			isa = PBXResourcesBuildPhase;
-			name = "Bundle Resources";
 		};
 		29B9732BFDCFA39411CA2CEA = {
 			buildActionMask = 2147483647;
@@ -312,7 +315,6 @@
 				F5B29D6801F7391601A80164,
 				F5B29D6C01F7392301A80164,
 				F5B29D7101F7393A01A80164,
-				F5B29D7201F7393A01A80164,
 				F5B29D7601F7394501A80164,
 				F5B29D7A01F7395001A80164,
 				F521994501FA86B001A80164,
@@ -320,10 +322,12 @@
 				F5EF54D502022A7001A80164,
 				F5DEAE8A0211DAA501A80164,
 				F529392B023034CB01A80164,
-				F5D446D30263B46801A80164,
+				F5CF4CF2026A383D01A80164,
+				F5DD31FF02F6294C01A80164,
+				F5DD321802F8F43501A80164,
+				F5A165FA030711ED01A80164,
 			);
 			isa = PBXSourcesBuildPhase;
-			name = Sources;
 		};
 		29B9732CFDCFA39411CA2CEA = {
 			fileRef = 29B97316FDCFA39411CA2CEA;
@@ -340,7 +344,6 @@
 				F510EE8D021716B401A80164,
 			);
 			isa = PBXFrameworksBuildPhase;
-			name = "Frameworks & Libraries";
 		};
 //290
 //291
@@ -358,6 +361,7 @@
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
 				OPTIMIZATION_CFLAGS = "-O0";
+				USE_GCC3 = YES;
 			};
 			isa = PBXBuildStyle;
 			name = Development;
@@ -430,8 +434,9 @@
 			);
 			buildSettings = {
 				HEADER_SEARCH_PATHS = /sw/include;
-				LIBRARY_SEARCH_PATHS = /sw/lib;
+				LIBRARY_SEARCH_PATHS = /Users/kyle/Wcalc;
 				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
 				PRODUCT_NAME = wcalc;
 				REZ_EXECUTABLE = YES;
 				SECTORDER_FLAGS = "";
@@ -452,9 +457,9 @@
 				F521993701F8D28801A80164,
 				F5DEAE91021254A501A80164,
 				F5293928023032E201A80164,
+				F5DD321B02F8F43501A80164,
 			);
 			isa = PBXHeadersBuildPhase;
-			name = Headers;
 		};
 		F521993601F8D28801A80164 = {
 			fileRef = F5B29D6601F7391601A80164;
@@ -477,9 +482,9 @@
 				F521993C01F8D28801A80164,
 				F521994001F8D2B801A80164,
 				F5293929023032E201A80164,
+				F5DD321A02F8F43501A80164,
 			);
 			isa = PBXSourcesBuildPhase;
-			name = Sources;
 		};
 		F521993901F8D28801A80164 = {
 			fileRef = F5B29D6501F7391601A80164;
@@ -510,16 +515,15 @@
 			files = (
 				F510EE8B0217160601A80164,
 				F5459F57022612F901A80164,
+				F57B9A980267F76201A80164,
 			);
 			isa = PBXFrameworksBuildPhase;
-			name = "Frameworks & Libraries";
 		};
 		F521993E01F8D28801A80164 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXRezBuildPhase;
-			name = "ResourceManager Resources";
 		};
 		F521993F01F8D2B801A80164 = {
 			isa = PBXFileReference;
@@ -648,8 +652,41 @@
 			settings = {
 			};
 		};
+		F57B9A970267F76201A80164 = {
+			isa = PBXFileReference;
+			path = libreadline.a;
+			refType = 4;
+		};
+		F57B9A980267F76201A80164 = {
+			fileRef = F57B9A970267F76201A80164;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		F586ED3901FD41B201A80164 = {
 			fileRef = F521994801FA927601A80164;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5A165F7030711ED01A80164 = {
+			isa = PBXFileReference;
+			path = ConversionList.h;
+			refType = 4;
+		};
+		F5A165F8030711ED01A80164 = {
+			isa = PBXFileReference;
+			path = ConversionList.m;
+			refType = 4;
+		};
+		F5A165F9030711ED01A80164 = {
+			fileRef = F5A165F7030711ED01A80164;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5A165FA030711ED01A80164 = {
+			fileRef = F5A165F8030711ED01A80164;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -665,6 +702,8 @@
 				F5B29D6E01F7393A01A80164,
 				F5293926023032E201A80164,
 				F5293927023032E201A80164,
+				F5DD321602F8F43501A80164,
+				F5DD321702F8F43501A80164,
 			);
 			isa = PBXGroup;
 			name = Math;
@@ -763,12 +802,6 @@
 			settings = {
 			};
 		};
-		F5B29D7201F7393A01A80164 = {
-			fileRef = F5B29D6E01F7393A01A80164;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		F5B29D7301F7394501A80164 = {
 			isa = PBXFileReference;
 			path = variables.c;
@@ -845,6 +878,18 @@
 			settings = {
 			};
 		};
+		F5CF4CF1026A383D01A80164 = {
+			fileRef = F5D446D00263B46801A80164;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5CF4CF2026A383D01A80164 = {
+			fileRef = F5D446D10263B46801A80164;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		F5D446D00263B46801A80164 = {
 			isa = PBXFileReference;
 			path = MyTextField.h;
@@ -855,14 +900,42 @@
 			path = MyTextField.m;
 			refType = 4;
 		};
-		F5D446D20263B46801A80164 = {
-			fileRef = F5D446D00263B46801A80164;
+		F5DD31FF02F6294C01A80164 = {
+			fileRef = F5B29D6E01F7393A01A80164;
 			isa = PBXBuildFile;
 			settings = {
 			};
 		};
-		F5D446D30263B46801A80164 = {
-			fileRef = F5D446D10263B46801A80164;
+		F5DD321602F8F43501A80164 = {
+			isa = PBXFileReference;
+			path = conversion.c;
+			refType = 4;
+		};
+		F5DD321702F8F43501A80164 = {
+			isa = PBXFileReference;
+			path = conversion.h;
+			refType = 4;
+		};
+		F5DD321802F8F43501A80164 = {
+			fileRef = F5DD321602F8F43501A80164;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5DD321902F8F43501A80164 = {
+			fileRef = F5DD321702F8F43501A80164;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5DD321A02F8F43501A80164 = {
+			fileRef = F5DD321602F8F43501A80164;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5DD321B02F8F43501A80164 = {
+			fileRef = F5DD321702F8F43501A80164;
 			isa = PBXBuildFile;
 			settings = {
 			};
