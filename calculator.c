@@ -485,13 +485,21 @@ char *print_this_result (double result)
 			break;
 	}
 
-	if (result == HUGE_VAL) {
+	if (isinf(result)) {
 		// if it is infinity, print "Infinity", regardless of format
 		if (pa_dyn) tmp = realloc(pa,sizeof(char)*11);
 		else { tmp = pa = malloc(sizeof(char)*11); pa_dyn = 1; }
 		if (! tmp) { free(pa); pa = "Not Enough Memory"; pa_dyn = 0; return pa; }
 		else pa = tmp;
 		sprintf(pa,"Infinity");
+		not_all_displayed = 0;
+	} else if (isnan(result)) {
+		// if it is not a number, print "Not a Number", regardless of format
+		if (pa_dyn) tmp = realloc(pa,sizeof(char)*13);
+		else { tmp = pa = malloc(sizeof(char)*13); pa_dyn = 1; }
+		if (! tmp) { free(pa); pa = "Not Enough Memory"; pa_dyn = 0; return pa; }
+		else pa = tmp;
+		sprintf(pa,"Not a Number");
 		not_all_displayed = 0;
 	} else {
 		switch (conf.output_format) {
@@ -637,8 +645,8 @@ double simple_exp (double first, enum operations op, double second)
 			case wplus:		temp = (first + second); break;
 			case wminus:	temp = (first - second); break;
 			case wmult:		temp = (first * second); break;
-			case wdiv:		temp = ((second != 0)?(first/second):HUGE_VAL); break;
-			case wmod:		temp = ((second != 0)?(fmod(first, second)):HUGE_VAL); break;
+			case wdiv:		temp = first/second; break;
+			case wmod:		temp = fmod(first, second); break;
 			case wexp:		temp = pow(first, second); break;
 			case wbor:		temp = (int)first | (int)second; break;
 			case wband:		temp = (int)first & (int)second; break;
