@@ -51,12 +51,13 @@
 #define W_ELECTRON_RADIUS 2.81794028531e-15
 
 #define SUPPORTED_SYMBOLS \
-"+ - () {} [] * %% / ! ^ > >= < <= == != && || << >> |\n"\
+"+ - () {} [] * %% / ! ^ > >= < <= == != && || << >> | & ~\n"\
 "sin cos tan cot asin acos atan acot\n"\
 "sinh cosh tanh coth asinh acosh atanh acoth\n"\
 "log ln logtwo round abs ceil floor sqrt cbrt\n\n"\
 "e pi Na k Cc ec R G g Me Mp Mn Md u amu c h mu0 epsilon0\n"\
-"muB muN b mW mZ ao F Vm NAk eV sigma alpha gamma re random\n"
+"muB muN b mW mZ ao F Vm NAk eV sigma alpha gamma re\n"\
+"random irandom rand irand\n"
 
 
 #endif
