@@ -270,6 +270,10 @@ cbrt { return(WCBRT); }
 (({DIGIT})|[,.])* {
 	/* This is the garbage-number collector */
 	char err[strlen(yytext)+25];
+	int i;
+	for (i=0;i<strlen(yytext);++i) {
+		yytext[i] = conf.charunkey[(int)yytext[i]];
+	}	
 	sprintf(err,"Confusing number format (%s)",yytext);
 	report_error(err);
 	scanerror = 1;
@@ -278,7 +282,7 @@ cbrt { return(WCBRT); }
 %{ /* if we haven't matched anything yet, then it's illegal */
 	%}
 . { char error[26];
-	sprintf(error, "scanner: cannot parse next token\n");
+	sprintf(error, "scanner: cannot parse next token (%c)\n", conf.charunkey[(int)*yytext]);
 	report_error(error);
 	scanerror = 1;}
 
