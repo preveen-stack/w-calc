@@ -286,7 +286,8 @@ cbrt { return(WCBRT); }
 
 (({DIGIT})|[,.])* {
 	/* This is the garbage-number collector */
-	char err[strlen(yytext)+25];
+	char errmsg[] = "Confusing number format (%s)\nDecimal Separator: '%c'\nThousands Separator: '%c'";
+	char err[strlen(yytext)+strlen(errmsg)-5];
 	int i;
 	for (i=0;i<strlen(yytext);++i) {
 	    if (yytext[i] == ',')
@@ -295,7 +296,7 @@ cbrt { return(WCBRT); }
 		yytext[i] = conf.dec_delimiter;
 //		yytext[i] = conf.charunkey[(int)yytext[i]];
 	}	
-	sprintf(err,"Confusing number format (%s)",yytext);
+	sprintf(err,errmsg,yytext,conf.dec_delimiter,conf.thou_delimiter);
 	report_error(err);
 	scanerror = 1;
 }

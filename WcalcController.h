@@ -23,9 +23,12 @@
 	IBOutlet NSButton *decimalKey;
 	IBOutlet NSButton *rememberErrors;
 	IBOutlet NSButton *enterKey;
+	IBOutlet NSButton *limitHistory;
 	
     IBOutlet NSTextField *AnswerField;
     IBOutlet NSTextField *ExpressionField;
+	IBOutlet NSTextField *limitHistoryLen;
+	IBOutlet NSTextField *limitHistoryLenTag;
 	
     IBOutlet NSDrawer *theDrawer;
 	IBOutlet NSDrawer *baseDrawer;

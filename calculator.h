@@ -73,6 +73,8 @@ struct _conf {
 	unsigned char thou_delimiter;
 	unsigned char dec_delimiter;
 	unsigned int precision_guard:1;
+	unsigned int history_limit:1;
+	unsigned int history_limit_len;
 };
 
 /* configuration */

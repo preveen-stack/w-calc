@@ -201,6 +201,8 @@ NSTextField *ef;
 		[prefs setObject:@"YES" forKey:@"rememberErrors"];
 		[prefs setObject:@"NO" forKey:@"baseShowing"];
 		[prefs setObject:@"YES" forKey:@"precisionGuard"];
+		[prefs setObject:@"NO" forKey:@"historyLimit"];
+		[prefs setObject:@"1000" forKey:@"historyLimitLength"];
 	}
 	conf.precision = [prefs integerForKey:@"precision"];
 	conf.engineering = [prefs boolForKey:@"engineeringNotation"];
@@ -216,6 +218,8 @@ NSTextField *ef;
 	allow_duplicates = [prefs boolForKey:@"historyDuplicatesAllowed"];
 	update_history = [prefs boolForKey:@"updateHistory"];
 	conf.remember_errors = [prefs boolForKey:@"rememberErrors"];
+	conf.history_limit = [prefs boolForKey:@"historyLimit"];
+	conf.history_limit_len = [prefs integerForKey:@"historyLimitLen"];
 	
 	[PrecisionSlider setIntValue:conf.precision];
 	just_answered = FALSE;
@@ -588,6 +592,20 @@ NSTextField *ef;
 				[prefs setObject:(conf.precision_guard?@"YES":@"NO") forKey:@"precisionGuard"];
 			}
 			break;
+		case 13: // History length limit toggle
+		    olde = conf.history_limit;
+		    conf.history_limit = ([sender state]==NSOnState);
+		    if (olde != conf.history_limit) {
+			[prefs setObject:(conf.history_limit?@"YES":@"NO") forKey:@"historyLimit"];
+		    }
+			break;
+		case 14: // History length limit
+		    olde = conf.history_limit_len;
+		    conf.history_limit_len = [sender intValue];
+		    if (olde != conf.history_limit_len) {
+			[prefs setObject:[NSString stringWithFormat:@"%i",conf.history_limit_len] forKey:@"historyLimitLength"];
+		    }
+			break;
 		default: return;
 	}
 
@@ -648,9 +666,18 @@ NSTextField *ef;
 	[strictSyntax setState:(conf.strict_syntax?NSOnState:NSOffState)];
 	[roundingIndication selectItemAtIndex:conf.rounding_indication];
 	[rememberErrors setState:(conf.remember_errors?NSOnState:NSOffState)];
+	[limitHistory setState:(conf.history_limit?NSOnState:NSOffState)];
 	
 	[printPrefixes setEnabled:(conf.output_format!=DECIMAL_FORMAT)];
 	[engineeringNotation setEnabled:(conf.output_format==DECIMAL_FORMAT)];
+	[limitHistoryLen setEnabled:conf.history_limit];
+	[limitHistoryLenTag setEnabled:conf.history_limit];
+
+	{
+	    char len[6];
+	    sprintf(len,"%i",conf.history_limit_len);
+	    [limitHistoryLen setStringValue:[NSString stringWithFormat:@"%s",len]];
+	}
 }
 
 @end

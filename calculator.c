@@ -75,10 +75,23 @@ double parseme (char * pthis)
 	
 	/* Convert to standard notation via lookuptable */
 	for (i=0;i<strlen(sanitized);++i) {
-            if (sanitized[i] == conf.thou_delimiter)
-                sanitized[i] = ',';
-            else if (sanitized[i] == conf.dec_delimiter)
-                sanitized[i] = '.';
+		if (conf.thou_delimiter != '.' &&
+				conf.dec_delimiter != '.' &&
+				sanitized[i] == '.') {
+			// throw an error
+			report_error("Improperly formatted numbers!");
+			synerrors = 1;
+			break;
+		} else if (conf.thou_delimiter != ',' &&
+				conf.dec_delimiter != ',' &&
+				sanitized[i] == ',') {
+			// throw an error
+			report_error("Improperly formatted numbers!");
+			synerrors = 1;
+		} else if (sanitized[i] == conf.thou_delimiter)
+			sanitized[i] = ',';
+		else if (sanitized[i] == conf.dec_delimiter)
+			sanitized[i] = '.';
 //		sanitized[i] = conf.charkey[(int)sanitized[i]];
 	}
 
@@ -216,7 +229,7 @@ char *print_this_result (double result)
 	extern char *errstring;
 	unsigned int decimal_places = 0;
 
-	// Find the proper format
+	/* Build the "format" string, that will be used in an sprintf later */
 	switch (conf.output_format) {
 		case DECIMAL_FORMAT:
 			tmp = realloc(pa, sizeof(char)*310);
@@ -255,13 +268,15 @@ char *print_this_result (double result)
 			sprintf(format,conf.print_prefixes?"0x%%x":"%%x");
 			break;
 		case BINARY_FORMAT:
+			// Binary Format can't just use a format string, so
+			// we have to handle it later
 			free(pa);
 			pa = NULL;
 			break;
 	}
 
 	if (result == HUGE_VAL) {
-		// if it is infinity, print it, regardless of format
+		// if it is infinity, print "Infinity", regardless of format
 		tmp = realloc(pa,sizeof(char)*11);
 		if (! tmp) { free(pa); pa = "Not Enough Memory"; return pa; } else pa = tmp;
 		sprintf(pa,"Infinity");
@@ -272,7 +287,16 @@ char *print_this_result (double result)
 			case DECIMAL_FORMAT:
 			{
 				double junk;
+				/* This is the big call */
 				sprintf(pa,format,result);
+				/* was it as good for you as it was for me?
+				 * now, you must localize it */
+				{ int index;
+					for (index=0;index<strlen(pa);++index) {
+						if (pa[index] == '.')
+							pa[index] = conf.dec_delimiter;
+					}
+				}
 				switch (conf.rounding_indication) {
 					case SIMPLE_ROUNDING_INDICATION:
 						not_all_displayed = (modf(result*pow(10,decimal_places),&junk))?1:0;

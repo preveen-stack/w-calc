@@ -99,6 +99,9 @@
                 historyDuplicates = NSButton; 
                 historyList = NSTableView; 
                 keypad = id; 
+                limitHistory = NSButton; 
+                limitHistoryLen = NSTextField; 
+                limitHistoryLenTag = NSTextField; 
                 mainWindow = NSWindow; 
                 outputFormat = NSMatrix; 
                 outputFormat2 = NSMatrix; 
