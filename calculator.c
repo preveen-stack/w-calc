@@ -49,7 +49,8 @@ static int seed_random (void);
 double parseme (char * pthis)
 {
 	extern int synerrors;
-	int stackcur;
+//	int stackcur;
+	int i;
 	int len = strlen(pthis);
 	char * sanitized;
 
@@ -57,19 +58,28 @@ double parseme (char * pthis)
 	sig_figs = UINT32_MAX;
 
 	/* Sanitize the input */
-	sanitized = calloc(sizeof(char),len+2);
+	sanitized = calloc(sizeof(char),len+1);
 	if (! sanitized) {
 		perror("resizing buffer");
 		return 0.00;
 	}
 	sprintf(sanitized,"%s\n",pthis);
 
+	printf("sanitized: %s\n", sanitized);
+	
+	/* Convert to standard notation via lookuptable */
+	for (i=0;i<strlen(sanitized);++i) {
+		sanitized[i] = conf.charkey[(int)sanitized[i]];
+	}
+
+	printf("converted: %s\n", sanitized);
+
 	/* Hold my Place */
-	stackcur = stacklast + 1;
+//	stackcur = stacklast + 1;
 	/* Evaluate the Expression
 		* These two lines borrowed from:
 		* http://www.bgw.org/tutorials/programming/c/lex_yacc/main.c
-		* and are here primarily for readline suppport
+		* and are here strictly for readline suppport
 		*/
 	yy_scan_string(sanitized);
 	yyparse();

@@ -217,6 +217,10 @@ static char update_history = 0;
 	[PrecisionSlider setIntValue:conf.precision];
 	just_answered = FALSE;
 
+	/* Set up the character translation table */
+	conf.charkey['.'] = [[prefs objectForKey:NSDecimalSeparator] characterAtIndex:0];
+	conf.charkey[','] = [[prefs objectForKey:NSThousandsSeparator] characterAtIndex:0];
+
 	/* reset the window to the saved setting */
 	superview = [keypad superview];
 	[keypad retain];

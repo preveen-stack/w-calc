@@ -18,6 +18,10 @@ static void * getvar_core (char * key, int all_or_nothing);
 
 void initvar (void)
 {
+	int i;
+	for (i=0;i<256;++i) {
+		conf.charkey[i] = i;
+	}
 }
 
 void delnvar (int i)
