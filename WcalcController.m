@@ -1,5 +1,6 @@
 #import "calculator.h"
 #import "variables.h"
+#import "conversion.h"
 #import "ErrorController.h"
 #import "historyManager.h"
 #import "WcalcController.h"
@@ -328,6 +329,7 @@ NSTextField *ef;
 		free(errstring);
 		errstring = NULL;
 	}
+	/* why is this if here? */
 	if (pout_fmt != conf.output_format) {
 		char * temp;
 		if (pretty_answer) free(pretty_answer);
@@ -336,6 +338,7 @@ NSTextField *ef;
 		else pretty_answer = NULL;
 		[AnswerField setStringValue:[NSString stringWithCString:(pretty_answer?pretty_answer:"Not Enough Memory")]];
 	} else {
+		/* display the answer */
 		[AnswerField setStringValue:[NSString stringWithFormat:@"%s",pretty_answer]];
 	}
 	[AnswerField setTextColor:(not_all_displayed?[NSColor redColor]:[NSColor blackColor])];
@@ -352,6 +355,29 @@ NSTextField *ef;
 	if ([baseDrawer state])
 		[outputFormat2 selectCellWithTag:conf.output_format];
 	[ExpressionField selectText:self];
+}
+
+- (IBAction)convert:(id)sender
+{
+	char * temp;
+	int type = [convertType indexOfSelectedItem];
+	int from = [convertFrom selectedRow];
+	int to = [convertTo selectedRow];
+
+	if (type < 0 || type > MAX_TYPE) return;
+	if (from < 0) return;
+	if (to < 0) return;
+	
+	last_answer = uber_conversion(type, from, to, last_answer);
+	if (pretty_answer) free(pretty_answer);
+	temp = print_this_result(last_answer);
+	if (temp) pretty_answer = strdup(temp);
+	else pretty_answer = NULL;
+	[AnswerField setStringValue:[NSString stringWithCString:(pretty_answer?pretty_answer:"Not Enough Memory")]];
+	putval("a",last_answer);
+	if ([theDrawer state]) {
+		[variableList reloadData];
+	}
 }
 
 - (IBAction)enterData:(id)sender
@@ -405,6 +431,20 @@ NSTextField *ef;
 	free(str);
 }
 
+- (IBAction)shConversions:(id)sender
+{
+	static char initialized = 0;
+	if (! [conversionWindow isVisible]) {
+		[conversionWindow makeKeyAndOrderFront:self];
+		if (! initialized) {
+			[conversionWindow center];
+			initialized = 1;
+		}
+	} else {
+		[conversionWindow close];
+	}
+}
+
 - (IBAction)showInspectorDrawer:(id)sender
 {
 	NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
@@ -426,6 +466,7 @@ NSTextField *ef;
 		[theKeyboard makeKeyAndOrderFront:self];
 		if (! initialized) {
 			[theKeyboard center];
+			initialized = 1;
 		}
 		[theKeyboard setFrameAutosaveName:@"wcalc_keyboard"];
 	} else {

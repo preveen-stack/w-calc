@@ -37,13 +37,18 @@
     IBOutlet id historyList;
     IBOutlet id PrecisionSlider;
     IBOutlet id theKeyboard;
-    IBOutlet id variableList;
 	IBOutlet id keypad;
 	
 	IBOutlet NSPanel *thePrefPanel;
+	IBOutlet NSPanel *conversionWindow;
 	
 	IBOutlet NSPopUpButton *roundingIndication;
+	IBOutlet NSPopUpButton *convertType;
 
+	IBOutlet NSTableView *variableList;
+	IBOutlet NSTableView *convertFrom;
+	IBOutlet NSTableView *convertTo;
+	
 	bool just_answered;
 	NSView *superview;
 }
@@ -60,4 +65,6 @@
 - (IBAction)showPrefs:(id)sender;
 - (IBAction)displayPrefs:(id)sender;
 - (IBAction)showBaseDrawer:(id)sender;
+- (IBAction)shConversions:(id)sender;
+- (IBAction)convert:(id)sender;
 @end
