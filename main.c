@@ -218,8 +218,10 @@ int main (int argc, char *argv[])
 #ifdef HAVE_READLINE_HISTORY
 		if (write_history(filename))
 			perror("Saving History");
-		if (history_truncate_file(filename,1000))
-			perror("Truncating History");
+		if (conf.history_limit) {
+			if (history_truncate_file(filename,conf.history_limit_len))
+				perror("Truncating History");
+		}
 		free(filename);
 #endif
 	} else if (tty < 0) {
