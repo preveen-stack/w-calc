@@ -49,6 +49,7 @@ int main (int argc, char *argv[])
 	standard_output = 1;
 	conf.picky_variables = 1;
 	conf.print_prefixes = 1;
+	conf.precision_guard = 1;
 
 	/* Parse commandline options */
 	for (i = 1; i < argc; ++i) {
