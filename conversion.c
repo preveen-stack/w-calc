@@ -36,7 +36,7 @@ const struct conversion lengths[MAX_LENGTH_UNIT+1] = {
 	{1000,            "Millimeters"},
 	{39370.07874,     "Mils"},
 	{1000000000,      "Nanometers"},
-	{236.2205,        "Pica"}
+	{236.2205,        "Pica"},
 	{2834.6457,       "Points"},
 	{0.198839,        "Rods"},
 	{4.374453,        "Spans"},
@@ -87,7 +87,7 @@ const struct conversion areas[MAX_AREA_UNIT+1] = {
 /* based on US Gallons */
 const struct conversion volumes[MAX_VOLUME_UNIT+1] = {
 	{4,              "#2.5 can"},
-	{1,              "#10 can"}
+	{1,              "#10 can"},
 	{0.031746,       "Barrel (US, liquid)"},
 	{1.604167,       "Board Foot"},
 	{0.107421,       "Bushel (US)"},
@@ -163,7 +163,7 @@ const struct conversion speeds[MAX_SPEED_UNIT+1] = {
 	{1.0972853161278995,     "Kilometers/hour"},
 	{0.5924837511331251,     "Knots"},
 	{5.454644629902362,      "Leagues/day"},
-	{0.0009191187537183524,  "Mach (dry air, 273 kelvin)"}
+	{0.0009191187537183524,  "Mach (dry air, 273 kelvin)"},
 	{0.68181818181818181819, "Miles/hour"},
 };
 
@@ -187,7 +187,7 @@ const struct conversion forces[MAX_FORCE_UNIT+1] = {
 	{100000,     "Dyne"},
 	{101.971621, "Gram-force"},
 	{0.101972,   "Kilopond (kgm-force)"},
-	{0.000225,   "Kip"}
+	{0.000225,   "Kip"},
 	{1,          "Newton"},
 	{0.224809,   "Pound"},
 	{7.233011,   "Poundal"},
