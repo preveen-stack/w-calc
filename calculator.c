@@ -247,13 +247,17 @@ static char * flatten (char * str)
 	while (curs && *curs) {
 		// search for the fist letter of a possible variable
 		while (curs && *curs && ! isalpha((int)(*curs))) {
+			if (*curs == '\\') {
+				curs++;
+				while (curs && *curs && isalpha((int)(*curs))) curs++;
+			}
 			if (*curs == '\'') {
 				curs++;
 				while (curs && *curs && *curs != '\'') curs++;
 			}
 			curs++;
 		}
-		if (! *curs) break;
+		if (! curs || ! *curs) break;
 
 		// pull out that variable
 		eov = curs;
