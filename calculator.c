@@ -19,8 +19,11 @@ static double *stack = NULL;
 static int stacksize = 0;
 static int stacklast = -1;
 
+/* variables everyone needs to get to */
 double last_answer = 0;
 char *pretty_answer = NULL;
+
+/* configuration variables */
 short standard_output = 1;
 int precision = -1;
 short engineering = 0;
@@ -29,6 +32,7 @@ short use_radians = 0;
 short compute = 1;
 short output_format = 0;
 short print_prefixes = 0;
+short use_commas = 0;
 
 /*
  * These are declared here because they're not in any header files.
@@ -176,6 +180,11 @@ char *print_this_result (double result)
 			--place;
 		}
 		pa[i+1] = 0;
+	}
+
+	// Internationalize it ;-)
+	if (use_commas) {
+		*strchr(pa,'.') = ',';
 	}
 
 	if (standard_output) {

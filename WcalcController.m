@@ -187,6 +187,7 @@ static char update_history = 0;
 		[prefs setObject:@"0" forKey:@"outputFormat"];
 		[prefs setObject:@"NO" forKey:@"printPrefixes"];
 		[prefs setObject:@"NO" forKey:@"updateHistory"];
+		[prefs setObject:@"NO" forKey:@"useCommas"];
 	}
 	precision = [prefs integerForKey:@"precision"];
 	engineering = [prefs boolForKey:@"engineeringNotation"];
@@ -197,6 +198,7 @@ static char update_history = 0;
 	[PrecisionSlider setEnabled:(output_format==DECIMAL_FORMAT)];
 	print_prefixes = [prefs boolForKey:@"printPrefixes"];
 	update_history = [prefs boolForKey:@"updateHistory"];
+	use_commas = [prefs boolForKey:@"useCommas"];
 	
 	[PrecisionSlider setIntValue:precision];
 	just_answered = FALSE;
@@ -426,7 +428,15 @@ static char update_history = 0;
 			if (olde != update_history) {
 				[prefs setObject:(update_history?@"YES":@"NO") forKey:@"updateHistory"];
 			}
-			break;
+				break;
+		case 8: // Use Commas
+			olde = use_commas;
+			use_commas = ([sender state]==NSOnState);
+			if (olde != use_commas) {
+				need_redraw = 1;
+				[prefs setObject:(use_commas?@"YES":@"NO") forKey:@"useCommas"];
+			}
+				break;
 		default: return;
 	}
 

@@ -35,5 +35,6 @@ extern short output_format;
 #define HEXADECIMAL_FORMAT 2
 #define BINARY_FORMAT 3
 extern short print_prefixes;
+extern short use_commas;
 
 #endif

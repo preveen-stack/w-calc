@@ -28,6 +28,7 @@
 	IBOutlet NSMatrix *outputFormat;
 	IBOutlet NSPanel *thePrefPanel;
 	IBOutlet NSButton *updateHistory;
+	IBOutlet NSButton *useCommas;
 
 	bool just_answered;
 	NSView *superview;
