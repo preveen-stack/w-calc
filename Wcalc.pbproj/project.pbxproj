@@ -151,6 +151,7 @@
 				080E96DDFE201D6D7F000001,
 				29B97315FDCFA39411CA2CEA,
 				29B97317FDCFA39411CA2CEA,
+				F510EE8F021717DF01A80164,
 				29B97323FDCFA39411CA2CEA,
 				19C28FACFE9D520D11CA2CBB,
 			);
@@ -220,10 +221,9 @@
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
 				HEADER_SEARCH_PATHS = "";
-				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = "";
 				OPTIMIZATION_CFLAGS = "-O0";
-				OTHER_CFLAGS = "-Wall -Wunused -Wno-long-double";
+				OTHER_CFLAGS = "-Wall -Wunused";
 				OTHER_LDFLAGS = "-ll";
 				PREBINDING = NO;
 				PRODUCT_NAME = Wcalc;
@@ -235,7 +235,6 @@
 			);
 			isa = PBXApplicationTarget;
 			name = Wcalc;
-			productInstallPath = "$(HOME)/Applications";
 			productName = Wcalc;
 			productReference = 17587328FF379C6511CA2CBB;
 			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
@@ -247,7 +246,7 @@
 	<key>CFBundleExecutable</key>
 	<string>Wcalc</string>
 	<key>CFBundleGetInfoString</key>
-	<string>Wcalc Version 1.4</string>
+	<string>Wcalc Version 1.4.1</string>
 	<key>CFBundleIconFile</key>
 	<string>TheW</string>
 	<key>CFBundleIdentifier</key>
@@ -259,11 +258,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>Wcalc 1.4</string>
+	<string>Wcalc 1.4.1</string>
 	<key>CFBundleSignature</key>
 	<string>Wcal</string>
 	<key>CFBundleVersion</key>
-	<string>1.4</string>
+	<string>1.4.1</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
@@ -336,6 +335,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1058C7A3FEA54F0111CA2CBB,
+				F510EE8D021716B401A80164,
 			);
 			isa = PBXFrameworksBuildPhase;
 			name = "Frameworks & Libraries";
@@ -380,6 +380,46 @@
 //F52
 //F53
 //F54
+		F510EE8A0217160601A80164 = {
+			isa = PBXFileReference;
+			name = libreadline.a;
+			path = /sw/lib/libreadline.a;
+			refType = 0;
+		};
+		F510EE8B0217160601A80164 = {
+			fileRef = F510EE8A0217160601A80164;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F510EE8C021716B401A80164 = {
+			isa = PBXFileReference;
+			name = libl.a;
+			path = /usr/lib/libl.a;
+			refType = 0;
+		};
+		F510EE8D021716B401A80164 = {
+			fileRef = F510EE8C021716B401A80164;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F510EE8E021716B401A80164 = {
+			fileRef = F510EE8C021716B401A80164;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F510EE8F021717DF01A80164 = {
+			children = (
+				F510EE8A0217160601A80164,
+				F510EE8C021716B401A80164,
+			);
+			isa = PBXGroup;
+			name = Libraries;
+			path = "";
+			refType = 4;
+		};
 		F521993301F8D28701A80164 = {
 			isa = PBXExecutableFileReference;
 			path = wcalc;
@@ -394,9 +434,9 @@
 			);
 			buildSettings = {
 				HEADER_SEARCH_PATHS = /sw/include;
+				INSTALL_PATH = "";
 				LIBRARY_SEARCH_PATHS = /sw/lib;
 				OTHER_CFLAGS = "-Wall -Wunused";
-				OTHER_LDFLAGS = "-lreadline -ll";
 				OTHER_REZFLAGS = "";
 				PREBINDING = NO;
 				PRODUCT_NAME = wcalc;
@@ -408,7 +448,7 @@
 			);
 			isa = PBXToolTarget;
 			name = wcalc;
-			productInstallPath = /usr/local/bin;
+			productInstallPath = "";
 			productName = wcalc;
 			productReference = F521993301F8D28701A80164;
 			shouldUseHeadermap = 0;
@@ -474,6 +514,8 @@
 		F521993D01F8D28801A80164 = {
 			buildActionMask = 2147483647;
 			files = (
+				F510EE8B0217160601A80164,
+				F510EE8E021716B401A80164,
 			);
 			isa = PBXFrameworksBuildPhase;
 			name = "Frameworks & Libraries";

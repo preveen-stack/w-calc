@@ -13,15 +13,15 @@
 		);
 		perUserDictionary = {
 			PBXWorkspaceConfiguration = {
-				ContentSize = "{1244, 972}";
+				ContentSize = "{1265, 961}";
 				LeftSlideOut = {
 					ActiveTab = 0;
-					Frame = "{{0, 23}, {1244, 949}}";
+					Frame = "{{0, 23}, {1265, 938}}";
 					Split0 = {
 						ActiveTab = 2;
-						Frame = "{{305, 0}, {939, 949}}";
+						Frame = "{{305, 0}, {960, 938}}";
 						Split0 = {
-							Frame = "{{0, 178}, {939, 771}}";
+							Frame = "{{0, 178}, {960, 760}}";
 						};
 						SplitCount = 1;
 						Tab0 = {
@@ -51,16 +51,16 @@
 							LauncherConfigVersion = 4;
 						};
 						Tab1 = {
-							Frame = "{{0, 0}, {939, 208}}";
+							Frame = "{{0, 0}, {960, 208}}";
 							LauncherConfigVersion = 3;
 							Runner = {
-								Frame = "{{0, 0}, {939, 208}}";
+								Frame = "{{0, 0}, {960, 208}}";
 							};
 						};
 						Tab2 = {
-							BuildMessageFrame = "{{0, 0}, {941, 59}}";
-							BuildTranscriptFrame = "{{0, 68}, {941, 88}}";
-							Frame = "{{0, 0}, {939, 154}}";
+							BuildMessageFrame = "{{0, 0}, {962, 59}}";
+							BuildTranscriptFrame = "{{0, 68}, {962, 88}}";
+							Frame = "{{0, 0}, {960, 154}}";
 						};
 						Tab3 = {
 							Frame = "{{0, 0}, {612, 295}}";
@@ -69,7 +69,7 @@
 					};
 					SplitCount = 1;
 					Tab0 = {
-						Frame = "{{0, 0}, {281, 949}}";
+						Frame = "{{0, 0}, {281, 938}}";
 					};
 					Tab1 = {
 						ClassesFrame = "{{0, 0}, {202, 358}}";
@@ -81,12 +81,12 @@
 						Frame = "{{0, 0}, {200, 100}}";
 					};
 					Tab3 = {
-						Frame = "{{0, 0}, {200, 949}}";
+						Frame = "{{0, 0}, {200, 938}}";
 						Split0 = {
-							Frame = "{{0, 0}, {200, 463}}";
+							Frame = "{{0, 0}, {200, 457}}";
 						};
 						Split1 = {
-							Frame = "{{0, 472}, {200, 477}}";
+							Frame = "{{0, 466}, {200, 472}}";
 						};
 						SplitCount = 2;
 					};
@@ -121,6 +121,11 @@
 			macosx = (
 				F521994101F8D2CA01A80164,
 			);
+		};
+	};
+	F521993F01F8D2B801A80164 = {
+		uiCtxt = {
+			sepNavWindowFrame = "{{848, 248}, {750, 502}}";
 		};
 	};
 	F521994101F8D2CA01A80164 = {
@@ -241,13 +246,13 @@
 	F5DEAE9202125B9A01A80164 = {
 		fileReference = F5B29D6501F7391601A80164;
 		isa = PBXFileBreakpoint;
-		lineNumber = 97;
+		lineNumber = 110;
 		state = 2;
 	};
 	F5DEAE9302125C3F01A80164 = {
 		fileReference = F5B29D6501F7391601A80164;
 		isa = PBXFileBreakpoint;
-		lineNumber = 87;
+		lineNumber = 98;
 		state = 2;
 	};
 }
