@@ -29,6 +29,7 @@
 	IBOutlet NSPanel *thePrefPanel;
 	IBOutlet NSButton *updateHistory;
 	IBOutlet NSButton *useCommas;
+	IBOutlet NSButton *strictSyntax;
 
 	bool just_answered;
 	NSView *superview;

@@ -28,6 +28,7 @@ short standard_output = 1;
 int precision = -1;
 short engineering = 0;
 short picky_variables = 0;
+short strict_syntax = 1;
 short use_radians = 0;
 short compute = 1;
 short output_format = 0;

@@ -29,6 +29,7 @@ extern short compute;
 extern int precision;
 extern short engineering;
 extern short picky_variables;
+extern short strict_syntax;
 extern short use_radians;
 extern short output_format;
 #define DECIMAL_FORMAT 0
