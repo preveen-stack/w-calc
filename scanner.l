@@ -58,6 +58,7 @@ ACCEPTABLE	[_:]
 \\s(tr(ict)?)?			{ return(STRICT_CMD); }
 \/\*.*\*\/              { }
 \/\/.*                  { }
+\#.*                    { }
 
 %{ /* These are the constants (except random) */
 	%}
