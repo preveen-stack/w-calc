@@ -358,8 +358,13 @@ static char update_history = 0;
 
 - (IBAction)showKeyboardDrawer:(id)sender
 {
+	static char initialized = 0;
 	if (! [theKeyboard isVisible]) {
 		[theKeyboard makeKeyAndOrderFront:self];
+		if (! initialized) {
+			[theKeyboard center];
+		}
+		[theKeyboard setFrameAutosaveName:@"wcalc_keyboard"];
 	} else {
 		[theKeyboard close];
 	}
@@ -472,10 +477,15 @@ static char update_history = 0;
 
 - (IBAction)showPrefs:(id)sender
 {
+	static char initialized = 0;
 	[self displayPrefs:sender];
 	[thePrefPanel makeKeyAndOrderFront:self];
 	// centering may not be necessary, but...
-    [thePrefPanel center];
+	if (! initialized) {
+		initialized=1;
+		[thePrefPanel center];
+	}
+	[thePrefPanel setFrameAutosaveName:@"wcalc_prefs"];
 }
 
 - (IBAction)displayPrefs:(id)sender
