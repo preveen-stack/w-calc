@@ -159,7 +159,7 @@ char *print_this_result (double result)
 			if (result < pow(2.0,i))
 				place = i-1;
 		}
-		pa = malloc(sizeof(char)*(place+(print_prefixes*2)+1));
+		pa = calloc(sizeof(char),(place+(print_prefixes*2)+1));
 		if (! pa) {
 			pa = "Not Enough Memory";
 			return pa;
