@@ -48,6 +48,7 @@ ACCEPTABLE	[_:]
 	yylval.number = atoi(foo);
 	return(ENG_CMD);}
 \\h(ex(adecimal)?)?		{ return(HEX_CMD); }
+\\x                     { return(HEX_CMD); }
 \\l(enient)?			{ return(PICKY_CMD); }
 \\o(ct(al)?)?			{ return(OCT_CMD); }
 \\p({DIGIT}|[-])+		{ yylval.number = atoi(yytext+2);
