@@ -1,5 +1,5 @@
 %define name Wcalc
-%define version 1.5-beta1
+%define version 1.5.1
 
 Summary: A flexible command-line calculator
 Name: %{name}
@@ -19,7 +19,7 @@ Wcalc is a command-line calculator designed to accpet all valid mathematical exp
 %setup -q
 
 %build
-make
+make distro
 
 %install
 make install

@@ -34,7 +34,7 @@ enum commands cmd;
 char * variable;
 }
 
-%token DEC_CMD OCT_CMD HEX_CMD BIN_CMD 
+%token DEC_CMD OCT_CMD HEX_CMD BIN_CMD GUARD_CMD
 %token RADIAN_CMD PICKY_CMD STRICT_CMD REMEMBER_CMD LISTVAR_CMD
 %token <number> PRECISION_CMD ENG_CMD
 

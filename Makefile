@@ -10,7 +10,7 @@ CC = gcc
 YACC = yacc
 #YACC = bison -b y
 
-LFLAGS = -ll
+LFLAGS = -ll -lm
 
 PROGRAM = wcalc
 CFILES = main.c calculator.c variables.c string_manip.c
