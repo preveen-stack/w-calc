@@ -126,7 +126,7 @@ int main (int argc, char *argv[])
 					printf("%sUsing Radians\n",use_radians?"":"Not ");
 				} else if (!strncmp(readme,"\\commas",7)) {
 					use_commas = ! use_commas;
-					printf("%s are the decimal delineation.\n", use_commas?"Commas (,)":"Periods (.)")
+					printf("%s are the decimal delineation.\n", use_commas?"Commas (,)":"Periods (.)");
 				} else if (!strncmp(readme,"?",1) || !strncmp(readme,"help",4)) {
 					print_interactive_help();
 				} else {
