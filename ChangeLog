@@ -1,11 +1,27 @@
+Jan 26 2002 - Kyle Wheeler
+ - Fixed the grammar (MUCH better now) (BOTH)
+Jan 25 2002 - Kyle Wheeler
+ - Added checks to catch values with too much precision (BOTH)
+ - Precision slider won't go too far anymore (GUI)
+ - Remembers the window position (GUI)
+ - Quits when the window is closed (GUI)
+ - Saves Preferences! (GUI)
+ - Expanded the vocabulary (asin,arcsin,sin^-1) (BOTH)
+Jan 24 2002 - Kyle Wheeler
+ - Added a preference to toggle using Radians (GUI)
+ - Made the history font smaller (GUI)
+ - Fixed a crasher in the history list. (GUI)
+ - Can now do floating point mods (BOTH)
+ - "random" means a random value (BOTH)
+ - added round() to round a value to the nearest value (BOTH)
 Jan 21 2002 - Kyle Wheeler
- - Rewrote the Variable management - now it's simpler, slower, more useful
+ - Rewrote the Variable management - now it's simpler, slower, more useful (BOTH)
  - Variable GUI list is functioning!
  - History list selection now replaces the current expression
- - Pickiness about undefined variables is configurable (not in commandline version)
+ - Pickiness about undefined variables is configurable (GUI-only)
  - Made it approximately the size of Apple's calculator
  - Prefs are their own window now
- - Logging duplicates in the history is configurable (not in commandline version).
+ - Logging duplicates in the history is configurable (GUI-only).
  - Need to redo commands in command-line version (perhaps \q to quit, \dups for history dups... eh?)
  - Fixed the boolean thing - now both !4 and 4! work (!4 = 0, 4! = 24, !0 = 1)
  - Discovered that 9+-9 doesn't work... dunno how to fix. I'll think about it. (is this critical?)
