@@ -1,5 +1,5 @@
 %define name Wcalc
-%define version 1.5.2
+%define version 1.5.2.1
 
 Summary: A flexible command-line calculator
 Name: %{name}
@@ -37,11 +37,11 @@ make DESTDIR=$RPM_BUILD_ROOT install
 %{_mandir}/*/*
 
 %changelog
-* Wed Jan 29 2003 Kyle Wheeler <kyle-rpm@memoryhole.ncr.nd.edu>
+* Wed Jan 29 2003 Kyle Wheeler <kyle-rpm@memoryhole.net>
  - A few minor modifications
 * Wed Jan 29 2003 Mark Schreiber <mark7@andrew.cmu.edu>
  - Fixed spec file to build on Red Hat
-* Mon Jan 27 2003 Kyle Wheeler <kyle-rpm@memoryhole.ncr.nd.edu>
+* Mon Jan 27 2003 Kyle Wheeler <kyle-rpm@memoryhole.net>
  - Fixed spec file for new URL
  - Fixed spec file to use automake/autoconf
 * Tue Jan 22 2002 Kyle Wheeler <memoryhole@mac.com>

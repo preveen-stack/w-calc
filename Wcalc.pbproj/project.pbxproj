@@ -223,14 +223,14 @@
 				29B9732DFDCFA39411CA2CEA,
 			);
 			buildSettings = {
+				DEBUGGING_SYMBOLS = NO;
 				FRAMEWORK_SEARCH_PATHS = "";
 				HEADER_SEARCH_PATHS = "";
 				LIBRARY_SEARCH_PATHS = "";
-				OPTIMIZATION_CFLAGS = "-O0";
+				OPTIMIZATION_CFLAGS = "-O2";
 				OTHER_CFLAGS = "-Wall -Wunused -DGUI -DSTDC_HEADERS";
 				OTHER_LDFLAGS = "-ll";
 				PRODUCT_NAME = Wcalc;
-				PROFILING_CODE = YES;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
 				WRAPPER_EXTENSION = app;
@@ -250,7 +250,7 @@
 	<key>CFBundleExecutable</key>
 	<string>Wcalc</string>
 	<key>CFBundleGetInfoString</key>
-	<string>Wcalc Version 1.5.2</string>
+	<string>Wcalc Version 1.5.2.1</string>
 	<key>CFBundleIconFile</key>
 	<string>TheW</string>
 	<key>CFBundleIdentifier</key>
@@ -262,11 +262,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>Wcalc 1.5.2</string>
+	<string>Wcalc 1.5.2.1</string>
 	<key>CFBundleSignature</key>
 	<string>Wcal</string>
 	<key>CFBundleVersion</key>
-	<string>1.5.2</string>
+	<string>1.5.2.1</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>

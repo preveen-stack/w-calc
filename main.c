@@ -158,7 +158,7 @@ int main (int argc, char *argv[])
 					c = fgetc(stdin);
 					++i;
 				}
-				if (feof(stdin) || ferror(stdin)) exit(0);
+				if (feof(stdin) || ferror(stdin)) break;
 			}
 #endif
 			if (! readme) {

@@ -7,7 +7,7 @@
 
 \f0\fs28 \cf0 Hello!\
 \
-This is Wcalc 1.5.2!\
+This is Wcalc 1.5.2.1!\
 \
 1. What's New\
 2. Intro\
@@ -22,19 +22,7 @@ This is Wcalc 1.5.2!\
 **************
 \f0\b0 \
 \
-BUGFIX: Internationalization support was rewritten and should be more reliable.\
-\
-NEW FEATURE: You can limit the length of your history now (this is a precursor to being able to save/load the history).\
-\
-NEW FEATURE: In the GUI, both the variable list and the history now have "Clear" buttons to remove all variables and empty the history (respectively).\
-\
-NEW FEATURE: In the command-line, \\dsep and \\tsep were moved into the parser/scanner properly (so you can use them in piped files).\
-\
-BUGFIX: Fixed a formatting problem in the error-reporting routines that could cause crashes in some forms of Unix (e.g. Linux).\
-\
-CHANGE: Alphabetized the units in the conversion tool.\
-\
-NEW FEATURE: Wcalc now supports autoconf and automake (makes compiling the command-line version across different Unixes easier, and can now be compiled without readline support).\
+BUGFIX: The command-line version had a bug in it. It wasn't compiled with readline support by default, and if it wasn't, typing ^D would put it into a little death-loop.\
 \
 
 \f1\b *********\
