@@ -104,7 +104,14 @@ eoln
 		case nothing: break;
 	}
 }
-| eoln	/* blank line, do nothing */
+| eoln	/* blank line */
+{
+	if (scanerror) {
+		scanerror = synerrors = 0;
+		report_error("Error in scanner halts parser.");
+	}
+	compute = 1;
+}	
 | error eoln { compute = 0; }
 /* if we got an error on the line */
 ;
