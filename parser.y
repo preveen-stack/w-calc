@@ -42,7 +42,7 @@ char * variable;
 %token WPLUS WMINUS WMULT WDIV WMOD WEQL WEXP WSQR
 %token WOR WAND WEQUAL WNEQUAL WGT WLT WGEQ WLEQ
 
-%token WNOT WLOG WLN WROUND WABS WSQRT WCEIL WFLOOR
+%token WNOT WLOG WLN WROUND WABS WSQRT WCEIL WFLOOR WCBRT
 %token WSIN WCOS WTAN WASIN WACOS WATAN WSINH WCOSH WTANH WASINH WACOSH WATANH
 
 %token <number> NUMBER
@@ -60,7 +60,7 @@ char * variable;
 %left WEXP
 %left WNOT
 
-%expect 722
+%expect 751
 
 %% 	/* beginning of the parsing rules	*/
 
@@ -246,6 +246,7 @@ func : WSIN { $$ = wsin; }
 | WSQRT { $$ = wsqrt; }
 | WFLOOR { $$ = wfloor; }
 | WCEIL { $$ = wceil; }
+| WCBRT { $$ = wcbrt; }
 ;
 
 null : PAR REN

@@ -146,6 +146,7 @@ abs { return(WABS); }
 (sqrt)|(Ã) { return(WSQRT); }
 floor { return(WFLOOR); }
 (ceil)|(ceiling) { return(WCEIL); }
+cbrt { return(WCBRT); }
 
 {LETTER}+({LETTER}|{ACCEPTABLE})* {
 	yylval.variable = strdup(yytext);
