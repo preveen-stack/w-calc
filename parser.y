@@ -78,7 +78,7 @@ char character;
 %left WEXP
 %left WNOT WBNOT
 
-%expect 1051
+%expect 1115
 
 %% 	/* beginning of the parsing rules	*/
 
