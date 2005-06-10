@@ -58,13 +58,13 @@ ACCEPTABLE	[_:0-9]
 \\dsep.                 { YYLVALAC->character = yytext[5]; return(DSEP_CMD); }
 \\e(ng(ineering)?)?{DIGIT}*		{ char * foo = yytext;
 	while (*foo && ! isdigit((int)(*foo))) ++foo;
-	if (*foo != 0) YYLVALAC->number = atoi(foo);
-	else YYLVALAC->number = -1;
+	if (*foo != 0) YYLVALAC->smallnum = atoi(foo);
+	else YYLVALAC->smallnum = -1;
 	return(ENG_CMD);}
 \\cons(ervative)?       { return(GUARD_CMD); }
 \\h(ex(adecimal)?)?     { return(HEX_CMD); }
 \\help                  { return(PRINT_HELP_CMD); }
-\\hlimit{DIGIT}+        { YYLVALAC->number = atoi(yytext+7); return(HLIMIT_CMD); }
+\\hlimit{DIGIT}+        { YYLVALAC->smallnum = atoi(yytext+7); return(HLIMIT_CMD); }
 \\ints?                 { return(INT_CMD); }
 \\x                     { return(HEX_CMD); }
 \\l(enient)?            { return(PICKY_CMD); }
@@ -84,18 +84,18 @@ ACCEPTABLE	[_:0-9]
 	YYLVALAC->variable = returnme;
 	Dprintf("filename: %s\n",returnme);
 	return(OPEN_CMD); }
-\\p[-]?{DIGIT}+         { YYLVALAC->number = atoi(yytext+2); return(PRECISION_CMD);}
+\\p[-]?{DIGIT}+         { YYLVALAC->smallnum = atoi(yytext+2); return(PRECISION_CMD);}
 \\p(icky)?              { return(PICKY_CMD); }
 \\pre(fix(es)?)?        { return(PREFIX_CMD); }
 \\pref(s|erences)?      { return(DISPLAY_PREFS_CMD); }
 \\r(ad(ians)?)?         { return(RADIAN_CMD); }
-\\rou(nd(ing)?)?{WHITESPACE}+no(ne)? { YYLVALAC->number = NO_ROUNDING_INDICATION;
+\\rou(nd(ing)?)?{WHITESPACE}+no(ne)? { YYLVALAC->smallnum = NO_ROUNDING_INDICATION;
 	                      return(ROUNDING_INDICATION_CMD); }
-\\rou(nd(ing)?)?{WHITESPACE}+simple { YYLVALAC->number = SIMPLE_ROUNDING_INDICATION;
+\\rou(nd(ing)?)?{WHITESPACE}+simple { YYLVALAC->smallnum = SIMPLE_ROUNDING_INDICATION;
 	                      return(ROUNDING_INDICATION_CMD); }
-\\rou(nd(ing)?)?{WHITESPACE}+sig_fig { YYLVALAC->number = SIG_FIG_ROUNDING_INDICATION;
+\\rou(nd(ing)?)?{WHITESPACE}+sig_fig { YYLVALAC->smallnum = SIG_FIG_ROUNDING_INDICATION;
 	                      return(ROUNDING_INDICATION_CMD); }
-\\rou(nd(int)?)?        { YYLVALAC->number = -1;
+\\rou(nd(int)?)?        { YYLVALAC->smallnum = -1;
 	                      return(ROUNDING_INDICATION_CMD); }
 \\re(member(_errors)?)? { return(REMEMBER_CMD); }
 \\save[ ].*                { 
@@ -124,39 +124,91 @@ ACCEPTABLE	[_:0-9]
 
 %{ /* These are the constants (except random) */
 	%}
-(e)				{ YYLVALAC->number = W_E; return(NUMBER); }
-([pP][iI])|(¹)	{ YYLVALAC->number = W_PI; return(NUMBER); }
-random			{ YYLVALAC->number = kbw_rand(); return(NUMBER); }
-irandom			{ YYLVALAC->number = (double) kbw_int_rand(); return(NUMBER); }
-N[aA]			{ YYLVALAC->number = W_AVOGADROS_CONSTANT; return(NUMBER); }
-k				{ YYLVALAC->number = W_BOLTZMANN_CONSTANT; return(NUMBER); }
-Cc				{ YYLVALAC->number = W_COULOMB_CONSTANT; return(NUMBER); }
-ec				{ YYLVALAC->number = W_ELEMENTARY_CHARGE; return(NUMBER); }
-R				{ YYLVALAC->number = W_MOLAR_GAS_CONSTANT; return(NUMBER); }
-G				{ YYLVALAC->number = W_GRAVITATIONAL_CONSTANT; return(NUMBER); }
-g				{ YYLVALAC->number = W_GRAVITATIONAL_ACCELLERATION; return(NUMBER); }
-Me				{ YYLVALAC->number = W_ELECTRON_MASS; return(NUMBER); }
-Mp				{ YYLVALAC->number = W_PROTON_MASS; return(NUMBER); }
-Mn				{ YYLVALAC->number = W_NEUTRON_MASS; return(NUMBER); }
-Md				{ YYLVALAC->number = W_DEUTERON_MASS; return(NUMBER); }
-(u)|(amu)		{ YYLVALAC->number = W_ATOMIC_MASS;  return(NUMBER); }
-c				{ YYLVALAC->number = W_SPEED_OF_LIGHT; return(NUMBER); }
-h				{ YYLVALAC->number = W_PLANCK_CONSTANT; return(NUMBER); }
-(µ0)|(mu((0)|((zero)|(ZERO)))) { YYLVALAC->number = W_PERMEABILITY_OF_FREE_SPACE; return(NUMBER); }
-((epsilon)|(EPSILON))((0)|((zero)|(ZERO))) { YYLVALAC->number = W_PERMITTIVITY_OF_FREE_SPACE; return(NUMBER); }
-(µB)|(muB)		{ YYLVALAC->number = W_BOHR_MAGNETON; return(NUMBER); }
-(µN)|(muN)		{ YYLVALAC->number = W_NUCLEAR_MAGNETON; return(NUMBER); }
-b				{ YYLVALAC->number = W_WIEN_DISPLACEMENT; return(NUMBER); }
-mW				{ YYLVALAC->number = W_W_BOSON_MASS; return(NUMBER); }
-mZ				{ YYLVALAC->number = W_Z_BOSON_MASS; return(NUMBER); }
-ao				{ YYLVALAC->number = W_BOHR_RADIUS; return(NUMBER); }
-F				{ YYLVALAC->number = W_FARADAY_CONSTANT; return(NUMBER); }
-(Vm)|(NAk)		{ YYLVALAC->number = W_MOLAR_VOLUME_OF_IDEAL_GAS; return(NUMBER); }
-eV				{ YYLVALAC->number = W_ELECTRON_VOLT; return(NUMBER); }
-(sigma)|(SIGMA) { YYLVALAC->number = W_STEFAN_BOLTZMANN; return(NUMBER); }
-(alpha)|(ALPHA) { YYLVALAC->number = W_FINE_STRUCTURE; return(NUMBER); }
-(gamma)|(GAMMA) { YYLVALAC->number = W_EULER; return(NUMBER); }
-re				{ YYLVALAC->number = W_ELECTRON_RADIUS; return(NUMBER); }
+(e)				{ mpfr_init_set_str(YYLVALAC->number,W_E,0,GMP_RNDN); return(NUMBER); }
+([pP][iI])|(¹)	{ mpfr_init(YYLVALAC->number); mpfr_const_pi(YYLVALAC->number,GMP_RNDN);
+				  return(NUMBER); }
+random			{ seed_random();
+				  mpfr_init(YYLVALAC->number);
+				  while (mpfr_urandomb(YYLVALAC->number,randstate) != 0) ;
+				  mpfr_mul_ui(YYLVALAC->number,YYLVALAC->number,UINT32_MAX,GMP_RNDN);
+				  return(NUMBER); }
+irandom			{ seed_random();
+				  mpfr_init(YYLVALAC->number);
+				  while (mpfr_urandomb(YYLVALAC->number,randstate) != 0) ;
+				  mpfr_mul_ui(YYLVALAC->number,YYLVALAC->number,UINT32_MAX,GMP_RNDN);
+				  mpfr_rint(YYLVALAC->number,YYLVALAC->number,GMP_RNDN);
+				  return(NUMBER); }
+N[aA]			{ mpfr_init_set_str(YYLVALAC->number,W_AVOGADROS_CONSTANT,0,GMP_RNDN);
+				  return(NUMBER); }
+k				{ mpfr_init_set_str(YYLVALAC->number,W_BOLTZMANN_CONSTANT,0,GMP_RNDN);
+				  return(NUMBER); }
+Cc				{ mpfr_init_set_str(YYLVALAC->number,W_COULOMB_CONSTANT,0,GMP_RNDN);
+				  return(NUMBER); }
+ec				{ mpfr_init_set_str(YYLVALAC->number,W_ELEMENTARY_CHARGE,0,GMP_RNDN);
+				  return(NUMBER); }
+R				{ mpfr_init_set_str(YYLVALAC->number,W_MOLAR_GAS_CONSTANT,0,GMP_RNDN);
+				  return(NUMBER); }
+G				{ mpfr_init_set_str(YYLVALAC->number,W_GRAVITATIONAL_CONSTANT,0,GMP_RNDN);
+				  return(NUMBER); }
+g				{ mpfr_init_set_str(YYLVALAC->number,W_GRAVITATIONAL_ACCELLERATION,0,GMP_RNDN);
+				  return(NUMBER); }
+Me				{ mpfr_init_set_str(YYLVALAC->number,W_ELECTRON_MASS,0,GMP_RNDN);
+				  return(NUMBER); }
+Mp				{ mpfr_init_set_str(YYLVALAC->number,W_PROTON_MASS,0,GMP_RNDN);
+				  return(NUMBER); }
+Mn				{ mpfr_init_set_str(YYLVALAC->number,W_NEUTRON_MASS,0,GMP_RNDN);
+				  return(NUMBER); }
+Md				{ mpfr_init_set_str(YYLVALAC->number,W_DEUTERON_MASS,0,GMP_RNDN);
+				  return(NUMBER); }
+(u)|(amu)		{ mpfr_init_set_str(YYLVALAC->number,W_ATOMIC_MASS,0,GMP_RNDN);
+				  return(NUMBER); }
+c				{ mpfr_init_set_str(YYLVALAC->number,W_SPEED_OF_LIGHT,0,GMP_RNDN);
+				  return(NUMBER); }
+h				{ mpfr_init_set_str(YYLVALAC->number,W_PLANCK_CONSTANT,0,GMP_RNDN);
+				  return(NUMBER); }
+(µ0)|(mu((0)|((zero)|(ZERO)))) {
+				  mpfr_t temp;
+				  mpfr_inits(YYLVALAC->number, temp);
+				  mpfr_set_d(temp,1e-7,GMP_RNDN);
+				  mpfr_const_pi(YYLVALAC->number,GMP_RNDN);
+				  mpfr_mul_ui(YYLVALAC->number,YYLVALAC->number,4,GMP_RNDN);
+				  mpfr_mul(YYLVALAC->number,YYLVALAC->number,temp,GMP_RNDN);
+				  mpfr_clear(temp);
+				  return(NUMBER); }
+((epsilon)|(EPSILON))((0)|((zero)|(ZERO))) { mpfr_init_set_str(YYLVALAC->number,W_PERMITTIVITY_OF_FREE_SPACE,0,GMP_RNDN);
+				  return(NUMBER); }
+(µB)|(muB)		{ mpfr_init_set_str(YYLVALAC->number,W_BOHR_MAGNETON,0,GMP_RNDN);
+				  return(NUMBER); }
+(µN)|(muN)		{ mpfr_init_set_str(YYLVALAC->number,W_NUCLEAR_MAGNETON,0,GMP_RNDN);
+				  return(NUMBER); }
+b				{ mpfr_init_set_str(YYLVALAC->number,W_WIEN_DISPLACEMENT,0,GMP_RNDN);
+				  return(NUMBER); }
+ao				{ mpfr_init_set_str(YYLVALAC->number,W_BOHR_RADIUS,0,GMP_RNDN);
+				  return(NUMBER); }
+F				{ mpfr_init_set_str(YYLVALAC->number,W_FARADAY_CONSTANT,0,GMP_RNDN);
+				  return(NUMBER); }
+(Vm)|(NAk)		{ mpfr_init_set_str(YYLVALAC->number,W_MOLAR_VOLUME_OF_IDEAL_GAS,0,GMP_RNDN);
+				  return(NUMBER); }
+eV				{ mpfr_init_set_str(YYLVALAC->number,W_ELECTRON_VOLT,0,GMP_RNDN);
+				  return(NUMBER); }
+(sigma)|(SIGMA) { mpfr_init_set_str(YYLVALAC->number,W_STEFAN_BOLTZMANN,0,GMP_RNDN);
+				  return(NUMBER); }
+(alpha)|(ALPHA) { mpfr_init_set_str(YYLVALAC->number,W_FINE_STRUCTURE,0,GMP_RNDN);
+				  return(NUMBER); }
+(gamma)|(GAMMA) { mpfr_init_set_str(YYLVALAC->number,W_EULER,0,GMP_RNDN);
+				  return(NUMBER); }
+re				{ mpfr_init_set_str(YYLVALAC->number,W_ELECTRON_RADIUS,0,GMP_RNDN);
+				  return(NUMBER); }
+Kj				{ mpfr_init_set_str(YYLVALAC->number,W_JOSEPHSON_CONSTANT,0,GMP_RNDN);
+				  return(NUMBER); }
+Rk				{ mpfr_init_set_str(YYLVALAC->number,W_VON_KLITZING_CONSTANT,0,GMP_RNDN);
+				  return(NUMBER); }
+Rinf			{ mpfr_init_set_str(YYLVALAC->number,W_RYDBERG_CONSTANT,0,GMP_RNDN);
+				  return(NUMBER); }
+Eh				{ mpfr_init_set_str(YYLVALAC->number,W_HARTREE_ENERGY,0,GMP_RNDN);
+				  return(NUMBER); }
+Gf				{ mpfr_init_set_str(YYLVALAC->number,W_FERMI_COUPLING_CONSTANT,0,GMP_RNDN);
+				  return(NUMBER); }
 
 %{ /* These are the grouping symbols */
 	%}
@@ -226,6 +278,7 @@ floor { return(WFLOOR); }
 cbrt { return(WCBRT); }
 rand { return(WRAND); }
 irand { return(WIRAND); }
+fact { return(WFACT); }
 
 '.*' {
 	char * temp = strdup(yytext+1);
@@ -245,20 +298,18 @@ irand { return(WIRAND); }
 ({NDIGIT}{DIGIT}{0,2}\.{DIGIT}{3})(e[+-]?{DIGIT}+)? {
 	/* simple decimals */
 	extern int yydebug;
+	int retval;
 
 	/* take out the ignored char */
 	strstrip(',', yytext);
-	
+
 	if (yydebug)
 		printf("ambiguous %s\n", yytext);
 
-	YYLVALAC->number = strtod(yytext,NULL);
-	
-	if ((errno == ERANGE && YYLVALAC->number == 0) ||
-		(errno == ERANGE &&
-		(YYLVALAC->number == HUGE_VAL ||
-		YYLVALAC->number == HUGE_VALF))) {
-		report_error(strerror(errno));
+	retval = mpfr_init_set_str(YYLVALAC->number, yytext, DEFAULT_BASE, GMP_RNDN);
+
+	if (-1 == retval) {
+		report_error("Invalid characters for base 10");
 	} else {
 		unsigned int t = count_digits(yytext);
 		if (t<sig_figs) sig_figs = t;
@@ -268,16 +319,14 @@ irand { return(WIRAND); }
 }
 
 (0?\.{DIGIT}*) {
+	/* zero-optional decimal */
 	extern int yydebug;
+	int retval;
 
 	if (yydebug) printf("nonambiguous %s => ", yytext);
-	YYLVALAC->number = strtod(yytext,NULL);
-	if (yydebug) printf("%f\n", YYLVALAC->number);
-	if ((errno == ERANGE && YYLVALAC->number == 0) ||
-		(errno == ERANGE &&
-		(YYLVALAC->number == HUGE_VAL ||
-		YYLVALAC->number == HUGE_VALF))) {
-		report_error(strerror(errno));
+	retval = mpfr_init_set_str(YYLVALAC->number, yytext, DEFAULT_BASE, GMP_RNDN);
+	if (-1 == retval) {
+		report_error("Invalid characters for base 10");
 	} else {
 		unsigned int t = count_digits(yytext) - (yytext[0]=='0')?1:0;
 		if (t<sig_figs) sig_figs = t;
@@ -286,23 +335,18 @@ irand { return(WIRAND); }
 }
 
 (({NDIGIT}(({DIGIT}*)|({DIGIT}{0,2}([,]{DIGIT}{3})+)))|({NDIGIT}(({DIGIT}*)|({DIGIT}{0,2}([,]{DIGIT}{3})+))[.]{DIGIT}*))(e[+-]?{DIGIT}+)? {
-	const char strip = ',';
+	/* big ugly */
 	extern int yydebug;
+	int retval;
 
 	/* strip out ignored characters */
-	strstrip(strip,yytext);
+	strstrip(',',yytext);
 
 	if (yydebug) printf("complex one %s => ", yytext);
-	YYLVALAC->number = strtod(yytext,NULL);
-	if (yydebug) {
-		printf("%f\n",YYLVALAC->number);
-	}
+	retval = mpfr_init_set_str(YYLVALAC->number, yytext, DEFAULT_BASE, GMP_RNDN);
 
-	if ((errno == ERANGE && YYLVALAC->number == 0) ||
-		(errno == ERANGE &&
-		(YYLVALAC->number == HUGE_VAL ||
-		YYLVALAC->number == HUGE_VALF))) {
-		report_error(strerror(errno));
+	if (-1 == retval) {
+		report_error("Invalid characters for base 10");
 	} else {
 		unsigned int t = count_digits(yytext);
 		if (t<sig_figs) sig_figs = t;
@@ -311,63 +355,73 @@ irand { return(WIRAND); }
 }
 
 0x[0-9a-fA-F]+ {
-	unsigned long int value;
-	unsigned int t = 0;
-	char * curs = yytext+2;
-	
-	sscanf(yytext,"%lx",&value);
-	YYLVALAC->number = value;
+	/* hex */
+	extern int yydebug;
+	int retval;
 
-	while (curs && *curs) {
-		++t;
-		++curs;
+	if (yydebug) printf("complex one %s => ", yytext);
+	retval = mpfr_init_set_str(YYLVALAC->number,yytext,16,GMP_RNDN);
+
+	if (-1 == retval) {
+		report_error("some characters invalid for base 16");
+	} else {
+		unsigned int t = count_digits(yytext);
+		if (yydebug) {
+			mpfr_out_str(stdout,DEFAULT_BASE,0, YYLVALAC->number, GMP_RNDN);
+			printf("\n");
+		}
+		if (t<sig_figs) sig_figs = t;
 	}
-	if (t<sig_figs) sig_figs = t;
 	return(NUMBER);
 }
 
 0{DIGIT}* {
-	unsigned long int value;
-	char *err;
-	err = (char *)calloc(sizeof(char),(int)strlen(yytext)+57);
+	/* octal */
+	char err[strlen(yytext)+57];
 	if (strchr(yytext,'8') || strchr(yytext,'9')) {
 		sprintf(err,"Incorrect number format (%s) - expected 0-7 for octal",yytext);
 		report_error(err);
 		scanerror = 1;
 	} else {
+		/*unsigned long int value;*/
 		unsigned int t;
-		sscanf(yytext,"%lo",&value);
-		YYLVALAC->number = value;
+		int retval;
+		retval = mpfr_init_set_str(YYLVALAC->number,yytext,8,GMP_RNDN);
+		if (-1 == retval) report_error(strerror(errno));
+		/*sscanf(yytext,"%lo",&value);
+		yylval.number = value; */
 		t = count_digits(yytext)-1;
 		if (t<sig_figs) sig_figs = t;
-		free(err);
 		return(NUMBER);
 	}
-	free(err);
 }
 
 0b[0-9]+ {
-	unsigned long int value = 0;
-	unsigned int i, place = 1, len = (unsigned int)strlen(yytext);
-	char *err;
-	err = (char *)calloc(sizeof(char),(int)strlen(yytext)+57);
+	/* binary */
+	extern int yydebug;
+	char err[strlen(yytext)+57];
+
+	/* verify the digits */
 	if (strchr(yytext,'2') || strchr(yytext,'3') || strchr(yytext,'4') || strchr(yytext,'5') || strchr(yytext,'6') || strchr(yytext,'7') || strchr(yytext,'8') || strchr(yytext,'9')) {
 		sprintf(err,"Incorrect number format (%s) - expected 0 or 1 for binary",yytext);
 		report_error(err);
 		scanerror = 1;
 	} else {
-		unsigned int t;
-		for (i=len-1;i>1;--i) {
-			value += ((yytext[i]=='0')?0:1) * place;
-			place = pow(2,len-i);
+		int retval;
+
+		retval = mpfr_init_set_str(YYLVALAC->number,yytext,2,GMP_RNDN);
+		if (-1 == retval) {
+			report_error("Expected a 0 or 1 for binary.");
+		} else {
+			unsigned int t = count_digits(yytext)-2;
+			if (yydebug) {
+				mpfr_out_str(stdout,DEFAULT_BASE,0, YYLVALAC->number, GMP_RNDN);
+				printf("\n");
+			}
+			if (t<sig_figs) sig_figs = t;
 		}
-		YYLVALAC->number = value;
-		t = count_digits(yytext)-2;
-		if (t<sig_figs) sig_figs = t;
-		free(err);
-		return(NUMBER);
 	}
-	free(err);
+	return(NUMBER);
 }
 
 (({DIGIT})|[,.])* {
@@ -382,7 +436,7 @@ irand { return(WIRAND); }
 		yytext[i] = conf.thou_delimiter;
 	    else if (yytext[i] == '.')
 		yytext[i] = conf.dec_delimiter;
-	}	
+	}
 	sprintf(err,errmsg,yytext,conf.dec_delimiter,conf.thou_delimiter);
 	report_error(err);
 	scanerror = 1;

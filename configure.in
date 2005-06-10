@@ -23,12 +23,18 @@ dnl	AC_CHECK_LIB([readline], [_readline])
 	VL_LIB_READLINE
 dnl	PGAC_CHECK_READLINE
 fi
+AC_CHECK_LIB(gmp, __gmpz_init, ,
+       [AC_CHECK_LIB(gmp, mpz_init, ,
+         [AC_CHECK_LIB(gmp2, mpz_init)])])
+AC_CHECK_LIB(mpfr, mpfr_add, , [AC_MSG_ERROR(
+[Need MPFR either from GNU MP 4 or separate MPFR package.
+See http://www.mpfr.org or http://swox.com/gmp])])
 
 # Checks for header files.
 AC_HEADER_STDC
 AC_HEADER_SYS_WAIT
 AC_HEADER_TIME
-AC_HEADER_STAT
+#AC_HEADER_STAT
 AC_CHECK_HEADERS([fcntl.h float.h inttypes.h stdlib.h stdio.h string.h sys/time.h unistd.h limits.h malloc.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
@@ -38,8 +44,8 @@ AC_C_CONST
 AC_FUNC_ALLOCA
 AC_FUNC_MALLOC
 AC_FUNC_REALLOC
-AC_FUNC_STAT
-AC_FUNC_STRTOD
+#AC_FUNC_STAT
+#AC_FUNC_STRTOD
 AC_FUNC_VPRINTF
 AC_CHECK_FUNCS([memset floor modf pow rint sqrt strchr strdup strerror strrchr strtoul])
 

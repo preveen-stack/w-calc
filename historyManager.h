@@ -8,8 +8,12 @@
  */
 
 #ifndef WCALC_HISTORY_MANAGER
+
+#include <gmp.h>
+#include <mpfr.h>
+
 void clearHistory(void);
-void addToHistory(char *, double);
+void addToHistory(char *, mpfr_t);
 char * historynum(int,int);
 int historyLength(void);
 

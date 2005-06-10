@@ -68,24 +68,27 @@ void addToHistory(char *expression, mpfr_t answer)
 	add_history(expression);
 #endif
 	if (!histlen) {
+		/* this is the beginning of a new history record */
 		if (!conf.history_limit || conf.history_limit_len > 0) {
 			history = malloc(sizeof(struct entry));
 			if (!history)
 				return;
 			history->exp = strdup(expression);
-			history->ans = answer;
 			if (!history->exp) {
 				free(history);
 				return;
 			}
+			mpfr_init_set(history->ans, answer, GMP_RNDN);
 			histlen = 1;
 		}
-	} else {
+	} else {						   /* a history exists */
 		// eliminate duplicates
 		if (allow_duplicates || strcmp(history[histlen - 1].exp, expression)) {
 			if (!conf.history_limit || histlen < conf.history_limit_len) {
+				/* history not too long, just add a new entry */
 				struct entry *temp =
 					realloc(history, sizeof(struct entry) * (histlen + 1));
+
 				if (!temp) {
 					// if it couldn't be realloced, try malloc and memcpy
 					temp = malloc(sizeof(struct entry) * (histlen + 1));
@@ -99,23 +102,27 @@ void addToHistory(char *expression, mpfr_t answer)
 					history[histlen].exp = strdup(expression);
 				else
 					history[histlen].exp = NULL;
-				history[histlen].ans = answer;
+				mpfr_init_set(history[histlen].ans, answer, GMP_RNDN);
+				/* why is this if statement here? */
 				if (!temp[histlen].exp)
 					return;
 				++histlen;
 			} else {
+				/* history too long */
 				unsigned long i;
 
 				if (history[0].exp)
 					free(history[0].exp);
 				for (i = 0; i < histlen - 1; ++i) {
-					history[i] = history[i + 1];
+					history[i].exp = history[i + 1].exp;
+					mpfr_set(history[i].ans, history[i + 1].ans, GMP_RNDN);
+					history[i].calc = history[i + 1].calc;
 				}
 				if (expression)
 					history[histlen - 1].exp = strdup(expression);
 				else
 					history[histlen - 1].exp = NULL;
-				history[histlen - 1].ans = answer;
+				mpfr_set(history[histlen - 1].ans, answer, GMP_RNDN);
 				return;
 			}
 		}
@@ -130,7 +137,7 @@ char *historynum(int step, int col)
 		static char *temp;
 
 		if (recalculate) {
-			history[step].ans = parseme(history[step].exp);
+			parseme(history[step].ans, history[step].exp);
 			history[step].calc = 1;
 			if (all_calculated()) {
 				recalculate = 0;

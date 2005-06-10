@@ -1,0 +1,1051 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 42;
+	objects = {
+
+/* Begin PBXApplicationTarget section */
+		29B97326FDCFA39411CA2CEA /* Wcalc */ = {
+			isa = PBXApplicationTarget;
+			buildConfigurationList = 27B38F980859DCBE00C2FE3C /* Build configuration list for PBXApplicationTarget "Wcalc" */;
+			buildPhases = (
+				29B97327FDCFA39411CA2CEA /* Headers */,
+				29B97328FDCFA39411CA2CEA /* Resources */,
+				29B9732BFDCFA39411CA2CEA /* Sources */,
+				29B9732DFDCFA39411CA2CEA /* Frameworks */,
+			);
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = "";
+				LIBRARY_SEARCH_PATHS = "";
+				OPTIMIZATION_CFLAGS = "-O0";
+				OTHER_CFLAGS = (
+					"-Wall",
+					"-Wunused",
+					"-DGUI",
+					"-DSTDC_HEADERS",
+				);
+				OTHER_LDFLAGS = "-ll";
+				PRODUCT_NAME = Wcalc;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+			};
+			dependencies = (
+			);
+			name = Wcalc;
+			productName = Wcalc;
+			productReference = 17587328FF379C6511CA2CBB /* Wcalc.app */;
+			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>Wcalc</string>
+	<key>CFBundleGetInfoString</key>
+	<string>Wcalc Version 1.6.2</string>
+	<key>CFBundleIconFile</key>
+	<string>TheW</string>
+	<key>CFBundleIdentifier</key>
+	<string>Wcalc</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>Wcalc</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>Wcalc 1.6.2</string>
+	<key>CFBundleSignature</key>
+	<string>Wcal</string>
+	<key>CFBundleVersion</key>
+	<string>1.6.2</string>
+	<key>NSMainNibFile</key>
+	<string>MainMenu</string>
+	<key>NSPrincipalClass</key>
+	<string>NSApplication</string>
+</dict>
+</plist>
+";
+		};
+/* End PBXApplicationTarget section */
+
+/* Begin PBXBuildFile section */
+		089C165EFE840E0CC02AAC07 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
+		1058C7A3FEA54F0111CA2CBB /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		275710BE042D0472004ACA36 /* files.h in Headers */ = {isa = PBXBuildFile; fileRef = 275710BC042D0472004ACA36 /* files.h */; };
+		275710BF042D0472004ACA36 /* files.c in Sources */ = {isa = PBXBuildFile; fileRef = 275710BD042D0472004ACA36 /* files.c */; };
+		275710C0042D0472004ACA36 /* files.h in Headers */ = {isa = PBXBuildFile; fileRef = 275710BC042D0472004ACA36 /* files.h */; };
+		275710C1042D0472004ACA36 /* files.c in Sources */ = {isa = PBXBuildFile; fileRef = 275710BD042D0472004ACA36 /* files.c */; };
+		277DB27E042F5173004ACA36 /* COPYING in Resources */ = {isa = PBXBuildFile; fileRef = 277DB27D042F5173004ACA36 /* COPYING */; };
+		277DB280042F51A6004ACA36 /* NEWS in Resources */ = {isa = PBXBuildFile; fileRef = 277DB27F042F51A5004ACA36 /* NEWS */; };
+		2799DA4503FAD61400CA71DD /* help.h in Headers */ = {isa = PBXBuildFile; fileRef = 2799DA4303FAD61400CA71DD /* help.h */; };
+		2799DA4603FAD61400CA71DD /* help.c in Sources */ = {isa = PBXBuildFile; fileRef = 2799DA4403FAD61400CA71DD /* help.c */; };
+		2799DA4703FAD61400CA71DD /* help.h in Headers */ = {isa = PBXBuildFile; fileRef = 2799DA4303FAD61400CA71DD /* help.h */; };
+		2799DA4803FAD61400CA71DD /* help.c in Sources */ = {isa = PBXBuildFile; fileRef = 2799DA4403FAD61400CA71DD /* help.c */; };
+		27BDF4C6059F712100CF1DF6 /* simpleCalc.c in Sources */ = {isa = PBXBuildFile; fileRef = 27BDF4C4059F712100CF1DF6 /* simpleCalc.c */; };
+		27BDF4C7059F712200CF1DF6 /* simpleCalc.h in Headers */ = {isa = PBXBuildFile; fileRef = 27BDF4C5059F712100CF1DF6 /* simpleCalc.h */; };
+		27BDF4C8059F712200CF1DF6 /* simpleCalc.c in Sources */ = {isa = PBXBuildFile; fileRef = 27BDF4C4059F712100CF1DF6 /* simpleCalc.c */; };
+		27BDF4C9059F712200CF1DF6 /* simpleCalc.h in Headers */ = {isa = PBXBuildFile; fileRef = 27BDF4C5059F712100CF1DF6 /* simpleCalc.h */; };
+		27D39129059BEA850035F25F /* AboutBoxController.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B29D6101F7391001A80164 /* AboutBoxController.h */; };
+		27D3912A059BEA850035F25F /* calculator.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B29D6601F7391601A80164 /* calculator.h */; };
+		27D3912B059BEA850035F25F /* ErrorController.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B29D6901F7392301A80164 /* ErrorController.h */; };
+		27D3912C059BEA850035F25F /* variables.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B29D7401F7394501A80164 /* variables.h */; };
+		27D3912D059BEA850035F25F /* WcalcController.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B29D7701F7395001A80164 /* WcalcController.h */; };
+		27D3912E059BEA850035F25F /* VariableList.h in Headers */ = {isa = PBXBuildFile; fileRef = F521994601FA8EC401A80164 /* VariableList.h */; };
+		27D3912F059BEA850035F25F /* HistoryList.h in Headers */ = {isa = PBXBuildFile; fileRef = F574E09901FD0FD701A80164 /* HistoryList.h */; };
+		27D39130059BEA850035F25F /* historyManager.h in Headers */ = {isa = PBXBuildFile; fileRef = F574E09D01FD122F01A80164 /* historyManager.h */; };
+		27D39131059BEA850035F25F /* theDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = F5EF54D302022A7001A80164 /* theDelegate.h */; };
+		27D39132059BEA850035F25F /* definitions.h in Headers */ = {isa = PBXBuildFile; fileRef = F5DEAE8F021254A501A80164 /* definitions.h */; };
+		27D39133059BEA850035F25F /* string_manip.h in Headers */ = {isa = PBXBuildFile; fileRef = F5293926023032E201A80164 /* string_manip.h */; };
+		27D39134059BEA850035F25F /* MyTextField.h in Headers */ = {isa = PBXBuildFile; fileRef = F5D446D00263B46801A80164 /* MyTextField.h */; };
+		27D39135059BEA850035F25F /* conversion.h in Headers */ = {isa = PBXBuildFile; fileRef = F5DD321702F8F43501A80164 /* conversion.h */; };
+		27D39136059BEA850035F25F /* ConversionList.h in Headers */ = {isa = PBXBuildFile; fileRef = F5A165F7030711ED01A80164 /* ConversionList.h */; };
+		27D39137059BEA850035F25F /* help.h in Headers */ = {isa = PBXBuildFile; fileRef = 2799DA4303FAD61400CA71DD /* help.h */; };
+		27D39138059BEA850035F25F /* files.h in Headers */ = {isa = PBXBuildFile; fileRef = 275710BC042D0472004ACA36 /* files.h */; };
+		27D3913A059BEA850035F25F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
+		27D3913B059BEA850035F25F /* TheW.icns in Resources */ = {isa = PBXBuildFile; fileRef = F5B29D6F01F7393A01A80164 /* TheW.icns */; };
+		27D3913C059BEA850035F25F /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = F5B29D7B01F7398A01A80164 /* MainMenu.nib */; };
+		27D3913D059BEA850035F25F /* w.png in Resources */ = {isa = PBXBuildFile; fileRef = F5B29D8301F73C2701A80164 /* w.png */; };
+		27D3913E059BEA850035F25F /* ChangeLog in Resources */ = {isa = PBXBuildFile; fileRef = F521994801FA927601A80164 /* ChangeLog */; };
+		27D3913F059BEA850035F25F /* Wred.png in Resources */ = {isa = PBXBuildFile; fileRef = F5463560020065B401A80164 /* Wred.png */; };
+		27D39140059BEA850035F25F /* COPYING in Resources */ = {isa = PBXBuildFile; fileRef = 277DB27D042F5173004ACA36 /* COPYING */; };
+		27D39141059BEA850035F25F /* NEWS in Resources */ = {isa = PBXBuildFile; fileRef = 277DB27F042F51A5004ACA36 /* NEWS */; };
+		27D39143059BEA850035F25F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
+		27D39144059BEA850035F25F /* AboutBoxController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B29D6201F7391001A80164 /* AboutBoxController.m */; };
+		27D39145059BEA850035F25F /* calculator.c in Sources */ = {isa = PBXBuildFile; fileRef = F5B29D6501F7391601A80164 /* calculator.c */; };
+		27D39146059BEA850035F25F /* ErrorController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B29D6A01F7392301A80164 /* ErrorController.m */; };
+		27D39147059BEA850035F25F /* parser.y in Sources */ = {isa = PBXBuildFile; fileRef = F5B29D6D01F7393A01A80164 /* parser.y */; };
+		27D39148059BEA850035F25F /* variables.c in Sources */ = {isa = PBXBuildFile; fileRef = F5B29D7301F7394501A80164 /* variables.c */; };
+		27D39149059BEA850035F25F /* WcalcController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B29D7801F7395001A80164 /* WcalcController.m */; };
+		27D3914A059BEA850035F25F /* VariableList.m in Sources */ = {isa = PBXBuildFile; fileRef = F521994301FA86B001A80164 /* VariableList.m */; };
+		27D3914B059BEA850035F25F /* HistoryList.m in Sources */ = {isa = PBXBuildFile; fileRef = F574E09A01FD0FD701A80164 /* HistoryList.m */; };
+		27D3914C059BEA850035F25F /* theDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F5EF54D202022A7001A80164 /* theDelegate.m */; };
+		27D3914D059BEA850035F25F /* historyManager.c in Sources */ = {isa = PBXBuildFile; fileRef = F574E09E01FD122F01A80164 /* historyManager.c */; };
+		27D3914E059BEA850035F25F /* string_manip.c in Sources */ = {isa = PBXBuildFile; fileRef = F5293927023032E201A80164 /* string_manip.c */; };
+		27D3914F059BEA850035F25F /* MyTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = F5D446D10263B46801A80164 /* MyTextField.m */; };
+		27D39150059BEA850035F25F /* scanner.l in Sources */ = {isa = PBXBuildFile; fileRef = F5B29D6E01F7393A01A80164 /* scanner.l */; };
+		27D39151059BEA850035F25F /* conversion.c in Sources */ = {isa = PBXBuildFile; fileRef = F5DD321602F8F43501A80164 /* conversion.c */; };
+		27D39152059BEA850035F25F /* ConversionList.m in Sources */ = {isa = PBXBuildFile; fileRef = F5A165F8030711ED01A80164 /* ConversionList.m */; };
+		27D39153059BEA850035F25F /* help.c in Sources */ = {isa = PBXBuildFile; fileRef = 2799DA4403FAD61400CA71DD /* help.c */; };
+		27D39154059BEA850035F25F /* files.c in Sources */ = {isa = PBXBuildFile; fileRef = 275710BD042D0472004ACA36 /* files.c */; };
+		27D39156059BEA850035F25F /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		27D39157059BEA850035F25F /* libl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F510EE8C021716B401A80164 /* libl.a */; };
+		29B9732CFDCFA39411CA2CEA /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
+		F510EE8B0217160601A80164 /* libreadline.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F510EE8A0217160601A80164 /* libreadline.a */; };
+		F510EE8D021716B401A80164 /* libl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F510EE8C021716B401A80164 /* libl.a */; };
+		F521993601F8D28801A80164 /* calculator.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B29D6601F7391601A80164 /* calculator.h */; };
+		F521993701F8D28801A80164 /* variables.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B29D7401F7394501A80164 /* variables.h */; };
+		F521993901F8D28801A80164 /* calculator.c in Sources */ = {isa = PBXBuildFile; fileRef = F5B29D6501F7391601A80164 /* calculator.c */; };
+		F521993A01F8D28801A80164 /* variables.c in Sources */ = {isa = PBXBuildFile; fileRef = F5B29D7301F7394501A80164 /* variables.c */; };
+		F521993B01F8D28801A80164 /* parser.y in Sources */ = {isa = PBXBuildFile; fileRef = F5B29D6D01F7393A01A80164 /* parser.y */; };
+		F521993C01F8D28801A80164 /* scanner.l in Sources */ = {isa = PBXBuildFile; fileRef = F5B29D6E01F7393A01A80164 /* scanner.l */; };
+		F521994001F8D2B801A80164 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = F521993F01F8D2B801A80164 /* main.c */; };
+		F521994501FA86B001A80164 /* VariableList.m in Sources */ = {isa = PBXBuildFile; fileRef = F521994301FA86B001A80164 /* VariableList.m */; };
+		F521994701FA8EC401A80164 /* VariableList.h in Headers */ = {isa = PBXBuildFile; fileRef = F521994601FA8EC401A80164 /* VariableList.h */; };
+		F5293928023032E201A80164 /* string_manip.h in Headers */ = {isa = PBXBuildFile; fileRef = F5293926023032E201A80164 /* string_manip.h */; };
+		F5293929023032E201A80164 /* string_manip.c in Sources */ = {isa = PBXBuildFile; fileRef = F5293927023032E201A80164 /* string_manip.c */; };
+		F529392A023034CB01A80164 /* string_manip.h in Headers */ = {isa = PBXBuildFile; fileRef = F5293926023032E201A80164 /* string_manip.h */; };
+		F529392B023034CB01A80164 /* string_manip.c in Sources */ = {isa = PBXBuildFile; fileRef = F5293927023032E201A80164 /* string_manip.c */; };
+		F5459F57022612F901A80164 /* libl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F510EE8C021716B401A80164 /* libl.a */; };
+		F5463561020065B401A80164 /* Wred.png in Resources */ = {isa = PBXBuildFile; fileRef = F5463560020065B401A80164 /* Wred.png */; };
+		F574E09B01FD0FD701A80164 /* HistoryList.h in Headers */ = {isa = PBXBuildFile; fileRef = F574E09901FD0FD701A80164 /* HistoryList.h */; };
+		F574E09C01FD0FD701A80164 /* HistoryList.m in Sources */ = {isa = PBXBuildFile; fileRef = F574E09A01FD0FD701A80164 /* HistoryList.m */; };
+		F574E09F01FD122F01A80164 /* historyManager.h in Headers */ = {isa = PBXBuildFile; fileRef = F574E09D01FD122F01A80164 /* historyManager.h */; };
+		F586ED3901FD41B201A80164 /* ChangeLog in Resources */ = {isa = PBXBuildFile; fileRef = F521994801FA927601A80164 /* ChangeLog */; };
+		F5A165F9030711ED01A80164 /* ConversionList.h in Headers */ = {isa = PBXBuildFile; fileRef = F5A165F7030711ED01A80164 /* ConversionList.h */; };
+		F5A165FA030711ED01A80164 /* ConversionList.m in Sources */ = {isa = PBXBuildFile; fileRef = F5A165F8030711ED01A80164 /* ConversionList.m */; };
+		F5B29D6301F7391001A80164 /* AboutBoxController.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B29D6101F7391001A80164 /* AboutBoxController.h */; };
+		F5B29D6401F7391001A80164 /* AboutBoxController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B29D6201F7391001A80164 /* AboutBoxController.m */; };
+		F5B29D6701F7391601A80164 /* calculator.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B29D6601F7391601A80164 /* calculator.h */; };
+		F5B29D6801F7391601A80164 /* calculator.c in Sources */ = {isa = PBXBuildFile; fileRef = F5B29D6501F7391601A80164 /* calculator.c */; };
+		F5B29D6B01F7392301A80164 /* ErrorController.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B29D6901F7392301A80164 /* ErrorController.h */; };
+		F5B29D6C01F7392301A80164 /* ErrorController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B29D6A01F7392301A80164 /* ErrorController.m */; };
+		F5B29D7001F7393A01A80164 /* TheW.icns in Resources */ = {isa = PBXBuildFile; fileRef = F5B29D6F01F7393A01A80164 /* TheW.icns */; };
+		F5B29D7101F7393A01A80164 /* parser.y in Sources */ = {isa = PBXBuildFile; fileRef = F5B29D6D01F7393A01A80164 /* parser.y */; };
+		F5B29D7501F7394501A80164 /* variables.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B29D7401F7394501A80164 /* variables.h */; };
+		F5B29D7601F7394501A80164 /* variables.c in Sources */ = {isa = PBXBuildFile; fileRef = F5B29D7301F7394501A80164 /* variables.c */; };
+		F5B29D7901F7395001A80164 /* WcalcController.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B29D7701F7395001A80164 /* WcalcController.h */; };
+		F5B29D7A01F7395001A80164 /* WcalcController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B29D7801F7395001A80164 /* WcalcController.m */; };
+		F5B29D7D01F7398A01A80164 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = F5B29D7B01F7398A01A80164 /* MainMenu.nib */; };
+		F5B29D8401F73C2701A80164 /* w.png in Resources */ = {isa = PBXBuildFile; fileRef = F5B29D8301F73C2701A80164 /* w.png */; };
+		F5CF4CF1026A383D01A80164 /* MyTextField.h in Headers */ = {isa = PBXBuildFile; fileRef = F5D446D00263B46801A80164 /* MyTextField.h */; };
+		F5CF4CF2026A383D01A80164 /* MyTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = F5D446D10263B46801A80164 /* MyTextField.m */; };
+		F5DD31FF02F6294C01A80164 /* scanner.l in Sources */ = {isa = PBXBuildFile; fileRef = F5B29D6E01F7393A01A80164 /* scanner.l */; };
+		F5DD321802F8F43501A80164 /* conversion.c in Sources */ = {isa = PBXBuildFile; fileRef = F5DD321602F8F43501A80164 /* conversion.c */; };
+		F5DD321902F8F43501A80164 /* conversion.h in Headers */ = {isa = PBXBuildFile; fileRef = F5DD321702F8F43501A80164 /* conversion.h */; };
+		F5DD321A02F8F43501A80164 /* conversion.c in Sources */ = {isa = PBXBuildFile; fileRef = F5DD321602F8F43501A80164 /* conversion.c */; };
+		F5DD321B02F8F43501A80164 /* conversion.h in Headers */ = {isa = PBXBuildFile; fileRef = F5DD321702F8F43501A80164 /* conversion.h */; };
+		F5DEAE8A0211DAA501A80164 /* historyManager.c in Sources */ = {isa = PBXBuildFile; fileRef = F574E09E01FD122F01A80164 /* historyManager.c */; };
+		F5DEAE90021254A501A80164 /* definitions.h in Headers */ = {isa = PBXBuildFile; fileRef = F5DEAE8F021254A501A80164 /* definitions.h */; };
+		F5DEAE91021254A501A80164 /* definitions.h in Headers */ = {isa = PBXBuildFile; fileRef = F5DEAE8F021254A501A80164 /* definitions.h */; };
+		F5EF54D402022A7001A80164 /* theDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = F5EF54D302022A7001A80164 /* theDelegate.h */; };
+		F5EF54D502022A7001A80164 /* theDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F5EF54D202022A7001A80164 /* theDelegate.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXBuildStyle section */
+		4A9504CCFFE6A4B311CA0CBA /* Development */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				OPTIMIZATION_CFLAGS = "-O0 -g";
+				ZERO_LINK = YES;
+			};
+			name = Development;
+		};
+		4A9504CDFFE6A4B311CA0CBA /* Deployment */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				OPTIMIZATION_CFLAGS = "-O2";
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+/* End PBXBuildStyle section */
+
+/* Begin PBXFileReference section */
+		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		17587328FF379C6511CA2CBB /* Wcalc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; path = Wcalc.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		275710BC042D0472004ACA36 /* files.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = files.h; sourceTree = "<group>"; };
+		275710BD042D0472004ACA36 /* files.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = files.c; sourceTree = "<group>"; };
+		277DB27D042F5173004ACA36 /* COPYING */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = COPYING; sourceTree = "<group>"; };
+		277DB27F042F51A5004ACA36 /* NEWS */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = NEWS; sourceTree = "<group>"; };
+		2799DA4303FAD61400CA71DD /* help.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = help.h; sourceTree = "<group>"; };
+		2799DA4403FAD61400CA71DD /* help.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = help.c; sourceTree = "<group>"; };
+		27BDF4C4059F712100CF1DF6 /* simpleCalc.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = simpleCalc.c; sourceTree = "<group>"; };
+		27BDF4C5059F712100CF1DF6 /* simpleCalc.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = simpleCalc.h; sourceTree = "<group>"; };
+		27D39159059BEA850035F25F /* Info-Wcalc__Upgraded_.plist */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Info-Wcalc__Upgraded_.plist"; sourceTree = "<group>"; };
+		27D3915A059BEA860035F25F /* Wcalc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Wcalc.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
+		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		F510EE8A0217160601A80164 /* libreadline.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libreadline.a; path = /sw/lib/libreadline.a; sourceTree = "<absolute>"; };
+		F510EE8C021716B401A80164 /* libl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libl.a; path = /usr/lib/libl.a; sourceTree = "<absolute>"; };
+		F521993301F8D28701A80164 /* wcalc */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; path = wcalc; sourceTree = BUILT_PRODUCTS_DIR; };
+		F521993F01F8D2B801A80164 /* main.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
+		F521994301FA86B001A80164 /* VariableList.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = VariableList.m; sourceTree = "<group>"; };
+		F521994601FA8EC401A80164 /* VariableList.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = VariableList.h; sourceTree = "<group>"; };
+		F521994801FA927601A80164 /* ChangeLog */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = ChangeLog; sourceTree = "<group>"; };
+		F5293926023032E201A80164 /* string_manip.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = string_manip.h; sourceTree = "<group>"; };
+		F5293927023032E201A80164 /* string_manip.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = string_manip.c; sourceTree = "<group>"; };
+		F5463560020065B401A80164 /* Wred.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Wred.png; sourceTree = "<group>"; };
+		F574E09901FD0FD701A80164 /* HistoryList.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = HistoryList.h; sourceTree = "<group>"; };
+		F574E09A01FD0FD701A80164 /* HistoryList.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = HistoryList.m; sourceTree = "<group>"; };
+		F574E09D01FD122F01A80164 /* historyManager.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = historyManager.h; sourceTree = "<group>"; };
+		F574E09E01FD122F01A80164 /* historyManager.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = historyManager.c; sourceTree = "<group>"; };
+		F5A165F7030711ED01A80164 /* ConversionList.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ConversionList.h; sourceTree = "<group>"; };
+		F5A165F8030711ED01A80164 /* ConversionList.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ConversionList.m; sourceTree = "<group>"; };
+		F5B29D6101F7391001A80164 /* AboutBoxController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = AboutBoxController.h; sourceTree = "<group>"; };
+		F5B29D6201F7391001A80164 /* AboutBoxController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = AboutBoxController.m; sourceTree = "<group>"; };
+		F5B29D6501F7391601A80164 /* calculator.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = calculator.c; sourceTree = "<group>"; };
+		F5B29D6601F7391601A80164 /* calculator.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = calculator.h; sourceTree = "<group>"; };
+		F5B29D6901F7392301A80164 /* ErrorController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ErrorController.h; sourceTree = "<group>"; };
+		F5B29D6A01F7392301A80164 /* ErrorController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ErrorController.m; sourceTree = "<group>"; };
+		F5B29D6D01F7393A01A80164 /* parser.y */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.yacc; path = parser.y; sourceTree = "<group>"; };
+		F5B29D6E01F7393A01A80164 /* scanner.l */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.lex; path = scanner.l; sourceTree = "<group>"; };
+		F5B29D6F01F7393A01A80164 /* TheW.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = TheW.icns; sourceTree = "<group>"; };
+		F5B29D7301F7394501A80164 /* variables.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = variables.c; sourceTree = "<group>"; };
+		F5B29D7401F7394501A80164 /* variables.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = variables.h; sourceTree = "<group>"; };
+		F5B29D7701F7395001A80164 /* WcalcController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = WcalcController.h; sourceTree = "<group>"; };
+		F5B29D7801F7395001A80164 /* WcalcController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = WcalcController.m; sourceTree = "<group>"; };
+		F5B29D7C01F7398A01A80164 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/MainMenu.nib; sourceTree = "<group>"; };
+		F5B29D8301F73C2701A80164 /* w.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = w.png; sourceTree = "<group>"; };
+		F5D446D00263B46801A80164 /* MyTextField.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MyTextField.h; sourceTree = "<group>"; };
+		F5D446D10263B46801A80164 /* MyTextField.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = MyTextField.m; sourceTree = "<group>"; };
+		F5DD321602F8F43501A80164 /* conversion.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = conversion.c; sourceTree = "<group>"; };
+		F5DD321702F8F43501A80164 /* conversion.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = conversion.h; sourceTree = "<group>"; };
+		F5DEAE8F021254A501A80164 /* definitions.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = definitions.h; sourceTree = "<group>"; };
+		F5EF54D202022A7001A80164 /* theDelegate.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = theDelegate.m; sourceTree = "<group>"; };
+		F5EF54D302022A7001A80164 /* theDelegate.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = theDelegate.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		27D39155059BEA850035F25F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				27D39156059BEA850035F25F /* Cocoa.framework in Frameworks */,
+				27D39157059BEA850035F25F /* libl.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		29B9732DFDCFA39411CA2CEA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1058C7A3FEA54F0111CA2CBB /* Cocoa.framework in Frameworks */,
+				F510EE8D021716B401A80164 /* libl.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F521993D01F8D28801A80164 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F510EE8B0217160601A80164 /* libreadline.a in Frameworks */,
+				F5459F57022612F901A80164 /* libl.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		080E96DDFE201D6D7F000001 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				F5B29D6101F7391001A80164 /* AboutBoxController.h */,
+				F5B29D6201F7391001A80164 /* AboutBoxController.m */,
+				F5B29D6901F7392301A80164 /* ErrorController.h */,
+				F5B29D6A01F7392301A80164 /* ErrorController.m */,
+				F5B29D7701F7395001A80164 /* WcalcController.h */,
+				F5B29D7801F7395001A80164 /* WcalcController.m */,
+				27BDF4C4059F712100CF1DF6 /* simpleCalc.c */,
+				27BDF4C5059F712100CF1DF6 /* simpleCalc.h */,
+				F5B29D6001F738F601A80164 /* Shared Code */,
+				F521994601FA8EC401A80164 /* VariableList.h */,
+				F521994301FA86B001A80164 /* VariableList.m */,
+				F574E09901FD0FD701A80164 /* HistoryList.h */,
+				F574E09A01FD0FD701A80164 /* HistoryList.m */,
+				F5EF54D302022A7001A80164 /* theDelegate.h */,
+				F5EF54D202022A7001A80164 /* theDelegate.m */,
+				F5D446D00263B46801A80164 /* MyTextField.h */,
+				F5D446D10263B46801A80164 /* MyTextField.m */,
+				F5A165F7030711ED01A80164 /* ConversionList.h */,
+				F5A165F8030711ED01A80164 /* ConversionList.m */,
+			);
+			name = Classes;
+			sourceTree = "<group>";
+		};
+		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
+			);
+			name = "Linked Frameworks";
+			sourceTree = "<group>";
+		};
+		1058C7A2FEA54F0111CA2CBB /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				29B97325FDCFA39411CA2CEA /* Foundation.framework */,
+				29B97324FDCFA39411CA2CEA /* AppKit.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		19C28FACFE9D520D11CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				17587328FF379C6511CA2CBB /* Wcalc.app */,
+				F521993301F8D28701A80164 /* wcalc */,
+				27D3915A059BEA860035F25F /* Wcalc.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		29B97314FDCFA39411CA2CEA /* Wcalc */ = {
+			isa = PBXGroup;
+			children = (
+				080E96DDFE201D6D7F000001 /* Classes */,
+				29B97315FDCFA39411CA2CEA /* Other Sources */,
+				29B97317FDCFA39411CA2CEA /* Resources */,
+				F510EE8F021717DF01A80164 /* Libraries */,
+				29B97323FDCFA39411CA2CEA /* Frameworks */,
+				19C28FACFE9D520D11CA2CBB /* Products */,
+				27D39159059BEA850035F25F /* Info-Wcalc__Upgraded_.plist */,
+			);
+			name = Wcalc;
+			sourceTree = "<group>";
+		};
+		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
+			isa = PBXGroup;
+			children = (
+				29B97316FDCFA39411CA2CEA /* main.m */,
+				F521993F01F8D2B801A80164 /* main.c */,
+			);
+			name = "Other Sources";
+			sourceTree = "<group>";
+		};
+		29B97317FDCFA39411CA2CEA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				F5B29D6F01F7393A01A80164 /* TheW.icns */,
+				F5B29D7B01F7398A01A80164 /* MainMenu.nib */,
+				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
+				F5463560020065B401A80164 /* Wred.png */,
+				F5B29D8301F73C2701A80164 /* w.png */,
+				F521994801FA927601A80164 /* ChangeLog */,
+				277DB27F042F51A5004ACA36 /* NEWS */,
+				277DB27D042F5173004ACA36 /* COPYING */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */,
+				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F510EE8F021717DF01A80164 /* Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				F510EE8A0217160601A80164 /* libreadline.a */,
+				F510EE8C021716B401A80164 /* libl.a */,
+			);
+			name = Libraries;
+			sourceTree = "<group>";
+		};
+		F5B29D6001F738F601A80164 /* Shared Code */ = {
+			isa = PBXGroup;
+			children = (
+				F5DEAE8F021254A501A80164 /* definitions.h */,
+				F5B29D6601F7391601A80164 /* calculator.h */,
+				F5B29D6501F7391601A80164 /* calculator.c */,
+				2799DA4303FAD61400CA71DD /* help.h */,
+				2799DA4403FAD61400CA71DD /* help.c */,
+				F5B29D7401F7394501A80164 /* variables.h */,
+				F5B29D7301F7394501A80164 /* variables.c */,
+				F5B29D6D01F7393A01A80164 /* parser.y */,
+				F5B29D6E01F7393A01A80164 /* scanner.l */,
+				F5293926023032E201A80164 /* string_manip.h */,
+				F5293927023032E201A80164 /* string_manip.c */,
+				F5DD321702F8F43501A80164 /* conversion.h */,
+				F5DD321602F8F43501A80164 /* conversion.c */,
+				275710BC042D0472004ACA36 /* files.h */,
+				275710BD042D0472004ACA36 /* files.c */,
+				F574E09D01FD122F01A80164 /* historyManager.h */,
+				F574E09E01FD122F01A80164 /* historyManager.c */,
+			);
+			name = "Shared Code";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		27D39128059BEA850035F25F /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				27D39129059BEA850035F25F /* AboutBoxController.h in Headers */,
+				27D3912A059BEA850035F25F /* calculator.h in Headers */,
+				27D3912B059BEA850035F25F /* ErrorController.h in Headers */,
+				27D3912C059BEA850035F25F /* variables.h in Headers */,
+				27D3912D059BEA850035F25F /* WcalcController.h in Headers */,
+				27D3912E059BEA850035F25F /* VariableList.h in Headers */,
+				27D3912F059BEA850035F25F /* HistoryList.h in Headers */,
+				27D39130059BEA850035F25F /* historyManager.h in Headers */,
+				27D39131059BEA850035F25F /* theDelegate.h in Headers */,
+				27D39132059BEA850035F25F /* definitions.h in Headers */,
+				27D39133059BEA850035F25F /* string_manip.h in Headers */,
+				27D39134059BEA850035F25F /* MyTextField.h in Headers */,
+				27D39135059BEA850035F25F /* conversion.h in Headers */,
+				27D39136059BEA850035F25F /* ConversionList.h in Headers */,
+				27D39137059BEA850035F25F /* help.h in Headers */,
+				27D39138059BEA850035F25F /* files.h in Headers */,
+				27BDF4C9059F712200CF1DF6 /* simpleCalc.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		29B97327FDCFA39411CA2CEA /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F5B29D6301F7391001A80164 /* AboutBoxController.h in Headers */,
+				F5B29D6701F7391601A80164 /* calculator.h in Headers */,
+				F5B29D6B01F7392301A80164 /* ErrorController.h in Headers */,
+				F5B29D7501F7394501A80164 /* variables.h in Headers */,
+				F5B29D7901F7395001A80164 /* WcalcController.h in Headers */,
+				F521994701FA8EC401A80164 /* VariableList.h in Headers */,
+				F574E09B01FD0FD701A80164 /* HistoryList.h in Headers */,
+				F574E09F01FD122F01A80164 /* historyManager.h in Headers */,
+				F5EF54D402022A7001A80164 /* theDelegate.h in Headers */,
+				F5DEAE90021254A501A80164 /* definitions.h in Headers */,
+				F529392A023034CB01A80164 /* string_manip.h in Headers */,
+				F5CF4CF1026A383D01A80164 /* MyTextField.h in Headers */,
+				F5DD321902F8F43501A80164 /* conversion.h in Headers */,
+				F5A165F9030711ED01A80164 /* ConversionList.h in Headers */,
+				2799DA4503FAD61400CA71DD /* help.h in Headers */,
+				275710BE042D0472004ACA36 /* files.h in Headers */,
+				27BDF4C7059F712200CF1DF6 /* simpleCalc.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F521993501F8D28801A80164 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F521993601F8D28801A80164 /* calculator.h in Headers */,
+				F521993701F8D28801A80164 /* variables.h in Headers */,
+				F5DEAE91021254A501A80164 /* definitions.h in Headers */,
+				F5293928023032E201A80164 /* string_manip.h in Headers */,
+				F5DD321B02F8F43501A80164 /* conversion.h in Headers */,
+				2799DA4703FAD61400CA71DD /* help.h in Headers */,
+				275710C0042D0472004ACA36 /* files.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		27D39127059BEA850035F25F /* Wcalc_native */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 27B38FA00859DCBE00C2FE3C /* Build configuration list for PBXNativeTarget "Wcalc_native" */;
+			buildPhases = (
+				27D39128059BEA850035F25F /* Headers */,
+				27D39139059BEA850035F25F /* Resources */,
+				27D39142059BEA850035F25F /* Sources */,
+				27D39155059BEA850035F25F /* Frameworks */,
+			);
+			buildRules = (
+			);
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					GUI,
+					STDC_HEADERS,
+				);
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = "Info-Wcalc__Upgraded_.plist";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = (
+					"-Wall",
+					"-Wunused",
+				);
+				OTHER_LDFLAGS = "-ll";
+				PRODUCT_NAME = Wcalc;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+			};
+			dependencies = (
+			);
+			name = Wcalc_native;
+			productName = Wcalc;
+			productReference = 27D3915A059BEA860035F25F /* Wcalc.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		29B97313FDCFA39411CA2CEA /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 27B38FA40859DCBE00C2FE3C /* Build configuration list for PBXProject "Wcalc" */;
+			buildSettings = {
+			};
+			buildStyles = (
+				4A9504CCFFE6A4B311CA0CBA /* Development */,
+				4A9504CDFFE6A4B311CA0CBA /* Deployment */,
+			);
+			hasScannedForEncodings = 1;
+			mainGroup = 29B97314FDCFA39411CA2CEA /* Wcalc */;
+			projectDirPath = "";
+			targets = (
+				29B97326FDCFA39411CA2CEA /* Wcalc */,
+				F521993401F8D28701A80164 /* wcalc */,
+				27D39127059BEA850035F25F /* Wcalc_native */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		27D39139059BEA850035F25F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				27D3913A059BEA850035F25F /* InfoPlist.strings in Resources */,
+				27D3913B059BEA850035F25F /* TheW.icns in Resources */,
+				27D3913C059BEA850035F25F /* MainMenu.nib in Resources */,
+				27D3913D059BEA850035F25F /* w.png in Resources */,
+				27D3913E059BEA850035F25F /* ChangeLog in Resources */,
+				27D3913F059BEA850035F25F /* Wred.png in Resources */,
+				27D39140059BEA850035F25F /* COPYING in Resources */,
+				27D39141059BEA850035F25F /* NEWS in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		29B97328FDCFA39411CA2CEA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				089C165EFE840E0CC02AAC07 /* InfoPlist.strings in Resources */,
+				F5B29D7001F7393A01A80164 /* TheW.icns in Resources */,
+				F5B29D7D01F7398A01A80164 /* MainMenu.nib in Resources */,
+				F5B29D8401F73C2701A80164 /* w.png in Resources */,
+				F586ED3901FD41B201A80164 /* ChangeLog in Resources */,
+				F5463561020065B401A80164 /* Wred.png in Resources */,
+				277DB27E042F5173004ACA36 /* COPYING in Resources */,
+				277DB280042F51A6004ACA36 /* NEWS in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXRezBuildPhase section */
+		F521993E01F8D28801A80164 /* Rez */ = {
+			isa = PBXRezBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXRezBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		27D39142059BEA850035F25F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				27D39143059BEA850035F25F /* main.m in Sources */,
+				27D39144059BEA850035F25F /* AboutBoxController.m in Sources */,
+				27D39145059BEA850035F25F /* calculator.c in Sources */,
+				27D39146059BEA850035F25F /* ErrorController.m in Sources */,
+				27D39147059BEA850035F25F /* parser.y in Sources */,
+				27D39148059BEA850035F25F /* variables.c in Sources */,
+				27D39149059BEA850035F25F /* WcalcController.m in Sources */,
+				27D3914A059BEA850035F25F /* VariableList.m in Sources */,
+				27D3914B059BEA850035F25F /* HistoryList.m in Sources */,
+				27D3914C059BEA850035F25F /* theDelegate.m in Sources */,
+				27D3914D059BEA850035F25F /* historyManager.c in Sources */,
+				27D3914E059BEA850035F25F /* string_manip.c in Sources */,
+				27D3914F059BEA850035F25F /* MyTextField.m in Sources */,
+				27D39150059BEA850035F25F /* scanner.l in Sources */,
+				27D39151059BEA850035F25F /* conversion.c in Sources */,
+				27D39152059BEA850035F25F /* ConversionList.m in Sources */,
+				27D39153059BEA850035F25F /* help.c in Sources */,
+				27D39154059BEA850035F25F /* files.c in Sources */,
+				27BDF4C8059F712200CF1DF6 /* simpleCalc.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		29B9732BFDCFA39411CA2CEA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				29B9732CFDCFA39411CA2CEA /* main.m in Sources */,
+				F5B29D6401F7391001A80164 /* AboutBoxController.m in Sources */,
+				F5B29D6801F7391601A80164 /* calculator.c in Sources */,
+				F5B29D6C01F7392301A80164 /* ErrorController.m in Sources */,
+				F5B29D7101F7393A01A80164 /* parser.y in Sources */,
+				F5B29D7601F7394501A80164 /* variables.c in Sources */,
+				F5B29D7A01F7395001A80164 /* WcalcController.m in Sources */,
+				F521994501FA86B001A80164 /* VariableList.m in Sources */,
+				F574E09C01FD0FD701A80164 /* HistoryList.m in Sources */,
+				F5EF54D502022A7001A80164 /* theDelegate.m in Sources */,
+				F5DEAE8A0211DAA501A80164 /* historyManager.c in Sources */,
+				F529392B023034CB01A80164 /* string_manip.c in Sources */,
+				F5CF4CF2026A383D01A80164 /* MyTextField.m in Sources */,
+				F5DD31FF02F6294C01A80164 /* scanner.l in Sources */,
+				F5DD321802F8F43501A80164 /* conversion.c in Sources */,
+				F5A165FA030711ED01A80164 /* ConversionList.m in Sources */,
+				2799DA4603FAD61400CA71DD /* help.c in Sources */,
+				275710BF042D0472004ACA36 /* files.c in Sources */,
+				27BDF4C6059F712100CF1DF6 /* simpleCalc.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F521993801F8D28801A80164 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F521993901F8D28801A80164 /* calculator.c in Sources */,
+				F521993A01F8D28801A80164 /* variables.c in Sources */,
+				F521993B01F8D28801A80164 /* parser.y in Sources */,
+				F521993C01F8D28801A80164 /* scanner.l in Sources */,
+				F521994001F8D2B801A80164 /* main.c in Sources */,
+				F5293929023032E201A80164 /* string_manip.c in Sources */,
+				F5DD321A02F8F43501A80164 /* conversion.c in Sources */,
+				2799DA4803FAD61400CA71DD /* help.c in Sources */,
+				275710C1042D0472004ACA36 /* files.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXToolTarget section */
+		F521993401F8D28701A80164 /* wcalc */ = {
+			isa = PBXToolTarget;
+			buildConfigurationList = 27B38F9C0859DCBE00C2FE3C /* Build configuration list for PBXToolTarget "wcalc" */;
+			buildPhases = (
+				F521993501F8D28801A80164 /* Headers */,
+				F521993801F8D28801A80164 /* Sources */,
+				F521993D01F8D28801A80164 /* Frameworks */,
+				F521993E01F8D28801A80164 /* Rez */,
+			);
+			buildSettings = {
+				HEADER_SEARCH_PATHS = /sw/include;
+				LIBRARY_SEARCH_PATHS = /Users/kyle/Wcalc;
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = wcalc;
+				REZ_EXECUTABLE = YES;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wall",
+					"-Wunused",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			dependencies = (
+			);
+			name = wcalc;
+			productName = wcalc;
+			productReference = F521993301F8D28701A80164 /* wcalc */;
+		};
+/* End PBXToolTarget section */
+
+/* Begin PBXVariantGroup section */
+		089C165CFE840E0CC02AAC07 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				089C165DFE840E0CC02AAC07 /* English */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		F5B29D7B01F7398A01A80164 /* MainMenu.nib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F5B29D7C01F7398A01A80164 /* English */,
+			);
+			name = MainMenu.nib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		27B38F990859DCBE00C2FE3C /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				HEADER_SEARCH_PATHS = "";
+				LIBRARY_SEARCH_PATHS = "";
+				OPTIMIZATION_CFLAGS = "-O0 -g";
+				OTHER_CFLAGS = (
+					"-Wall",
+					"-Wunused",
+					"-DGUI",
+					"-DSTDC_HEADERS",
+				);
+				OTHER_LDFLAGS = "-ll";
+				PRODUCT_NAME = Wcalc;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = YES;
+			};
+			name = Development;
+		};
+		27B38F9A0859DCBE00C2FE3C /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				HEADER_SEARCH_PATHS = "";
+				LIBRARY_SEARCH_PATHS = "";
+				OPTIMIZATION_CFLAGS = "-O2";
+				OTHER_CFLAGS = (
+					"-Wall",
+					"-Wunused",
+					"-DGUI",
+					"-DSTDC_HEADERS",
+				);
+				OTHER_LDFLAGS = "-ll";
+				PRODUCT_NAME = Wcalc;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+		27B38F9B0859DCBE00C2FE3C /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = "";
+				LIBRARY_SEARCH_PATHS = "";
+				OPTIMIZATION_CFLAGS = "-O0";
+				OTHER_CFLAGS = (
+					"-Wall",
+					"-Wunused",
+					"-DGUI",
+					"-DSTDC_HEADERS",
+				);
+				OTHER_LDFLAGS = "-ll";
+				PRODUCT_NAME = Wcalc;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+			};
+			name = Default;
+		};
+		27B38F9D0859DCBE00C2FE3C /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				HEADER_SEARCH_PATHS = /sw/include;
+				LIBRARY_SEARCH_PATHS = /Users/kyle/Wcalc;
+				OPTIMIZATION_CFLAGS = "-O0 -g";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = wcalc;
+				REZ_EXECUTABLE = YES;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wall",
+					"-Wunused",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				ZERO_LINK = YES;
+			};
+			name = Development;
+		};
+		27B38F9E0859DCBE00C2FE3C /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				HEADER_SEARCH_PATHS = /sw/include;
+				LIBRARY_SEARCH_PATHS = /Users/kyle/Wcalc;
+				OPTIMIZATION_CFLAGS = "-O2";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = wcalc;
+				REZ_EXECUTABLE = YES;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wall",
+					"-Wunused",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+		27B38F9F0859DCBE00C2FE3C /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				HEADER_SEARCH_PATHS = /sw/include;
+				LIBRARY_SEARCH_PATHS = /Users/kyle/Wcalc;
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = wcalc;
+				REZ_EXECUTABLE = YES;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wall",
+					"-Wunused",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Default;
+		};
+		27B38FA10859DCBE00C2FE3C /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					GUI,
+					STDC_HEADERS,
+				);
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = "Info-Wcalc__Upgraded_.plist";
+				LIBRARY_SEARCH_PATHS = "";
+				OPTIMIZATION_CFLAGS = "-O0 -g";
+				OTHER_CFLAGS = (
+					"-Wall",
+					"-Wunused",
+				);
+				OTHER_LDFLAGS = "-ll";
+				PRODUCT_NAME = Wcalc;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = YES;
+			};
+			name = Development;
+		};
+		27B38FA20859DCBE00C2FE3C /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					GUI,
+					STDC_HEADERS,
+				);
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = "Info-Wcalc__Upgraded_.plist";
+				LIBRARY_SEARCH_PATHS = "";
+				OPTIMIZATION_CFLAGS = "-O2";
+				OTHER_CFLAGS = (
+					"-Wall",
+					"-Wunused",
+				);
+				OTHER_LDFLAGS = "-ll";
+				PRODUCT_NAME = Wcalc;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+		27B38FA30859DCBE00C2FE3C /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					GUI,
+					STDC_HEADERS,
+				);
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = "Info-Wcalc__Upgraded_.plist";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = (
+					"-Wall",
+					"-Wunused",
+				);
+				OTHER_LDFLAGS = "-ll";
+				PRODUCT_NAME = Wcalc;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+			};
+			name = Default;
+		};
+		27B38FA50859DCBE00C2FE3C /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Development;
+		};
+		27B38FA60859DCBE00C2FE3C /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Deployment;
+		};
+		27B38FA70859DCBE00C2FE3C /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Default;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		27B38F980859DCBE00C2FE3C /* Build configuration list for PBXApplicationTarget "Wcalc" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				27B38F990859DCBE00C2FE3C /* Development */,
+				27B38F9A0859DCBE00C2FE3C /* Deployment */,
+				27B38F9B0859DCBE00C2FE3C /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+		27B38F9C0859DCBE00C2FE3C /* Build configuration list for PBXToolTarget "wcalc" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				27B38F9D0859DCBE00C2FE3C /* Development */,
+				27B38F9E0859DCBE00C2FE3C /* Deployment */,
+				27B38F9F0859DCBE00C2FE3C /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+		27B38FA00859DCBE00C2FE3C /* Build configuration list for PBXNativeTarget "Wcalc_native" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				27B38FA10859DCBE00C2FE3C /* Development */,
+				27B38FA20859DCBE00C2FE3C /* Deployment */,
+				27B38FA30859DCBE00C2FE3C /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+		27B38FA40859DCBE00C2FE3C /* Build configuration list for PBXProject "Wcalc" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				27B38FA50859DCBE00C2FE3C /* Development */,
+				27B38FA60859DCBE00C2FE3C /* Deployment */,
+				27B38FA70859DCBE00C2FE3C /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 29B97313FDCFA39411CA2CEA /* Project object */;
+}

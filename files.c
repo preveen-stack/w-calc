@@ -15,6 +15,9 @@
 #include <string.h>					   /* for strlen() */
 #include <stdlib.h>					   /* for free() */
 
+#include <gmp.h>
+#include <mpfr.h>
+
 #include "historyManager.h"
 #include "string_manip.h"
 #include "calculator.h"
@@ -41,7 +44,7 @@ int saveState(char *filename)
 		/* save variables */
 		for (hindex = 0; hindex < contents; hindex++) {
 			struct variable *keyval = getrealnvar(hindex);
-			char value[100], *cptr;
+			char value[500], *cptr;
 
 			if (!keyval) {
 				continue;
@@ -62,7 +65,7 @@ int saveState(char *filename)
 			if (keyval->exp) {
 				cptr = keyval->expression;
 			} else {
-				sprintf(value, "%g", keyval->value);
+				sprintf(value, "%s", print_this_result(keyval->value));
 				cptr = value;
 			}
 			retval = write(fd, cptr, strlen(cptr));
@@ -123,7 +126,7 @@ int loadState(char *filename)
 		//success
 		char *linebuf;
 		int retval;
-		double val;
+		mpfr_t val;
 		unsigned int linelen = 0, maxlinelen = 99;
 
 		linebuf = calloc(sizeof(char), 100);
@@ -154,12 +157,14 @@ int loadState(char *filename)
 				char *safe;
 
 				safe = strdup(linebuf);
-				val = parseme(safe);
+				mpfr_init(val);
+				parseme(val,safe);
 				putval("a", val);
 				if (!errstring || (errstring && !strlen(errstring)) ||
 					conf.remember_errors) {
 					addToHistory(linebuf, val);
 				}
+				mpfr_clear(val);
 			}
 			linelen = 0;
 			memset(linebuf, 0, maxlinelen);

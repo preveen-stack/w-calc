@@ -2,10 +2,14 @@
 #include "config.h"
 #endif
 #include <ctype.h>
-#include <pwd.h>					   /* for getpwent */
-#include <sys/types.h>				   /* for getpwent */
-#include <stdio.h>					   /* for cuserid */
-#include <unistd.h>					   /* for getlogin */
+//#include <pwd.h>                     /* for getpwent */
+//#include <sys/types.h>                   /* for getpwent */
+//#include <stdio.h>                       /* for cuserid */
+//#include <unistd.h>                      /* for getlogin */
+
+#include <gmp.h>
+#include <mpfr.h>
+
 #include "calculator.h"				   /* for report_error */
 #include "variables.h"
 
@@ -49,46 +53,6 @@ void delnvar(int i)
 	contents--;
 }
 
-struct answer getnvar_full(int i)
-{
-	struct variable *t = getrealnvar(i);
-	struct answer ans;
-
-	if (!t) {
-		ans.val = 0.00;
-		ans.err = 1;
-		ans.exp = NULL;
-	} else if (t->exp) {
-		ans.val = 0.00;
-		ans.exp = t->expression;
-		ans.err = 0;
-	} else {
-		ans.val = t->value;
-		ans.err = 0;
-		ans.exp = NULL;
-	}
-	return ans;
-}
-
-struct answer getnvar(int i)
-{
-	struct variable *t = getrealnvar(i);
-	struct answer ans;
-
-	ans.exp = NULL;
-	if (!t) {
-		ans.val = 0.00;
-		ans.err = 1;
-	} else if (t->exp) {
-		ans.val = 0.00;
-		ans.err = 1;
-	} else {
-		ans.val = t->value;
-		ans.err = 0;
-	}
-	return ans;
-}
-
 struct variable *getrealnvar(int i)
 {
 	int j;
@@ -102,35 +66,44 @@ struct variable *getrealnvar(int i)
 
 struct answer getvar(char *key)
 {
-	/* static struct answer ans; */
 	struct answer ans;
-	double *t = getvar_core(key, THE_VALUE);
+	mpfr_t *t = getvar_core(key, THE_VALUE);
 
 	if (t) {
-		ans.val = *t;
+		mpfr_init_set(ans.val, *t, GMP_RNDN);
 		ans.err = 0;
 		ans.exp = NULL;
 	} else {
-		ans.val = 0.00;
+		/* it's an error.
+		 * if you access ans.val, you deserve what you get */
 		ans.exp = NULL;
 		ans.err = 1;
 	}
 	return ans;
 }
 
+void getvarval(mpfr_t out, char *key)
+{
+	mpfr_t *t = getvar_core(key, THE_VALUE);
+
+	if (t) {
+		mpfr_set(out, *t, GMP_RNDN);
+	}
+}
+
 struct answer getvar_full(char *key)
 {
 	struct answer ans;
-	double *t = getvar_core(key, THE_VALUE);
+	mpfr_t *t = getvar_core(key, THE_VALUE);
 
 	if (t) {
-		ans.val = *t;
+		mpfr_init_set(ans.val, *t, GMP_RNDN);
 		ans.err = 0;
 		ans.exp = NULL;
 	} else {
 		char *c = getvar_core(key, THE_EXPRESSION);
 
-		ans.val = 0.00;
+		/* if you access ans.val, you deserve what you get */
 		if (c) {
 			ans.exp = c;
 			ans.err = 0;
@@ -219,7 +192,7 @@ int putexp(char *key, char *value)
 	}
 }
 
-int putval(char *key, double value)
+int putval(char *key, mpfr_t value)
 {
 	struct variable *cursor = them;
 
@@ -241,41 +214,45 @@ int putval(char *key, double value)
 			}
 			cursor = cursor->next;
 			cursor->next = ntemp;
+			mpfr_init(cursor->value);
+			contents++;
 		} else {					   // change this one
 
 		}
 	} else {
 		them = cursor = calloc(sizeof(struct variable), 1);
+		mpfr_init(cursor->value);
+		contents = 1;
 	}
+	/* by this point, cursor points to a fully allocated structure... it may, 
+	 * however, be missing a key value */
 
-	if (cursor->key) {
-//      if (cursor->value)
-//          free(cursor->value);
-		cursor->value = value;
-		cursor->expression = NULL;
-		cursor->exp = 0;
-		return 0;
-	} else {
-		contents++;
+	if (!cursor->key) {
 		cursor->key = (char *)strdup(key);
-		cursor->value = value;
-		cursor->expression = NULL;
-		cursor->exp = 0;
-		return 0;
 	}
+	if (cursor->expression) {
+		free(cursor->expression);
+		cursor->expression = NULL;
+	}
+	mpfr_set(cursor->value, value, GMP_RNDN);
+	cursor->exp = 0;
+	return 0;
 }
 
 int putvarc(char *keyvalue)
 {
 	char *key = keyvalue, *value;
 	int retval;
+	mpfr_t value_t;
 
 	value = strchr(keyvalue, '=');
 	if (value == NULL)
 		return -1;
 	*value = 0;
 	++value;
-	retval = putval(key, strtod(value, NULL));
+	mpfr_init_set_str(value_t, value, 0, GMP_RNDN);	// guesses the base, defaults to 10
+	retval = putval(key, value_t);
+	mpfr_clear(value_t);
 	--value;
 	*value = '=';
 	return retval;

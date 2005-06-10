@@ -9,10 +9,10 @@
 #ifndef WCALC_CONVERSIONS
 #define WCALC_CONVERSIONS
 
-double uber_conversion (int utype, int fromunit, int tounit, double value);
+void uber_conversion (mpfr_t output, int utype, int fromunit, int tounit, mpfr_t value);
 
 struct conversion {
-	double factor;
+	char * factor;
 	char * name;
 };
 

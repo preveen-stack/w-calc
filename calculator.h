@@ -6,6 +6,9 @@
 #endif
 #include "definitions.h"
 
+#include <gmp.h>
+#include <mpfr.h>
+
 #ifdef EBUG
 #include <stdio.h>
 #define Dprintf(fmt, ...) \
@@ -45,13 +48,13 @@ enum functions {wnot,
 	wrand,
 	wirand,
 	wexp,
+	wfact,
 	wcbrt};
 enum operations {wplus,
 	wminus,
 	wmult,
 	wdiv,
 	wmod,
-	wfact,
 	wpow,
 	wor,
 	wbor,
@@ -68,20 +71,14 @@ enum operations {wplus,
 	wnone};
 enum commands {redisplay,nothing};
 
-double parseme (char *);
-void print_results (void);
-void push_value (double);
+void parseme (mpfr_t, char *);
 void report_error (char *);
-void print_result (void);
-void set_prettyanswer(double num);
-char *print_this_result (double result);
-double uber_function (enum functions func, double input);
-double simple_exp (double first, enum operations op, double second);
-double kbw_rand ();
-int kbw_int_rand ();
+void set_prettyanswer(mpfr_t num);
+char *print_this_result (mpfr_t result);
+void uber_function (mpfr_t output, enum functions func, mpfr_t input);
+void simple_exp (mpfr_t output, mpfr_t first, enum operations op, mpfr_t second);
+int seed_random();
 char *output_string(unsigned int);
-
-double fact (int);
 
 struct _conf {
 	int precision;
@@ -106,7 +103,7 @@ struct _conf {
 extern struct _conf conf;
 
 /* results */
-extern double last_answer;
+extern mpfr_t last_answer;
 extern char *pretty_answer;
 
 /* communication with parser */
@@ -116,6 +113,9 @@ extern unsigned int sig_figs;
 /* communication with the frontend */
 extern char standard_output;
 extern char not_all_displayed;
+
+/* random state */
+extern gmp_randstate_t randstate;
 
 #define DECIMAL_FORMAT 0
 #define OCTAL_FORMAT 1

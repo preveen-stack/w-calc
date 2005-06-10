@@ -44,7 +44,9 @@ char *strchr (), *strrchr ();
 %union	{ /* the types that we use in the tokens */
 enum functions function;
 enum operations operation;
-double number;
+mpfr_t number;
+double smallnum;
+int integer;
 enum commands cmd;
 char * variable;
 char character;
@@ -53,7 +55,7 @@ char character;
 %token DEC_CMD OCT_CMD HEX_CMD BIN_CMD GUARD_CMD DISPLAY_PREFS_CMD
 %token RADIAN_CMD PICKY_CMD REMEMBER_CMD LISTVAR_CMD
 %token PRINT_HELP_CMD PREFIX_CMD INT_CMD
-%token <number> PRECISION_CMD ENG_CMD HLIMIT_CMD ROUNDING_INDICATION_CMD
+%token <smallnum> PRECISION_CMD ENG_CMD HLIMIT_CMD ROUNDING_INDICATION_CMD
 
 %token EOLN PAR REN WBRA WKET WSBRA WSKET
 %token WPLUS WMINUS WMULT WDIV WMOD WEQL WPOW WEXP WSQR
@@ -62,14 +64,15 @@ char character;
 
 %token WBNOT WNOT WLOG WLN WROUND WABS WSQRT WCEIL WFLOOR WCBRT WLOGTWO WBANG
 %token WSIN WCOS WTAN WASIN WACOS WATAN WSINH WCOSH WTANH WASINH WACOSH WATANH
-%token WCOT WACOT WCOTH WACOTH WRAND WIRAND
+%token WCOT WACOT WCOTH WACOTH WRAND WIRAND WFACT
 
 %token <number> NUMBER
 %token <variable> VAR STRING OPEN_CMD SAVE_CMD
 %token <character> DSEP_CMD TSEP_CMD
 
 %type <number> exp exp_l2 exp_l3
-%type <number> oval capsule sign
+%type <number> oval capsule
+%type <integer> sign
 %type <cmd> command
 %type <function> func
 
@@ -81,7 +84,7 @@ char character;
 %left WPOW
 %left WNOT WBNOT WNEG
 
-%expect 1181
+%expect 1163
 
 %% 	/* beginning of the parsing rules	*/
 
@@ -99,9 +102,9 @@ oneline : exp eoln
 		scanerror = synerrors = 0;
 		report_error("Error in scanner halts parser.");
 	} else {
-		push_value($1);
 		if (! synerrors && ! yynerrs) {
-			print_result();
+			set_prettyanswer($1);
+			mpfr_set(last_answer,$1,GMP_RNDN);
 		} else {
 			synerrors = 0;
 			report_error("Too many errors.");
@@ -115,9 +118,8 @@ oneline : exp eoln
 | command eoln {
 	switch ($1) {
 		case redisplay:
-			push_value(last_answer);
 			if (! synerrors) {
-				print_result();
+				set_prettyanswer(last_answer);
 			} else {
 				synerrors = 0;
 				report_error("Too many errors.");
@@ -134,7 +136,7 @@ oneline : exp eoln
 		report_error("2 Error in scanner halts parser.");
 	}
 	compute = 1;
-}	
+}
 | error eoln {
 	report_error("3 Error in scanner halts parser.");
 	compute = 1;
@@ -257,7 +259,7 @@ command : HEX_CMD {
 		if (keyval->exp)
 			printf("%s\n", keyval->expression);
 		else
-			printf("%g\n", keyval->value);
+			printf("%g\n", mpfr_get_d(keyval->value, GMP_RNDN));
 	}
 }
 | ENG_CMD {
@@ -349,7 +351,13 @@ assignment : VAR WEQL exp
 		} else {
 			if (putval($1,$3) == 0) {
 				if (standard_output) {
-					printf("%s = %f\n", $1, getvar($1).val);
+					mpfr_t val;
+					mpfr_init(val);
+					printf("%s = ", $1);
+					getvarval(val, $1);
+					mpfr_out_str(stdout,DEFAULT_BASE,0,val,GMP_RNDN);
+					mpfr_clear(val);
+					printf("\n");
 				}
 			} else {
 				report_error("There was a problem assigning variables.");
@@ -400,24 +408,23 @@ assignment : VAR WEQL exp
 }
 ;
 
-exp : exp WMINUS exp { $$ = simple_exp($1, wminus, $3); }
-| exp WPLUS exp { $$ = simple_exp($1, wplus, $3); }
-| exp WAND exp { $$ = simple_exp($1, wand, $3); }
-| exp WOR exp { $$ = simple_exp($1, wor, $3); }
-| exp WBOR exp { $$ = simple_exp($1, wbor, $3); }
-| exp WBAND exp { $$ = simple_exp($1, wband, $3); }
-| exp WEQUAL exp { $$ = simple_exp($1, wequal, $3); }
-| exp WNEQUAL exp { $$ = simple_exp($1, wnequal, $3); }
-| exp WGT exp { $$ = simple_exp($1, wgt, $3); }
-| exp WLT exp { $$ = simple_exp($1, wlt, $3); }
-| exp WGEQ exp { $$ = simple_exp($1, wgeq, $3); }
-| exp WLEQ exp { $$ = simple_exp($1, wleq, $3); }
-| exp WLSHFT exp { $$ = simple_exp($1, wlshft, $3); }
-| exp WRSHFT exp { $$ = simple_exp($1, wrshft, $3); }
-| exp WMULT exp { $$ = simple_exp($1, wmult, $3); }
-| exp WDIV exp { $$ = simple_exp($1, wdiv, $3); }
-| exp WMOD exp { $$ = simple_exp($1, wmod, $3); }
-| WBNOT exp { $$ = ~ (int)$2; }
+exp : exp WMINUS exp { mpfr_init($$); simple_exp($$, $1, wminus, $3); mpfr_clear($1); mpfr_clear($3); }
+| exp WPLUS exp { mpfr_init($$); simple_exp($$, $1, wplus, $3); mpfr_clear($1); mpfr_clear($3); }
+| exp WAND exp { mpfr_init($$); simple_exp($$, $1, wand, $3); mpfr_clear($1); mpfr_clear($3); }
+| exp WOR exp { mpfr_init($$); simple_exp($$, $1, wor, $3); mpfr_clear($1); mpfr_clear($3); }
+| exp WBOR exp { mpfr_init($$); simple_exp($$, $1, wbor, $3); mpfr_clear($1); mpfr_clear($3); }
+| exp WBAND exp { mpfr_init($$); simple_exp($$, $1, wband, $3); mpfr_clear($1); mpfr_clear($3); }
+| exp WEQUAL exp { mpfr_init($$); simple_exp($$, $1, wequal, $3); mpfr_clear($1); mpfr_clear($3); }
+| exp WNEQUAL exp { mpfr_init($$); simple_exp($$, $1, wnequal, $3); mpfr_clear($1); mpfr_clear($3); }
+| exp WGT exp { mpfr_init($$); simple_exp($$, $1, wgt, $3); mpfr_clear($1); mpfr_clear($3); }
+| exp WLT exp { mpfr_init($$); simple_exp($$, $1, wlt, $3); mpfr_clear($1); mpfr_clear($3); }
+| exp WGEQ exp { mpfr_init($$); simple_exp($$, $1, wgeq, $3); mpfr_clear($1); mpfr_clear($3); }
+| exp WLEQ exp { mpfr_init($$); simple_exp($$, $1, wleq, $3); mpfr_clear($1); mpfr_clear($3); }
+| exp WLSHFT exp { mpfr_init($$); simple_exp($$, $1, wlshft, $3); mpfr_clear($1); mpfr_clear($3); }
+| exp WRSHFT exp { mpfr_init($$); simple_exp($$, $1, wrshft, $3); mpfr_clear($1); mpfr_clear($3); }
+| exp WMULT exp { mpfr_init($$); simple_exp($$, $1, wmult, $3); mpfr_clear($1); mpfr_clear($3); }
+| exp WDIV exp { mpfr_init($$); simple_exp($$, $1, wdiv, $3); mpfr_clear($1); mpfr_clear($3); }
+| exp WMOD exp { mpfr_init($$); simple_exp($$, $1, wmod, $3); mpfr_clear($1); mpfr_clear($3); }
 | exp_l2
 ;
 
@@ -449,6 +456,10 @@ func : WSIN { $$ = wsin; }
 | WCBRT { $$ = wcbrt; }
 | WRAND { $$ = wrand; }
 | WIRAND { $$ = wirand; }
+| WBNOT { $$ = wbnot; }
+| WNOT { $$ = wnot; }
+| WBANG { $$ = wnot; }
+| WFACT { $$ = wfact; }
 ;
 
 null : PAR REN
@@ -462,40 +473,50 @@ sign : WMINUS { $$ = -1; }
 ;
 
 exp_l2 : exp_l3
-| sign exp_l2 oval { $$ = $1 * $2 * $3; }
+| exp_l3 WBANG { mpfr_init($$); mpfr_fac_ui($$,mpfr_get_ui($1,GMP_RNDN),GMP_RNDN); mpfr_clear($1); }
+| exp_l3 WSQR { /* this is a dumb feature */
+				mpfr_init($$); mpfr_sqr($$,$1,GMP_RNDN); mpfr_clear($1); }
+| sign exp_l2 oval { mpfr_init($$);
+					 mpfr_mul($2,$2,$3,GMP_RNDN);
+					 mpfr_mul_si($$,$2,$1,GMP_RNDN);
+					 mpfr_clears($2,$3); }
 ;
 
 oval : exp_l3 oval
-| { $$ = 1; }
+| { mpfr_init_set_ui($$,1,GMP_RNDN); }
 ;
 
-exp_l3 : capsule oval { $$ = $1 * $2; }
-| capsule WPOW sign exp_l3 oval { $$ = pow($1,$3*$4) * $5; }
+exp_l3 : capsule oval { mpfr_init($$); mpfr_mul($$,$1,$2,GMP_RNDN); }
+| capsule WPOW sign exp_l3 oval { mpfr_init($$);
+								  mpfr_mul_si($4,$4,$3,GMP_RNDN);
+								  mpfr_pow($1,$1,$4,GMP_RNDN);
+								  mpfr_mul($$,$1,$5,GMP_RNDN); }
 ;
 
-capsule: PAR exp REN { $$ = $2; }
-| WBRA exp WKET { $$ = $2; }
-| WSBRA exp WSKET { $$ = $2; }
-| null { $$ = 0; }
+capsule: PAR exp REN { mpfr_init($$); mpfr_set($$,$2,GMP_RNDN); mpfr_clear($2); }
+| WBRA exp WKET { mpfr_init($$); mpfr_set($$,$2,GMP_RNDN); mpfr_clear($2); }
+| WSBRA exp WSKET { mpfr_init($$); mpfr_set($$,$2,GMP_RNDN); mpfr_clear($2); }
+| null { mpfr_init_set_ui($$,0,GMP_RNDN); }
 | NUMBER
-| exp_l3 WBANG { $$ = fact($1); }
-| WBANG exp_l3 %prec WNOT { $$ = ! $2; }
-| WNOT exp_l3 %prec WNOT { $$ = ! $2; }
-| exp_l3 WSQR { $$ = pow($1,2); }
-| func sign capsule { $$ = uber_function($1,$2*$3); }
+| func sign capsule { mpfr_init($$);
+					  mpfr_mul_si($3,$3,$2,GMP_RNDN);
+					  uber_function($$,$1,$3);
+					  mpfr_clear($3);}
 | VAR
 {
 	/* Don't include reserved variables */
+	mpfr_init($$);
 	if (standard_output && (!strcmp($1,"P") || !strcmp($1,"E") || !strcmp($1,"M") || !strcmp($1,"q"))) {
 		fprintf(stderr,"%s is a reserved variable.\n",$1);
 		compute = 0;
-		$$ = 0;
+		mpfr_set_ui($$,0,GMP_RNDN);
 	} else {
 		struct answer temp = getvar($1);
 		if (! temp.err && ! temp.exp) {
-			$$ = temp.val;
+			mpfr_set($$,temp.val,GMP_RNDN);
+			mpfr_clear(temp.val);
 		} else {
-			$$ = 0;
+			mpfr_set_ui($$,0,GMP_RNDN);
 			if (conf.picky_variables) {
 				char * error = malloc(sizeof(char)*(strlen($1)+45));
 				sprintf(error,"%s does not exist or was not properly parsed.",$1);
