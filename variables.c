@@ -2,11 +2,11 @@
 #include "config.h"
 #endif
 #include <ctype.h>
-#include <pwd.h>        /* for getpwent */
-#include <sys/types.h>  /* for getpwent */
-#include <stdio.h>      /* for cuserid */
-#include <unistd.h>     /* for getlogin */
-#include "calculator.h" /* for report_error */
+#include <pwd.h>					   /* for getpwent */
+#include <sys/types.h>				   /* for getpwent */
+#include <stdio.h>					   /* for cuserid */
+#include <unistd.h>					   /* for getlogin */
+#include "calculator.h"				   /* for report_error */
 #include "variables.h"
 
 #define THE_VALUE 0
@@ -18,22 +18,22 @@ struct variable *them = NULL;
 int contents = 0;
 
 /* Hidden, internal functions */
-static void * getvar_core (char * key, int all_or_nothing);
+static void *getvar_core(char *key, int all_or_nothing);
 
-void initvar (void)
+void initvar(void)
 {
 }
 
-void delnvar (int i)
+void delnvar(int i)
 {
 	int j;
 	struct variable *cursor = them, *follower = NULL;
 
-	for (j=0;j<i;++j) {
+	for (j = 0; j < i; ++j) {
 		follower = cursor;
 		cursor = cursor->next;
 	}
-	if (! follower) {
+	if (!follower) {
 		if (cursor) {
 			them = cursor->next;
 			free(cursor->key);
@@ -49,11 +49,12 @@ void delnvar (int i)
 	contents--;
 }
 
-struct answer getnvar_full (int i)
+struct answer getnvar_full(int i)
 {
-	struct variable * t = getrealnvar(i);
+	struct variable *t = getrealnvar(i);
 	struct answer ans;
-	if (! t) {
+
+	if (!t) {
 		ans.val = 0.00;
 		ans.err = 1;
 		ans.exp = NULL;
@@ -69,10 +70,11 @@ struct answer getnvar_full (int i)
 	return ans;
 }
 
-struct answer getnvar (int i)
+struct answer getnvar(int i)
 {
-	struct variable * t = getrealnvar(i);
+	struct variable *t = getrealnvar(i);
 	struct answer ans;
+
 	ans.exp = NULL;
 	if (!t) {
 		ans.val = 0.00;
@@ -87,22 +89,23 @@ struct answer getnvar (int i)
 	return ans;
 }
 
-struct variable * getrealnvar (int i)
+struct variable *getrealnvar(int i)
 {
 	int j;
 	struct variable *cursor = them;
 
-	for (j=0;j<i;++j)
+	for (j = 0; j < i; ++j)
 		cursor = cursor->next;
 
 	return cursor;
 }
 
-struct answer getvar (char * key)
+struct answer getvar(char *key)
 {
 	/* static struct answer ans; */
 	struct answer ans;
 	double *t = getvar_core(key, THE_VALUE);
+
 	if (t) {
 		ans.val = *t;
 		ans.err = 0;
@@ -115,16 +118,18 @@ struct answer getvar (char * key)
 	return ans;
 }
 
-struct answer getvar_full (char * key)
+struct answer getvar_full(char *key)
 {
 	struct answer ans;
 	double *t = getvar_core(key, THE_VALUE);
+
 	if (t) {
 		ans.val = *t;
 		ans.err = 0;
 		ans.exp = NULL;
 	} else {
-		char * c = getvar_core(key, THE_EXPRESSION);
+		char *c = getvar_core(key, THE_EXPRESSION);
+
 		ans.val = 0.00;
 		if (c) {
 			ans.exp = c;
@@ -137,22 +142,24 @@ struct answer getvar_full (char * key)
 	return ans;
 }
 
-struct variable * getvarptr (char *key)
+struct variable *getvarptr(char *key)
 {
-	return (struct variable *) getvar_core(key, THE_STRUCTURE);
+	return (struct variable *)getvar_core(key, THE_STRUCTURE);
 }
 
-static void * getvar_core (char * key, int all_or_nothing)
+static void *getvar_core(char *key, int all_or_nothing)
 {
 	struct variable *cursor = them;
 
-	if (! cursor) return NULL;
-	if (! strlen(key)) return NULL;
-	
+	if (!cursor)
+		return NULL;
+	if (!strlen(key))
+		return NULL;
+
 	while (cursor && cursor->key && strncmp(cursor->key, key, strlen(key))) {
 		cursor = cursor->next;
 	}
-	if (cursor && cursor->key && ! strncmp(cursor->key, key, strlen(key))) {
+	if (cursor && cursor->key && !strncmp(cursor->key, key, strlen(key))) {
 		switch (all_or_nothing) {
 			case THE_VALUE:
 				if (cursor->exp) {
@@ -168,85 +175,89 @@ static void * getvar_core (char * key, int all_or_nothing)
 	return NULL;
 }
 
-int putexp (char * key, char * value)
+int putexp(char *key, char *value)
 {
 	struct variable *cursor = them;
 
-	if (! key) return -1;
+	if (!key)
+		return -1;
 
 	if (cursor) {
-		while (cursor && strncmp(cursor->key,key,strlen(key))>0 && cursor->next) {
+		while (cursor && strncmp(cursor->key, key, strlen(key)) > 0 &&
+			   cursor->next) {
 			cursor = cursor->next;
 		}
 
-		if (strncmp(cursor->key,key,strlen(key))) { // add after cursor
+		if (strncmp(cursor->key, key, strlen(key))) {	// add after cursor
 			struct variable *ntemp = cursor->next;
-			cursor->next = calloc(sizeof(struct variable),1);
-			if (! cursor->next) { // if we can't allocate memory
+			cursor->next = calloc(sizeof(struct variable), 1);
+			if (!cursor->next) {	   // if we can't allocate memory
 				cursor->next = ntemp;
 				return -1;
 			}
 			cursor = cursor->next;
 			cursor->next = ntemp;
-		} else { // change this one
+		} else {					   // change this one
 
 		}
 	} else {
-		them = cursor = calloc(sizeof(struct variable),1);
+		them = cursor = calloc(sizeof(struct variable), 1);
 	}
 
 	if (cursor->key) {
 		if (cursor->expression)
 			free(cursor->expression);
-		cursor->expression = (char*)strdup(value);
+		cursor->expression = (char *)strdup(value);
 		cursor->exp = 1;
 		return 0;
 	} else {
 		contents++;
-		cursor->key = (char*)strdup(key);
-		cursor->expression = (char*)strdup(value);
+		cursor->key = (char *)strdup(key);
+		cursor->expression = (char *)strdup(value);
 		cursor->exp = 1;
 		return 0;
 	}
 }
 
-int putval (char * key, double value)
+int putval(char *key, double value)
 {
 	struct variable *cursor = them;
 
-	if (! key) return -1;
+	if (!key)
+		return -1;
 
 	if (cursor) {
-		while (cursor && strncmp(cursor->key,key,strlen(key))>0 && cursor->next) {
+		while (cursor && strncmp(cursor->key, key, strlen(key)) > 0 &&
+			   cursor->next) {
 			cursor = cursor->next;
 		}
 
-		if (strncmp(cursor->key,key,strlen(key))) { // add after cursor
+		if (strncmp(cursor->key, key, strlen(key))) {	// add after cursor
 			struct variable *ntemp = cursor->next;
-			cursor->next = calloc(sizeof(struct variable),1);
-			if (! cursor->next) { // if we can't allocate memory
+			cursor->next = calloc(sizeof(struct variable), 1);
+			if (!cursor->next) {	   // if we can't allocate memory
 				cursor->next = ntemp;
 				return -1;
 			}
 			cursor = cursor->next;
 			cursor->next = ntemp;
-		} else { // change this one
+		} else {					   // change this one
 
 		}
 	} else {
-		them = cursor = calloc(sizeof(struct variable),1);
+		them = cursor = calloc(sizeof(struct variable), 1);
 	}
 
 	if (cursor->key) {
-//		if (cursor->value)
-//			free(cursor->value);
+//      if (cursor->value)
+//          free(cursor->value);
 		cursor->value = value;
 		cursor->expression = NULL;
 		cursor->exp = 0;
 		return 0;
 	} else {
 		contents++;
-		cursor->key = (char*)strdup(key);
+		cursor->key = (char *)strdup(key);
 		cursor->value = value;
 		cursor->expression = NULL;
 		cursor->exp = 0;
@@ -254,17 +265,18 @@ int putval (char * key, double value)
 	}
 }
 
-int putvarc (char * keyvalue)
+int putvarc(char *keyvalue)
 {
-	char *key=keyvalue, *value;
+	char *key = keyvalue, *value;
 	int retval;
-	value = strchr(keyvalue,'=');
-	if (value == NULL) return -1;
+
+	value = strchr(keyvalue, '=');
+	if (value == NULL)
+		return -1;
 	*value = 0;
 	++value;
-	retval = putval(key, strtod(value,NULL));
+	retval = putval(key, strtod(value, NULL));
 	--value;
 	*value = '=';
 	return retval;
 }
-
