@@ -168,7 +168,8 @@ h				{ mpfr_init_set_str(YYLVALAC->number,W_PLANCK_CONSTANT,0,GMP_RNDN);
 				  return(NUMBER); }
 (µ0)|(mu((0)|((zero)|(ZERO)))) {
 				  mpfr_t temp;
-				  mpfr_inits(YYLVALAC->number, temp);
+				  mpfr_init(YYLVALAC->number);
+				  mpfr_init(temp);
 				  mpfr_set_d(temp,1e-7,GMP_RNDN);
 				  mpfr_const_pi(YYLVALAC->number,GMP_RNDN);
 				  mpfr_mul_ui(YYLVALAC->number,YYLVALAC->number,4,GMP_RNDN);
@@ -208,6 +209,24 @@ Rinf			{ mpfr_init_set_str(YYLVALAC->number,W_RYDBERG_CONSTANT,0,GMP_RNDN);
 Eh				{ mpfr_init_set_str(YYLVALAC->number,W_HARTREE_ENERGY,0,GMP_RNDN);
 				  return(NUMBER); }
 Gf				{ mpfr_init_set_str(YYLVALAC->number,W_FERMI_COUPLING_CONSTANT,0,GMP_RNDN);
+				  return(NUMBER); }
+M(µ|mu)			{ mpfr_init_set_str(YYLVALAC->number,W_MUON_MASS,0,GMP_RNDN);
+				  return(NUMBER); }
+Mt				{ mpfr_init_set_str(YYLVALAC->number,W_TAU_MASS,0,GMP_RNDN);
+				  return(NUMBER); }
+Mh				{ mpfr_init_set_str(YYLVALAC->number,W_HELION_MASS,0,GMP_RNDN);
+				  return(NUMBER); }
+Malpha			{ mpfr_init_set_str(YYLVALAC->number,W_ALPHA_PARTICLE_MASS,0,GMP_RNDN);
+				  return(NUMBER); }
+n(0|zero)		{ mpfr_init_set_str(YYLVALAC->number,W_LOSCHMIDT_CONSTANT,0,GMP_RNDN);
+				  return(NUMBER); }
+c1				{ mpfr_init_set_str(YYLVALAC->number,W_FIRST_RADIATION_CONSTANT,0,GMP_RNDN);
+				  return(NUMBER); }
+c2				{ mpfr_init_set_str(YYLVALAC->number,W_SECOND_RADIATION_CONSTANT,0,GMP_RNDN);
+				  return(NUMBER); }
+G(0|zero)		{ mpfr_init_set_str(YYLVALAC->number,W_CONDUCTANCE_QUANTUM,0,GMP_RNDN);
+				  return(NUMBER); }
+Z(0|zero)		{ mpfr_init_set_str(YYLVALAC->number,W_IMPEDANCE_OF_VACUUM,0,GMP_RNDN);
 				  return(NUMBER); }
 
 %{ /* These are the grouping symbols */
