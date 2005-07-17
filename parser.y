@@ -479,7 +479,8 @@ exp_l2 : exp_l3
 | sign exp_l2 oval { mpfr_init($$);
 					 mpfr_mul($2,$2,$3,GMP_RNDN);
 					 mpfr_mul_si($$,$2,$1,GMP_RNDN);
-					 mpfr_clears($2,$3); }
+					 mpfr_clear($2);
+					 mpfr_clear($3); }
 ;
 
 oval : exp_l3 oval
