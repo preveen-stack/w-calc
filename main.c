@@ -95,7 +95,6 @@ int main(int argc, char *argv[])
 
 	mpfr_set_default_prec(200);
 	mpfr_init(retvalue);
-	mpfr_init_set_ui(last_answer, 0, GMP_RNDN);
 
 	/* load the preferences */
 	{
