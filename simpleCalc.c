@@ -4,51 +4,58 @@
 #include <string.h> // for strcmp/strlen/stpcpy/strdup
 #include <stdlib.h> // for calloc
 #include <stdio.h>
+#include <gmp.h>
+#include <mpfr.h>
 
 static char lastchar = 0;
 static char operator = 0;
 static char append = 1;
-static double cur_number = 0.0;
-static double prev_number = 0.0;
+static mpfr_t cur_number;
+static mpfr_t prev_number;
+
+void simpleCalcInit();
 
 void simpleEval()
 {
+	simpleCalcInit();
 	Dprintf("operator: %c\n",operator);
 	switch (operator) {
 		case '+':
-			prev_number = simple_exp(prev_number, wplus, cur_number);
+			simple_exp(prev_number, prev_number, wplus, cur_number);
 			break;
 		case '-':
-			prev_number = simple_exp(prev_number, wminus, cur_number);
+			simple_exp(prev_number, prev_number, wminus, cur_number);
 			break;
 		case '*':
-			prev_number = simple_exp(prev_number, wmult, cur_number);
+			simple_exp(prev_number, prev_number, wmult, cur_number);
 			break;
 		case '/':
-			prev_number = simple_exp(prev_number, wdiv, cur_number);
+			simple_exp(prev_number, prev_number, wdiv, cur_number);
 			break;
 		default:
-			prev_number = cur_number;
+			mpfr_set(prev_number, cur_number, GMP_RNDN);
 			break;
 	}
 }
 
 char *simpleCalc(unsigned char input, char *expStr)
 {
+	simpleCalcInit();
 	Dprintf("simpleCalc: %c, %s\n",input,expStr);
 	Dprintf(" ~ cur: %f, prev: %f\n",cur_number, prev_number);
 	if (input == '+' || input == '-' || input == '*' || input == '/') {
 		// if the input is one of the operators
 		append = 0;
 		if (lastchar != input) {
-			cur_number = parseme(expStr);
+			parseme(cur_number, expStr);
 		}
 		simpleEval();
 		operator = input;
 	} else if (input == '=') {
 		simpleEval();
 		set_prettyanswer(prev_number);
-		last_answer = cur_number = prev_number;
+		mpfr_set(cur_number, prev_number, GMP_RNDN);
+		mpfr_set(last_answer, prev_number, GMP_RNDN);
 		operator = 0;
 		append = 0;
 		return NULL;
@@ -70,7 +77,7 @@ char *simpleCalc(unsigned char input, char *expStr)
 			*newStr = input;
 		}
 		append = 1;
-		cur_number = parseme(newStr);
+		parseme(cur_number, newStr);
 		return newStr;
 	} else {
 		// if the input is not an acceptable character... do nothing
@@ -84,16 +91,30 @@ char *simpleCalc(unsigned char input, char *expStr)
 
 void simpleClearEntry()
 {
-	cur_number = 0.0;
+	simpleCalcInit();
+	mpfr_set_ui(cur_number,0,GMP_RNDN);
 //	operator = 0;
 	lastchar = 0;
 }
 
+void simpleCalcInit()
+{
+	static int initialized = 0;
+	if (! initialized) {
+		mpfr_init(cur_number);
+		mpfr_init(last_answer);
+		mpfr_init_set_ui(cur_number,0,GMP_RNDN);
+		mpfr_init_set_ui(last_answer,0,GMP_RNDN);
+		initialized = 1;
+	}
+}
+
 void simpleClearAll()
 {
-	cur_number = 0.0;
-	last_answer = 0.0;
-	prev_number = 0.0;
+	simpleCalcInit();
+	mpfr_set_ui(cur_number,0,GMP_RNDN);
+	mpfr_set_ui(last_answer,0,GMP_RNDN);
+	mpfr_set_ui(prev_number,0,GMP_RNDN);
 	operator = 0;
 	lastchar = 0;
 }
