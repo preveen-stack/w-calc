@@ -61,8 +61,8 @@ struct _conf conf;
 extern int yyparse();
 extern int yy_scan_string(const char *);
 
-static size_t num_to_str_complex(char *str, mpfr_t num, int base, int engr, int prec,
-						  int prefix);
+static size_t num_to_str_complex(char *str, mpfr_t num, int base, int engr,
+								 int prec, int prefix);
 #define num_to_str(x,y) num_to_str_complex(x,y,10,0,0,1)
 struct variable_list
 {
@@ -75,6 +75,8 @@ static int recursion(char *str);
 static int find_recursion(struct variable_list *vstack);
 static char *flatten(char *str);
 
+static int initialized = 0;
+
 void parseme(mpfr_t output, char *pthis)
 {
 	extern int synerrors;
@@ -85,6 +87,10 @@ void parseme(mpfr_t output, char *pthis)
 	synerrors = 0;
 	compute = 1;
 	sig_figs = UINT32_MAX;
+	if (initialized == 0) {
+		mpfr_init_set_ui(last_answer, 0, GMP_RNDN);
+		initialized = 1;
+	}
 
 	sanitized = strdup(pthis);
 
@@ -216,9 +222,15 @@ size_t num_to_str_complex(char *str, mpfr_t num, int base, int engr, int prec,
 	}
 
 	s = mpfr_get_str(NULL, &e, base, 0, num, GMP_RNDN);
+	/* s is the string, allocated big enough to hold the whole thing
+	 * e is the number of integers (the exponent) if positive
+	 */
 	if (prec > -1) {
 		if (engr == 0) {
-			s = mpfr_get_str(s, &e, base, e + prec, num, GMP_RNDN);
+			printf("e: %i\n",e);
+			printf("s: %s\n",s);
+			printf("prec: %i\n",prec);
+			s = mpfr_get_str(s, &e, base, (e>0?e:0) + prec, num, GMP_RNDN);
 		} else {
 			s = mpfr_get_str(s, &e, base, 1 + prec, num, GMP_RNDN);
 		}
@@ -577,6 +589,279 @@ void set_prettyanswer(mpfr_t num)
 	}
 }
 
+char *print_this_result_dbl(double result)
+{
+	static char format[10];
+	static char *pa = NULL, *tmp;
+	static char pa_dyn = 1;
+	extern char *errstring;
+	unsigned int decimal_places = 0;
+
+	/* Build the "format" string, that will be used in an sprintf later */
+	switch (conf.output_format) {
+		case DECIMAL_FORMAT:
+			if (pa_dyn)
+				tmp = realloc(pa, sizeof(char) * 310);
+			else {
+				tmp = pa = malloc(sizeof(char) * 310);
+				pa_dyn = 1;
+			}
+			if (!tmp) {
+				free(pa);
+				pa = "Not Enough Memory";
+				pa_dyn = 0;
+				return pa;
+			} else
+				pa = tmp;
+			if (conf.precision > -1 && !conf.engineering) {
+				sprintf(format, "%%1.%if", conf.precision);
+				decimal_places = conf.precision;
+			} else if (conf.precision > -1 && conf.engineering) {
+				sprintf(format, "%%1.%iE", conf.precision);
+				decimal_places = conf.precision;
+			} else {
+				sprintf(format, "%%G");
+				if (fabs(result) < 10.0) {
+					decimal_places = 6;
+				} else if (fabs(result) < 100.0) {
+					decimal_places = 4;
+				} else if (fabs(result) < 1000.0) {
+					decimal_places = 3;
+				} else if (fabs(result) < 10000.0) {
+					decimal_places = 2;
+				} else if (fabs(result) < 100000.0) {
+					decimal_places = 1;
+				} else {
+					decimal_places = 0;
+				}
+			}
+			break;
+		case OCTAL_FORMAT:
+			if (pa_dyn) {
+				tmp = realloc(pa, sizeof(char) * 14);
+			} else {
+				tmp = pa = malloc(sizeof(char) * 14);
+				pa_dyn = 1;
+			}
+			if (!tmp) {
+				free(pa);
+				pa = "Not Enough Memory";
+				pa_dyn = 0;
+				return pa;
+			} else {
+				pa = tmp;
+			}
+			sprintf(format, conf.print_prefixes ? "%%#o" : "%%o");
+			break;
+		case HEXADECIMAL_FORMAT:
+			if (pa_dyn) {
+				tmp = realloc(pa, sizeof(char) * 11);
+			} else {
+				tmp = pa = malloc(sizeof(char) * 11);
+				pa_dyn = 1;
+			}
+			if (!tmp) {
+				free(pa);
+				pa = "Not Enough Memory";
+				pa_dyn = 0;
+				return pa;
+			} else {
+				pa = tmp;
+			}
+			sprintf(format, conf.print_prefixes ? "%%#x" : "%%x");
+			break;
+		case BINARY_FORMAT:
+			// Binary Format can't just use a format string, so
+			// we have to handle it later
+			if (pa_dyn)
+				free(pa);
+			pa = NULL;
+			pa_dyn = 1;
+			break;
+	}
+
+	if (isinf(result)) {
+		// if it is infinity, print "Infinity", regardless of format
+		if (pa_dyn)
+			tmp = realloc(pa, sizeof(char) * 11);
+		else {
+			tmp = pa = malloc(sizeof(char) * 11);
+			pa_dyn = 1;
+		}
+		if (!tmp) {
+			free(pa);
+			pa = "Not Enough Memory";
+			pa_dyn = 0;
+			return pa;
+		} else
+			pa = tmp;
+		sprintf(pa, "Infinity");
+		not_all_displayed = 0;
+	} else if (isnan(result)) {
+		// if it is not a number, print "Not a Number", regardless of format
+		if (pa_dyn)
+			tmp = realloc(pa, sizeof(char) * 13);
+		else {
+			tmp = pa = malloc(sizeof(char) * 13);
+			pa_dyn = 1;
+		}
+		if (!tmp) {
+			free(pa);
+			pa = "Not Enough Memory";
+			pa_dyn = 0;
+			return pa;
+		} else
+			pa = tmp;
+		sprintf(pa, "Not a Number");
+		not_all_displayed = 0;
+	} else {
+		switch (conf.output_format) {
+				char *curs;
+
+			case DECIMAL_FORMAT:
+			{
+				double junk;
+
+				/* This is the big call */
+				if (fabs(modf(result, &junk)) != 0.0 || conf.engineering ||
+					!conf.print_ints) {
+					sprintf(pa, format, result);
+				} else {
+					sprintf(pa, "%1.0f", result);
+				}
+				/* was it as good for you as it was for me?
+				 * now, you must localize it */
+				{
+					unsigned int index;
+
+					for (index = 0; index < strlen(pa); ++index) {
+						if (pa[index] == '.')
+							pa[index] = conf.dec_delimiter;
+					}
+				}
+				switch (conf.rounding_indication) {
+					case SIMPLE_ROUNDING_INDICATION:
+						not_all_displayed =
+							(modf(result * pow(10, decimal_places), &junk)) ?
+							1 : 0;
+						break;
+					case SIG_FIG_ROUNDING_INDICATION:
+						if (sig_figs < UINT32_MAX) {
+							unsigned int t = count_digits(pa);
+
+							if (pa[0] == '0')
+								--t;
+							else if (pa[0] == '-' && pa[1] == '0')
+								--t;
+							not_all_displayed = t != sig_figs;
+						} else {
+							not_all_displayed = 0;
+						}
+						break;
+					default:
+					case NO_ROUNDING_INDICATION:
+						not_all_displayed = 0;
+						break;
+				}
+			}
+				break;
+			case HEXADECIMAL_FORMAT:
+				curs = pa + (conf.print_prefixes ? 2 : 0);
+			case OCTAL_FORMAT:
+				curs = pa + (conf.print_prefixes ? 1 : 0);
+				{
+					long int temp = result;
+					unsigned int t = 0;
+
+					sprintf(pa, format, temp);
+					if (conf.rounding_indication ==
+						SIG_FIG_ROUNDING_INDICATION) {
+						if (sig_figs < UINT32_MAX) {
+							while (curs && *curs) {
+								++t;
+								++curs;
+							}
+							not_all_displayed = t != sig_figs;
+						} else {
+							not_all_displayed = 0;
+						}
+					} else {
+						not_all_displayed = 0;
+					}
+				}
+				break;
+			case BINARY_FORMAT:
+			{
+				int i, place = -1;
+
+				// if it is binary, format it, and print it
+				// first, find the upper limit
+				for (i = 1; place == -1; ++i) {
+					if (result < pow(2.0, i))
+						place = i - 1;
+				}
+				pa = calloc(sizeof(char),
+							(place + (conf.print_prefixes * 2) + 1));
+				if (!pa) {
+					pa = "Not Enough Memory";
+					pa_dyn = 0;
+					return pa;
+				}
+				if (conf.print_prefixes) {
+					pa[0] = '0';
+					pa[1] = 'b';
+				}
+				// print it
+				for (i = conf.print_prefixes * 2; place >= 0; ++i) {
+					double t = pow(2.0, place);
+
+					if (result >= t) {
+						pa[i] = '1';
+						result -= t;
+					} else {
+						pa[i] = '0';
+					}
+					--place;
+				}
+				pa[i + 1] = 0;
+
+				if (sig_figs < UINT32_MAX) {
+					if (conf.rounding_indication ==
+						SIG_FIG_ROUNDING_INDICATION) {
+						not_all_displayed =
+							count_digits(pa +
+										 (conf.print_prefixes ? 2 : 0)) !=
+							sig_figs;
+					} else {
+						not_all_displayed = 0;
+					}
+				} else {
+					not_all_displayed = 0;
+				}
+			}						   // binary format
+		}							   // switch
+	}								   // if
+
+	Dprintf("standard_output? -> ");
+	if (standard_output) {
+		Dprintf("yes\n");
+		if (errstring && strlen(errstring)) {
+			extern int scanerror;
+
+			fprintf(stderr, "%s\n", errstring);
+			free(errstring);
+			errstring = NULL;
+			scanerror = 0;
+		}
+		printf("%s%s\n",
+			   conf.print_equal ? (not_all_displayed ? " ~= " : " = ")
+			   : (not_all_displayed ? "~" : ""), pa);
+	}
+	Dprintf("no\n");
+
+	return pa;
+}
+
 char *print_this_result(mpfr_t result)
 {
 	static char pa[500];
@@ -591,6 +876,14 @@ char *print_this_result(mpfr_t result)
 			break;
 		default:
 		case DECIMAL_FORMAT:
+			if (mpfr_get_d(result, GMP_RNDN) != mpfr_get_si(result, GMP_RNDN) &&
+				conf.precision < 0 && conf.precision_guard) {
+				double res = mpfr_get_d(result, GMP_RNDN);
+				if (res < DBL_EPSILON) {
+					res = 0.0;
+				}
+				return print_this_result_dbl(res);
+			}
 			base = 10;
 			break;
 		case OCTAL_FORMAT:
@@ -873,21 +1166,21 @@ void uber_function(mpfr_t output, enum functions func, mpfr_t input)
 			case wrand:
 #warning rand(range) hasn't been tested
 				seed_random();
-				while (mpfr_urandomb(output,randstate) != 0) ;
-				mpfr_mul(output,output,input,GMP_RNDN);
-				if (mpfr_cmp_si(input,0) < 0) {
-					mpfr_mul_si(output,output,-1,GMP_RNDN);
+				while (mpfr_urandomb(output, randstate) != 0) ;
+				mpfr_mul(output, output, input, GMP_RNDN);
+				if (mpfr_cmp_si(input, 0) < 0) {
+					mpfr_mul_si(output, output, -1, GMP_RNDN);
 				}
 				break;
 			case wirand:
 #warning irand(range) hasn't been tested
 				seed_random();
-				while (mpfr_urandomb(output,randstate) != 0) ;
-				mpfr_mul(output,output,input,GMP_RNDN);
-				if (mpfr_cmp_si(input,0) < 0) {
-					mpfr_mul_si(output,output,-1,GMP_RNDN);
+				while (mpfr_urandomb(output, randstate) != 0) ;
+				mpfr_mul(output, output, input, GMP_RNDN);
+				if (mpfr_cmp_si(input, 0) < 0) {
+					mpfr_mul_si(output, output, -1, GMP_RNDN);
 				}
-				mpfr_rint(output,output,GMP_RNDN);
+				mpfr_rint(output, output, GMP_RNDN);
 				break;
 			case wcbrt:
 				mpfr_cbrt(output, input, GMP_RNDN);
