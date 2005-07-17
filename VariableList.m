@@ -3,6 +3,9 @@
 #import "string_manip.h"
 #import "VariableList.h"
 
+#import "gmp.h"
+#import "mpfr.h"
+
 @implementation VariableList
 // needs to be REALLY fast
 - (int)numberOfRowsInTableView:(NSTableView *)aTableView
@@ -35,15 +38,17 @@
 {
 	struct variable *theval = getrealnvar(rowIndex);
 	NSString *ch = [col identifier];
-	
+
 //	printf("Column %s, Row %i was %s,%s becomes %s\n", [ch cString], rowIndex, theval->key, theval->value, [anObject cString]);
 	if ([ch isEqualToString:@"value"]) {
 		char * input=strdup([anObject cString]);
 		if (justnumbers(input)) {
-			double la = last_answer;
-			theval->value = parseme(input);
+			mpfr_t la;
+
+			mpfr_init_set(la,last_answer,GMP_RNDN);
+			parseme(theval->value, input);
 			theval->exp = 0;
-			last_answer = la;
+			mpfr_set(last_answer,la,GMP_RNDN);
 		} else {
 			theval->expression = input;
 			theval->exp = 1;
@@ -66,12 +71,15 @@
 {
 	char varname[20];
 	int i=1;
+	mpfr_t blank;
+
+	mpfr_init_set_ui(blank,0,GMP_RNDN);
 	sprintf(varname,"NewVariable%i",i);
-	while(! getvar_full(varname).err) {
+	while(! varexists(varname)) {
 		++i;
 		sprintf(varname,"NewVariable%i",i);
 	}
-	putval(varname,0);
+	putval(varname,blank);
 	[theList reloadData];
 }
 
