@@ -9,6 +9,9 @@
 #ifndef WCALC_CONVERSIONS
 #define WCALC_CONVERSIONS
 
+#include <gmp.h>
+#include <mpfr.h>
+
 void uber_conversion (mpfr_t output, int utype, int fromunit, int tounit, mpfr_t value);
 
 struct conversion {
