@@ -25,16 +25,11 @@
 #define W_COULOMB_CONSTANT "8987551787.37"
 #define W_ELEMENTARY_CHARGE "1.60217653e-19"
 #define W_MOLAR_GAS_CONSTANT "8.314472"
-#define W_GRAVITATIONAL_CONSTANT "6.6742e-11"
-#define W_GRAVITATIONAL_ACCELLERATION "9.80665"
-#define W_ELECTRON_MASS "9.1093826e-31"
-#define W_PROTON_MASS "1.67262171e-27"
-#define W_NEUTRON_MASS "1.67492728e-27"
-#define W_DEUTERON_MASS "3.34358335e-27"
-#define W_ATOMIC_MASS "1.66053886e-27"
+#define W_GRAVITATIONAL_CONSTANT "6.6742e-11" /* m^3 kg^-1 s^-2 */
+#define W_GRAVITATIONAL_ACCELLERATION "9.80665" /* m s^-2 */
 #define W_SPEED_OF_LIGHT "299792458"
 #define W_PERMEABILITY_OF_FREE_SPACE "1.25663706144e-6" /* 4pi*pow(10,-7) */
-#define W_PERMITTIVITY_OF_FREE_SPACE "8.854187817e-12"
+#define W_PERMITTIVITY_OF_FREE_SPACE "8.854187817e-12" /* F m^-1 */
 #define W_PLANCK_CONSTANT "6.6260693e-34"
 #define W_BOHR_MAGNETON "927.400949e-26" /* J T^-1 */
 #define W_NUCLEAR_MAGNETON "5.05078343e-27" /* J T^-1 */
@@ -52,7 +47,20 @@
 #define W_RYDBERG_CONSTANT "10973731.568525" /* m^-1 */
 #define W_HARTREE_ENERGY "4.35974417e-18" /* J */
 #define W_FERMI_COUPLING_CONSTANT "1.16638e-5" /* GeV^-2 */
-#define W_COMPTON_WAVELENGTH 
+#define W_MUON_MASS "1.88353140e-28" /* kg */
+#define W_TAU_MASS "3.16777e-27" /* kg */
+#define W_ELECTRON_MASS "9.1093826e-31" /* kg */
+#define W_PROTON_MASS "1.67262171e-27" /* kg */
+#define W_NEUTRON_MASS "1.67492728e-27" /* kg */
+#define W_DEUTERON_MASS "3.34358335e-27" /* kg */
+#define W_ATOMIC_MASS "1.66053886e-27" /* kg */
+#define W_HELION_MASS "5.00641214e-27" /* kg */
+#define W_ALPHA_PARTICLE_MASS "6.6446565e-27" /* kg */
+#define W_LOSCHMIDT_CONSTANT "2.6867773e25" /* m^-3 */
+#define W_FIRST_RADIATION_CONSTANT "3.74177138e-16" /* W m^2 */
+#define W_SECOND_RADIATION_CONSTANT "1.4387752e-2" /* m K */
+#define W_CONDUCTANCE_QUANTUM "7.748091733e-5" /* S */
+#define W_IMPEDANCE_OF_VACUUM "376.730313461" /* ohms */
 
 #define SUPPORTED_SYMBOLS \
 "+ - () {} [] * %% / ! ^ > >= < <= == != && || << >> | & ~\n"\
@@ -61,7 +69,7 @@
 "log ln logtwo round abs ceil floor sqrt cbrt\n\n"\
 "e pi Na k Cc ec R G g Me Mp Mn Md u amu c h mu0 epsilon0\n"\
 "muB muN b ao F Vm NAk eV sigma alpha gamma re Kj Rk Rinf\n"\
-"Eh Gf\n"\
+"Eh Gf Mµ Mmu Mt Mh Malpha n0 c1 c2 G0\n"\
 "random irandom rand irand\n"
 
 
