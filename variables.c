@@ -120,6 +120,23 @@ struct variable *getvarptr(char *key)
 	return (struct variable *)getvar_core(key, THE_STRUCTURE);
 }
 
+int varexists(char *key)
+{
+	struct variable *cursor = them;
+
+	if (!cursor) return 0;
+	if (!strlen(key)) return 0;
+
+	while (cursor && cursor->key && strncmp(cursor->key, key, strlen(key))) {
+		cursor = cursor->next;
+	}
+	if (cursor && cursor->key && !strncmp(cursor->key, key, strlen(key))) {
+		return 1;
+	} else {
+		return 0;
+	}
+}
+
 static void *getvar_core(char *key, int all_or_nothing)
 {
 	struct variable *cursor = them;

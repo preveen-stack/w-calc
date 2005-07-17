@@ -13,6 +13,9 @@ char *strchr(), *strrchr();
 #include <stdlib.h>
 #include <stdio.h>
 
+#include <gmp.h>
+#include <mpfr.h>
+
 struct variable
 {
 	char *key;
@@ -29,6 +32,14 @@ struct answer
 	unsigned int err:1;
 };
 
+void getvarval(mpfr_t out, char *key);	// requires a working mpfr_t
+int putval(char *key, mpfr_t value); // requires a working mpfr_t (duh)
+int putvarc(char *keyvalue);
+int putexp(char *key, char *value);
+int varexists(char *key);
+void initvar(void);
+void delnvar(int);
+
 /* ******************************
  * NOTE!
  * If you use these functions, they return
@@ -38,12 +49,6 @@ struct answer
 
 struct answer getvar(char *key);
 struct answer getvar_full(char *key);
-void getvarval(mpfr_t out, char *key);	// requires a working mpfr_t
-int putexp(char *key, char *value);
-int putval(char *key, mpfr_t value);
-int putvarc(char *keyvalue);
-void initvar(void);
-void delnvar(int);
 
 /* THIS function, however, exposes the innards of the variable system.
  * do not under any circumstance un-initialize the mpfr_t
