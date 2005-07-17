@@ -117,37 +117,55 @@ static NSString *curFile = NULL;
 	switch ([sender tag]) {
 		case 1: str2 = @"¹"; break;
 		case 2: str2 = @"e"; break;
-		case 3: str2 = @"Na"; break;
-		case 4: str2 = @"k"; break;
+		case 3: str2 = @"gamma"; break;
+		case 4: str2 = @"g"; break;
 		case 5: str2 = @"Cc"; break;
-		case 6: str2 = @"ec"; break;
-		case 7: str2 = @"R"; break;
-		case 8: str2 = @"G"; break;
-		case 9: str2 = @"g"; break;
-		case 10: str2 = @"Me"; break;
-		case 11: str2 = @"Mp"; break;
-		case 12: str2 = @"u"; break;
-		case 13: str2 = @"c"; break;
-		case 14: str2 = @"µ0"; break;
-		case 15: str2 = @"random"; break;
-		case 16: str2 = @"h"; break;
-		case 17: str2 = @"Mn"; break;
-		case 18: str2 = @"epsilon0"; break;
-		case 19: str2 = @"Md"; break;
-		case 20: str2 = @"alpha"; break;
-		case 21: str2 = @"µB"; break;
-		case 22: str2 = @"µN"; break;
-		case 23: str2 = @"b"; break;
-		case 24: str2 = @"sigma"; break;
-		case 25: str2 = @"mW"; break;
-		case 26: str2 = @"mZ"; break;
-		case 27: str2 = @"gamma"; break;
-		case 28: str2 = @"eV"; break;
-		case 29: str2 = @"ao"; break;
-		case 30: str2 = @"F"; break;
-		case 31: str2 = @"Vm"; break;
-		case 32: str2 = @"re"; break;
-                case 33: str2 = @"irandom"; break;
+		
+		case 101: str2 = @"Z0"; break;
+		case 102: str2 = @"epsilon0"; break;
+		case 103: str2 = @"µ0"; break;
+		case 104: str2 = @"G"; break;
+		case 105: str2 = @"h"; break;
+		case 106: str2 = @"c"; break;
+		
+		case 201: str2 = @"µB"; break;
+		case 202: str2 = @"µN"; break;
+		case 203: str2 = @"G0"; break;
+		case 204: str2 = @"ec"; break;
+		case 205: str2 = @"Kj"; break;
+		case 206: str2 = @"µN"; break;
+		case 207: str2 = @"Rk"; break;
+		
+		case 301: str2 = @"Mampha"; break;
+		case 302: str2 = @"ao"; break;
+		case 303: str2 = @"Md"; break;
+		case 304: str2 = @"Me"; break;
+		case 305: str2 = @"re"; break;
+		case 306: str2 = @"eV"; break;
+		case 307: str2 = @"Gf"; break;
+		case 308: str2 = @"alpha"; break;
+		case 309: str2 = @"Eh"; break;
+		case 310: str2 = @"Mh"; break;
+		case 311: str2 = @"Mµ"; break;
+		case 312: str2 = @"Mn"; break;
+		case 313: str2 = @"Mp"; break;
+		case 314: str2 = @"Rinf"; break;
+		case 315: str2 = @"Mt"; break;
+		
+		case 401: str2 = @"u"; break;
+		case 402: str2 = @"Na"; break;
+		case 403: str2 = @"k"; break;
+		case 404: str2 = @"F"; break;
+		case 405: str2 = @"c1"; break;
+		case 406: str2 = @"n0"; break;
+		case 407: str2 = @"R"; break;
+		case 408: str2 = @"Vm"; break;
+		case 409: str2 = @"c2"; break;
+		case 410: str2 = @"sigma"; break;
+		case 411: str2 = @"b"; break;
+
+		case 6: str2 = @"random"; break;
+		case 7: str2 = @"irandom"; break;
 		default: return;
 	}
 	if ([str length]) {
@@ -203,7 +221,7 @@ static NSString *curFile = NULL;
 	NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
 	NSRect w;
 	NSSize bounds;
-	
+
 	if (! [prefs integerForKey:@"initialized"]) {
 		[prefs setObject:@"1" forKey:@"initialized"];
 		[prefs setObject:@"-1" forKey:@"precision"];
@@ -243,11 +261,11 @@ static NSString *curFile = NULL;
 	conf.remember_errors = [prefs boolForKey:@"rememberErrors"];
 	conf.history_limit = [prefs boolForKey:@"historyLimit"];
 	conf.history_limit_len = [prefs integerForKey:@"historyLimitLen"];
-	
+
 	[PrecisionSlider setIntValue:conf.precision];
 	just_answered = FALSE;
 
-	/* Set up the character translation */	
+	/* Set up the character translation */
 	conf.dec_delimiter = [[prefs objectForKey:NSDecimalSeparator] characterAtIndex:0];
 	conf.thou_delimiter = [[prefs objectForKey:NSThousandsSeparator] characterAtIndex:0];
 	[decimalKey setAttributedTitle:[prefs objectForKey:NSDecimalSeparator]];
@@ -283,7 +301,7 @@ static NSString *curFile = NULL;
 
 	e = enterKey;
 	ef = ExpressionField;
-	
+
 	/* this restores the drawer states */
 	if ([prefs boolForKey:@"historyShowing"]) {
 		[NSTimer scheduledTimerWithTimeInterval:0 target:self selector:@selector(openIDrawer:) userInfo:nil repeats:NO];
@@ -291,13 +309,14 @@ static NSString *curFile = NULL;
 	if ([prefs boolForKey:@"baseShowing"]) {
 		[NSTimer scheduledTimerWithTimeInterval:0 target:self selector:@selector(openBDrawer:) userInfo:nil repeats:NO];
 	}
-	
+
 	/* set the correct expression display for simple_calc */
 	if (conf.simple_calc) {
 		[ExpressionField setStringValue:@"0"];
 		[AnswerField setStringValue:@"0"];
 		simpleClearAll();
 	}
+	mpfr_set_default_prec(200);
 }
 
 - (void)openBDrawer: (id) sender
@@ -332,7 +351,7 @@ static NSString *curFile = NULL;
 		[AnswerField setTextColor:[NSColor redColor]];
 	} else {
 		[AnswerField setTextColor:[NSColor blackColor]];
-	}	
+	}
 
 	[ExpressionField selectText:self];
 }
@@ -340,20 +359,22 @@ static NSString *curFile = NULL;
 - (IBAction)go:(id)sender
 {
 	char * expression;
-	double val;
+	mpfr_t val;
 	extern char * errstring;
-	
+
 	expression = strdup([[ExpressionField stringValue] cString]);
-	
-	val = parseme(expression);
+
+	mpfr_init(val);
+	parseme(val, expression);
 	putval("a",val);
-	
+
 	/* if it isn't an error (or if you want me to remember errors) record it in the history */
 	if (!errstring || (errstring && !strlen(errstring)) || conf.remember_errors) {
 		addToHistory(expression, val);
 		free(expression);
 	}
-	
+	mpfr_clear(val);
+
 	[self displayAnswer];
 }
 
@@ -396,7 +417,7 @@ static NSString *curFile = NULL;
 	if (from < 0) return;
 	if (to < 0) return;
 	
-	last_answer = uber_conversion(type, from, to, last_answer);
+	uber_conversion(last_answer, type, from, to, last_answer);
 	set_prettyanswer(last_answer);
 	[AnswerField setStringValue:[NSString stringWithCString:(pretty_answer?pretty_answer:"Not Enough Memory")]];
 	putval("a",last_answer);
