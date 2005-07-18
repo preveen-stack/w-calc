@@ -13,10 +13,11 @@
 #include <ctype.h>
 #include "string_manip.h"
 
-void strstrip (char strip, char * str)
+void strstrip(char strip, char *str)
 {
 	char *left, *right;
-	for (left=right=str; *right; ++right) {
+
+	for (left = right = str; *right; ++right) {
 		if (right && *right && *right != strip) {
 			*left = *right;
 			++left;
@@ -28,7 +29,7 @@ void strstrip (char strip, char * str)
 	}
 }
 
-void strswap (char sw, char ap, char * str)
+void strswap(char sw, char ap, char *str)
 {
 	while (str && *str) {
 		if (*str == sw)
@@ -37,7 +38,7 @@ void strswap (char sw, char ap, char * str)
 	}
 }
 
-void strswap2 (char sw, char ap, char * str)
+void strswap2(char sw, char ap, char *str)
 {
 	while (str && *str) {
 		if (*str == sw)
@@ -48,9 +49,10 @@ void strswap2 (char sw, char ap, char * str)
 	}
 }
 
-unsigned int count_digits(char * curs)
+unsigned int count_digits(char *curs)
 {
 	unsigned int counter = 0;
+
 	while (curs && *curs && *curs != 'e' && *curs != 'E') {
 		counter += isdigit((int)(*curs));
 		++curs;
@@ -58,31 +60,32 @@ unsigned int count_digits(char * curs)
 	return counter;
 }
 
-int justnumbers (char * curs)
+int justnumbers(char *curs)
 {
 	while (curs && *curs && (isdigit((int)(*curs)) || ispunct((int)(*curs))))
-		curs ++;
-	if (curs && ! *curs) // if we reached the end of the string
+		curs++;
+	if (curs && !*curs)				   // if we reached the end of the string
 		return 1;
 	else
 		return 0;
 }
 
-void stripComments (char * curs)
+void stripComments(char *curs)
 {
-	char * follower = curs;
+	char *follower = curs;
 	char update_follower = 1;
+
 	while (curs && *curs) {
 		if (*curs == '#') {
 			*curs = 0;
 			return;
-		} else if (*curs == '/' && *(curs+1) == '/') {
+		} else if (*curs == '/' && *(curs + 1) == '/') {
 			*curs = 0;
 			return;
-		} else if (*curs == '/' && *(curs+1) == '*') {
+		} else if (*curs == '/' && *(curs + 1) == '*') {
 			update_follower = 0;
-			curs ++;
-		} else if (*curs == '*' && *(curs+1) == '/') {
+			curs++;
+		} else if (*curs == '*' && *(curs + 1) == '/') {
 			update_follower = 1;
 			curs += 2;
 		}
