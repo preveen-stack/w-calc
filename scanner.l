@@ -31,7 +31,7 @@
 #else
 #define YYLVALAC (&yylval)
 #endif
-	
+
 /* Everything up to the funny characters on the next line */
 /* goes directly into the lex.yy.c file */
 %}
@@ -46,7 +46,7 @@ ACCEPTABLE	[_:0-9]
 /* The rest of this after the '%%' is lex rules */
 %%
 
-{WHITESPACE}+	{ }  /* Just ignore white space */
+{WHITESPACE}+	{ /* Just ignore white space */ }
 
 "\n" 	        { return(EOLN); } 
 
@@ -58,13 +58,13 @@ ACCEPTABLE	[_:0-9]
 \\dsep.                 { YYLVALAC->character = yytext[5]; return(DSEP_CMD); }
 \\e(ng(ineering)?)?{DIGIT}*		{ char * foo = yytext;
 	while (*foo && ! isdigit((int)(*foo))) ++foo;
-	if (*foo != 0) YYLVALAC->smallnum = atoi(foo);
-	else YYLVALAC->smallnum = -1;
+	if (*foo != 0) YYLVALAC->integer = atoi(foo);
+	else YYLVALAC->integer = -1;
 	return(ENG_CMD);}
 \\cons(ervative)?       { return(GUARD_CMD); }
 \\h(ex(adecimal)?)?     { return(HEX_CMD); }
 \\help                  { return(PRINT_HELP_CMD); }
-\\hlimit{DIGIT}+        { YYLVALAC->smallnum = atoi(yytext+7); return(HLIMIT_CMD); }
+\\hlimit{DIGIT}+        { YYLVALAC->integer = atoi(yytext+7); return(HLIMIT_CMD); }
 \\ints?                 { return(INT_CMD); }
 \\x                     { return(HEX_CMD); }
 \\l(enient)?            { return(PICKY_CMD); }
@@ -84,21 +84,22 @@ ACCEPTABLE	[_:0-9]
 	YYLVALAC->variable = returnme;
 	Dprintf("filename: %s\n",returnme);
 	return(OPEN_CMD); }
-\\p[-]?{DIGIT}+         { YYLVALAC->smallnum = atoi(yytext+2); return(PRECISION_CMD);}
+\\p[-]?{DIGIT}+         { YYLVALAC->integer = atoi(yytext+2); return(PRECISION_CMD);}
 \\p(icky)?              { return(PICKY_CMD); }
 \\pre(fix(es)?)?        { return(PREFIX_CMD); }
 \\pref(s|erences)?      { return(DISPLAY_PREFS_CMD); }
 \\r(ad(ians)?)?         { return(RADIAN_CMD); }
-\\rou(nd(ing)?)?{WHITESPACE}+no(ne)? { YYLVALAC->smallnum = NO_ROUNDING_INDICATION;
+\\rou(nd(ing)?)?{WHITESPACE}+no(ne)? { YYLVALAC->integer = NO_ROUNDING_INDICATION;
 	                      return(ROUNDING_INDICATION_CMD); }
-\\rou(nd(ing)?)?{WHITESPACE}+simple { YYLVALAC->smallnum = SIMPLE_ROUNDING_INDICATION;
+\\rou(nd(ing)?)?{WHITESPACE}+simple { YYLVALAC->integer = SIMPLE_ROUNDING_INDICATION;
 	                      return(ROUNDING_INDICATION_CMD); }
-\\rou(nd(ing)?)?{WHITESPACE}+sig_fig { YYLVALAC->smallnum = SIG_FIG_ROUNDING_INDICATION;
+\\rou(nd(ing)?)?{WHITESPACE}+sig_fig { YYLVALAC->integer = SIG_FIG_ROUNDING_INDICATION;
 	                      return(ROUNDING_INDICATION_CMD); }
-\\rou(nd(int)?)?        { YYLVALAC->smallnum = -1;
+\\rou(nd(int)?)?        { YYLVALAC->integer = -1;
 	                      return(ROUNDING_INDICATION_CMD); }
 \\re(member(_errors)?)? { return(REMEMBER_CMD); }
-\\save[ ].*                { 
+\\bits{DIGIT}+			{ YYLVALAC->integer = atoi(yytext+5); return(BITS_CMD); }
+\\save[ ].*                {
 	char * curs = yytext+5, *returnme;
 	while (curs && *curs && *curs == ' ')
 		curs++;
@@ -245,7 +246,7 @@ not						{ return(WNOT); }
 [*][*]					{ return(WSQR); }
 [+]						{ return(WPLUS); }
 [*]						{ return(WMULT); }
-[/]|[Ö]					{ return(WDIV); }
+[/]|[Ö]|(÷)				{ return(WDIV); }
 [%]						{ return(WMOD); }
 [=]						{ return(WEQL); }
 (\^)					{ return(WPOW); }
@@ -331,6 +332,7 @@ fact { return(WFACT); }
 		report_error("Invalid characters for base 10");
 	} else {
 		unsigned int t = count_digits(yytext);
+		printf("sigfigs1: %u\nt: %u\n",sig_figs,t);
 		if (t<sig_figs) sig_figs = t;
 	}
 
@@ -347,7 +349,8 @@ fact { return(WFACT); }
 	if (-1 == retval) {
 		report_error("Invalid characters for base 10");
 	} else {
-		unsigned int t = count_digits(yytext) - (yytext[0]=='0')?1:0;
+		unsigned int t = count_digits(yytext) - ((yytext[0]=='0')?1:0);
+		printf("sigfigs2: %u\nt: %u\n",sig_figs,t);
 		if (t<sig_figs) sig_figs = t;
 	}
 	return(NUMBER);
@@ -368,6 +371,7 @@ fact { return(WFACT); }
 		report_error("Invalid characters for base 10");
 	} else {
 		unsigned int t = count_digits(yytext);
+		printf("sigfigs3: %u\nt: %u\n",sig_figs,t);
 		if (t<sig_figs) sig_figs = t;
 	}
 	return(NUMBER);
@@ -384,7 +388,7 @@ fact { return(WFACT); }
 	if (-1 == retval) {
 		report_error("some characters invalid for base 16");
 	} else {
-		unsigned int t = count_digits(yytext);
+		unsigned int t = strlen(yytext+2);
 		if (yydebug) {
 			mpfr_out_str(stdout,DEFAULT_BASE,0, YYLVALAC->number, GMP_RNDN);
 			printf("\n");
@@ -409,7 +413,7 @@ fact { return(WFACT); }
 		if (-1 == retval) report_error(strerror(errno));
 		/*sscanf(yytext,"%lo",&value);
 		yylval.number = value; */
-		t = count_digits(yytext)-1;
+		t = strlen(yytext+1);
 		if (t<sig_figs) sig_figs = t;
 		return(NUMBER);
 	}
@@ -432,7 +436,7 @@ fact { return(WFACT); }
 		if (-1 == retval) {
 			report_error("Expected a 0 or 1 for binary.");
 		} else {
-			unsigned int t = count_digits(yytext)-2;
+			unsigned int t = strlen(yytext+2);
 			if (yydebug) {
 				mpfr_out_str(stdout,DEFAULT_BASE,0, YYLVALAC->number, GMP_RNDN);
 				printf("\n");
