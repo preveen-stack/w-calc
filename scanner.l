@@ -332,7 +332,6 @@ fact { return(WFACT); }
 		report_error("Invalid characters for base 10");
 	} else {
 		unsigned int t = count_digits(yytext);
-		printf("sigfigs1: %u\nt: %u\n",sig_figs,t);
 		if (t<sig_figs) sig_figs = t;
 	}
 
@@ -350,7 +349,6 @@ fact { return(WFACT); }
 		report_error("Invalid characters for base 10");
 	} else {
 		unsigned int t = count_digits(yytext) - ((yytext[0]=='0')?1:0);
-		printf("sigfigs2: %u\nt: %u\n",sig_figs,t);
 		if (t<sig_figs) sig_figs = t;
 	}
 	return(NUMBER);
@@ -371,7 +369,6 @@ fact { return(WFACT); }
 		report_error("Invalid characters for base 10");
 	} else {
 		unsigned int t = count_digits(yytext);
-		printf("sigfigs3: %u\nt: %u\n",sig_figs,t);
 		if (t<sig_figs) sig_figs = t;
 	}
 	return(NUMBER);
