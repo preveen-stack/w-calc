@@ -93,7 +93,7 @@ int main(int argc, char *argv[])
 	conf.print_equal = 1;
 	conf.print_ints = 0;
 
-	mpfr_set_default_prec(200);
+	mpfr_set_default_prec(1024);
 	mpfr_init(retvalue);
 
 	/* load the preferences */
