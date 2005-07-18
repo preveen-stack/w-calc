@@ -162,6 +162,8 @@ int main(int argc, char *argv[])
 		/* if stdin is a keyboard or terminal, then use readline and prompts */
 #ifdef HAVE_READLINE_HISTORY
 		char *filename;
+
+		using_history();
 		filename = malloc((strlen(getenv("HOME")) + 16) * sizeof(char));
 		sprintf(filename, "%s/.wcalc_history", getenv("HOME"));
 		if (read_history(filename) && errno != ENOENT)
@@ -194,8 +196,17 @@ int main(int argc, char *argv[])
 			}
 #endif
 			if (!readme) {
-				if (errno != 2)
-					perror("reading line");
+				/* from the readline manpage:
+				 *      readline returns the text of the line read. A blank 
+				 *      line returns the empty string. If EOF is encountered 
+				 *      while reading a line, and the line is empty, NULL is 
+				 *      returned. If an eof is read with a non-empty line, it 
+				 *      is treated as a newline.
+				 * This means: readme == NULL is a perfectly reasonable 
+				 * response from readline(), AND it means something 
+				 * significant. DO NOT DO errno PARSING HERE!!!!
+				 */
+				printf("\n");
 				break;
 			}
 			/* if there is a line */
