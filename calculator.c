@@ -224,13 +224,17 @@ size_t num_to_str_complex(char *str, mpfr_t num, int base, int engr, int prec,
 	s = mpfr_get_str(NULL, &e, base, 0, num, GMP_RNDN);
 	/* s is the string, allocated big enough to hold the whole thing
 	 * e is the number of integers (the exponent) if positive
+	 *
+	 * Now, if there's odd formatting involved, make mpfr do the rounding,
+	 * so we know it's "correct":
 	 */
 	if (prec > -1) {
 		if (engr == 0) {
-			printf("e: %i\n",e);
-			printf("s: %s\n",s);
-			printf("prec: %i\n",prec);
-			s = mpfr_get_str(s, &e, base, (e>0?e:0) + prec, num, GMP_RNDN);
+			/*printf("e: %i\n",e);
+			 * printf("s: %s\n",s);
+			 * printf("prec: %i\n",prec); */
+			s = mpfr_get_str(s, &e, base, (e > 0 ? e : 0) + prec, num,
+							 GMP_RNDN);
 		} else {
 			s = mpfr_get_str(s, &e, base, 1 + prec, num, GMP_RNDN);
 		}
@@ -876,9 +880,10 @@ char *print_this_result(mpfr_t result)
 			break;
 		default:
 		case DECIMAL_FORMAT:
-			if (mpfr_get_d(result, GMP_RNDN) != mpfr_get_si(result, GMP_RNDN) &&
-				conf.precision < 0 && conf.precision_guard) {
+			if (mpfr_get_d(result, GMP_RNDN) != mpfr_get_si(result, GMP_RNDN)
+				&& conf.precision < 0 && conf.precision_guard) {
 				double res = mpfr_get_d(result, GMP_RNDN);
+
 				if (res < DBL_EPSILON) {
 					res = 0.0;
 				}
@@ -1000,10 +1005,36 @@ void simple_exp(mpfr_t output, mpfr_t first, enum operations op,
 							(!mpfr_zero_p(second)), GMP_RNDN);
 				break;
 			case wbor:
-#warning Binary OR isn't implemented
+			{
+				mpz_t intfirst, intsecond, intoutput;
+
+				mpz_init(intfirst);
+				mpz_init(intsecond);
+				mpz_init(intoutput);
+				mpfr_get_z(intfirst, first, GMP_RNDN);
+				mpfr_get_z(intsecond, second, GMP_RNDN);
+				mpz_ior(intoutput, intfirst, intsecond);
+				mpfr_set_z(output, intoutput, GMP_RNDN);
+				mpz_clear(intfirst);
+				mpz_clear(intsecond);
+				mpz_clear(intoutput);
+			}
 				break;
 			case wband:
-#warning Binary AND isn't implemented
+			{
+				mpz_t intfirst, intsecond, intoutput;
+
+				mpz_init(intfirst);
+				mpz_init(intsecond);
+				mpz_init(intoutput);
+				mpfr_get_z(intfirst, first, GMP_RNDN);
+				mpfr_get_z(intsecond, second, GMP_RNDN);
+				mpz_and(intoutput, intfirst, intsecond);
+				mpfr_set_z(output, intoutput, GMP_RNDN);
+				mpz_clear(intfirst);
+				mpz_clear(intsecond);
+				mpz_clear(intoutput);
+			}
 				break;
 			case wlshft:
 				mpfr_pow_ui(temp, second, 2, GMP_RNDN);
@@ -1164,7 +1195,6 @@ void uber_function(mpfr_t output, enum functions func, mpfr_t input)
 				mpfr_ceil(output, input);
 				break;
 			case wrand:
-#warning rand(range) hasn't been tested
 				seed_random();
 				while (mpfr_urandomb(output, randstate) != 0) ;
 				mpfr_mul(output, output, input, GMP_RNDN);
@@ -1173,7 +1203,6 @@ void uber_function(mpfr_t output, enum functions func, mpfr_t input)
 				}
 				break;
 			case wirand:
-#warning irand(range) hasn't been tested
 				seed_random();
 				while (mpfr_urandomb(output, randstate) != 0) ;
 				mpfr_mul(output, output, input, GMP_RNDN);
@@ -1208,8 +1237,14 @@ int seed_random(void)
 	static char seeded = 0;
 
 	if (!seeded) {
+		struct timeval tp;
+
+		if (gettimeofday(&tp,NULL) != 0) {
+			perror("gettimeofday");
+			exit(EXIT_FAILURE);
+		}
 		gmp_randinit_default(randstate);
-		gmp_randseed_ui(randstate, time(NULL));
+		gmp_randseed_ui(randstate, (unsigned long)(tp.tv_usec));
 		//srandom(time(NULL));
 		seeded = 1;
 	}
