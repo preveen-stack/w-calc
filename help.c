@@ -8,6 +8,8 @@
  */
 
 #include <stdio.h>
+#include <gmp.h>
+#include <mpfr.h>
 #include "help.h"
 
 #ifndef GUI
@@ -27,7 +29,9 @@ void print_interactive_help (void)
 		 "octal (088), hexadecimal (0xff), and binary (0b11).\n\n"
 		 "a   is a reserved variable that represents the previous answer.\n"
 		 "\\pX is the way to set the precision, where X is the desired precision.\n"
-		 "    This setting only affects output.\n"
+		 "    Precision here is in digits. This setting only affects decimal output.\n"
+		 "\\bitsX is the way to set the number of bits used internally to represent\n"
+		 "    numbers. This number must be above %li and below %li.\n"
 		 "\\e or \\eng or \\engineering or \\eX or \\engX or \\engineeringX\n"
 		 "    toggles the formatting of output between decimal and scientific notation.\n"
 		 "    If X is used, 0 turns it off, anything else turns it on.\n"
@@ -56,7 +60,8 @@ void print_interactive_help (void)
 		 "foo = anylegalexpression\n"
 		 "Thereafter, that variable name is the same as the literal value it represents.\n\n"
 		 "Comments (ignored expressions) are either between /* and */ or\n"
-		 "after a // or #\n"
+		 "after a // or #\n",
+		(long int) MPFR_PREC_MIN, (long int) MPFR_PREC_MAX
 		 );
 }
 
