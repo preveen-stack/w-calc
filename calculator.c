@@ -753,11 +753,12 @@ char *print_this_result_dbl(double result)
 						if (sig_figs < UINT32_MAX) {
 							unsigned int t = count_digits(pa);
 
-							if (pa[0] == '0')
+							if (pa[0] == '0' && pa[1] != '\0') {
 								--t;
-							else if (pa[0] == '-' && pa[1] == '0')
+							} else if (pa[0] == '-' && pa[1] == '0') {
 								--t;
-							not_all_displayed = t != sig_figs;
+							}
+							not_all_displayed = (t < sig_figs);
 						} else {
 							not_all_displayed = 0;
 						}
@@ -785,7 +786,7 @@ char *print_this_result_dbl(double result)
 								++t;
 								++curs;
 							}
-							not_all_displayed = t != sig_figs;
+							not_all_displayed = (t < sig_figs);
 						} else {
 							not_all_displayed = 0;
 						}
@@ -834,7 +835,7 @@ char *print_this_result_dbl(double result)
 						SIG_FIG_ROUNDING_INDICATION) {
 						not_all_displayed =
 							count_digits(pa +
-										 (conf.print_prefixes ? 2 : 0)) !=
+										 (conf.print_prefixes ? 2 : 0)) <
 							sig_figs;
 					} else {
 						not_all_displayed = 0;
@@ -916,8 +917,14 @@ char *print_this_result(mpfr_t result)
 			case SIG_FIG_ROUNDING_INDICATION:
 				/* sig_figs is how many we need to display */
 				if (sig_figs < UINT32_MAX) {
-					/* do something */
-#warning SIG_FIG_ROUNDING_INDICATION not implemented
+					unsigned int t = count_digits(pa);
+
+					if (pa[0] == '0' && pa[1] != '\0') {
+						--t;
+					} else if (pa[0] == '-' && pa[1] == '0') {
+						--t;
+					}
+					not_all_displayed = (t < sig_figs);
 				} else {
 					not_all_displayed = 0;
 				}
