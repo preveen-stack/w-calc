@@ -345,13 +345,17 @@ int read_prefs(char *filename)
 				break;
 			++curs;
 		}
+		if (retval != 1) break;
+		*curs = 0;
 		// read in the =
 		while (retval == 1 && *curs != '=') {
 			retval = read(fd, curs, 1);
 		}
+		if (retval != 1) break;
 		while (retval == 1 && (isspace((int)(*curs)) || *curs == '=')) {
 			retval = read(fd, curs, 1);
 		}
+		if (retval != 1) break;
 		value[0] = *curs;
 		*curs = 0;
 		curs = value;
@@ -370,6 +374,7 @@ int read_prefs(char *filename)
 		}
 		if (*curs == '\n')
 			*curs = 0;
+
 		if (!strcmp(key, "precision"))
 			conf.precision = atoi(value);
 		else if (!strcmp(key, "show_equals"))
@@ -415,6 +420,8 @@ int read_prefs(char *filename)
 				conf.rounding_indication = SIMPLE_ROUNDING_INDICATION;
 			else if (!strcmp(value, "sig_fig"))
 				conf.rounding_indication = SIG_FIG_ROUNDING_INDICATION;
+		} else {
+			fprintf(stderr,"Invalid string in wcalcrc: %s\n",key);
 		}
 		memset(key, 0, sizeof(key));
 		memset(value, 0, sizeof(value));
