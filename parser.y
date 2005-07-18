@@ -45,7 +45,6 @@ char *strchr (), *strrchr ();
 enum functions function;
 enum operations operation;
 mpfr_t number;
-double smallnum;
 int integer;
 enum commands cmd;
 char * variable;
@@ -55,7 +54,8 @@ char character;
 %token DEC_CMD OCT_CMD HEX_CMD BIN_CMD GUARD_CMD DISPLAY_PREFS_CMD
 %token RADIAN_CMD PICKY_CMD REMEMBER_CMD LISTVAR_CMD
 %token PRINT_HELP_CMD PREFIX_CMD INT_CMD
-%token <smallnum> PRECISION_CMD ENG_CMD HLIMIT_CMD ROUNDING_INDICATION_CMD
+%token <integer> ENG_CMD HLIMIT_CMD ROUNDING_INDICATION_CMD
+%token <integer> PRECISION_CMD BITS_CMD
 
 %token EOLN PAR REN WBRA WKET WSBRA WSKET
 %token WPLUS WMINUS WMULT WDIV WMOD WEQL WPOW WEXP WSQR
@@ -205,13 +205,14 @@ command : HEX_CMD {
 | DISPLAY_PREFS_CMD {
 	$$ = nothing;
 	if (standard_output) {
-		printf("                Precision: %i %s\n",conf.precision,((conf.precision==-1)?"(auto)":""));
+		printf("        Display Precision: %i %s\n",conf.precision,((conf.precision==-1)?"(auto)":""));
+		printf("       Internal Precision: %lu bits\n", (unsigned long) mpfr_get_default_prec());
 		printf("       Engineering Output: %s\n",conf.engineering?"yes":"no");
 		printf("            Output Format: %s\n",output_string(conf.output_format));
 		printf("Flag Undeclared Variables: %s\n",conf.picky_variables?"yes":"no");
 		printf("              Use Radians: %s\n",conf.use_radians?"yes":"no");
 		printf("           Print Prefixes: %s\n",conf.print_prefixes?"yes":"no");
-		printf("      Rounding Indication: %s\n",conf.rounding_indication?"yes":"no");
+		printf("      Rounding Indication: %s\n",conf.rounding_indication==SIMPLE_ROUNDING_INDICATION?"yes (simple)":(conf.rounding_indication==SIG_FIG_ROUNDING_INDICATION?"yes (sig_fig)":"no"));
 		printf("   Save Errors in History: %s\n",conf.remember_errors?"yes":"no");
 		printf("      Thousands Delimiter: '%c'\n",conf.thou_delimiter);
 		printf("        Decimal Delimiter: '%c'\n",conf.dec_delimiter);
@@ -261,6 +262,7 @@ command : HEX_CMD {
 		else
 			printf("%g\n", mpfr_get_d(keyval->value, GMP_RNDN));
 	}
+	$$ = nothing;
 }
 | ENG_CMD {
 	$$ = isatty(0)?redisplay:nothing;
@@ -331,6 +333,7 @@ command : HEX_CMD {
 		free(open_file);
 		open_file = NULL;
 	}*/
+	$$ = nothing;
 }
 | SAVE_CMD {
 	int retval;
@@ -339,6 +342,17 @@ command : HEX_CMD {
 		report_error("Could not save file.");
 		report_error((char*)strerror(retval));
 	}
+	$$ = nothing;
+}
+| BITS_CMD {
+	if ($1 < MPFR_PREC_MIN) {
+		report_error("Number too small.");
+	} else if ($1 > MPFR_PREC_MAX) {
+		report_error("Number too large.");
+	} else {
+		mpfr_set_default_prec($1);
+	}
+	$$ = nothing;
 }
 ;
 
