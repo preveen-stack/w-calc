@@ -21,6 +21,7 @@ void print_interactive_help (void)
 {
 	printf("Wcalc %s by Kyle Wheeler.\nVersion 0.1.x written in C++ for CS240C at Ohio University, Jan 14 2000\n",VERSION);
 	printf("Version 0.2.x rewritten for lex/yacc in C, Nov 25 2001\n");
+	printf("Version 0.3.x released under GPL, Jan 2003\n");
 	printf( "This calculator recognizes the following symbols:\n"
 		 SUPPORTED_SYMBOLS
 		 "\nThe ! is factorial or boolean, depending on use.\n"
