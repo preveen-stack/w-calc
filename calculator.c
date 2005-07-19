@@ -191,7 +191,7 @@ void parseme(mpfr_t output, char *pthis)
  * string, and does all the fancy presentation stuff we've come to expect from
  * wcalc.
  */
-size_t num_to_str_complex(char *str, mpfr_t num, int base, int engr, int prec,
+size_t num_to_str_complex(char *inputstr, mpfr_t num, int base, int engr, int prec,
 						  int prefix)
 {
 	char *s, *s0, *curs;
@@ -199,24 +199,24 @@ size_t num_to_str_complex(char *str, mpfr_t num, int base, int engr, int prec,
 	mp_exp_t e;
 
 	if (mpfr_nan_p(num)) {
-		sprintf(str, "@NaN@");
-		return 3;
+		sprintf(inputstr, "@NaN@");
+		return 5;
 	}
 	if (mpfr_inf_p(num)) {
 		if (mpfr_sgn(num) > 0) {
-			sprintf(str, "@Inf@");
-			return 3;
+			sprintf(inputstr, "@Inf@");
+			return 5;
 		} else {
-			sprintf(str, "-@Inf@");
-			return 4;
+			sprintf(inputstr, "-@Inf@");
+			return 6;
 		}
 	}
 	if (mpfr_zero_p(num)) {
 		if (mpfr_sgn(num) > 0) {
-			sprintf(str, "0");
+			sprintf(inputstr, "0");
 			return 1;
 		} else {
-			sprintf(str, "-0");
+			sprintf(inputstr, "-0");
 			return 2;
 		}
 	}
@@ -244,7 +244,7 @@ size_t num_to_str_complex(char *str, mpfr_t num, int base, int engr, int prec,
 
 	l = strlen(s) + 1;				   /* size of allocated block returned by mpfr_get_str
 									    * - may be incorrect, as only an upper bound? */
-	curs = str;
+	curs = inputstr;
 	if (*s == '-') {
 		sprintf(curs++, "%c", *s++);
 	}
@@ -869,8 +869,7 @@ char *print_this_result_dbl(double result)
 
 char *print_this_result(mpfr_t result)
 {
-	static char pa[500];
-	char pa2[500];
+	static char *pa=NULL;
 	extern char *errstring;
 	unsigned int base = 0;
 
@@ -899,6 +898,8 @@ char *print_this_result(mpfr_t result)
 			base = 2;
 			break;
 	}
+	pa = realloc(pa,conf.precision + 50);
+	memset(pa,0,conf.precision+50);
 	num_to_str_complex(pa, result, base, conf.engineering, conf.precision,
 					   conf.print_prefixes);
 
@@ -910,9 +911,13 @@ char *print_this_result(mpfr_t result)
 		/* rounding guess */
 		switch (conf.rounding_indication) {
 			case SIMPLE_ROUNDING_INDICATION:
+			{
+				char * pa2 = calloc(1,conf.precision + 50);
 				num_to_str_complex(pa2, result, base, conf.engineering, -1,
 								   conf.print_prefixes);
 				not_all_displayed = (strlen(pa) < strlen(pa2));
+				free(pa2);
+			}
 				break;
 			case SIG_FIG_ROUNDING_INDICATION:
 				/* sig_figs is how many we need to display */
