@@ -95,7 +95,7 @@ ACCEPTABLE	[_:0-9]
 	                      return(ROUNDING_INDICATION_CMD); }
 \\rou(nd(ing)?)?{WHITESPACE}+sig_fig { YYLVALAC->integer = SIG_FIG_ROUNDING_INDICATION;
 	                      return(ROUNDING_INDICATION_CMD); }
-\\rou(nd(int)?)?        { YYLVALAC->integer = -1;
+\\rou(nd(ing)?)?        { YYLVALAC->integer = -1;
 	                      return(ROUNDING_INDICATION_CMD); }
 \\re(member(_errors)?)? { return(REMEMBER_CMD); }
 \\bits{DIGIT}+			{ YYLVALAC->integer = atoi(yytext+5); return(BITS_CMD); }
