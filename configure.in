@@ -1,7 +1,7 @@
 # Process this file with autoconf to produce a configure script.
 AC_PREREQ(2.57)
-AC_INIT(wcalc, 1.7, kyle-wcalc@memoryhole.net)
-AM_INIT_AUTOMAKE(wcalc, 1.7)
+AC_INIT(wcalc, 2.0, kyle-wcalc@memoryhole.net)
+AM_INIT_AUTOMAKE(wcalc, 2.0)
 AC_CONFIG_SRCDIR([WcalcController.h])
 AM_CONFIG_HEADER([config.h])
 
