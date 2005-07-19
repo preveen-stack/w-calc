@@ -110,6 +110,7 @@ oneline : exp eoln
 			report_error("Too many errors.");
 		}
 	}
+	mpfr_clear($1);
 	compute = 1;
 }
 | assignment eoln {
@@ -376,6 +377,7 @@ assignment : VAR WEQL exp
 			} else {
 				report_error("There was a problem assigning variables.");
 			}
+			mpfr_clear($3);
 		}
 	} else {
 		scanerror = 0;
@@ -407,6 +409,7 @@ assignment : VAR WEQL exp
 | NUMBER WEQL exp
 {
 	report_error("Constants cannot be assigned to other values.");
+	mpfr_clear($3);
 }
 | NUMBER WEQL STRING
 {
@@ -419,6 +422,7 @@ assignment : VAR WEQL exp
 | func WEQL exp
 {
 	report_error("Functions cannot be assigned to values.");
+	mpfr_clear($3);
 }
 ;
 
@@ -486,7 +490,7 @@ sign : WMINUS { $$ = -1; }
 | { $$ = 1; }
 ;
 
-exp_l2 : exp_l3
+exp_l2 : exp_l3 
 | exp_l3 WBANG { mpfr_init($$); mpfr_fac_ui($$,mpfr_get_ui($1,GMP_RNDN),GMP_RNDN); mpfr_clear($1); }
 | exp_l3 WSQR { /* this is a dumb feature */
 				mpfr_init($$); mpfr_sqr($$,$1,GMP_RNDN); mpfr_clear($1); }
@@ -497,15 +501,21 @@ exp_l2 : exp_l3
 					 mpfr_clear($3); }
 ;
 
-oval : exp_l3 oval
+oval : exp_l3 oval 
 | { mpfr_init_set_ui($$,1,GMP_RNDN); }
 ;
 
-exp_l3 : capsule oval { mpfr_init($$); mpfr_mul($$,$1,$2,GMP_RNDN); }
+exp_l3 : capsule oval { mpfr_init($$);
+                        mpfr_mul($$,$1,$2,GMP_RNDN);
+						mpfr_clear($1);
+						mpfr_clear($2);}
 | capsule WPOW sign exp_l3 oval { mpfr_init($$);
 								  mpfr_mul_si($4,$4,$3,GMP_RNDN);
 								  mpfr_pow($1,$1,$4,GMP_RNDN);
-								  mpfr_mul($$,$1,$5,GMP_RNDN); }
+								  mpfr_mul($$,$1,$5,GMP_RNDN);
+								  mpfr_clear($1);
+								  mpfr_clear($4);
+								  mpfr_clear($5);}
 ;
 
 capsule: PAR exp REN { mpfr_init($$); mpfr_set($$,$2,GMP_RNDN); mpfr_clear($2); }

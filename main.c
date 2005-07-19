@@ -154,8 +154,10 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	if (cmdline_input)
+	if (cmdline_input) {
+		mpfr_clear(retvalue);
 		exit(0);
+	}
 
 	tty = isatty(0);				   /* Find out where stdin is coming from... */
 	if (tty > 0) {
@@ -304,6 +306,7 @@ int main(int argc, char *argv[])
 		}
 	}
 
+	mpfr_clear(retvalue);
 	exit(0);
 }
 
