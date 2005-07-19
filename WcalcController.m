@@ -133,8 +133,7 @@ static NSString *curFile = NULL;
 		case 203: str2 = @"G0"; break;
 		case 204: str2 = @"ec"; break;
 		case 205: str2 = @"Kj"; break;
-		case 206: str2 = @"µN"; break;
-		case 207: str2 = @"Rk"; break;
+		case 206: str2 = @"Rk"; break;
 		
 		case 301: str2 = @"Mampha"; break;
 		case 302: str2 = @"ao"; break;
