@@ -120,7 +120,7 @@ int main(int argc, char *argv[])
 			}
 		} else if (!strcmp(argv[i], "-E")) {
 			conf.engineering = 1;
-		} else if (!strcmp(argv[i], "--help")) {
+		} else if (!strcmp(argv[i], "-H") || !strcmp(argv[i], "--help")) {
 			print_command_help();
 			exit(0);
 		} else if (!strcmp(argv[i], "-v") || !strcmp(argv[i], "--version")) {
@@ -138,12 +138,14 @@ int main(int argc, char *argv[])
 		} else if (!strcmp(argv[i], "-b") || !strcmp(argv[i], "--binary") ||
 				   !strcmp(argv[i], "-bin")) {
 			conf.output_format = BINARY_FORMAT;
-		} else if (!strcmp(argv[i], "-p")) {
-			conf.print_prefixes = 0;
+		} else if (!strcmp(argv[i], "-p") || !strcmp(argv[i], "--prefixes")) {
+			conf.print_prefixes = !conf.print_prefixes;
 		} else if (!strcmp(argv[i], "-l") || !strcmp(argv[i], "--lenient")) {
 			conf.picky_variables = 0;
 		} else if (!strcmp(argv[i], "-r") || !strcmp(argv[i], "--radians")) {
-			conf.use_radians = 1;
+			conf.use_radians = !conf.use_radians;
+		} else if (!strcmp(argv[i], "-q") || !strcmp(argv[i], "--quiet")) {
+			conf.print_equal = !conf.print_equal;
 		} else if (!strcmp(argv[i], "--yydebug")) {
 			yydebug = 1;
 		} else if (!strcmp(argv[i], "-n")) {
