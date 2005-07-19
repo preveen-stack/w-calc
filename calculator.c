@@ -61,9 +61,10 @@ struct _conf conf;
 extern int yyparse();
 extern int yy_scan_string(const char *);
 
-static size_t num_to_str_complex(char *str, mpfr_t num, int base, int engr,
-								 int prec, int prefix);
-#define num_to_str(x,y) num_to_str_complex(x,y,10,0,0,1)
+static size_t num_to_str_complex(char *inputstr, unsigned int length,
+								 mpfr_t num, int base, int engr, int prec,
+								 int prefix);
+#define num_to_str(x,y,z) num_to_str_complex(x,y,z,10,0,0,1)
 struct variable_list
 {
 	char *varname;
@@ -191,32 +192,33 @@ void parseme(mpfr_t output, char *pthis)
  * string, and does all the fancy presentation stuff we've come to expect from
  * wcalc.
  */
-size_t num_to_str_complex(char *inputstr, mpfr_t num, int base, int engr, int prec,
-						  int prefix)
+size_t num_to_str_complex(char *inputstr, unsigned int length, mpfr_t num,
+						  int base, int engr, int prec, int prefix)
 {
 	char *s, *s0, *curs;
 	size_t l;
 	mp_exp_t e;
+	size_t decimal_count = 0;
 
 	if (mpfr_nan_p(num)) {
-		sprintf(inputstr, "@NaN@");
+		snprintf(inputstr, length, "@NaN@");
 		return 5;
 	}
 	if (mpfr_inf_p(num)) {
 		if (mpfr_sgn(num) > 0) {
-			sprintf(inputstr, "@Inf@");
+			snprintf(inputstr, length, "@Inf@");
 			return 5;
 		} else {
-			sprintf(inputstr, "-@Inf@");
+			snprintf(inputstr, length, "-@Inf@");
 			return 6;
 		}
 	}
 	if (mpfr_zero_p(num)) {
 		if (mpfr_sgn(num) > 0) {
-			sprintf(inputstr, "0");
+			snprintf(inputstr, length, "0");
 			return 1;
 		} else {
-			sprintf(inputstr, "-0");
+			snprintf(inputstr, length, "-0");
 			return 2;
 		}
 	}
@@ -230,62 +232,101 @@ size_t num_to_str_complex(char *inputstr, mpfr_t num, int base, int engr, int pr
 	 */
 	if (prec > -1) {
 		if (engr == 0) {
-			/*printf("e: %i\n",e);
-			 * printf("s: %s\n",s);
-			 * printf("prec: %i\n",prec); */
-			s = mpfr_get_str(s, &e, base, (e > 0 ? e : 0) + prec, num,
-							 GMP_RNDN);
+			size_t significant_figures = 0;
+
+			/*printf("e: %li\n", (long)e);
+			 * printf("s: %s\n", s);
+			 * printf("prec: %i\n", prec); */
+			significant_figures = ((e > 0) ? e : 0) + prec;
+			if (significant_figures < 2) {	/* why is this the minimum? */
+				s = mpfr_get_str(s, &e, base, 2, num, GMP_RNDN);
+				if (s[1] > '4') {	   /* XXX: LAME! */
+					unsigned foo;
+
+					foo = s[0] - '0';
+					foo++;
+					snprintf(s, 3, "%u", foo);
+					e++;
+				}
+			} else {
+				s = mpfr_get_str(s, &e, base, significant_figures, num,
+								 GMP_RNDN);
+			}
 		} else {
 			s = mpfr_get_str(s, &e, base, 1 + prec, num, GMP_RNDN);
 		}
 	}
 	s0 = s;
+	//printf("post-mpfr s: %s\n", s);
 	/* for num = 3.1416 we have s = "31416" and e = 1 */
 
-	l = strlen(s) + 1;				   /* size of allocated block returned by mpfr_get_str
-									    * - may be incorrect, as only an upper bound? */
-	curs = inputstr;
-	if (*s == '-') {
-		sprintf(curs++, "%c", *s++);
-	}
+	/* size of allocated block returned by mpfr_get_str may be incorrect, but 
+	 * only as an upper bound */
+	l = strlen(s) + 1;
 
+	/* now, copy the string into the input string, carefully */
+
+	curs = inputstr;
+	/* copy over the negative sign */
+	if (*s == '-') {
+		snprintf(curs++, length--, "%c", *s++);
+	}
+	/* copy in a prefix */
 	if (prefix) {
 		switch (base) {
 			case 16:
-				sprintf(curs, "0x");
+				snprintf(curs, length, "0x");
+				length -= 2;
 				curs += 2;
 				break;
 			case 10:
 				break;
 			case 8:
-				sprintf(curs++, "0");
+				snprintf(curs++, length--, "0");
 				break;
 			case 2:
-				sprintf(curs, "0b");
+				snprintf(curs, length, "0b");
+				length -= 2;
 				curs += 2;
 				break;
 		}
 	}
 
-	/* outputs mantissa */
+	/* copy over the integers */
 	if (e > 0) {
-		sprintf(curs++, "%c", *s++);
+		snprintf(curs++, length--, "%c", *s++);
 		e--;						   /* leading digit */
 		if (engr == 0) {
 			while (e > 0) {
-				sprintf(curs++, "%c", *s++);
+				snprintf(curs++, length--, "%c", *s++);
 				e--;				   /* leading digits */
 			}
 		}
 	} else {
-		sprintf(curs++, "0");
+		snprintf(curs++, length--, "0");
 	}
-	sprintf(curs++, ".");			   /* decimal point */
-	while (e < 0) {
-		sprintf(curs++, "0");
+	snprintf(curs++, length--, ".");   /* decimal point */
+	/* everything after this is affected by decimalcount */
+	/* copy in leading zeros */
+	while (e < 0 && decimal_count < prec) {
+		snprintf(curs++, length--, "0");
 		e++;
+		decimal_count++;
 	}
-	curs += sprintf(curs, "%s", s);	   /* the rest of the mantissa */
+	/* the rest of the mantissa (the decimals) */
+	{
+		size_t print_limit =
+			((length <
+			  (prec - decimal_count + 1)) ? length : (prec - decimal_count +
+													  1));
+		size_t printed =
+			((print_limit < strlen(s)) ? print_limit : strlen(s));
+
+		snprintf(curs, print_limit, "%s", s);
+		length -= printed;
+		decimal_count += printed;
+		curs += printed;
+	}
 	mpfr_free_str(s0);
 	/* strip off trailing 0's */
 	if (prec == -1) {
@@ -293,15 +334,18 @@ size_t num_to_str_complex(char *inputstr, mpfr_t num, int base, int engr, int pr
 		while ('0' == *curs) {
 			*curs-- = '\0';
 			l--;
+			length++;
 		}
 		if ('.' == *curs) {
 			*curs = '\0';
 			l--;
+			length++;
 		}
 		curs++;
 	}
-	if (e > 0) {
-		l += sprintf(curs, (base <= 10 ? "e%ld" : "@%ld"), (long)e);
+	/* copy in an exponent if necessary (unlikely) */
+	if (e != 0) {
+		l += snprintf(curs, length, (base <= 10 ? "e%ld" : "@%ld"), (long)e);
 	}
 
 	return l;
@@ -426,10 +470,10 @@ static char *flatten(char *str)
 
 				mpfr_init(f);
 				parseme(f, a.exp);
-				num_to_str(varname, f);
+				num_to_str(varname, 500, f);
 				mpfr_clear(f);
 			} else {				   // it is a value
-				num_to_str(varname, a.val);
+				num_to_str(varname, 500, a.val);
 			}
 		}
 		nlen = strlen(varname);
@@ -834,8 +878,7 @@ char *print_this_result_dbl(double result)
 					if (conf.rounding_indication ==
 						SIG_FIG_ROUNDING_INDICATION) {
 						not_all_displayed =
-							count_digits(pa +
-										 (conf.print_prefixes ? 2 : 0)) <
+							count_digits(pa + (conf.print_prefixes ? 2 : 0)) <
 							sig_figs;
 					} else {
 						not_all_displayed = 0;
@@ -869,7 +912,7 @@ char *print_this_result_dbl(double result)
 
 char *print_this_result(mpfr_t result)
 {
-	static char *pa=NULL;
+	static char *pa = NULL;
 	extern char *errstring;
 	unsigned int base = 0;
 
@@ -898,10 +941,10 @@ char *print_this_result(mpfr_t result)
 			base = 2;
 			break;
 	}
-	pa = realloc(pa,conf.precision + 50);
-	memset(pa,0,conf.precision+50);
-	num_to_str_complex(pa, result, base, conf.engineering, conf.precision,
-					   conf.print_prefixes);
+	pa = realloc(pa, conf.precision + 50);
+	memset(pa, 0, conf.precision + 50);
+	num_to_str_complex(pa, conf.precision + 50, result, base,
+					   conf.engineering, conf.precision, conf.print_prefixes);
 
 	/* now, decide whether it's been rounded or not */
 	if (mpfr_inf_p(result) || mpfr_nan_p(result)) {
@@ -912,9 +955,10 @@ char *print_this_result(mpfr_t result)
 		switch (conf.rounding_indication) {
 			case SIMPLE_ROUNDING_INDICATION:
 			{
-				char * pa2 = calloc(1,conf.precision + 50);
-				num_to_str_complex(pa2, result, base, conf.engineering, -1,
-								   conf.print_prefixes);
+				char *pa2 = calloc(1, conf.precision + 50);
+
+				num_to_str_complex(pa2, conf.precision + 50, result, base,
+								   conf.engineering, -1, conf.print_prefixes);
 				not_all_displayed = (strlen(pa) < strlen(pa2));
 				free(pa2);
 			}
@@ -1049,11 +1093,13 @@ void simple_exp(mpfr_t output, mpfr_t first, enum operations op,
 			}
 				break;
 			case wlshft:
-				mpfr_pow_ui(temp, second, 2, GMP_RNDN);
+				mpfr_set_ui(temp, 2, GMP_RNDN);
+				mpfr_pow(temp, temp, second, GMP_RNDN);
 				mpfr_mul(output, first, temp, GMP_RNDN);
 				break;
 			case wrshft:
-				mpfr_pow_ui(temp, second, 2, GMP_RNDN);
+				mpfr_set_ui(temp, 2, GMP_RNDN);
+				mpfr_pow(temp, temp, second, GMP_RNDN);
 				mpfr_div(output, first, temp, GMP_RNDN);
 				break;
 			case wmod:
@@ -1251,7 +1297,7 @@ int seed_random(void)
 	if (!seeded) {
 		struct timeval tp;
 
-		if (gettimeofday(&tp,NULL) != 0) {
+		if (gettimeofday(&tp, NULL) != 0) {
 			perror("gettimeofday");
 			exit(EXIT_FAILURE);
 		}
