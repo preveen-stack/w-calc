@@ -15,6 +15,7 @@
 #include <errno.h>
 #include <ctype.h> /* for isdigit() */
 #include "calculator.h"
+#include "conversion.h"
 #include "parser.h"
 #include "string_manip.h"
 
@@ -42,6 +43,8 @@ NDIGIT		[123456789]
 LETTER		[a-zA-Z]
 WHITESPACE	[ \t]
 ACCEPTABLE	[_:0-9]
+UNITCHRS	[-_a-zA-Z0-9^/µÅ]
+SPACE		[ ]
 
 /* The rest of this after the '%%' is lex rules */
 %%
@@ -114,7 +117,15 @@ ACCEPTABLE	[_:0-9]
 \\tsep.                 { YYLVALAC->character = yytext[5]; return(TSEP_CMD); }
 \?                      { return(PRINT_HELP_CMD); }
 [Hh][Ee][Ll][Pp]        { return(PRINT_HELP_CMD); }
-\\c(onv(ert)?)?			{ return(CONVERT_CMD); }
+\\c(onv(ert)?)?{SPACE}+{UNITCHRS}+{SPACE}+{UNITCHRS}+ {
+	char *unitone, *unittwo;
+	unitone = strchr(yytext,' ')+1;
+	unittwo = strchr(unitone,' ');
+	*unittwo++ = 0;
+	YYLVALAC->conver.u1 = strdup(unitone);
+	YYLVALAC->conver.u2 = strdup(unittwo);
+	return(CONVERT_CMD);
+}
 
 %{ /* These are comments */
 %}

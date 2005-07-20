@@ -21,6 +21,7 @@ char *strchr (), *strrchr ();
 #include "variables.h"
 #include "help.h"
 #include "files.h"
+#include "conversion.h"
 
 	/* Based on the headstart code by Shawn Ostermann
 	* modified by Kyle Wheeler
@@ -44,19 +45,20 @@ char *strchr (), *strrchr ();
 %union	{ /* the types that we use in the tokens */
 enum functions function;
 enum operations operation;
-double unit;
 mpfr_t number;
 int integer;
 enum commands cmd;
 char * variable;
 char character;
+struct conv_req conver;
 }
 
 %token DEC_CMD OCT_CMD HEX_CMD BIN_CMD GUARD_CMD DISPLAY_PREFS_CMD
 %token RADIAN_CMD PICKY_CMD REMEMBER_CMD LISTVAR_CMD
-%token PRINT_HELP_CMD PREFIX_CMD INT_CMD CONVERT_CMD
+%token PRINT_HELP_CMD PREFIX_CMD INT_CMD
 %token <integer> ENG_CMD HLIMIT_CMD ROUNDING_INDICATION_CMD
 %token <integer> PRECISION_CMD BITS_CMD
+%token <conver> CONVERT_CMD
 
 %token EOLN PAR REN WBRA WKET WSBRA WSKET
 %token WPLUS WMINUS WMULT WDIV WMOD WEQL WPOW WEXP WSQR
@@ -70,7 +72,6 @@ char character;
 %token <number> NUMBER
 %token <variable> VAR STRING OPEN_CMD SAVE_CMD
 %token <character> DSEP_CMD TSEP_CMD
-%token <unit> UNIT
 
 %type <number> exp exp_l2 exp_l3
 %type <number> oval capsule
@@ -357,8 +358,20 @@ command : HEX_CMD {
 	}
 	$$ = nothing;
 }
-| CONVERT_CMD UNIT UNIT
+| CONVERT_CMD
 {
+	int category;
+	category = identify_units($1.u1,$1.u2);
+	if (category == -1) {
+		report_error("Units must be in the same category.");
+	} else if (category == -2) {
+		report_error("Units provided are not recognized.");
+	} else {
+		uber_conversion(last_answer,category,unit_id(category,$1.u1),unit_id(category,$1.u2),last_answer);
+	}
+	free($1.u1);
+	free($1.u2);
+	$$ = redisplay;
 }
 ;
 

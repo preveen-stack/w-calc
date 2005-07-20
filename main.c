@@ -44,6 +44,7 @@ extern int history_truncate_file(char *, int);
 #endif /* HAVE_READLINE_HISTORY */
 
 #include "calculator.h"
+#include "conversion.h"
 #include "parser.h"
 #include "variables.h"
 #include "help.h"

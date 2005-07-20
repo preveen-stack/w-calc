@@ -80,7 +80,7 @@ am__quote = @am__quote@
 install_sh = @install_sh@
 bin_PROGRAMS = wcalc
 AM_YFLAGS = -dt
-wcalc_SOURCES = calculator.h variables.h string_manip.h help.h parser.y string_manip.h historyManager.h files.h scanner.l help.c calculator.c string_manip.c historyManager.c files.c variables.c main.c
+wcalc_SOURCES = calculator.h variables.h string_manip.h help.h parser.y string_manip.h historyManager.h files.h conversion.h scanner.l help.c calculator.c string_manip.c historyManager.c files.c variables.c conversion.c main.c
 AM_CFLAGS = -O2 -Wall
 wcalc_LDADD = @LEXLIB@
 man_MANS = wcalc.1
@@ -95,7 +95,7 @@ PROGRAMS = $(bin_PROGRAMS)
 am_wcalc_OBJECTS = parser.$(OBJEXT) scanner.$(OBJEXT) help.$(OBJEXT) \
 	calculator.$(OBJEXT) string_manip.$(OBJEXT) \
 	historyManager.$(OBJEXT) files.$(OBJEXT) variables.$(OBJEXT) \
-	main.$(OBJEXT)
+	conversion.$(OBJEXT) main.$(OBJEXT)
 wcalc_OBJECTS = $(am_wcalc_OBJECTS)
 wcalc_DEPENDENCIES =
 wcalc_LDFLAGS =
@@ -107,7 +107,8 @@ LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
-@AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/calculator.Po ./$(DEPDIR)/files.Po \
+@AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/calculator.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/conversion.Po ./$(DEPDIR)/files.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/help.Po ./$(DEPDIR)/historyManager.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/main.Po ./$(DEPDIR)/parser.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/scanner.Po ./$(DEPDIR)/string_manip.Po \
@@ -202,6 +203,7 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/calculator.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/conversion.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/files.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/help.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/historyManager.Po@am__quote@

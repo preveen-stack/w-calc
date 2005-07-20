@@ -13,10 +13,18 @@
 #include <mpfr.h>
 
 void uber_conversion (mpfr_t output, int utype, int fromunit, int tounit, mpfr_t value);
+int identify_units(char * unit1, char * unit2);
+int unit_id(int utype, char * unit);
 
 struct conversion {
 	char * factor;
 	char * name;
+	char *aka[7];
+};
+
+struct conv_req {
+	char *u1;
+	char *u2;
 };
 
 /* Conversion Types */
@@ -29,8 +37,7 @@ struct conversion {
 #define POWER_C         5 /*-*/
 #define FORCE_C         6 /*-*/
 #define ACCELERATION_C  7 /*-*/
-#define ASTRONOMICAL_C  8 /*-*/
-#define TEMPERATURE_C   9 /**/
+#define TEMPERATURE_C   8 /**/
 
 /* Length Units */
 #define MAX_LENGTH_UNIT 26
@@ -63,7 +70,7 @@ struct conversion {
 #define PICAS         26
 
 /* Area Units */
-#define MAX_AREA_UNIT 35
+#define MAX_AREA_UNIT 37
 #define ACRE          0
 #define COMM_ACRE     1
 #define IRISH_ACRE    2
