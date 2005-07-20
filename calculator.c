@@ -1092,6 +1092,22 @@ void simple_exp(mpfr_t output, mpfr_t first, enum operations op,
 				mpz_clear(intoutput);
 			}
 				break;
+			case wbxor:
+			{
+				mpz_t intfirst, intsecond, intoutput;
+
+				mpz_init(intfirst);
+				mpz_init(intsecond);
+				mpz_init(intoutput);
+				mpfr_get_z(intfirst, first, GMP_RNDN);
+				mpfr_get_z(intsecond, second, GMP_RNDN);
+				mpz_xor(intoutput, intfirst, intsecond);
+				mpfr_set_z(output, intoutput, GMP_RNDN);
+				mpz_clear(intfirst);
+				mpz_clear(intsecond);
+				mpz_clear(intoutput);
+			}
+				break;
 			case wlshft:
 				mpfr_set_ui(temp, 2, GMP_RNDN);
 				mpfr_pow(temp, temp, second, GMP_RNDN);
@@ -1277,6 +1293,19 @@ void uber_function(mpfr_t output, enum functions func, mpfr_t input)
 				break;
 			case wfact:
 				mpfr_fac_ui(output, mpfr_get_ui(input, GMP_RNDN), GMP_RNDN);
+				break;
+			case wcomp:
+			{
+				mpz_t integer, intout;
+
+				mpz_init(integer);
+				mpz_init(intout);
+				mpfr_get_z(integer, input, GMP_RNDN);
+				mpz_com(intout, integer);
+				mpfr_set_z(output, intout, GMP_RNDN);
+				mpz_clear(integer);
+				mpz_clear(intout);
+			}
 				break;
 			default:
 				mpfr_set(output, input, GMP_RNDN);

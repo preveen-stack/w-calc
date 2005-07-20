@@ -112,9 +112,9 @@ ACCEPTABLE	[_:0-9]
 	YYLVALAC->variable = returnme;
 	return(SAVE_CMD); }
 \\tsep.                 { YYLVALAC->character = yytext[5]; return(TSEP_CMD); }
-\\c(onv(ert)?)?{WHITESPACE}+{LETTER}+{WHITESPACE}+{LETTER}+{WHITESPACE}+{LETTER}+ {}
 \?                      { return(PRINT_HELP_CMD); }
 [Hh][Ee][Ll][Pp]        { return(PRINT_HELP_CMD); }
+\\c(onv(ert)?)?			{ return(CONVERT_CMD); }
 
 %{ /* These are comments */
 %}
@@ -257,6 +257,7 @@ not						{ return(WNOT); }
 (\&\&)|(and)			{ return(WAND); }
 (\=\=)|(equals)|(eq)	{ return(WEQUAL); }
 (\!\=)|(ne)|(­)			{ return(WNEQUAL); }
+xor						{ return(WBXOR); }
 \>						{ return(WGT); }
 \<						{ return(WLT); }
 \>\>                    { return(WRSHFT); }
@@ -299,6 +300,7 @@ cbrt { return(WCBRT); }
 rand { return(WRAND); }
 irand { return(WIRAND); }
 fact { return(WFACT); }
+comp { return(WCOMP); }
 
 '.*' {
 	char * temp = strdup(yytext+1);

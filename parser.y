@@ -44,6 +44,7 @@ char *strchr (), *strrchr ();
 %union	{ /* the types that we use in the tokens */
 enum functions function;
 enum operations operation;
+double unit;
 mpfr_t number;
 int integer;
 enum commands cmd;
@@ -53,22 +54,23 @@ char character;
 
 %token DEC_CMD OCT_CMD HEX_CMD BIN_CMD GUARD_CMD DISPLAY_PREFS_CMD
 %token RADIAN_CMD PICKY_CMD REMEMBER_CMD LISTVAR_CMD
-%token PRINT_HELP_CMD PREFIX_CMD INT_CMD
+%token PRINT_HELP_CMD PREFIX_CMD INT_CMD CONVERT_CMD
 %token <integer> ENG_CMD HLIMIT_CMD ROUNDING_INDICATION_CMD
 %token <integer> PRECISION_CMD BITS_CMD
 
 %token EOLN PAR REN WBRA WKET WSBRA WSKET
 %token WPLUS WMINUS WMULT WDIV WMOD WEQL WPOW WEXP WSQR
 %token WOR WAND WEQUAL WNEQUAL WGT WLT WGEQ WLEQ
-%token WLSHFT WRSHFT WBOR WBAND
+%token WLSHFT WRSHFT WBOR WBAND WBXOR
 
 %token WBNOT WNOT WLOG WLN WROUND WABS WSQRT WCEIL WFLOOR WCBRT WLOGTWO WBANG
 %token WSIN WCOS WTAN WASIN WACOS WATAN WSINH WCOSH WTANH WASINH WACOSH WATANH
-%token WCOT WACOT WCOTH WACOTH WRAND WIRAND WFACT
+%token WCOT WACOT WCOTH WACOTH WRAND WIRAND WFACT WCOMP
 
 %token <number> NUMBER
 %token <variable> VAR STRING OPEN_CMD SAVE_CMD
 %token <character> DSEP_CMD TSEP_CMD
+%token <unit> UNIT
 
 %type <number> exp exp_l2 exp_l3
 %type <number> oval capsule
@@ -355,6 +357,9 @@ command : HEX_CMD {
 	}
 	$$ = nothing;
 }
+| CONVERT_CMD UNIT UNIT
+{
+}
 ;
 
 assignment : VAR WEQL exp
@@ -431,6 +436,7 @@ exp : exp WMINUS exp { mpfr_init($$); simple_exp($$, $1, wminus, $3); mpfr_clear
 | exp WAND exp { mpfr_init($$); simple_exp($$, $1, wand, $3); mpfr_clear($1); mpfr_clear($3); }
 | exp WOR exp { mpfr_init($$); simple_exp($$, $1, wor, $3); mpfr_clear($1); mpfr_clear($3); }
 | exp WBOR exp { mpfr_init($$); simple_exp($$, $1, wbor, $3); mpfr_clear($1); mpfr_clear($3); }
+| exp WBXOR exp { mpfr_init($$); simple_exp($$, $1, wbxor, $3); mpfr_clear($1); mpfr_clear($3); }
 | exp WBAND exp { mpfr_init($$); simple_exp($$, $1, wband, $3); mpfr_clear($1); mpfr_clear($3); }
 | exp WEQUAL exp { mpfr_init($$); simple_exp($$, $1, wequal, $3); mpfr_clear($1); mpfr_clear($3); }
 | exp WNEQUAL exp { mpfr_init($$); simple_exp($$, $1, wnequal, $3); mpfr_clear($1); mpfr_clear($3); }
@@ -478,6 +484,7 @@ func : WSIN { $$ = wsin; }
 | WNOT { $$ = wnot; }
 | WBANG { $$ = wnot; }
 | WFACT { $$ = wfact; }
+| WCOMP { $$ = wcomp; }
 ;
 
 null : PAR REN

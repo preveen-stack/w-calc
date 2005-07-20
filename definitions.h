@@ -11,7 +11,7 @@
 #define WCALC_DEFINITIONS
 
 #ifdef GUI
-#define VERSION "1.7"
+#define VERSION "2.0"
 #endif
 
 #define W_EXTRA 5
@@ -64,9 +64,10 @@
 
 #define SUPPORTED_SYMBOLS \
 "+ - () {} [] * %% / ! ^ > >= < <= == != && || << >> | & ~\n"\
+"not ** or and equals eq ne xor\n\n"\
 "sin cos tan cot asin acos atan acot\n"\
 "sinh cosh tanh coth asinh acosh atanh acoth\n"\
-"log ln logtwo round abs ceil floor sqrt cbrt\n\n"\
+"log ln logtwo round abs ceil floor sqrt cbrt comp\n\n"\
 "e pi Na k Cc ec R G g Me Mp Mn Md u amu c h mu0 epsilon0\n"\
 "muB muN b ao F Vm NAk eV sigma alpha gamma re Kj Rk Rinf\n"\
 "Eh Gf Mµ Mmu Mt Mh Malpha n0 c1 c2 G0\n"\
