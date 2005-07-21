@@ -73,7 +73,7 @@ enum operations {wplus,
 	wnone};
 enum commands {redisplay,nothing};
 
-void parseme (mpfr_t, char *);
+void parseme (char *);
 void report_error (char *);
 void set_prettyanswer(mpfr_t num);
 char *print_this_result (mpfr_t result);
