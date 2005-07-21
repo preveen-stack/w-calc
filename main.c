@@ -75,7 +75,6 @@ int main(int argc, char *argv[])
 #endif
 	int tty, i;
 	short cmdline_input = 0;
-	mpfr_t retvalue;
 
 	yydebug = 1;					   /* turn on ugly YACC debugging */
 	yydebug = 0;					   /* turn off ugly YACC debugging */
@@ -95,7 +94,6 @@ int main(int argc, char *argv[])
 	conf.print_ints = 0;
 
 	mpfr_set_default_prec(1024);
-	mpfr_init(retvalue);
 
 	/* load the preferences */
 	{
@@ -153,12 +151,11 @@ int main(int argc, char *argv[])
 			conf.print_equal = 0;
 		} else {
 			cmdline_input = 1;
-			parseme(retvalue, argv[i]);
+			parseme(argv[i]);
 		}
 	}
 
 	if (cmdline_input) {
-		mpfr_clear(retvalue);
 		exit(0);
 	}
 
@@ -224,7 +221,7 @@ int main(int argc, char *argv[])
 					yydebug = !yydebug;
 					printf("Debug Mode %s\n", yydebug ? "On" : "Off");
 				} else {
-					parseme(retvalue, readme);
+					parseme(readme);
 					{
 						extern char *errstring;
 
@@ -291,7 +288,7 @@ int main(int argc, char *argv[])
 			}
 			if (ferror(stdin) || (feof(stdin) && linelen == 0))
 				break;
-			parseme(retvalue, line);
+			parseme(line);
 			putval("a", last_answer);
 			{
 				extern char *errstring;
@@ -309,7 +306,6 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	mpfr_clear(retvalue);
 	exit(0);
 }
 

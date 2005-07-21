@@ -126,7 +126,6 @@ int loadState(char *filename)
 		//success
 		char *linebuf;
 		int retval;
-		mpfr_t val;
 		unsigned int linelen = 0, maxlinelen = 99;
 
 		linebuf = calloc(sizeof(char), 100);
@@ -157,14 +156,12 @@ int loadState(char *filename)
 				char *safe;
 
 				safe = strdup(linebuf);
-				mpfr_init(val);
-				parseme(val,safe);
-				putval("a", val);
+				parseme(safe);
+				putval("a", last_answer);
 				if (!errstring || (errstring && !strlen(errstring)) ||
 					conf.remember_errors) {
-					addToHistory(linebuf, val);
+					addToHistory(linebuf, last_answer);
 				}
-				mpfr_clear(val);
 			}
 			linelen = 0;
 			memset(linebuf, 0, maxlinelen);
