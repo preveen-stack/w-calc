@@ -5,7 +5,12 @@
 #include <stdio.h>
 #include <math.h>					   /* for HUGE_VAL */
 #include <float.h>					   /* for DBL_EPSILON */
+#ifdef HAVE_INTTYPES_H
 #include <inttypes.h>				   /* for UINT32_MAX */
+#endif
+#ifdef HAVE_STDINT_H
+#include <stdint.h>					   /* for UINT32_MAX */
+#endif
 #include <ctype.h>					   /* for isalpha() */
 
 #if STDC_HEADERS
@@ -64,7 +69,6 @@ extern int yy_scan_string(const char *);
 static size_t num_to_str_complex(char *inputstr, unsigned int length,
 								 mpfr_t num, int base, int engr, int prec,
 								 int prefix);
-#define num_to_str(x,y,z) num_to_str_complex(x,y,z,10,0,0,1)
 struct variable_list
 {
 	char *varname;
@@ -78,7 +82,7 @@ static char *flatten(char *str);
 
 static int initialized = 0;
 
-void parseme(mpfr_t output, char *pthis)
+void parseme(char *pthis)
 {
 	extern int synerrors;
 	short numbers = 0;
@@ -200,6 +204,9 @@ size_t num_to_str_complex(char *inputstr, unsigned int length, mpfr_t num,
 	mp_exp_t e;
 	size_t decimal_count = 0;
 
+	Dprintf
+		("num_to_str_complex: length: %u, base: %i, engr: %i, prec: %i, prefix: %i\n",
+		 length, base, engr, prec, prefix);
 	if (mpfr_nan_p(num)) {
 		snprintf(inputstr, length, "@NaN@");
 		return 5;
@@ -257,7 +264,7 @@ size_t num_to_str_complex(char *inputstr, unsigned int length, mpfr_t num,
 		}
 	}
 	s0 = s;
-	//printf("post-mpfr s: %s\n", s);
+	Dprintf("post-mpfr s: %s\n", s);
 	/* for num = 3.1416 we have s = "31416" and e = 1 */
 
 	/* size of allocated block returned by mpfr_get_str may be incorrect, but 
@@ -315,13 +322,20 @@ size_t num_to_str_complex(char *inputstr, unsigned int length, mpfr_t num,
 	}
 	/* the rest of the mantissa (the decimals) */
 	{
-		size_t print_limit =
-			((length <
-			  (prec - decimal_count + 1)) ? length : (prec - decimal_count +
-													  1));
-		size_t printed =
-			((print_limit < strlen(s)) ? print_limit : strlen(s));
+		size_t print_limit, printed;
 
+		if (prec == -1) {			   /* if precision is arbitrary, the sky's the limit in printing stuff */
+			print_limit = length;
+		} else {					   /* if precision is specified, then you use that as a limit */
+			print_limit =
+				((length <
+				  (prec - decimal_count + 1)) ? length : (prec -
+														  decimal_count + 1));
+		}
+		/* this variable exists because snprintf's return value is unreliable
+		 * and can be larger than the number of digits printed
+		 * */
+		printed = ((print_limit < strlen(s)) ? print_limit : strlen(s));
 		snprintf(curs, print_limit, "%s", s);
 		length -= printed;
 		decimal_count += printed;
@@ -415,8 +429,8 @@ static char *flatten(char *str)
 {
 	struct variable_list *vlist = NULL;
 	char *curs = str, *eov, *nstr;
-	char varname[500];
-	int i, olen, nlen, changedlen;
+	char varname[500], *varvalue;
+	size_t olen, nlen, changedlen;
 	struct answer a;
 	char standard_output_save = standard_output;
 
@@ -445,38 +459,52 @@ static char *flatten(char *str)
 			}
 			curs++;
 		}
-		if (!curs || !*curs)
+		if (!curs || !*curs) {
 			break;
-
+		}
 		// pull out that variable
 		eov = curs;
-		i = 0;
-		while (eov && *eov &&
-			   (isalpha((int)(*eov)) || *eov == '_' || *eov == ':' ||
-				isdigit((int)(*eov)))) {
-			varname[i++] = *eov;
-			eov++;
+		{
+			size_t i = 0;
+			while (eov && *eov &&
+					(isalpha((int)(*eov)) || *eov == '_' || *eov == ':' ||
+					 isdigit((int)(*eov)))) {
+				varname[i++] = *eov;
+				eov++;
+			}
+			if (i == 0)
+				break;
+			varname[i] = 0;
 		}
-		if (i == 0)
-			break;
-		varname[i] = 0;
 		olen = strlen(varname);
 
 		// if it's a variable, evaluate it
 		a = getvar_full(varname);
 		if (!a.err) {				   // it is a var
-			if (a.exp) {			   // it is an expression
-				mpfr_t f;
+			mp_exp_t e;
+			char *tstr;
+			size_t len;
+			mpfr_t f;
 
-				mpfr_init(f);
-				parseme(f, a.exp);
-				num_to_str(varname, 500, f);
-				mpfr_clear(f);
+			mpfr_init(f);
+			if (a.exp) {			   // it is an expression
+				parseme(a.exp);
+				mpfr_set(f, last_answer, GMP_RNDN);
 			} else {				   // it is a value
-				num_to_str(varname, 500, a.val);
+				mpfr_set(f, a.val, GMP_RNDN);
 			}
+			// find out how much space it needs for full precision
+			tstr = mpfr_get_str(NULL, &e, 10, 0, f, GMP_RNDN);
+			len = strlen(tstr) + 3 + (e / 10);
+			// allocate that space
+			varvalue = calloc(len, sizeof(char));
+			// get the number
+			num_to_str_complex(varvalue, len, f, 10, 0, -1, 1);
+			mpfr_clear(f);
+		} else {					   // not a known var: itza literal (e.g. cos)
+			varvalue = strdup(varname);
 		}
-		nlen = strlen(varname);
+		nlen = strlen(varvalue);
 
 		// now, put it back in the string
 		// it is a var, and needs parenthesis
@@ -504,7 +532,7 @@ static char *flatten(char *str)
 				*tostring = '(';
 				++tostring;
 			}
-			fromstring = varname;
+			fromstring = varvalue;
 			while (fromstring && *fromstring) {
 				*tostring = *fromstring;
 				++fromstring;
@@ -525,6 +553,7 @@ static char *flatten(char *str)
 			free(str);
 			str = nstr;
 		}
+		free(varvalue);
 	}
 	// free up the vlist
 	while (vlist) {
