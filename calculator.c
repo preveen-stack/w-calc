@@ -260,7 +260,7 @@ size_t num_to_str_complex(char *inputstr, unsigned int length, mpfr_t num,
 								 GMP_RNDN);
 			}
 		} else {
-			s = mpfr_get_str(s, &e, base, 1 + prec, num, GMP_RNDN);
+			s = mpfr_get_str(NULL, &e, base, 1 + prec, num, GMP_RNDN);
 		}
 	}
 	s0 = s;
