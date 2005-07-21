@@ -137,7 +137,8 @@ char *historynum(int step, int col)
 		static char *temp;
 
 		if (recalculate) {
-			parseme(history[step].ans, history[step].exp);
+			parseme(history[step].exp);
+			mpfr_set(history[step].ans, last_answer, GMP_RNDN);
 			history[step].calc = 1;
 			if (all_calculated()) {
 				recalculate = 0;

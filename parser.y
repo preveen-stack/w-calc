@@ -87,7 +87,7 @@ struct conv_req conver;
 %left WPOW
 %left WNOT WBNOT WNEG
 
-%expect 1163
+%expect 1237
 
 %% 	/* beginning of the parsing rules	*/
 
@@ -380,17 +380,16 @@ assignment : VAR WEQL exp
 	if (compute && ! scanerror) {
 		/* if standard_error, q is reserved */
 		if (standard_output && !strcmp($1,"q")) {
-			printf("q cannot be assigned a value. q is used to exit.\n");
+			report_error("q cannot be assigned a value. q is used to exit.");
 		} else {
 			if (putval($1,$3) == 0) {
 				if (standard_output) {
 					mpfr_t val;
 					mpfr_init(val);
-					printf("%s = ", $1);
+					printf($1);
 					getvarval(val, $1);
-					mpfr_out_str(stdout,DEFAULT_BASE,0,val,GMP_RNDN);
+					print_this_result(val);
 					mpfr_clear(val);
-					printf("\n");
 				}
 			} else {
 				report_error("There was a problem assigning variables.");
@@ -407,7 +406,7 @@ assignment : VAR WEQL exp
 {
 	if (compute && ! scanerror) {
 		if (standard_output && !strcmp($1,"q")) {
-			printf("q cannot be assigned a value. q is used to exit.\n");
+			report_error("q cannot be assigned an expression. q is used to exit.");
 		} else {
 			if (putexp($1,$3) == 0) {
 				if (standard_output) {
@@ -521,12 +520,12 @@ exp_l2 : exp_l3
 					 mpfr_clear($3); }
 ;
 
-oval : exp_l3 oval 
+oval : exp_l3 oval
 | { mpfr_init_set_ui($$,1,GMP_RNDN); }
 ;
 
 exp_l3 : capsule oval { mpfr_init($$);
-                        mpfr_mul($$,$1,$2,GMP_RNDN);
+                        simple_exp($$,$1,wmult,$2);
 						mpfr_clear($1);
 						mpfr_clear($2);}
 | capsule WPOW sign exp_l3 oval { mpfr_init($$);
@@ -547,32 +546,6 @@ capsule: PAR exp REN { mpfr_init($$); mpfr_set($$,$2,GMP_RNDN); mpfr_clear($2); 
 					  mpfr_mul_si($3,$3,$2,GMP_RNDN);
 					  uber_function($$,$1,$3);
 					  mpfr_clear($3);}
-| VAR
-{
-	/* Don't include reserved variables */
-	mpfr_init($$);
-	if (standard_output && (!strcmp($1,"P") || !strcmp($1,"E") || !strcmp($1,"M") || !strcmp($1,"q"))) {
-		fprintf(stderr,"%s is a reserved variable.\n",$1);
-		compute = 0;
-		mpfr_set_ui($$,0,GMP_RNDN);
-	} else {
-		struct answer temp = getvar($1);
-		if (! temp.err && ! temp.exp) {
-			mpfr_set($$,temp.val,GMP_RNDN);
-			mpfr_clear(temp.val);
-		} else {
-			mpfr_set_ui($$,0,GMP_RNDN);
-			if (conf.picky_variables) {
-				char * error = malloc(sizeof(char)*(strlen($1)+45));
-				sprintf(error,"%s does not exist or was not properly parsed.",$1);
-				report_error(error);
-				compute = 0;
-				free(error);
-			}
-		}
-	}
-}
-
 ;
 
 %%

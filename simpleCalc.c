@@ -47,7 +47,8 @@ char *simpleCalc(unsigned char input, char *expStr)
 		// if the input is one of the operators
 		append = 0;
 		if (lastchar != input) {
-			parseme(cur_number, expStr);
+			parseme(expStr);
+			mpfr_set(cur_number, last_answer, GMP_RNDN);
 		}
 		simpleEval();
 		operator = input;
@@ -77,7 +78,8 @@ char *simpleCalc(unsigned char input, char *expStr)
 			*newStr = input;
 		}
 		append = 1;
-		parseme(cur_number, newStr);
+		parseme(newStr);
+		mpfr_set(cur_number, last_answer, GMP_RNDN);
 		return newStr;
 	} else {
 		// if the input is not an acceptable character... do nothing
