@@ -1,9 +1,9 @@
 # Process this file with autoconf to produce a configure script.
-AC_PREREQ(2.57)
+AC_PREREQ(2.50)
 AC_INIT(wcalc, 2.0, kyle-wcalc@memoryhole.net)
 AM_INIT_AUTOMAKE(wcalc, 2.0)
 AC_CONFIG_SRCDIR([WcalcController.h])
-AM_CONFIG_HEADER([config.h])
+AM_CONFIG_HEADER(config.h)
 
 # Checks for programs.
 AC_PROG_YACC
@@ -35,19 +35,20 @@ AC_HEADER_STDC
 AC_HEADER_SYS_WAIT
 AC_HEADER_TIME
 #AC_HEADER_STAT
-AC_CHECK_HEADERS([fcntl.h float.h inttypes.h stdlib.h stdio.h string.h sys/time.h unistd.h limits.h malloc.h])
+AC_CHECK_HEADERS([fcntl.h float.h inttypes.h limits.h stddef.h stdint.h stdlib.h string.h sys/time.h unistd.h stdio.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
+AC_TYPE_SIZE_T
 
 # Checks for library functions.
-AC_FUNC_ALLOCA
+#AC_FUNC_ALLOCA
 AC_FUNC_MALLOC
 AC_FUNC_REALLOC
 #AC_FUNC_STAT
 #AC_FUNC_STRTOD
 AC_FUNC_VPRINTF
-AC_CHECK_FUNCS([memset floor modf pow rint sqrt strchr strdup strerror strrchr strtoul])
+AC_CHECK_FUNCS([gettimeofday memset modf pow stpcpy strchr strdup strerror strrchr strtoul])
 
 if test "`(uname) 2>/dev/null`" = SunOS \
 	&& uname -r | grep '^5' >/dev/null; then
