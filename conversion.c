@@ -390,11 +390,11 @@ void uber_conversion (mpfr_t output, int utype, int fromunit, int tounit, mpfr_t
         }
         mpfr_clear(temp);
 /* The old way *//*
-        char stage1[100];
-        char composite[100];
-        sprintf(stage1,from_temperatures[fromunit],value);
-        sprintf(composite,to_temperatures[tounit],stage1);
-        return parseme(composite);
+        //char stage1[100];
+        //char composite[100];
+        //sprintf(stage1,from_temperatures[fromunit],value);
+        //sprintf(composite,to_temperatures[tounit],stage1);
+        //return parseme(composite);
         */
     }
 }
