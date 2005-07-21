@@ -11,6 +11,12 @@
 #include <sys/wait.h>
 #include <stdio.h>
 #include <string.h>
+#ifdef HAVE_INTTYPES_H
+#include <inttypes.h>
+#endif
+#ifdef HAVE_STDINT_H
+#include <stdint.h>
+#endif
 #include <math.h>
 #include <errno.h>
 #include <ctype.h> /* for isdigit() */
@@ -37,6 +43,8 @@
 /* goes directly into the lex.yy.c file */
 %}
 
+%pointer
+%option nounput noinput
 /* shorthand definitions for later */
 DIGIT		[0123456789]
 NDIGIT		[123456789]
@@ -315,7 +323,8 @@ comp { return(WCOMP); }
 
 '.*' {
 	char * temp = strdup(yytext+1);
-	temp[(int)strlen(temp)-1] = 0;
+	//temp[(int)strlen(temp)-1] = 0;
+	temp[yyleng-2] = 0;
 	YYLVALAC->variable = temp;
 	return(STRING);
 }
@@ -398,7 +407,7 @@ comp { return(WCOMP); }
 	if (-1 == retval) {
 		report_error("some characters invalid for base 16");
 	} else {
-		unsigned int t = strlen(yytext+2);
+		unsigned int t = yyleng-2; //strlen(yytext+2);
 		if (yydebug) {
 			mpfr_out_str(stdout,DEFAULT_BASE,0, YYLVALAC->number, GMP_RNDN);
 			printf("\n");
@@ -410,7 +419,8 @@ comp { return(WCOMP); }
 
 0{DIGIT}* {
 	/* octal */
-	char err[strlen(yytext)+57];
+	//char err[strlen(yytext)+57];
+	char err[yyleng+57];
 	if (strchr(yytext,'8') || strchr(yytext,'9')) {
 		sprintf(err,"Incorrect number format (%s) - expected 0-7 for octal",yytext);
 		report_error(err);
@@ -423,7 +433,7 @@ comp { return(WCOMP); }
 		if (-1 == retval) report_error(strerror(errno));
 		/*sscanf(yytext,"%lo",&value);
 		yylval.number = value; */
-		t = strlen(yytext+1);
+		t = yyleng-1; //strlen(yytext+1);
 		if (t<sig_figs) sig_figs = t;
 		return(NUMBER);
 	}
@@ -432,7 +442,8 @@ comp { return(WCOMP); }
 0b[0-9]+ {
 	/* binary */
 	extern int yydebug;
-	char err[strlen(yytext)+57];
+	//char err[strlen(yytext)+57];
+	char err[yyleng+57];
 
 	/* verify the digits */
 	if (strchr(yytext,'2') || strchr(yytext,'3') || strchr(yytext,'4') || strchr(yytext,'5') || strchr(yytext,'6') || strchr(yytext,'7') || strchr(yytext,'8') || strchr(yytext,'9')) {
@@ -446,7 +457,7 @@ comp { return(WCOMP); }
 		if (-1 == retval) {
 			report_error("Expected a 0 or 1 for binary.");
 		} else {
-			unsigned int t = strlen(yytext+2);
+			unsigned int t = yyleng-2; //strlen(yytext+2);
 			if (yydebug) {
 				mpfr_out_str(stdout,DEFAULT_BASE,0, YYLVALAC->number, GMP_RNDN);
 				printf("\n");
@@ -463,8 +474,8 @@ comp { return(WCOMP); }
 	char errmsg[] = "Confusing number format (%s)";
 	char *err;
 	int i;
-	err = (char *)calloc(sizeof(char),(int)strlen(yytext)+(int)strlen(errmsg)-5);
-	for (i=0;i<(int)strlen(yytext);++i) {
+	err = (char *)calloc(sizeof(char),yyleng+(int)strlen(errmsg)-5);
+	for (i=0;i<yyleng;++i) {
 	    if (yytext[i] == ',')
 		yytext[i] = conf.thou_delimiter;
 	    else if (yytext[i] == '.')
