@@ -270,6 +270,7 @@ size_t num_to_str_complex(char *inputstr, unsigned int length, mpfr_t num,
 	/* size of allocated block returned by mpfr_get_str may be incorrect, but 
 	 * only as an upper bound */
 	l = strlen(s) + 1;
+	Dprintf("l = %lu\n",l);
 
 	/* now, copy the string into the input string, carefully */
 
@@ -322,7 +323,7 @@ size_t num_to_str_complex(char *inputstr, unsigned int length, mpfr_t num,
 	}
 	/* the rest of the mantissa (the decimals) */
 	{
-		size_t print_limit, printed;
+		size_t print_limit, printed, initial_length;
 
 		if (prec == -1) {			   /* if precision is arbitrary, the sky's the limit in printing stuff */
 			print_limit = length;
@@ -335,7 +336,8 @@ size_t num_to_str_complex(char *inputstr, unsigned int length, mpfr_t num,
 		/* this variable exists because snprintf's return value is unreliable
 		 * and can be larger than the number of digits printed
 		 * */
-		printed = ((print_limit < strlen(s)) ? print_limit : strlen(s));
+		printed = ((print_limit-1 < strlen(s)) ? print_limit-1 : strlen(s));
+		initial_length = strlen(inputstr);
 		snprintf(curs, print_limit, "%s", s);
 		length -= printed;
 		decimal_count += printed;
