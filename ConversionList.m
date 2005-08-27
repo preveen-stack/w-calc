@@ -23,7 +23,6 @@
 		case POWER_C: return MAX_POWER_UNIT+1;
 		case FORCE_C: return MAX_FORCE_UNIT+1;
 		case ACCELERATION_C: return MAX_ACCELERATION_UNIT+1;
-		case ASTRONOMICAL_C: return MAX_ASTRONOMICAL_UNIT+1;
 		case TEMPERATURE_C: return MAX_TEMPERATURE_UNIT+1;
 		default:
 			return 0;

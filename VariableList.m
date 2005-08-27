@@ -45,10 +45,12 @@
 		if (justnumbers(input)) {
 			mpfr_t la;
 
-			mpfr_init_set(la,last_answer,GMP_RNDN);
-			parseme(theval->value, input);
+			mpfr_init_set(la, last_answer, GMP_RNDN);
+			parseme(input);
+			mpfr_set(theval->value, last_answer, GMP_RNDN);
 			theval->exp = 0;
-			mpfr_set(last_answer,la,GMP_RNDN);
+			mpfr_set(last_answer, la, GMP_RNDN);
+			mpfr_clear(la);
 		} else {
 			theval->expression = input;
 			theval->exp = 1;

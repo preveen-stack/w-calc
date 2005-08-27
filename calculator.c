@@ -13,7 +13,7 @@
 #endif
 #include <ctype.h>					   /* for isalpha() */
 
-#if STDC_HEADERS
+#if defined(GUI) || STDC_HEADERS
 # include <string.h>				   /* for memset() */
 #else
 # if !HAVE_STRCHR
@@ -23,7 +23,7 @@
 char *strchr(), *strrchr();
 #endif
 
-#if TIME_WITH_SYS_TIME				   /* for time() */
+#if defined(GUI) || TIME_WITH_SYS_TIME		/* for time() */
 # include <sys/time.h>
 # include <time.h>
 #else

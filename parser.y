@@ -1,7 +1,10 @@
 /*%pure-parser */
 %{
 /*#define REENTRANT_PARSER */
-#if STDC_HEADERS
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+#if defined(STDC_HEADERS) || ! defined(HAVE_CONFIG_H)
 # include <string.h>
 #else
 # if !HAVE_STRCHR

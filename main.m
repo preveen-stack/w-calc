@@ -9,8 +9,9 @@
 #import <Cocoa/Cocoa.h>
 
 #import "calculator.h"
-#import "variables.h"
+#import "conversion.h"
 #import "parser.h"
+#import "variables.h"
 
 #import "WcalcController.h"
 

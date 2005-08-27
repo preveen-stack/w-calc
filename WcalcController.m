@@ -358,21 +358,18 @@ static NSString *curFile = NULL;
 - (IBAction)go:(id)sender
 {
 	char * expression;
-	mpfr_t val;
 	extern char * errstring;
 
 	expression = strdup([[ExpressionField stringValue] cString]);
 
-	mpfr_init(val);
-	parseme(val, expression);
-	putval("a",val);
+	parseme(expression);
+	putval("a",last_answer);
 
 	/* if it isn't an error (or if you want me to remember errors) record it in the history */
 	if (!errstring || (errstring && !strlen(errstring)) || conf.remember_errors) {
-		addToHistory(expression, val);
+		addToHistory(expression, last_answer);
 		free(expression);
 	}
-	mpfr_clear(val);
 
 	[self displayAnswer];
 }
