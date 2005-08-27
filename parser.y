@@ -364,11 +364,22 @@ command : HEX_CMD {
 | CONVERT_CMD
 {
 	int category;
+	char * errstr;
 	category = identify_units($1.u1,$1.u2);
 	if (category == -1) {
 		report_error("Units must be in the same category.");
 	} else if (category == -2) {
 		report_error("Units provided are not recognized.");
+	} else if (category == -3) {
+		errstr = calloc(sizeof(char),strlen($1.u1)+45);
+		sprintf(errstr,"First unit provided was not recognized (%s).",$1.u1);
+		report_error(errstr);
+		free(errstr);
+	} else if (category == -4) {
+		errstr = calloc(sizeof(char),strlen($1.u2)+46);
+		sprintf(errstr,"Second unit provided was not recognized (%s).",$1.u2);
+		report_error(errstr);
+		free(errstr);
 	} else {
 		uber_conversion(last_answer,category,unit_id(category,$1.u1),unit_id(category,$1.u2),last_answer);
 	}

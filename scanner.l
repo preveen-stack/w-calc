@@ -125,11 +125,14 @@ SPACE		[ ]
 \\tsep.                 { YYLVALAC->character = yytext[5]; return(TSEP_CMD); }
 \?                      { return(PRINT_HELP_CMD); }
 [Hh][Ee][Ll][Pp]        { return(PRINT_HELP_CMD); }
-\\c(onv(ert)?)?{SPACE}+{UNITCHRS}+{SPACE}+{UNITCHRS}+ {
+\\c(onv(ert)?)?{SPACE}+{UNITCHRS}+{SPACE}+to{SPACE}+{UNITCHRS}+ {
 	char *unitone, *unittwo;
 	unitone = strchr(yytext,' ')+1;
 	unittwo = strchr(unitone,' ');
-	*unittwo++ = 0;
+	*unittwo++ = 0; /* space */
+	*unittwo++ = 0; /* t */
+	*unittwo++ = 0; /* o */
+	*unittwo++ = 0; /* space */
 	YYLVALAC->conver.u1 = strdup(unitone);
 	YYLVALAC->conver.u2 = strdup(unittwo);
 	return(CONVERT_CMD);

@@ -15,15 +15,15 @@
 - (int)numberOfRowsInTableView:(NSTableView *)atv;
 {
 	switch ([theType indexOfSelectedItem]) {
-		case LENGTH_C: return MAX_LENGTH_UNIT+1;
-		case AREA_C: return MAX_AREA_UNIT+1;
-		case VOLUME_C: return MAX_VOLUME_UNIT+1;
-		case MASS_C: return MAX_MASS_UNIT+1;
-		case SPEED_C: return MAX_SPEED_UNIT+1;
-		case POWER_C: return MAX_POWER_UNIT+1;
-		case FORCE_C: return MAX_FORCE_UNIT+1;
-		case ACCELERATION_C: return MAX_ACCELERATION_UNIT+1;
-		case TEMPERATURE_C: return MAX_TEMPERATURE_UNIT+1;
+		case LENGTH_C: return LENGTH_UNIT_COUNT;
+		case AREA_C: return AREA_UNIT_COUNT;
+		case VOLUME_C: return VOLUME_UNIT_COUNT;
+		case MASS_C: return MASS_UNIT_COUNT;
+		case SPEED_C: return SPEED_UNIT_COUNT;
+		case POWER_C: return POWER_UNIT_COUNT;
+		case FORCE_C: return FORCE_UNIT_COUNT;
+		case ACCELERATION_C: return ACCELERATION_UNIT_COUNT;
+		case TEMPERATURE_C: return TEMPERATURE_UNIT_COUNT;
 		default:
 			return 0;
 	}

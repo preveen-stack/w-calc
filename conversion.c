@@ -236,7 +236,7 @@ const struct conversion accelerations[] = {
 };
 
 
-char * from_temperatures[MAX_TEMPERATURE_UNIT+1] = {
+char * from_temperatures[] = {
     "[%1.15f]",                     // kelvin
     "[%1.15f + 273.15]",            // celsius
     "[%1.15f / 1.8]",               // rankine
@@ -244,7 +244,7 @@ char * from_temperatures[MAX_TEMPERATURE_UNIT+1] = {
     "[((5/4) * %1.15f) + 273.15]"   // reaumur
 };
 
-char * to_temperatures[MAX_TEMPERATURE_UNIT+1] = {
+char * to_temperatures[] = {
     "%s",                 // kelvin
     "%s - 273.15",        // celsius
     "%s * 1.8",           // rankine
@@ -300,6 +300,11 @@ int identify_units(char * unit1, char * unit2)
                 }
             }
         }
+    }
+    if (-1 == u1) {
+        return -3;
+    } else if (-1 == u2) {
+        return -4;
     }
     return -2;
 }

@@ -81,14 +81,15 @@
 /* Begin PBXBuildFile section */
 		089C165EFE840E0CC02AAC07 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		1058C7A3FEA54F0111CA2CBB /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
-		2721CC3608660C7E00E3BB4D /* libmpfr.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2721CC3508660C7E00E3BB4D /* libmpfr.a */; };
-		2721CC3708660C7F00E3BB4D /* libmpfr.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2721CC3508660C7E00E3BB4D /* libmpfr.a */; };
-		2721CC3808660C7F00E3BB4D /* libmpfr.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2721CC3508660C7E00E3BB4D /* libmpfr.a */; };
-		2721CC4508660CA600E3BB4D /* libgmp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2721CC4408660CA600E3BB4D /* libgmp.a */; };
-		2721CC4608660CA600E3BB4D /* libgmp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2721CC4408660CA600E3BB4D /* libgmp.a */; };
-		2721CC4708660CA600E3BB4D /* libgmp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2721CC4408660CA600E3BB4D /* libgmp.a */; };
 		2721CD4A0869C13400E3BB4D /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2721CD490869C13400E3BB4D /* Info.plist */; };
 		2721CD4B0869C13400E3BB4D /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2721CD490869C13400E3BB4D /* Info.plist */; };
+		2754E78B08C0DC14007F45CF /* libreadline.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2754E78A08C0DC14007F45CF /* libreadline.a */; };
+		2754E79108C0E00B007F45CF /* libmpfr.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2754E79008C0E00B007F45CF /* libmpfr.a */; };
+		2754E79208C0E00B007F45CF /* libmpfr.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2754E79008C0E00B007F45CF /* libmpfr.a */; };
+		2754E79308C0E00B007F45CF /* libmpfr.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2754E79008C0E00B007F45CF /* libmpfr.a */; };
+		2754E79508C0E032007F45CF /* libgmp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2754E79408C0E032007F45CF /* libgmp.a */; };
+		2754E79608C0E032007F45CF /* libgmp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2754E79408C0E032007F45CF /* libgmp.a */; };
+		2754E79708C0E032007F45CF /* libgmp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2754E79408C0E032007F45CF /* libgmp.a */; };
 		275710BE042D0472004ACA36 /* files.h in Headers */ = {isa = PBXBuildFile; fileRef = 275710BC042D0472004ACA36 /* files.h */; };
 		275710BF042D0472004ACA36 /* files.c in Sources */ = {isa = PBXBuildFile; fileRef = 275710BD042D0472004ACA36 /* files.c */; };
 		275710C0042D0472004ACA36 /* files.h in Headers */ = {isa = PBXBuildFile; fileRef = 275710BC042D0472004ACA36 /* files.h */; };
@@ -147,7 +148,6 @@
 		27D39154059BEA850035F25F /* files.c in Sources */ = {isa = PBXBuildFile; fileRef = 275710BD042D0472004ACA36 /* files.c */; };
 		27D39156059BEA850035F25F /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		29B9732CFDCFA39411CA2CEA /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
-		F510EE8B0217160601A80164 /* libreadline.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F510EE8A0217160601A80164 /* libreadline.a */; };
 		F521993601F8D28801A80164 /* calculator.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B29D6601F7391601A80164 /* calculator.h */; };
 		F521993701F8D28801A80164 /* variables.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B29D7401F7394501A80164 /* variables.h */; };
 		F521993901F8D28801A80164 /* calculator.c in Sources */ = {isa = PBXBuildFile; fileRef = F5B29D6501F7391601A80164 /* calculator.c */; };
@@ -226,9 +226,10 @@
 		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		17587328FF379C6511CA2CBB /* Wcalc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; path = Wcalc.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		2721CC3508660C7E00E3BB4D /* libmpfr.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmpfr.a; path = /opt/local/lib/libmpfr.a; sourceTree = "<absolute>"; };
-		2721CC4408660CA600E3BB4D /* libgmp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgmp.a; path = /opt/local/lib/libgmp.a; sourceTree = "<absolute>"; };
 		2721CD490869C13400E3BB4D /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = Info.plist; sourceTree = "<group>"; };
+		2754E78A08C0DC14007F45CF /* libreadline.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libreadline.a; path = /opt/local/lib/libreadline.a; sourceTree = "<absolute>"; };
+		2754E79008C0E00B007F45CF /* libmpfr.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmpfr.a; path = /opt/local/lib/libmpfr.a; sourceTree = "<absolute>"; };
+		2754E79408C0E032007F45CF /* libgmp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgmp.a; path = /opt/local/lib/libgmp.a; sourceTree = "<absolute>"; };
 		275710BC042D0472004ACA36 /* files.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = files.h; sourceTree = "<group>"; };
 		275710BD042D0472004ACA36 /* files.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = files.c; sourceTree = "<group>"; };
 		277DB27D042F5173004ACA36 /* COPYING */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = COPYING; sourceTree = "<group>"; };
@@ -241,7 +242,6 @@
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
-		F510EE8A0217160601A80164 /* libreadline.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libreadline.a; path = /sw/lib/libreadline.a; sourceTree = "<absolute>"; };
 		F521993301F8D28701A80164 /* wcalc */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; path = wcalc; sourceTree = BUILT_PRODUCTS_DIR; };
 		F521993F01F8D2B801A80164 /* main.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		F521994301FA86B001A80164 /* VariableList.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = VariableList.m; sourceTree = "<group>"; };
@@ -286,8 +286,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				27D39156059BEA850035F25F /* Cocoa.framework in Frameworks */,
-				2721CC3708660C7F00E3BB4D /* libmpfr.a in Frameworks */,
-				2721CC4608660CA600E3BB4D /* libgmp.a in Frameworks */,
+				2754E79208C0E00B007F45CF /* libmpfr.a in Frameworks */,
+				2754E79608C0E032007F45CF /* libgmp.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -296,8 +296,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				1058C7A3FEA54F0111CA2CBB /* Cocoa.framework in Frameworks */,
-				2721CC3608660C7E00E3BB4D /* libmpfr.a in Frameworks */,
-				2721CC4508660CA600E3BB4D /* libgmp.a in Frameworks */,
+				2754E79308C0E00B007F45CF /* libmpfr.a in Frameworks */,
+				2754E79708C0E032007F45CF /* libgmp.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -305,9 +305,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F510EE8B0217160601A80164 /* libreadline.a in Frameworks */,
-				2721CC3808660C7F00E3BB4D /* libmpfr.a in Frameworks */,
-				2721CC4708660CA600E3BB4D /* libgmp.a in Frameworks */,
+				2754E78B08C0DC14007F45CF /* libreadline.a in Frameworks */,
+				2754E79108C0E00B007F45CF /* libmpfr.a in Frameworks */,
+				2754E79508C0E032007F45CF /* libgmp.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -417,9 +417,9 @@
 		F510EE8F021717DF01A80164 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				2721CC4408660CA600E3BB4D /* libgmp.a */,
-				2721CC3508660C7E00E3BB4D /* libmpfr.a */,
-				F510EE8A0217160601A80164 /* libreadline.a */,
+				2754E79408C0E032007F45CF /* libgmp.a */,
+				2754E78A08C0DC14007F45CF /* libreadline.a */,
+				2754E79008C0E00B007F45CF /* libmpfr.a */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
