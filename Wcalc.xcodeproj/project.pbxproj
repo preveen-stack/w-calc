@@ -90,6 +90,9 @@
 		2754E79508C0E032007F45CF /* libgmp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2754E79408C0E032007F45CF /* libgmp.a */; };
 		2754E79608C0E032007F45CF /* libgmp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2754E79408C0E032007F45CF /* libgmp.a */; };
 		2754E79708C0E032007F45CF /* libgmp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2754E79408C0E032007F45CF /* libgmp.a */; };
+		2754E89308C11276007F45CF /* libfl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2754E89208C11276007F45CF /* libfl.a */; };
+		2754E89408C11276007F45CF /* libfl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2754E89208C11276007F45CF /* libfl.a */; };
+		2754E89508C11276007F45CF /* libfl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2754E89208C11276007F45CF /* libfl.a */; };
 		275710BE042D0472004ACA36 /* files.h in Headers */ = {isa = PBXBuildFile; fileRef = 275710BC042D0472004ACA36 /* files.h */; };
 		275710BF042D0472004ACA36 /* files.c in Sources */ = {isa = PBXBuildFile; fileRef = 275710BD042D0472004ACA36 /* files.c */; };
 		275710C0042D0472004ACA36 /* files.h in Headers */ = {isa = PBXBuildFile; fileRef = 275710BC042D0472004ACA36 /* files.h */; };
@@ -230,6 +233,7 @@
 		2754E78A08C0DC14007F45CF /* libreadline.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libreadline.a; path = /opt/local/lib/libreadline.a; sourceTree = "<absolute>"; };
 		2754E79008C0E00B007F45CF /* libmpfr.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmpfr.a; path = /opt/local/lib/libmpfr.a; sourceTree = "<absolute>"; };
 		2754E79408C0E032007F45CF /* libgmp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgmp.a; path = /opt/local/lib/libgmp.a; sourceTree = "<absolute>"; };
+		2754E89208C11276007F45CF /* libfl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfl.a; path = /opt/local/lib/libfl.a; sourceTree = "<absolute>"; };
 		275710BC042D0472004ACA36 /* files.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = files.h; sourceTree = "<group>"; };
 		275710BD042D0472004ACA36 /* files.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = files.c; sourceTree = "<group>"; };
 		277DB27D042F5173004ACA36 /* COPYING */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = COPYING; sourceTree = "<group>"; };
@@ -288,6 +292,7 @@
 				27D39156059BEA850035F25F /* Cocoa.framework in Frameworks */,
 				2754E79208C0E00B007F45CF /* libmpfr.a in Frameworks */,
 				2754E79608C0E032007F45CF /* libgmp.a in Frameworks */,
+				2754E89408C11276007F45CF /* libfl.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -298,6 +303,7 @@
 				1058C7A3FEA54F0111CA2CBB /* Cocoa.framework in Frameworks */,
 				2754E79308C0E00B007F45CF /* libmpfr.a in Frameworks */,
 				2754E79708C0E032007F45CF /* libgmp.a in Frameworks */,
+				2754E89508C11276007F45CF /* libfl.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -308,6 +314,7 @@
 				2754E78B08C0DC14007F45CF /* libreadline.a in Frameworks */,
 				2754E79108C0E00B007F45CF /* libmpfr.a in Frameworks */,
 				2754E79508C0E032007F45CF /* libgmp.a in Frameworks */,
+				2754E89308C11276007F45CF /* libfl.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -417,6 +424,7 @@
 		F510EE8F021717DF01A80164 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				2754E89208C11276007F45CF /* libfl.a */,
 				2754E79408C0E032007F45CF /* libgmp.a */,
 				2754E78A08C0DC14007F45CF /* libreadline.a */,
 				2754E79008C0E00B007F45CF /* libmpfr.a */,
@@ -808,31 +816,6 @@
 			};
 			name = Deployment;
 		};
-		27B38F9B0859DCBE00C2FE3C /* Default */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = "";
-				HEADER_SEARCH_PATHS = "";
-				LIBRARY_SEARCH_PATHS = /opt/local/lib;
-				OPTIMIZATION_CFLAGS = "-O0";
-				OTHER_CFLAGS = (
-					"-Wall",
-					"-Wunused",
-					"-DGUI",
-					"-DSTDC_HEADERS",
-				);
-				OTHER_LDFLAGS = "-ll";
-				PRODUCT_NAME = Wcalc;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-				WRAPPER_EXTENSION = app;
-			};
-			name = Default;
-		};
 		27B38F9D0859DCBE00C2FE3C /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -888,34 +871,15 @@
 			};
 			name = Deployment;
 		};
-		27B38F9F0859DCBE00C2FE3C /* Default */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				HEADER_SEARCH_PATHS = /sw/include;
-				LIBRARY_SEARCH_PATHS = (
-					/Users/kyle/Wcalc,
-					/opt/local/lib,
-				);
-				OTHER_REZFLAGS = "";
-				PREBINDING = NO;
-				PRODUCT_NAME = wcalc;
-				REZ_EXECUTABLE = YES;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wall",
-					"-Wunused",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-			};
-			name = Default;
-		};
 		27B38FA10859DCBE00C2FE3C /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_AUTO_VECTORIZATION = YES;
 				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_CPP_EXCEPTIONS = YES;
+				GCC_ENABLE_CPP_RTTI = YES;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -923,19 +887,25 @@
 					GUI,
 					STDC_HEADERS,
 				);
-				HEADER_SEARCH_PATHS = "";
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
+				GCC_WARN_MISSING_PARENTHESES = YES;
+				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = NO;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_PARAMETER = YES;
+				GCC_WARN_UNUSED_VALUE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = /opt/local/include;
 				INFOPLIST_FILE = Info.plist;
 				LIBRARY_SEARCH_PATHS = /opt/local/lib;
 				OPTIMIZATION_CFLAGS = "-O0 -g";
 				OTHER_CFLAGS = (
 					"-Wall",
 					"-Wunused",
-					"-I/opt/local/include",
 				);
-				OTHER_LDFLAGS = (
-					"-ll",
-					"-lfl",
-				);
+				OTHER_LDFLAGS = "-ll";
 				PRODUCT_NAME = Wcalc;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = (
@@ -953,12 +923,26 @@
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_AUTO_VECTORIZATION = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					GUI,
 					STDC_HEADERS,
 				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
+				GCC_WARN_MISSING_PARENTHESES = YES;
+				GCC_WARN_PEDANTIC = YES;
+				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_PARAMETER = YES;
+				GCC_WARN_UNUSED_VALUE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = /opt/local/include;
 				INFOPLIST_FILE = Info.plist;
 				LIBRARY_SEARCH_PATHS = /opt/local/lib;
@@ -967,7 +951,6 @@
 					"-Wall",
 					"-Wunused",
 				);
-				OTHER_LDFLAGS = "-ll";
 				PRODUCT_NAME = Wcalc;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = (
@@ -979,33 +962,6 @@
 				ZERO_LINK = NO;
 			};
 			name = Deployment;
-		};
-		27B38FA30859DCBE00C2FE3C /* Default */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = "";
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					GUI,
-					STDC_HEADERS,
-				);
-				HEADER_SEARCH_PATHS = "";
-				LIBRARY_SEARCH_PATHS = /opt/local/lib;
-				OTHER_CFLAGS = (
-					"-Wall",
-					"-Wunused",
-				);
-				OTHER_LDFLAGS = "-ll";
-				PRODUCT_NAME = Wcalc;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-				WRAPPER_EXTENSION = app;
-			};
-			name = Default;
 		};
 		27B38FA50859DCBE00C2FE3C /* Development */ = {
 			isa = XCBuildConfiguration;
@@ -1023,12 +979,6 @@
 			};
 			name = Deployment;
 		};
-		27B38FA70859DCBE00C2FE3C /* Default */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-			};
-			name = Default;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1037,40 +987,36 @@
 			buildConfigurations = (
 				27B38F990859DCBE00C2FE3C /* Development */,
 				27B38F9A0859DCBE00C2FE3C /* Deployment */,
-				27B38F9B0859DCBE00C2FE3C /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Default;
+			defaultConfigurationName = Development;
 		};
 		27B38F9C0859DCBE00C2FE3C /* Build configuration list for PBXToolTarget "wcalc" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				27B38F9D0859DCBE00C2FE3C /* Development */,
 				27B38F9E0859DCBE00C2FE3C /* Deployment */,
-				27B38F9F0859DCBE00C2FE3C /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Default;
+			defaultConfigurationName = Development;
 		};
 		27B38FA00859DCBE00C2FE3C /* Build configuration list for PBXNativeTarget "Wcalc_native" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				27B38FA10859DCBE00C2FE3C /* Development */,
 				27B38FA20859DCBE00C2FE3C /* Deployment */,
-				27B38FA30859DCBE00C2FE3C /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Default;
+			defaultConfigurationName = Development;
 		};
 		27B38FA40859DCBE00C2FE3C /* Build configuration list for PBXProject "Wcalc" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				27B38FA50859DCBE00C2FE3C /* Development */,
 				27B38FA60859DCBE00C2FE3C /* Deployment */,
-				27B38FA70859DCBE00C2FE3C /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Default;
+			defaultConfigurationName = Development;
 		};
 /* End XCConfigurationList section */
 	};
