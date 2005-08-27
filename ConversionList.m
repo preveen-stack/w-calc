@@ -12,7 +12,7 @@
 	[fromList reloadData];
 }
 
-- (int)numberOfRowsInTableView:(NSTableView *)atv;
+- (int)numberOfRowsInTableView:(NSTableView *)atv
 {
 	switch ([theType indexOfSelectedItem]) {
 		case LENGTH_C: return LENGTH_UNIT_COUNT;
