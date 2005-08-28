@@ -1,3 +1,24 @@
+--- Version 2.0 ---
+Aug 28 2005 - Kyle Wheeler
+ - Answer field expands to reveal the entire answer, if necessary (GUI)
+ - Fixed the bizarre resizing behavior, finally! (GUI)
+ - Can display much more precision now (GUI)
+Jul 19 2005 - Kyle Wheeler
+ - Added a binary xor operator (BOTH)
+ - Added a comp(x) function that returns the one's compliment (BOTH)
+ - Can convert units from the command-line now (CLI)
+ - Improved the man page and online help (CLI)
+ - Reorganized the conversion units, to be easier to use (GUI)
+ - Many more scientific symbols, in standardized units now (BOTH)
+Jul 18 2005 - Kyle Wheeler
+ - Significant-figure rounding indication is more reliable now (BOTH)
+ - Added support for the \bits command for arbitrary precision (BOTH)
+ - \prefs display is more useful (CLI)
+ - ~/.wcalcrc parsing works now (CLI)
+ - Receiving an EOF will now *never* cause an ugly error message (CLI)
+Jun 10 2005 - Kyle Wheeler
+ - Selecting the Planck constant from the menu produces the correct symbol (GUI)
+ - Fixed the reduce/reduce conflicts in the parser (BOTH)
 --- Version 1.7 ---
 Dec 29 2003 - Kyle Wheeler
  - Added a "simple" calculator feature (GUI)

@@ -150,8 +150,8 @@
 		functionName = "-setPrecision:";
 		hitCount = 0;
 		lineNumber = 362;
-		modificationTime = 146888891.529331;
-		state = 1;
+		modificationTime = 146931458.909894;
+		state = 0;
 	};
 	272C35D708C16738009EA18F /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
@@ -473,27 +473,41 @@
 		vrLen = 896;
 		vrLoc = 0;
 	};
-	272C369208C188D8009EA18F /* PBXTextBookmark */ = {
+	272C369808C1971F009EA18F /* Wcalc */ = {
+		isa = PBXExecutable;
+		activeArgIndex = 2147483647;
+		activeArgIndices = (
+		);
+		argumentStrings = (
+		);
+		configStateDict = {
+		};
+		cppStopOnCatchEnabled = 0;
+		cppStopOnThrowEnabled = 0;
+		customDataFormattersEnabled = 1;
+		debuggerPlugin = GDBDebugging;
+		disassemblyDisplayState = 0;
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		executableSystemSymbolLevel = 0;
+		executableUserSymbolLevel = 0;
+		libgmallocEnabled = 0;
+		name = Wcalc;
+		sourceDirectories = (
+		);
+	};
+	272C36A808C19795009EA18F /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
 		fRef = 089C165DFE840E0CC02AAC07 /* English */;
-		name = "English: 5";
+		name = "English: 7";
 		rLen = 0;
-		rLoc = 161;
+		rLoc = 258;
 		rType = 0;
 		vrLen = 258;
 		vrLoc = 0;
 	};
-	272C369308C188D8009EA18F /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 2721CD490869C13400E3BB4D /* Info.plist */;
-		name = "Info.plist: 10";
-		rLen = 0;
-		rLoc = 371;
-		rType = 0;
-		vrLen = 896;
-		vrLoc = 0;
-	};
-	272C369408C188D8009EA18F /* PBXTextBookmark */ = {
+	272C36EE08C2010E009EA18F /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
 		fRef = 089C165DFE840E0CC02AAC07 /* English */;
 		name = "English: 7";
@@ -815,8 +829,8 @@
 		codeSenseManager = 27DA4EAF0521141D00F8327E /* Code sense */;
 		executables = (
 			F521994101F8D2CA01A80164 /* wcalc */,
-			F5B29D7E01F739D501A80164 /* Wcalc */,
 			27D3915B059BEA860035F25F /* Wcalc_native */,
+			272C369808C1971F009EA18F /* Wcalc */,
 		);
 		perUserDictionary = {
 			"PBXConfiguration.PBXBreakpointsDataSource.v1:1CA1AED706398EBD00589147" = {
@@ -929,7 +943,7 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 146899714;
+			PBXPerProjectTemplateStateSaveDate = 146931456;
 			PBXPrepackagedSmartGroups_v2 = (
 				{
 					PBXTransientLocationAtTop = bottom;
@@ -1467,7 +1481,7 @@
 				PBXModuleWindowStatusBarHidden = YES;
 				RubberWindowFrame = "455 165 745 464 0 0 1152 746 ";
 			};
-			PBXWorkspaceStateSaveDate = 146899714;
+			PBXWorkspaceStateSaveDate = 146931456;
 		};
 		perUserProjectItems = {
 			2721CBB70865FD2800E3BB4D /* PBXTextBookmark */ = 2721CBB70865FD2800E3BB4D /* PBXTextBookmark */;
@@ -1517,9 +1531,8 @@
 			272C363C08C17E7F009EA18F /* PBXTextBookmark */ = 272C363C08C17E7F009EA18F /* PBXTextBookmark */;
 			272C364108C17F5E009EA18F /* PBXTextBookmark */ = 272C364108C17F5E009EA18F /* PBXTextBookmark */;
 			272C369108C188D8009EA18F /* PBXTextBookmark */ = 272C369108C188D8009EA18F /* PBXTextBookmark */;
-			272C369208C188D8009EA18F /* PBXTextBookmark */ = 272C369208C188D8009EA18F /* PBXTextBookmark */;
-			272C369308C188D8009EA18F /* PBXTextBookmark */ = 272C369308C188D8009EA18F /* PBXTextBookmark */;
-			272C369408C188D8009EA18F /* PBXTextBookmark */ = 272C369408C188D8009EA18F /* PBXTextBookmark */;
+			272C36A808C19795009EA18F /* PBXTextBookmark */ = 272C36A808C19795009EA18F /* PBXTextBookmark */;
+			272C36EE08C2010E009EA18F /* PBXTextBookmark */ = 272C36EE08C2010E009EA18F /* PBXTextBookmark */;
 			2754E75508C0D6E1007F45CF /* PBXTextBookmark */ = 2754E75508C0D6E1007F45CF /* PBXTextBookmark */;
 			2754E75608C0D6E1007F45CF /* PBXTextBookmark */ = 2754E75608C0D6E1007F45CF /* PBXTextBookmark */;
 			2754E7E008C0E659007F45CF /* PBXTextBookmark */ = 2754E7E008C0E659007F45CF /* PBXTextBookmark */;
@@ -1558,7 +1571,7 @@
 	29B97326FDCFA39411CA2CEA /* Wcalc */ = {
 		activeExec = 0;
 		executables = (
-			F5B29D7E01F739D501A80164 /* Wcalc */,
+			272C369808C1971F009EA18F /* Wcalc */,
 		);
 	};
 	F521993401F8D28701A80164 /* wcalc */ = {
@@ -1765,31 +1778,6 @@
 			sepNavVisRect = "{{0, 4653}, {688, 397}}";
 			sepNavWindowFrame = "{{515, 224}, {778, 762}}";
 		};
-	};
-	F5B29D7E01F739D501A80164 /* Wcalc */ = {
-		isa = PBXExecutable;
-		activeArgIndex = 2147483647;
-		activeArgIndices = (
-		);
-		argumentStrings = (
-		);
-		configStateDict = {
-		};
-		cppStopOnCatchEnabled = 0;
-		cppStopOnThrowEnabled = 0;
-		customDataFormattersEnabled = 1;
-		debuggerPlugin = GDBDebugging;
-		disassemblyDisplayState = 0;
-		dylibVariantSuffix = "";
-		enableDebugStr = 1;
-		environmentEntries = (
-		);
-		executableSystemSymbolLevel = 0;
-		executableUserSymbolLevel = 0;
-		libgmallocEnabled = 0;
-		name = Wcalc;
-		sourceDirectories = (
-		);
 	};
 	F5D446D00263B46801A80164 /* MyTextField.h */ = {
 		uiCtxt = {
