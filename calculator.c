@@ -671,6 +671,7 @@ char *print_this_result_dbl(double result)
 	extern char *errstring;
 	unsigned int decimal_places = 0;
 
+	Dprintf("print_this_result_dbl(%f)\n",result);
 	/* Build the "format" string, that will be used in an sprintf later */
 	switch (conf.output_format) {
 		case DECIMAL_FORMAT:
@@ -942,6 +943,7 @@ char *print_this_result(mpfr_t result)
 	extern char *errstring;
 	unsigned int base = 0;
 
+	Dprintf("print_this_result (%f)\n",mpfr_get_d(result, GMP_RNDN));
 	// output in the proper base and format
 	switch (conf.output_format) {
 		case HEXADECIMAL_FORMAT:
@@ -953,7 +955,7 @@ char *print_this_result(mpfr_t result)
 				&& conf.precision < 0 && conf.precision_guard) {
 				double res = mpfr_get_d(result, GMP_RNDN);
 
-				if (res < DBL_EPSILON) {
+				if (fabs(res) < DBL_EPSILON) {
 					res = 0.0;
 				}
 				return print_this_result_dbl(res);
@@ -1038,9 +1040,11 @@ void simple_exp(mpfr_t output, mpfr_t first, enum operations op,
 		mpfr_t temp;
 
 		mpfr_init(temp);
+		Dprintf("simple_exp: %f %i %f\n",mpfr_get_d(first,GMP_RNDN), op, mpfr_get_d(second,GMP_RNDN));
 
 		switch (op) {
 			default:
+				Dprintf("default\n");
 				mpfr_set_d(output, 0.0, GMP_RNDN);
 				break;
 			case wequal:
@@ -1064,12 +1068,15 @@ void simple_exp(mpfr_t output, mpfr_t first, enum operations op,
 							GMP_RNDN);
 				break;
 			case wplus:
+				Dprintf("wplus\n");
 				mpfr_add(output, first, second, GMP_RNDN);
 				break;
 			case wminus:
+				Dprintf("wminus\n");
 				mpfr_sub(output, first, second, GMP_RNDN);
 				break;
 			case wmult:
+				Dprintf("wmult\n");
 				mpfr_mul(output, first, second, GMP_RNDN);
 				break;
 			case wdiv:
@@ -1163,6 +1170,7 @@ void simple_exp(mpfr_t output, mpfr_t first, enum operations op,
 				}
 				break;
 		}
+		Dprintf("returns: %f\n",mpfr_get_d(output,GMP_RNDN));
 		mpfr_clear(temp);
 		return;
 	} else {
