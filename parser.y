@@ -77,7 +77,7 @@ struct conv_req conver;
 %token <character> DSEP_CMD TSEP_CMD
 
 %type <number> exp exp_l2 exp_l3
-%type <number> oval capsule
+%type <number> oval capsule parenthated
 %type <integer> sign
 %type <cmd> command
 %type <function> func
@@ -87,10 +87,10 @@ struct conv_req conver;
 %left WMINUS WPLUS
 %left WMULT WDIV WMOD WLSHFT WRSHFT
 %right WBANG
-%left WPOW
 %left WNOT WBNOT WNEG
+%right WPOW
 
-%expect 1237
+%expect 1211
 
 %% 	/* beginning of the parsing rules	*/
 
@@ -508,12 +508,11 @@ func : WSIN { $$ = wsin; }
 | WIRAND { $$ = wirand; }
 | WBNOT { $$ = wbnot; }
 | WNOT { $$ = wnot; }
-| WBANG { $$ = wnot; }
 | WFACT { $$ = wfact; }
 | WCOMP { $$ = wcomp; }
 ;
 
-null : PAR REN
+nullexp : PAR REN
 | WBRA WKET
 | WSBRA WSKET
 ;
@@ -524,7 +523,6 @@ sign : WMINUS { $$ = -1; }
 ;
 
 exp_l2 : exp_l3
-| exp_l3 WBANG { mpfr_init($$); mpfr_fac_ui($$,mpfr_get_ui($1,GMP_RNDN),GMP_RNDN); mpfr_clear($1); }
 | exp_l3 WSQR { /* this is a dumb feature */
 				mpfr_init($$); mpfr_sqr($$,$1,GMP_RNDN); mpfr_clear($1); }
 | sign exp_l2 oval { mpfr_init($$);
@@ -551,15 +549,37 @@ exp_l3 : capsule oval { mpfr_init($$);
 								  mpfr_clear($5);}
 ;
 
-capsule: PAR exp REN { mpfr_init($$); mpfr_set($$,$2,GMP_RNDN); mpfr_clear($2); }
-| WBRA exp WKET { mpfr_init($$); mpfr_set($$,$2,GMP_RNDN); mpfr_clear($2); }
-| WSBRA exp WSKET { mpfr_init($$); mpfr_set($$,$2,GMP_RNDN); mpfr_clear($2); }
-| null { mpfr_init_set_ui($$,0,GMP_RNDN); }
-| NUMBER
-| func sign capsule { mpfr_init($$);
-					  mpfr_mul_si($3,$3,$2,GMP_RNDN);
-					  uber_function($$,$1,$3);
-					  mpfr_clear($3);}
+parenthated: PAR exp REN
+		   { mpfr_init($$); mpfr_set($$,$2,GMP_RNDN); mpfr_clear($2); }
+		   | WBRA exp WKET
+		   { mpfr_init($$); mpfr_set($$,$2,GMP_RNDN); mpfr_clear($2); }
+		   | WSBRA exp WSKET
+		   { mpfr_init($$); mpfr_set($$,$2,GMP_RNDN); mpfr_clear($2); }
+		   | nullexp { mpfr_init_set_ui($$,0,GMP_RNDN); }
+		   ;
+
+capsule: parenthated
+	   { mpfr_init($$); mpfr_set($$,$1,GMP_RNDN); mpfr_clear($1); }
+	   | NUMBER
+	   | capsule WBANG
+	   {
+	   mpfr_init($$);
+	   mpfr_fac_ui($$,mpfr_get_ui($1,GMP_RNDN),GMP_RNDN);
+	   mpfr_clear($1);
+	   }
+	   | func parenthated %prec WMULT
+	   {
+	   mpfr_init($$);
+	   uber_function($$,$1,$2);
+	   mpfr_clear($2);
+	   }
+	   | func sign capsule %prec WEQUAL
+	   {
+	   mpfr_init($$);
+	   mpfr_mul_si($3,$3,$2,GMP_RNDN);
+	   uber_function($$,$1,$3);
+	   mpfr_clear($3);
+	   }
 ;
 
 %%
