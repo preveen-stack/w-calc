@@ -217,24 +217,23 @@ int putval(char *key, mpfr_t value)
 		return -1;
 
 	if (cursor) {
-		while (cursor && strncmp(cursor->key, key, strlen(key)) > 0 &&
+		while (cursor && strncmp(cursor->key, key, strlen(key)) &&
 			   cursor->next) {
 			cursor = cursor->next;
 		}
 
-		if (strncmp(cursor->key, key, strlen(key))) {	// add after cursor
-			struct variable *ntemp = cursor->next;
+		if (cursor->next == NULL) {
+			// add after cursor
 			cursor->next = calloc(sizeof(struct variable), 1);
 			if (!cursor->next) {	   // if we can't allocate memory
-				cursor->next = ntemp;
 				return -1;
 			}
 			cursor = cursor->next;
-			cursor->next = ntemp;
+			cursor->next = NULL;
 			mpfr_init(cursor->value);
 			contents++;
-		} else {					   // change this one
-
+		} else {
+			// change this one
 		}
 	} else {
 		them = cursor = calloc(sizeof(struct variable), 1);

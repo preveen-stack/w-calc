@@ -140,8 +140,8 @@ int main(int argc, char *argv[])
 			conf.output_format = BINARY_FORMAT;
 		} else if (!strcmp(argv[i], "-p") || !strcmp(argv[i], "--prefixes")) {
 			conf.print_prefixes = !conf.print_prefixes;
-		} else if (!strcmp(argv[i], "-l") || !strcmp(argv[i], "--lenient")) {
-			conf.picky_variables = 0;
+		/*} else if (!strcmp(argv[i], "-l") || !strcmp(argv[i], "--lenient")) {
+			conf.picky_variables = 0;*/
 		} else if (!strcmp(argv[i], "-r") || !strcmp(argv[i], "--radians")) {
 			conf.use_radians = !conf.use_radians;
 		} else if (!strcmp(argv[i], "-q") || !strcmp(argv[i], "--quiet")) {

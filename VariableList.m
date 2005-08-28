@@ -26,7 +26,7 @@
 		if (keyval->exp)
 			return [NSString stringWithCString:keyval->expression];
 		else
-			return [NSString localizedStringWithFormat:@"%g",(keyval->value)];
+			return [NSString localizedStringWithFormat:@"%g",mpfr_get_d(keyval->value, GMP_RNDN)];
 	} else if ([[col identifier] isEqualToString:@"variable"]) {
 		return [NSString stringWithCString:(keyval->key)];
 	} else {
@@ -77,7 +77,7 @@
 
 	mpfr_init_set_ui(blank,0,GMP_RNDN);
 	sprintf(varname,"NewVariable%i",i);
-	while(! varexists(varname)) {
+	while(varexists(varname)) {
 		++i;
 		sprintf(varname,"NewVariable%i",i);
 	}
