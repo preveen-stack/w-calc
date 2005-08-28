@@ -80,7 +80,6 @@ static int recursion(char *str);
 static int find_recursion(struct variable_list *vstack);
 static char *flatten(char *str);
 
-static int initialized = 0;
 
 void parseme(char *pthis)
 {
@@ -92,10 +91,6 @@ void parseme(char *pthis)
 	synerrors = 0;
 	compute = 1;
 	sig_figs = UINT32_MAX;
-	if (initialized == 0) {
-		mpfr_init_set_ui(last_answer, 0, GMP_RNDN);
-		initialized = 1;
-	}
 
 	sanitized = strdup(pthis);
 
@@ -267,7 +262,7 @@ size_t num_to_str_complex(char *inputstr, unsigned int length, mpfr_t num,
 	Dprintf("post-mpfr s: %s\n", s);
 	/* for num = 3.1416 we have s = "31416" and e = 1 */
 
-	/* size of allocated block returned by mpfr_get_str may be incorrect, but 
+	/* size of allocated block returned by mpfr_get_str may be incorrect, but
 	 * only as an upper bound */
 	l = strlen(s) + 1;
 	Dprintf("l = %lu\n",l);
