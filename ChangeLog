@@ -1,3 +1,39 @@
+2005-08-28 11:00  memoryhole
+
+	* VariableList.m, main.c, parser.y, variables.c,
+	  English.lproj/MainMenu.nib/info.nib,
+	  English.lproj/MainMenu.nib/keyedobjects.nib,
+	  Wcalc.xcodeproj/kyle.mode1, Wcalc.xcodeproj/kyle.pbxuser,
+	  Wcalc.xcodeproj/project.pbxproj: variable corrections
+
+2005-08-28 11:00  memoryhole
+
+	* calculator.c: comment spelling correction
+
+2005-08-28 09:28  memoryhole
+
+	* COPYING.txt, COPYRIGHT, NEWS, ReadMe.rtf, Wcalc.pmproj,
+	  Wcalc.pmsp, test.simple, Wcalc.xcodeproj/kyle.mode1,
+	  Wcalc.xcodeproj/kyle.pbxuser, Wcalc.xcodeproj/project.pbxproj:
+	  hopefully, last commit of version 2.0
+
+2005-08-28 09:25  memoryhole
+
+	* Info.plist: correct version
+
+2005-08-28 09:24  memoryhole
+
+	* calculator.c: that was stupid - I should have seen that before
+
+2005-08-28 09:11  memoryhole
+
+	* parser.y: Corrected a little precedence stuff in the parser.
+	  Managed to reduce conflicts too! :)
+
+2005-08-28 01:02  memoryhole
+
+	* ChangeLog: cvs2cl
+
 2005-08-28 00:53  memoryhole
 
 	* English.lproj/InfoPlist.strings, Wcalc.xcodeproj/kyle.mode1,
@@ -319,8 +355,7 @@
 
 2004-01-05 17:12  memoryhole
 
-	* Makefile.in, config.h.in, configure, Wcalc.pbproj/kyle.pbxuser:
-	  Time for a new version
+	* Makefile.in, config.h.in, configure: Time for a new version
 
 2004-01-04 19:36  memoryhole
 
@@ -339,9 +374,7 @@
 	* ChangeLog, NEWS, config.h.in, configure, configure.in,
 	  definitions.h, wcalc.info, English.lproj/InfoPlist.strings,
 	  English.lproj/MainMenu.nib/info.nib,
-	  English.lproj/MainMenu.nib/objects.nib,
-	  Wcalc.pbproj/kyle.pbxuser, Wcalc.pbproj/project.pbxproj: New
-	  version
+	  English.lproj/MainMenu.nib/objects.nib: New version
 
 2003-12-29 17:05  memoryhole
 
@@ -466,10 +499,8 @@
 	  definitions.h, English.lproj/InfoPlist.strings,
 	  English.lproj/MainMenu.nib/classes.nib,
 	  English.lproj/MainMenu.nib/info.nib,
-	  English.lproj/MainMenu.nib/objects.nib,
-	  Wcalc.pbproj/kyle.pbxuser, Wcalc.pbproj/project.pbxproj: Put the
-	  printInts preference into the GUI, updated some things for the
-	  new version.
+	  English.lproj/MainMenu.nib/objects.nib: Put the printInts
+	  preference into the GUI, updated some things for the new version.
 
 2003-08-21 12:16  memoryhole
 
@@ -503,8 +534,7 @@
 
 2003-08-20 09:40  memoryhole
 
-	* COPYRIGHT, Wcalc.pmsp, wcalc.info, Wcalc.pbproj/kyle.pbxuser: New
-	  version stuff
+	* COPYRIGHT, Wcalc.pmsp, wcalc.info: New version stuff
 
 2003-08-19 21:57  memoryhole
 
@@ -516,9 +546,7 @@
 	  configure.in, wcalc.info, wcalc.spec,
 	  English.lproj/InfoPlist.strings,
 	  English.lproj/MainMenu.nib/info.nib,
-	  English.lproj/MainMenu.nib/objects.nib,
-	  Wcalc.pbproj/kyle.pbxuser, Wcalc.pbproj/project.pbxproj: New
-	  version.
+	  English.lproj/MainMenu.nib/objects.nib: New version.
 
 2003-08-19 16:28  memoryhole
 
@@ -602,9 +630,8 @@
 2003-03-24 14:14  memoryhole
 
 	* WcalcController.m, configure,
-	  English.lproj/MainMenu.nib/objects.nib,
-	  Wcalc.pbproj/kyle.pbxuser, Wcalc.pbproj/project.pbxproj: Version
-	  problem fixed. Added cot to the menus. Corrected the log2 thing.
+	  English.lproj/MainMenu.nib/objects.nib: Version problem fixed.
+	  Added cot to the menus. Corrected the log2 thing.
 
 2003-03-22 23:35  memoryhole
 
@@ -615,9 +642,8 @@
 
 	* ChangeLog, Makefile.am, Makefile.in, NEWS, ReadMe.rtf,
 	  Wcalc.pmsp, acinclude.m4, aclocal.m4, calculator.c, config.h.in,
-	  configure, configure.in, definitions.h, wcalc.1, wcalc.spec,
-	  Wcalc.pbproj/kyle.pbxuser, Wcalc.pbproj/project.pbxproj: Updated
-	  everything for the new version (1.6)
+	  configure, configure.in, definitions.h, wcalc.1, wcalc.spec:
+	  Updated everything for the new version (1.6)
 
 2003-03-22 22:28  memoryhole
 
@@ -625,9 +651,9 @@
 
 2003-03-22 20:20  memoryhole
 
-	* help.c, scanner.l, Wcalc.pbproj/kyle.pbxuser: Updated the scanner
-	  to be more flexible with opening and saving filenames, and
-	  changed the help text to reflect the new commands.
+	* help.c, scanner.l: Updated the scanner to be more flexible with
+	  opening and saving filenames, and changed the help text to
+	  reflect the new commands.
 
 2003-03-22 20:19  memoryhole
 
@@ -641,11 +667,10 @@
 	* Makefile.am, Makefile.in, WcalcController.h, WcalcController.m,
 	  calculator.c, files.c, files.h, main.c, parser.y, scanner.l,
 	  English.lproj/MainMenu.nib/classes.nib,
-	  English.lproj/MainMenu.nib/objects.nib,
-	  Wcalc.pbproj/kyle.pbxuser, Wcalc.pbproj/project.pbxproj: Got file
-	  support working. Saves and loads history. As it loads, it
-	  evaluates, so variables stored that way are saved as well.
-	  Handles comments appropriately (read: ignores them) when loading.
+	  English.lproj/MainMenu.nib/objects.nib: Got file support working.
+	  Saves and loads history. As it loads, it evaluates, so variables
+	  stored that way are saved as well. Handles comments appropriately
+	  (read: ignores them) when loading.
 
 2003-03-22 17:34  memoryhole
 
@@ -683,11 +708,9 @@
 
 2003-03-19 13:40  memoryhole
 
-	* English.lproj/MainMenu.nib/classes.nib,
-	  English.lproj/MainMenu.nib/info.nib,
-	  English.lproj/MainMenu.nib/objects.nib,
-	  Wcalc.pbproj/kyle.pbxuser: A few nib fixes - the drawer is now
-	  reconnected to the main window, things like that.
+	* English.lproj/MainMenu.nib/: classes.nib, info.nib, objects.nib:
+	  A few nib fixes - the drawer is now reconnected to the main
+	  window, things like that.
 
 2003-03-19 13:35  memoryhole
 
@@ -760,9 +783,8 @@
 
 	* Makefile.in, aclocal.m4, calculator.c, calculator.h, config.h.in,
 	  configure, configure.in, main.c, parser.y, scanner.l,
-	  variables.c, Wcalc.pbproj/kyle.pbxuser: Added support for a
-	  ~/.wcalcrc. Changed some error-message wording here and there.
-	  Miscellaneous fixes.
+	  variables.c: Added support for a ~/.wcalcrc. Changed some
+	  error-message wording here and there. Miscellaneous fixes.
 
 2003-02-21 17:40  memoryhole
 
@@ -776,11 +798,10 @@
 2003-02-19 11:38  memoryhole
 
 	* WcalcController.m, English.lproj/MainMenu.nib/info.nib,
-	  English.lproj/MainMenu.nib/objects.nib,
-	  Wcalc.pbproj/kyle.pbxuser, Wcalc.pbproj/project.pbxproj: Finally
-	  fixed the bizarre window behavior. Replaced it with some bizarre
-	  window behavior behind the scenes (see WcalcController.m), but I
-	  can hide that from the user.
+	  English.lproj/MainMenu.nib/objects.nib: Finally fixed the bizarre
+	  window behavior. Replaced it with some bizarre window behavior
+	  behind the scenes (see WcalcController.m), but I can hide that
+	  from the user.
 
 2003-02-19 11:35  memoryhole
 
@@ -807,9 +828,7 @@
 2003-02-06 15:48  memoryhole
 
 	* ReadMe.rtf, Wcalc.pmsp, definitions.h, main.c, wcalc.spec,
-	  English.lproj/MainMenu.nib/objects.nib,
-	  Wcalc.pbproj/kyle.pbxuser, Wcalc.pbproj/project.pbxproj: Tiny
-	  version update.
+	  English.lproj/MainMenu.nib/objects.nib: Tiny version update.
 
 2003-02-06 14:49  memoryhole
 
@@ -819,9 +838,8 @@
 2003-02-06 14:43  memoryhole
 
 	* ChangeLog, calculator.c, calculator.h, conversion.c,
-	  definitions.h, historyManager.c, string_manip.c, variables.c,
-	  Wcalc.pbproj/kyle.pbxuser, Wcalc.pbproj/project.pbxproj: Got the
-	  GUI to build properly.
+	  definitions.h, historyManager.c, string_manip.c, variables.c: Got
+	  the GUI to build properly.
 
 2003-01-29 12:02  memoryhole
 
@@ -882,9 +900,8 @@
 	  configure.in, conversion.c, definitions.h, historyManager.c,
 	  libreadline.a, main.c, parser.y, scanner.l, string_manip.c,
 	  variables.c, variables.h, English.lproj/MainMenu.nib/info.nib,
-	  English.lproj/MainMenu.nib/objects.nib,
-	  Wcalc.pbproj/kyle.pbxuser, Wcalc.pbproj/project.pbxproj: Modified
-	  it for automake/autoconf
+	  English.lproj/MainMenu.nib/objects.nib: Modified it for
+	  automake/autoconf
 
 2003-01-25 15:19  memoryhole
 
@@ -901,8 +918,7 @@
 	* WcalcController.h, WcalcController.m, calculator.c, calculator.h,
 	  scanner.l, English.lproj/MainMenu.nib/classes.nib,
 	  English.lproj/MainMenu.nib/info.nib,
-	  English.lproj/MainMenu.nib/objects.nib,
-	  Wcalc.pbproj/kyle.pbxuser: Fixed (I think) the
+	  English.lproj/MainMenu.nib/objects.nib: Fixed (I think) the
 	  internationalization stuff. Also began work on limiting the
 	  history length.
 
@@ -910,10 +926,9 @@
 
 	* historyManager.h, English.lproj/MainMenu.nib/classes.nib,
 	  English.lproj/MainMenu.nib/info.nib,
-	  English.lproj/MainMenu.nib/objects.nib,
-	  Wcalc.pbproj/kyle.pbxuser, Wcalc.pbproj/project.pbxproj: Fixed a
-	  copyright notice. Added clear buttons to the interface. Updated
-	  the project file for use with newer versions of Project Builder.
+	  English.lproj/MainMenu.nib/objects.nib: Fixed a copyright notice.
+	  Added clear buttons to the interface. Updated the project file
+	  for use with newer versions of Project Builder.
 
 2003-01-17 12:01  memoryhole
 
@@ -1006,18 +1021,13 @@
 
 2002-08-11 22:43  kyle
 
-	* English.lproj/MainMenu.nib/info.nib,
-	  English.lproj/MainMenu.nib/objects.nib,
-	  Wcalc.pbproj/kyle.pbxuser: [no log message]
+	* English.lproj/MainMenu.nib/: info.nib, objects.nib: [no log
+	  message]
 
 2002-08-11 22:43  kyle
 
 	* ChangeLog, Makefile, MyTextField.m, ReadMe.rtf, Wcalc.pmsp,
 	  main.c, wcalc.1: Distribution
-
-2002-08-11 21:24  kyle
-
-	* Wcalc.pbproj/: kyle.pbxuser, project.pbxproj: [no log message]
 
 2002-08-11 21:24  kyle
 
@@ -1149,11 +1159,8 @@
 
 2002-04-12 15:45  kyle
 
-	* English.lproj/MainMenu.nib/classes.nib,
-	  English.lproj/MainMenu.nib/info.nib,
-	  English.lproj/MainMenu.nib/objects.nib,
-	  Wcalc.pbproj/kyle.pbxuser, Wcalc.pbproj/project.pbxproj: [no log
-	  message]
+	* English.lproj/MainMenu.nib/: classes.nib, info.nib, objects.nib:
+	  [no log message]
 
 2002-04-12 15:44  kyle
 
@@ -1286,10 +1293,6 @@
 
 	* English.lproj/InfoPlist.strings: version increment
 
-2002-03-04 20:45  kyle
-
-	* Wcalc.pbproj/: kyle.pbxuser, project.pbxproj: [no log message]
-
 2002-03-04 20:30  kyle
 
 	* ChangeLog: Updated changes per CVS log
@@ -1304,18 +1307,12 @@
 
 2002-03-03 14:57  kyle
 
-	* Wcalc.pbproj/kyle.pbxuser: [no log message]
-
-2002-03-03 14:57  kyle
-
 	* ReadMe.rtf, Wcalc.pmsp: Released a pre-release
 
 2002-03-02 12:22  kyle
 
-	* English.lproj/MainMenu.nib/classes.nib,
-	  English.lproj/MainMenu.nib/info.nib,
-	  English.lproj/MainMenu.nib/objects.nib,
-	  Wcalc.pbproj/kyle.pbxuser, Wcalc.pbproj/project.pbxproj: stuff
+	* English.lproj/MainMenu.nib/: classes.nib, info.nib, objects.nib:
+	  stuff
 
 2002-03-02 12:22  kyle
 
@@ -1398,8 +1395,7 @@
 2002-03-01 01:42  kyle
 
 	* ReadMe.rtf, libreadline.a, English.lproj/MainMenu.nib/info.nib,
-	  English.lproj/MainMenu.nib/objects.nib,
-	  Wcalc.pbproj/kyle.pbxuser: stuff
+	  English.lproj/MainMenu.nib/objects.nib: stuff
 
 2002-03-01 01:30  kyle
 
@@ -1454,8 +1450,7 @@
 
 	* ChangeLog, ReadMe.rtf, Wcalc.pmsp, WcalcController.m,
 	  calculator.c, definitions.h, parser.y,
-	  English.lproj/InfoPlist.strings, Wcalc.pbproj/kyle.pbxuser,
-	  Wcalc.pbproj/project.pbxproj: Excessive error reporting fixed
+	  English.lproj/InfoPlist.strings: Excessive error reporting fixed
 	  (good god)
 
 2002-02-27 11:35  kyle
@@ -1477,10 +1472,6 @@
 2002-02-27 02:11  kyle
 
 	* ReadMe.rtf: Just describing the new version (1.4.3)
-
-2002-02-26 18:43  kyle
-
-	* Wcalc.pbproj/: kyle.pbxuser, project.pbxproj: stuff
 
 2002-02-26 18:43  kyle
 
@@ -1538,10 +1529,9 @@
 	  historyManager.h, English.lproj/.cvsignore,
 	  English.lproj/MainMenu.nib/classes.nib,
 	  English.lproj/MainMenu.nib/info.nib,
-	  English.lproj/MainMenu.nib/objects.nib,
-	  Wcalc.pbproj/kyle.pbxuser: Fixed a bug or two, made small speed
-	  improvements on preference changes.  Made history redisplay
-	  configurable.
+	  English.lproj/MainMenu.nib/objects.nib: Fixed a bug or two, made
+	  small speed improvements on preference changes.  Made history
+	  redisplay configurable.
 
 2002-02-24 10:53  kyle
 
@@ -1567,8 +1557,7 @@
 
 2002-02-23 23:28  kyle
 
-	* English.lproj/InfoPlist.strings, Wcalc.pbproj/project.pbxproj:
-	  stuff
+	* English.lproj/InfoPlist.strings: stuff
 
 2002-02-23 23:28  kyle
 
@@ -1601,10 +1590,8 @@
 
 2002-02-23 15:57  kyle
 
-	* English.lproj/MainMenu.nib/classes.nib,
-	  English.lproj/MainMenu.nib/info.nib,
-	  English.lproj/MainMenu.nib/objects.nib,
-	  Wcalc.pbproj/kyle.pbxuser, Wcalc.pbproj/project.pbxproj: stuff
+	* English.lproj/MainMenu.nib/: classes.nib, info.nib, objects.nib:
+	  stuff
 
 2002-02-23 15:57  kyle
 
@@ -1643,11 +1630,8 @@
 
 2002-02-23 15:45  kyle
 
-	* English.lproj/InfoPlist.strings,
-	  English.lproj/MainMenu.nib/classes.nib,
-	  English.lproj/MainMenu.nib/info.nib,
-	  English.lproj/MainMenu.nib/objects.nib,
-	  Wcalc.pbproj/kyle.pbxuser, Wcalc.pbproj/project.pbxproj: stuff
+	* English.lproj/: InfoPlist.strings, MainMenu.nib/classes.nib,
+	  MainMenu.nib/info.nib, MainMenu.nib/objects.nib: stuff
 
 2002-02-23 15:45  kyle
 
@@ -1676,11 +1660,8 @@
 
 2002-02-23 15:40  kyle
 
-	* English.lproj/InfoPlist.strings,
-	  English.lproj/MainMenu.nib/classes.nib,
-	  English.lproj/MainMenu.nib/info.nib,
-	  English.lproj/MainMenu.nib/objects.nib,
-	  Wcalc.pbproj/kyle.pbxuser, Wcalc.pbproj/project.pbxproj: stuff
+	* English.lproj/: InfoPlist.strings, MainMenu.nib/classes.nib,
+	  MainMenu.nib/info.nib, MainMenu.nib/objects.nib: stuff
 
 2002-02-23 15:40  kyle
 
@@ -1698,10 +1679,6 @@
 
 2002-02-23 15:35  kyle
 
-	* Wcalc.pbproj/: kyle.pbxuser, project.pbxproj: stuff
-
-2002-02-23 15:35  kyle
-
 	* WcalcController.h, WcalcController.m, calculator.c, calculator.h,
 	  main.c: Began work on continuous calculations
 
@@ -1716,10 +1693,6 @@
 2002-02-23 15:32  kyle
 
 	* ChangeLog: Logging changes
-
-2002-02-23 15:31  kyle
-
-	* Wcalc.pbproj/project.pbxproj: stuff
 
 2002-02-23 15:31  kyle
 
@@ -1756,10 +1729,6 @@
 2002-02-23 15:26  kyle
 
 	* ChangeLog: Logging changes
-
-2002-02-23 15:19  kyle
-
-	* Wcalc.pbproj/: kyle.pbxuser, project.pbxproj: Dunno
 
 2002-02-23 15:19  kyle
 
@@ -1803,9 +1772,7 @@
 	  w.png, wcalc.1, wcalc.spec, English.lproj/InfoPlist.strings,
 	  English.lproj/MainMenu.nib/classes.nib,
 	  English.lproj/MainMenu.nib/info.nib,
-	  English.lproj/MainMenu.nib/objects.nib,
-	  Wcalc.pbproj/kyle.pbxuser, Wcalc.pbproj/project.pbxproj: Initial
-	  Import
+	  English.lproj/MainMenu.nib/objects.nib: Initial Import
 
 2002-02-23 15:03  kyle
 
@@ -1820,7 +1787,5 @@
 	  w.png, wcalc.1, wcalc.spec, English.lproj/InfoPlist.strings,
 	  English.lproj/MainMenu.nib/classes.nib,
 	  English.lproj/MainMenu.nib/info.nib,
-	  English.lproj/MainMenu.nib/objects.nib,
-	  Wcalc.pbproj/kyle.pbxuser, Wcalc.pbproj/project.pbxproj: Initial
-	  revision
+	  English.lproj/MainMenu.nib/objects.nib: Initial revision
 
