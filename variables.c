@@ -241,7 +241,7 @@ int putval(char *key, mpfr_t value)
 		mpfr_init(cursor->value);
 		contents = 1;
 	}
-	/* by this point, cursor points to a fully allocated structure... it may, 
+	/* by this point, cursor points to a fully allocated structure... it may,
 	 * however, be missing a key value */
 
 	if (!cursor->key) {

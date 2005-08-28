@@ -59,7 +59,7 @@ SPACE		[ ]
 
 {WHITESPACE}+	{ /* Just ignore white space */ }
 
-"\n" 	        { return(EOLN); } 
+"\n" 	        { return(EOLN); }
 
 %{ /* These are commands */
 %}

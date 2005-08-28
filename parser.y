@@ -34,7 +34,7 @@ char *strchr (), *strrchr ();
 #define YYDEBUG 1
 
 	/* to make it stop complaining about undeclared functions */
-	int yylex(); 
+	int yylex();
 	int yyerror(char *error_string, ...);
 
 	int lines = 1;
@@ -523,7 +523,7 @@ sign : WMINUS { $$ = -1; }
 | { $$ = 1; }
 ;
 
-exp_l2 : exp_l3 
+exp_l2 : exp_l3
 | exp_l3 WBANG { mpfr_init($$); mpfr_fac_ui($$,mpfr_get_ui($1,GMP_RNDN),GMP_RNDN); mpfr_clear($1); }
 | exp_l3 WSQR { /* this is a dumb feature */
 				mpfr_init($$); mpfr_sqr($$,$1,GMP_RNDN); mpfr_clear($1); }
