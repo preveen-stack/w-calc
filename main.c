@@ -94,6 +94,7 @@ int main(int argc, char *argv[])
 	conf.print_ints = 0;
 
 	mpfr_set_default_prec(1024);
+	mpfr_init_set_ui(last_answer, 0, GMP_RNDN);
 
 	/* load the preferences */
 	{
@@ -199,13 +200,13 @@ int main(int argc, char *argv[])
 #endif
 			if (!readme) {
 				/* from the readline manpage:
-				 *      readline returns the text of the line read. A blank 
-				 *      line returns the empty string. If EOF is encountered 
-				 *      while reading a line, and the line is empty, NULL is 
-				 *      returned. If an eof is read with a non-empty line, it 
+				 *      readline returns the text of the line read. A blank
+				 *      line returns the empty string. If EOF is encountered
+				 *      while reading a line, and the line is empty, NULL is
+				 *      returned. If an eof is read with a non-empty line, it
 				 *      is treated as a newline.
-				 * This means: readme == NULL is a perfectly reasonable 
-				 * response from readline(), AND it means something 
+				 * This means: readme == NULL is a perfectly reasonable
+				 * response from readline(), AND it means something
 				 * significant. DO NOT DO errno PARSING HERE!!!!
 				 */
 				printf("\n");
