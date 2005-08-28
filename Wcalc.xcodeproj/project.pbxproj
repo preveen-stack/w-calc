@@ -222,7 +222,7 @@
 /* Begin PBXFileReference section */
 		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
-		17587328FF379C6511CA2CBB /* Wcalc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; path = Wcalc.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		17587328FF379C6511CA2CBB /* Wcalc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; name = Wcalc.app; path = /Users/kyle/Wcalc/build/Deployment/Wcalc.app; sourceTree = "<absolute>"; };
 		2721CD490869C13400E3BB4D /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = Info.plist; sourceTree = "<group>"; };
 		2754E78A08C0DC14007F45CF /* libreadline.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libreadline.a; path = /opt/local/lib/libreadline.a; sourceTree = "<absolute>"; };
 		2754E89208C11276007F45CF /* libfl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfl.a; path = /opt/local/lib/libfl.a; sourceTree = "<absolute>"; };
@@ -353,7 +353,6 @@
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				17587328FF379C6511CA2CBB /* Wcalc.app */,
 				F521993301F8D28701A80164 /* wcalc */,
 				27D3915A059BEA860035F25F /* Wcalc.app */,
 			);
@@ -911,6 +910,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
+				DEAD_CODE_STRIPPING = YES;
+				DEPLOYMENT_POSTPROCESSING = NO;
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_AUTO_VECTORIZATION = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
