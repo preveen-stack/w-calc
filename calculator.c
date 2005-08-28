@@ -161,7 +161,7 @@ void parseme(char *pthis)
 	 * http://www.bgw.org/tutorials/programming/c/lex_yacc/main.c
 	 * and are here strictly for readline suppport
 	 */
-	Dprintf("scanning string\n");
+	Dprintf("scanning string: %s\n",sanitized);
 	yy_scan_string(sanitized);
 	Dprintf("yyparse\n");
 	yyparse();
@@ -442,7 +442,7 @@ static char *flatten(char *str)
 		curs = str;
 
 	while (curs && *curs) {
-		// search for the fist letter of a possible variable
+		// search for the first letter of a possible variable
 		while (curs && *curs && !isalpha((int)(*curs))) {
 			if (*curs == '\\') {
 				curs++;
