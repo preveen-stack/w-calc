@@ -1,6 +1,6 @@
 /* AboutBoxController */
 
-#import <Cocoa/Cocoa.h>
+#include <Cocoa/Cocoa.h>
 
 @interface AboutBoxController : NSObject
 {

@@ -1,4 +1,4 @@
-#import "theDelegate.h"
+#include "theDelegate.h"
 
 @implementation theDelegate
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication*)theApp

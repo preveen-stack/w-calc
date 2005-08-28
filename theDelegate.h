@@ -1,10 +1,10 @@
 /* theDelegate */
 
-#import <Cocoa/Cocoa.h>
+#include <Cocoa/Cocoa.h>
 
 @interface theDelegate : NSObject
 {
-	IBOutlet NSWindow *mainWindow; 
+	IBOutlet NSWindow *mainWindow;
 }
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication*)theApp;
 @end

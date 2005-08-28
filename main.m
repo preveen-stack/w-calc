@@ -6,14 +6,14 @@
 //  Copyright (c) 2001 Kyle Wheeler. All rights reserved.
 //
 
-#import <Cocoa/Cocoa.h>
+#include <Cocoa/Cocoa.h>
 
-#import "calculator.h"
-#import "conversion.h"
-#import "parser.h"
-#import "variables.h"
+#include "calculator.h"
+#include "conversion.h"
+#include "parser.h"
+#include "variables.h"
 
-#import "WcalcController.h"
+#include "WcalcController.h"
 
 int main(int argc, const char *argv[])
 {

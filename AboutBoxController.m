@@ -1,5 +1,5 @@
-#import "calculator.h"
-#import "AboutBoxController.h"
+#include "calculator.h"
+#include "AboutBoxController.h"
 
 @implementation AboutBoxController
 

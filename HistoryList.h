@@ -1,8 +1,8 @@
 /* HistoryList */
 
-#import <Cocoa/Cocoa.h>
+#include <Cocoa/Cocoa.h>
 
-#import "WcalcController.h"
+#include "WcalcController.h"
 
 @interface HistoryList : NSObject
 {

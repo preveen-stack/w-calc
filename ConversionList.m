@@ -1,5 +1,5 @@
-#import "conversion.h"
-#import "ConversionList.h"
+#include "conversion.h"
+#include "ConversionList.h"
 
 @implementation ConversionList
 - (IBAction)newType:(id)sender

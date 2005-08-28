@@ -1,10 +1,10 @@
-#import "variables.h"
-#import "calculator.h"
-#import "string_manip.h"
-#import "VariableList.h"
+#include "variables.h"
+#include "calculator.h"
+#include "string_manip.h"
+#include "VariableList.h"
 
-#import "gmp.h"
-#import "mpfr.h"
+#include "gmp.h"
+#include "mpfr.h"
 
 @implementation VariableList
 // needs to be REALLY fast

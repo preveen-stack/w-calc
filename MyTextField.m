@@ -1,7 +1,7 @@
-#import "MyTextField.h"
-#import "calculator.h"
-#import "variables.h"
-#import "simpleCalc.h"
+#include "MyTextField.h"
+#include "calculator.h"
+#include "variables.h"
+#include "simpleCalc.h"
 
 @implementation MyTextField
 - (void)keyDown:(NSEvent*) theEvent
@@ -85,7 +85,6 @@
 				break;
 			}
 		}
-		
 	}
 }
 

@@ -1,5 +1,5 @@
-#import "historyManager.h"
-#import "HistoryList.h"
+#include "historyManager.h"
+#include "HistoryList.h"
 
 @implementation HistoryList
 

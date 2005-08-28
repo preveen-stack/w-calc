@@ -1,10 +1,10 @@
 /* MyTextField */
 
-#import <Cocoa/Cocoa.h>
-#import "WcalcController.h"
+#include <Cocoa/Cocoa.h>
+#include "WcalcController.h"
 
-#import <gmp.h>
-#import <mpfr.h>
+#include <gmp.h>
+#include <mpfr.h>
 
 @interface MyTextField : NSTextField
 {
