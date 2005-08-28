@@ -1,18 +1,18 @@
-#import "calculator.h"
-#import "variables.h"
-#import "conversion.h"
-#import "ErrorController.h"
-#import "historyManager.h"
-#import "WcalcController.h"
-#import "string_manip.h"
-#import "files.h"
-#import "MyTextField.h"
-#import "simpleCalc.h"
+#include "calculator.h"
+#include "variables.h"
+#include "conversion.h"
+#include "ErrorController.h"
+#include "historyManager.h"
+#include "WcalcController.h"
+#include "string_manip.h"
+#include "files.h"
+#include "MyTextField.h"
+#include "simpleCalc.h"
 
 #define KEYPAD_HEIGHT 165
 #define MIN_WINDOW_WIDTH 171
-#define MIN_WINDOW_HEIGHT_TOGGLED 118
-#define MIN_WINDOW_HEIGHT_UNTOGGLED 283
+#define MIN_WINDOW_HEIGHT_TOGGLED 112
+#define MIN_WINDOW_HEIGHT_UNTOGGLED 277
 #define FIELD_WIDTH_DIFFERENCE 22
 #define MAX_WINDOW_SIZE 10000
 
@@ -29,26 +29,30 @@ static NSString *curFile = NULL;
 	NSRect mainwindow = [mainWindow frame];
 	NSRect exp = [ExpressionField frame];
 	NSRect prec = [PrecisionSlider frame];
+	NSRect ans = [AnswerField frame];
 	NSSize w;
 	NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-
 
 	if (shrinking) {
 		// if removing the keypad, change the window height
 		mainwindow.size.height -= KEYPAD_HEIGHT;
 		mainwindow.origin.y += KEYPAD_HEIGHT;
-		// this is set in case the calc starts up toggled
-		exp.size.height = mainwindow.size.height - 100;
+		// this is set in case the calc starts up toggled (under other
+		// conditions it is not strictly necessary, because the ExpressionField
+		// has achieved the correct size automatically
+		exp.size.height = mainwindow.size.height
+			- ans.size.height
+			- prec.size.height
+			- 57 /* the size of the rest of the window, including title bar */;
 	} else {
-		// if adding the keypad, change the window height 
+		// if adding the keypad, change the window height
 		mainwindow.size.height += KEYPAD_HEIGHT;
 		mainwindow.origin.y -= KEYPAD_HEIGHT;
-		// when adding the keypad, the window must be this width
 		mainwindow.size.width = MIN_WINDOW_WIDTH;
 	}
 
 	exp.size.width = prec.size.width = mainwindow.size.width - FIELD_WIDTH_DIFFERENCE;
-	
+
 	if (shrinking) {
 		[keypad removeFromSuperview];
 		exp.origin.y -= KEYPAD_HEIGHT;
@@ -57,19 +61,20 @@ static NSString *curFile = NULL;
 		exp.origin.y += KEYPAD_HEIGHT;
 		prec.origin.y += KEYPAD_HEIGHT;
 	}
-	
+
 	[ExpressionField removeFromSuperview];
 	[PrecisionSlider removeFromSuperview];
 
-	if (sender != 0)
+	if (sender != 0) {
 		[mainWindow setFrame:mainwindow display:TRUE animate:TRUE];
-	else
+	} else {
 		[mainWindow setFrame:mainwindow display:FALSE animate:FALSE];
+	}
 
 	if (! shrinking) {
 		[superview addSubview:keypad];
 		w.width = MIN_WINDOW_WIDTH;
-		w.height = MIN_WINDOW_HEIGHT_UNTOGGLED;
+		w.height = MIN_WINDOW_HEIGHT_UNTOGGLED + (ans.size.height - 21);
 		[mainWindow setMinSize:w];
 		w.width = MIN_WINDOW_WIDTH;
 		w.height = MAX_WINDOW_SIZE;
@@ -77,16 +82,14 @@ static NSString *curFile = NULL;
 		[prefs setObject:@"NO" forKey:@"toggled"];
 	} else {
 		w.width = MIN_WINDOW_WIDTH;
-		w.height = MIN_WINDOW_HEIGHT_TOGGLED;
+		w.height = MIN_WINDOW_HEIGHT_TOGGLED + (ans.size.height - 21);
 		[mainWindow setMinSize:w];
-	w = [mainWindow minSize];
 		w.width = MAX_WINDOW_SIZE;
 		w.height = MAX_WINDOW_SIZE;
 		[mainWindow setMaxSize:w];
-	w = [mainWindow maxSize];
 		[prefs setObject:@"YES" forKey:@"toggled"];
 	}
-	
+
 	[ExpressionField setFrame:exp];
 	[PrecisionSlider setFrame:prec];
 
@@ -113,28 +116,28 @@ static NSString *curFile = NULL;
 {
 	NSString *str = [ExpressionField stringValue];
 	NSString *str2;
-	
+
 	switch ([sender tag]) {
 		case 1: str2 = @"¹"; break;
 		case 2: str2 = @"e"; break;
 		case 3: str2 = @"gamma"; break;
 		case 4: str2 = @"g"; break;
 		case 5: str2 = @"Cc"; break;
-		
+
 		case 101: str2 = @"Z0"; break;
 		case 102: str2 = @"epsilon0"; break;
 		case 103: str2 = @"µ0"; break;
 		case 104: str2 = @"G"; break;
 		case 105: str2 = @"h"; break;
 		case 106: str2 = @"c"; break;
-		
+
 		case 201: str2 = @"µB"; break;
 		case 202: str2 = @"µN"; break;
 		case 203: str2 = @"G0"; break;
 		case 204: str2 = @"ec"; break;
 		case 205: str2 = @"Kj"; break;
 		case 206: str2 = @"Rk"; break;
-		
+
 		case 301: str2 = @"Mampha"; break;
 		case 302: str2 = @"ao"; break;
 		case 303: str2 = @"Md"; break;
@@ -150,7 +153,7 @@ static NSString *curFile = NULL;
 		case 313: str2 = @"Mp"; break;
 		case 314: str2 = @"Rinf"; break;
 		case 315: str2 = @"Mt"; break;
-		
+
 		case 401: str2 = @"u"; break;
 		case 402: str2 = @"Na"; break;
 		case 403: str2 = @"k"; break;
@@ -179,9 +182,9 @@ static NSString *curFile = NULL;
 {
 	NSString *str = [[ExpressionField stringValue] stringByAppendingString:@")"];
 	NSString *str2;
-	
+
 	if ([str length] == 1) str = @"";
-	
+
 	switch ([sender tag]) {
 		case 1: str2 = @"sin("; break;
 		case 2: str2 = @"cos("; break;
@@ -280,20 +283,17 @@ static NSString *curFile = NULL;
 	if ([prefs boolForKey:@"toggled"]) {
 		w.size.height += KEYPAD_HEIGHT;
 		w.origin.y -= KEYPAD_HEIGHT;
-		[mainWindow setFrame:w display:FALSE animate:FALSE];
+		[mainWindow setFrame:w display:TRUE animate:FALSE];
 		[self toggleSize:0];
 	} else {
 		w.size.width = MIN_WINDOW_WIDTH;
-		[mainWindow setFrame:w display:FALSE animate:FALSE];
+		[mainWindow setFrame:w display:TRUE animate:FALSE];
 		bounds.width = MIN_WINDOW_WIDTH;
 		bounds.height = MIN_WINDOW_HEIGHT_UNTOGGLED;
 		[mainWindow setMinSize:bounds];
 		bounds.width = MIN_WINDOW_WIDTH;
-		bounds.height = 0;
+		bounds.height = MAX_WINDOW_SIZE;
 		[mainWindow setMaxSize:bounds];
-		// if I don't do this, resizing makes the window disappear (????)
-		[self toggleSize:0];
-		[self toggleSize:0];
 	}
 //	w = [mainWindow frame];
 //	bounds = [mainWindow minSize];
@@ -315,7 +315,8 @@ static NSString *curFile = NULL;
 		[AnswerField setStringValue:@"0"];
 		simpleClearAll();
 	}
-	mpfr_set_default_prec(200);
+	mpfr_set_default_prec(1024);
+	mpfr_init_set_ui(last_answer, 0, GMP_RNDN);
 }
 
 - (void)openBDrawer: (id) sender
@@ -334,7 +335,7 @@ static NSString *curFile = NULL;
 	NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
 
 	last_pres = [prefs integerForKey:@"precision"];
-	
+
 	if (last_pres == [PrecisionSlider intValue])
 		return;
 	else
@@ -345,14 +346,7 @@ static NSString *curFile = NULL;
 
 	set_prettyanswer(last_answer);
 
-	[AnswerField setStringValue:[NSString stringWithCString:(pretty_answer?pretty_answer:"Not Enough Memory")]];
-	if (not_all_displayed) {
-		[AnswerField setTextColor:[NSColor redColor]];
-	} else {
-		[AnswerField setTextColor:[NSColor blackColor]];
-	}
-
-	[ExpressionField selectText:self];
+	[self displayAnswer];
 }
 
 - (IBAction)go:(id)sender
@@ -389,6 +383,37 @@ static NSString *curFile = NULL;
 	/* display the answer */
 	[AnswerField setStringValue:[NSString stringWithFormat:@"%s",pretty_answer]];
 	[AnswerField setTextColor:(not_all_displayed?[NSColor redColor]:[NSColor blackColor])];
+	{ // Make the Answerfield big enough to display the answer
+		NSRect curFrame, newFrame;
+		curFrame = [AnswerField frame];
+		newFrame = curFrame;
+		//newFrame.size.height = 10000000.0; // arbitrarily big number
+		newFrame.size = [[AnswerField cell] cellSizeForBounds:newFrame];
+		if (curFrame.size.height != newFrame.size.height) {
+			size_t newHeight;
+			int difference;
+			NSRect windowFrame;
+			NSSize ms;
+			newHeight = newFrame.size.height;
+			newFrame = curFrame;
+			newFrame.size.height = newHeight;
+			difference = newHeight - curFrame.size.height;
+			windowFrame = [mainWindow frame];
+			windowFrame.size.height += difference;
+			windowFrame.origin.y -= difference;
+			curFrame = [ExpressionField frame];
+			[AnswerField setHidden:TRUE];
+			[ExpressionField setHidden:TRUE];
+			[mainWindow setFrame:windowFrame display:YES animate:YES];
+			ms = [mainWindow minSize];
+			ms.height += difference;
+			[mainWindow setMinSize:ms];
+			[AnswerField setFrame:newFrame];
+			[ExpressionField setFrame:curFrame];
+			[AnswerField setHidden:FALSE];
+			[ExpressionField setHidden:FALSE];
+		}
+	}
 
 	// if the drawer is open, refresh the data.
 	if ([theDrawer state]) {
@@ -412,7 +437,7 @@ static NSString *curFile = NULL;
 	if (type < 0 || type > MAX_TYPE) return;
 	if (from < 0) return;
 	if (to < 0) return;
-	
+
 	uber_conversion(last_answer, type, from, to, last_answer);
 	set_prettyanswer(last_answer);
 	[AnswerField setStringValue:[NSString stringWithCString:(pretty_answer?pretty_answer:"Not Enough Memory")]];
@@ -428,7 +453,7 @@ static NSString *curFile = NULL;
 	char * str = strdup([[ExpressionField stringValue] cString]);
 	static short shiftdown = 0, capsdown = 0;
 	int tag;
-	
+
 	[ExpressionField setSelectable:FALSE];
 	tag = [sender tag];
 	switch (tag) {
@@ -744,7 +769,7 @@ static NSString *curFile = NULL;
 			if ([theDrawer state] || recalculate) {
 				[historyList reloadData];
 			}
-			
+
 			[ExpressionField selectText:self];
 			break;
 //		case 2:
@@ -815,7 +840,7 @@ static NSString *curFile = NULL;
 	errstr = malloc(strlen(strerror(errno))+[filename cStringLength]+3);
 	sprintf(errstr,"%s: %s",[filename cString], strerror(errno));
 	[errorController throwAlert:[NSString stringWithCString:errstr]];
-	free(errstr);				
+	free(errstr);
 }
 
 - (IBAction)saveAs:(id)sender
@@ -860,7 +885,7 @@ static NSString *curFile = NULL;
 		retval = saveState(strdup([curFile cString]));
 		if (retval)
 			[self displayErrno:retval forFile:curFile];
-	}		
+	}
 }
 
 - (IBAction)displayPrefs:(id)sender
@@ -877,8 +902,7 @@ static NSString *curFile = NULL;
 	[printInts setState:(conf.print_ints?NSOnState:NSOffState)];
 	[precisionGuard setState:(conf.precision_guard?NSOnState:NSOffState)];
 	[simpleCalculator setState:(conf.simple_calc?NSOnState:NSOffState)];
-				
-	
+
 	/* disable irrelevant preferences */
 	[historyDuplicates setEnabled:!conf.simple_calc];
 	[limitHistory setEnabled:!conf.simple_calc];
