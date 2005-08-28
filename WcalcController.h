@@ -1,6 +1,8 @@
 /* WcalcController */
+#ifndef WCALC_CONTROLLER_H
+#define WCALC_CONTROLLER_H
 
-#import <Cocoa/Cocoa.h>
+#include <Cocoa/Cocoa.h>
 
 @interface WcalcController : NSObject
 {
@@ -9,9 +11,9 @@
 	IBOutlet NSMenuItem *baseMenu;
 	IBOutlet NSMenuItem *saveMenuItem;
 	IBOutlet NSMenuItem *saveAsMenuItem;
-	
+
 	IBOutlet NSWindow *mainWindow;
-	
+
     IBOutlet NSButton *capsLockKey;
     IBOutlet NSButton *shiftKey1;
     IBOutlet NSButton *shiftKey2;
@@ -29,34 +31,34 @@
 	IBOutlet NSButton *precisionGuard;
 	IBOutlet NSButton *printInts;
 	IBOutlet NSButton *simpleCalculator;
-	
+
     IBOutlet NSTextField *AnswerField;
     IBOutlet NSTextField *ExpressionField;
 	IBOutlet NSTextField *limitHistoryLen;
 	IBOutlet NSTextField *limitHistoryLenTag;
-	
+
     IBOutlet NSDrawer *theDrawer;
 	IBOutlet NSDrawer *baseDrawer;
-	
+
 	IBOutlet NSMatrix *outputFormat;
 	IBOutlet NSMatrix *outputFormat2;
-	
+
     IBOutlet id errorController;
     IBOutlet id historyList;
     IBOutlet id PrecisionSlider;
     IBOutlet id theKeyboard;
 	IBOutlet id keypad;
-	
+
 	IBOutlet NSPanel *thePrefPanel;
 	IBOutlet NSPanel *conversionWindow;
-	
+
 	IBOutlet NSPopUpButton *roundingIndication;
 	IBOutlet NSPopUpButton *convertType;
 
 	IBOutlet NSTableView *variableList;
 	IBOutlet NSTableView *convertFrom;
 	IBOutlet NSTableView *convertTo;
-	
+
 	bool just_answered;
 	NSView *superview;
 }
@@ -83,3 +85,4 @@
 - (void)displayErrno:(int)err forFile:(NSString*)filename;
 - (BOOL)validateMenuItem:(NSMenuItem *)anItem;
 @end
+#endif
