@@ -1,5 +1,5 @@
 %define name Wcalc
-%define version 1.6.2
+%define version 2.0
 
 Summary: A flexible command-line calculator
 Name: %{name}
