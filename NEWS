@@ -20,6 +20,8 @@ Jun 10 2005 - Kyle Wheeler
  - Selecting the Planck constant from the menu produces the correct symbol (GUI)
  - Fixed the reduce/reduce conflicts in the parser (BOTH)
 --- Version 1.7 ---
+Jan 04 2004 - Kyle Wheeler
+ - Compiling tweaks for Solaris
 Dec 29 2003 - Kyle Wheeler
  - Added a "simple" calculator feature (GUI)
  - Updated autoconf/automake (CLI)
