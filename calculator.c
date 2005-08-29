@@ -23,7 +23,7 @@
 char *strchr(), *strrchr();
 #endif
 
-#if defined(GUI) || TIME_WITH_SYS_TIME		/* for time() */
+#if defined(GUI) || TIME_WITH_SYS_TIME /* for time() */
 # include <sys/time.h>
 # include <time.h>
 #else
@@ -69,9 +69,8 @@ struct _conf conf;
 extern int yyparse();
 extern int yy_scan_string(const char *);
 
-static size_t num_to_str_complex(char *inputstr, unsigned int length,
-								 mpfr_t num, int base, int engr, int prec,
-								 int prefix);
+static char *num_to_str_complex(mpfr_t num, int base, int engr, int prec,
+								int prefix);
 struct variable_list
 {
 	char *varname;
@@ -121,8 +120,9 @@ void parseme(char *pthis)
 										  conf.dec_delimiter != ',' &&
 										  sanitized[i] == ',')) {
 				// throw an error
-				snprintf(errmsg, 1000, "Improperly formatted numbers! (%c,%c)\n",
-						conf.thou_delimiter, conf.dec_delimiter);
+				snprintf(errmsg, 1000,
+						 "Improperly formatted numbers! (%c,%c)\n",
+						 conf.thou_delimiter, conf.dec_delimiter);
 				report_error(errmsg);
 				synerrors = 1;
 				break;
@@ -165,7 +165,7 @@ void parseme(char *pthis)
 	 * http://www.bgw.org/tutorials/programming/c/lex_yacc/main.c
 	 * and are here strictly for readline suppport
 	 */
-	Dprintf("scanning string: %s\n",sanitized);
+	Dprintf("scanning string: %s\n", sanitized);
 	yy_scan_string(sanitized);
 	Dprintf("yyparse\n");
 	yyparse();
@@ -195,37 +195,30 @@ void parseme(char *pthis)
  * string, and does all the fancy presentation stuff we've come to expect from
  * wcalc.
  */
-size_t num_to_str_complex(char *inputstr, unsigned int length, mpfr_t num,
-						  int base, int engr, int prec, int prefix)
+char *num_to_str_complex(mpfr_t num, int base, int engr, int prec, int prefix)
 {
-	char *s, *s0, *curs;
-	size_t l;
+	char *s, *s0, *curs, *retstr;
+	size_t len;
 	mp_exp_t e;
 	size_t decimal_count = 0;
 
-	Dprintf
-		("num_to_str_complex: length: %u, base: %i, engr: %i, prec: %i, prefix: %i\n",
-		 length, base, engr, prec, prefix);
+	Dprintf("num_to_str_complex: base: %i, engr: %i, prec: %i, prefix: %i\n",
+			base, engr, prec, prefix);
 	if (mpfr_nan_p(num)) {
-		snprintf(inputstr, length, "@NaN@");
-		return 5;
+		return (char *)strdup("@NaN@");
 	}
 	if (mpfr_inf_p(num)) {
 		if (mpfr_sgn(num) > 0) {
-			snprintf(inputstr, length, "@Inf@");
-			return 5;
+			return (char *)strdup("@Inf@");
 		} else {
-			snprintf(inputstr, length, "-@Inf@");
-			return 6;
+			return (char *)strdup("-@Inf@");
 		}
 	}
 	if (mpfr_zero_p(num)) {
 		if (mpfr_sgn(num) > 0) {
-			snprintf(inputstr, length, "0");
-			return 1;
+			return (char *)strdup("0");
 		} else {
-			snprintf(inputstr, length, "-0");
-			return 2;
+			return (char *)strdup("-0");
 		}
 	}
 
@@ -268,32 +261,32 @@ size_t num_to_str_complex(char *inputstr, unsigned int length, mpfr_t num,
 
 	/* size of allocated block returned by mpfr_get_str may be incorrect, but
 	 * only as an upper bound */
-	l = strlen(s) + 1;
-	Dprintf("l = %lu\n",l);
+	len = strlen(s);
+	Dprintf("l = %lu\n", len);
+	curs = retstr = (char *)calloc(sizeof(char),len+1);
 
 	/* now, copy the string into the input string, carefully */
 
-	curs = inputstr;
 	/* copy over the negative sign */
 	if (*s == '-') {
-		snprintf(curs++, length--, "%c", *s++);
+		snprintf(curs++, len--, "%c", *s++);
 	}
 	/* copy in a prefix */
 	if (prefix) {
 		switch (base) {
 			case 16:
-				snprintf(curs, length, "0x");
-				length -= 2;
+				snprintf(curs, len, "0x");
+				len -= 2;
 				curs += 2;
 				break;
 			case 10:
 				break;
 			case 8:
-				snprintf(curs++, length--, "0");
+				snprintf(curs++, len--, "0");
 				break;
 			case 2:
-				snprintf(curs, length, "0b");
-				length -= 2;
+				snprintf(curs, len, "0b");
+				len -= 2;
 				curs += 2;
 				break;
 		}
@@ -301,22 +294,22 @@ size_t num_to_str_complex(char *inputstr, unsigned int length, mpfr_t num,
 
 	/* copy over the integers */
 	if (e > 0) {
-		snprintf(curs++, length--, "%c", *s++);
+		snprintf(curs++, len--, "%c", *s++);
 		e--;						   /* leading digit */
 		if (engr == 0) {
 			while (e > 0) {
-				snprintf(curs++, length--, "%c", *s++);
+				snprintf(curs++, len--, "%c", *s++);
 				e--;				   /* leading digits */
 			}
 		}
 	} else {
-		snprintf(curs++, length--, "0");
+		snprintf(curs++, len--, "0");
 	}
-	snprintf(curs++, length--, ".");   /* decimal point */
+	snprintf(curs++, len--, ".");   /* decimal point */
 	/* everything after this is affected by decimalcount */
 	/* copy in leading zeros */
 	while (e < 0 && decimal_count < prec) {
-		snprintf(curs++, length--, "0");
+		snprintf(curs++, len--, "0");
 		e++;
 		decimal_count++;
 	}
@@ -325,20 +318,21 @@ size_t num_to_str_complex(char *inputstr, unsigned int length, mpfr_t num,
 		size_t print_limit, printed, initial_length;
 
 		if (prec == -1) {			   /* if precision is arbitrary, the sky's the limit in printing stuff */
-			print_limit = length;
+			print_limit = len;
 		} else {					   /* if precision is specified, then you use that as a limit */
 			print_limit =
-				((length <
-				  (prec - decimal_count + 1)) ? length : (prec -
+				((len <
+				  (prec - decimal_count + 1)) ? len : (prec -
 														  decimal_count + 1));
 		}
 		/* this variable exists because snprintf's return value is unreliable
 		 * and can be larger than the number of digits printed
 		 * */
-		printed = ((print_limit-1 < strlen(s)) ? print_limit-1 : strlen(s));
-		initial_length = strlen(inputstr);
+		printed =
+			((print_limit - 1 < strlen(s)) ? print_limit - 1 : strlen(s));
+		initial_length = strlen(retstr);
 		snprintf(curs, print_limit, "%s", s);
-		length -= printed;
+		len -= printed;
 		decimal_count += printed;
 		curs += printed;
 	}
@@ -348,22 +342,20 @@ size_t num_to_str_complex(char *inputstr, unsigned int length, mpfr_t num,
 		curs--;
 		while ('0' == *curs) {
 			*curs-- = '\0';
-			l--;
-			length++;
+			len++;
 		}
 		if ('.' == *curs) {
 			*curs = '\0';
-			l--;
-			length++;
+			len++;
 		}
 		curs++;
 	}
 	/* copy in an exponent if necessary (unlikely) */
 	if (e != 0) {
-		l += snprintf(curs, length, (base <= 10 ? "e%ld" : "@%ld"), (long)e);
+		snprintf(curs, len, (base <= 10 ? "e%ld" : "@%ld"), (long)e);
 	}
 
-	return l;
+	return retstr;
 }
 
 static struct variable_list *extract_vars(char *str)
@@ -467,9 +459,10 @@ static char *flatten(char *str)
 		eov = curs;
 		{
 			size_t i = 0;
+
 			while (eov && *eov &&
-					(isalpha((int)(*eov)) || *eov == '_' || *eov == ':' ||
-					 isdigit((int)(*eov)))) {
+				   (isalpha((int)(*eov)) || *eov == '_' || *eov == ':' ||
+					isdigit((int)(*eov)))) {
 				varname[i++] = *eov;
 				eov++;
 			}
@@ -497,10 +490,8 @@ static char *flatten(char *str)
 			// find out how much space it needs for full precision
 			tstr = mpfr_get_str(NULL, &e, 10, 0, f, GMP_RNDN);
 			len = strlen(tstr) + 3 + (e / 10);
-			// allocate that space
-			varvalue = calloc(len, sizeof(char));
 			// get the number
-			num_to_str_complex(varvalue, len, f, 10, 0, -1, 1);
+			varvalue = num_to_str_complex(f, 10, 0, -1, 1);
 			mpfr_clear(f);
 		} else {					   // not a known var: itza literal (e.g. cos)
 			varvalue = strdup(varname);
@@ -606,11 +597,11 @@ int find_recursion(struct variable_list *vstack)
 		for (vstackcurs = vstack; vstackcurs; vstackcurs = vstackcurs->next) {
 			if (!strcmp(vcurs->varname, vstackcurs->varname)) {
 				unsigned int len = strlen(vcurs->varname) + 73;
-				char *error =
-					malloc(sizeof(char) * len);
+				char *error = malloc(sizeof(char) * len);
+
 				snprintf(error, len,
-						"%s was found twice in symbol descent. Recursive variables are not allowed.",
-						vcurs->varname);
+						 "%s was found twice in symbol descent. Recursive variables are not allowed.",
+						 vcurs->varname);
 				report_error(error);
 				free(error);
 				return 1;
@@ -677,7 +668,7 @@ char *print_this_result_dbl(double result)
 	extern char *errstring;
 	unsigned int decimal_places = 0;
 
-	Dprintf("print_this_result_dbl(%f)\n",result);
+	Dprintf("print_this_result_dbl(%f)\n", result);
 	/* Build the "format" string, that will be used in an snprintf later */
 	switch (conf.output_format) {
 		case DECIMAL_FORMAT:
@@ -949,7 +940,7 @@ char *print_this_result(mpfr_t result)
 	extern char *errstring;
 	unsigned int base = 0;
 
-	Dprintf("print_this_result (%f)\n",mpfr_get_d(result, GMP_RNDN));
+	Dprintf("print_this_result (%f)\n", mpfr_get_d(result, GMP_RNDN));
 	// output in the proper base and format
 	switch (conf.output_format) {
 		case HEXADECIMAL_FORMAT:
@@ -975,10 +966,8 @@ char *print_this_result(mpfr_t result)
 			base = 2;
 			break;
 	}
-	pa = realloc(pa, conf.precision + 50);
-	memset(pa, 0, conf.precision + 50);
-	num_to_str_complex(pa, conf.precision + 50, result, base,
-					   conf.engineering, conf.precision, conf.print_prefixes);
+	pa = num_to_str_complex(result, base, conf.engineering, conf.precision,
+							conf.print_prefixes);
 
 	/* now, decide whether it's been rounded or not */
 	if (mpfr_inf_p(result) || mpfr_nan_p(result)) {
@@ -989,10 +978,11 @@ char *print_this_result(mpfr_t result)
 		switch (conf.rounding_indication) {
 			case SIMPLE_ROUNDING_INDICATION:
 			{
-				char *pa2 = calloc(1, conf.precision + 50);
+				char *pa2;
 
-				num_to_str_complex(pa2, conf.precision + 50, result, base,
-								   conf.engineering, -1, conf.print_prefixes);
+				pa2 =
+					num_to_str_complex(result, base, conf.engineering, -1,
+									   conf.print_prefixes);
 				not_all_displayed = (strlen(pa) < strlen(pa2));
 				free(pa2);
 			}
@@ -1046,7 +1036,8 @@ void simple_exp(mpfr_t output, mpfr_t first, enum operations op,
 		mpfr_t temp;
 
 		mpfr_init(temp);
-		Dprintf("simple_exp: %f %i %f\n",mpfr_get_d(first,GMP_RNDN), op, mpfr_get_d(second,GMP_RNDN));
+		Dprintf("simple_exp: %f %i %f\n", mpfr_get_d(first, GMP_RNDN), op,
+				mpfr_get_d(second, GMP_RNDN));
 
 		switch (op) {
 			default:
@@ -1176,7 +1167,7 @@ void simple_exp(mpfr_t output, mpfr_t first, enum operations op,
 				}
 				break;
 		}
-		Dprintf("returns: %f\n",mpfr_get_d(output,GMP_RNDN));
+		Dprintf("returns: %f\n", mpfr_get_d(output, GMP_RNDN));
 		mpfr_clear(temp);
 		return;
 	} else {
