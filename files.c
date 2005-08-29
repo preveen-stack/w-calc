@@ -65,7 +65,7 @@ int saveState(char *filename)
 			if (keyval->exp) {
 				cptr = keyval->expression;
 			} else {
-				sprintf(value, "%s", print_this_result(keyval->value));
+				snprintf(value, 500, "%s", print_this_result(keyval->value));
 				cptr = value;
 			}
 			retval = write(fd, cptr, strlen(cptr));

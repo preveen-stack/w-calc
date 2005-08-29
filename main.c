@@ -99,8 +99,9 @@ int main(int argc, char *argv[])
 	/* load the preferences */
 	{
 		char *filename;
-		filename = malloc((strlen(getenv("HOME")) + 16) * sizeof(char));
-		sprintf(filename, "%s/.wcalcrc", getenv("HOME"));
+		unsigned int len = strlen(getenv("HOME")) + 16;
+		filename = malloc(len * sizeof(char));
+		snprintf(filename, len, "%s/.wcalcrc", getenv("HOME"));
 		if (read_prefs(filename))
 			perror("Writing Preferences");
 		free(filename);
@@ -165,10 +166,11 @@ int main(int argc, char *argv[])
 		/* if stdin is a keyboard or terminal, then use readline and prompts */
 #ifdef HAVE_READLINE_HISTORY
 		char *filename;
+		unsigned int len = strlen(getenv("HOME")) + 16;
 
 		using_history();
-		filename = malloc((strlen(getenv("HOME")) + 16) * sizeof(char));
-		sprintf(filename, "%s/.wcalc_history", getenv("HOME"));
+		filename = malloc(len * sizeof(char));
+		snprintf(filename, len, "%s/.wcalc_history", getenv("HOME"));
 		if (read_history(filename) && errno != ENOENT)
 			perror("Reading History");
 #endif

@@ -28,7 +28,10 @@
 	extern short scanerror;
 
 #ifndef HUGE_VALF
-#define HUGE_VALF HUGE_VAL
+# define HUGE_VALF HUGE_VAL
+#endif
+#ifndef UINT32_MAX
+# define UINT32_MAX 4294967295U
 #endif
 
 #ifdef REENTRANT_PARSER
@@ -424,8 +427,9 @@ comp { return(WCOMP); }
 	/* octal */
 	//char err[strlen(yytext)+57];
 	char err[yyleng+57];
+	char *errpat = "Incorrect number format (%s) - expected 0-7 for octal";
 	if (strchr(yytext,'8') || strchr(yytext,'9')) {
-		sprintf(err,"Incorrect number format (%s) - expected 0-7 for octal",yytext);
+		snprintf(err,yyleng+57,errpat,yytext);
 		report_error(err);
 		scanerror = 1;
 	} else {
@@ -450,7 +454,7 @@ comp { return(WCOMP); }
 
 	/* verify the digits */
 	if (strchr(yytext,'2') || strchr(yytext,'3') || strchr(yytext,'4') || strchr(yytext,'5') || strchr(yytext,'6') || strchr(yytext,'7') || strchr(yytext,'8') || strchr(yytext,'9')) {
-		sprintf(err,"Incorrect number format (%s) - expected 0 or 1 for binary",yytext);
+		snprintf(err,yyleng+57,"Incorrect number format (%s) - expected 0 or 1 for binary",yytext);
 		report_error(err);
 		scanerror = 1;
 	} else {
@@ -477,14 +481,15 @@ comp { return(WCOMP); }
 	char errmsg[] = "Confusing number format (%s)";
 	char *err;
 	int i;
-	err = (char *)calloc(sizeof(char),yyleng+(int)strlen(errmsg)-5);
+	unsigned int len = yyleng + (int)strlen(errmsg) - 5;
+	err = (char *)calloc(sizeof(char),len);
 	for (i=0;i<yyleng;++i) {
 	    if (yytext[i] == ',')
 		yytext[i] = conf.thou_delimiter;
 	    else if (yytext[i] == '.')
 		yytext[i] = conf.dec_delimiter;
 	}
-	sprintf(err,errmsg,yytext,conf.dec_delimiter,conf.thou_delimiter);
+	snprintf(err,len,errmsg,yytext,conf.dec_delimiter,conf.thou_delimiter);
 	report_error(err);
 	scanerror = 1;
 	free(err);
@@ -495,7 +500,7 @@ comp { return(WCOMP); }
 . { char error[26];
 	if (*yytext == ',') *yytext = conf.thou_delimiter;
 	else if (*yytext == '.') *yytext = conf.dec_delimiter;
-	sprintf(error, "scanner: cannot understand next token (%c)\n", *yytext);
+	snprintf(error, 26, "scanner: cannot understand next token (%c)\n", *yytext);
 	report_error(error);
 	scanerror = 1;}
 

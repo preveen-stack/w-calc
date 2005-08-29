@@ -13,7 +13,7 @@
 #endif
 #include <ctype.h>					   /* for isalpha() */
 
-#if defined(GUI) || STDC_HEADERS
+#if STDC_HEADERS || ! defined(HAVE_CONFIG_H) || HAVE_STRING_H
 # include <string.h>				   /* for memset() */
 #else
 # if !HAVE_STRCHR
@@ -32,6 +32,9 @@ char *strchr(), *strrchr();
 # else
 #  include <time.h>
 # endif
+#endif
+#ifndef UINT32_MAX
+# define UINT32_MAX 4294967295U
 #endif
 
 #include <gmp.h>
@@ -118,7 +121,7 @@ void parseme(char *pthis)
 										  conf.dec_delimiter != ',' &&
 										  sanitized[i] == ',')) {
 				// throw an error
-				sprintf(errmsg, "Improperly formatted numbers! (%c,%c)\n",
+				snprintf(errmsg, 1000, "Improperly formatted numbers! (%c,%c)\n",
 						conf.thou_delimiter, conf.dec_delimiter);
 				report_error(errmsg);
 				synerrors = 1;
@@ -143,12 +146,13 @@ void parseme(char *pthis)
 	/* Sanitize the input (add a newline) */
 	{
 		char *temp;
-		temp = calloc(sizeof(char), strlen(sanitized) + 3);
+		unsigned int len = strlen(sanitized) + 3;
+		temp = calloc(sizeof(char), len);
 		if (!temp) {
 			perror("resizing buffer");
 			goto exiting;
 		}
-		sprintf(temp, "%s\n", sanitized);
+		snprintf(temp, len, "%s\n", sanitized);
 		free(sanitized);
 		sanitized = temp;
 	}
@@ -601,9 +605,10 @@ int find_recursion(struct variable_list *vstack)
 	for (vcurs = vlist; vcurs; vcurs = vcurs->next) {
 		for (vstackcurs = vstack; vstackcurs; vstackcurs = vstackcurs->next) {
 			if (!strcmp(vcurs->varname, vstackcurs->varname)) {
+				unsigned int len = strlen(vcurs->varname) + 73;
 				char *error =
-					malloc(sizeof(char) * (strlen(vcurs->varname) + 73));
-				sprintf(error,
+					malloc(sizeof(char) * len);
+				snprintf(error, len,
 						"%s was found twice in symbol descent. Recursive variables are not allowed.",
 						vcurs->varname);
 				report_error(error);
@@ -636,11 +641,12 @@ void report_error(char *err)
 {
 	extern char *errstring;
 	char *tempstring;
+	unsigned int len;
 
 	if (errstring) {
-		tempstring =
-			calloc(strlen(errstring) + 2 + strlen(err), sizeof(char));
-		sprintf(tempstring, "%s\n%s", errstring, err);
+		len = strlen(errstring) + 2 + strlen(err);
+		tempstring = calloc(sizeof(char), len);
+		snprintf(tempstring, len, "%s\n%s", errstring, err);
 		free(errstring);
 		errstring = tempstring;
 	} else {
@@ -672,7 +678,7 @@ char *print_this_result_dbl(double result)
 	unsigned int decimal_places = 0;
 
 	Dprintf("print_this_result_dbl(%f)\n",result);
-	/* Build the "format" string, that will be used in an sprintf later */
+	/* Build the "format" string, that will be used in an snprintf later */
 	switch (conf.output_format) {
 		case DECIMAL_FORMAT:
 			if (pa_dyn)
@@ -689,13 +695,13 @@ char *print_this_result_dbl(double result)
 			} else
 				pa = tmp;
 			if (conf.precision > -1 && !conf.engineering) {
-				sprintf(format, "%%1.%if", conf.precision);
+				snprintf(format, 10, "%%1.%if", conf.precision);
 				decimal_places = conf.precision;
 			} else if (conf.precision > -1 && conf.engineering) {
-				sprintf(format, "%%1.%iE", conf.precision);
+				snprintf(format, 10, "%%1.%iE", conf.precision);
 				decimal_places = conf.precision;
 			} else {
-				sprintf(format, "%%G");
+				snprintf(format, 10, "%%G");
 				if (fabs(result) < 10.0) {
 					decimal_places = 6;
 				} else if (fabs(result) < 100.0) {
@@ -726,7 +732,7 @@ char *print_this_result_dbl(double result)
 			} else {
 				pa = tmp;
 			}
-			sprintf(format, conf.print_prefixes ? "%%#o" : "%%o");
+			snprintf(format, 10, conf.print_prefixes ? "%%#o" : "%%o");
 			break;
 		case HEXADECIMAL_FORMAT:
 			if (pa_dyn) {
@@ -743,7 +749,7 @@ char *print_this_result_dbl(double result)
 			} else {
 				pa = tmp;
 			}
-			sprintf(format, conf.print_prefixes ? "%%#x" : "%%x");
+			snprintf(format, 10, conf.print_prefixes ? "%%#x" : "%%x");
 			break;
 		case BINARY_FORMAT:
 			// Binary Format can't just use a format string, so
@@ -770,7 +776,7 @@ char *print_this_result_dbl(double result)
 			return pa;
 		} else
 			pa = tmp;
-		sprintf(pa, "Infinity");
+		snprintf(pa, 11, "Infinity");
 		not_all_displayed = 0;
 	} else if (isnan(result)) {
 		// if it is not a number, print "Not a Number", regardless of format
@@ -787,7 +793,7 @@ char *print_this_result_dbl(double result)
 			return pa;
 		} else
 			pa = tmp;
-		sprintf(pa, "Not a Number");
+		snprintf(pa, 13, "Not a Number");
 		not_all_displayed = 0;
 	} else {
 		switch (conf.output_format) {
@@ -800,9 +806,9 @@ char *print_this_result_dbl(double result)
 				/* This is the big call */
 				if (fabs(modf(result, &junk)) != 0.0 || conf.engineering ||
 					!conf.print_ints) {
-					sprintf(pa, format, result);
+					snprintf(pa, 310, format, result);
 				} else {
-					sprintf(pa, "%1.0f", result);
+					snprintf(pa, 310, "%1.0f", result);
 				}
 				/* was it as good for you as it was for me?
 				 * now, you must localize it */
@@ -849,7 +855,7 @@ char *print_this_result_dbl(double result)
 					long int temp = result;
 					unsigned int t = 0;
 
-					sprintf(pa, format, temp);
+					snprintf(pa, 310, format, temp);
 					if (conf.rounding_indication ==
 						SIG_FIG_ROUNDING_INDICATION) {
 						if (sig_figs < UINT32_MAX) {

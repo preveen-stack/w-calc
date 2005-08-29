@@ -4,7 +4,7 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-#if defined(STDC_HEADERS) || ! defined(HAVE_CONFIG_H)
+#if defined(STDC_HEADERS) || ! defined(HAVE_CONFIG_H) || HAVE_STRING_H
 # include <string.h>
 #else
 # if !HAVE_STRCHR
@@ -12,6 +12,9 @@
 #  define strrchr rindex
 # endif
 char *strchr (), *strrchr ();
+#endif
+#if HAVE_LIMITS_H
+# include <limits.h> /* MPFR uses ULONG_MAX on some systems */
 #endif
 
 #include <stdio.h>
@@ -319,8 +322,9 @@ command : HEX_CMD {
 | OPEN_CMD {
 	extern char* open_file;
 	int i;
-	open_file = malloc(strlen($1)+1);
-	sprintf(open_file,"%s",$1);
+	unsigned int len = strlen($1)+1;
+	open_file = malloc(len);
+	snprintf(open_file,len,"%s",$1);
 	/* strip trailing spaces */
 	for (i=strlen(open_file)-1;i>=0;i--) {
 		if (open_file[i] != ' ') break;
@@ -365,19 +369,22 @@ command : HEX_CMD {
 {
 	int category;
 	char * errstr;
+	unsigned int len;
 	category = identify_units($1.u1,$1.u2);
 	if (category == -1) {
 		report_error("Units must be in the same category.");
 	} else if (category == -2) {
 		report_error("Units provided are not recognized.");
 	} else if (category == -3) {
-		errstr = calloc(sizeof(char),strlen($1.u1)+45);
-		sprintf(errstr,"First unit provided was not recognized (%s).",$1.u1);
+		len = strlen($1.u1)+45;
+		errstr = calloc(sizeof(char),len);
+		snprintf(errstr,len,"First unit provided was not recognized (%s).",$1.u1);
 		report_error(errstr);
 		free(errstr);
 	} else if (category == -4) {
-		errstr = calloc(sizeof(char),strlen($1.u2)+46);
-		sprintf(errstr,"Second unit provided was not recognized (%s).",$1.u2);
+		len = strlen($1.u2)+46;
+		errstr = calloc(sizeof(char),len);
+		snprintf(errstr,len,"Second unit provided was not recognized (%s).",$1.u2);
 		report_error(errstr);
 		free(errstr);
 	} else {
@@ -596,8 +603,8 @@ yyerror(char *error_string, ...) {
 
     ++synerrors;
 
-	sprintf(error,"Error on line %i: ", lines);
-	vsprintf(error,error_string,ap);
+	snprintf(error,1000,"Error on line %i: ", lines);
+	vsnprintf(error+strlen(error),1000-strlen(error),error_string,ap);
 	report_error(error);
 
 	/*    fprintf(f,"Error on line %d: ", lines);

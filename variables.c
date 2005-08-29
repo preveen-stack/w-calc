@@ -1,4 +1,4 @@
-#ifndef GUI
+#ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 #include <ctype.h>
@@ -6,6 +6,9 @@
 //#include <sys/types.h>                   /* for getpwent */
 //#include <stdio.h>                       /* for cuserid */
 //#include <unistd.h>                      /* for getlogin */
+#if HAVE_STRING_H
+# include <string.h>
+#endif
 
 #include <gmp.h>
 #include <mpfr.h>
