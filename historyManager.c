@@ -56,6 +56,12 @@ static void clear_calculated(void);
 
 void clearHistory()
 {
+	unsigned int i;
+
+	for (i=0;i<histlen;i++) {
+		free(history[i].exp);
+		mpfr_clear(history[i].ans);
+	}
 	if (histlen) {
 		free(history);
 		histlen = 0;

@@ -321,10 +321,12 @@ static char *flatten(char *str)
 				mpfr_set(f, last_answer, GMP_RNDN);
 			} else {				   // it is a value
 				mpfr_set(f, a.val, GMP_RNDN);
+				mpfr_clear(a.val);
 			}
 			// find out how much space it needs for full precision
 			tstr = mpfr_get_str(NULL, &e, 10, 0, f, GMP_RNDN);
 			len = strlen(tstr) + 3 + (e / 10);
+			mpfr_free_str(tstr);
 			// get the number
 			varvalue = num_to_str_complex(f, 10, 0, -1, 1);
 			mpfr_clear(f);
@@ -423,8 +425,11 @@ int find_recursion(struct variable_list *vstack)
 	struct variable_list *vcurs, *vstackcurs;
 
 	a = getvar_full(vstack->varname);
-	if (a.err || !a.exp)
+	if (a.err) return 0;
+	if (! a.exp) {
+		mpfr_clear(a.val);
 		return 0;
+	}
 
 	vlist = extract_vars(a.exp);
 	// for each entry in the vlist, see if it's in the vstack

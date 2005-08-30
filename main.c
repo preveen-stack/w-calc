@@ -117,15 +117,18 @@ int main(int argc, char *argv[])
 				fprintf(stderr,
 						"-P option requires a valid integer without spaces.\n");
 				fflush(stderr);
+				mpfr_clear(last_answer);
 				exit(0);
 			}
 		} else if (!strcmp(argv[i], "-E")) {
 			conf.engineering = 1;
 		} else if (!strcmp(argv[i], "-H") || !strcmp(argv[i], "--help")) {
 			print_command_help();
+			mpfr_clear(last_answer);
 			exit(0);
 		} else if (!strcmp(argv[i], "-v") || !strcmp(argv[i], "--version")) {
 			printf("wcalc %s\n", VERSION);
+			mpfr_clear(last_answer);
 			exit(0);
 		} else if (!strcmp(argv[i], "-d") || !strcmp(argv[i], "--decimal") ||
 				   !strcmp(argv[i], "-dec")) {
@@ -158,6 +161,9 @@ int main(int argc, char *argv[])
 	}
 
 	if (cmdline_input) {
+		cleanupvar();
+		mpfr_clear(last_answer);
+		mpfr_free_cache();
 		exit(0);
 	}
 
@@ -309,6 +315,10 @@ int main(int argc, char *argv[])
 		}
 	}
 
+	clearHistory();
+	cleanupvar();
+	mpfr_clear(last_answer);
+	mpfr_free_cache();
 	exit(0);
 }
 

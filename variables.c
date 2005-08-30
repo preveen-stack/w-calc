@@ -31,6 +31,21 @@ void initvar(void)
 {
 }
 
+void cleanupvar(void)
+{
+	struct variable *cursor = them;
+
+	while (cursor != NULL) {
+		free(cursor->key);
+		if (cursor->exp == 1) {
+			free(cursor->expression);
+		} else {
+			mpfr_clear(cursor->value);
+		}
+		cursor = cursor->next;
+	}
+}
+
 void delnvar(int i)
 {
 	int j;
@@ -43,14 +58,28 @@ void delnvar(int i)
 	if (!follower) {
 		if (cursor) {
 			them = cursor->next;
-			free(cursor->key);
+			if (cursor->key) {
+				free(cursor->key);
+			}
+			if (cursor->exp == 0) {
+				mpfr_clear(cursor->value);
+			} else {
+				free(cursor->expression);
+			}
 			free(cursor);
 		} else {
 			return;
 		}
 	} else {
 		follower->next = cursor->next;
-		free(cursor->key);
+		if (cursor->key) {
+			free(cursor->key);
+		}
+		if (cursor->exp == 0) {
+			mpfr_clear(cursor->value);
+		} else {
+			free(cursor->expression);
+		}
 		free(cursor);
 	}
 	contents--;
@@ -127,8 +156,10 @@ int varexists(char *key)
 {
 	struct variable *cursor = them;
 
-	if (!cursor) return 0;
-	if (!strlen(key)) return 0;
+	if (!cursor)
+		return 0;
+	if (!strlen(key))
+		return 0;
 
 	while (cursor && cursor->key && strncmp(cursor->key, key, strlen(key))) {
 		cursor = cursor->next;
@@ -198,8 +229,11 @@ int putexp(char *key, char *value)
 	}
 
 	if (cursor->key) {
-		if (cursor->expression)
+		if (cursor->expression) {
 			free(cursor->expression);
+		} else {
+			mpfr_clear(cursor->value);
+		}
 		cursor->expression = (char *)strdup(value);
 		cursor->exp = 1;
 		return 0;

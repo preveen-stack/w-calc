@@ -39,6 +39,7 @@ int putexp(char *key, char *value);
 int varexists(char *key);
 void initvar(void);
 void delnvar(int);
+void cleanupvar(void);
 
 /* ******************************
  * NOTE!
