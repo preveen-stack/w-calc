@@ -796,6 +796,9 @@ char *print_this_result(mpfr_t result)
 			base = 2;
 			break;
 	}
+	if (pa != NULL) {
+		free(pa);
+	}
 	pa = num_to_str_complex(result, base, conf.engineering, conf.precision,
 							conf.print_prefixes);
 
