@@ -17,6 +17,13 @@
 
 static size_t zero_strip(char *num);
 static void add_prefix(char *num, size_t length, int base);
+static char *engineering_formatted_number(char *digits, mp_exp_t exp,
+										  int precision, int base,
+										  int prefix);
+static char *automatically_formatted_number(char *digits, mp_exp_t exp,
+											int base, int prefix);
+static char *precision_formatted_number(char *digits, mp_exp_t exp,
+										int precision, int base, int prefix);
 
 /* this function takes a number (mpfr_t) and prints it.
  * This is a blatant ripoff of mpfr's mpfr_out_str(), because it formats things
@@ -104,7 +111,7 @@ char *precision_formatted_number(char *digits, mp_exp_t exp, int precision,
 	size_t print_limit, printed;
 	char *retstring, *curs, *dcurs = digits;
 
-	if (length < precision + 3) { // leading zero, decimal, and null
+	if (length < precision + 3) {	   // leading zero, decimal, and null
 		length = precision + 3;
 	}
 	Dprintf("Precision Formatted Number\n");
@@ -145,8 +152,9 @@ char *precision_formatted_number(char *digits, mp_exp_t exp, int precision,
 		// the decimal
 		snprintf(curs++, length--, ".");
 		Dprintf("the integers: %s\n", retstring);
-		Dprintf("l: %lu, fl: %lu, dc: %u, p: %i, e: %i\n", length, full_length,
-				(unsigned)decimal_count, (int)precision, (int)exp);
+		Dprintf("l: %lu, fl: %lu, dc: %u, p: %i, e: %i\n", length,
+				full_length, (unsigned)decimal_count, (int)precision,
+				(int)exp);
 		// everything after this is affected by decimalcount
 		// copy in the leading zeros
 		while (exp < 0 && decimal_count <= precision) {
@@ -154,8 +162,9 @@ char *precision_formatted_number(char *digits, mp_exp_t exp, int precision,
 			exp++;
 			decimal_count++;
 		}
-		Dprintf("l: %lu, fl: %lu, dc: %u, p: %i, e: %i\n", length, full_length,
-				(unsigned)decimal_count, (int)precision, (int)exp);
+		Dprintf("l: %lu, fl: %lu, dc: %u, p: %i, e: %i\n", length,
+				full_length, (unsigned)decimal_count, (int)precision,
+				(int)exp);
 		// copy in the rest of the mantissa (the decimals)
 		Dprintf("leading zeros: %s\n", retstring);
 		// this variable exists because snprintf's return value is unreliable,
@@ -163,7 +172,8 @@ char *precision_formatted_number(char *digits, mp_exp_t exp, int precision,
 		print_limit =
 			((length <
 			  (precision - decimal_count + 1)) ? length : (precision -
-														   decimal_count + 1));
+														   decimal_count +
+														   1));
 		snprintf(curs, print_limit, "%s", dcurs);
 		length -= printed;
 		decimal_count += printed;
@@ -282,7 +292,6 @@ char *engineering_formatted_number(char *digits, mp_exp_t exp, int precision,
 		length -= nc - curs;
 		curs = nc;
 	}
-
 	// copy over the integer
 	snprintf(curs++, length--, "%c", *dcurs++);
 	exp--;
@@ -302,7 +311,6 @@ char *engineering_formatted_number(char *digits, mp_exp_t exp, int precision,
 	if (-1 == precision) {
 		zero_strip(retstring);
 	}
-
 	// copy in an exponent
 	curs = strchr(retstring, '\0');
 	Dprintf("space left: %lu\n", full_length - (curs - retstring));
