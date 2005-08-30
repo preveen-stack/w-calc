@@ -1,3 +1,41 @@
+2005-08-29 22:02  memoryhole
+
+	* number_formatting.c, Wcalc.xcodeproj/kyle.mode1,
+	  Wcalc.xcodeproj/kyle.pbxuser, Wcalc.xcodeproj/project.pbxproj:
+	  compile warnings
+
+2005-08-29 21:34  memoryhole
+
+	* test.simple: 100!
+
+2005-08-29 20:26  memoryhole
+
+	* number_formatting.c, number_formatting.h: less namespace
+	  pollution
+
+2005-08-29 20:24  memoryhole
+
+	* Makefile.am, Makefile.in, calculator.c, number_formatting.c,
+	  number_formatting.h: fixed a crasher in large number output --
+	  better organized the number formatting stuff
+
+2005-08-29 17:56  memoryhole
+
+	* calculator.c: allow for the display of REALLY long numbers
+
+2005-08-29 16:25  memoryhole
+
+	* calculator.c, files.c, main.c, parser.y, scanner.l, variables.c:
+	  OpenBSD portability fixes
+
+2005-08-29 13:40  memoryhole
+
+	* NEWS: old fix
+
+2005-08-28 11:41  memoryhole
+
+	* ChangeLog: cvs2cl
+
 2005-08-28 11:00  memoryhole
 
 	* VariableList.m, main.c, parser.y, variables.c,
