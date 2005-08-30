@@ -44,6 +44,7 @@ char *strchr(), *strrchr();
 #include "variables.h"
 #include "string_manip.h"
 #include "files.h"
+#include "number_formatting.h"
 
 /* variables everyone needs to get to */
 mpfr_t last_answer;
@@ -69,8 +70,6 @@ struct _conf conf;
 extern int yyparse();
 extern int yy_scan_string(const char *);
 
-static char *num_to_str_complex(mpfr_t num, int base, int engr, int prec,
-								int prefix);
 struct variable_list
 {
 	char *varname;
@@ -187,175 +186,6 @@ void parseme(char *pthis)
 	/* exiting */
 	free(sanitized);
 	return;
-}
-
-/* this function takes a number (mpfr_t) and prints it.
- * This is a blatant ripoff of mpfr's mpfr_out_str(), because it formats things
- * (sorta) the way I want them formatted, though this prints things out to a
- * string, and does all the fancy presentation stuff we've come to expect from
- * wcalc.
- */
-char *num_to_str_complex(mpfr_t num, int base, int engr, int prec, int prefix)
-{
-	char *s, *s0, *curs, *retstr;
-	size_t len;
-	mp_exp_t e;
-	size_t decimal_count = 0;
-
-	Dprintf("num_to_str_complex: base: %i, engr: %i, prec: %i, prefix: %i\n",
-			base, engr, prec, prefix);
-	if (mpfr_nan_p(num)) {
-		return (char *)strdup("@NaN@");
-	}
-	if (mpfr_inf_p(num)) {
-		if (mpfr_sgn(num) > 0) {
-			return (char *)strdup("@Inf@");
-		} else {
-			return (char *)strdup("-@Inf@");
-		}
-	}
-	if (mpfr_zero_p(num)) {
-		if (mpfr_sgn(num) > 0) {
-			return (char *)strdup("0");
-		} else {
-			return (char *)strdup("-0");
-		}
-	}
-
-	s = mpfr_get_str(NULL, &e, base, 0, num, GMP_RNDN);
-	/* s is the string, allocated big enough to hold the whole thing
-	 * e is the number of integers (the exponent) if positive
-	 *
-	 * Now, if there's odd formatting involved, make mpfr do the rounding,
-	 * so we know it's "correct":
-	 */
-	if (prec > -1) {
-		if (engr == 0) {
-			size_t significant_figures = 0;
-
-			/*printf("e: %li\n", (long)e);
-			 * printf("s: %s\n", s);
-			 * printf("prec: %i\n", prec); */
-			significant_figures = ((e > 0) ? e : 0) + prec;
-			if (significant_figures < 2) {	/* why is this the minimum? */
-				s = mpfr_get_str(s, &e, base, 2, num, GMP_RNDN);
-				if (s[1] > '4') {	   /* XXX: LAME! */
-					unsigned foo;
-
-					foo = s[0] - '0';
-					foo++;
-					snprintf(s, 3, "%u", foo);
-					e++;
-				}
-			} else {
-				s = mpfr_get_str(s, &e, base, significant_figures, num,
-								 GMP_RNDN);
-			}
-		} else {
-			s = mpfr_get_str(NULL, &e, base, 1 + prec, num, GMP_RNDN);
-		}
-	}
-	s0 = s;
-	Dprintf("post-mpfr s: %s\n", s);
-	/* for num = 3.1416 we have s = "31416" and e = 1 */
-
-	/* size of allocated block returned by mpfr_get_str may be incorrect, but
-	 * only as an upper bound */
-	len = strlen(s);
-	Dprintf("l = %lu\n", len);
-	curs = retstr = (char *)calloc(sizeof(char),len+1);
-
-	/* now, copy the string into the input string, carefully */
-
-	/* copy over the negative sign */
-	if (*s == '-') {
-		snprintf(curs++, len--, "%c", *s++);
-	}
-	/* copy in a prefix */
-	if (prefix) {
-		switch (base) {
-			case 16:
-				snprintf(curs, len, "0x");
-				len -= 2;
-				curs += 2;
-				break;
-			case 10:
-				break;
-			case 8:
-				snprintf(curs++, len--, "0");
-				break;
-			case 2:
-				snprintf(curs, len, "0b");
-				len -= 2;
-				curs += 2;
-				break;
-		}
-	}
-
-	/* copy over the integers */
-	if (e > 0) {
-		snprintf(curs++, len--, "%c", *s++);
-		e--;						   /* leading digit */
-		if (engr == 0) {
-			while (e > 0) {
-				snprintf(curs++, len--, "%c", *s++);
-				e--;				   /* leading digits */
-			}
-		}
-	} else {
-		snprintf(curs++, len--, "0");
-	}
-	snprintf(curs++, len--, ".");   /* decimal point */
-	/* everything after this is affected by decimalcount */
-	/* copy in leading zeros */
-	while (e < 0 && decimal_count < prec) {
-		snprintf(curs++, len--, "0");
-		e++;
-		decimal_count++;
-	}
-	/* the rest of the mantissa (the decimals) */
-	{
-		size_t print_limit, printed, initial_length;
-
-		if (prec == -1) {			   /* if precision is arbitrary, the sky's the limit in printing stuff */
-			print_limit = len;
-		} else {					   /* if precision is specified, then you use that as a limit */
-			print_limit =
-				((len <
-				  (prec - decimal_count + 1)) ? len : (prec -
-														  decimal_count + 1));
-		}
-		/* this variable exists because snprintf's return value is unreliable
-		 * and can be larger than the number of digits printed
-		 * */
-		printed =
-			((print_limit - 1 < strlen(s)) ? print_limit - 1 : strlen(s));
-		initial_length = strlen(retstr);
-		snprintf(curs, print_limit, "%s", s);
-		len -= printed;
-		decimal_count += printed;
-		curs += printed;
-	}
-	mpfr_free_str(s0);
-	/* strip off trailing 0's */
-	if (prec == -1) {
-		curs--;
-		while ('0' == *curs) {
-			*curs-- = '\0';
-			len++;
-		}
-		if ('.' == *curs) {
-			*curs = '\0';
-			len++;
-		}
-		curs++;
-	}
-	/* copy in an exponent if necessary (unlikely) */
-	if (e != 0) {
-		snprintf(curs, len, (base <= 10 ? "e%ld" : "@%ld"), (long)e);
-	}
-
-	return retstr;
 }
 
 static struct variable_list *extract_vars(char *str)
