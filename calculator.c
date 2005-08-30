@@ -67,8 +67,10 @@ struct _conf conf;
  * compatible with the generated C code from yacc/bison.
  * These two lines are taken from http://www.bgw.org/tutorials/programming/c/lex_yacc/main.c
  */
+struct yy_buffer_state;
 extern int yyparse();
-extern int yy_scan_string(const char *);
+extern void * yy_scan_string(const char *);
+extern void yy_delete_buffer(struct yy_buffer_state *);
 
 struct variable_list
 {
@@ -165,9 +167,12 @@ void parseme(char *pthis)
 	 * and are here strictly for readline suppport
 	 */
 	Dprintf("scanning string: %s\n", sanitized);
-	yy_scan_string(sanitized);
+	{
+	struct yy_buffer_state * yy = yy_scan_string(sanitized);
 	Dprintf("yyparse\n");
 	yyparse();
+	yy_delete_buffer(yy);
+	}
 	Dprintf("done yyparse\n");
 
 	if (open_file) {
