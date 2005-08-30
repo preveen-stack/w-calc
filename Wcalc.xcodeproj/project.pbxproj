@@ -83,6 +83,12 @@
 		1058C7A3FEA54F0111CA2CBB /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		2721CD4A0869C13400E3BB4D /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2721CD490869C13400E3BB4D /* Info.plist */; };
 		2721CD4B0869C13400E3BB4D /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2721CD490869C13400E3BB4D /* Info.plist */; };
+		272C376108C3FDAF009EA18F /* number_formatting.h in Headers */ = {isa = PBXBuildFile; fileRef = 272C375F08C3FDAF009EA18F /* number_formatting.h */; };
+		272C376208C3FDAF009EA18F /* number_formatting.c in Sources */ = {isa = PBXBuildFile; fileRef = 272C376008C3FDAF009EA18F /* number_formatting.c */; };
+		272C376308C3FDAF009EA18F /* number_formatting.h in Headers */ = {isa = PBXBuildFile; fileRef = 272C375F08C3FDAF009EA18F /* number_formatting.h */; };
+		272C376408C3FDAF009EA18F /* number_formatting.c in Sources */ = {isa = PBXBuildFile; fileRef = 272C376008C3FDAF009EA18F /* number_formatting.c */; };
+		272C376508C3FDAF009EA18F /* number_formatting.h in Headers */ = {isa = PBXBuildFile; fileRef = 272C375F08C3FDAF009EA18F /* number_formatting.h */; };
+		272C376608C3FDAF009EA18F /* number_formatting.c in Sources */ = {isa = PBXBuildFile; fileRef = 272C376008C3FDAF009EA18F /* number_formatting.c */; };
 		2754E78B08C0DC14007F45CF /* libreadline.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2754E78A08C0DC14007F45CF /* libreadline.a */; };
 		2754E89308C11276007F45CF /* libfl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2754E89208C11276007F45CF /* libfl.a */; };
 		2754E89408C11276007F45CF /* libfl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2754E89208C11276007F45CF /* libfl.a */; };
@@ -224,6 +230,8 @@
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		2721CD490869C13400E3BB4D /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = Info.plist; sourceTree = "<group>"; };
 		272C369708C1971F009EA18F /* Wcalc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Wcalc.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		272C375F08C3FDAF009EA18F /* number_formatting.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = number_formatting.h; sourceTree = "<group>"; };
+		272C376008C3FDAF009EA18F /* number_formatting.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = number_formatting.c; sourceTree = "<group>"; };
 		2754E78A08C0DC14007F45CF /* libreadline.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libreadline.a; path = /opt/local/lib/libreadline.a; sourceTree = "<absolute>"; };
 		2754E89208C11276007F45CF /* libfl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfl.a; path = /opt/local/lib/libfl.a; sourceTree = "<absolute>"; };
 		275710BC042D0472004ACA36 /* files.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = files.h; sourceTree = "<group>"; };
@@ -436,6 +444,8 @@
 				275710BD042D0472004ACA36 /* files.c */,
 				F574E09D01FD122F01A80164 /* historyManager.h */,
 				F574E09E01FD122F01A80164 /* historyManager.c */,
+				272C375F08C3FDAF009EA18F /* number_formatting.h */,
+				272C376008C3FDAF009EA18F /* number_formatting.c */,
 			);
 			name = "Shared Code";
 			sourceTree = "<group>";
@@ -464,6 +474,7 @@
 				27D39137059BEA850035F25F /* help.h in Headers */,
 				27D39138059BEA850035F25F /* files.h in Headers */,
 				27BDF4C9059F712200CF1DF6 /* simpleCalc.h in Headers */,
+				272C376308C3FDAF009EA18F /* number_formatting.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -488,6 +499,7 @@
 				2799DA4503FAD61400CA71DD /* help.h in Headers */,
 				275710BE042D0472004ACA36 /* files.h in Headers */,
 				27BDF4C7059F712200CF1DF6 /* simpleCalc.h in Headers */,
+				272C376508C3FDAF009EA18F /* number_formatting.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -502,6 +514,7 @@
 				F5DD321B02F8F43501A80164 /* conversion.h in Headers */,
 				2799DA4703FAD61400CA71DD /* help.h in Headers */,
 				275710C0042D0472004ACA36 /* files.h in Headers */,
+				272C376108C3FDAF009EA18F /* number_formatting.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -641,6 +654,7 @@
 				27D39153059BEA850035F25F /* help.c in Sources */,
 				27D39154059BEA850035F25F /* files.c in Sources */,
 				27BDF4C8059F712200CF1DF6 /* simpleCalc.c in Sources */,
+				272C376408C3FDAF009EA18F /* number_formatting.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -667,6 +681,7 @@
 				2799DA4603FAD61400CA71DD /* help.c in Sources */,
 				275710BF042D0472004ACA36 /* files.c in Sources */,
 				27BDF4C6059F712100CF1DF6 /* simpleCalc.c in Sources */,
+				272C376608C3FDAF009EA18F /* number_formatting.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -683,6 +698,7 @@
 				F5DD321A02F8F43501A80164 /* conversion.c in Sources */,
 				2799DA4803FAD61400CA71DD /* help.c in Sources */,
 				275710C1042D0472004ACA36 /* files.c in Sources */,
+				272C376208C3FDAF009EA18F /* number_formatting.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

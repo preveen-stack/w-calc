@@ -108,7 +108,7 @@ char *precision_formatted_number(char *digits, mp_exp_t exp, int precision,
 	size_t length = strlen(digits) + 2;	// the null and the decimal
 	size_t full_length;
 	size_t decimal_count = 0;
-	size_t print_limit, printed;
+	size_t print_limit;
 	char *retstring, *curs, *dcurs = digits;
 
 	if (length < precision + 3) {	   // leading zero, decimal, and null
@@ -175,8 +175,6 @@ char *precision_formatted_number(char *digits, mp_exp_t exp, int precision,
 														   decimal_count +
 														   1));
 		snprintf(curs, print_limit, "%s", dcurs);
-		length -= printed;
-		decimal_count += printed;
 	}
 
 	return retstring;
