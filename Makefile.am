@@ -6,3 +6,8 @@ wcalc_LDADD = @LEXLIB@
 man_MANS = wcalc.1
 clean-local:
 	rm -f parser.c parser.h scanner.c
+maintainer-clean-local:
+	rm -rf CVS
+	rm -rf English.lproj/CVS
+	rm -rf English.lproj/MainMenu.nib/CVS
+	rm -rf Wcalc.xcodeproj/CVS
