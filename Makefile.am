@@ -4,3 +4,5 @@ wcalc_SOURCES = calculator.h variables.h string_manip.h help.h parser.y string_m
 AM_CFLAGS = -O2 -Wall
 wcalc_LDADD = @LEXLIB@
 man_MANS = wcalc.1
+clean-local:
+	rm -f parser.c parser.h scanner.c
