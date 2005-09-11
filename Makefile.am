@@ -11,3 +11,6 @@ distclean-local:
 	rm -rf English.lproj/CVS
 	rm -rf English.lproj/MainMenu.nib/CVS
 	rm -rf Wcalc.xcodeproj/CVS
+	rm -f .*.swp
+	find . -name .DS_Store -exec rm -f {} \;
+	rm -f .gdb_history
