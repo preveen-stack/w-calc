@@ -79,7 +79,7 @@ void set_prettyanswer(mpfr_t num);
 char *print_this_result (mpfr_t result);
 void uber_function (mpfr_t output, enum functions func, mpfr_t input);
 void simple_exp (mpfr_t output, mpfr_t first, enum operations op, mpfr_t second);
-int seed_random();
+int seed_random(void);
 char *output_string(unsigned int);
 
 struct _conf {
