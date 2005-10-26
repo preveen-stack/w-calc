@@ -213,7 +213,6 @@ command : HEX_CMD {
 	}
 }
 | DISPLAY_PREFS_CMD {
-	$$ = nothing;
 	if (standard_output) {
 		printf("        Display Precision: %i %s\n",conf.precision,((conf.precision==-1)?"(auto)":""));
 		printf("       Internal Precision: %lu bits\n", (unsigned long) mpfr_get_default_prec());
@@ -228,9 +227,11 @@ command : HEX_CMD {
 		printf("        Decimal Delimiter: '%c'\n",conf.dec_delimiter);
 		printf("          Precision Guard: %s\n",conf.precision_guard?"yes":"no");
 		printf("            History Limit: %s\n",conf.history_limit?"yes":"no");
-		if (conf.history_limit)
+		if (conf.history_limit) {
 			printf("       History Limited To: %lu\n",conf.history_limit_len);
+		}
 	}
+	$$ = nothing;
 }
 | RADIAN_CMD {
 	$$ = nothing;
@@ -263,14 +264,15 @@ command : HEX_CMD {
 | LISTVAR_CMD {
 	extern int contents;
 	int i;
-	for (i=0;i<=contents;i++) {
+	for (i = 0; i <= contents; i++) {
 		struct variable *keyval = getrealnvar(i);
 		if (! keyval) continue;
 		printf("%s = ", keyval->key);
-		if (keyval->exp)
+		if (keyval->exp) {
 			printf("%s\n", keyval->expression);
-		else
+		} else {
 			printf("%g\n", mpfr_get_d(keyval->value, GMP_RNDN));
+		}
 	}
 	$$ = nothing;
 }
