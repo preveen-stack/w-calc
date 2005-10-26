@@ -110,26 +110,28 @@ int main(int argc, char *argv[])
 	/* Parse commandline options */
 	for (i = 1; i < argc; ++i) {
 		if (!strncmp(argv[i], "-P", 2)) {
-			if ((isdigit((int)(argv[i][2]))) ||
-				(((argv[i][2]) == '-') && (isdigit((int)(argv[i][3]))))) {
-				conf.precision = atoi((argv[i]) + 2);
-			} else {
+			long int argnum;
+			char * endptr;
+			argnum = strtol(&(argv[i][2]), &endptr, 0);
+			if (endptr != NULL && (strlen(endptr) > 0)) {
 				fprintf(stderr,
 						"-P option requires a valid integer without spaces.\n");
 				fflush(stderr);
 				mpfr_clear(last_answer);
-				exit(0);
+				exit(EXIT_FAILURE);
+			} else {
+				conf.precision = (int)argnum;
 			}
-		} else if (!strcmp(argv[i], "-E")) {
-			conf.engineering = 1;
+		} else if (!strcmp(argv[i], "-E") || !strcmp(argv[i], "--engineering")) {
+			conf.engineering = !conf.engineering;
 		} else if (!strcmp(argv[i], "-H") || !strcmp(argv[i], "--help")) {
 			print_command_help();
 			mpfr_clear(last_answer);
-			exit(0);
+			exit(EXIT_SUCCESS);
 		} else if (!strcmp(argv[i], "-v") || !strcmp(argv[i], "--version")) {
 			printf("wcalc %s\n", VERSION);
 			mpfr_clear(last_answer);
-			exit(0);
+			exit(EXIT_SUCCESS);
 		} else if (!strcmp(argv[i], "-d") || !strcmp(argv[i], "--decimal") ||
 				   !strcmp(argv[i], "-dec")) {
 			conf.output_format = DECIMAL_FORMAT;
@@ -150,6 +152,57 @@ int main(int argc, char *argv[])
 			conf.use_radians = !conf.use_radians;
 		} else if (!strcmp(argv[i], "-q") || !strcmp(argv[i], "--quiet")) {
 			conf.print_equal = !conf.print_equal;
+		} else if (!strcmp(argv[i], "-c") || !strcmp(argv[i], "--conservative")) {
+			conf.precision_guard = !conf.precision_guard;
+		} else if (!strcmp(argv[i], "-R") || !strcmp(argv[i], "--remember")) {
+			conf.remember_errors = !conf.remember_errors;
+		} else if (!strncmp(argv[i], "--round=", 8)) {
+			if (!strcmp(&(argv[i][8]), "no") || !strcmp(&(argv[i][8]), "none")) {
+				conf.rounding_indication = NO_ROUNDING_INDICATION;
+			} else if (!strcmp(&(argv[i][8]), "simple")) {
+				conf.rounding_indication = SIMPLE_ROUNDING_INDICATION;
+			} else if (!strcmp(&(argv[i][8]), "sig_fig")) {
+				conf.rounding_indication = SIG_FIG_ROUNDING_INDICATION;
+			}
+		} else if (!strcmp(argv[i], "--round")) {
+			fprintf(stderr, "--round requires an argument (none|simple|sig_fig)\n");
+			exit(EXIT_FAILURE);
+		} else if (!strncmp(argv[i], "--dsep=", 7)) {
+			if (strlen(argv[i]) > 8 || strlen(argv[i]) == 7) {
+				fprintf(stderr,"--dsep= must have an argument\n");
+				exit(EXIT_FAILURE);
+			}
+			if (conf.thou_delimiter != argv[i][7]) {
+				conf.dec_delimiter = argv[i][7];
+			} else {
+				fprintf(stderr,"%c cannot be the decimal separator. It is the thousands separator.\n",argv[i][7]);
+				exit(EXIT_FAILURE);
+			}
+		} else if (!strncmp(argv[i], "--tsep=", 7)) {
+			if (strlen(argv[i]) > 8 || strlen(argv[i]) == 7) {
+				fprintf(stderr,"--tsep= must have an argument\n");
+				exit(EXIT_FAILURE);
+			}
+			if (conf.dec_delimiter != argv[i][7]) {
+				conf.thou_delimiter = argv[i][7];
+			} else {
+				fprintf(stderr,"%c cannot be the thousands separator. It is the decimal separator.\n",argv[i][7]);
+				exit(EXIT_FAILURE);
+			}
+		} else if (!strncmp(argv[i], "--bits")) {
+			unsigned long int argnum;
+			char * endptr;
+			argnum = strtoul(&(argv[i][6]), &endptr, 0);
+			if (endptr != NULL && (strlen(endptr) > 0)) {
+				fprintf(stderr,
+						"--bits option requires a valid integer without spaces.\n");
+				mpfr_clear(last_answer);
+				exit(EXIT_FAILURE);
+			} else {
+				mpfr_set_default_prec(argnum);
+			}
+		} else if (!strcmp(argv[i], "--ints")) {
+			conf.print_ints = !conf.print_ints;
 		} else if (!strcmp(argv[i], "--yydebug")) {
 			yydebug = 1;
 		} else if (!strcmp(argv[i], "-n")) {
@@ -164,7 +217,7 @@ int main(int argc, char *argv[])
 		cleanupvar();
 		mpfr_clear(last_answer);
 		mpfr_free_cache();
-		exit(0);
+		exit(EXIT_SUCCESS);
 	}
 
 	tty = isatty(0);				   /* Find out where stdin is coming from... */
@@ -288,7 +341,7 @@ int main(int argc, char *argv[])
 						free(line);
 						fprintf(stderr,
 								"Ran out of memory. Line too long.\n");
-						exit(-1);
+						exit(EXIT_FAILURE);
 					}
 					memset(temp + maxlinelen, 0, 100);
 					maxlinelen += 100;
@@ -319,7 +372,7 @@ int main(int argc, char *argv[])
 	cleanupvar();
 	mpfr_clear(last_answer);
 	mpfr_free_cache();
-	exit(0);
+	exit(EXIT_SUCCESS);
 }
 
 int read_prefs(char *filename)
