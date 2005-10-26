@@ -189,7 +189,7 @@ int main(int argc, char *argv[])
 				fprintf(stderr,"%c cannot be the thousands separator. It is the decimal separator.\n",argv[i][7]);
 				exit(EXIT_FAILURE);
 			}
-		} else if (!strncmp(argv[i], "--bits")) {
+		} else if (!strncmp(argv[i], "--bits", 6)) {
 			unsigned long int argnum;
 			char * endptr;
 			argnum = strtoul(&(argv[i][6]), &endptr, 0);
