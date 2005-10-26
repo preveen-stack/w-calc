@@ -36,12 +36,12 @@ Prints a help usage message to standard output, then exits.
 \fB\-E\fP
 Specifies that numerical output should be in scientific notation.
 .TP
-\fB\-P\fP
-Followed by an integer, it sets the precision.
+\fB\-P\fIXXX\fP
+Sets the precision to be \fIXXX\fP. This setting only affects output, not internal representations. A setting of -1 means formats output in whatever precision seems appropriate.
 .br
 Precision is set to autoadjust (-1) by default.
 .br
-Example: \fIwcalc -P6\fP
+Example: wcalc -P6
 .TP
 \fB\-v\fP or \fB\*=version\fP
 Prints the version number and exits.
@@ -70,6 +70,27 @@ radians. By default, trigonometric functions assume input is in degrees.
 .TP
 \fB\-q\fP or \fB\*=quiet\fP
 Toggles whether the equals sign will be printed before the results.
+.TP
+\fB\-c\fP or \fB\*=conservative\fP
+Toggles precision guards. Because of the way floating point numbers are stored, some operations, like 1-.9-.1, can return an extremely small number that is not zero but is less than the official precision of the floating point number and thus for all intents and purposes, it is 0. The precision guard will round numbers to zero if they are less than the official precision of the floating point number. However, sometimes numbers that small or smaller need to be displayed, and thus the precision guard should be turned off.
+.TP
+\fB\*=remember\fP
+Toggles whether or not expressions that produce errors are remembered in the history. Does not affect command-line math.
+.TP
+\fB\*=round=\fP { \fInone\fP | \fIsimple\fP | \fIsig_fig\fP }
+Wcalc can attempt to warn you when numbers have been rounded in the output display. It has two methods of keeping track---either by using significant figures (sig_fig), or by a simple digit-counting algorithm. Rounding in the command-line version is denoted by a tilde before the equals sign (~=). Rounding in the GUI version is denoted by changing the text color to red. In some cases, Wcalc may think that the number has been rounded even if it shouldn't have been necessary (this is because of the way floating point numbers are represented internally).
+.TP
+\fB\*=dsep=\fIX\fP
+Sets the decimal separator character to be X.
+.TP
+\fB\*=tsep=\fIX\fP
+Sets the thousands separator character to be X.
+.TP
+\fB\*=bits\fIXXXX\fP
+Sets the number of bits of precision that will be used to internally represent numbers to be \fIXXXX\fP. The default is 1024. Set higher if you need more precision, set lower if you want to use less memory.
+.TP
+\fB\*=ints\fP
+Toggles whether long integers will be abbreviated or not. This conflicts with engineering notation for large numbers, but not for decimals.
 .SH FUNCTIONS
 The functions supported in wcalc are almost all self-explanatory. For those few that are not, here is a full description.
 .TP 4
@@ -258,8 +279,8 @@ A Random Integer
 .SH COMMANDS
 There are several commands that are supported in wcalc.
 .TP
-.B "\epX"
-Sets the precision, where X in the desired precision. This setting only affects output, not internal representations. A setting of -1 means formats output in whatever precision seems appropriate.
+\fB\ep\fIXXX\fP
+Sets the precision to \fIXXX\fP. This setting only affects output, not internal representations. A setting of -1 means formats output in whatever precision seems appropriate.
 .TP
 \fB\ee\fP or \fB\eeng\fP or \fB\eengineering\fP
 Toggles the formatting of output between decimal and scientific notation.
@@ -277,7 +298,7 @@ Prints out the currently defined variables.
 Toggles between using and not using radians for trigonometric calculations.
 .TP
 \fB\econs\fP or \fB\econservative\fP
-Toggles precision guards. Because of the way double-precision floating point numbers are stored, the equation 1-.9-.1 can return an extremely small number that is less than the precision of the double-precision floating point numbers, thus for all intents and purposes, it is 0. However, sometimes numbers that small or smaller need to be manipulated.
+Toggles precision guards. Because of the way floating point numbers are stored, some operations, like 1-.9-.1, can return an extremely small number that is not zero but is less than the official precision of the floating point number and thus for all intents and purposes, it is 0. The precision guard will round numbers to zero if they are less than the official precision of the floating point number. However, sometimes numbers that small or smaller need to be displayed, and thus the precision guard should be turned off.
 .TP
 \fB\ep\fP or \fB\epicky\fP or \fB\el\fP or \fB\elenient\fP
 Toggles variable parsing rules. When wcalc is "picky" it will complain if you use undefined variables. If it is "lenient", wcalc will assume a value of 0 for undefined variables.
@@ -300,26 +321,26 @@ Results are printed in hexadecimal (base 16). Numbers printed in hexadecimal hav
 \fB\eo\fP or \fB\eoct\fP or \fB\eoctal\fP
 Results are printed in octal (base 8). Numbers printed in octal have a prefix of \fI0\fP unless the \fB\eprefixes\fP command is used.
 .TP
-.B "\eround none|simple|sig_fig"
-Wcalc can attempt to warn you when numbers have been rounded in the output display. It has two methods of keeping track---either by using significant figures (sig_fig), or by a simple digit-counting algorithm. Rounding in the command-line version is denoted by a tilde before the equals sign (~=). Rounding in the GUI version is denoted by changing the text color to red.
+\fB\eround\fP \fInone\fP|\fIsimple\fP|\fIsig_fig\fP
+Wcalc can attempt to warn you when numbers have been rounded in the output display. It has two methods of keeping track---either by using significant figures (sig_fig), or by a simple digit-counting algorithm. Rounding in the command-line version is denoted by a tilde before the equals sign (~=). Rounding in the GUI version is denoted by changing the text color to red. In some cases, Wcalc may think that the number has been rounded even if it shouldn't have been necessary (this is because of the way floating point numbers are represented internally).
 .TP
-.B "\edsepX"
-Sets the decimal separator character to be X.
+\fB\edsep\fIX\fP
+Sets the decimal separator character to be \fIX\fP.
 .TP
-.B "\etsepX"
-Sets the thousands-place separator character to be X.
+\fB\etsep\fIX\fP
+Sets the thousands-place separator character to be \fIX\fP.
 .TP
-.B "\ehlimitX"
-Sets the limit on the length of the history.
+\fB\ehlimit\fIX\fP
+Sets the limit (\fIX\fP) on the length of the history.
 .TP
-.B "\eopenXXXXX"
-Loads file XXXXX.
+\fB\eopen\fIXXXXX\fP
+Loads file \fIXXXXX\fP.
 .TP
-.B "\esaveXXXXX"
-Saves the history and variable list to a file.
+\fB\esave\fIXXXXX\fP
+Saves the history and variable list to a file, \fIXXXXX\fP.
 .TP
-.B \ebitsX
-Sets the number of bits of precision that will be used to internally represent numbers. The default is 1024. Set higher if you need more precision, set lower if you want to use less memory.
+\fB\ebits\fIXXXX\fP
+Sets the number of bits of precision that will be used to internally represent numbers to be \fIXXXX\fP. The default is 1024. Set higher if you need more precision, set lower if you want to use less memory.
 .TP
 .B \eints
 Toggles whether long integers will be abbreviated or not. This conflicts with engineering notation for large numbers, but not for decimals.
@@ -333,8 +354,8 @@ Converts the previous answer from \fIunit1\fP to \fIunit2\fP.
 wcalc is Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005 Kyle Wheeler.
 .br
 It is freely distributed, and can be modified and used freely for any purpose,
-as long as a copy of the modification is sent to Kyle Wheeler at kyle-wcalc@memoryhole.net.
+as long as a copy of the modification is sent to Kyle Wheeler at \fIkyle-wcalc@memoryhole.net\fP.
 .SH SUGGESTIONS AND BUG REPORTS
 Any bugs found should be reported to
 .br
-Kyle Wheeler at kyle-wcalc@memoryhole.net.
+Kyle Wheeler at \fIkyle-wcalc@memoryhole.net\fP.
