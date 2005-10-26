@@ -13,7 +13,6 @@ AC_DEFUN([VL_LIB_READLINE], [
           TRY_LIB="-l$readline_lib -l$termcap_lib"
         fi
         LIBS="$ORIG_LIBS $TRY_LIB"
-		echo $LIBS
         AC_TRY_LINK_FUNC(readline, vl_cv_lib_readline="$TRY_LIB")
         if test -n "$vl_cv_lib_readline"; then
           break
