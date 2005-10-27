@@ -166,14 +166,11 @@ void parseme(char *pthis)
 	 * http://www.bgw.org/tutorials/programming/c/lex_yacc/main.c
 	 * and are here strictly for readline suppport
 	 */
-	Dprintf("scanning string: %s\n", sanitized);
 	{
 	struct yy_buffer_state * yy = yy_scan_string(sanitized);
-	Dprintf("yyparse\n");
 	yyparse();
 	yy_delete_buffer(yy);
 	}
-	Dprintf("done yyparse\n");
 
 	if (open_file) {
 		char *filename = open_file;
@@ -326,6 +323,7 @@ static char *flatten(char *str)
 
 			mpfr_init(f);
 			if (a.exp) {			   // it is an expression
+				printf("parseme\n");
 				parseme(a.exp);
 				mpfr_set(f, last_answer, GMP_RNDN);
 			} else {				   // it is a value
@@ -763,9 +761,7 @@ char *print_this_result_dbl(double result)
 		}							   /*}}}*/
 	}								   // if
 
-	Dprintf("standard_output? -> ");
 	if (standard_output) {
-		Dprintf("yes\n");
 		if (errstring && strlen(errstring)) {
 			extern int scanerror;
 
@@ -778,7 +774,6 @@ char *print_this_result_dbl(double result)
 			   conf.print_equal ? (not_all_displayed ? " ~= " : " = ")
 			   : (not_all_displayed ? "~" : ""), pa);
 	}
-	Dprintf("no\n");
 
 	return pa;
 }/*}}}*/
@@ -861,9 +856,7 @@ char *print_this_result(mpfr_t result)
 		}
 	}
 
-	Dprintf("standard_output? -> ");
 	if (standard_output) {
-		Dprintf("yes\n");
 		if (errstring && strlen(errstring)) {
 			extern int scanerror;
 
@@ -876,7 +869,6 @@ char *print_this_result(mpfr_t result)
 			   conf.print_equal ? (not_all_displayed ? " ~= " : " = ")
 			   : (not_all_displayed ? "~" : ""), pa);
 	}
-	Dprintf("no\n");
 
 	return pa;
 }/*}}}*/
@@ -893,7 +885,6 @@ void simple_exp(mpfr_t output, mpfr_t first, enum operations op,
 
 		switch (op) {
 			default:
-				Dprintf("default\n");
 				mpfr_set_d(output, 0.0, GMP_RNDN);
 				break;
 			case wequal:
@@ -917,15 +908,12 @@ void simple_exp(mpfr_t output, mpfr_t first, enum operations op,
 							GMP_RNDN);
 				break;
 			case wplus:
-				Dprintf("wplus\n");
 				mpfr_add(output, first, second, GMP_RNDN);
 				break;
 			case wminus:
-				Dprintf("wminus\n");
 				mpfr_sub(output, first, second, GMP_RNDN);
 				break;
 			case wmult:
-				Dprintf("wmult\n");
 				mpfr_mul(output, first, second, GMP_RNDN);
 				break;
 			case wdiv:
