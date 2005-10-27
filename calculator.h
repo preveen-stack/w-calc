@@ -99,6 +99,7 @@ struct _conf {
 	unsigned int print_equal:1;
 	unsigned int print_ints:1;
 	unsigned int simple_calc:1;
+	unsigned int verbose:1;
 };
 
 /* configuration */

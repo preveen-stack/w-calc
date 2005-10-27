@@ -62,7 +62,7 @@ struct conv_req conver;
 
 %token DEC_CMD OCT_CMD HEX_CMD BIN_CMD GUARD_CMD DISPLAY_PREFS_CMD
 %token RADIAN_CMD PICKY_CMD REMEMBER_CMD LISTVAR_CMD
-%token PRINT_HELP_CMD PREFIX_CMD INT_CMD
+%token PRINT_HELP_CMD PREFIX_CMD INT_CMD VERBOSE_CMD
 %token <integer> ENG_CMD HLIMIT_CMD ROUNDING_INDICATION_CMD
 %token <integer> PRECISION_CMD BITS_CMD BASE_CMD
 %token <conver> CONVERT_CMD
@@ -213,6 +213,14 @@ command : HEX_CMD {
 		printf("Will %suse abbreviations for large integers.\n",conf.print_ints?"not ":"");
 	}
 }
+| VERBOSE_CMD
+{
+	$$ = nothing;
+	conf.verbose = ! conf.verbose;
+	if (standard_output) {
+		printf("Will %secho the lines to be evaluated.\n",conf.verbose?"":"not ");
+	}
+}
 | DISPLAY_PREFS_CMD {
 	if (standard_output) {
 		printf("        Display Precision: %i %s\n",conf.precision,((conf.precision==-1)?"(auto)":""));
@@ -231,6 +239,7 @@ command : HEX_CMD {
 		if (conf.history_limit) {
 			printf("       History Limited To: %lu\n",conf.history_limit_len);
 		}
+		printf("                  Verbose: %s\n",conf.verbose?"yes":"no");
 	}
 	$$ = nothing;
 }

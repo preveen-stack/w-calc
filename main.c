@@ -92,6 +92,7 @@ int main(int argc, char *argv[])
 	conf.dec_delimiter = '.';
 	conf.print_equal = 1;
 	conf.print_ints = 0;
+	conf.verbose = 0;
 
 	mpfr_set_default_prec(1024);
 	mpfr_init_set_ui(last_answer, 0, GMP_RNDN);
@@ -203,12 +204,15 @@ int main(int argc, char *argv[])
 			}
 		} else if (!strcmp(argv[i], "--ints")) {
 			conf.print_ints = !conf.print_ints;
+		} else if (!strcmp(argv[i], "--verbose")) {
+			conf.verbose = !conf.verbose;
 		} else if (!strcmp(argv[i], "--yydebug")) {
 			yydebug = 1;
 		} else if (!strcmp(argv[i], "-n")) {
 			conf.print_equal = 0;
 		} else {
 			cmdline_input = 1;
+			if (conf.verbose) { printf("-> %s\n",argv[i]); }
 			parseme(argv[i]);
 		}
 	}
@@ -283,6 +287,7 @@ int main(int argc, char *argv[])
 					yydebug = !yydebug;
 					printf("Debug Mode %s\n", yydebug ? "On" : "Off");
 				} else {
+					if (conf.verbose) { printf("-> %s\n",readme); }
 					parseme(readme);
 					{
 						extern char *errstring;
@@ -350,6 +355,7 @@ int main(int argc, char *argv[])
 			}
 			if (ferror(stdin) || (feof(stdin) && linelen == 0))
 				break;
+			if (conf.verbose) { printf("-> %s\n",line); }
 			parseme(line);
 			putval("a", last_answer);
 			{

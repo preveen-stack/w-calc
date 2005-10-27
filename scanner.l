@@ -141,6 +141,7 @@ SPACE		[ ]
 	return(CONVERT_CMD);
 }
 \\base{DIGIT}+          { YYLVALAC->integer = atoi(yytext+5); return(BASE_CMD); }
+\\verbose               { return(VERBOSE_CMD); }
 
 %{ /* These are comments */
 %}

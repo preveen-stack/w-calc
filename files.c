@@ -148,6 +148,7 @@ int loadState(char *filename)
 				retval = read(fd, linebuf + linelen, 1);
 			}
 			linebuf[linelen] = 0;
+			if (conf.verbose) { printf("-> %s\n",linebuf); }
 			strstrip(' ', linebuf);
 			stripComments(linebuf);
 			if (strlen(linebuf)) {
