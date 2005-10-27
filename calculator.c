@@ -85,7 +85,7 @@ static char *flatten(char *str);
 
 
 void parseme(char *pthis)
-{
+{/*{{{*/
 	extern int synerrors;
 	short numbers = 0;
 	char *sanitized;
@@ -191,10 +191,10 @@ void parseme(char *pthis)
 	/* exiting */
 	free(sanitized);
 	return;
-}
+}/*}}}*/
 
 static struct variable_list *extract_vars(char *str)
-{
+{/*{{{*/
 	char *curs, *eov, save_char;
 	struct variable_list *vlist = NULL, *vcurs;
 	char *varname;
@@ -251,14 +251,14 @@ static struct variable_list *extract_vars(char *str)
 		vlist = vcurs;
 	}
 	return vlist;
-}
+}/*}}}*/
 
 static char *flatten(char *str)
-{
+{/*{{{*/
 	struct variable_list *vlist = NULL;
 	char *curs = str, *eov, *nstr;
-	char varname[500], *varvalue;
-	size_t olen, nlen, changedlen;
+	char *varname, *varvalue;
+	size_t olen, nlen, changedlen, varnamelen = 100;
 	struct answer a;
 	char standard_output_save = standard_output;
 
@@ -295,9 +295,18 @@ static char *flatten(char *str)
 		{
 			size_t i = 0;
 
+			varname = malloc(varnamelen * sizeof(char));
 			while (eov && *eov &&
 				   (isalpha((int)(*eov)) || *eov == '_' || *eov == ':' ||
 					isdigit((int)(*eov)))) {
+				if (i == varnamelen-1) {
+					varnamelen += 100;
+					varname = realloc(varname, varnamelen * sizeof(char));
+					if (varname == NULL) {
+						perror("flatten: ");
+						exit(EXIT_FAILURE);
+					}
+				}
 				varname[i++] = *eov;
 				eov++;
 			}
@@ -329,9 +338,10 @@ static char *flatten(char *str)
 			mpfr_free_str(tstr);
 			// get the number
 			varvalue = num_to_str_complex(f, 10, 0, -1, 1);
+			free(varname);
 			mpfr_clear(f);
 		} else {					   // not a known var: itza literal (e.g. cos)
-			varvalue = strdup(varname);
+			varvalue = varname;
 		}
 		nlen = strlen(varvalue);
 
@@ -344,7 +354,7 @@ static char *flatten(char *str)
 		nstr = malloc(changedlen);
 		if (!nstr) {				   // not enough memory
 			perror("flatten: ");
-			exit(1);
+			exit(EXIT_FAILURE);
 		}
 		{
 			char *fromstring = str;
@@ -394,10 +404,10 @@ static char *flatten(char *str)
 	}
 	standard_output = standard_output_save;
 	return str;
-}
+}/*}}}*/
 
 static int recursion(char *str)
-{
+{/*{{{*/
 	struct variable_list *vlist, *vcurs, vstack_base;
 	int retval = 0;
 
@@ -415,10 +425,10 @@ static int recursion(char *str)
 		vlist = vcurs;
 	}
 	return retval;
-}
+}/*}}}*/
 
 int find_recursion(struct variable_list *vstack)
-{
+{/*{{{*/
 	struct variable_list *vlist = NULL;
 	int retval = 0;
 	struct answer a;
@@ -466,10 +476,10 @@ int find_recursion(struct variable_list *vstack)
 		vcurs = bookmark;
 	}
 	return retval;
-}
+}/*}}}*/
 
 void report_error(char *err)
-{
+{/*{{{*/
 	extern char *errstring;
 	char *tempstring;
 	unsigned int len;
@@ -483,10 +493,10 @@ void report_error(char *err)
 	} else {
 		errstring = (char *)strdup(err);
 	}
-}
+}/*}}}*/
 
 void set_prettyanswer(mpfr_t num)
-{
+{/*{{{*/
 	char *temp;
 
 	if (pretty_answer) {
@@ -498,10 +508,10 @@ void set_prettyanswer(mpfr_t num)
 	} else {
 		pretty_answer = NULL;
 	}
-}
+}/*}}}*/
 
 char *print_this_result_dbl(double result)
-{
+{/*{{{*/
 	static char format[10];
 	static char *pa = NULL, *tmp;
 	static char pa_dyn = 1;
@@ -510,7 +520,7 @@ char *print_this_result_dbl(double result)
 
 	Dprintf("print_this_result_dbl(%f)\n", result);
 	/* Build the "format" string, that will be used in an snprintf later */
-	switch (conf.output_format) {
+	switch (conf.output_format) {/*{{{*/
 		case DECIMAL_FORMAT:
 			if (pa_dyn)
 				tmp = realloc(pa, sizeof(char) * 310);
@@ -590,7 +600,7 @@ char *print_this_result_dbl(double result)
 			pa = NULL;
 			pa_dyn = 1;
 			break;
-	}
+	}/*}}}*/
 
 	if (isinf(result)) {
 		// if it is infinity, print "Infinity", regardless of format
@@ -627,9 +637,8 @@ char *print_this_result_dbl(double result)
 		snprintf(pa, 13, "Not a Number");
 		not_all_displayed = 0;
 	} else {
-		switch (conf.output_format) {
-				char *curs;
-
+		char *curs;
+		switch (conf.output_format) {/*{{{*/
 			case DECIMAL_FORMAT:
 			{
 				double junk;
@@ -751,7 +760,7 @@ char *print_this_result_dbl(double result)
 					not_all_displayed = 0;
 				}
 			}						   // binary format
-		}							   // switch
+		}							   /*}}}*/
 	}								   // if
 
 	Dprintf("standard_output? -> ");
@@ -772,10 +781,10 @@ char *print_this_result_dbl(double result)
 	Dprintf("no\n");
 
 	return pa;
-}
+}/*}}}*/
 
 char *print_this_result(mpfr_t result)
-{
+{/*{{{*/
 	static char *pa = NULL;
 	extern char *errstring;
 	unsigned int base = 0;
@@ -870,11 +879,11 @@ char *print_this_result(mpfr_t result)
 	Dprintf("no\n");
 
 	return pa;
-}
+}/*}}}*/
 
 void simple_exp(mpfr_t output, mpfr_t first, enum operations op,
 				mpfr_t second)
-{
+{/*{{{*/
 	if (compute) {
 		mpfr_t temp;
 
@@ -1017,10 +1026,10 @@ void simple_exp(mpfr_t output, mpfr_t first, enum operations op,
 		mpfr_set_ui(output, 0, GMP_RNDN);
 		return;
 	}
-}
+}/*}}}*/
 
 void uber_function(mpfr_t output, enum functions func, mpfr_t input)
-{
+{/*{{{*/
 	if (compute) {
 		mpfr_t temp;
 
@@ -1191,10 +1200,10 @@ void uber_function(mpfr_t output, enum functions func, mpfr_t input)
 		mpfr_set_ui(output, 0, GMP_RNDN);
 		return;
 	}
-}
+}/*}}}*/
 
 int seed_random(void)
-{
+{/*{{{*/
 	static char seeded = 0;
 
 	if (!seeded) {
@@ -1210,10 +1219,10 @@ int seed_random(void)
 		seeded = 1;
 	}
 	return 1;
-}
+}/*}}}*/
 
 char *output_string(unsigned int o)
-{
+{/*{{{*/
 	switch (o) {
 		case HEXADECIMAL_FORMAT:
 			return "hexadecimal format (0xf)";
@@ -1226,4 +1235,4 @@ char *output_string(unsigned int o)
 		default:
 			return "error, unknown format";
 	}
-}
+}/*}}}*/
