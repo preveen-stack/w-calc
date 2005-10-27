@@ -44,7 +44,7 @@ int saveState(char *filename)
 		/* save variables */
 		for (hindex = 0; hindex < contents; hindex++) {
 			struct variable *keyval = getrealnvar(hindex);
-			char value[500], *cptr;
+			char *cptr;
 
 			if (!keyval) {
 				continue;
@@ -65,8 +65,7 @@ int saveState(char *filename)
 			if (keyval->exp) {
 				cptr = keyval->expression;
 			} else {
-				snprintf(value, 500, "%s", print_this_result(keyval->value));
-				cptr = value;
+				cptr = print_this_result(keyval->value);
 			}
 			retval = write(fd, cptr, strlen(cptr));
 			if (retval < (int)strlen(cptr)) {
