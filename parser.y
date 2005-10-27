@@ -28,6 +28,7 @@ char *strchr (), *strrchr ();
 #include "help.h"
 #include "files.h"
 #include "conversion.h"
+#include "number_formatting.h"
 
 	/* Based on the headstart code by Shawn Ostermann
 	* modified by Kyle Wheeler
@@ -63,7 +64,7 @@ struct conv_req conver;
 %token RADIAN_CMD PICKY_CMD REMEMBER_CMD LISTVAR_CMD
 %token PRINT_HELP_CMD PREFIX_CMD INT_CMD
 %token <integer> ENG_CMD HLIMIT_CMD ROUNDING_INDICATION_CMD
-%token <integer> PRECISION_CMD BITS_CMD
+%token <integer> PRECISION_CMD BITS_CMD BASE_CMD
 %token <conver> CONVERT_CMD
 
 %token EOLN PAR REN WBRA WKET WSBRA WSKET
@@ -395,6 +396,17 @@ command : HEX_CMD {
 	free($1.u1);
 	free($1.u2);
 	$$ = redisplay;
+}
+| BASE_CMD
+{
+	if ($1 >= 2 && $1 <= 36) {
+		char * str;
+		str = num_to_str_complex(last_answer, $1, conf.engineering, -1, conf.print_prefixes);
+		printf("base %i: %s\n",$1,str);
+	} else {
+		report_error("Number too large.");
+	}
+	$$ = nothing;
 }
 ;
 

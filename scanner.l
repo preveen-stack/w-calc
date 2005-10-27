@@ -140,6 +140,7 @@ SPACE		[ ]
 	YYLVALAC->conver.u2 = strdup(unittwo);
 	return(CONVERT_CMD);
 }
+\\base{DIGIT}+          { YYLVALAC->integer = atoi(yytext+5); return(BASE_CMD); }
 
 %{ /* These are comments */
 %}
