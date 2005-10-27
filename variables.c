@@ -205,6 +205,7 @@ int putexp(char *key, char *value)
 
 	if (!key)
 		return -1;
+	printf("putexp: %s = %s\n",key,value);
 
 	if (cursor) {
 		while (cursor && strncmp(cursor->key, key, strlen(key)) > 0 &&
@@ -248,7 +249,7 @@ int putexp(char *key, char *value)
 
 int putval(char *key, mpfr_t value)
 {
-	struct variable *cursor = them;
+	struct variable *cursor = them, *temp;
 
 	if (!key)
 		return -1;
@@ -259,18 +260,19 @@ int putval(char *key, mpfr_t value)
 			cursor = cursor->next;
 		}
 
-		if (cursor->next == NULL) {
+		if (!strncmp(cursor->key, key, strlen(key))) {
+			// change this one
+		} else {
 			// add after cursor
+			temp = cursor->next;
 			cursor->next = calloc(sizeof(struct variable), 1);
 			if (!cursor->next) {	   // if we can't allocate memory
 				return -1;
 			}
 			cursor = cursor->next;
-			cursor->next = NULL;
+			cursor->next = temp;
 			mpfr_init(cursor->value);
 			contents++;
-		} else {
-			// change this one
 		}
 	} else {
 		them = cursor = calloc(sizeof(struct variable), 1);
@@ -298,6 +300,7 @@ int putvarc(char *keyvalue)
 	int retval;
 	mpfr_t value_t;
 
+	printf("putvarc: %s\n",keyvalue);
 	value = strchr(keyvalue, '=');
 	if (value == NULL)
 		return -1;
