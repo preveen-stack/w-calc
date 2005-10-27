@@ -1,0 +1,4 @@
+foo=5
+foobar='foo'
+boink='foobar+5'
+boink
