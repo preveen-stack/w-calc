@@ -205,7 +205,6 @@ int putexp(char *key, char *value)
 
 	if (!key)
 		return -1;
-	printf("putexp: %s = %s\n",key,value);
 
 	if (cursor) {
 		while (cursor && strncmp(cursor->key, key, strlen(key)) > 0 &&
@@ -300,7 +299,6 @@ int putvarc(char *keyvalue)
 	int retval;
 	mpfr_t value_t;
 
-	printf("putvarc: %s\n",keyvalue);
 	value = strchr(keyvalue, '=');
 	if (value == NULL)
 		return -1;
