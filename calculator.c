@@ -779,6 +779,33 @@ char *print_this_result_dbl(double result)
 	return pa;
 }/*}}}*/
 
+int is_mpfr_int(mpfr_t potential_int)
+{
+	char * str, *curs;
+	mp_exp_t eptr;
+	int base;
+
+	switch (conf.output_format) {
+		case HEXADECIMAL_FORMAT: base=16; break;
+		default:
+		case DECIMAL_FORMAT: base=10; break;
+		case OCTAL_FORMAT: base=8; break;
+		case BINARY_FORMAT: base=2; break;
+	}
+	str = mpfr_get_str(NULL,&eptr,base,0,potential_int,GMP_RNDN);
+	if (eptr < 0) goto not_an_int;
+	curs = str+eptr;
+	while (curs && *curs) {
+		if (*curs != '0') goto not_an_int;
+		curs ++;
+	}
+	mpfr_free_str(str);
+	return 1;
+not_an_int:
+	mpfr_free_str(str);
+	return 0;
+}
+
 char *print_this_result(mpfr_t result)
 {/*{{{*/
 	static char *pa = NULL;
@@ -793,8 +820,13 @@ char *print_this_result(mpfr_t result)
 			break;
 		default:
 		case DECIMAL_FORMAT:
-			if (mpfr_get_d(result, GMP_RNDN) != mpfr_get_si(result, GMP_RNDN)
-				&& conf.precision < 0 && conf.precision_guard) {
+			// if you want precision_guard and automatic precision,
+			// then we have to go with the tried and true "double" method
+			// ... but only as long as it will fit in a double and isn't
+			// an integer
+			if (conf.precision_guard && conf.precision < 0 &&
+				! is_mpfr_int(result) &&
+				mpfr_get_d(result,GMP_RNDN) != mpfr_get_si(result, GMP_RNDN)) {
 				double res = mpfr_get_d(result, GMP_RNDN);
 
 				if (fabs(res) < DBL_EPSILON) {
