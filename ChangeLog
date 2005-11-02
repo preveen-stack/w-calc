@@ -1,3 +1,162 @@
+2005-11-01 22:55  memoryhole
+
+	* Makefile.in: changed with Makefile.am
+
+2005-11-01 22:53  memoryhole
+
+	* English.lproj/MainMenu.nib/: info.nib, keyedobjects.nib: little
+	  tweak - added a symbol
+
+2005-11-01 22:52  memoryhole
+
+	* Wcalc.xcodeproj/: kyle.mode1, kyle.pbxuser, project.pbxproj: many
+	  compilation fixes and organizational improvements
+
+2005-11-01 22:51  memoryhole
+
+	* wcalc.info: fink needs to get its act together wrt gmp and mpfr
+
+2005-11-01 22:49  memoryhole
+
+	* wcalc.1: gamma is more accurate
+
+2005-11-01 22:47  memoryhole
+
+	* scanner.l: make utf-8 savvy (mostly)
+
+2005-11-01 22:45  memoryhole
+
+	* parser.y: remove sarcasm
+
+2005-11-01 22:45  memoryhole
+
+	* definitions.h: added Phi0 (magnetic flux quantum) and made gamma
+	  more accurate
+
+2005-11-01 22:44  memoryhole
+
+	* WcalcController.m: comply with ObjC charset restrictions, and add
+	  a symbol
+
+2005-11-01 22:40  memoryhole
+
+	* ConversionList.m: comply with ObjC charset restrictions
+
+2005-10-27 09:23  memoryhole
+
+	* test.recursion, test.vars: more tests
+
+2005-10-27 09:22  memoryhole
+
+	* files.c, main.c, parser.y, scanner.l, calculator.h: added verbose
+	  command
+
+2005-10-27 09:22  memoryhole
+
+	* variables.c: removed debugging printouts
+
+2005-10-27 09:07  memoryhole
+
+	* calculator.c: dprintf cleanup
+
+2005-10-27 09:04  memoryhole
+
+	* variables.c: bug in storing variables when theres only one
+	  variable fixed
+
+2005-10-26 20:03  memoryhole
+
+	* files.c: removed a length limitation
+
+2005-10-26 19:54  memoryhole
+
+	* calculator.c: cleanup and removed a nondynamic string (aka
+	  possible overflow)
+
+2005-10-26 19:53  memoryhole
+
+	* parser.y, scanner.l: the \base command
+
+2005-10-26 19:52  memoryhole
+
+	* aclocal.m4: downgraded for OSX
+
+2005-10-26 10:11  memoryhole
+
+	* wcalc.1: updates and corrections
+
+2005-10-26 09:26  memoryhole
+
+	* parser.y: minor readability tweaks
+
+2005-10-26 09:25  memoryhole
+
+	* Makefile.in: automake regen
+
+2005-10-26 09:24  memoryhole
+
+	* main.c: typo
+
+2005-10-26 09:20  memoryhole
+
+	* main.c: more useful command-line options
+
+2005-10-26 09:01  memoryhole
+
+	* calculator.h: pedantic compatability
+
+2005-10-26 09:00  memoryhole
+
+	* acinclude.m4: remove extra printout in readline detection
+
+2005-10-26 08:59  memoryhole
+
+	* Makefile.am: parser.h is sometimes missed in the cleaning phase
+
+2005-10-02 11:36  memoryhole
+
+	* wcalc.1: Fixed irand/fact bug - noticed by Daniele Sempione
+
+2005-09-10 22:56  memoryhole
+
+	* Makefile.am, Makefile.in: more automake distclean cleanup
+
+2005-09-10 22:49  memoryhole
+
+	* Makefile.am: shouldnt use maintainer-clean for this purpose
+
+2005-09-10 22:38  memoryhole
+
+	* Makefile.in: removing CVS directories
+
+2005-09-10 22:36  memoryhole
+
+	* Makefile.am: now removes CVS files when I do a "make
+	  maintainer-clean"
+
+2005-09-10 22:30  memoryhole
+
+	* Makefile.am, Makefile.in, aclocal.m4, configure: newer auto*
+	  tools, and now it gets rid of the lex/yacc stuff
+
+2005-08-30 13:09  memoryhole
+
+	* calculator.c, historyManager.c, main.c, test.vars, variables.c,
+	  variables.h: some more memory leaks, all small, most irrelevant
+
+2005-08-30 10:51  memoryhole
+
+	* calculator.c: fix longstanding memory leak. lets hope its a
+	  cross-platform solution
+
+2005-08-30 10:30  memoryhole
+
+	* calculator.c: memory leak
+
+2005-08-29 22:04  memoryhole
+
+	* ChangeLog: cvs2cl
+
 2005-08-29 22:02  memoryhole
 
 	* number_formatting.c, Wcalc.xcodeproj/kyle.mode1,
