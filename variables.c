@@ -161,10 +161,11 @@ int varexists(char *key)
 	if (!strlen(key))
 		return 0;
 
-	while (cursor && cursor->key && strncmp(cursor->key, key, strlen(key))) {
+	while (cursor && cursor->key &&
+			strncmp(cursor->key, key, strlen(cursor->key)+1)) {
 		cursor = cursor->next;
 	}
-	if (cursor && cursor->key && !strncmp(cursor->key, key, strlen(key))) {
+	if (cursor && cursor->key && !strncmp(cursor->key, key, strlen(cursor->key)+1)) {
 		return 1;
 	} else {
 		return 0;
@@ -180,16 +181,17 @@ static void *getvar_core(char *key, int all_or_nothing)
 	if (!strlen(key))
 		return NULL;
 
-	while (cursor && cursor->key && strncmp(cursor->key, key, strlen(key))) {
+	while (cursor && cursor->key && strncmp(cursor->key, key, strlen(cursor->key)+1)) {
 		cursor = cursor->next;
 	}
-	if (cursor && cursor->key && !strncmp(cursor->key, key, strlen(key))) {
+	if (cursor && cursor->key && !strncmp(cursor->key, key, strlen(cursor->key)+1)) {
 		switch (all_or_nothing) {
 			case THE_VALUE:
 				if (cursor->exp) {
 					return NULL;
-				} else
+				} else {
 					return &(cursor->value);
+				}
 			case THE_STRUCTURE:
 				return cursor;
 			case THE_EXPRESSION:
@@ -207,12 +209,12 @@ int putexp(char *key, char *value)
 		return -1;
 
 	if (cursor) {
-		while (cursor && strncmp(cursor->key, key, strlen(key)) > 0 &&
+		while (cursor && strncmp(cursor->key, key, strlen(cursor->key)+1) > 0 &&
 			   cursor->next) {
 			cursor = cursor->next;
 		}
 
-		if (strncmp(cursor->key, key, strlen(key))) {	// add after cursor
+		if (strncmp(cursor->key, key, strlen(cursor->key)+1)) {	// add after cursor
 			struct variable *ntemp = cursor->next;
 			cursor->next = calloc(sizeof(struct variable), 1);
 			if (!cursor->next) {	   // if we can't allocate memory
@@ -254,12 +256,12 @@ int putval(char *key, mpfr_t value)
 		return -1;
 
 	if (cursor) {
-		while (cursor && strncmp(cursor->key, key, strlen(key)) &&
+		while (cursor && strncmp(cursor->key, key, strlen(cursor->key)+1) &&
 			   cursor->next) {
 			cursor = cursor->next;
 		}
 
-		if (!strncmp(cursor->key, key, strlen(key))) {
+		if (!strncmp(cursor->key, key, strlen(cursor->key)+1)) {
 			// change this one
 		} else {
 			// add after cursor
