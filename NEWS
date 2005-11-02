@@ -1,3 +1,19 @@
+--- Version 2.1 ---
+Nov 01 2005 - Kyle Wheeler
+ - Make UTF-8 compatable (BOTH)
+ - Added Phi0 (magnetic flux quantum) (BOTH)
+ - Made gamma more accurate (BOTH)
+Oct 27 2005 - Kyle Wheeler
+ - Fix bug in storing variables when there's only one variable (BOTH)
+ - Added verbose command (CLI)
+Oct 26 2005 - Kyle Wheeler
+ - Fixed up autoconf/automake for Debian (CLI)
+ - Updated man page (CLI)
+ - Removed potential buffer overflow in variable name (BOTH)
+Oct 02 2005 - Kyle Wheeler
+ - Corrected man page bug (thanks Daniele Sempione!) (CLI)
+Aug 30 2005 - Kyle Wheeler
+ - Fix memory-leaks (BOTH)
 --- Version 2.0 ---
 Aug 28 2005 - Kyle Wheeler
  - Answer field expands to reveal the entire answer, if necessary (GUI)
