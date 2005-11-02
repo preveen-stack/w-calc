@@ -6,105 +6,32 @@
 	objectVersion = 42;
 	objects = {
 
-/* Begin PBXApplicationTarget section */
-		29B97326FDCFA39411CA2CEA /* Wcalc */ = {
-			isa = PBXApplicationTarget;
-			buildConfigurationList = 27B38F980859DCBE00C2FE3C /* Build configuration list for PBXApplicationTarget "Wcalc" */;
-			buildPhases = (
-				29B97327FDCFA39411CA2CEA /* Headers */,
-				29B97328FDCFA39411CA2CEA /* Resources */,
-				29B9732BFDCFA39411CA2CEA /* Sources */,
-				29B9732DFDCFA39411CA2CEA /* Frameworks */,
-			);
-			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = "";
-				HEADER_SEARCH_PATHS = "";
-				LIBRARY_SEARCH_PATHS = "";
-				OPTIMIZATION_CFLAGS = "-O0";
-				OTHER_CFLAGS = (
-					"-Wall",
-					"-Wunused",
-					"-DGUI",
-					"-DSTDC_HEADERS",
-				);
-				OTHER_LDFLAGS = "-ll";
-				PRODUCT_NAME = Wcalc;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-				WRAPPER_EXTENSION = app;
-			};
-			dependencies = (
-			);
-			name = Wcalc;
-			productName = Wcalc;
-			productReference = 272C369708C1971F009EA18F /* Wcalc.app */;
-			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
-<plist version=\"1.0\">
-<dict>
-	<key>CFBundleDevelopmentRegion</key>
-	<string>English</string>
-	<key>CFBundleExecutable</key>
-	<string>Wcalc</string>
-	<key>CFBundleGetInfoString</key>
-	<string>Wcalc Version 2.0</string>
-	<key>CFBundleIconFile</key>
-	<string>TheW</string>
-	<key>CFBundleIdentifier</key>
-	<string>Wcalc</string>
-	<key>CFBundleInfoDictionaryVersion</key>
-	<string>6.0</string>
-	<key>CFBundleName</key>
-	<string>Wcalc</string>
-	<key>CFBundlePackageType</key>
-	<string>APPL</string>
-	<key>CFBundleShortVersionString</key>
-	<string>Wcalc 2.0</string>
-	<key>CFBundleSignature</key>
-	<string>Wcal</string>
-	<key>CFBundleVersion</key>
-	<string>2.0</string>
-	<key>NSMainNibFile</key>
-	<string>MainMenu</string>
-	<key>NSPrincipalClass</key>
-	<string>NSApplication</string>
-</dict>
-</plist>
-";
-		};
-/* End PBXApplicationTarget section */
-
 /* Begin PBXBuildFile section */
-		089C165EFE840E0CC02AAC07 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
-		1058C7A3FEA54F0111CA2CBB /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		2721CD4A0869C13400E3BB4D /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2721CD490869C13400E3BB4D /* Info.plist */; };
-		2721CD4B0869C13400E3BB4D /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2721CD490869C13400E3BB4D /* Info.plist */; };
-		272C376108C3FDAF009EA18F /* number_formatting.h in Headers */ = {isa = PBXBuildFile; fileRef = 272C375F08C3FDAF009EA18F /* number_formatting.h */; };
-		272C376208C3FDAF009EA18F /* number_formatting.c in Sources */ = {isa = PBXBuildFile; fileRef = 272C376008C3FDAF009EA18F /* number_formatting.c */; };
 		272C376308C3FDAF009EA18F /* number_formatting.h in Headers */ = {isa = PBXBuildFile; fileRef = 272C375F08C3FDAF009EA18F /* number_formatting.h */; };
 		272C376408C3FDAF009EA18F /* number_formatting.c in Sources */ = {isa = PBXBuildFile; fileRef = 272C376008C3FDAF009EA18F /* number_formatting.c */; };
-		272C376508C3FDAF009EA18F /* number_formatting.h in Headers */ = {isa = PBXBuildFile; fileRef = 272C375F08C3FDAF009EA18F /* number_formatting.h */; };
-		272C376608C3FDAF009EA18F /* number_formatting.c in Sources */ = {isa = PBXBuildFile; fileRef = 272C376008C3FDAF009EA18F /* number_formatting.c */; };
-		2754E78B08C0DC14007F45CF /* libreadline.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2754E78A08C0DC14007F45CF /* libreadline.a */; };
-		2754E89308C11276007F45CF /* libfl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2754E89208C11276007F45CF /* libfl.a */; };
 		2754E89408C11276007F45CF /* libfl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2754E89208C11276007F45CF /* libfl.a */; };
-		2754E89508C11276007F45CF /* libfl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2754E89208C11276007F45CF /* libfl.a */; };
-		275710BE042D0472004ACA36 /* files.h in Headers */ = {isa = PBXBuildFile; fileRef = 275710BC042D0472004ACA36 /* files.h */; };
-		275710BF042D0472004ACA36 /* files.c in Sources */ = {isa = PBXBuildFile; fileRef = 275710BD042D0472004ACA36 /* files.c */; };
-		275710C0042D0472004ACA36 /* files.h in Headers */ = {isa = PBXBuildFile; fileRef = 275710BC042D0472004ACA36 /* files.h */; };
-		275710C1042D0472004ACA36 /* files.c in Sources */ = {isa = PBXBuildFile; fileRef = 275710BD042D0472004ACA36 /* files.c */; };
-		277DB27E042F5173004ACA36 /* COPYING in Resources */ = {isa = PBXBuildFile; fileRef = 277DB27D042F5173004ACA36 /* COPYING */; };
-		277DB280042F51A6004ACA36 /* NEWS in Resources */ = {isa = PBXBuildFile; fileRef = 277DB27F042F51A5004ACA36 /* NEWS */; };
-		2799DA4503FAD61400CA71DD /* help.h in Headers */ = {isa = PBXBuildFile; fileRef = 2799DA4303FAD61400CA71DD /* help.h */; };
-		2799DA4603FAD61400CA71DD /* help.c in Sources */ = {isa = PBXBuildFile; fileRef = 2799DA4403FAD61400CA71DD /* help.c */; };
-		2799DA4703FAD61400CA71DD /* help.h in Headers */ = {isa = PBXBuildFile; fileRef = 2799DA4303FAD61400CA71DD /* help.h */; };
-		2799DA4803FAD61400CA71DD /* help.c in Sources */ = {isa = PBXBuildFile; fileRef = 2799DA4403FAD61400CA71DD /* help.c */; };
-		27BDF4C6059F712100CF1DF6 /* simpleCalc.c in Sources */ = {isa = PBXBuildFile; fileRef = 27BDF4C4059F712100CF1DF6 /* simpleCalc.c */; };
-		27BDF4C7059F712200CF1DF6 /* simpleCalc.h in Headers */ = {isa = PBXBuildFile; fileRef = 27BDF4C5059F712100CF1DF6 /* simpleCalc.h */; };
+		2773DD3409180D4300DBDA9D /* calculator.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B29D6601F7391601A80164 /* calculator.h */; };
+		2773DD3509180D4300DBDA9D /* variables.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B29D7401F7394501A80164 /* variables.h */; };
+		2773DD3609180D4300DBDA9D /* definitions.h in Headers */ = {isa = PBXBuildFile; fileRef = F5DEAE8F021254A501A80164 /* definitions.h */; };
+		2773DD3709180D4300DBDA9D /* string_manip.h in Headers */ = {isa = PBXBuildFile; fileRef = F5293926023032E201A80164 /* string_manip.h */; };
+		2773DD3809180D4300DBDA9D /* conversion.h in Headers */ = {isa = PBXBuildFile; fileRef = F5DD321702F8F43501A80164 /* conversion.h */; };
+		2773DD3909180D4300DBDA9D /* help.h in Headers */ = {isa = PBXBuildFile; fileRef = 2799DA4303FAD61400CA71DD /* help.h */; };
+		2773DD3A09180D4300DBDA9D /* files.h in Headers */ = {isa = PBXBuildFile; fileRef = 275710BC042D0472004ACA36 /* files.h */; };
+		2773DD3B09180D4300DBDA9D /* number_formatting.h in Headers */ = {isa = PBXBuildFile; fileRef = 272C375F08C3FDAF009EA18F /* number_formatting.h */; };
+		2773DD3D09180D4300DBDA9D /* calculator.c in Sources */ = {isa = PBXBuildFile; fileRef = F5B29D6501F7391601A80164 /* calculator.c */; };
+		2773DD3E09180D4300DBDA9D /* variables.c in Sources */ = {isa = PBXBuildFile; fileRef = F5B29D7301F7394501A80164 /* variables.c */; };
+		2773DD3F09180D4300DBDA9D /* parser.y in Sources */ = {isa = PBXBuildFile; fileRef = F5B29D6D01F7393A01A80164 /* parser.y */; };
+		2773DD4009180D4300DBDA9D /* scanner.l in Sources */ = {isa = PBXBuildFile; fileRef = F5B29D6E01F7393A01A80164 /* scanner.l */; };
+		2773DD4109180D4300DBDA9D /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = F521993F01F8D2B801A80164 /* main.c */; };
+		2773DD4209180D4300DBDA9D /* string_manip.c in Sources */ = {isa = PBXBuildFile; fileRef = F5293927023032E201A80164 /* string_manip.c */; };
+		2773DD4309180D4300DBDA9D /* conversion.c in Sources */ = {isa = PBXBuildFile; fileRef = F5DD321602F8F43501A80164 /* conversion.c */; };
+		2773DD4409180D4300DBDA9D /* help.c in Sources */ = {isa = PBXBuildFile; fileRef = 2799DA4403FAD61400CA71DD /* help.c */; };
+		2773DD4509180D4300DBDA9D /* files.c in Sources */ = {isa = PBXBuildFile; fileRef = 275710BD042D0472004ACA36 /* files.c */; };
+		2773DD4609180D4300DBDA9D /* number_formatting.c in Sources */ = {isa = PBXBuildFile; fileRef = 272C376008C3FDAF009EA18F /* number_formatting.c */; };
+		2773DD4909180D4300DBDA9D /* libfl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2754E89208C11276007F45CF /* libfl.a */; };
+		2773DD650918117800DBDA9D /* historyManager.c in Sources */ = {isa = PBXBuildFile; fileRef = F574E09E01FD122F01A80164 /* historyManager.c */; };
+		2773DD660918117900DBDA9D /* historyManager.h in Headers */ = {isa = PBXBuildFile; fileRef = F574E09D01FD122F01A80164 /* historyManager.h */; };
 		27BDF4C8059F712200CF1DF6 /* simpleCalc.c in Sources */ = {isa = PBXBuildFile; fileRef = 27BDF4C4059F712100CF1DF6 /* simpleCalc.c */; };
 		27BDF4C9059F712200CF1DF6 /* simpleCalc.h in Headers */ = {isa = PBXBuildFile; fileRef = 27BDF4C5059F712100CF1DF6 /* simpleCalc.h */; };
 		27D39129059BEA850035F25F /* AboutBoxController.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B29D6101F7391001A80164 /* AboutBoxController.h */; };
@@ -150,53 +77,6 @@
 		27D39153059BEA850035F25F /* help.c in Sources */ = {isa = PBXBuildFile; fileRef = 2799DA4403FAD61400CA71DD /* help.c */; };
 		27D39154059BEA850035F25F /* files.c in Sources */ = {isa = PBXBuildFile; fileRef = 275710BD042D0472004ACA36 /* files.c */; };
 		27D39156059BEA850035F25F /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
-		29B9732CFDCFA39411CA2CEA /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
-		F521993601F8D28801A80164 /* calculator.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B29D6601F7391601A80164 /* calculator.h */; };
-		F521993701F8D28801A80164 /* variables.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B29D7401F7394501A80164 /* variables.h */; };
-		F521993901F8D28801A80164 /* calculator.c in Sources */ = {isa = PBXBuildFile; fileRef = F5B29D6501F7391601A80164 /* calculator.c */; };
-		F521993A01F8D28801A80164 /* variables.c in Sources */ = {isa = PBXBuildFile; fileRef = F5B29D7301F7394501A80164 /* variables.c */; };
-		F521993B01F8D28801A80164 /* parser.y in Sources */ = {isa = PBXBuildFile; fileRef = F5B29D6D01F7393A01A80164 /* parser.y */; };
-		F521993C01F8D28801A80164 /* scanner.l in Sources */ = {isa = PBXBuildFile; fileRef = F5B29D6E01F7393A01A80164 /* scanner.l */; };
-		F521994001F8D2B801A80164 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = F521993F01F8D2B801A80164 /* main.c */; };
-		F521994501FA86B001A80164 /* VariableList.m in Sources */ = {isa = PBXBuildFile; fileRef = F521994301FA86B001A80164 /* VariableList.m */; };
-		F521994701FA8EC401A80164 /* VariableList.h in Headers */ = {isa = PBXBuildFile; fileRef = F521994601FA8EC401A80164 /* VariableList.h */; };
-		F5293928023032E201A80164 /* string_manip.h in Headers */ = {isa = PBXBuildFile; fileRef = F5293926023032E201A80164 /* string_manip.h */; };
-		F5293929023032E201A80164 /* string_manip.c in Sources */ = {isa = PBXBuildFile; fileRef = F5293927023032E201A80164 /* string_manip.c */; };
-		F529392A023034CB01A80164 /* string_manip.h in Headers */ = {isa = PBXBuildFile; fileRef = F5293926023032E201A80164 /* string_manip.h */; };
-		F529392B023034CB01A80164 /* string_manip.c in Sources */ = {isa = PBXBuildFile; fileRef = F5293927023032E201A80164 /* string_manip.c */; };
-		F5463561020065B401A80164 /* Wred.png in Resources */ = {isa = PBXBuildFile; fileRef = F5463560020065B401A80164 /* Wred.png */; };
-		F574E09B01FD0FD701A80164 /* HistoryList.h in Headers */ = {isa = PBXBuildFile; fileRef = F574E09901FD0FD701A80164 /* HistoryList.h */; };
-		F574E09C01FD0FD701A80164 /* HistoryList.m in Sources */ = {isa = PBXBuildFile; fileRef = F574E09A01FD0FD701A80164 /* HistoryList.m */; };
-		F574E09F01FD122F01A80164 /* historyManager.h in Headers */ = {isa = PBXBuildFile; fileRef = F574E09D01FD122F01A80164 /* historyManager.h */; };
-		F586ED3901FD41B201A80164 /* ChangeLog in Resources */ = {isa = PBXBuildFile; fileRef = F521994801FA927601A80164 /* ChangeLog */; };
-		F5A165F9030711ED01A80164 /* ConversionList.h in Headers */ = {isa = PBXBuildFile; fileRef = F5A165F7030711ED01A80164 /* ConversionList.h */; };
-		F5A165FA030711ED01A80164 /* ConversionList.m in Sources */ = {isa = PBXBuildFile; fileRef = F5A165F8030711ED01A80164 /* ConversionList.m */; };
-		F5B29D6301F7391001A80164 /* AboutBoxController.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B29D6101F7391001A80164 /* AboutBoxController.h */; };
-		F5B29D6401F7391001A80164 /* AboutBoxController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B29D6201F7391001A80164 /* AboutBoxController.m */; };
-		F5B29D6701F7391601A80164 /* calculator.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B29D6601F7391601A80164 /* calculator.h */; };
-		F5B29D6801F7391601A80164 /* calculator.c in Sources */ = {isa = PBXBuildFile; fileRef = F5B29D6501F7391601A80164 /* calculator.c */; };
-		F5B29D6B01F7392301A80164 /* ErrorController.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B29D6901F7392301A80164 /* ErrorController.h */; };
-		F5B29D6C01F7392301A80164 /* ErrorController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B29D6A01F7392301A80164 /* ErrorController.m */; };
-		F5B29D7001F7393A01A80164 /* TheW.icns in Resources */ = {isa = PBXBuildFile; fileRef = F5B29D6F01F7393A01A80164 /* TheW.icns */; };
-		F5B29D7101F7393A01A80164 /* parser.y in Sources */ = {isa = PBXBuildFile; fileRef = F5B29D6D01F7393A01A80164 /* parser.y */; };
-		F5B29D7501F7394501A80164 /* variables.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B29D7401F7394501A80164 /* variables.h */; };
-		F5B29D7601F7394501A80164 /* variables.c in Sources */ = {isa = PBXBuildFile; fileRef = F5B29D7301F7394501A80164 /* variables.c */; };
-		F5B29D7901F7395001A80164 /* WcalcController.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B29D7701F7395001A80164 /* WcalcController.h */; };
-		F5B29D7A01F7395001A80164 /* WcalcController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B29D7801F7395001A80164 /* WcalcController.m */; };
-		F5B29D7D01F7398A01A80164 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = F5B29D7B01F7398A01A80164 /* MainMenu.nib */; };
-		F5B29D8401F73C2701A80164 /* w.png in Resources */ = {isa = PBXBuildFile; fileRef = F5B29D8301F73C2701A80164 /* w.png */; };
-		F5CF4CF1026A383D01A80164 /* MyTextField.h in Headers */ = {isa = PBXBuildFile; fileRef = F5D446D00263B46801A80164 /* MyTextField.h */; };
-		F5CF4CF2026A383D01A80164 /* MyTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = F5D446D10263B46801A80164 /* MyTextField.m */; };
-		F5DD31FF02F6294C01A80164 /* scanner.l in Sources */ = {isa = PBXBuildFile; fileRef = F5B29D6E01F7393A01A80164 /* scanner.l */; };
-		F5DD321802F8F43501A80164 /* conversion.c in Sources */ = {isa = PBXBuildFile; fileRef = F5DD321602F8F43501A80164 /* conversion.c */; };
-		F5DD321902F8F43501A80164 /* conversion.h in Headers */ = {isa = PBXBuildFile; fileRef = F5DD321702F8F43501A80164 /* conversion.h */; };
-		F5DD321A02F8F43501A80164 /* conversion.c in Sources */ = {isa = PBXBuildFile; fileRef = F5DD321602F8F43501A80164 /* conversion.c */; };
-		F5DD321B02F8F43501A80164 /* conversion.h in Headers */ = {isa = PBXBuildFile; fileRef = F5DD321702F8F43501A80164 /* conversion.h */; };
-		F5DEAE8A0211DAA501A80164 /* historyManager.c in Sources */ = {isa = PBXBuildFile; fileRef = F574E09E01FD122F01A80164 /* historyManager.c */; };
-		F5DEAE90021254A501A80164 /* definitions.h in Headers */ = {isa = PBXBuildFile; fileRef = F5DEAE8F021254A501A80164 /* definitions.h */; };
-		F5DEAE91021254A501A80164 /* definitions.h in Headers */ = {isa = PBXBuildFile; fileRef = F5DEAE8F021254A501A80164 /* definitions.h */; };
-		F5EF54D402022A7001A80164 /* theDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = F5EF54D302022A7001A80164 /* theDelegate.h */; };
-		F5EF54D502022A7001A80164 /* theDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F5EF54D202022A7001A80164 /* theDelegate.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildStyle section */
@@ -229,13 +109,12 @@
 		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		2721CD490869C13400E3BB4D /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = Info.plist; sourceTree = "<group>"; };
-		272C369708C1971F009EA18F /* Wcalc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Wcalc.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		272C375F08C3FDAF009EA18F /* number_formatting.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = number_formatting.h; sourceTree = "<group>"; };
 		272C376008C3FDAF009EA18F /* number_formatting.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = number_formatting.c; sourceTree = "<group>"; };
-		2754E78A08C0DC14007F45CF /* libreadline.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libreadline.a; path = /opt/local/lib/libreadline.a; sourceTree = "<absolute>"; };
 		2754E89208C11276007F45CF /* libfl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfl.a; path = /opt/local/lib/libfl.a; sourceTree = "<absolute>"; };
 		275710BC042D0472004ACA36 /* files.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = files.h; sourceTree = "<group>"; };
 		275710BD042D0472004ACA36 /* files.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = files.c; sourceTree = "<group>"; };
+		2773DD4F09180D4300DBDA9D /* wcalc */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = wcalc; sourceTree = BUILT_PRODUCTS_DIR; };
 		277DB27D042F5173004ACA36 /* COPYING */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = COPYING; sourceTree = "<group>"; };
 		277DB27F042F51A5004ACA36 /* NEWS */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = NEWS; sourceTree = "<group>"; };
 		2799DA4303FAD61400CA71DD /* help.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = help.h; sourceTree = "<group>"; };
@@ -246,7 +125,6 @@
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
-		F521993301F8D28701A80164 /* wcalc */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; path = wcalc; sourceTree = BUILT_PRODUCTS_DIR; };
 		F521993F01F8D2B801A80164 /* main.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		F521994301FA86B001A80164 /* VariableList.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = VariableList.m; sourceTree = "<group>"; };
 		F521994601FA8EC401A80164 /* VariableList.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = VariableList.h; sourceTree = "<group>"; };
@@ -285,30 +163,20 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		2773DD4709180D4300DBDA9D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2773DD4909180D4300DBDA9D /* libfl.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		27D39155059BEA850035F25F /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				27D39156059BEA850035F25F /* Cocoa.framework in Frameworks */,
 				2754E89408C11276007F45CF /* libfl.a in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		29B9732DFDCFA39411CA2CEA /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				1058C7A3FEA54F0111CA2CBB /* Cocoa.framework in Frameworks */,
-				2754E89508C11276007F45CF /* libfl.a in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		F521993D01F8D28801A80164 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				2754E78B08C0DC14007F45CF /* libreadline.a in Frameworks */,
-				2754E89308C11276007F45CF /* libfl.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -361,9 +229,8 @@
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				F521993301F8D28701A80164 /* wcalc */,
 				27D3915A059BEA860035F25F /* Wcalc.app */,
-				272C369708C1971F009EA18F /* Wcalc.app */,
+				2773DD4F09180D4300DBDA9D /* wcalc */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -419,7 +286,6 @@
 			isa = PBXGroup;
 			children = (
 				2754E89208C11276007F45CF /* libfl.a */,
-				2754E78A08C0DC14007F45CF /* libreadline.a */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -453,6 +319,22 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
+		2773DD3309180D4300DBDA9D /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2773DD3409180D4300DBDA9D /* calculator.h in Headers */,
+				2773DD3509180D4300DBDA9D /* variables.h in Headers */,
+				2773DD3609180D4300DBDA9D /* definitions.h in Headers */,
+				2773DD3709180D4300DBDA9D /* string_manip.h in Headers */,
+				2773DD3809180D4300DBDA9D /* conversion.h in Headers */,
+				2773DD3909180D4300DBDA9D /* help.h in Headers */,
+				2773DD3A09180D4300DBDA9D /* files.h in Headers */,
+				2773DD3B09180D4300DBDA9D /* number_formatting.h in Headers */,
+				2773DD660918117900DBDA9D /* historyManager.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		27D39128059BEA850035F25F /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -478,52 +360,45 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		29B97327FDCFA39411CA2CEA /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				F5B29D6301F7391001A80164 /* AboutBoxController.h in Headers */,
-				F5B29D6701F7391601A80164 /* calculator.h in Headers */,
-				F5B29D6B01F7392301A80164 /* ErrorController.h in Headers */,
-				F5B29D7501F7394501A80164 /* variables.h in Headers */,
-				F5B29D7901F7395001A80164 /* WcalcController.h in Headers */,
-				F521994701FA8EC401A80164 /* VariableList.h in Headers */,
-				F574E09B01FD0FD701A80164 /* HistoryList.h in Headers */,
-				F574E09F01FD122F01A80164 /* historyManager.h in Headers */,
-				F5EF54D402022A7001A80164 /* theDelegate.h in Headers */,
-				F5DEAE90021254A501A80164 /* definitions.h in Headers */,
-				F529392A023034CB01A80164 /* string_manip.h in Headers */,
-				F5CF4CF1026A383D01A80164 /* MyTextField.h in Headers */,
-				F5DD321902F8F43501A80164 /* conversion.h in Headers */,
-				F5A165F9030711ED01A80164 /* ConversionList.h in Headers */,
-				2799DA4503FAD61400CA71DD /* help.h in Headers */,
-				275710BE042D0472004ACA36 /* files.h in Headers */,
-				27BDF4C7059F712200CF1DF6 /* simpleCalc.h in Headers */,
-				272C376508C3FDAF009EA18F /* number_formatting.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		F521993501F8D28801A80164 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				F521993601F8D28801A80164 /* calculator.h in Headers */,
-				F521993701F8D28801A80164 /* variables.h in Headers */,
-				F5DEAE91021254A501A80164 /* definitions.h in Headers */,
-				F5293928023032E201A80164 /* string_manip.h in Headers */,
-				F5DD321B02F8F43501A80164 /* conversion.h in Headers */,
-				2799DA4703FAD61400CA71DD /* help.h in Headers */,
-				275710C0042D0472004ACA36 /* files.h in Headers */,
-				272C376108C3FDAF009EA18F /* number_formatting.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		27D39127059BEA850035F25F /* Wcalc_native */ = {
+		2773DD3209180D4300DBDA9D /* wcalc */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 27B38FA00859DCBE00C2FE3C /* Build configuration list for PBXNativeTarget "Wcalc_native" */;
+			buildConfigurationList = 2773DD4B09180D4300DBDA9D /* Build configuration list for PBXNativeTarget "wcalc" */;
+			buildPhases = (
+				2773DD3309180D4300DBDA9D /* Headers */,
+				2773DD3C09180D4300DBDA9D /* Sources */,
+				2773DD4709180D4300DBDA9D /* Frameworks */,
+				2773DD4A09180D4300DBDA9D /* Rez */,
+			);
+			buildRules = (
+			);
+			buildSettings = {
+				HEADER_SEARCH_PATHS = /sw/include;
+				LIBRARY_SEARCH_PATHS = /Users/kyle/Wcalc;
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = wcalc;
+				REZ_EXECUTABLE = YES;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wall",
+					"-Wunused",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			dependencies = (
+			);
+			name = wcalc;
+			productName = wcalc;
+			productReference = 2773DD4F09180D4300DBDA9D /* wcalc */;
+			productType = "com.apple.product-type.tool";
+		};
+		27D39127059BEA850035F25F /* Wcalc.app */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 27B38FA00859DCBE00C2FE3C /* Build configuration list for PBXNativeTarget "Wcalc.app" */;
 			buildPhases = (
 				27D39128059BEA850035F25F /* Headers */,
 				27D39139059BEA850035F25F /* Resources */,
@@ -557,7 +432,7 @@
 			};
 			dependencies = (
 			);
-			name = Wcalc_native;
+			name = Wcalc.app;
 			productName = Wcalc;
 			productReference = 27D3915A059BEA860035F25F /* Wcalc.app */;
 			productType = "com.apple.product-type.application";
@@ -578,9 +453,8 @@
 			mainGroup = 29B97314FDCFA39411CA2CEA /* Wcalc */;
 			projectDirPath = "";
 			targets = (
-				29B97326FDCFA39411CA2CEA /* Wcalc */,
-				F521993401F8D28701A80164 /* wcalc */,
-				27D39127059BEA850035F25F /* Wcalc_native */,
+				2773DD3209180D4300DBDA9D /* wcalc */,
+				27D39127059BEA850035F25F /* Wcalc.app */,
 			);
 		};
 /* End PBXProject section */
@@ -602,26 +476,10 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		29B97328FDCFA39411CA2CEA /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				089C165EFE840E0CC02AAC07 /* InfoPlist.strings in Resources */,
-				F5B29D7001F7393A01A80164 /* TheW.icns in Resources */,
-				F5B29D7D01F7398A01A80164 /* MainMenu.nib in Resources */,
-				F5B29D8401F73C2701A80164 /* w.png in Resources */,
-				F586ED3901FD41B201A80164 /* ChangeLog in Resources */,
-				F5463561020065B401A80164 /* Wred.png in Resources */,
-				277DB27E042F5173004ACA36 /* COPYING in Resources */,
-				277DB280042F51A6004ACA36 /* NEWS in Resources */,
-				2721CD4B0869C13400E3BB4D /* Info.plist in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXRezBuildPhase section */
-		F521993E01F8D28801A80164 /* Rez */ = {
+		2773DD4A09180D4300DBDA9D /* Rez */ = {
 			isa = PBXRezBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -631,6 +489,24 @@
 /* End PBXRezBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		2773DD3C09180D4300DBDA9D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2773DD3D09180D4300DBDA9D /* calculator.c in Sources */,
+				2773DD3E09180D4300DBDA9D /* variables.c in Sources */,
+				2773DD3F09180D4300DBDA9D /* parser.y in Sources */,
+				2773DD4009180D4300DBDA9D /* scanner.l in Sources */,
+				2773DD4109180D4300DBDA9D /* main.c in Sources */,
+				2773DD4209180D4300DBDA9D /* string_manip.c in Sources */,
+				2773DD4309180D4300DBDA9D /* conversion.c in Sources */,
+				2773DD4409180D4300DBDA9D /* help.c in Sources */,
+				2773DD4509180D4300DBDA9D /* files.c in Sources */,
+				2773DD4609180D4300DBDA9D /* number_formatting.c in Sources */,
+				2773DD650918117800DBDA9D /* historyManager.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		27D39142059BEA850035F25F /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -658,84 +534,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		29B9732BFDCFA39411CA2CEA /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				29B9732CFDCFA39411CA2CEA /* main.m in Sources */,
-				F5B29D6401F7391001A80164 /* AboutBoxController.m in Sources */,
-				F5B29D6801F7391601A80164 /* calculator.c in Sources */,
-				F5B29D6C01F7392301A80164 /* ErrorController.m in Sources */,
-				F5B29D7101F7393A01A80164 /* parser.y in Sources */,
-				F5B29D7601F7394501A80164 /* variables.c in Sources */,
-				F5B29D7A01F7395001A80164 /* WcalcController.m in Sources */,
-				F521994501FA86B001A80164 /* VariableList.m in Sources */,
-				F574E09C01FD0FD701A80164 /* HistoryList.m in Sources */,
-				F5EF54D502022A7001A80164 /* theDelegate.m in Sources */,
-				F5DEAE8A0211DAA501A80164 /* historyManager.c in Sources */,
-				F529392B023034CB01A80164 /* string_manip.c in Sources */,
-				F5CF4CF2026A383D01A80164 /* MyTextField.m in Sources */,
-				F5DD31FF02F6294C01A80164 /* scanner.l in Sources */,
-				F5DD321802F8F43501A80164 /* conversion.c in Sources */,
-				F5A165FA030711ED01A80164 /* ConversionList.m in Sources */,
-				2799DA4603FAD61400CA71DD /* help.c in Sources */,
-				275710BF042D0472004ACA36 /* files.c in Sources */,
-				27BDF4C6059F712100CF1DF6 /* simpleCalc.c in Sources */,
-				272C376608C3FDAF009EA18F /* number_formatting.c in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		F521993801F8D28801A80164 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				F521993901F8D28801A80164 /* calculator.c in Sources */,
-				F521993A01F8D28801A80164 /* variables.c in Sources */,
-				F521993B01F8D28801A80164 /* parser.y in Sources */,
-				F521993C01F8D28801A80164 /* scanner.l in Sources */,
-				F521994001F8D2B801A80164 /* main.c in Sources */,
-				F5293929023032E201A80164 /* string_manip.c in Sources */,
-				F5DD321A02F8F43501A80164 /* conversion.c in Sources */,
-				2799DA4803FAD61400CA71DD /* help.c in Sources */,
-				275710C1042D0472004ACA36 /* files.c in Sources */,
-				272C376208C3FDAF009EA18F /* number_formatting.c in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXToolTarget section */
-		F521993401F8D28701A80164 /* wcalc */ = {
-			isa = PBXToolTarget;
-			buildConfigurationList = 27B38F9C0859DCBE00C2FE3C /* Build configuration list for PBXToolTarget "wcalc" */;
-			buildPhases = (
-				F521993501F8D28801A80164 /* Headers */,
-				F521993801F8D28801A80164 /* Sources */,
-				F521993D01F8D28801A80164 /* Frameworks */,
-				F521993E01F8D28801A80164 /* Rez */,
-			);
-			buildSettings = {
-				HEADER_SEARCH_PATHS = /sw/include;
-				LIBRARY_SEARCH_PATHS = /Users/kyle/Wcalc;
-				OTHER_REZFLAGS = "";
-				PREBINDING = NO;
-				PRODUCT_NAME = wcalc;
-				REZ_EXECUTABLE = YES;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wall",
-					"-Wunused",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-			};
-			dependencies = (
-			);
-			name = wcalc;
-			productName = wcalc;
-			productReference = F521993301F8D28701A80164 /* wcalc */;
-		};
-/* End PBXToolTarget section */
 
 /* Begin PBXVariantGroup section */
 		089C165CFE840E0CC02AAC07 /* InfoPlist.strings */ = {
@@ -757,66 +556,7 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		27B38F990859DCBE00C2FE3C /* Development */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				FRAMEWORK_SEARCH_PATHS = "";
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				HEADER_SEARCH_PATHS = "";
-				LIBRARY_SEARCH_PATHS = /opt/local/lib;
-				OPTIMIZATION_CFLAGS = "-O0 -g";
-				OTHER_CFLAGS = (
-					"-Wall",
-					"-Wunused",
-					"-DGUI",
-					"-DSTDC_HEADERS",
-				);
-				OTHER_LDFLAGS = "-ll";
-				PRODUCT_NAME = Wcalc;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-				WRAPPER_EXTENSION = app;
-				ZERO_LINK = YES;
-			};
-			name = Development;
-		};
-		27B38F9A0859DCBE00C2FE3C /* Deployment */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				FRAMEWORK_SEARCH_PATHS = "";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				HEADER_SEARCH_PATHS = "";
-				LIBRARY_SEARCH_PATHS = /opt/local/lib;
-				OPTIMIZATION_CFLAGS = "-O2";
-				OTHER_CFLAGS = (
-					"-Wall",
-					"-Wunused",
-					"-DGUI",
-					"-DSTDC_HEADERS",
-				);
-				OTHER_LDFLAGS = "-ll";
-				PRODUCT_NAME = Wcalc;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-				WRAPPER_EXTENSION = app;
-				ZERO_LINK = NO;
-			};
-			name = Deployment;
-		};
-		27B38F9D0859DCBE00C2FE3C /* Development */ = {
+		2773DD4C09180D4300DBDA9D /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
@@ -829,7 +569,6 @@
 					/Users/kyle/Wcalc,
 					/opt/local/lib,
 				);
-				OPTIMIZATION_CFLAGS = "-O0 -g";
 				OTHER_REZFLAGS = "";
 				PREBINDING = NO;
 				PRODUCT_NAME = wcalc;
@@ -845,17 +584,65 @@
 			};
 			name = Development;
 		};
-		27B38F9E0859DCBE00C2FE3C /* Deployment */ = {
+		2773DD4D09180D4300DBDA9D /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEAD_CODE_STRIPPING = YES;
+				DEPLOYMENT_POSTPROCESSING = YES;
+				GCC_CW_ASM_SYNTAX = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_ENABLE_PASCAL_STRINGS = NO;
+				GCC_OPTIMIZATION_LEVEL = 2;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = STDC_HEADERS;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
+				GCC_WARN_MISSING_PARENTHESES = YES;
+				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNKNOWN_PRAGMAS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_PARAMETER = NO;
+				GCC_WARN_UNUSED_VALUE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = /opt/local/include;
+				LIBRARY_SEARCH_PATHS = /opt/local/lib;
+				MACOSX_DEPLOYMENT_TARGET = 10.3;
+				OTHER_LDFLAGS = (
+					/opt/local/lib/libmpfr.a,
+					/opt/local/lib/libgmp.a,
+					/opt/local/lib/libreadline.a,
+					/opt/local/lib/libncursesw.a,
+				);
+				PREBINDING = YES;
+				PRODUCT_NAME = wcalc;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wchar-subscripts",
+					"-Wcomment",
+					"-Wimplicit",
+					"-Wmain",
+					"-Wsequence-point",
+				);
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+		2773DD4E09180D4300DBDA9D /* Deployment debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_OPTIMIZATION_LEVEL = 2;
 				HEADER_SEARCH_PATHS = /sw/include;
 				LIBRARY_SEARCH_PATHS = (
 					/Users/kyle/Wcalc,
 					/opt/local/lib,
 				);
-				OPTIMIZATION_CFLAGS = "-O2";
 				OTHER_REZFLAGS = "";
 				PREBINDING = NO;
 				PRODUCT_NAME = wcalc;
@@ -869,7 +656,7 @@
 				);
 				ZERO_LINK = NO;
 			};
-			name = Deployment;
+			name = "Deployment debug";
 		};
 		27B38FA10859DCBE00C2FE3C /* Development */ = {
 			isa = XCBuildConfiguration;
@@ -930,6 +717,82 @@
 				DEAD_CODE_STRIPPING = YES;
 				DEPLOYMENT_POSTPROCESSING = YES;
 				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_AUTO_VECTORIZATION = NO;
+				GCC_CW_ASM_SYNTAX = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_ENABLE_PASCAL_STRINGS = NO;
+				GCC_MODEL_TUNING = G4;
+				GCC_OPTIMIZATION_LEVEL = 2;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					GUI,
+					STDC_HEADERS,
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
+				GCC_WARN_MISSING_PARENTHESES = YES;
+				GCC_WARN_PEDANTIC = NO;
+				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNKNOWN_PRAGMAS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_PARAMETER = NO;
+				GCC_WARN_UNUSED_VALUE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = /opt/local/include;
+				INFOPLIST_FILE = Info.plist;
+				LIBRARY_SEARCH_PATHS = /opt/local/lib;
+				MACOSX_DEPLOYMENT_TARGET = 10.3;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = (
+					/opt/local/lib/libmpfr.a,
+					/opt/local/lib/libgmp.a,
+				);
+				PRIVATE_HEADERS_FOLDER_PATH = "$(CONTENTS_FOLDER_PATH)/PrivateHeaders";
+				PRODUCT_NAME = Wcalc;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wchar-subscripts",
+					"-Wcomment",
+					"-Wimplicit",
+					"-Wmain",
+					"-Wsequence-point",
+				);
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+		27B38FA50859DCBE00C2FE3C /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_CPP_RTTI = NO;
+				OTHER_CFLAGS = "-I/opt/local/include";
+				UNSTRIPPED_PRODUCT = YES;
+			};
+			name = Development;
+		};
+		27B38FA60859DCBE00C2FE3C /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CURRENT_PROJECT_VERSION = 2.1;
+				GCC_OPTIMIZATION_LEVEL = 2;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Deployment;
+		};
+		27F1CAFC08C41EC600B42878 /* Deployment debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEAD_CODE_STRIPPING = YES;
+				DEPLOYMENT_POSTPROCESSING = YES;
+				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_AUTO_VECTORIZATION = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -953,6 +816,7 @@
 				HEADER_SEARCH_PATHS = /opt/local/include;
 				INFOPLIST_FILE = Info.plist;
 				LIBRARY_SEARCH_PATHS = /opt/local/lib;
+				MACOSX_DEPLOYMENT_TARGET = 10.3;
 				OPTIMIZATION_CFLAGS = "-O2";
 				OTHER_CFLAGS = (
 					"-Wall",
@@ -972,51 +836,35 @@
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = NO;
 			};
-			name = Deployment;
+			name = "Deployment debug";
 		};
-		27B38FA50859DCBE00C2FE3C /* Development */ = {
+		27F1CAFD08C41EC600B42878 /* Deployment debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_ENABLE_CPP_EXCEPTIONS = NO;
-				GCC_ENABLE_CPP_RTTI = NO;
-				OTHER_CFLAGS = "-I/opt/local/include";
-				UNSTRIPPED_PRODUCT = YES;
-			};
-			name = Development;
-		};
-		27B38FA60859DCBE00C2FE3C /* Deployment */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
+				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 2.0;
 			};
-			name = Deployment;
+			name = "Deployment debug";
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		27B38F980859DCBE00C2FE3C /* Build configuration list for PBXApplicationTarget "Wcalc" */ = {
+		2773DD4B09180D4300DBDA9D /* Build configuration list for PBXNativeTarget "wcalc" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				27B38F990859DCBE00C2FE3C /* Development */,
-				27B38F9A0859DCBE00C2FE3C /* Deployment */,
+				2773DD4C09180D4300DBDA9D /* Development */,
+				2773DD4D09180D4300DBDA9D /* Deployment */,
+				2773DD4E09180D4300DBDA9D /* Deployment debug */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Development;
 		};
-		27B38F9C0859DCBE00C2FE3C /* Build configuration list for PBXToolTarget "wcalc" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				27B38F9D0859DCBE00C2FE3C /* Development */,
-				27B38F9E0859DCBE00C2FE3C /* Deployment */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Development;
-		};
-		27B38FA00859DCBE00C2FE3C /* Build configuration list for PBXNativeTarget "Wcalc_native" */ = {
+		27B38FA00859DCBE00C2FE3C /* Build configuration list for PBXNativeTarget "Wcalc.app" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				27B38FA10859DCBE00C2FE3C /* Development */,
 				27B38FA20859DCBE00C2FE3C /* Deployment */,
+				27F1CAFC08C41EC600B42878 /* Deployment debug */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Development;
@@ -1026,6 +874,7 @@
 			buildConfigurations = (
 				27B38FA50859DCBE00C2FE3C /* Development */,
 				27B38FA60859DCBE00C2FE3C /* Deployment */,
+				27F1CAFD08C41EC600B42878 /* Deployment debug */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Development;
