@@ -780,7 +780,7 @@ char *print_this_result_dbl(double result)
 }/*}}}*/
 
 int is_mpfr_int(mpfr_t potential_int)
-{
+{/*{{{*/
 	char * str, *curs;
 	mp_exp_t eptr;
 	int base;
@@ -804,7 +804,7 @@ int is_mpfr_int(mpfr_t potential_int)
 not_an_int:
 	mpfr_free_str(str);
 	return 0;
-}
+}/*}}}*/
 
 char *print_this_result(mpfr_t result)
 {/*{{{*/
@@ -825,7 +825,7 @@ char *print_this_result(mpfr_t result)
 			// ... but only as long as it will fit in a double and isn't
 			// an integer
 			if (conf.precision_guard && conf.precision < 0 &&
-				! is_mpfr_int(result) &&
+				(!conf.print_ints || ! is_mpfr_int(result)) &&
 				mpfr_get_d(result,GMP_RNDN) != mpfr_get_si(result, GMP_RNDN)) {
 				double res = mpfr_get_d(result, GMP_RNDN);
 
