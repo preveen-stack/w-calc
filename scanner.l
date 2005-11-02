@@ -54,7 +54,7 @@ NDIGIT		[123456789]
 LETTER		[a-zA-Z]
 WHITESPACE	[ \t]
 ACCEPTABLE	[_:0-9]
-UNITCHRS	[-_a-zA-Z0-9^/µÅ]
+UNITCHRS	[-_a-zA-Z0-9^/ÂµÃ…]
 SPACE		[ ]
 
 /* The rest of this after the '%%' is lex rules */
@@ -132,10 +132,19 @@ SPACE		[ ]
 	char *unitone, *unittwo;
 	unitone = strchr(yytext,' ')+1;
 	unittwo = strchr(unitone,' ');
-	*unittwo++ = 0; /* space */
+	while (*unittwo == ' ') { *unittwo++ = 0; /* space */ }
 	*unittwo++ = 0; /* t */
 	*unittwo++ = 0; /* o */
-	*unittwo++ = 0; /* space */
+	while (*unittwo == ' ') { *unittwo++ = 0; /* space */ }
+	YYLVALAC->conver.u1 = strdup(unitone);
+	YYLVALAC->conver.u2 = strdup(unittwo);
+	return(CONVERT_CMD);
+}
+\\c(onv(ert)?)?{SPACE}+{UNITCHRS}+{SPACE}+{UNITCHRS}+ {
+	char *unitone, *unittwo;
+	unitone = strchr(yytext,' ')+1;
+	unittwo = strchr(unitone,' ');
+	while (*unittwo == ' ') { *unittwo++ = 0; /* space */ }
 	YYLVALAC->conver.u1 = strdup(unitone);
 	YYLVALAC->conver.u2 = strdup(unittwo);
 	return(CONVERT_CMD);
@@ -153,7 +162,7 @@ SPACE		[ ]
 %{ /* These are the constants (except random) */
 	%}
 (e)				{ mpfr_init_set_str(YYLVALAC->number,W_E,0,GMP_RNDN); return(NUMBER); }
-([pP][iI])|(¹)	{ mpfr_init(YYLVALAC->number); mpfr_const_pi(YYLVALAC->number,GMP_RNDN);
+([pP][iI])|(\317\200)	{ mpfr_init(YYLVALAC->number); mpfr_const_pi(YYLVALAC->number,GMP_RNDN);
 				  return(NUMBER); }
 random			{ seed_random();
 				  mpfr_init(YYLVALAC->number);
@@ -194,7 +203,7 @@ c				{ mpfr_init_set_str(YYLVALAC->number,W_SPEED_OF_LIGHT,0,GMP_RNDN);
 				  return(NUMBER); }
 h				{ mpfr_init_set_str(YYLVALAC->number,W_PLANCK_CONSTANT,0,GMP_RNDN);
 				  return(NUMBER); }
-(µ0)|(mu((0)|((zero)|(ZERO)))) {
+((\302\265)(0))|(mu((0)|((zero)|(ZERO)))) {
 				  mpfr_t temp;
 				  mpfr_init(YYLVALAC->number);
 				  mpfr_init(temp);
@@ -204,11 +213,11 @@ h				{ mpfr_init_set_str(YYLVALAC->number,W_PLANCK_CONSTANT,0,GMP_RNDN);
 				  mpfr_mul(YYLVALAC->number,YYLVALAC->number,temp,GMP_RNDN);
 				  mpfr_clear(temp);
 				  return(NUMBER); }
-((epsilon)|(EPSILON))((0)|((zero)|(ZERO))) { mpfr_init_set_str(YYLVALAC->number,W_PERMITTIVITY_OF_FREE_SPACE,0,GMP_RNDN);
+(epsilon|EPSILON|\316\265)(0|zero|ZERO) { mpfr_init_set_str(YYLVALAC->number,W_PERMITTIVITY_OF_FREE_SPACE,0,GMP_RNDN);
 				  return(NUMBER); }
-(µB)|(muB)		{ mpfr_init_set_str(YYLVALAC->number,W_BOHR_MAGNETON,0,GMP_RNDN);
+(\302\265|mu)B	{ mpfr_init_set_str(YYLVALAC->number,W_BOHR_MAGNETON,0,GMP_RNDN);
 				  return(NUMBER); }
-(µN)|(muN)		{ mpfr_init_set_str(YYLVALAC->number,W_NUCLEAR_MAGNETON,0,GMP_RNDN);
+(\302\265|mu)N	{ mpfr_init_set_str(YYLVALAC->number,W_NUCLEAR_MAGNETON,0,GMP_RNDN);
 				  return(NUMBER); }
 b				{ mpfr_init_set_str(YYLVALAC->number,W_WIEN_DISPLACEMENT,0,GMP_RNDN);
 				  return(NUMBER); }
@@ -220,11 +229,11 @@ F				{ mpfr_init_set_str(YYLVALAC->number,W_FARADAY_CONSTANT,0,GMP_RNDN);
 				  return(NUMBER); }
 eV				{ mpfr_init_set_str(YYLVALAC->number,W_ELECTRON_VOLT,0,GMP_RNDN);
 				  return(NUMBER); }
-(sigma)|(SIGMA) { mpfr_init_set_str(YYLVALAC->number,W_STEFAN_BOLTZMANN,0,GMP_RNDN);
+sigma|\317\203 { mpfr_init_set_str(YYLVALAC->number,W_STEFAN_BOLTZMANN,0,GMP_RNDN);
 				  return(NUMBER); }
-(alpha)|(ALPHA) { mpfr_init_set_str(YYLVALAC->number,W_FINE_STRUCTURE,0,GMP_RNDN);
+alpha|\316\261 { mpfr_init_set_str(YYLVALAC->number,W_FINE_STRUCTURE,0,GMP_RNDN);
 				  return(NUMBER); }
-(gamma)|(GAMMA) { mpfr_init_set_str(YYLVALAC->number,W_EULER,0,GMP_RNDN);
+gamma|GAMMA|\316\263 { mpfr_init_set_str(YYLVALAC->number,W_EULER,0,GMP_RNDN);
 				  return(NUMBER); }
 re				{ mpfr_init_set_str(YYLVALAC->number,W_ELECTRON_RADIUS,0,GMP_RNDN);
 				  return(NUMBER); }
@@ -232,19 +241,19 @@ Kj				{ mpfr_init_set_str(YYLVALAC->number,W_JOSEPHSON_CONSTANT,0,GMP_RNDN);
 				  return(NUMBER); }
 Rk				{ mpfr_init_set_str(YYLVALAC->number,W_VON_KLITZING_CONSTANT,0,GMP_RNDN);
 				  return(NUMBER); }
-Rinf			{ mpfr_init_set_str(YYLVALAC->number,W_RYDBERG_CONSTANT,0,GMP_RNDN);
+R(inf|\342\210\236)			{ mpfr_init_set_str(YYLVALAC->number,W_RYDBERG_CONSTANT,0,GMP_RNDN);
 				  return(NUMBER); }
 Eh				{ mpfr_init_set_str(YYLVALAC->number,W_HARTREE_ENERGY,0,GMP_RNDN);
 				  return(NUMBER); }
 Gf				{ mpfr_init_set_str(YYLVALAC->number,W_FERMI_COUPLING_CONSTANT,0,GMP_RNDN);
 				  return(NUMBER); }
-M(µ|mu)			{ mpfr_init_set_str(YYLVALAC->number,W_MUON_MASS,0,GMP_RNDN);
+M((\302\265)|mu)	{ mpfr_init_set_str(YYLVALAC->number,W_MUON_MASS,0,GMP_RNDN);
 				  return(NUMBER); }
-Mt				{ mpfr_init_set_str(YYLVALAC->number,W_TAU_MASS,0,GMP_RNDN);
+M(t|tau|\317\204)				{ mpfr_init_set_str(YYLVALAC->number,W_TAU_MASS,0,GMP_RNDN);
 				  return(NUMBER); }
 Mh				{ mpfr_init_set_str(YYLVALAC->number,W_HELION_MASS,0,GMP_RNDN);
 				  return(NUMBER); }
-Malpha			{ mpfr_init_set_str(YYLVALAC->number,W_ALPHA_PARTICLE_MASS,0,GMP_RNDN);
+M(alpha|\316\261)	{ mpfr_init_set_str(YYLVALAC->number,W_ALPHA_PARTICLE_MASS,0,GMP_RNDN);
 				  return(NUMBER); }
 n(0|zero)		{ mpfr_init_set_str(YYLVALAC->number,W_LOSCHMIDT_CONSTANT,0,GMP_RNDN);
 				  return(NUMBER); }
@@ -255,6 +264,14 @@ c2				{ mpfr_init_set_str(YYLVALAC->number,W_SECOND_RADIATION_CONSTANT,0,GMP_RND
 G(0|zero)		{ mpfr_init_set_str(YYLVALAC->number,W_CONDUCTANCE_QUANTUM,0,GMP_RNDN);
 				  return(NUMBER); }
 Z(0|zero)		{ mpfr_init_set_str(YYLVALAC->number,W_IMPEDANCE_OF_VACUUM,0,GMP_RNDN);
+				  return(NUMBER); }
+(Phi|\316\246)(0|zero)	{ mpfr_init_set_str(YYLVALAC->number,W_MAGNETIC_FLUX_QUANTUM,0,GMP_RNDN);
+				  return(NUMBER); }
+\302\274		{ mpfr_init_set_d(YYLVALAC->number,0.25,GMP_RNDN);
+				  return(NUMBER); }
+\302\275		{ mpfr_init_set_d(YYLVALAC->number,0.5,GMP_RNDN);
+				  return(NUMBER); }
+\302\276		{ mpfr_init_set_d(YYLVALAC->number,0.75,GMP_RNDN);
 				  return(NUMBER); }
 
 %{ /* These are the grouping symbols */
@@ -268,33 +285,33 @@ Z(0|zero)		{ mpfr_init_set_str(YYLVALAC->number,W_IMPEDANCE_OF_VACUUM,0,GMP_RNDN
 
 %{ /* These are the binary operations */
 	%}
-not						{ return(WNOT); }
+not|\302\254			{ return(WNOT); }
 [!]						{ return(WBANG); }
-[*][*]					{ return(WSQR); }
+[*][*]|\302\262			{ return(WSQR); }
 [+]						{ return(WPLUS); }
-[*]						{ return(WMULT); }
-[/]|[Ö]|(÷)				{ return(WDIV); }
+[*]|\303\227			{ return(WMULT); }
+[/]|\267				{ return(WDIV); }
 [%]						{ return(WMOD); }
 [=]						{ return(WEQL); }
 (\^)					{ return(WPOW); }
 \|                      { return(WBOR); }
 \&                      { return(WBAND); }
 \~                      { return(WBNOT); }
-(\|\|)|(or)				{ return(WOR); }
-(\&\&)|(and)			{ return(WAND); }
+(\|\|)|(or)|\342\210\250	{ return(WOR); }
+(\&\&)|(and)|\342\210\247	{ return(WAND); }
 (\=\=)|(equals)|(eq)	{ return(WEQUAL); }
-(\!\=)|(ne)|(­)			{ return(WNEQUAL); }
+(\!\=)|(ne)|(\342\211\240)	{ return(WNEQUAL); }
 xor						{ return(WBXOR); }
 \>						{ return(WGT); }
 \<						{ return(WLT); }
 \>\>                    { return(WRSHFT); }
 \<\<                    { return(WLSHFT); }
-(\>\=)|(³)				{ return(WGEQ); }
-(\<\=)|(²)				{ return(WLEQ); }
+(\>\=)|(\342\211\245)				{ return(WGEQ); }
+(\<\=)|(\342\211\244)				{ return(WLEQ); }
 
 %{ /* This is a special operator/function */
 	%}
-\-  { return(WMINUS); }
+\-|\342\210\222  { return(WMINUS); }
 
 %{ /* These are functions (unary operations) */
 	%}
@@ -319,7 +336,7 @@ logtwo { return(WLOGTWO); }
 ln { return(WLN); }
 round { return(WROUND); }
 abs { return(WABS); }
-(sqrt)|(Ã) { return(WSQRT); }
+(sqrt)|(\342\210\232) { return(WSQRT); }
 exp { return(WEXP); }
 floor { return(WFLOOR); }
 (ceil)|(ceiling) { return(WCEIL); }
@@ -499,10 +516,10 @@ comp { return(WCOMP); }
 
 %{ /* if we haven't matched anything yet, then it's illegal */
 	%}
-. { char error[26];
+. { char error[50];
 	if (*yytext == ',') *yytext = conf.thou_delimiter;
 	else if (*yytext == '.') *yytext = conf.dec_delimiter;
-	snprintf(error, 26, "scanner: cannot understand next token (%c)\n", *yytext);
+	snprintf(error, 50, "scanner(%i): cannot understand character (%c)\n", (unsigned char) (*yytext),*yytext);
 	report_error(error);
 	scanerror = 1;}
 
