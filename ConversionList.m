@@ -32,6 +32,11 @@
 - (id)tableView:(NSTableView *)atv objectValueForTableColumn:(NSTableColumn*)col row:(int)rowIndex
 {
 	int type = [theType indexOfSelectedItem];
+	static NSString * reamur = NULL;
+	if (! reamur) {
+		reamur = [NSString stringWithFormat:@"R%Caumur", 0x00e9];
+		[reamur retain];
+	}
 	if (type != TEMPERATURE_C) {
 		return [NSString stringWithCString:conversions[type][rowIndex].name];
 	} else {
@@ -40,7 +45,7 @@
 			case CELSIUS: return @"Celsius";
 			case RANKINE: return @"Rankine";
 			case FARENHEIT: return @"Farenheit";
-			case REAUMUR: return @"RŽaumur";
+			case REAUMUR: return reamur;
 			default:
 				return @"UNKNOWN";
 		}
