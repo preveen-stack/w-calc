@@ -118,41 +118,42 @@ static NSString *curFile = NULL;
 	NSString *str2;
 
 	switch ([sender tag]) {
-		case 1: str2 = @"¹"; break;
+		case 1: str2 = [NSString stringWithFormat:@"%C", 0x03c0]; break;
 		case 2: str2 = @"e"; break;
-		case 3: str2 = @"gamma"; break;
+		case 3: str2 = [NSString stringWithFormat:@"%C", 0x03b3]; break;
 		case 4: str2 = @"g"; break;
 		case 5: str2 = @"Cc"; break;
 
 		case 101: str2 = @"Z0"; break;
-		case 102: str2 = @"epsilon0"; break;
-		case 103: str2 = @"µ0"; break;
+		case 102: str2 = [NSString stringWithFormat:@"%C0", 0x03b5]; break;
+		case 103: str2 = [NSString stringWithFormat:@"%C0", 0x00b5]; break;
 		case 104: str2 = @"G"; break;
 		case 105: str2 = @"h"; break;
 		case 106: str2 = @"c"; break;
 
-		case 201: str2 = @"µB"; break;
-		case 202: str2 = @"µN"; break;
+		case 201: str2 = [NSString stringWithFormat:@"%CB", 0x00b5]; break;
+		case 202: str2 = [NSString stringWithFormat:@"%Cn", 0x00b5]; break;
 		case 203: str2 = @"G0"; break;
 		case 204: str2 = @"ec"; break;
 		case 205: str2 = @"Kj"; break;
 		case 206: str2 = @"Rk"; break;
+		case 207: str2 = [NSString stringWithFormat:@"%C0", 0x03a6]; break;
 
-		case 301: str2 = @"Mampha"; break;
+		case 301: str2 = [NSString stringWithFormat:@"M%C", 0x03b1]; break;
 		case 302: str2 = @"ao"; break;
 		case 303: str2 = @"Md"; break;
 		case 304: str2 = @"Me"; break;
 		case 305: str2 = @"re"; break;
 		case 306: str2 = @"eV"; break;
 		case 307: str2 = @"Gf"; break;
-		case 308: str2 = @"alpha"; break;
+		case 308: str2 = [NSString stringWithFormat:@"%C", 0x03b1]; break;
 		case 309: str2 = @"Eh"; break;
 		case 310: str2 = @"Mh"; break;
-		case 311: str2 = @"Mµ"; break;
+		case 311: str2 = [NSString stringWithFormat:@"m%C", 0x00b5]; break;
 		case 312: str2 = @"Mn"; break;
 		case 313: str2 = @"Mp"; break;
-		case 314: str2 = @"Rinf"; break;
-		case 315: str2 = @"Mt"; break;
+		case 314: str2 = [NSString stringWithFormat:@"R%C", 0x221E]; break;
+		case 315: str2 = [NSString stringWithFormat:@"M%C", 0x03c4]; break;
 
 		case 401: str2 = @"u"; break;
 		case 402: str2 = @"Na"; break;
@@ -163,7 +164,7 @@ static NSString *curFile = NULL;
 		case 407: str2 = @"R"; break;
 		case 408: str2 = @"Vm"; break;
 		case 409: str2 = @"c2"; break;
-		case 410: str2 = @"sigma"; break;
+		case 410: str2 = [NSString stringWithFormat:@"%C", 0x03c3]; break;
 		case 411: str2 = @"b"; break;
 
 		case 6: str2 = @"random"; break;
@@ -354,7 +355,7 @@ static NSString *curFile = NULL;
 	char * expression;
 	extern char * errstring;
 
-	expression = strdup([[ExpressionField stringValue] cString]);
+	expression = strdup([[ExpressionField stringValue] UTF8String]);
 
 	parseme(expression);
 	putval("a",last_answer);
@@ -526,9 +527,20 @@ static NSString *curFile = NULL;
 		case 105: /* the divide key on the onscreen keypad */
 		default:
 			if (! conf.simple_calc) { /* the real power of Wcalc */
+				static NSString *div = NULL;
+				if (div == NULL) { div = [NSString stringWithFormat:@"%C", 0x00f7]; }
 				if (just_answered == FALSE) {
 					[ExpressionField setStringValue:[[ExpressionField stringValue] stringByAppendingString:sent]];
-				} else if ([sent isEqualToString:@"+"] || [sent isEqualToString:@"-"]||[sent isEqualToString:@"*"]||[sent isEqualToString:@"/"]||[sent isEqualToString:@"%"]||[sent isEqualToString:@"+"]||[sent isEqualToString:@"("]||[sent isEqualToString:@"&"]||[sent isEqualToString:@"|"]||[sent isEqualToString:@"Ö"]) {
+				} else if ([sent isEqualToString:@"+"] ||
+						   [sent isEqualToString:@"-"] ||
+						   [sent isEqualToString:@"*"] ||
+						   [sent isEqualToString:@"/"] ||
+						   [sent isEqualToString:@"%"] ||
+						   [sent isEqualToString:@"+"] ||
+						   [sent isEqualToString:@"("] ||
+						   [sent isEqualToString:@"&"] ||
+						   [sent isEqualToString:@"|"] ||
+						   [sent isEqualToString:div]) {
 					[ExpressionField setStringValue:[[@"a" self] stringByAppendingString:sent]];
 				} else {
 					[ExpressionField setStringValue:sent];
