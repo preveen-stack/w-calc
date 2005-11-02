@@ -29,3 +29,5 @@ irandom
 \p-1
 \ints
 100! # should be the same as above
+\ints
+100! # should be abbreviated
