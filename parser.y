@@ -553,8 +553,7 @@ sign : WMINUS { $$ = -1; }
 ;
 
 exp_l2 : exp_l3
-| exp_l3 WSQR { /* this is a dumb feature */
-				mpfr_init($$); mpfr_sqr($$,$1,GMP_RNDN); mpfr_clear($1); }
+| exp_l3 WSQR { mpfr_init($$); mpfr_sqr($$,$1,GMP_RNDN); mpfr_clear($1); }
 | sign exp_l2 oval { mpfr_init($$);
 					 mpfr_mul($2,$2,$3,GMP_RNDN);
 					 mpfr_mul_si($$,$2,$1,GMP_RNDN);
