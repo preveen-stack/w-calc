@@ -71,7 +71,7 @@ char *simpleCalc(unsigned char input, char *expStr)
 			char *tail;
 
 			newStr = (char *)calloc(sizeof(char), strlen(expStr) + 2);
-			tail = stpcpy(newStr, expStr);
+			tail = (char *)stpcpy(newStr, expStr);
 			*tail = input;
 		} else {
 			newStr = (char *)calloc(sizeof(char), 2);
