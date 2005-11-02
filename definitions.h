@@ -40,7 +40,7 @@
 #define W_ELECTRON_VOLT "1.60217653e-19" /* J */
 #define W_STEFAN_BOLTZMANN "5.670400e-8"
 #define W_FINE_STRUCTURE "7.297352568e-3"
-#define W_EULER "0.577215664901532861"
+#define W_EULER "0.57721566490153286060651209008240243104215933593992359880576723488486772677766467093694706329174674951463144724980708248096050401448654283622417399764492353625350033374293733773767394279259525824709491600873520394816567" /* http://primes.utm.edu/glossary/page.php?sort=Gamma */
 #define W_ELECTRON_RADIUS "2.817940325e-15" /* m */
 #define W_JOSEPHSON_CONSTANT "483597.879e9" /* Hz V^-1 */
 #define W_VON_KLITZING_CONSTANT "25812.807449" /* omega */
@@ -61,6 +61,7 @@
 #define W_SECOND_RADIATION_CONSTANT "1.4387752e-2" /* m K */
 #define W_CONDUCTANCE_QUANTUM "7.748091733e-5" /* S */
 #define W_IMPEDANCE_OF_VACUUM "376.730313461" /* ohms */
+#define W_MAGNETIC_FLUX_QUANTUM "2.06783372e-15" /* Wb */
 
 #define SUPPORTED_SYMBOLS \
 "+ - () {} [] * %% / ! ^ > >= < <= == != && || << >> | & ~\n"\
@@ -70,7 +71,7 @@
 "log ln logtwo round abs ceil floor sqrt cbrt comp\n\n"\
 "e pi Na k Cc ec R G g Me Mp Mn Md u amu c h mu0 epsilon0\n"\
 "muB muN b ao F Vm NAk eV sigma alpha gamma re Kj Rk Rinf\n"\
-"Eh Gf Mµ Mmu Mt Mh Malpha n0 c1 c2 G0\n"\
+"Eh Gf Mµ Mmu Mt Mh Malpha n0 c1 c2 G0 Phi0\n"\
 "random irandom rand irand\n"
 
 
