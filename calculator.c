@@ -207,6 +207,8 @@ static struct variable_list *extract_vars(char *str)
 		while (curs && *curs && !isalpha((int)(*curs))) {
 			if (*curs == '\'')
 				return NULL;
+			if (*curs == '#')
+				break;
 			curs++;
 			// skip hex numbers
 			if ((*curs == 'x' || *curs == 'X') && curs != str &&
@@ -225,7 +227,7 @@ static struct variable_list *extract_vars(char *str)
 		}
 
 		// if we didn't find any, we're done looking
-		if (!*curs)
+		if (*curs == 0 || *curs == '#')
 			break;
 
 		// if we did find something, pull out the variable name
@@ -323,7 +325,6 @@ static char *flatten(char *str)
 
 			mpfr_init(f);
 			if (a.exp) {			   // it is an expression
-				printf("parseme\n");
 				parseme(a.exp);
 				mpfr_set(f, last_answer, GMP_RNDN);
 			} else {				   // it is a value
