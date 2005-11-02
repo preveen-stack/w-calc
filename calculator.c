@@ -95,7 +95,7 @@ void parseme(char *pthis)
 	compute = 1;
 	sig_figs = UINT32_MAX;
 
-	sanitized = strdup(pthis);
+	sanitized = (char *)strdup(pthis);
 
 	/* Convert to standard notation (american comma and period) if there are
 	 * numbers */
@@ -237,7 +237,7 @@ static struct variable_list *extract_vars(char *str)
 		}
 		save_char = *eov;
 		*eov = 0;
-		varname = strdup(curs);
+		varname = (char *)strdup(curs);
 		*eov = save_char;
 		curs = eov;
 
@@ -339,7 +339,7 @@ static char *flatten(char *str)
 			free(varname);
 			mpfr_clear(f);
 		} else {					   // not a known var: itza literal (e.g. cos)
-			varvalue = varname;
+			varvalue = (char *)strdup(varname);
 		}
 		nlen = strlen(varvalue);
 
@@ -411,7 +411,7 @@ static int recursion(char *str)
 
 	vlist = extract_vars(str);
 	for (vcurs = vlist; vcurs && !retval; vcurs = vcurs->next) {
-		vstack_base.varname = strdup(vcurs->varname);
+		vstack_base.varname = (char *)strdup(vcurs->varname);
 		vstack_base.next = NULL;
 		retval = find_recursion(&vstack_base);
 		free(vstack_base.varname);
