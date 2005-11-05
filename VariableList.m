@@ -24,11 +24,11 @@
 
 	if ([[col identifier] isEqualToString:@"value"]) {
 		if (keyval->exp)
-			return [NSString stringWithCString:keyval->expression];
+			return [NSString stringWithUTF8String:keyval->expression];
 		else
 			return [NSString localizedStringWithFormat:@"%g",mpfr_get_d(keyval->value, GMP_RNDN)];
 	} else if ([[col identifier] isEqualToString:@"variable"]) {
-		return [NSString stringWithCString:(keyval->key)];
+		return [NSString stringWithUTF8String:(keyval->key)];
 	} else {
 		return @"BAD COLUMN";
 	}
@@ -39,9 +39,9 @@
 	struct variable *theval = getrealnvar(rowIndex);
 	NSString *ch = [col identifier];
 
-//	printf("Column %s, Row %i was %s,%s becomes %s\n", [ch cString], rowIndex, theval->key, theval->value, [anObject cString]);
+//	printf("Column %s, Row %i was %s,%s becomes %s\n", [ch UTF8String], rowIndex, theval->key, theval->value, [anObject UTF8String]);
 	if ([ch isEqualToString:@"value"]) {
-		char * input=strdup([anObject cString]);
+		char * input=strdup([anObject UTF8String]);
 		if (justnumbers(input)) {
 			mpfr_t la;
 
@@ -58,7 +58,7 @@
 	} else if ([ch isEqualToString:@"variable"]) {
 		int i,j;
 		free(theval->key);
-		theval->key = strdup([anObject cString]);
+		theval->key = strdup([anObject UTF8String]);
 		for (j=i=0;i<strlen(theval->key);++i) {
 			if (theval->key[i] != ' ') {
 				theval->key[j] = theval->key[i];

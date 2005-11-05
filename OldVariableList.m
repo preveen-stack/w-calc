@@ -29,15 +29,15 @@
 	for (i=1;i<rowIndex;++i) {
 		cursor = cursor->next;
 	}
-	if (strcmp([[[aTableColumn headerCell] stringValue] cString],"Value")) {
+	if ([[[aTableColumn headerCell] stringValue] isEqualToString:@"Value"]) {
 		printf("Value = %s!\n",strchr(cursor->keyvalue,'=')+1);
-		return [NSString stringWithCString:(strchr(cursor->keyvalue,'=')+1)];
+		return [NSString stringWithUTF8String:(strchr(cursor->keyvalue,'=')+1)];
 	} else {
 		char *temp = strchr(cursor->keyvalue,'=');
 		NSString *foo;
 		*temp=0;
 		printf("Variable! = %s\n",temp2);
-		foo = [NSString stringWithCString:cursor->keyvalue];
+		foo = [NSString stringWithUTF8String:cursor->keyvalue];
 		*temp = '=';
 		return foo;
 	}
