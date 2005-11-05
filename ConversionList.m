@@ -38,7 +38,7 @@
 		[reamur retain];
 	}
 	if (type != TEMPERATURE_C) {
-		return [NSString stringWithCString:conversions[type][rowIndex].name];
+		return [NSString stringWithUTF8String:conversions[type][rowIndex].name];
 	} else {
 		switch (rowIndex) {
 			case KELVIN: return @"Kelvin";

@@ -27,11 +27,11 @@
 				char * temp;
 				extern NSButton *e;
 				extern NSTextField *ef;
-				temp = strdup([[ef stringValue] cString]);
+				temp = strdup([[ef stringValue] UTF8String]);
 				while (strlen(temp) && temp[strlen(temp)-1]=='=') {
 					temp[strlen(temp)-1] = '\0';
 				}
-				[ef setStringValue:[NSString stringWithCString:temp]];
+				[ef setStringValue:[NSString stringWithUTF8String:temp]];
 				if (temp) free(temp);
 				[e performClick:self];
 				break;
@@ -44,7 +44,7 @@
 			default:
 				//			printf("keyup %i => ", keycode);
 	//			fflush(NULL);
- //			printf("%s\n", [[theEvent characters] cString]);
+ //			printf("%s\n", [[theEvent characters] UTF8String]);
 				break;
 		}
 	} else {
@@ -71,14 +71,14 @@
 				char thechar = [[theEvent characters] characterAtIndex:0];
 				char * ret;
 				char * exp;
-				exp = strdup([[self stringValue] cString]);
-				exp[strlen(exp)-1] = 0;
+				unsigned len = [[self stringValue] length];
+				exp = strdup([[[self stringValue] substringToIndex:len-1] UTF8String]);
 				ret = simpleCalc(thechar,exp);
 				if (ret) {
-					[self setStringValue:[NSString stringWithCString:ret]];
+					[self setStringValue:[NSString stringWithUTF8String:ret]];
 					free(ret);
 				} else {
-					[self setStringValue:[NSString stringWithCString:exp]];
+					[self setStringValue:[NSString stringWithUTF8String:exp]];
 					[mainController displayAnswer];
 				}
 				free(exp);

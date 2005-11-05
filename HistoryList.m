@@ -21,7 +21,7 @@
 	if (! val)
 		return @"BAD ROW";
 
-	return [NSString stringWithCString:val];
+	return [NSString stringWithUTF8String:val];
 }
 
 - (IBAction)rowSelected:(id)sender
@@ -29,7 +29,7 @@
 	int row = [sender selectedRow];
 //	printf("selected: %i\n",[sender selectedRow]);
 	if (row > -1) {
-		[expressionField setStringValue:[NSString stringWithCString:historynum([sender selectedRow],1)]];
+		[expressionField setStringValue:[NSString stringWithUTF8String:historynum([sender selectedRow],1)]];
 	}
 	[expressionField selectText:self];
 }
