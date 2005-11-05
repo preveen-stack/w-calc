@@ -290,7 +290,7 @@ not|\302\254			{ return(WNOT); }
 [*][*]|\302\262			{ return(WSQR); }
 [+]						{ return(WPLUS); }
 [*]|\303\227			{ return(WMULT); }
-[/]|\267				{ return(WDIV); }
+[/]|\303\267			{ return(WDIV); }
 [%]						{ return(WMOD); }
 [=]						{ return(WEQL); }
 (\^)					{ return(WPOW); }
@@ -519,7 +519,7 @@ comp { return(WCOMP); }
 . { char error[50];
 	if (*yytext == ',') *yytext = conf.thou_delimiter;
 	else if (*yytext == '.') *yytext = conf.dec_delimiter;
-	snprintf(error, 50, "scanner(%i): cannot understand character (%c)\n", (unsigned char) (*yytext),*yytext);
+	snprintf(error, 50, "scanner(%i): cannot understand character\n", (unsigned char) (*yytext));
 	report_error(error);
 	scanerror = 1;}
 
