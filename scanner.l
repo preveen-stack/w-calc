@@ -327,10 +327,10 @@ sinh { return(WSINH); }
 cosh { return(WCOSH); }
 tanh { return(WTANH); }
 coth { return(WCOTH); }
-(asinh)|(arcsinh)|(sinh^-1) { return(WASINH); }
-(acosh)|(arccosh)|(cosh^-1) { return(WACOSH); }
-(atanh)|(arctanh)|(tanh^-1) { return(WATANH); }
-(acoth)|(arccoth)|(tanh^-1) { return(WACOTH); }
+asinh|arsinh|areasinh|(sinh^-1) { return(WASINH); }
+acosh|arcosh|areacosh|(cosh^-1) { return(WACOSH); }
+atanh|artanh|areatanh|(tanh^-1) { return(WATANH); }
+acoth|arcoth|areacoth|(tanh^-1) { return(WACOTH); }
 log { return(WLOG); }
 logtwo { return(WLOGTWO); }
 ln { return(WLN); }
