@@ -103,10 +103,10 @@ static NSString *curFile = NULL;
 
 - (IBAction)clear:(id)sender
 {
-	if ([[ExpressionField stringValue] cStringLength]) {
+	if ([[ExpressionField stringValue] length]) {
 		[ExpressionField setStringValue:@""];
 		[ExpressionField selectText:self];
-	} else if ([[AnswerField stringValue] cStringLength]) {
+	} else if ([[AnswerField stringValue] length]) {
 		[AnswerField setStringValue:@""];
 		[ExpressionField selectText:self];
 	}
@@ -225,7 +225,9 @@ static NSString *curFile = NULL;
 	NSRect w;
 	NSSize bounds;
 
+	Dprintf("awakeFromNib\n");
 	if (! [prefs integerForKey:@"initialized"]) {
+		Dprintf("prefs not initialized\n");
 		[prefs setObject:@"1" forKey:@"initialized"];
 		[prefs setObject:@"-1" forKey:@"precision"];
 		[prefs setObject:@"NO" forKey:@"engineeringNotation"];
@@ -245,6 +247,7 @@ static NSString *curFile = NULL;
 		[prefs setObject:@"1000" forKey:@"historyLimitLength"];
 		[prefs setObject:@"NO" forKey:@"printInts"];
 		[prefs setObject:@"NO" forKey:@"simpleCalc"];
+		Dprintf("initializing finished\n");
 	}
 	conf.precision = [prefs integerForKey:@"precision"];
 	conf.engineering = [prefs boolForKey:@"engineeringNotation"];
@@ -264,29 +267,50 @@ static NSString *curFile = NULL;
 	conf.remember_errors = [prefs boolForKey:@"rememberErrors"];
 	conf.history_limit = [prefs boolForKey:@"historyLimit"];
 	conf.history_limit_len = [prefs integerForKey:@"historyLimitLen"];
+	Dprintf("preferences read\n");
 
 	[PrecisionSlider setIntValue:conf.precision];
+	Dprintf("precision slider\n");
 	just_answered = FALSE;
 
 	/* Set up the character translation */
-	conf.dec_delimiter = [[prefs objectForKey:NSDecimalSeparator] characterAtIndex:0];
-	conf.thou_delimiter = [[prefs objectForKey:NSThousandsSeparator] characterAtIndex:0];
+	if ([[prefs objectForKey:NSDecimalSeparator] length] > 0) {
+		Dprintf("NSDecimalSeparator > 0\n");
+		conf.dec_delimiter = [[prefs objectForKey:NSDecimalSeparator] characterAtIndex:0];
+	} else {
+		conf.dec_delimiter = '.';
+	}
+	Dprintf("NSDecimalSeparator set\n");
+	if ([[prefs objectForKey:NSThousandsSeparator] length] > 0) {
+		Dprintf("thou_delimiter length > 0\n"); fflush(NULL);
+		conf.thou_delimiter = [[prefs objectForKey:NSThousandsSeparator] characterAtIndex:0];
+	} else {
+		conf.thou_delimiter = 0;
+	}
+	Dprintf("NSThousandsSeparator set\n");
 	[decimalKey setAttributedTitle:[prefs objectForKey:NSDecimalSeparator]];
+	Dprintf("decimalKey title set\n");
 
 	/* reset the window to the saved setting */
 	superview = [keypad superview];
 	[keypad retain];
 	[PrecisionSlider retain];
 	[ExpressionField retain];
+	Dprintf("interface retained\n");
 	[mainWindow useOptimizedDrawing:TRUE];
 	[mainWindow setFrameAutosaveName:@"wcalc"];
+	Dprintf("frame autosave set\n");
 	w = [mainWindow frame];
 	if ([prefs boolForKey:@"toggled"]) {
+		Dprintf("window is toggled\n");
 		w.size.height += KEYPAD_HEIGHT;
 		w.origin.y -= KEYPAD_HEIGHT;
 		[mainWindow setFrame:w display:TRUE animate:FALSE];
+		Dprintf("frame set\n");
 		[self toggleSize:0];
+		Dprintf("toggled\n");
 	} else {
+		Dprintf("window not toggled\n");
 		w.size.width = MIN_WINDOW_WIDTH;
 		[mainWindow setFrame:w display:TRUE animate:FALSE];
 		bounds.width = MIN_WINDOW_WIDTH;
@@ -295,6 +319,7 @@ static NSString *curFile = NULL;
 		bounds.width = MIN_WINDOW_WIDTH;
 		bounds.height = MAX_WINDOW_SIZE;
 		[mainWindow setMaxSize:bounds];
+		Dprintf("window size restored\n");
 	}
 //	w = [mainWindow frame];
 //	bounds = [mainWindow minSize];
@@ -304,20 +329,31 @@ static NSString *curFile = NULL;
 
 	/* this restores the drawer states */
 	if ([prefs boolForKey:@"historyShowing"]) {
+		Dprintf("history showing\n");
 		[NSTimer scheduledTimerWithTimeInterval:0 target:self selector:@selector(openIDrawer:) userInfo:nil repeats:NO];
+		Dprintf("history drawer displayed\n");
 	}
 	if ([prefs boolForKey:@"baseShowing"]) {
+		Dprintf("base showing\n");
 		[NSTimer scheduledTimerWithTimeInterval:0 target:self selector:@selector(openBDrawer:) userInfo:nil repeats:NO];
+		Dprintf("base drawer displayed\n");
 	}
+	Dprintf("done with drawers\n");
 
 	/* set the correct expression display for simple_calc */
 	if (conf.simple_calc) {
+		Dprintf("simple calc\n");
 		[ExpressionField setStringValue:@"0"];
 		[AnswerField setStringValue:@"0"];
+		Dprintf("values zeroed\n");
 		simpleClearAll();
+		Dprintf("simple all cleared\n");
 	}
+	Dprintf("default precision is...\n");
 	mpfr_set_default_prec(1024);
+	Dprintf("1024\n");
 	mpfr_init_set_ui(last_answer, 0, GMP_RNDN);
+	Dprintf("last answer cleared\n");
 }
 
 - (void)openBDrawer: (id) sender
@@ -373,11 +409,13 @@ static NSString *curFile = NULL;
 {
 	extern char * errstring;
 
+	Dprintf("display answer\n");
 	/* if there is an error, display it */
 	if (errstring && strlen(errstring)) {
 		extern int scanerror;
 		scanerror = 0;
-		[errorController throwAlert:[NSString stringWithCString:errstring]];
+		Dprintf("%s\n",errstring);
+		[errorController throwAlert:[NSString stringWithUTF8String:errstring]];
 		free(errstring);
 		errstring = NULL;
 	}
@@ -441,7 +479,7 @@ static NSString *curFile = NULL;
 
 	uber_conversion(last_answer, type, from, to, last_answer);
 	set_prettyanswer(last_answer);
-	[AnswerField setStringValue:[NSString stringWithCString:(pretty_answer?pretty_answer:"Not Enough Memory")]];
+	[AnswerField setStringValue:[NSString stringWithUTF8String:(pretty_answer?pretty_answer:"Not Enough Memory")]];
 	putval("a",last_answer);
 	if ([theDrawer state]) {
 		[variableList reloadData];
@@ -450,8 +488,7 @@ static NSString *curFile = NULL;
 
 - (IBAction)enterData:(id)sender
 {
-	NSString * sent = [[sender attributedTitle] string];
-	char * str = strdup([[ExpressionField stringValue] cString]);
+	NSString * sent = [NSString stringWithString:[[sender attributedTitle] string]];
 	static short shiftdown = 0, capsdown = 0;
 	int tag;
 
@@ -459,17 +496,17 @@ static NSString *curFile = NULL;
 	tag = [sender tag];
 	switch (tag) {
 		case 101: /* delete key on the onscreen keyboard */
-			if (strlen(str)) {
-				str[strlen(str)-1] = 0;
-				[ExpressionField setStringValue:[NSString stringWithCString:str]];
+			if ([[ExpressionField stringValue] length] > 0) {
+				unsigned len = [[ExpressionField stringValue] length];
+				[ExpressionField setStringValue:[[ExpressionField stringValue] substringToIndex:len-1]];
 			}
 			break;
 		case 100: /* clear key on the onscreen keypad */
 			if (!conf.simple_calc) {
-				if ([[ExpressionField stringValue] cStringLength]) {
+				if ([[ExpressionField stringValue] length] > 0) {
 					[ExpressionField setStringValue:@""];
 					[ExpressionField selectText:self];
-				} else if ([[AnswerField stringValue] cStringLength]) {
+				} else if ([[AnswerField stringValue] length] > 0) {
 					[AnswerField setStringValue:@""];
 					[ExpressionField selectText:self];
 				}
@@ -511,11 +548,11 @@ static NSString *curFile = NULL;
 			if (! conf.simple_calc) {
 				[self go:sender];
 			} else {
-				char * exp = strdup([[ExpressionField stringValue] cString]);
+				char * exp = strdup([[ExpressionField stringValue] UTF8String]);
 				char * ret;
 				ret = simpleCalc('=',exp);
 				if (ret) {
-					[ExpressionField setStringValue:[NSString stringWithCString:ret]];
+					[ExpressionField setStringValue:[NSString stringWithUTF8String:ret]];
 					free(ret);
 				} else {
 					[self displayAnswer];
@@ -527,8 +564,6 @@ static NSString *curFile = NULL;
 		case 105: /* the divide key on the onscreen keypad */
 		default:
 			if (! conf.simple_calc) { /* the real power of Wcalc */
-				static NSString *div = NULL;
-				if (div == NULL) { div = [NSString stringWithFormat:@"%C", 0x00f7]; }
 				if (just_answered == FALSE) {
 					[ExpressionField setStringValue:[[ExpressionField stringValue] stringByAppendingString:sent]];
 				} else if ([sent isEqualToString:@"+"] ||
@@ -536,11 +571,10 @@ static NSString *curFile = NULL;
 						   [sent isEqualToString:@"*"] ||
 						   [sent isEqualToString:@"/"] ||
 						   [sent isEqualToString:@"%"] ||
-						   [sent isEqualToString:@"+"] ||
 						   [sent isEqualToString:@"("] ||
 						   [sent isEqualToString:@"&"] ||
 						   [sent isEqualToString:@"|"] ||
-						   [sent isEqualToString:div]) {
+						   [sent isEqualToString:[NSString stringWithFormat:@"%C",0x00f7]]) {
 					[ExpressionField setStringValue:[[@"a" self] stringByAppendingString:sent]];
 				} else {
 					[ExpressionField setStringValue:sent];
@@ -553,7 +587,7 @@ static NSString *curFile = NULL;
 				just_answered = FALSE;
 			} else { /* stupid calculator */
 				char *ret, *exp;
-				exp = strdup([[ExpressionField stringValue] cString]);
+				exp = strdup([[ExpressionField stringValue] UTF8String]);
 				if (tag == 105) {
 					ret = simpleCalc('/',exp);
 				} else {
@@ -561,7 +595,7 @@ static NSString *curFile = NULL;
 				}
 				free(exp);
 				if (ret) {
-					[ExpressionField setStringValue:[NSString stringWithCString:ret]];
+					[ExpressionField setStringValue:[NSString stringWithUTF8String:ret]];
 					free(ret);
 				} else {
 					[self displayAnswer];
@@ -571,7 +605,6 @@ static NSString *curFile = NULL;
 			break;
 	}
 	[ExpressionField setEditable:TRUE];
-	free(str);
 }
 
 - (IBAction)shConversions:(id)sender
@@ -775,7 +808,7 @@ static NSString *curFile = NULL;
 		case 1:
 			set_prettyanswer(last_answer);
 
-			[AnswerField setStringValue:[NSString stringWithCString:(pretty_answer?pretty_answer:"Not Enough Memory")]];
+			[AnswerField setStringValue:[NSString stringWithUTF8String:(pretty_answer?pretty_answer:"Not Enough Memory")]];
 			[AnswerField setTextColor:((not_all_displayed)?([NSColor redColor]):([NSColor blackColor]))];
 
 			if ([theDrawer state] || recalculate) {
@@ -823,7 +856,7 @@ static NSString *curFile = NULL;
 			int retval;
 			extern char * errstring;
 			curFile = [filesToOpen objectAtIndex:i];
-			retval = loadState(strdup([curFile cString]));
+			retval = loadState(strdup([curFile UTF8String]));
 			if ([theDrawer state]) {
 				[variableList reloadData];
 				[historyList reloadData];
@@ -832,7 +865,7 @@ static NSString *curFile = NULL;
 			if (errstring && strlen(errstring)) {
 				extern int scanerror;
 				scanerror = 0;
-				[errorController throwAlert:[NSString stringWithCString:errstring]];
+				[errorController throwAlert:[NSString stringWithUTF8String:errstring]];
 				free(errstring);
 				errstring = NULL;
 			}
@@ -849,9 +882,9 @@ static NSString *curFile = NULL;
 - (void)displayErrno:(int)err forFile:(NSString*)filename
 {
 	char * errstr;
-	errstr = malloc(strlen(strerror(errno))+[filename cStringLength]+3);
-	sprintf(errstr,"%s: %s",[filename cString], strerror(errno));
-	[errorController throwAlert:[NSString stringWithCString:errstr]];
+	errstr = malloc(strlen(strerror(errno))+[filename length]+3);
+	sprintf(errstr,"%s: %s",[filename UTF8String], strerror(errno));
+	[errorController throwAlert:[NSString stringWithUTF8String:errstr]];
 	free(errstr);
 }
 
@@ -894,7 +927,7 @@ static NSString *curFile = NULL;
 		[self saveAs:sender];
 	} else {
 		int retval;
-		retval = saveState(strdup([curFile cString]));
+		retval = saveState(strdup([curFile UTF8String]));
 		if (retval)
 			[self displayErrno:retval forFile:curFile];
 	}
