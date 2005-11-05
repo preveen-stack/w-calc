@@ -4,7 +4,7 @@
 
 - (IBAction)closeAlert:(id)sender
 {
-	[errorMessage setString:[NSString stringWithCString:""]];
+	[errorMessage setString:@""];
 	[errorDialog close];
 }
 
@@ -20,7 +20,7 @@
 	[errorDialog center];
 	[errorMessage setEditable:true];
 	[errorMessage insertText:message];
-	[errorMessage insertText:[NSString stringWithCString:"\n"]];
+	[errorMessage insertText:@"\n"];
 	[errorMessage setEditable:false];
 	NSBeep();
 }
