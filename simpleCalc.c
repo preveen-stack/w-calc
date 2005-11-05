@@ -42,7 +42,7 @@ char *simpleCalc(unsigned char input, char *expStr)
 {
 	simpleCalcInit();
 	Dprintf("simpleCalc: %c, %s\n",input,expStr);
-	Dprintf(" ~ cur: %f, prev: %f\n",cur_number, prev_number);
+	Dprintf(" ~ cur: %f, prev: %f\n",mpfr_get_d(cur_number,GMP_RNDN), mpfr_get_d(prev_number,GMP_RNDN));
 	if (input == '+' || input == '-' || input == '*' || input == '/') {
 		// if the input is one of the operators
 		append = 0;
