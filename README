@@ -71,7 +71,7 @@ log ln logtwo round abs ceil floor sqrt cbrt comp
 Wcalc has a few built-in constants:
 e pi Na k Cc ec R G g Me Mp Mn Md u amu c h mu0 epsilon0
 muB muN b ao F Vm NAk eV sigma alpha gamma re Kj Rk Rinf
-Eh Gf Mµ Mmu Mt Mh Malpha n0 c1 c2 G0
+Eh Gf Mmu Mt Mh Malpha n0 c1 c2 G0 Phi0
 random irandom rand irand
 
 Wcalc supports user-defined variables. You define a variable like this:
