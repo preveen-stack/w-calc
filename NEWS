@@ -1,3 +1,14 @@
+--- Version 2.1.1 ---
+Nov 05 2005 - Kyle Wheeler
+ - Corrected UTF-8 parsing (thanks Marco Thill!) (BOTH)
+ - Corrected areasinh function names (thanks Marco Thill!) (BOTH)
+ - Compatibility with locales without thousands separators (thanks Marco Thill!) (GUI)
+ - Fixed repeat calculations bug (GUI)
+ - Fixed error reporting (GUI)
+Nov 02 2005 - Kyle Wheeler
+ - Fix possible double-free (BOTH)
+ - Fix logic errors in variable handling: variables where one is the prefix of another will not be confused (BOTH)
+ - Correct unabbreviated integer output for big numbers (BOTH)
 --- Version 2.1 ---
 Nov 01 2005 - Kyle Wheeler
  - Make UTF-8 compatable (BOTH)

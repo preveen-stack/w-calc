@@ -1,3 +1,130 @@
+2005-11-05 11:53  memoryhole
+
+	* WcalcController.m: improve utf-8 friendliness, add debug
+	  printouts in loading sequence, fix compatability with locales
+	  without NSThousandsSeparators, fix repeat calculation bug
+
+2005-11-05 11:49  memoryhole
+
+	* scanner.l: correct name for the asinh,acosh,atanh,acoth functions
+
+2005-11-05 11:48  memoryhole
+
+	* ReadMe.rtf: text only now
+
+2005-11-05 10:50  memoryhole
+
+	* English.lproj/InfoPlist.strings: binary-fied
+
+2005-11-05 10:49  memoryhole
+
+	* English.lproj/InfoPlist.strings: step 1 in binary-fying it
+
+2005-11-05 10:48  memoryhole
+
+	* simpleCalc.c: fixed debug output
+
+2005-11-05 10:47  memoryhole
+
+	* scanner.l: fixed the division symbol and made it so the
+	  error-reporter won't break the GUI by printing malformed UTF-8
+
+2005-11-05 10:45  memoryhole
+
+	* definitions.h: preparing for 2.1.1
+
+2005-11-05 10:44  memoryhole
+
+	* OldVariableList.m, VariableList.m: made utf-8 friendly
+
+2005-11-05 10:18  memoryhole
+
+	* Info.plist: preparing for 2.1.1
+
+2005-11-05 10:17  memoryhole
+
+	* ErrorController.m: minor obvious optimizations (what was I
+	  thinking?)
+
+2005-11-05 10:17  memoryhole
+
+	* ConversionList.m, HistoryList.m, MyTextField.m: made utf-8
+	  friendly
+
+2005-11-05 10:05  memoryhole
+
+	* English.lproj/MainMenu.nib/keyedobjects.nib: presto: binary
+
+2005-11-05 10:04  memoryhole
+
+	* English.lproj/MainMenu.nib/keyedobjects.nib: step 1 to proper
+	  cvsage
+
+2005-11-05 10:03  memoryhole
+
+	* English.lproj/MainMenu.nib/info.nib: Re-add as binary
+
+2005-11-05 10:03  memoryhole
+
+	* English.lproj/MainMenu.nib/info.nib: Step 1 to making it work
+	  properly
+
+2005-11-05 10:01  memoryhole
+
+	* English.lproj/MainMenu.nib/classes.nib: Re-adding with wrapper
+
+2005-11-05 09:58  memoryhole
+
+	* English.lproj/MainMenu.nib/classes.nib: Step 1 to adding it
+	  "properly"
+
+2005-11-02 13:20  memoryhole
+
+	* test.simple: \ints tests
+
+2005-11-02 13:19  memoryhole
+
+	* calculator.c: correct \ints output for small numbers (I am still
+	  a moron)
+
+2005-11-02 13:11  memoryhole
+
+	* calculator.c: correct \ints output for big numbers (I am a moron)
+
+2005-11-02 13:10  memoryhole
+
+	* variables.c: fix logic errors introduced by the openbsd strncmp
+	  fixes: now variables where one is a prefix of the other will not
+	  be confused
+
+2005-11-02 13:07  memoryhole
+
+	* test.errors, test.recursion, test.simple, test.vars: comments
+	  that say what you should expect
+
+2005-11-02 12:02  memoryhole
+
+	* calculator.c: small optimization and remove a debug printout
+
+2005-11-02 10:55  memoryhole
+
+	* calculator.c: fix possible double-free plus some casting warnings
+
+2005-11-02 10:53  memoryhole
+
+	* simpleCalc.c: warning removal through casting
+
+2005-11-02 01:48  memoryhole
+
+	* Info.plist, Makefile.in, NEWS, README.txt, Wcalc.pmproj,
+	  configure, configure.in, wcalc.info, wcalc.spec,
+	  English.lproj/InfoPlist.strings, Wcalc.xcodeproj/kyle.mode1,
+	  Wcalc.xcodeproj/kyle.pbxuser: post-version 2.1-release commit
+
+2005-11-01 23:50  memoryhole
+
+	* ChangeLog: cvs2cl
+
 2005-11-01 22:55  memoryhole
 
 	* Makefile.in: changed with Makefile.am

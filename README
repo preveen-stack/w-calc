@@ -1,1 +1,137 @@
-The real README is ReadMe.rtf.
+Hello!
+
+This is Wcalc 2.1.1!
+
+1. What's New
+2. Intro
+3. Installation
+4. License
+5. Known Bugs
+6. Contact Info
+
+**************
+* What's New *
+**************
+
+BUGFIXES:
+ - Fixed logic errors in variable handling: variables where one is the prefix of another will not be confused (BOTH)
+ - Correct unabbreviated integer output for big numbers (BOTH)
+ - Corrected UTF-8 parsing (thanks Marco Thill!) (BOTH)
+ - Corrected areasinh function names (thanks Marco Thill!) (BOTH)
+ - Compatibility with locales without thousands separators  (thanks Marco Thill!) (GUI)
+ - Fixed repeat calculations bug (GUI)
+ - Fixed error reporting (GUI)
+ - Fixed memory leaks and general bugfixes (BOTH)
+
+*********
+* INTRO *
+*********
+
+Wcalc started as a project written for my C++ class at Ohio University (CS 240B), way back on January 14th, 2000. I made it to be a "natural language" calculator - in that it would successfully interpret any valid mathematical expression. As you can imagine, being a beginner programmer, the code was rather heinous, to say the least!
+
+I reworked it after learning lex and yacc (powerful string parsing tools for C programmers - if you're a C programmer and you don't know them... go google!) in November 2001. Then I thought to myself - I have MacOS X, the standard calculator leaves something to be desired, and they say Cocoa programming is easy... what the heck, I'll give it a shot. Wcalc has turned out better than I thought it would - so I'm putting it on the web, for you! (If you're curious, yes, Cocoa is as wonderful as they say.)
+
+I keep refining and adding to its capabilities - both the GUI/Cocoa version and the command line version (they use the same innards). I think I may personally use the command line version more frequently, but both are excellent (I have fun with the GUI).
+
+Wcalc takes "expressions" and calculates the answer. My goal was to make the expressions relatively intutive - no reverse polish, or anything like that. So, by way of a record, here is what Wcalc can do:
+
+**********
+* Syntax *
+**********
+
+Wcalc recognizes the following symbols:
++ (plus)
+- (minus)
+* (multiply)
+/ (divide)
+% (modulo (read: the remainder when integers are divided))
+! (factorial or boolean NOT)
+^ (exponent. four squared is 4^2)
+> (less than)
+< (greater than)
+<= (less than or equal to)
+>= (greater than or equal to)
+== (equal)
+!= (not equal)
+&& (logical and)
+|| (logical or)
+<< (bitshift left)
+>> (bitshift right)
+| (bitwise or)
+~ (bitwise not)
+& (bitwise and)
+
+Wcalc also allows you to group operations with parenthesis (), brackets [], and braces {}.
+
+Wcalc supports the following functions:
+sin cos tan cot asin acos atan acot
+sinh cosh tanh coth asinh acosh atanh acoth
+log ln logtwo round abs ceil floor sqrt cbrt comp
+
+Wcalc has a few built-in constants:
+e pi Na k Cc ec R G g Me Mp Mn Md u amu c h mu0 epsilon0
+muB muN b ao F Vm NAk eV sigma alpha gamma re Kj Rk Rinf
+Eh Gf Mµ Mmu Mt Mh Malpha n0 c1 c2 G0
+random irandom rand irand
+
+Wcalc supports user-defined variables. You define a variable like this:
+mynewvariable=5
+Then you can use it in an expression like this: 1+3*mynewvariable/4
+
+You can also define "active" variables. In the GUI, just type an expression into the appropriate spot of the variable list. In the command-line, when you assign a variable, put it in single-quotes, like this:
+twicepreviousanswer='a * 2'
+In expressions, these work just like regular variables, except the value is calculated when it's used, not when it's defined.
+
+Some special notes about variables - two things are reserved:
+a - this variable represents the last answer, and may be used in expressions.
+q - this variable is reserved in the command-line version (it means quit), and cannot be used in expressions.
+Also, built-in constants cannot be re-defined, although they are treated as variables in all other cases.
+
+*********
+* Bases *
+*********
+
+When you type a number into Wcalc, the number is normally assumed to be in decimal form. However, if the number has a prefix, it may be interpreted as a different form number. Specifically:
+
+0x - this means "the following is a hexadecimal"
+0 - this means "the following is octal"
+0b - this means "the following is binary"
+
+This prefix affects only the number it prefixes, and none of the other numbers in the expression.
+
+Answers are, by default, displayed in decimal form. This can be changed in the preferences window - and display of the prefixes can be toggled in the preferences window as well. You can also change the display using the \hex, \oct, \bin, or \dec commands.
+
+You can, however, print a number in any base (without a prefix) by using the \base command.
+
+****************
+* Installation *
+****************
+
+Installing the regular (GUI) version of Wcalc is easy - copy it to your Applications folder! To install the command-line version on OSX, use the .pkg file.
+
+For people who may install and use Wcalc on other Unix systems, there are other packages available for download. The source for Wcalc is available on SourceForge from the Wcalc home page, and some RPM packages are available as well. Install as you would usually install from source or from RPM. If you're really new to this sort of thing, there's some information in the INSTALL file.
+
+***********
+* License *
+***********
+
+Wcalc is made available under the GNU Public License (GPL), version 2. The full text of the License is in the file titled COPYING as distributed with the source, or is available here:
+http://www.gnu.org/copyleft/gpl.html
+
+The general gist of the GPL is this: This program is free. You may do as you like with it, including sell the binaries, as long as you don't modify the program or use it as part of another program. If, however, you download the source code of this program and either modify the source (and give it to people) or use pieces of the source in your own program (and give THAT to people), you must distribute that program and its source code under the GPL as well.
+
+**************
+* Known Bugs *
+**************
+
+There are still some problems in the grammar with implicit multiplication in exotic cases... they aren't too big, because you can get around them by simply being explicit, but I'm working on fixing that. (The grammar is hard!)
+
+If you find more bugs, please LET ME KNOW!
+
+****************
+* Contact Info *
+****************
+
+The Wcalc homepage is http://w-calc.sourceforge.net/
+
+Contact me at kyle-wcalc-sf@memoryhole.net
