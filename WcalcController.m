@@ -126,13 +126,13 @@ static NSString *curFile = NULL;
 
 		case 101: str2 = @"Z0"; break;
 		case 102: str2 = [NSString stringWithFormat:@"%C0", 0x03b5]; break;
-		case 103: str2 = [NSString stringWithFormat:@"%C0", 0x00b5]; break;
+		case 103: str2 = [NSString stringWithFormat:@"%C0", 0x03bc]; break;
 		case 104: str2 = @"G"; break;
 		case 105: str2 = @"h"; break;
 		case 106: str2 = @"c"; break;
 
-		case 201: str2 = [NSString stringWithFormat:@"%CB", 0x00b5]; break;
-		case 202: str2 = [NSString stringWithFormat:@"%Cn", 0x00b5]; break;
+		case 201: str2 = [NSString stringWithFormat:@"%CB", 0x03bc]; break;
+		case 202: str2 = [NSString stringWithFormat:@"%CN", 0x03bc]; break;
 		case 203: str2 = @"G0"; break;
 		case 204: str2 = @"ec"; break;
 		case 205: str2 = @"Kj"; break;
@@ -149,7 +149,7 @@ static NSString *curFile = NULL;
 		case 308: str2 = [NSString stringWithFormat:@"%C", 0x03b1]; break;
 		case 309: str2 = @"Eh"; break;
 		case 310: str2 = @"Mh"; break;
-		case 311: str2 = [NSString stringWithFormat:@"m%C", 0x00b5]; break;
+		case 311: str2 = [NSString stringWithFormat:@"m%C", 0x03bc]; break;
 		case 312: str2 = @"Mn"; break;
 		case 313: str2 = @"Mp"; break;
 		case 314: str2 = [NSString stringWithFormat:@"R%C", 0x221E]; break;
@@ -172,7 +172,7 @@ static NSString *curFile = NULL;
 		default: return;
 	}
 	if ([str length]) {
-		NSString *str3 = @"*";
+		NSString *str3 = [NSString stringWithFormat:@"%C",0x00d7];
 		[ExpressionField setStringValue:[str stringByAppendingString:[str3 stringByAppendingString:str2]]];
 	} else {
 		[ExpressionField setStringValue:str2];
