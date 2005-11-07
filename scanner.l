@@ -203,7 +203,7 @@ c				{ mpfr_init_set_str(YYLVALAC->number,W_SPEED_OF_LIGHT,0,GMP_RNDN);
 				  return(NUMBER); }
 h				{ mpfr_init_set_str(YYLVALAC->number,W_PLANCK_CONSTANT,0,GMP_RNDN);
 				  return(NUMBER); }
-((\302\265)(0))|(mu((0)|((zero)|(ZERO)))) {
+(\302\265|\316\274|mu)(0|zero|ZERO) {
 				  mpfr_t temp;
 				  mpfr_init(YYLVALAC->number);
 				  mpfr_init(temp);
@@ -215,9 +215,9 @@ h				{ mpfr_init_set_str(YYLVALAC->number,W_PLANCK_CONSTANT,0,GMP_RNDN);
 				  return(NUMBER); }
 (epsilon|EPSILON|\316\265)(0|zero|ZERO) { mpfr_init_set_str(YYLVALAC->number,W_PERMITTIVITY_OF_FREE_SPACE,0,GMP_RNDN);
 				  return(NUMBER); }
-(\302\265|mu)B	{ mpfr_init_set_str(YYLVALAC->number,W_BOHR_MAGNETON,0,GMP_RNDN);
+(\302\265|\316\274|mu)B	{ mpfr_init_set_str(YYLVALAC->number,W_BOHR_MAGNETON,0,GMP_RNDN);
 				  return(NUMBER); }
-(\302\265|mu)N	{ mpfr_init_set_str(YYLVALAC->number,W_NUCLEAR_MAGNETON,0,GMP_RNDN);
+(\302\265|\316\274|mu)N	{ mpfr_init_set_str(YYLVALAC->number,W_NUCLEAR_MAGNETON,0,GMP_RNDN);
 				  return(NUMBER); }
 b				{ mpfr_init_set_str(YYLVALAC->number,W_WIEN_DISPLACEMENT,0,GMP_RNDN);
 				  return(NUMBER); }
@@ -247,7 +247,7 @@ Eh				{ mpfr_init_set_str(YYLVALAC->number,W_HARTREE_ENERGY,0,GMP_RNDN);
 				  return(NUMBER); }
 Gf				{ mpfr_init_set_str(YYLVALAC->number,W_FERMI_COUPLING_CONSTANT,0,GMP_RNDN);
 				  return(NUMBER); }
-M((\302\265)|mu)	{ mpfr_init_set_str(YYLVALAC->number,W_MUON_MASS,0,GMP_RNDN);
+M(\302\265|\316\274|mu)	{ mpfr_init_set_str(YYLVALAC->number,W_MUON_MASS,0,GMP_RNDN);
 				  return(NUMBER); }
 M(t|tau|\317\204)				{ mpfr_init_set_str(YYLVALAC->number,W_TAU_MASS,0,GMP_RNDN);
 				  return(NUMBER); }
