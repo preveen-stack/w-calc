@@ -4594,9 +4594,9 @@ fi
 fi
 
 
-echo "$as_me:$LINENO: checking for mpfr_add in -lmpfr" >&5
-echo $ECHO_N "checking for mpfr_add in -lmpfr... $ECHO_C" >&6
-if test "${ac_cv_lib_mpfr_mpfr_add+set}" = set; then
+echo "$as_me:$LINENO: checking for mpfr_sqr in -lmpfr" >&5
+echo $ECHO_N "checking for mpfr_sqr in -lmpfr... $ECHO_C" >&6
+if test "${ac_cv_lib_mpfr_mpfr_sqr+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
   ac_check_lib_save_LIBS=$LIBS
@@ -4614,11 +4614,11 @@ extern "C"
 #endif
 /* We use char because int might match the return type of a gcc2
    builtin and then its argument prototype would still apply.  */
-char mpfr_add ();
+char mpfr_sqr ();
 int
 main ()
 {
-mpfr_add ();
+mpfr_sqr ();
   ;
   return 0;
 }
@@ -4645,20 +4645,20 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-  ac_cv_lib_mpfr_mpfr_add=yes
+  ac_cv_lib_mpfr_mpfr_sqr=yes
 else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-ac_cv_lib_mpfr_mpfr_add=no
+ac_cv_lib_mpfr_mpfr_sqr=no
 fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
 LIBS=$ac_check_lib_save_LIBS
 fi
-echo "$as_me:$LINENO: result: $ac_cv_lib_mpfr_mpfr_add" >&5
-echo "${ECHO_T}$ac_cv_lib_mpfr_mpfr_add" >&6
-if test $ac_cv_lib_mpfr_mpfr_add = yes; then
+echo "$as_me:$LINENO: result: $ac_cv_lib_mpfr_mpfr_sqr" >&5
+echo "${ECHO_T}$ac_cv_lib_mpfr_mpfr_sqr" >&6
+if test $ac_cv_lib_mpfr_mpfr_sqr = yes; then
   cat >>confdefs.h <<_ACEOF
 #define HAVE_LIBMPFR 1
 _ACEOF
@@ -4666,10 +4666,8 @@ _ACEOF
   LIBS="-lmpfr $LIBS"
 
 else
-  { { echo "$as_me:$LINENO: error: Need MPFR either from GNU MP 4 or separate MPFR package.
-See http://www.mpfr.org or http://swox.com/gmp" >&5
-echo "$as_me: error: Need MPFR either from GNU MP 4 or separate MPFR package.
-See http://www.mpfr.org or http://swox.com/gmp" >&2;}
+  { { echo "$as_me:$LINENO: error: Need MPFR. hee http://www.mpfr.org" >&5
+echo "$as_me: error: Need MPFR. hee http://www.mpfr.org" >&2;}
    { (exit 1); exit 1; }; }
 fi
 

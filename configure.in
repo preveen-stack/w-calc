@@ -26,9 +26,8 @@ fi
 AC_CHECK_LIB(gmp, __gmpz_init, ,
        [AC_CHECK_LIB(gmp, mpz_init, ,
          [AC_CHECK_LIB(gmp2, mpz_init)])])
-AC_CHECK_LIB(mpfr, mpfr_add, , [AC_MSG_ERROR(
-[Need MPFR either from GNU MP 4 or separate MPFR package.
-See http://www.mpfr.org or http://swox.com/gmp])])
+AC_CHECK_LIB(mpfr, mpfr_sqr, , [AC_MSG_ERROR(
+[Need MPFR. hee http://www.mpfr.org])])
 
 # Checks for header files.
 AC_HEADER_STDC
