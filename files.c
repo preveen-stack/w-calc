@@ -63,11 +63,13 @@ int saveState(char *filename)
 				break;
 			}
 			if (keyval->exp) {
-				cptr = keyval->expression;
+				cptr = malloc(strlen(keyval->expression)+3);
+				sprintf(cptr,"'%s'",keyval->expression);
 			} else {
-				cptr = print_this_result(keyval->value);
+				cptr = strdup(print_this_result(keyval->value));
 			}
 			retval = write(fd, cptr, strlen(cptr));
+			free(cptr);
 			if (retval < (int)strlen(cptr)) {
 				return_error = errno;
 				break;
