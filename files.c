@@ -64,7 +64,7 @@ int saveState(char *filename)
 			}
 			if (keyval->exp) {
 				cptr = malloc(strlen(keyval->expression)+3);
-				sprintf(cptr,"'%s'",keyval->expression);
+				snprintf(cptr,strlen(keyval->expression)+3,"'%s'",keyval->expression);
 			} else {
 				cptr = strdup(print_this_result(keyval->value));
 			}
