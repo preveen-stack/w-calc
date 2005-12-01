@@ -3,16 +3,18 @@
 #define WCALC_CONTROLLER_H
 
 #include <Cocoa/Cocoa.h>
+#include "InspectorController.h"
 
 @interface WcalcController : NSObject
 {
-    IBOutlet NSMenuItem *affectDrawerMenu;
     IBOutlet NSMenuItem *affectKeyboardMenu;
 	IBOutlet NSMenuItem *baseMenu;
 	IBOutlet NSMenuItem *saveMenuItem;
 	IBOutlet NSMenuItem *saveAsMenuItem;
 
 	IBOutlet NSWindow *mainWindow;
+	IBOutlet NSWindow *inspectorWindow;
+	IBOutlet InspectorController *inspector;
 
     IBOutlet NSButton *capsLockKey;
     IBOutlet NSButton *shiftKey1;
@@ -37,7 +39,6 @@
 	IBOutlet NSTextField *limitHistoryLen;
 	IBOutlet NSTextField *limitHistoryLenTag;
 
-    IBOutlet NSDrawer *theDrawer;
 	IBOutlet NSDrawer *baseDrawer;
 
 	IBOutlet NSMatrix *outputFormat;
@@ -66,7 +67,6 @@
 - (IBAction)enterData:(id)sender;
 - (IBAction)go:(id)sender;
 - (IBAction)setPrecision:(id)sender;
-- (IBAction)showInspectorDrawer:(id)sender;
 - (IBAction)showKeyboardDrawer:(id)sender;
 - (IBAction)toggleSize:(id)sender;
 - (IBAction)menuFunction:(id)sender;

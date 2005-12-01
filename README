@@ -1,6 +1,6 @@
 Hello!
 
-This is Wcalc 2.1.1!
+This is Wcalc 2.1.2!
 
 1. What's New
 2. Intro
@@ -14,14 +14,13 @@ This is Wcalc 2.1.1!
 **************
 
 BUGFIXES:
- - Fixed logic errors in variable handling: variables where one is the prefix of another will not be confused (BOTH)
- - Correct unabbreviated integer output for big numbers (BOTH)
- - Corrected UTF-8 parsing (thanks Marco Thill!) (BOTH)
- - Corrected areasinh function names (thanks Marco Thill!) (BOTH)
- - Compatibility with locales without thousands separators  (thanks Marco Thill!) (GUI)
- - Fixed repeat calculations bug (GUI)
- - Fixed error reporting (GUI)
- - Fixed memory leaks and general bugfixes (BOTH)
+ - Corrected areasinh function names (thanks Marco Thill!) (GUI)
+ - Variables as expressions should be quoted correctly (BOTH)
+ - Drawers work again (GUI)
+ - Inspector is now a separate window (GUI)
+ - Funky resizing behavior gone permanently (GUI)
+FEATURES:
+ - Attempts to detect broken MPFR installations (CLI)
 
 *********
 * INTRO *

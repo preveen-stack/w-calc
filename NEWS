@@ -1,3 +1,12 @@
+--- Version 2.1.2 ---
+Dec 01 2005 - Kyle Wheeler
+ - Fixed the resize behavior once and for all with a separate inspector (GUI)
+Nov 10 2005 - Kyle Wheeler
+ - Fix the menu display of arcsinh to be areasinh (GUI)
+Nov 08 2005 - Kyle Wheeler
+ - Variables should be quoted when read in from files (BOTH)
+Nov 07 2005 - Kyle Wheeler
+ - Connected drawers to main window again (GUI)
 --- Version 2.1.1 ---
 Nov 05 2005 - Kyle Wheeler
  - Corrected UTF-8 parsing (thanks Marco Thill!) (BOTH)

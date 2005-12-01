@@ -29,6 +29,13 @@
             OUTLETS = {expressionField = NSTextField; theList = NSTableView; }; 
             SUPERCLASS = NSObject; 
         }, 
+        {
+            ACTIONS = {closeIt = id; onClose = id; openIt = id; toggleIt = id; }; 
+            CLASS = InspectorController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {affectInspectorMenu = NSMenuItem; inspectorWindow = NSWindow; }; 
+            SUPERCLASS = NSObject; 
+        }, 
         {CLASS = Interpreter; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {
             CLASS = MyTextField; 
@@ -79,7 +86,6 @@
                 setPrefs = id; 
                 shConversions = id; 
                 showBaseDrawer = id; 
-                showInspectorDrawer = id; 
                 showKeyboardDrawer = id; 
                 showPrefs = id; 
                 toggleSize = id; 
@@ -90,7 +96,6 @@
                 AnswerField = NSTextField; 
                 ExpressionField = NSTextField; 
                 PrecisionSlider = NSSlider; 
-                affectDrawerMenu = NSMenuItem; 
                 affectKeyboardMenu = NSMenuItem; 
                 baseDrawer = NSDrawer; 
                 baseMenu = NSMenuItem; 
@@ -106,6 +111,8 @@
                 errorController = id; 
                 historyDuplicates = NSButton; 
                 historyList = NSTableView; 
+                inspector = InspectorController; 
+                inspectorWindow = NSWindow; 
                 keypad = id; 
                 limitHistory = NSButton; 
                 limitHistoryLen = NSTextField; 
@@ -124,7 +131,6 @@
                 shiftKey1 = NSButton; 
                 shiftKey2 = NSButton; 
                 simpleCalculator = NSButton; 
-                theDrawer = NSDrawer; 
                 theKeyboard = id; 
                 thePrefPanel = NSPanel; 
                 updateHistory = NSButton; 

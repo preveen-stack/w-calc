@@ -363,7 +363,7 @@ static NSString *curFile = NULL;
 
 - (void)openIDrawer: (id) sender
 {
-	[theDrawer open];
+	[inspector openIt:sender];
 }
 
 - (IBAction)setPrecision:(id)sender
@@ -455,7 +455,7 @@ static NSString *curFile = NULL;
 	}
 
 	// if the drawer is open, refresh the data.
-	if ([theDrawer state]) {
+	if ([inspectorWindow isVisible]) {
 		[variableList reloadData];
 		[historyList reloadData];
 	}
@@ -481,7 +481,7 @@ static NSString *curFile = NULL;
 	set_prettyanswer(last_answer);
 	[AnswerField setStringValue:[NSString stringWithUTF8String:(pretty_answer?pretty_answer:"Not Enough Memory")]];
 	putval("a",last_answer);
-	if ([theDrawer state]) {
+	if ([inspectorWindow isVisible]) {
 		[variableList reloadData];
 	}
 }
@@ -618,20 +618,6 @@ static NSString *curFile = NULL;
 		}
 	} else {
 		[conversionWindow close];
-	}
-}
-
-- (IBAction)showInspectorDrawer:(id)sender
-{
-	NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-	if (! [theDrawer state]) {
-		[theDrawer open];
-		[prefs setObject:@"YES" forKey:@"historyShowing"];
-		[affectDrawerMenu setTitle:@"Hide Inspector Drawer"];
-	} else {
-		[theDrawer close];
-		[prefs setObject:@"NO" forKey:@"historyShowing"];
-		[affectDrawerMenu setTitle:@"Show Inspector Drawer"];
 	}
 }
 
@@ -811,7 +797,7 @@ static NSString *curFile = NULL;
 			[AnswerField setStringValue:[NSString stringWithUTF8String:(pretty_answer?pretty_answer:"Not Enough Memory")]];
 			[AnswerField setTextColor:((not_all_displayed)?([NSColor redColor]):([NSColor blackColor]))];
 
-			if ([theDrawer state] || recalculate) {
+			if ([inspectorWindow isVisible] || recalculate) {
 				[historyList reloadData];
 			}
 
@@ -857,7 +843,7 @@ static NSString *curFile = NULL;
 			extern char * errstring;
 			curFile = [filesToOpen objectAtIndex:i];
 			retval = loadState(strdup([curFile UTF8String]));
-			if ([theDrawer state]) {
+			if ([inspectorWindow isVisible]) {
 				[variableList reloadData];
 				[historyList reloadData];
 			}

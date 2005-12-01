@@ -3,12 +3,11 @@ Version: 2.1
 Revision: 1
 Maintainer: Kyle Wheeler <kyle-fink-wcalc@memoryhole.net>
 Source: mirror:sourceforge:w-calc/Wcalc-%v.tar.bz2
-Source-MD5: bac7dc67dbfbe37b3b22b19a9ac7b6b8
+Source-MD5: 56f5235a576c46b09a50ec6cd42bb82c
 DocFiles: AUTHORS COPYING COPYRIGHT INSTALL NEWS ReadMe.rtf wcalc.rc
-Patch: %n.patch
 ConfigureParams: --mandir=%i/share/man/
-Depends: readline-shlibs,gmp-shlibs,mpfr-shlibs
-BuildDepends: readline,gmp,mpfr
+Depends: readline-shlibs,gmp-shlibs,libmpfr1-shlibs
+BuildDepends: readline,gmp,libmpfr1
 Description: Command-line calculator
 DescDetail: <<
 Wcalc is a very capable command-line calculator (also has a Cocoa GUI version).
