@@ -1,3 +1,69 @@
+2005-12-01 15:18  memoryhole
+
+	* Makefile.am: Reference for if I need lexx flags in the future
+
+2005-12-01 15:12  memoryhole
+
+	* configure, configure.in: Version 2.1.2
+
+2005-12-01 15:11  memoryhole
+
+	* Makefile.in: backup file garbage
+
+2005-11-14 13:46  memoryhole
+
+	* Makefile.am: remove more cvs cruft
+
+2005-11-10 08:18  memoryhole
+
+	* English.lproj/MainMenu.nib/: info.nib, keyedobjects.nib: the menu
+	  functions now say areasinh instead of arcsinh
+
+2005-11-09 11:27  memoryhole
+
+	* files.c: makes OpenBSD happy
+
+2005-11-08 02:05  memoryhole
+
+	* files.c: variables as expressions should be quoted correctly
+
+2005-11-07 16:42  memoryhole
+
+	* Wcalc.xcodeproj/: kyle.mode1, kyle.pbxuser: whatever
+
+2005-11-07 16:42  memoryhole
+
+	* Makefile.in, aclocal.m4, configure, configure.in: attempt to
+	  detect broken MPFR installations
+
+2005-11-07 16:41  memoryhole
+
+	* English.lproj/MainMenu.nib/: info.nib, keyedobjects.nib: Forgot
+	  to connect the drawers to the corrected main window :(
+
+2005-11-07 16:40  memoryhole
+
+	* scanner.l: technically, that should be a "mu" and not a "micro",
+	  but you can't tell visually... for the time being, we accept
+	  either one
+
+2005-11-07 16:38  memoryhole
+
+	* WcalcController.m: technically, that should be a "mu" and not a
+	  "micro", but you can't tell visually - also, use a real multiply
+	  symbol for implicit here
+
+2005-11-07 11:11  memoryhole
+
+	* README, definitions.h: I wanted mu, not micro... but that's
+	  complicated
+
+2005-11-06 23:41  memoryhole
+
+	* ChangeLog, NEWS, README, README.txt, Wcalc.pmproj,
+	  Wcalc.xcodeproj/kyle.mode1, Wcalc.xcodeproj/kyle.pbxuser,
+	  Wcalc.xcodeproj/project.pbxproj: 2.1.1
+
 2005-11-05 11:53  memoryhole
 
 	* WcalcController.m: improve utf-8 friendliness, add debug
