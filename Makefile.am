@@ -1,5 +1,6 @@
 bin_PROGRAMS = wcalc
 AM_YFLAGS = -dt
+#AM_LFLAGS = -w
 wcalc_SOURCES = calculator.h variables.h string_manip.h help.h parser.y string_manip.h historyManager.h files.h conversion.h scanner.l help.c calculator.c string_manip.c historyManager.c files.c variables.c conversion.c main.c number_formatting.c
 AM_CFLAGS = -O2 -Wall
 wcalc_LDADD = @LEXLIB@
