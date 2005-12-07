@@ -76,7 +76,7 @@ int main(int argc, char *argv[])
 #else
 	char readme[1000];
 #endif
-	int tty, i, hist_init = 0;
+	int tty, i;
 	short cmdline_input = 0;
 
 	yydebug = 1;					   /* turn on ugly YACC debugging */
@@ -219,10 +219,10 @@ int main(int argc, char *argv[])
 			extern char *errstring;
 
 #ifdef HAVE_READLINE_HISTORY
-			if (!hist_init) {
+			if (!cmdline_input) {
 				char filename[PATH_MAX];
 
-				hist_init=1;
+				cmdline_input = 1;
 				using_history();
 				snprintf(filename, PATH_MAX, "%s/.wcalc_history", getenv("HOME"));
 				if (read_history(filename)) {
@@ -232,7 +232,6 @@ int main(int argc, char *argv[])
 				}
 			}
 #endif
-			cmdline_input = 1;
 			if (conf.verbose) { printf("-> %s\n",argv[i]); }
 			parseme(argv[i]);
 			if (!errstring || (errstring && !strlen(errstring)) ||
@@ -268,13 +267,10 @@ int main(int argc, char *argv[])
 		char filename[PATH_MAX];
 
 		snprintf(filename, PATH_MAX, "%s/.wcalc_history", getenv("HOME"));
-		if (!hist_init) {
-			hist_init=1;
-			using_history();
-			if (read_history(filename)) {
-				if (errno != ENOENT) {
-					perror("Reading History");
-				}
+		using_history();
+		if (read_history(filename)) {
+			if (errno != ENOENT) {
+				perror("Reading History");
 			}
 		}
 #endif
