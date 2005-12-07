@@ -9,10 +9,11 @@
 
 #include <unistd.h>
 #include <sys/types.h>
+#include <sys/stat.h>                  /* for stat() */
 #include <ctype.h>					   /* for isdigit and isalpha */
 #include <errno.h>
 #include <fcntl.h>					   /* for open() */
-#include <limits.h>					   /* for stroul() */
+#include <limits.h>					   /* for stroul() and PATH_MAX */
 #include <gmp.h>
 #include <mpfr.h>					   /* for mpfr_t */
 
@@ -48,11 +49,13 @@ extern int history_truncate_file(char *, int);
 #include "parser.h"
 #include "variables.h"
 #include "help.h"
+#include "files.h"
 #include "historyManager.h"
 
 #define TRUEFALSE (! strcmp(value,"yes") || ! strcmp(value,"true"))
 
-int read_prefs(char *filename);
+static int read_prefs(char *filename);
+static int read_preload(char *filename);
 
 /*
  * These are declared here because they're not in any header files.
@@ -73,7 +76,7 @@ int main(int argc, char *argv[])
 #else
 	char readme[1000];
 #endif
-	int tty, i;
+	int tty, i, hist_init = 0;
 	short cmdline_input = 0;
 
 	yydebug = 1;					   /* turn on ugly YACC debugging */
@@ -99,13 +102,15 @@ int main(int argc, char *argv[])
 
 	/* load the preferences */
 	{
-		char *filename;
-		unsigned int len = strlen(getenv("HOME")) + 16;
-		filename = malloc(len * sizeof(char));
-		snprintf(filename, len, "%s/.wcalcrc", getenv("HOME"));
-		if (read_prefs(filename))
+		char filename[PATH_MAX];
+		snprintf(filename, PATH_MAX, "%s/.wcalcrc", getenv("HOME"));
+		if (read_prefs(filename)) {
 			perror("Writing Preferences");
-		free(filename);
+		}
+		snprintf(filename, PATH_MAX, "%s/.wcalc_preload", getenv("HOME"));
+		if (read_preload(filename)) {
+			perror("Reading Preload File");
+		}
 	}
 
 	/* Parse commandline options */
@@ -211,13 +216,45 @@ int main(int argc, char *argv[])
 		} else if (!strcmp(argv[i], "-n")) {
 			conf.print_equal = 0;
 		} else {
+			extern char *errstring;
+
+#ifdef HAVE_READLINE_HISTORY
+			if (!hist_init) {
+				char filename[PATH_MAX];
+
+				hist_init=1;
+				using_history();
+				snprintf(filename, PATH_MAX, "%s/.wcalc_history", getenv("HOME"));
+				if (read_history(filename)) {
+					if (errno != ENOENT) {
+					perror("Reading History");
+					}
+				}
+			}
+#endif
 			cmdline_input = 1;
 			if (conf.verbose) { printf("-> %s\n",argv[i]); }
 			parseme(argv[i]);
+			if (!errstring || (errstring && !strlen(errstring)) ||
+					conf.remember_errors) {
+				addToHistory(argv[i], last_answer);
+			}
+			putval("a", last_answer);
 		}
 	}
 
 	if (cmdline_input) {
+#ifdef HAVE_READLINE_HISTORY
+		char filename[PATH_MAX];
+
+		snprintf(filename, PATH_MAX, "%s/.wcalc_history", getenv("HOME"));
+		if (write_history(filename))
+			perror("Saving History");
+		if (conf.history_limit) {
+			if (history_truncate_file(filename, conf.history_limit_len))
+				perror("Truncating History");
+		}
+#endif
 		cleanupvar();
 		mpfr_clear(last_answer);
 		mpfr_free_cache();
@@ -228,14 +265,18 @@ int main(int argc, char *argv[])
 	if (tty > 0) {
 		/* if stdin is a keyboard or terminal, then use readline and prompts */
 #ifdef HAVE_READLINE_HISTORY
-		char *filename;
-		unsigned int len = strlen(getenv("HOME")) + 16;
+		char filename[PATH_MAX];
 
-		using_history();
-		filename = malloc(len * sizeof(char));
-		snprintf(filename, len, "%s/.wcalc_history", getenv("HOME"));
-		if (read_history(filename) && errno != ENOENT)
-			perror("Reading History");
+		snprintf(filename, PATH_MAX, "%s/.wcalc_history", getenv("HOME"));
+		if (!hist_init) {
+			hist_init=1;
+			using_history();
+			if (read_history(filename)) {
+				if (errno != ENOENT) {
+					perror("Reading History");
+				}
+			}
+		}
 #endif
 		printf
 			("Enter an expression to evaluate, q to quit, or ? for help:\n");
@@ -323,7 +364,6 @@ int main(int argc, char *argv[])
 			if (history_truncate_file(filename, conf.history_limit_len))
 				perror("Truncating History");
 		}
-		free(filename);
 #endif
 	} else if (tty < 0) {
 		fprintf(stderr, "Could not determine terminal type.\n");
@@ -381,7 +421,21 @@ int main(int argc, char *argv[])
 	exit(EXIT_SUCCESS);
 }
 
-int read_prefs(char *filename)
+static int read_preload(char *filename)
+{
+	struct stat sb;
+
+	if (-1 == stat(filename,&sb)) {
+		if (errno != ENOENT) {
+			return -1;
+		} else {
+			return 0;
+		}
+	}
+	return loadState(filename);
+}
+
+static int read_prefs(char *filename)
 {
 	int fd = open(filename, O_RDONLY);
 	char key[1000], value[100];
