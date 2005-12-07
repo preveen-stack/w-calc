@@ -22,10 +22,10 @@ piped to wcalc, and they will be interpreted.
 .PP
 Variables are supported and may be assigned using the = operator. To assign
 a variable use the form:
-.I "foo = anylegalexpression"
+.I foo = anylegalexpression
 Thereafter, that variable name is the same as the literal value it represents.
 Expressions can be stored in variables like this:
-.I "foo = 'anylegalexpression'
+.I foo = 'anylegalexpression'
 Expressions stored this way will be interpreted at evaluation time, rather
 than assignment-time. Note that these cannot be recursive.
 .SS OPTIONS
@@ -92,7 +92,9 @@ Sets the number of bits of precision that will be used to internally represent n
 \fB\*=ints\fP
 Toggles whether long integers will be abbreviated or not. This conflicts with engineering notation for large numbers, but not for decimals.
 .SH FUNCTIONS
-The functions supported in wcalc are almost all self-explanatory. For those few that are not, here is a full description.
+wcalc supports two basic kinds of functions: standard mathematical functions, and "active" variables.
+.SS MATH FUNCTIONS
+The functions supported in wcalc are almost all self-explanatory. Here are the basic descriptions.
 .TP 4
 .B "sin cos tan cot"
 The standard trigonometric functions
@@ -129,6 +131,26 @@ Returns a random integer between 0 and the number given.
 .TP
 .B "fact"
 Returns the factorial of a number.
+.SS ACTIVE VARIABLES
+Active variables are designed to give a functionality similar to user-defined functions. They are variables that rather than representing a value, represent an expression that is evaluated whenever the variable is evaluated. This expression may contain other variable names. For example, after the following sequence of commands:
+.PP
+.I foo=5
+.br
+.I bar='foo+4'
+.PP
+The variable \fIbar\fP will evaluate to 9, or four more than whatever foo evaluates to be. These can be stacked, like so:
+.PP
+.I baz='sin(bar)+foo'
+.PP
+In this case, baz will evaluate to be 5.15643, or the sin of whatever foo+4 is plus whatever foo is.
+.PP
+To demonstrate the utility of these active variables, here are two functions written by Stephen M. Lawson. The first computes the weekday of a given day (\fIdy\fP) in a given month (\fImo\fP) in a given year (\fIyr\fP). The value it returns is in the range of 1 to 7, where 1 is Sunday, 2 is Monday, 3 is Tuesday, and so forth.
+.PP
+weekday='(((floor((yr - floor(0.6 + 1 / mo)) / 400) - floor((yr - floor(0.6 + 1 / mo)) / 100) + floor((5 * (yr - floor(0.6 + 1 / mo))) / 4) + floor(13 * (mo + 12 * floor(0.6 + 1 / mo) + 1) / 5)) - (7 * floor((floor((yr - floor(0.6 + 1 / mo)) / 400) - floor((yr - floor(0.6 + 1 / mo)) / 100) + floor((5 * (yr - floor(0.6 + 1 / mo))) / 4) + floor(13 * (mo + 12 * floor(0.6 + 1 / mo) + 1) / 5)) / 7)) + 1) + 5 + dy) % 7 + 1'
+.PP
+The second function computes what day Easter will be for a given year (\fIyr\fP) and returns an offset from March 31st. For example, for the year 2005, it returns -4, which means March 27th. Because of leap-year problems, this only works from the year 1900 to 2099, but is a good demonstration nevertheless.
+.PP
+easter='((19 * (yr - 19 * floor(yr / 19)) + 24) - floor((19 * (yr - 19 * floor(yr / 19)) + 24) / 30) * 30) + ((2 * (yr - 4 * floor(yr / 4)) + 4 * (yr - 7 * floor(yr / 7)) + 6 * ((19 * (yr - 19 * floor(yr / 19)) + 24) - floor((19 * (yr - 19 * floor(yr / 19)) + 24) / 30) * 30) + 5) - floor((2 * (yr - 4 * floor(yr / 4)) + 4 * (yr - 7 * floor(yr / 7)) + 6 * ((19 * (yr - 19 * floor(yr / 19)) + 24) - floor((19 * (yr - 19 * floor(yr / 19)) + 24) / 30) * 30) + 5) / 7) * 7) - 9'
 .SH SYMBOLS
 Wcalc supports a lot of constants. Some are special (like \fBpi\fP), and some are simply mathematical or physical constants that have been hardcoded in. The physics constants are taken from \fIhttp://physics.nist.gov/constants\fP, and should all be in predictable SI units.
 .PP
@@ -350,6 +372,54 @@ Displays the current preference settings.
 .TP
 \fB\econvert\fP \fIunit1\fP \fIunit1\fP
 Converts the previous answer from \fIunit1\fP to \fIunit2\fP.
+.SH PREFERENCES
+Preferences and settings can be retained between invocations of wcalc by storing them in the file \fB~/.wcalcrc\fP
+.PP
+The format of the file is that each line is either blank or an assignment. Comments are ignored, and are defined as anything to the right of and including a hash mark (#). Assignments are of the form: \fIkey=value\fP
+.PP
+The possible keys are:
+.TP
+.B precision
+Either true ("yes" or "true") or false (anything else).
+.TP
+.B show_equals
+Either true ("yes" or "true") or false (anything else).
+.TP
+.B engineering
+Either true ("yes" or "true") or false (anything else).
+.TP
+.B flag_undeclared
+Either true ("yes" or "true") or false (anything else).
+.TP
+.B use_radians
+Either true ("yes" or "true") or false (anything else).
+.TP
+.B print_prefixes
+Either true ("yes" or "true") or false (anything else).
+.TP
+.B save_errors
+Either true ("yes" or "true") or false (anything else).
+.TP
+.B precision_guard
+Either true ("yes" or "true") or false (anything else).
+.TP
+.B print_integers
+Either true ("yes" or "true") or false (anything else).
+.TP
+.B thousands_delimiter
+Uses the next character after the equals sign as its value.
+.TP
+.B decimal_delimiter
+Uses the next character after the equals sign as its value.
+.TP
+.B history_limit
+Either "no", for no limit, or a number.
+.TP
+.B output_format
+Either \fIdecimal\fP, \fIoctal\fP, \fIbinary\fP, \fIhex\fP, or \fIhexadecimal\fP.
+.TP
+.B rounding_indication
+Either \fIno\fP, \fIsimple\fP, or \fIsig_fig\fP.
 .SH COPYRIGHT
 wcalc is Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005 Kyle Wheeler.
 .br
