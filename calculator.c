@@ -318,9 +318,6 @@ static char *flatten(char *str)
 		// if it's a variable, evaluate it
 		a = getvar_full(varname);
 		if (!a.err) {				   // it is a var
-			mp_exp_t e;
-			char *tstr;
-			size_t len;
 			mpfr_t f;
 
 			mpfr_init(f);
@@ -331,10 +328,6 @@ static char *flatten(char *str)
 				mpfr_set(f, a.val, GMP_RNDN);
 				mpfr_clear(a.val);
 			}
-			// find out how much space it needs for full precision
-			tstr = mpfr_get_str(NULL, &e, 10, 0, f, GMP_RNDN);
-			len = strlen(tstr) + 3 + (e / 10);
-			mpfr_free_str(tstr);
 			// get the number
 			varvalue = num_to_str_complex(f, 10, 0, -1, 1);
 			free(varname);
