@@ -22,15 +22,15 @@ void explain(char *str)
 	}
 	if (!strcmp(str, "q")) {
 		printf("Quits the program.");
-	} else if (*str == '\\') {		   /* it's a command */
+	} else if (*str == '\\') {		   // it's a command
 		explain_command(str);
-	} else if (isconst(str)) {
+	} else if (isconst(str)) {		   // it's a constant
 		explain_constant(str);
-	} else if (isfunc(str)) {
+	} else if (isfunc(str)) {		   // it's a function
 		explain_function(str);
-	} else if (varexists(str)) {	   /* it's a variable */
+	} else if (varexists(str)) {	   // it's a variable
 		explain_variable(str);
-	} else {						   /* it's a call for help */
+	} else {						   // it's a call for help
 		printf("not implemented yet!\n");
 	}
 }
@@ -132,7 +132,7 @@ void explain_variable(char *str)
 		printf("This should never happen.\n");
 		return;
 	}
-	if (var.exp) {					   /* it's an expression (i.e. a function) */
+	if (var.exp) {					   // it's an expression (i.e. a function)
 		List strings;
 
 		printf("%s is the expression: %s\n", str, var.exp);
@@ -160,6 +160,9 @@ void explain_variable(char *str)
 		printf("%s is a variable with the value: %s\n", str,
 			   print_this_result(var.val));
 		standard_output = std_save;
+	}
+	if (var.desc != NULL) {
+		printf("Description: %s\n", var.desc);
 	}
 }
 

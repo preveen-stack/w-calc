@@ -240,7 +240,7 @@ int main(int argc, char *argv[])
 					conf.remember_errors) {
 				addToHistory(argv[i], last_answer);
 			}
-			putval("a", last_answer);
+			putval("a", last_answer, "previous answer");
 		}
 	}
 
@@ -338,7 +338,7 @@ int main(int argc, char *argv[])
 						}
 					}
 				}
-				putval("a", last_answer);
+				putval("a", last_answer, "previous answer");
 
 				{
 					extern char *errstring;
@@ -396,7 +396,7 @@ int main(int argc, char *argv[])
 				break;
 			if (conf.verbose) { printf("-> %s\n",line); }
 			parseme(line);
-			putval("a", last_answer);
+			putval("a", last_answer, "previous answer");
 			{
 				extern char *errstring;
 

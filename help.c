@@ -44,6 +44,7 @@ void print_interactive_help (void)
 		 "\\ints\n"
 		 "\\convert "
 		 "\\li \\list \\listvars "
+		 "\\store "
 		 "\\explain "
 		 "\n\n"
 		 "Variables are supported and may be assigned using the = operator.\n"

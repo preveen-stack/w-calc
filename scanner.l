@@ -347,7 +347,7 @@ irand { return(WIRAND); }
 fact { return(WFACT); }
 comp { return(WCOMP); }
 
-'.*' {
+'[^']*' {
 	char * temp = strdup(yytext+1);
 	//temp[(int)strlen(temp)-1] = 0;
 	temp[yyleng-2] = 0;

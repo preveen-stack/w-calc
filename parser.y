@@ -85,6 +85,7 @@ struct conv_req conver;
 %type <integer> sign
 %type <cmd> command
 %type <function> func
+%type <variable> optionalstring
 
 %left WAND WOR WBAND WBOR
 %left WEQUAL WNEQUAL WGT WLT WGEQ WLEQ
@@ -410,14 +411,22 @@ command : HEX_CMD {
 }
 ;
 
-assignment : VAR WEQL exp
+optionalstring : STRING {
+			   $$ = $1;
+			   }
+			   | {
+			   $$ = NULL;
+			   }
+			   ;
+
+assignment : VAR WEQL exp optionalstring
 {
 	if (compute && ! scanerror) {
 		/* if standard_error, q is reserved */
 		if (standard_output && !strcmp($1,"q")) {
 			report_error("q cannot be assigned a value. q is used to exit.");
 		} else {
-			if (putval($1,$3) == 0) {
+			if (putval($1,$3,$4) == 0) {
 				if (standard_output) {
 					mpfr_t val;
 					mpfr_init(val);
@@ -429,21 +438,24 @@ assignment : VAR WEQL exp
 			} else {
 				report_error("There was a problem assigning variables.");
 			}
-			mpfr_clear($3);
 		}
+		mpfr_clear($3);
 	} else {
 		scanerror = 0;
 		report_error("Scanner error halts parser.");
 	}
 	free($1);
+	if ($4 != NULL) {
+		free($4);
+	}
 }
-| VAR WEQL STRING
+| VAR WEQL STRING optionalstring
 {
 	if (compute && ! scanerror) {
 		if (standard_output && !strcmp($1,"q")) {
 			report_error("q cannot be assigned an expression. q is used to exit.");
 		} else {
-			if (putexp($1,$3) == 0) {
+			if (putexp($1,$3,$4) == 0) {
 				if (standard_output) {
 					printf("%s = %s\n", $1, getvar_full($1).exp);
 				}
@@ -457,24 +469,41 @@ assignment : VAR WEQL exp
 	}
 	free($1);
 	free($3);
+	if ($4 != NULL) {
+		free($4);
+	}
 }
-| NUMBER WEQL exp
+| NUMBER WEQL exp optionalstring
 {
 	report_error("Constants cannot be assigned to other values.");
 	mpfr_clear($3);
+	if ($4 != NULL) {
+		free($4);
+	}
 }
-| NUMBER WEQL STRING
+| NUMBER WEQL STRING optionalstring
 {
 	report_error("Constants cannot be assigned to other values.");
+	free($3);
+	if ($4 != NULL) {
+		free($4);
+	}
 }
-| func WEQL STRING
+| func WEQL STRING optionalstring
 {
 	report_error("Functions cannot be assigned to values.");
+	free($3);
+	if ($4 != NULL) {
+		free($4);
+	}
 }
-| func WEQL exp
+| func WEQL exp optionalstring
 {
 	report_error("Functions cannot be assigned to values.");
 	mpfr_clear($3);
+	if ($4 != NULL) {
+		free($4);
+	}
 }
 ;
 

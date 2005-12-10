@@ -126,23 +126,21 @@ void getvarval(mpfr_t out, char *key)
 struct answer getvar_full(char *key)
 {
 	struct answer ans;
-	mpfr_t *t = getvar_core(key, THE_VALUE);
+	struct variable *var;
 
-	if (t) {
-		mpfr_init_set(ans.val, *t, GMP_RNDN);
+	var = getvar_core(key, THE_STRUCTURE);
+	if (var && !var->exp) {
+		mpfr_init_set(ans.val, var->value, GMP_RNDN);
 		ans.err = 0;
 		ans.exp = NULL;
+		ans.desc = var->description;
+	} else if (var && var->exp) {
+		ans.exp = var->expression;
+		ans.desc = var->description;
+		ans.err = 0;
 	} else {
-		char *c = getvar_core(key, THE_EXPRESSION);
-
-		/* if you access ans.val, you deserve what you get */
-		if (c) {
-			ans.exp = c;
-			ans.err = 0;
-		} else {
-			ans.exp = NULL;
-			ans.err = 1;
-		}
+		ans.exp = NULL;
+		ans.err = 1;
 	}
 	return ans;
 }
@@ -201,7 +199,7 @@ static void *getvar_core(char *key, int all_or_nothing)
 	return NULL;
 }
 
-int putexp(char *key, char *value)
+int putexp(char *key, char *value, char* desc)
 {
 	struct variable *cursor = them;
 
@@ -236,19 +234,32 @@ int putexp(char *key, char *value)
 		} else {
 			mpfr_clear(cursor->value);
 		}
+		if (cursor->description) {
+			free(cursor->description);
+		}
 		cursor->expression = (char *)strdup(value);
+		if (desc != NULL) {
+			cursor->description = (char *)strdup(desc);
+		} else {
+			cursor->description = NULL;
+		}
 		cursor->exp = 1;
 		return 0;
 	} else {
 		contents++;
 		cursor->key = (char *)strdup(key);
 		cursor->expression = (char *)strdup(value);
+		if (desc != NULL) {
+			cursor->description = (char *)strdup(desc);
+		} else {
+			cursor->description = NULL;
+		}
 		cursor->exp = 1;
 		return 0;
 	}
 }
 
-int putval(char *key, mpfr_t value)
+int putval(char *key, mpfr_t value, char* desc)
 {
 	struct variable *cursor = them, *temp;
 
@@ -290,26 +301,15 @@ int putval(char *key, mpfr_t value)
 		free(cursor->expression);
 		cursor->expression = NULL;
 	}
+	if (cursor->description) {
+		free(cursor->description);
+	}
+	if (desc != NULL) {
+		cursor->description = (char *)strdup(desc);
+	} else {
+		cursor->description = NULL;
+	}
 	mpfr_set(cursor->value, value, GMP_RNDN);
 	cursor->exp = 0;
 	return 0;
-}
-
-int putvarc(char *keyvalue)
-{
-	char *key = keyvalue, *value;
-	int retval;
-	mpfr_t value_t;
-
-	value = strchr(keyvalue, '=');
-	if (value == NULL)
-		return -1;
-	*value = 0;
-	++value;
-	mpfr_init_set_str(value_t, value, 0, GMP_RNDN);	// guesses the base, defaults to 10
-	retval = putval(key, value_t);
-	mpfr_clear(value_t);
-	--value;
-	*value = '=';
-	return retval;
 }

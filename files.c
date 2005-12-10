@@ -166,7 +166,7 @@ int loadState(char *filename, int into_history)
 
 				safe = strdup(linebuf);
 				parseme(safe);
-				putval("a", last_answer);
+				putval("a", last_answer, "previous answer");
 				if ((!errstring || (errstring && !strlen(errstring)) ||
 					 conf.remember_errors) && into_history) {
 					addToHistory(linebuf, last_answer);

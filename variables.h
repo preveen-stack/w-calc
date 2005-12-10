@@ -20,6 +20,7 @@ struct variable
 {
 	char *key;
 	char *expression;
+	char *description;
 	mpfr_t value;
 	unsigned int exp:1;
 	struct variable *next;
@@ -29,13 +30,15 @@ struct answer
 {
 	mpfr_t val;
 	char *exp;
+	char *desc;
 	unsigned int err:1;
 };
 
-void getvarval(mpfr_t out, char *key);	// requires a working mpfr_t
-int putval(char *key, mpfr_t value); // requires a working mpfr_t (duh)
-int putvarc(char *keyvalue);
-int putexp(char *key, char *value);
+// requires a working mpfr_t
+void getvarval(mpfr_t out, char *key);
+// requires a working mpfr_t (duh)
+int putval(char *key, mpfr_t value, char* desc);
+int putexp(char *key, char *value, char* desc);
 int varexists(char *key);
 void initvar(void);
 void delnvar(int);
