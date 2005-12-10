@@ -151,6 +151,7 @@ SPACE		[ ]
 \\base{DIGIT}+          { YYLVALAC->integer = atoi(yytext+5); return(BASE_CMD); }
 \\verbose               { return(VERBOSE_CMD); }
 \\explain{SPACE}.* 		{ explain(yytext+9); }
+\\store					{ return(STORE_CMD); }
 
 %{ /* These are comments */
 %}

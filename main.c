@@ -432,7 +432,7 @@ static int read_preload(char *filename)
 			return 0;
 		}
 	}
-	return loadState(filename);
+	return loadState(filename, 0);
 }
 
 static int read_prefs(char *filename)

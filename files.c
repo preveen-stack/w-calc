@@ -14,6 +14,7 @@
 #include <sys/stat.h>				   /* for open flags */
 #include <string.h>					   /* for strlen() */
 #include <stdlib.h>					   /* for free() */
+#include <limits.h> /* for PATH_MAX */
 
 #include <gmp.h>
 #include <mpfr.h>
@@ -29,7 +30,7 @@
 char *open_file = NULL;
 
 int saveState(char *filename)
-{
+{									   /*{{{ */
 	int fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC,
 				  S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 	int return_error = 0;
@@ -63,8 +64,9 @@ int saveState(char *filename)
 				break;
 			}
 			if (keyval->exp) {
-				cptr = malloc(strlen(keyval->expression)+3);
-				snprintf(cptr,strlen(keyval->expression)+3,"'%s'",keyval->expression);
+				cptr = malloc(strlen(keyval->expression) + 3);
+				snprintf(cptr, strlen(keyval->expression) + 3, "'%s'",
+						 keyval->expression);
 			} else {
 				cptr = strdup(print_this_result(keyval->value));
 			}
@@ -81,7 +83,7 @@ int saveState(char *filename)
 			}
 		}
 		/* save history */
-		for (hindex = 0; hindex < historyLength(); hindex++) {
+		for (hindex = 0; hindex < historyLength() && return_error == 0; hindex++) {
 			char *history_entry = historynum(hindex, 1);
 
 			retval = write(fd, history_entry, strlen(history_entry));
@@ -114,10 +116,10 @@ int saveState(char *filename)
 		return_error = errno;
 	}
 	return return_error;
-}
+}									   /*}}} */
 
-int loadState(char *filename)
-{
+int loadState(char *filename, int into_history)
+{									   /*{{{ */
 	int fd, return_error = 0;
 	int standard_output_save = standard_output;
 
@@ -150,9 +152,13 @@ int loadState(char *filename)
 				retval = read(fd, linebuf + linelen, 1);
 			}
 			linebuf[linelen] = 0;
-			if (conf.verbose) { printf("-> %s\n",linebuf); }
-			strstrip(' ', linebuf);
+			if (conf.verbose) {
+				printf("-> %s\n", linebuf);
+			}
 			stripComments(linebuf);
+			while (linebuf[strlen(linebuf)-1] == ' ') {
+				linebuf[strlen(linebuf)-1] = 0;
+			}
 			if (strlen(linebuf)) {
 				extern char *errstring;
 				char *safe;
@@ -160,8 +166,8 @@ int loadState(char *filename)
 				safe = strdup(linebuf);
 				parseme(safe);
 				putval("a", last_answer);
-				if (!errstring || (errstring && !strlen(errstring)) ||
-					conf.remember_errors) {
+				if ((!errstring || (errstring && !strlen(errstring)) ||
+					conf.remember_errors) && into_history) {
 					addToHistory(linebuf, last_answer);
 				}
 			}
@@ -180,4 +186,58 @@ int loadState(char *filename)
 	}
 	standard_output = standard_output_save;
 	return return_error;
-}
+}									   /*}}} */
+
+int storeVar(char *variable)
+{/*{{{*/
+	int fd, retval = 0, return_error = 0;
+	char filename[PATH_MAX];
+
+	if (!varexists(variable)) {
+		report_error("Variable is not defined.");
+		return -1;
+	}
+	snprintf(filename, PATH_MAX, "%s/.wcalc_preload", getenv("HOME"));
+	fd = open(filename, O_WRONLY | O_CREAT | O_APPEND,
+				  S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+	if (fd >= 0) {
+		// success
+		struct answer keyval = getvar_full(variable);
+		char *cptr;
+
+		retval = write(fd, variable, strlen(variable));
+		if (retval < (int)strlen(variable)) {
+			return_error = errno;
+			goto exit_storeVar;
+		}
+		retval = write(fd,"=",1);
+		if (retval < 1) {
+			return_error = errno;
+			goto exit_storeVar;
+		}
+		if (keyval.exp) {
+			cptr = malloc(strlen(keyval.exp)+3);
+			snprintf(cptr, strlen(keyval.exp)+3, "'%s'", keyval.exp);
+		} else {
+			cptr = strdup(print_this_result(keyval.val));
+		}
+		retval = write(fd, cptr, strlen(cptr));
+		free(cptr);
+		if (retval < strlen(cptr)) {
+			return_error = errno;
+			goto exit_storeVar;
+		}
+		retval = write(fd, "\n", 1);
+		if (retval < 1) {
+			return_error = errno;
+			goto exit_storeVar;
+		}
+		retval = close(fd);
+		if (retval == -1) {
+			return_error = errno;
+			goto exit_storeVar;
+		}
+	}
+exit_storeVar:
+	return return_error;
+}/*}}}*/

@@ -61,7 +61,7 @@ struct conv_req conver;
 }
 
 %token DEC_CMD OCT_CMD HEX_CMD BIN_CMD GUARD_CMD DISPLAY_PREFS_CMD
-%token RADIAN_CMD REMEMBER_CMD LISTVAR_CMD
+%token RADIAN_CMD REMEMBER_CMD LISTVAR_CMD STORE_CMD
 %token PRINT_HELP_CMD PREFIX_CMD INT_CMD VERBOSE_CMD
 %token <integer> ENG_CMD HLIMIT_CMD ROUNDING_INDICATION_CMD
 %token <integer> PRECISION_CMD BITS_CMD BASE_CMD
@@ -336,16 +336,7 @@ command : HEX_CMD {
 		free(open_file);
 		open_file = NULL;
 		report_error("Please specify a file name to open.");
-	} /*else {
-		int retval;
-		retval = loadState(open_file);
-		if (retval) {
-			report_error("Could not open file.");
-			report_error((char*)strerror(retval));
-		}
-		free(open_file);
-		open_file = NULL;
-	}*/
+	}
 	$$ = nothing;
 }
 | SAVE_CMD {
@@ -406,6 +397,16 @@ command : HEX_CMD {
 		report_error("Number too large.");
 	}
 	$$ = nothing;
+}
+| STORE_CMD VAR
+{
+	int retval = storeVar($2);
+	if (retval == 0) {
+		printf("successfully stored %s\n",$2);
+	} else {
+		report_error("Failure!");
+	}
+	free($2);
 }
 ;
 
