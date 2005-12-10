@@ -71,7 +71,7 @@ struct _conf conf;
  */
 struct yy_buffer_state;
 extern int yyparse();
-extern void * yy_scan_string(const char *);
+extern void *yy_scan_string(const char *);
 extern void yy_delete_buffer(struct yy_buffer_state *);
 
 static int recursion(char *str);
@@ -80,7 +80,7 @@ static int find_recursion_core(List);
 static char *flatten(char *str);
 
 void parseme(char *pthis)
-{/*{{{*/
+{									   /*{{{ */
 	extern int synerrors;
 	short numbers = 0;
 	char *sanitized;
@@ -162,9 +162,10 @@ void parseme(char *pthis)
 	 * and are here strictly for readline suppport
 	 */
 	{
-	struct yy_buffer_state * yy = yy_scan_string(sanitized);
-	yyparse();
-	yy_delete_buffer(yy);
+		struct yy_buffer_state *yy = yy_scan_string(sanitized);
+
+		yyparse();
+		yy_delete_buffer(yy);
 	}
 
 	if (open_file) {
@@ -173,7 +174,7 @@ void parseme(char *pthis)
 
 		open_file = NULL;
 		Dprintf("open_file\n");
-		retval = loadState(filename);
+		retval = loadState(filename, 1);
 		if (retval) {
 			report_error("Could not load file.");
 			report_error((char *)strerror(retval));
@@ -183,10 +184,10 @@ void parseme(char *pthis)
 	/* exiting */
 	free(sanitized);
 	return;
-}/*}}}*/
+}									   /*}}} */
 
 static char *flatten(char *str)
-{/*{{{*/
+{									   /*{{{ */
 	char *curs = str, *eov, *nstr;
 	char *varname, *varvalue;
 	size_t olen, nlen, changedlen, varnamelen = 100;
@@ -200,7 +201,7 @@ static char *flatten(char *str)
 		return str;
 	}
 	curs = strchr(str, '=');
-	if (!curs || !*curs || *(curs+1) == '=')
+	if (!curs || !*curs || *(curs + 1) == '=')
 		curs = str;
 
 	while (curs && *curs) {
@@ -230,7 +231,7 @@ static char *flatten(char *str)
 			while (eov && *eov &&
 				   (isalpha((int)(*eov)) || *eov == '_' || *eov == ':' ||
 					isdigit((int)(*eov)))) {
-				if (i == varnamelen-1) {
+				if (i == varnamelen - 1) {
 					varnamelen += 100;
 					varname = realloc(varname, varnamelen * sizeof(char));
 					if (varname == NULL) {
@@ -320,13 +321,13 @@ static char *flatten(char *str)
 	}
 	standard_output = standard_output_save;
 	return str;
-}/*}}}*/
+}									   /*}}} */
 
 static int recursion(char *str)
-{/*{{{*/
+{									   /*{{{ */
 	List vlist = NULL;
 	int retval = 0;
-	char * righthand;
+	char *righthand;
 
 	// do not examine commands
 	if (*str == '\\') {
@@ -334,42 +335,44 @@ static int recursion(char *str)
 	}
 	// do not examine the left side of an assignment
 	righthand = strchr(str, '=');
-	if (!righthand || !*righthand || *(righthand+1) == '=') {
+	if (!righthand || !*righthand || *(righthand + 1) == '=') {
 		righthand = str;
 	}
 	vlist = extract_vars(righthand);
 	while (listLen(vlist) > 0) {
-		char * varname = (char *)getHeadOfList(vlist);
+		char *varname = (char *)getHeadOfList(vlist);
+
 		if (retval == 0) {
 			retval = find_recursion(varname);
 		}
 		free(varname);
 	}
 	return retval;
-}/*}}}*/
+}									   /*}}} */
 
-int find_recursion(char * instring)
-{/*{{{*/
+int find_recursion(char *instring)
+{									   /*{{{ */
 	List vl = NULL;
 	int retval;
 
-	addToList(&vl,(char*)strdup(instring));
+	addToList(&vl, (char *)strdup(instring));
 	retval = find_recursion_core(vl);
 	free(getHeadOfList(vl));
 	return retval;
-}/*}}}*/
+}									   /*}}} */
 
 int find_recursion_core(List oldvars)
-{/*{{{*/
+{									   /*{{{ */
 	List newvars = NULL;
 	ListIterator oldvarsIterator;
 	int retval = 0;
 	struct answer a;
 	char *newVarname = NULL, *oldVarname = NULL;
 
-	a = getvar_full((char*)peekAheadInList(oldvars));
-	if (a.err) return 0;
-	if (! a.exp) {
+	a = getvar_full((char *)peekAheadInList(oldvars));
+	if (a.err)
+		return 0;
+	if (!a.exp) {
 		mpfr_clear(a.val);
 		return 0;
 	}
@@ -379,8 +382,9 @@ int find_recursion_core(List oldvars)
 	// for each variable in that expression (i.e. each entry in newvars)
 	// see if we've seen it before (i.e. it's in oldvars)
 	while (listLen(newvars) > 0) {
-		newVarname = (char*)getHeadOfList(newvars);
-		while ((oldVarname = (char*)nextListElement(oldvarsIterator)) != NULL) {
+		newVarname = (char *)getHeadOfList(newvars);
+		while ((oldVarname =
+				(char *)nextListElement(oldvarsIterator)) != NULL) {
 			if (!strcmp(newVarname, oldVarname)) {
 				unsigned int len = strlen(newVarname) + 73;
 				char *error = malloc(sizeof(char) * len);
@@ -395,7 +399,7 @@ int find_recursion_core(List oldvars)
 			}
 		}
 		// now see if it has recursion
-		addToListHead(&oldvars,newVarname);
+		addToListHead(&oldvars, newVarname);
 		retval = find_recursion_core(oldvars);
 		getHeadOfList(oldvars);
 		resetListIterator(oldvarsIterator);
@@ -406,10 +410,10 @@ int find_recursion_core(List oldvars)
 	}
 	freeListIterator(oldvarsIterator);
 	return retval;
-}/*}}}*/
+}									   /*}}} */
 
 void report_error(char *err)
-{/*{{{*/
+{									   /*{{{ */
 	extern char *errstring;
 	char *tempstring;
 	unsigned int len;
@@ -423,10 +427,10 @@ void report_error(char *err)
 	} else {
 		errstring = (char *)strdup(err);
 	}
-}/*}}}*/
+}									   /*}}} */
 
 void set_prettyanswer(mpfr_t num)
-{/*{{{*/
+{									   /*{{{ */
 	char *temp;
 
 	if (pretty_answer) {
@@ -438,10 +442,10 @@ void set_prettyanswer(mpfr_t num)
 	} else {
 		pretty_answer = NULL;
 	}
-}/*}}}*/
+}									   /*}}} */
 
 char *print_this_result_dbl(double result)
-{/*{{{*/
+{									   /*{{{ */
 	static char format[10];
 	static char *pa = NULL, *tmp;
 	static char pa_dyn = 1;
@@ -450,7 +454,7 @@ char *print_this_result_dbl(double result)
 
 	Dprintf("print_this_result_dbl(%f)\n", result);
 	/* Build the "format" string, that will be used in an snprintf later */
-	switch (conf.output_format) {/*{{{*/
+	switch (conf.output_format) {	   /*{{{ */
 		case DECIMAL_FORMAT:
 			if (pa_dyn)
 				tmp = realloc(pa, sizeof(char) * 310);
@@ -530,7 +534,7 @@ char *print_this_result_dbl(double result)
 			pa = NULL;
 			pa_dyn = 1;
 			break;
-	}/*}}}*/
+	}								   /*}}} */
 
 	if (isinf(result)) {
 		// if it is infinity, print "Infinity", regardless of format
@@ -568,7 +572,8 @@ char *print_this_result_dbl(double result)
 		not_all_displayed = 0;
 	} else {
 		char *curs;
-		switch (conf.output_format) {/*{{{*/
+
+		switch (conf.output_format) {  /*{{{ */
 			case DECIMAL_FORMAT:
 			{
 				double junk;
@@ -690,7 +695,7 @@ char *print_this_result_dbl(double result)
 					not_all_displayed = 0;
 				}
 			}						   // binary format
-		}							   /*}}}*/
+		}							   /*}}} */
 	}								   // if
 
 	if (standard_output) {
@@ -708,37 +713,47 @@ char *print_this_result_dbl(double result)
 	}
 
 	return pa;
-}/*}}}*/
+}									   /*}}} */
 
 int is_mpfr_int(mpfr_t potential_int)
-{/*{{{*/
-	char * str, *curs;
+{									   /*{{{ */
+	char *str, *curs;
 	mp_exp_t eptr;
 	int base;
 
 	switch (conf.output_format) {
-		case HEXADECIMAL_FORMAT: base=16; break;
+		case HEXADECIMAL_FORMAT:
+			base = 16;
+			break;
 		default:
-		case DECIMAL_FORMAT: base=10; break;
-		case OCTAL_FORMAT: base=8; break;
-		case BINARY_FORMAT: base=2; break;
+		case DECIMAL_FORMAT:
+			base = 10;
+			break;
+		case OCTAL_FORMAT:
+			base = 8;
+			break;
+		case BINARY_FORMAT:
+			base = 2;
+			break;
 	}
-	str = mpfr_get_str(NULL,&eptr,base,0,potential_int,GMP_RNDN);
-	if (eptr < 0) goto not_an_int;
-	curs = str+eptr;
+	str = mpfr_get_str(NULL, &eptr, base, 0, potential_int, GMP_RNDN);
+	if (eptr < 0)
+		goto not_an_int;
+	curs = str + eptr;
 	while (curs && *curs) {
-		if (*curs != '0') goto not_an_int;
-		curs ++;
+		if (*curs != '0')
+			goto not_an_int;
+		curs++;
 	}
 	mpfr_free_str(str);
 	return 1;
-not_an_int:
+  not_an_int:
 	mpfr_free_str(str);
 	return 0;
-}/*}}}*/
+}									   /*}}} */
 
 char *print_this_result(mpfr_t result)
-{/*{{{*/
+{									   /*{{{ */
 	static char *pa = NULL;
 	extern char *errstring;
 	unsigned int base = 0;
@@ -756,8 +771,9 @@ char *print_this_result(mpfr_t result)
 			// ... but only as long as it will fit in a double and isn't
 			// an integer
 			if (conf.precision_guard && conf.precision < 0 &&
-				(!conf.print_ints || ! is_mpfr_int(result)) &&
-				mpfr_get_d(result,GMP_RNDN) != mpfr_get_si(result, GMP_RNDN)) {
+				(!conf.print_ints || !is_mpfr_int(result)) &&
+				mpfr_get_d(result, GMP_RNDN) != mpfr_get_si(result,
+															GMP_RNDN)) {
 				double res = mpfr_get_d(result, GMP_RNDN);
 
 				if (fabs(res) < DBL_EPSILON) {
@@ -835,11 +851,11 @@ char *print_this_result(mpfr_t result)
 	}
 
 	return pa;
-}/*}}}*/
+}									   /*}}} */
 
 void simple_exp(mpfr_t output, mpfr_t first, enum operations op,
 				mpfr_t second)
-{/*{{{*/
+{									   /*{{{ */
 	if (compute) {
 		mpfr_t temp;
 
@@ -978,10 +994,10 @@ void simple_exp(mpfr_t output, mpfr_t first, enum operations op,
 		mpfr_set_ui(output, 0, GMP_RNDN);
 		return;
 	}
-}/*}}}*/
+}									   /*}}} */
 
 void uber_function(mpfr_t output, enum functions func, mpfr_t input)
-{/*{{{*/
+{									   /*{{{ */
 	if (compute) {
 		mpfr_t temp;
 
@@ -1152,10 +1168,10 @@ void uber_function(mpfr_t output, enum functions func, mpfr_t input)
 		mpfr_set_ui(output, 0, GMP_RNDN);
 		return;
 	}
-}/*}}}*/
+}									   /*}}} */
 
 int seed_random(void)
-{/*{{{*/
+{									   /*{{{ */
 	static char seeded = 0;
 
 	if (!seeded) {
@@ -1171,10 +1187,10 @@ int seed_random(void)
 		seeded = 1;
 	}
 	return 1;
-}/*}}}*/
+}									   /*}}} */
 
 char *output_string(unsigned int o)
-{/*{{{*/
+{									   /*{{{ */
 	switch (o) {
 		case HEXADECIMAL_FORMAT:
 			return "hexadecimal format (0xf)";
@@ -1187,4 +1203,4 @@ char *output_string(unsigned int o)
 		default:
 			return "error, unknown format";
 	}
-}/*}}}*/
+}									   /*}}} */
