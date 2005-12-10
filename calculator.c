@@ -80,7 +80,6 @@ struct variable_list
 	struct variable_list *next;
 };
 
-static struct variable_list *local_extract_vars(char *str);
 static int recursion(char *str);
 static int find_recursion(char *vstack);
 static int find_recursion_core(struct variable_list *vstack);
@@ -191,68 +190,6 @@ void parseme(char *pthis)
 	/* exiting */
 	free(sanitized);
 	return;
-}/*}}}*/
-
-static struct variable_list *local_extract_vars(char *str)
-{/*{{{*/
-	char *curs, *eov, save_char;
-	struct variable_list *vlist = NULL, *vcurs;
-	char *varname;
-
-	if (*str == '\\')
-		return NULL;
-	curs = strchr(str, '=');
-	if (!curs || !*curs || *(curs+1) == '=')
-		curs = str;
-
-	while (curs && *curs) {
-		// search for the first letter of a possible variable
-		while (curs && *curs && !isalpha((int)(*curs))) {
-			if (*curs == '\'')
-				return NULL;
-			if (*curs == '#')
-				break;
-			curs++;
-			// skip hex numbers
-			if ((*curs == 'x' || *curs == 'X') && curs != str &&
-				*(curs - 1) == '0') {
-				curs++;
-				while (curs && *curs &&
-					   (isdigit((int)(*curs)) ||
-						(*curs >= 'a' && *curs <= 'f') || (*curs >= 'A' &&
-														   *curs <= 'F'))) {
-					curs++;
-				}
-			}
-			// skip binary (not strictly necessary, since b is reserved, but just in case)
-			if (*curs == 'b' && curs != str && *(curs - 1) == '0')
-				curs++;
-		}
-
-		// if we didn't find any, we're done looking
-		if (*curs == 0 || *curs == '#')
-			break;
-
-		// if we did find something, pull out the variable name
-		eov = curs;
-		while (eov && *eov &&
-			   (isalpha((int)(*eov)) || *eov == '_' || *eov == ':' ||
-				isdigit((int)(*eov)))) {
-			eov++;
-		}
-		save_char = *eov;
-		*eov = 0;
-		varname = (char *)strdup(curs);
-		*eov = save_char;
-		curs = eov;
-
-		// add it to the varlist
-		vcurs = malloc(sizeof(struct variable_list));
-		vcurs->varname = varname;
-		vcurs->next = vlist;
-		vlist = vcurs;
-	}
-	return vlist;
 }/*}}}*/
 
 static char *flatten(char *str)
@@ -403,7 +340,7 @@ static char *flatten(char *str)
 
 static int recursion(char *str)
 {/*{{{*/
-	List vlist;
+	List vlist = NULL;
 	int retval = 0;
 	char * righthand;
 
@@ -440,10 +377,12 @@ int find_recursion(char * instring)
 
 int find_recursion_core(struct variable_list *vstack)
 {/*{{{*/
-	struct variable_list *vlist = NULL;
+	List vlist = NULL;
+	ListIterator vlistIterator;
 	int retval = 0;
 	struct answer a;
-	struct variable_list *vcurs, *vstackcurs;
+	struct variable_list *vstackcurs;
+	char * vlistVarname = NULL;
 
 	a = getvar_full(vstack->varname);
 	if (a.err) return 0;
@@ -452,39 +391,51 @@ int find_recursion_core(struct variable_list *vstack)
 		return 0;
 	}
 
-	vlist = local_extract_vars(a.exp);
-	// for each entry in the vlist, see if it's in the vstack
-	for (vcurs = vlist; vcurs; vcurs = vcurs->next) {
+	vlist = extract_vars(a.exp);
+	vlistIterator = getListIterator(vlist);
+	// for each variable in that expression (i.e. each entry in the vlist)
+	// see if we've seen it before (i.e. it's in the vstack)
+	vlistVarname = (char*)nextListElement(vlistIterator);
+	while (vlistVarname != NULL) {
 		for (vstackcurs = vstack; vstackcurs; vstackcurs = vstackcurs->next) {
-			if (!strcmp(vcurs->varname, vstackcurs->varname)) {
-				unsigned int len = strlen(vcurs->varname) + 73;
+			if (!strcmp(vlistVarname, vstackcurs->varname)) {
+				unsigned int len = strlen(vlistVarname) + 73;
 				char *error = malloc(sizeof(char) * len);
 
 				snprintf(error, len,
 						 "%s was found twice in symbol descent. Recursive variables are not allowed.",
-						 vcurs->varname);
+						 vlistVarname);
 				report_error(error);
 				free(error);
 				return 1;
 			}
 		}
+		vlistVarname = (char*)nextListElement(vlistIterator);
 	}
+	resetListIterator(vlistIterator);
 	// for each entry in the vlist, see if it has recursion
+	while ((vlistVarname = (char*)nextListElement(vlistIterator)) != NULL) {
+		struct variable_list newfront;
+
+		newfront.varname = vlistVarname;
+		newfront.next = vstack;
+		retval = find_recursion_core(&newfront);
+		if (retval != 0) {
+			break;
+		}
+	}
+	/*
 	for (vcurs = vlist; vcurs && !retval; vcurs = vcurs->next) {
 		struct variable_list *bookmark = vcurs->next;
 
 		vcurs->next = vstack;
 		retval = find_recursion_core(vcurs);
 		vcurs->next = bookmark;
-	}
+	}*/
 	// free the vlist
-	vcurs = vlist;
-	while (vcurs) {
-		struct variable_list *bookmark = vcurs->next;
-
-		free(vcurs->varname);
-		free(vcurs);
-		vcurs = bookmark;
+	while (listLen(vlist) > 0) {
+		char * freeme = (char*)getHeadOfList(vlist);
+		free(freeme);
 	}
 	return retval;
 }/*}}}*/
