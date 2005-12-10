@@ -81,8 +81,8 @@ struct variable_list
 };
 
 static int recursion(char *str);
-static int find_recursion(char *vstack);
-static int find_recursion_core(struct variable_list *vstack);
+static int find_recursion(char *);
+static int find_recursion_core(List);
 static char *flatten(char *str);
 
 
@@ -366,77 +366,69 @@ static int recursion(char *str)
 
 int find_recursion(char * instring)
 {
-	struct variable_list vl;
+	List vl = NULL;
 	int retval;
-	vl.varname = (char*)strdup(instring);
-	vl.next = NULL;
-	retval = find_recursion_core(&vl);
-	free(vl.varname);
+
+	addToList(&vl,(char*)strdup(instring));
+	retval = find_recursion_core(vl);
+	free(getHeadOfList(vl));
 	return retval;
 }
 
-int find_recursion_core(struct variable_list *vstack)
+int find_recursion_core(List oldvars)
 {/*{{{*/
-	List vlist = NULL;
-	ListIterator vlistIterator;
+	List newvars = NULL;
+	ListIterator newvarsIterator, oldvarsIterator;
 	int retval = 0;
 	struct answer a;
-	struct variable_list *vstackcurs;
-	char * vlistVarname = NULL;
+	char *newVarname = NULL, *oldVarname = NULL;
 
-	a = getvar_full(vstack->varname);
+	a = getvar_full((char*)peekAheadInList(oldvars));
 	if (a.err) return 0;
 	if (! a.exp) {
 		mpfr_clear(a.val);
 		return 0;
 	}
 
-	vlist = extract_vars(a.exp);
-	vlistIterator = getListIterator(vlist);
-	// for each variable in that expression (i.e. each entry in the vlist)
-	// see if we've seen it before (i.e. it's in the vstack)
-	vlistVarname = (char*)nextListElement(vlistIterator);
-	while (vlistVarname != NULL) {
-		for (vstackcurs = vstack; vstackcurs; vstackcurs = vstackcurs->next) {
-			if (!strcmp(vlistVarname, vstackcurs->varname)) {
-				unsigned int len = strlen(vlistVarname) + 73;
+	newvars = extract_vars(a.exp);
+	newvarsIterator = getListIterator(newvars);
+	oldvarsIterator = getListIterator(oldvars);
+	// for each variable in that expression (i.e. each entry in newvars)
+	// see if we've seen it before (i.e. it's in oldvars)
+	while ((newVarname = (char*)nextListElement(newvarsIterator)) != NULL) {
+		while ((oldVarname = (char*)nextListElement(oldvarsIterator)) != NULL) {
+			if (!strcmp(newVarname, oldVarname)) {
+				unsigned int len = strlen(newVarname) + 73;
 				char *error = malloc(sizeof(char) * len);
 
 				snprintf(error, len,
 						 "%s was found twice in symbol descent. Recursive variables are not allowed.",
-						 vlistVarname);
+						 newVarname);
 				report_error(error);
 				free(error);
+				freeListIterator(newvarsIterator);
+				freeListIterator(oldvarsIterator);
 				return 1;
 			}
 		}
-		vlistVarname = (char*)nextListElement(vlistIterator);
 	}
-	resetListIterator(vlistIterator);
-	// for each entry in the vlist, see if it has recursion
-	while ((vlistVarname = (char*)nextListElement(vlistIterator)) != NULL) {
-		struct variable_list newfront;
-
-		newfront.varname = vlistVarname;
-		newfront.next = vstack;
-		retval = find_recursion_core(&newfront);
+	resetListIterator(newvarsIterator);
+	// for each entry in newvars, see if it has recursion
+	while ((newVarname = (char*)nextListElement(newvarsIterator)) != NULL) {
+		addToListHead(&oldvars,newVarname);
+		retval = find_recursion_core(oldvars);
+		getHeadOfList(oldvars);
 		if (retval != 0) {
 			break;
 		}
 	}
-	/*
-	for (vcurs = vlist; vcurs && !retval; vcurs = vcurs->next) {
-		struct variable_list *bookmark = vcurs->next;
-
-		vcurs->next = vstack;
-		retval = find_recursion_core(vcurs);
-		vcurs->next = bookmark;
-	}*/
-	// free the vlist
-	while (listLen(vlist) > 0) {
-		char * freeme = (char*)getHeadOfList(vlist);
+	// free the newvars
+	while (listLen(newvars) > 0) {
+		char * freeme = (char*)getHeadOfList(newvars);
 		free(freeme);
 	}
+	freeListIterator(newvarsIterator);
+	freeListIterator(oldvarsIterator);
 	return retval;
 }/*}}}*/
 
