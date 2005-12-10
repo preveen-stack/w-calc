@@ -1,6 +1,9 @@
 #ifndef KBW_VARIABLES
 #define KBW_VARIABLES
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 #if STDC_HEADERS
 # include <string.h>
 #else
