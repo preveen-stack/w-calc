@@ -202,7 +202,7 @@ static struct variable_list *local_extract_vars(char *str)
 	if (*str == '\\')
 		return NULL;
 	curs = strchr(str, '=');
-	if (!curs || !*curs)
+	if (!curs || !*curs || *(curs+1) == '=')
 		curs = str;
 
 	while (curs && *curs) {
@@ -271,7 +271,7 @@ static char *flatten(char *str)
 		return str;
 	}
 	curs = strchr(str, '=');
-	if (!curs || !*curs)
+	if (!curs || !*curs || *(curs+1) == '=')
 		curs = str;
 
 	while (curs && *curs) {
@@ -404,16 +404,16 @@ static char *flatten(char *str)
 static int recursion(char *str)
 {/*{{{*/
 	List vlist;
-	struct variable_list vstack_base;
 	int retval = 0;
-	size_t i;
 	char * righthand;
 
+	// do not examine commands
 	if (*str == '\\') {
 		return 0;
 	}
+	// do not examine the left side of an assignment
 	righthand = strchr(str, '=');
-	if (!righthand || !*righthand) {
+	if (!righthand || !*righthand || *(righthand+1) == '=') {
 		righthand = str;
 	}
 	vlist = extract_vars(righthand);
