@@ -40,6 +40,9 @@ void explain_command(char *str)
 	str++;
 	if (!strcmp(str, "b") || !strcmp(str, "bin") || !strcmp(str, "binary")) {
 		printf("This displays the output in binary.\n");
+	} else if (!strcmp(str, "store")) {
+		printf
+			("Saves the variable specified in the preload file, ~/.wcalc_preload. Use like so: \\store variablename");
 	} else if (!strcmp(str, "q")) {
 		printf("Exits the program.");
 	} else if (!strcmp(str, "d") || !strcmp(str, "dec") ||
@@ -72,7 +75,8 @@ void explain_command(char *str)
 			   !strcmp(str, "octal")) {
 		printf("This displays the output in octal.\n");
 	} else if (!strcmp(str, "open")) {
-		printf("Loads a saved file. Used like this: \\openXXXXX where XXXXX is the name of the file to load.\n");
+		printf
+			("Loads a saved file. Used like this: \\openXXXXX where XXXXX is the name of the file to load.\n");
 	} else if (!strcmp(str, "p")) {
 		printf
 			("Sets the precision. Use it like so: \\pX where X is the desired precision. Precision here is in digits. This setting only affects display. -1 means \"auto\".\n");
@@ -87,7 +91,8 @@ void explain_command(char *str)
 		printf("Toggles radian mode for trigonometric functions.\n");
 	} else if (!strcmp(str, "rou") || !strcmp(str, "round") ||
 			   !strcmp(str, "rounding")) {
-		printf("Sets the rounding indication. The possible arguments to this preference are \"none\", \"simple\", and \"sig_fig\". Use like this: \\round none\n");
+		printf
+			("Sets the rounding indication. The possible arguments to this preference are \"none\", \"simple\", and \"sig_fig\". Use like this: \\round none\n");
 	} else if (!strcmp(str, "re") || !strcmp(str, "remember") ||
 			   !strcmp(str, "remember_errors")) {
 		printf("Toggles whether errors are remembered in history.\n");
@@ -96,7 +101,8 @@ void explain_command(char *str)
 			("Sets the number of bits used internally to represent numbers. Used like this: \\bitsX where X is a number that must be above %li and below %li.\n",
 			 (long int)MPFR_PREC_MIN, (long int)MPFR_PREC_MAX);
 	} else if (!strcmp(str, "save")) {
-		printf("Saves the history and variable list to a file. Used like this: \\saveXXXXX where XXXXX is the name of the file to save.\n");
+		printf
+			("Saves the history and variable list to a file. Used like this: \\saveXXXXX where XXXXX is the name of the file to save.\n");
 	} else if (!strcmp(str, "tsep")) {
 		printf
 			("Used like this: \\tsepX Sets the thousands-place separator character to X. The default is a comma (,).\n");

@@ -14,7 +14,7 @@
 #include <sys/stat.h>				   /* for open flags */
 #include <string.h>					   /* for strlen() */
 #include <stdlib.h>					   /* for free() */
-#include <limits.h> /* for PATH_MAX */
+#include <limits.h>					   /* for PATH_MAX */
 
 #include <gmp.h>
 #include <mpfr.h>
@@ -83,7 +83,8 @@ int saveState(char *filename)
 			}
 		}
 		/* save history */
-		for (hindex = 0; hindex < historyLength() && return_error == 0; hindex++) {
+		for (hindex = 0; hindex < historyLength() && return_error == 0;
+			 hindex++) {
 			char *history_entry = historynum(hindex, 1);
 
 			retval = write(fd, history_entry, strlen(history_entry));
@@ -156,8 +157,8 @@ int loadState(char *filename, int into_history)
 				printf("-> %s\n", linebuf);
 			}
 			stripComments(linebuf);
-			while (linebuf[strlen(linebuf)-1] == ' ') {
-				linebuf[strlen(linebuf)-1] = 0;
+			while (linebuf[strlen(linebuf) - 1] == ' ') {
+				linebuf[strlen(linebuf) - 1] = 0;
 			}
 			if (strlen(linebuf)) {
 				extern char *errstring;
@@ -167,7 +168,7 @@ int loadState(char *filename, int into_history)
 				parseme(safe);
 				putval("a", last_answer);
 				if ((!errstring || (errstring && !strlen(errstring)) ||
-					conf.remember_errors) && into_history) {
+					 conf.remember_errors) && into_history) {
 					addToHistory(linebuf, last_answer);
 				}
 			}
@@ -189,7 +190,7 @@ int loadState(char *filename, int into_history)
 }									   /*}}} */
 
 int storeVar(char *variable)
-{/*{{{*/
+{									   /*{{{ */
 	int fd, retval = 0, return_error = 0;
 	char filename[PATH_MAX];
 
@@ -199,7 +200,7 @@ int storeVar(char *variable)
 	}
 	snprintf(filename, PATH_MAX, "%s/.wcalc_preload", getenv("HOME"));
 	fd = open(filename, O_WRONLY | O_CREAT | O_APPEND,
-				  S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+			  S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 	if (fd >= 0) {
 		// success
 		struct answer keyval = getvar_full(variable);
@@ -210,14 +211,14 @@ int storeVar(char *variable)
 			return_error = errno;
 			goto exit_storeVar;
 		}
-		retval = write(fd,"=",1);
+		retval = write(fd, "=", 1);
 		if (retval < 1) {
 			return_error = errno;
 			goto exit_storeVar;
 		}
 		if (keyval.exp) {
-			cptr = malloc(strlen(keyval.exp)+3);
-			snprintf(cptr, strlen(keyval.exp)+3, "'%s'", keyval.exp);
+			cptr = malloc(strlen(keyval.exp) + 3);
+			snprintf(cptr, strlen(keyval.exp) + 3, "'%s'", keyval.exp);
 		} else {
 			cptr = strdup(print_this_result(keyval.val));
 		}
@@ -238,6 +239,6 @@ int storeVar(char *variable)
 			goto exit_storeVar;
 		}
 	}
-exit_storeVar:
+  exit_storeVar:
 	return return_error;
-}/*}}}*/
+}									   /*}}} */
