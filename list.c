@@ -22,6 +22,12 @@ struct _list
 	struct _list *pool_prev;
 };
 
+struct _list_iterator
+{
+	struct _listheader *cur;
+	List l;
+};
+
 struct cleanup
 {
 	struct cleanup *next;
@@ -226,6 +232,36 @@ void addToList(List * lst, void *addme)
 	}
 }									   /*}}} */
 
+/* This adds "addme" to the head of the list */
+void addToListHead(List * lst, void *addme)
+{									   /*{{{ */
+	List list;
+	ListHeader pl;
+
+	pl = get_lh();
+	pl->payload = addme;
+	pl->next = NULL;
+	if (!lst) {
+		fprintf(stderr, "null list passed\n");
+		exit(EXIT_FAILURE);
+	}
+	list = *lst;
+	if (!list) {
+		list = *lst = get_l();
+		list->tail = list->head = pl;
+		list->len = 1;
+	} else {
+		if (list->head) {
+			pl->next = list->head;
+			list->head = pl;
+			list->len++;
+		} else {
+			list->tail = list->head = pl;
+			list->len = 1;
+		}
+	}
+}									   /*}}} */
+
 /* This removes the front of the list from the list and returns it */
 void *getHeadOfList(List list)
 {									   /*{{{ */
@@ -289,3 +325,50 @@ inline unsigned long listLen(List list)
 		return 0;
 	}
 }									   /*}}} */
+
+/* This returns a list iterator to a list */
+ListIterator getListIterator(List list)
+{
+	ListIterator li = malloc(sizeof(ListIterator));
+
+	li->cur = list->head;
+	li->l = list;
+	return li;
+}
+
+/* This returns the value of the current element in the list Iterator */
+void * currentListElement(ListIterator li)
+{
+	if (!li || !(li->cur)) {
+		return NULL;
+	}
+	return li->cur->payload;
+}
+
+/* This iterates a list iterator */
+void *nextListElement(ListIterator li)
+{
+	void * payload;
+
+	if (!li || !(li->cur)) {
+		return NULL;
+	}
+	payload = li->cur->payload;
+	li->cur = li->cur->next;
+	return payload;
+}
+
+/* This sets the iterator back to the beginning */
+void resetListIterator(ListIterator li)
+{
+	if (!li) {
+		return;
+	}
+	li->cur = li->l->head;
+}
+
+/* This frees up a list iterator */
+void freeListIterator(ListIterator li)
+{
+	free(li);
+}
