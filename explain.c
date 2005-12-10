@@ -1,6 +1,15 @@
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 #include <string.h>
 #include <gmp.h>
 #include <mpfr.h>
+#ifdef HAVE_INTTYPES_H
+#include <inttypes.h>				   /* for UINT32_MAX */
+#endif
+#ifdef HAVE_STDINT_H
+#include <stdint.h>					   /* for UINT32_MAX */
+#endif
 #include "variables.h"
 #include "calculator.h"
 #include "list.h"
