@@ -194,7 +194,6 @@ void parseme(char *pthis)
 
 static char *flatten(char *str)
 {/*{{{*/
-	struct variable_list *vlist = NULL;
 	char *curs = str, *eov, *nstr;
 	char *varname, *varvalue;
 	size_t olen, nlen, changedlen, varnamelen = 100;
@@ -325,14 +324,6 @@ static char *flatten(char *str)
 			str = nstr;
 		}
 		free(varvalue);
-	}
-	// free up the vlist
-	while (vlist) {
-		struct variable_list *freeme = vlist;
-
-		free(vlist->varname);
-		vlist = vlist->next;
-		free(freeme);
 	}
 	standard_output = standard_output_save;
 	return str;
