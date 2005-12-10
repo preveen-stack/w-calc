@@ -10,3 +10,4 @@ foo
 bar='baz'
 baz='foo'
 foo
+foo==5
