@@ -349,7 +349,7 @@ static int recursion(char *str)
 }/*}}}*/
 
 int find_recursion(char * instring)
-{
+{/*{{{*/
 	List vl = NULL;
 	int retval;
 
@@ -357,7 +357,7 @@ int find_recursion(char * instring)
 	retval = find_recursion_core(vl);
 	free(getHeadOfList(vl));
 	return retval;
-}
+}/*}}}*/
 
 int find_recursion_core(List oldvars)
 {/*{{{*/
