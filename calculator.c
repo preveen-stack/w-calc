@@ -74,17 +74,10 @@ extern int yyparse();
 extern void * yy_scan_string(const char *);
 extern void yy_delete_buffer(struct yy_buffer_state *);
 
-struct variable_list
-{
-	char *varname;
-	struct variable_list *next;
-};
-
 static int recursion(char *str);
 static int find_recursion(char *);
 static int find_recursion_core(List);
 static char *flatten(char *str);
-
 
 void parseme(char *pthis)
 {/*{{{*/
@@ -369,7 +362,7 @@ int find_recursion(char * instring)
 int find_recursion_core(List oldvars)
 {/*{{{*/
 	List newvars = NULL;
-	ListIterator newvarsIterator, oldvarsIterator;
+	ListIterator oldvarsIterator;
 	int retval = 0;
 	struct answer a;
 	char *newVarname = NULL, *oldVarname = NULL;
@@ -382,11 +375,11 @@ int find_recursion_core(List oldvars)
 	}
 
 	newvars = extract_vars(a.exp);
-	newvarsIterator = getListIterator(newvars);
 	oldvarsIterator = getListIterator(oldvars);
 	// for each variable in that expression (i.e. each entry in newvars)
 	// see if we've seen it before (i.e. it's in oldvars)
-	while ((newVarname = (char*)nextListElement(newvarsIterator)) != NULL) {
+	while (listLen(newvars) > 0) {
+		newVarname = (char*)getHeadOfList(newvars);
 		while ((oldVarname = (char*)nextListElement(oldvarsIterator)) != NULL) {
 			if (!strcmp(newVarname, oldVarname)) {
 				unsigned int len = strlen(newVarname) + 73;
@@ -397,28 +390,20 @@ int find_recursion_core(List oldvars)
 						 newVarname);
 				report_error(error);
 				free(error);
-				freeListIterator(newvarsIterator);
 				freeListIterator(oldvarsIterator);
 				return 1;
 			}
 		}
-	}
-	resetListIterator(newvarsIterator);
-	// for each entry in newvars, see if it has recursion
-	while ((newVarname = (char*)nextListElement(newvarsIterator)) != NULL) {
+		// now see if it has recursion
 		addToListHead(&oldvars,newVarname);
 		retval = find_recursion_core(oldvars);
 		getHeadOfList(oldvars);
+		resetListIterator(oldvarsIterator);
+		free(newVarname);
 		if (retval != 0) {
 			break;
 		}
 	}
-	// free the newvars
-	while (listLen(newvars) > 0) {
-		char * freeme = (char*)getHeadOfList(newvars);
-		free(freeme);
-	}
-	freeListIterator(newvarsIterator);
 	freeListIterator(oldvarsIterator);
 	return retval;
 }/*}}}*/
