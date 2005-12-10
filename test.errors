@@ -2,3 +2,11 @@
 q=7 # q cannot be assigned a value
 \convert feet cups # must be same category
 \convert feet to cups # must be same category
+foo='foo'
+foo
+foo='bar'
+bar='foo'
+foo
+bar='baz'
+baz='foo'
+foo
