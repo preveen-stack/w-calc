@@ -48,7 +48,10 @@ void cleanupvar(void);
  * mpfr_clear()'d when you're done with 'em.
  */
 
+/* getvar returns only the value, or an error if it doesn't have one */
 struct answer getvar(char *key);
+/* getvar returns whatever is known about the variable, or an error if
+ * it doesn't exist */
 struct answer getvar_full(char *key);
 
 /* THIS function, however, exposes the innards of the variable system.

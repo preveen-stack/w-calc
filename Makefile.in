@@ -57,7 +57,9 @@ am_wcalc_OBJECTS = parser.$(OBJEXT) scanner.$(OBJEXT) help.$(OBJEXT) \
 	calculator.$(OBJEXT) string_manip.$(OBJEXT) \
 	historyManager.$(OBJEXT) files.$(OBJEXT) variables.$(OBJEXT) \
 	conversion.$(OBJEXT) main.$(OBJEXT) \
-	number_formatting.$(OBJEXT)
+	number_formatting.$(OBJEXT) explain.$(OBJEXT) list.$(OBJEXT) \
+	extract_vars.$(OBJEXT) isconst.$(OBJEXT) isfunc.$(OBJEXT) \
+	evalvar.$(OBJEXT)
 wcalc_OBJECTS = $(am_wcalc_OBJECTS)
 wcalc_DEPENDENCIES =
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I.
@@ -163,7 +165,18 @@ sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 AM_YFLAGS = -dt
-wcalc_SOURCES = calculator.h variables.h string_manip.h help.h parser.y string_manip.h historyManager.h files.h conversion.h scanner.l help.c calculator.c string_manip.c historyManager.c files.c variables.c conversion.c main.c number_formatting.c
+#AM_LFLAGS = -w
+wcalc_SOURCES = calculator.h variables.h string_manip.h help.h parser.y \
+				string_manip.h historyManager.h files.h conversion.h \
+				scanner.l help.c calculator.c string_manip.c historyManager.c \
+				files.c variables.c conversion.c main.c number_formatting.c \
+				explain.h explain.c \
+				list.h list.c \
+				extract_vars.h extract_vars.c \
+				isconst.h isconst.c \
+				isfunc.h isfunc.c \
+				evalvar.h evalvar.c
+
 AM_CFLAGS = -O2 -Wall
 wcalc_LDADD = @LEXLIB@
 man_MANS = wcalc.1
@@ -257,9 +270,15 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/calculator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/conversion.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/evalvar.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/explain.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/extract_vars.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/files.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/help.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/historyManager.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/isconst.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/isfunc.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/list.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/number_formatting.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/parser.Po@am__quote@
@@ -641,7 +660,9 @@ distclean-local:
 	rm -rf Wcalc.xcodeproj/CVS
 	rm -f .*.swp *~ ".#"*
 	find . -name .DS_Store -exec rm -f {} \;
+	find . -name .cvsignore -exec rm -f {} \;
 	rm -f .gdb_history
+	rm -rf build autom4te.cache
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

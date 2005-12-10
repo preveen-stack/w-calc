@@ -4666,8 +4666,8 @@ _ACEOF
   LIBS="-lmpfr $LIBS"
 
 else
-  { { echo "$as_me:$LINENO: error: Need MPFR. hee http://www.mpfr.org" >&5
-echo "$as_me: error: Need MPFR. hee http://www.mpfr.org" >&2;}
+  { { echo "$as_me:$LINENO: error: Need MPFR. see http://www.mpfr.org" >&5
+echo "$as_me: error: Need MPFR. see http://www.mpfr.org" >&2;}
    { (exit 1); exit 1; }; }
 fi
 

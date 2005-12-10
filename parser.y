@@ -61,7 +61,7 @@ struct conv_req conver;
 }
 
 %token DEC_CMD OCT_CMD HEX_CMD BIN_CMD GUARD_CMD DISPLAY_PREFS_CMD
-%token RADIAN_CMD PICKY_CMD REMEMBER_CMD LISTVAR_CMD
+%token RADIAN_CMD REMEMBER_CMD LISTVAR_CMD
 %token PRINT_HELP_CMD PREFIX_CMD INT_CMD VERBOSE_CMD
 %token <integer> ENG_CMD HLIMIT_CMD ROUNDING_INDICATION_CMD
 %token <integer> PRECISION_CMD BITS_CMD BASE_CMD
@@ -197,15 +197,6 @@ command : HEX_CMD {
 	} else if (standard_output) {
 		printf("%c cannot be the thousands separator. It is the decimal separator.\n", $1);
 	}}
-/*| PICKY_CMD {
-	$$ = nothing;
-	conf.picky_variables = ! conf.picky_variables;
-	if (standard_output) {
-		if (! conf.picky_variables)
-			printf("Unknown variables are assumed to be 0.\n");
-		else
-			printf("Strict variable parsing.\n");
-	}}*/
 | INT_CMD {
 	$$ = nothing;
 	conf.print_ints = ! conf.print_ints;
@@ -227,7 +218,6 @@ command : HEX_CMD {
 		printf("       Internal Precision: %lu bits\n", (unsigned long) mpfr_get_default_prec());
 		printf("       Engineering Output: %s\n",conf.engineering?"yes":"no");
 		printf("            Output Format: %s\n",output_string(conf.output_format));
-		//printf("Flag Undeclared Variables: %s\n",conf.picky_variables?"yes":"no");
 		printf("              Use Radians: %s\n",conf.use_radians?"yes":"no");
 		printf("           Print Prefixes: %s\n",conf.print_prefixes?"yes":"no");
 		printf("      Rounding Indication: %s\n",conf.rounding_indication==SIMPLE_ROUNDING_INDICATION?"yes (simple)":(conf.rounding_indication==SIG_FIG_ROUNDING_INDICATION?"yes (sig_fig)":"no"));

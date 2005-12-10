@@ -51,6 +51,7 @@ extern int history_truncate_file(char *, int);
 #include "help.h"
 #include "files.h"
 #include "historyManager.h"
+#include "list.h"
 
 #define TRUEFALSE (! strcmp(value,"yes") || ! strcmp(value,"true"))
 
@@ -83,6 +84,7 @@ int main(int argc, char *argv[])
 	yydebug = 0;					   /* turn off ugly YACC debugging */
 
 	initvar();
+	lists_init();
 
 	/* initialize the preferences */
 	conf.precision = -1;
@@ -257,6 +259,7 @@ int main(int argc, char *argv[])
 		cleanupvar();
 		mpfr_clear(last_answer);
 		mpfr_free_cache();
+		lists_cleanup();
 		exit(EXIT_SUCCESS);
 	}
 
@@ -414,6 +417,7 @@ int main(int argc, char *argv[])
 	cleanupvar();
 	mpfr_clear(last_answer);
 	mpfr_free_cache();
+	lists_cleanup();
 	exit(EXIT_SUCCESS);
 }
 

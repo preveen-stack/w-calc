@@ -24,6 +24,7 @@
 #include "conversion.h"
 #include "parser.h"
 #include "string_manip.h"
+#include "explain.h"
 
 	extern short scanerror;
 
@@ -81,7 +82,6 @@ SPACE		[ ]
 \\hlimit{DIGIT}+        { YYLVALAC->integer = atoi(yytext+7); return(HLIMIT_CMD); }
 \\ints?                 { return(INT_CMD); }
 \\x                     { return(HEX_CMD); }
-\\l(enient)?            { return(PICKY_CMD); }
 \\li(st(vars)?)?        { return(LISTVAR_CMD); }
 \\o(ct(al)?)?           { return(OCT_CMD); }
 \\open[ ].*             {
@@ -99,7 +99,6 @@ SPACE		[ ]
 	Dprintf("filename: %s\n",returnme);
 	return(OPEN_CMD); }
 \\p[-]?{DIGIT}+         { YYLVALAC->integer = atoi(yytext+2); return(PRECISION_CMD);}
-\\p(icky)?              { return(PICKY_CMD); }
 \\pre(fix(es)?)?        { return(PREFIX_CMD); }
 \\pref(s|erences)?      { return(DISPLAY_PREFS_CMD); }
 \\r(ad(ians)?)?         { return(RADIAN_CMD); }
@@ -151,6 +150,7 @@ SPACE		[ ]
 }
 \\base{DIGIT}+          { YYLVALAC->integer = atoi(yytext+5); return(BASE_CMD); }
 \\verbose               { return(VERBOSE_CMD); }
+\\explain{SPACE}.* 		{ explain(yytext+9); }
 
 %{ /* These are comments */
 %}
@@ -255,17 +255,17 @@ Mh				{ mpfr_init_set_str(YYLVALAC->number,W_HELION_MASS,0,GMP_RNDN);
 				  return(NUMBER); }
 M(alpha|\316\261)	{ mpfr_init_set_str(YYLVALAC->number,W_ALPHA_PARTICLE_MASS,0,GMP_RNDN);
 				  return(NUMBER); }
-n(0|zero)		{ mpfr_init_set_str(YYLVALAC->number,W_LOSCHMIDT_CONSTANT,0,GMP_RNDN);
+n(0|zero|ZERO)	{ mpfr_init_set_str(YYLVALAC->number,W_LOSCHMIDT_CONSTANT,0,GMP_RNDN);
 				  return(NUMBER); }
 c1				{ mpfr_init_set_str(YYLVALAC->number,W_FIRST_RADIATION_CONSTANT,0,GMP_RNDN);
 				  return(NUMBER); }
 c2				{ mpfr_init_set_str(YYLVALAC->number,W_SECOND_RADIATION_CONSTANT,0,GMP_RNDN);
 				  return(NUMBER); }
-G(0|zero)		{ mpfr_init_set_str(YYLVALAC->number,W_CONDUCTANCE_QUANTUM,0,GMP_RNDN);
+G(0|zero|ZERO)	{ mpfr_init_set_str(YYLVALAC->number,W_CONDUCTANCE_QUANTUM,0,GMP_RNDN);
 				  return(NUMBER); }
-Z(0|zero)		{ mpfr_init_set_str(YYLVALAC->number,W_IMPEDANCE_OF_VACUUM,0,GMP_RNDN);
+Z(0|zero|ZERO)	{ mpfr_init_set_str(YYLVALAC->number,W_IMPEDANCE_OF_VACUUM,0,GMP_RNDN);
 				  return(NUMBER); }
-(Phi|\316\246)(0|zero)	{ mpfr_init_set_str(YYLVALAC->number,W_MAGNETIC_FLUX_QUANTUM,0,GMP_RNDN);
+(Phi|\316\246)(0|zero|ZERO)	{ mpfr_init_set_str(YYLVALAC->number,W_MAGNETIC_FLUX_QUANTUM,0,GMP_RNDN);
 				  return(NUMBER); }
 \302\274		{ mpfr_init_set_d(YYLVALAC->number,0.25,GMP_RNDN);
 				  return(NUMBER); }
