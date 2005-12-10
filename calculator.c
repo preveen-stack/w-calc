@@ -45,6 +45,8 @@ char *strchr(), *strrchr();
 #include "string_manip.h"
 #include "files.h"
 #include "number_formatting.h"
+#include "list.h"
+#include "extract_vars.h"
 
 /* variables everyone needs to get to */
 mpfr_t last_answer;
@@ -78,9 +80,10 @@ struct variable_list
 	struct variable_list *next;
 };
 
-static struct variable_list *extract_vars(char *str);
+static struct variable_list *local_extract_vars(char *str);
 static int recursion(char *str);
-static int find_recursion(struct variable_list *vstack);
+static int find_recursion(char *vstack);
+static int find_recursion_core(struct variable_list *vstack);
 static char *flatten(char *str);
 
 
@@ -190,7 +193,7 @@ void parseme(char *pthis)
 	return;
 }/*}}}*/
 
-static struct variable_list *extract_vars(char *str)
+static struct variable_list *local_extract_vars(char *str)
 {/*{{{*/
 	char *curs, *eov, save_char;
 	struct variable_list *vlist = NULL, *vcurs;
@@ -400,26 +403,42 @@ static char *flatten(char *str)
 
 static int recursion(char *str)
 {/*{{{*/
-	struct variable_list *vlist, *vcurs, vstack_base;
+	List vlist;
+	struct variable_list vstack_base;
 	int retval = 0;
+	size_t i;
+	char * righthand;
 
-	vlist = extract_vars(str);
-	for (vcurs = vlist; vcurs && !retval; vcurs = vcurs->next) {
-		vstack_base.varname = (char *)strdup(vcurs->varname);
-		vstack_base.next = NULL;
-		retval = find_recursion(&vstack_base);
-		free(vstack_base.varname);
+	if (*str == '\\') {
+		return 0;
 	}
-	while (vlist) {
-		vcurs = vlist->next;
-		free(vlist->varname);
-		free(vlist);
-		vlist = vcurs;
+	righthand = strchr(str, '=');
+	if (!righthand || !*righthand) {
+		righthand = str;
+	}
+	vlist = extract_vars(righthand);
+	while (listLen(vlist) > 0) {
+		char * varname = (char *)getHeadOfList(vlist);
+		if (retval == 0) {
+			retval = find_recursion(varname);
+		}
+		free(varname);
 	}
 	return retval;
 }/*}}}*/
 
-int find_recursion(struct variable_list *vstack)
+int find_recursion(char * instring)
+{
+	struct variable_list vl;
+	int retval;
+	vl.varname = (char*)strdup(instring);
+	vl.next = NULL;
+	retval = find_recursion_core(&vl);
+	free(vl.varname);
+	return retval;
+}
+
+int find_recursion_core(struct variable_list *vstack)
 {/*{{{*/
 	struct variable_list *vlist = NULL;
 	int retval = 0;
@@ -433,7 +452,7 @@ int find_recursion(struct variable_list *vstack)
 		return 0;
 	}
 
-	vlist = extract_vars(a.exp);
+	vlist = local_extract_vars(a.exp);
 	// for each entry in the vlist, see if it's in the vstack
 	for (vcurs = vlist; vcurs; vcurs = vcurs->next) {
 		for (vstackcurs = vstack; vstackcurs; vstackcurs = vstackcurs->next) {
@@ -455,7 +474,7 @@ int find_recursion(struct variable_list *vstack)
 		struct variable_list *bookmark = vcurs->next;
 
 		vcurs->next = vstack;
-		retval = find_recursion(vcurs);
+		retval = find_recursion_core(vcurs);
 		vcurs->next = bookmark;
 	}
 	// free the vlist
