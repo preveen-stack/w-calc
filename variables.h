@@ -4,7 +4,7 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-#if STDC_HEADERS
+#if HAVE_STRING_H
 # include <string.h>
 #else
 # if !HAVE_STRCHR
@@ -39,9 +39,10 @@ struct answer
 
 // requires a working mpfr_t
 void getvarval(mpfr_t out, char *key);
+
 // requires a working mpfr_t (duh)
-int putval(char *key, mpfr_t value, char* desc);
-int putexp(char *key, char *value, char* desc);
+int putval(char *key, mpfr_t value, char *desc);
+int putexp(char *key, char *value, char *desc);
 int varexists(char *key);
 void initvar(void);
 void delnvar(int);
@@ -56,6 +57,7 @@ void cleanupvar(void);
 
 /* getvar returns only the value, or an error if it doesn't have one */
 struct answer getvar(char *key);
+
 /* getvar returns whatever is known about the variable, or an error if
  * it doesn't exist */
 struct answer getvar_full(char *key);

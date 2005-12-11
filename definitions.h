@@ -10,8 +10,8 @@
 #ifndef WCALC_DEFINITIONS
 #define WCALC_DEFINITIONS
 
-#ifdef GUI
-#define VERSION "2.1.2"
+#ifndef HAVE_CONFIG_H
+#define VERSION "2.2"
 #endif
 
 #define W_EXTRA 5

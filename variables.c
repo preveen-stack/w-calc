@@ -2,11 +2,7 @@
 #include "config.h"
 #endif
 #include <ctype.h>
-//#include <pwd.h>                     /* for getpwent */
-//#include <sys/types.h>                   /* for getpwent */
-//#include <stdio.h>                       /* for cuserid */
-//#include <unistd.h>                      /* for getlogin */
-#if HAVE_STRING_H
+#if HAVE_STRING_H || !defined(HAVE_CONFIG_H)
 # include <string.h>
 #endif
 
@@ -28,11 +24,11 @@ int contents = 0;
 static void *getvar_core(char *key, int all_or_nothing);
 
 void initvar(void)
-{
-}
+{									   /*{{{ */
+}									   /*}}} */
 
 void cleanupvar(void)
-{
+{									   /*{{{ */
 	struct variable *cursor = them;
 
 	while (cursor != NULL) {
@@ -44,10 +40,10 @@ void cleanupvar(void)
 		}
 		cursor = cursor->next;
 	}
-}
+}									   /*}}} */
 
 void delnvar(int i)
-{
+{									   /*{{{ */
 	int j;
 	struct variable *cursor = them, *follower = NULL;
 
@@ -83,10 +79,10 @@ void delnvar(int i)
 		free(cursor);
 	}
 	contents--;
-}
+}									   /*}}} */
 
 struct variable *getrealnvar(int i)
-{
+{									   /*{{{ */
 	int j;
 	struct variable *cursor = them;
 
@@ -94,10 +90,10 @@ struct variable *getrealnvar(int i)
 		cursor = cursor->next;
 
 	return cursor;
-}
+}									   /*}}} */
 
 struct answer getvar(char *key)
-{
+{									   /*{{{ */
 	struct answer ans;
 	mpfr_t *t = getvar_core(key, THE_VALUE);
 
@@ -112,19 +108,19 @@ struct answer getvar(char *key)
 		ans.err = 1;
 	}
 	return ans;
-}
+}									   /*}}} */
 
 void getvarval(mpfr_t out, char *key)
-{
+{									   /*{{{ */
 	mpfr_t *t = getvar_core(key, THE_VALUE);
 
 	if (t) {
 		mpfr_set(out, *t, GMP_RNDN);
 	}
-}
+}									   /*}}} */
 
 struct answer getvar_full(char *key)
-{
+{									   /*{{{ */
 	struct answer ans;
 	struct variable *var;
 
@@ -143,15 +139,15 @@ struct answer getvar_full(char *key)
 		ans.err = 1;
 	}
 	return ans;
-}
+}									   /*}}} */
 
 struct variable *getvarptr(char *key)
-{
+{									   /*{{{ */
 	return (struct variable *)getvar_core(key, THE_STRUCTURE);
-}
+}									   /*}}} */
 
 int varexists(char *key)
-{
+{									   /*{{{ */
 	struct variable *cursor = them;
 
 	if (!cursor)
@@ -160,18 +156,19 @@ int varexists(char *key)
 		return 0;
 
 	while (cursor && cursor->key &&
-			strncmp(cursor->key, key, strlen(cursor->key)+1)) {
+		   strncmp(cursor->key, key, strlen(cursor->key) + 1)) {
 		cursor = cursor->next;
 	}
-	if (cursor && cursor->key && !strncmp(cursor->key, key, strlen(cursor->key)+1)) {
+	if (cursor && cursor->key &&
+		!strncmp(cursor->key, key, strlen(cursor->key) + 1)) {
 		return 1;
 	} else {
 		return 0;
 	}
-}
+}									   /*}}} */
 
 static void *getvar_core(char *key, int all_or_nothing)
-{
+{									   /*{{{ */
 	struct variable *cursor = them;
 
 	if (!cursor)
@@ -179,10 +176,12 @@ static void *getvar_core(char *key, int all_or_nothing)
 	if (!strlen(key))
 		return NULL;
 
-	while (cursor && cursor->key && strncmp(cursor->key, key, strlen(cursor->key)+1)) {
+	while (cursor && cursor->key &&
+		   strncmp(cursor->key, key, strlen(cursor->key) + 1)) {
 		cursor = cursor->next;
 	}
-	if (cursor && cursor->key && !strncmp(cursor->key, key, strlen(cursor->key)+1)) {
+	if (cursor && cursor->key &&
+		!strncmp(cursor->key, key, strlen(cursor->key) + 1)) {
 		switch (all_or_nothing) {
 			case THE_VALUE:
 				if (cursor->exp) {
@@ -197,22 +196,23 @@ static void *getvar_core(char *key, int all_or_nothing)
 		}
 	}
 	return NULL;
-}
+}									   /*}}} */
 
-int putexp(char *key, char *value, char* desc)
-{
+int putexp(char *key, char *value, char *desc)
+{									   /*{{{ */
 	struct variable *cursor = them;
 
 	if (!key)
 		return -1;
 
 	if (cursor) {
-		while (cursor && strncmp(cursor->key, key, strlen(cursor->key)+1) > 0 &&
+		while (cursor &&
+			   strncmp(cursor->key, key, strlen(cursor->key) + 1) > 0 &&
 			   cursor->next) {
 			cursor = cursor->next;
 		}
 
-		if (strncmp(cursor->key, key, strlen(cursor->key)+1)) {	// add after cursor
+		if (strncmp(cursor->key, key, strlen(cursor->key) + 1)) {	// add after cursor
 			struct variable *ntemp = cursor->next;
 			cursor->next = calloc(sizeof(struct variable), 1);
 			if (!cursor->next) {	   // if we can't allocate memory
@@ -257,22 +257,22 @@ int putexp(char *key, char *value, char* desc)
 		cursor->exp = 1;
 		return 0;
 	}
-}
+}									   /*}}} */
 
-int putval(char *key, mpfr_t value, char* desc)
-{
+int putval(char *key, mpfr_t value, char *desc)
+{									   /*{{{ */
 	struct variable *cursor = them, *temp;
 
 	if (!key)
 		return -1;
 
 	if (cursor) {
-		while (cursor && strncmp(cursor->key, key, strlen(cursor->key)+1) &&
+		while (cursor && strncmp(cursor->key, key, strlen(cursor->key) + 1) &&
 			   cursor->next) {
 			cursor = cursor->next;
 		}
 
-		if (!strncmp(cursor->key, key, strlen(cursor->key)+1)) {
+		if (!strncmp(cursor->key, key, strlen(cursor->key) + 1)) {
 			// change this one
 		} else {
 			// add after cursor
@@ -312,4 +312,4 @@ int putval(char *key, mpfr_t value, char* desc)
 	mpfr_set(cursor->value, value, GMP_RNDN);
 	cursor->exp = 0;
 	return 0;
-}
+}									   /*}}} */

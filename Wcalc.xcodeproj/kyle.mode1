@@ -289,13 +289,11 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>48</integer>
-									<integer>45</integer>
-									<integer>0</integer>
+									<integer>73</integer>
 								</array>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
-							<string>{{0, 374}, {252, 645}}</string>
+							<string>{{0, 782}, {252, 645}}</string>
 						</dict>
 						<key>PBXTopSmartGroupGIDs</key>
 						<array/>
@@ -330,7 +328,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CE0B20306471E060097A5F4</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>WcalcController.m</string>
+								<string>variables.c</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -338,15 +336,13 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CE0B20406471E060097A5F4</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>WcalcController.m</string>
+										<string>variables.c</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>273655C7094A6FF70043391C</string>
+										<string>27365635094C6A3B0043391C</string>
 										<key>history</key>
 										<array>
-											<string>2721CBB70865FD2800E3BB4D</string>
-											<string>2721CBFD086604FD00E3BB4D</string>
 											<string>2721CD220869C0C400E3BB4D</string>
 											<string>2721CD240869C0C400E3BB4D</string>
 											<string>2754E75508C0D6E1007F45CF</string>
@@ -371,13 +367,10 @@
 											<string>272C373F08C21615009EA18F</string>
 											<string>272C374008C21615009EA18F</string>
 											<string>272C374108C21615009EA18F</string>
-											<string>272C374208C21615009EA18F</string>
-											<string>272C377008C3FE2E009EA18F</string>
 											<string>2773DCF40917EF3400DBDA9D</string>
 											<string>27E050E50918749700928DC2</string>
 											<string>276C7001091D1AB7005A5B75</string>
 											<string>276C7002091D1AB7005A5B75</string>
-											<string>27FAECB5093F982700D7EE3E</string>
 											<string>27FAECD5093FAA8400D7EE3E</string>
 											<string>27FAECD6093FAA8400D7EE3E</string>
 											<string>27FAECD7093FAA8400D7EE3E</string>
@@ -385,7 +378,13 @@
 											<string>27FAED39093FB42900D7EE3E</string>
 											<string>27FAED4F093FB5E800D7EE3E</string>
 											<string>27FAED58093FB65B00D7EE3E</string>
-											<string>27FAED6B093FBB7A00D7EE3E</string>
+											<string>273655E0094C63660043391C</string>
+											<string>2736561C094C69B80043391C</string>
+											<string>2736561D094C69B80043391C</string>
+											<string>2736561E094C69B80043391C</string>
+											<string>2736561F094C69B80043391C</string>
+											<string>27365632094C6A3B0043391C</string>
+											<string>27365633094C6A3B0043391C</string>
 										</array>
 										<key>prevStack</key>
 										<array>
@@ -430,6 +429,12 @@
 											<string>27E050E60918749700928DC2</string>
 											<string>27FAED01093FAF2400D7EE3E</string>
 											<string>27FAED1B093FB0BB00D7EE3E</string>
+											<string>273655E1094C63660043391C</string>
+											<string>27365621094C69B80043391C</string>
+											<string>27365622094C69B80043391C</string>
+											<string>27365623094C69B80043391C</string>
+											<string>27365624094C69B80043391C</string>
+											<string>27365634094C6A3B0043391C</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -608,7 +613,7 @@
 	<key>StatusbarIsVisible</key>
 	<true/>
 	<key>TimeStamp</key>
-	<real>155873260.33538401</real>
+	<real>156002875.26148799</real>
 	<key>ToolbarDisplayMode</key>
 	<integer>1</integer>
 	<key>ToolbarIsVisible</key>
@@ -623,6 +628,7 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
+		<string>276C702E09208343005A5B75</string>
 		<string>1C0AD2B3069F1EA900FABCE6</string>
 		<string>/Users/kyle/Wcalc/Wcalc.xcodeproj</string>
 	</array>
@@ -648,7 +654,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CD0528F0623707200166675</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>InspectorController.m</string>
+								<string>variables.c</string>
 								<key>StatusBarVisibility</key>
 								<true/>
 							</dict>
@@ -670,7 +676,7 @@
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXBuildLogShowsTranscriptDefaultKey</key>
-								<string>{{0, 252}, {789, 150}}</string>
+								<string>{{0, 207}, {789, 195}}</string>
 								<key>PBXProjectModuleGUID</key>
 								<string>XCMainBuildResultsModuleGUID</string>
 								<key>PBXProjectModuleLabel</key>
@@ -708,7 +714,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>276C702E09208343005A5B75</string>
-				<string>27FAECC3093FA34800D7EE3E</string>
+				<string>273655EE094C63E10043391C</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>

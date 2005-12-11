@@ -328,27 +328,27 @@ inline unsigned long listLen(List list)
 
 /* This returns a list iterator to a list */
 ListIterator getListIterator(List list)
-{
+{									   /*{{{ */
 	ListIterator li = malloc(sizeof(ListIterator));
 
 	li->cur = list->head;
 	li->l = list;
 	return li;
-}
+}									   /*}}} */
 
 /* This returns the value of the current element in the list Iterator */
-void * currentListElement(ListIterator li)
-{
+void *currentListElement(ListIterator li)
+{									   /*{{{ */
 	if (!li || !(li->cur)) {
 		return NULL;
 	}
 	return li->cur->payload;
-}
+}									   /*}}} */
 
 /* This iterates a list iterator */
 void *nextListElement(ListIterator li)
-{
-	void * payload;
+{									   /*{{{ */
+	void *payload;
 
 	if (!li || !(li->cur)) {
 		return NULL;
@@ -356,19 +356,19 @@ void *nextListElement(ListIterator li)
 	payload = li->cur->payload;
 	li->cur = li->cur->next;
 	return payload;
-}
+}									   /*}}} */
 
 /* This sets the iterator back to the beginning */
 void resetListIterator(ListIterator li)
-{
+{									   /*{{{ */
 	if (!li) {
 		return;
 	}
 	li->cur = li->l->head;
-}
+}									   /*}}} */
 
 /* This frees up a list iterator */
 void freeListIterator(ListIterator li)
-{
+{									   /*{{{ */
 	free(li);
-}
+}									   /*}}} */

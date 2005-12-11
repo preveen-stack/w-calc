@@ -77,6 +77,17 @@ int saveState(char *filename)
 				break;
 			}
 			free(cptr);
+			if (keyval->description) {
+				cptr = malloc(strlen(keyval->description) + 4);
+				snprintf(cptr, strlen(keyval->description) + 4, " '%s'", keyval->description);
+				retval = write(fd, cptr, strlen(cptr));
+				if (retval < (int)strlen(cptr)) {
+					return_error = errno;
+					free(cptr);
+					break;
+				}
+				free(cptr);
+			}
 			retval = write(fd, "\n", 1);
 			if (retval < 1) {
 				return_error = errno;

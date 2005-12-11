@@ -394,7 +394,7 @@ static NSString *curFile = NULL;
 	expression = strdup([[ExpressionField stringValue] UTF8String]);
 
 	parseme(expression);
-	putval("a",last_answer);
+	putval("a",last_answer,"previous answer");
 
 	/* if it isn't an error (or if you want me to remember errors) record it in the history */
 	if (!errstring || (errstring && !strlen(errstring)) || conf.remember_errors) {
@@ -480,7 +480,7 @@ static NSString *curFile = NULL;
 	uber_conversion(last_answer, type, from, to, last_answer);
 	set_prettyanswer(last_answer);
 	[AnswerField setStringValue:[NSString stringWithUTF8String:(pretty_answer?pretty_answer:"Not Enough Memory")]];
-	putval("a",last_answer);
+	putval("a",last_answer,"previous answer");
 	if ([inspectorWindow isVisible]) {
 		[variableList reloadData];
 	}
@@ -842,7 +842,7 @@ static NSString *curFile = NULL;
 			int retval;
 			extern char * errstring;
 			curFile = [filesToOpen objectAtIndex:i];
-			retval = loadState(strdup([curFile UTF8String]));
+			retval = loadState(strdup([curFile UTF8String]),1);
 			if ([inspectorWindow isVisible]) {
 				[variableList reloadData];
 				[historyList reloadData];

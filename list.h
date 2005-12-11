@@ -27,8 +27,8 @@ void freeList(List *);
 
 /* ListIterator operations */
 ListIterator getListIterator(List);
-void * currentListElement(ListIterator);
-void * nextListElement(ListIterator);
+void *currentListElement(ListIterator);
+void *nextListElement(ListIterator);
 void resetListIterator(ListIterator);
 void freeListIterator(ListIterator);
 

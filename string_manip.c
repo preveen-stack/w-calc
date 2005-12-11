@@ -3,14 +3,14 @@
  *  Wcalc
  *
  *  Created by Kyle Wheeler on Fri Mar 01 2002.
- *  Copyright (c) 2001 __MyCompanyName__. All rights reserved.
+ *  Copyright (c) 2001 Kyle Wheeler. All rights reserved.
  *
  */
 
-#ifndef GUI
+#include <ctype.h>
+#ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-#include <ctype.h>
 #include "string_manip.h"
 
 void strstrip(char strip, char *str)

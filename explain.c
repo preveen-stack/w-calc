@@ -20,7 +20,7 @@ void explain_constant(char *);
 void explain_function(char *);
 
 void explain(char *str)
-{
+{									   /*{{{ */
 	if (!str || !*str) {
 		return;
 	}
@@ -37,10 +37,10 @@ void explain(char *str)
 	} else {						   // it's a call for help
 		printf("not implemented yet!\n");
 	}
-}
+}									   /*}}} */
 
 void explain_command(char *str)
-{
+{									   /*{{{ */
 	str++;
 	if (!strcmp(str, "b") || !strcmp(str, "bin") || !strcmp(str, "binary")) {
 		printf("This displays the output in binary.\n");
@@ -125,10 +125,10 @@ void explain_command(char *str)
 	} else {
 		printf("Undefined command.\n");
 	}
-}
+}									   /*}}} */
 
 void explain_variable(char *str)
-{
+{									   /*{{{ */
 	struct answer var;
 
 	var = getvar_full(str);
@@ -168,10 +168,10 @@ void explain_variable(char *str)
 	if (var.desc != NULL) {
 		printf("Description: %s\n", var.desc);
 	}
-}
+}									   /*}}} */
 
 void explain_constant(char *str)
-{
+{									   /*{{{ */
 	if (!strcmp(str, "e")) {
 		printf
 			("The base of the natural logarithm function. Arbitrary precision. Occasionally called Euler's Number (after Leonhard Eulter) or Napier's Constant (after John Napier).");
@@ -293,10 +293,10 @@ void explain_constant(char *str)
 			("Magnetic flux quantum. The quantum of magnetic flux passing through a superconductor.");
 	}
 	printf("\n");
-}
+}									   /*}}} */
 
 void explain_function(char *str)
-{
+{									   /*{{{ */
 	if (!strcmp(str, "sin") || !strcmp(str, "cos") || !strcmp(str, "tan") ||
 		!strcmp(str, "cot")) {
 		printf("A trigonometric function.");
@@ -346,4 +346,4 @@ void explain_function(char *str)
 		printf("Returns the one's complement of the input number.");
 	}
 	printf("\n");
-}
+}									   /*}}} */

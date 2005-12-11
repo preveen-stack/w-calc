@@ -9,7 +9,7 @@
 
 #include <unistd.h>
 #include <sys/types.h>
-#include <sys/stat.h>                  /* for stat() */
+#include <sys/stat.h>				   /* for stat() */
 #include <ctype.h>					   /* for isdigit and isalpha */
 #include <errno.h>
 #include <fcntl.h>					   /* for open() */
@@ -105,6 +105,7 @@ int main(int argc, char *argv[])
 	/* load the preferences */
 	{
 		char filename[PATH_MAX];
+
 		snprintf(filename, PATH_MAX, "%s/.wcalcrc", getenv("HOME"));
 		if (read_prefs(filename)) {
 			perror("Writing Preferences");
@@ -119,7 +120,8 @@ int main(int argc, char *argv[])
 	for (i = 1; i < argc; ++i) {
 		if (!strncmp(argv[i], "-P", 2)) {
 			long int argnum;
-			char * endptr;
+			char *endptr;
+
 			argnum = strtol(&(argv[i][2]), &endptr, 0);
 			if (endptr != NULL && (strlen(endptr) > 0)) {
 				fprintf(stderr,
@@ -130,7 +132,8 @@ int main(int argc, char *argv[])
 			} else {
 				conf.precision = (int)argnum;
 			}
-		} else if (!strcmp(argv[i], "-E") || !strcmp(argv[i], "--engineering")) {
+		} else if (!strcmp(argv[i], "-E") ||
+				   !strcmp(argv[i], "--engineering")) {
 			conf.engineering = !conf.engineering;
 		} else if (!strcmp(argv[i], "-H") || !strcmp(argv[i], "--help")) {
 			print_command_help();
@@ -154,18 +157,20 @@ int main(int argc, char *argv[])
 			conf.output_format = BINARY_FORMAT;
 		} else if (!strcmp(argv[i], "-p") || !strcmp(argv[i], "--prefixes")) {
 			conf.print_prefixes = !conf.print_prefixes;
-		/*} else if (!strcmp(argv[i], "-l") || !strcmp(argv[i], "--lenient")) {
-			conf.picky_variables = 0;*/
+			/*} else if (!strcmp(argv[i], "-l") || !strcmp(argv[i], "--lenient")) {
+			 * conf.picky_variables = 0; */
 		} else if (!strcmp(argv[i], "-r") || !strcmp(argv[i], "--radians")) {
 			conf.use_radians = !conf.use_radians;
 		} else if (!strcmp(argv[i], "-q") || !strcmp(argv[i], "--quiet")) {
 			conf.print_equal = !conf.print_equal;
-		} else if (!strcmp(argv[i], "-c") || !strcmp(argv[i], "--conservative")) {
+		} else if (!strcmp(argv[i], "-c") ||
+				   !strcmp(argv[i], "--conservative")) {
 			conf.precision_guard = !conf.precision_guard;
 		} else if (!strcmp(argv[i], "-R") || !strcmp(argv[i], "--remember")) {
 			conf.remember_errors = !conf.remember_errors;
 		} else if (!strncmp(argv[i], "--round=", 8)) {
-			if (!strcmp(&(argv[i][8]), "no") || !strcmp(&(argv[i][8]), "none")) {
+			if (!strcmp(&(argv[i][8]), "no") ||
+				!strcmp(&(argv[i][8]), "none")) {
 				conf.rounding_indication = NO_ROUNDING_INDICATION;
 			} else if (!strcmp(&(argv[i][8]), "simple")) {
 				conf.rounding_indication = SIMPLE_ROUNDING_INDICATION;
@@ -173,33 +178,39 @@ int main(int argc, char *argv[])
 				conf.rounding_indication = SIG_FIG_ROUNDING_INDICATION;
 			}
 		} else if (!strcmp(argv[i], "--round")) {
-			fprintf(stderr, "--round requires an argument (none|simple|sig_fig)\n");
+			fprintf(stderr,
+					"--round requires an argument (none|simple|sig_fig)\n");
 			exit(EXIT_FAILURE);
 		} else if (!strncmp(argv[i], "--dsep=", 7)) {
 			if (strlen(argv[i]) > 8 || strlen(argv[i]) == 7) {
-				fprintf(stderr,"--dsep= must have an argument\n");
+				fprintf(stderr, "--dsep= must have an argument\n");
 				exit(EXIT_FAILURE);
 			}
 			if (conf.thou_delimiter != argv[i][7]) {
 				conf.dec_delimiter = argv[i][7];
 			} else {
-				fprintf(stderr,"%c cannot be the decimal separator. It is the thousands separator.\n",argv[i][7]);
+				fprintf(stderr,
+						"%c cannot be the decimal separator. It is the thousands separator.\n",
+						argv[i][7]);
 				exit(EXIT_FAILURE);
 			}
 		} else if (!strncmp(argv[i], "--tsep=", 7)) {
 			if (strlen(argv[i]) > 8 || strlen(argv[i]) == 7) {
-				fprintf(stderr,"--tsep= must have an argument\n");
+				fprintf(stderr, "--tsep= must have an argument\n");
 				exit(EXIT_FAILURE);
 			}
 			if (conf.dec_delimiter != argv[i][7]) {
 				conf.thou_delimiter = argv[i][7];
 			} else {
-				fprintf(stderr,"%c cannot be the thousands separator. It is the decimal separator.\n",argv[i][7]);
+				fprintf(stderr,
+						"%c cannot be the thousands separator. It is the decimal separator.\n",
+						argv[i][7]);
 				exit(EXIT_FAILURE);
 			}
 		} else if (!strncmp(argv[i], "--bits", 6)) {
 			unsigned long int argnum;
-			char * endptr;
+			char *endptr;
+
 			argnum = strtoul(&(argv[i][6]), &endptr, 0);
 			if (endptr != NULL && (strlen(endptr) > 0)) {
 				fprintf(stderr,
@@ -226,18 +237,21 @@ int main(int argc, char *argv[])
 
 				cmdline_input = 1;
 				using_history();
-				snprintf(filename, PATH_MAX, "%s/.wcalc_history", getenv("HOME"));
+				snprintf(filename, PATH_MAX, "%s/.wcalc_history",
+						 getenv("HOME"));
 				if (read_history(filename)) {
 					if (errno != ENOENT) {
-					perror("Reading History");
+						perror("Reading History");
 					}
 				}
 			}
 #endif
-			if (conf.verbose) { printf("-> %s\n",argv[i]); }
+			if (conf.verbose) {
+				printf("-> %s\n", argv[i]);
+			}
 			parseme(argv[i]);
 			if (!errstring || (errstring && !strlen(errstring)) ||
-					conf.remember_errors) {
+				conf.remember_errors) {
 				addToHistory(argv[i], last_answer);
 			}
 			putval("a", last_answer, "previous answer");
@@ -327,7 +341,9 @@ int main(int argc, char *argv[])
 					yydebug = !yydebug;
 					printf("Debug Mode %s\n", yydebug ? "On" : "Off");
 				} else {
-					if (conf.verbose) { printf("-> %s\n",readme); }
+					if (conf.verbose) {
+						printf("-> %s\n", readme);
+					}
 					parseme(readme);
 					{
 						extern char *errstring;
@@ -394,7 +410,9 @@ int main(int argc, char *argv[])
 			}
 			if (ferror(stdin) || (feof(stdin) && linelen == 0))
 				break;
-			if (conf.verbose) { printf("-> %s\n",line); }
+			if (conf.verbose) {
+				printf("-> %s\n", line);
+			}
 			parseme(line);
 			putval("a", last_answer, "previous answer");
 			{
@@ -425,7 +443,7 @@ static int read_preload(char *filename)
 {
 	struct stat sb;
 
-	if (-1 == stat(filename,&sb)) {
+	if (-1 == stat(filename, &sb)) {
 		if (errno != ENOENT) {
 			return -1;
 		} else {
@@ -473,17 +491,20 @@ static int read_prefs(char *filename)
 				break;
 			++curs;
 		}
-		if (retval != 1) break;
+		if (retval != 1)
+			break;
 		*curs = 0;
 		// read in the =
 		while (retval == 1 && *curs != '=') {
 			retval = read(fd, curs, 1);
 		}
-		if (retval != 1) break;
+		if (retval != 1)
+			break;
 		while (retval == 1 && (isspace((int)(*curs)) || *curs == '=')) {
 			retval = read(fd, curs, 1);
 		}
-		if (retval != 1) break;
+		if (retval != 1)
+			break;
 		value[0] = *curs;
 		*curs = 0;
 		curs = value;
@@ -549,7 +570,7 @@ static int read_prefs(char *filename)
 			else if (!strcmp(value, "sig_fig"))
 				conf.rounding_indication = SIG_FIG_ROUNDING_INDICATION;
 		} else {
-			fprintf(stderr,"Invalid string in wcalcrc: %s\n",key);
+			fprintf(stderr, "Invalid string in wcalcrc: %s\n", key);
 		}
 		memset(key, 0, sizeof(key));
 		memset(value, 0, sizeof(value));

@@ -14,7 +14,7 @@
 #include <gmp.h>
 #include <mpfr.h>
 
-#ifndef GUI
+#ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 #include "historyManager.h"
@@ -58,7 +58,7 @@ void clearHistory()
 {
 	unsigned int i;
 
-	for (i=0;i<histlen;i++) {
+	for (i = 0; i < histlen; i++) {
 		free(history[i].exp);
 		mpfr_clear(history[i].ans);
 	}

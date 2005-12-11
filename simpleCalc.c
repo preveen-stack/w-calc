@@ -1,8 +1,8 @@
 #include "simpleCalc.h"
 #include "calculator.h"
-#include <ctype.h> // for isdigit
-#include <string.h> // for strcmp/strlen/stpcpy/strdup
-#include <stdlib.h> // for calloc
+#include <ctype.h>					   // for isdigit
+#include <string.h>					   // for strcmp/strlen/stpcpy/strdup
+#include <stdlib.h>					   // for calloc
 #include <stdio.h>
 #include <gmp.h>
 #include <mpfr.h>
@@ -18,7 +18,7 @@ void simpleCalcInit();
 void simpleEval()
 {
 	simpleCalcInit();
-	Dprintf("operator: %c\n",operator);
+	Dprintf("operator: %c\n", operator);
 	switch (operator) {
 		case '+':
 			simple_exp(prev_number, prev_number, wplus, cur_number);
@@ -41,8 +41,9 @@ void simpleEval()
 char *simpleCalc(unsigned char input, char *expStr)
 {
 	simpleCalcInit();
-	Dprintf("simpleCalc: %c, %s\n",input,expStr);
-	Dprintf(" ~ cur: %f, prev: %f\n",mpfr_get_d(cur_number,GMP_RNDN), mpfr_get_d(prev_number,GMP_RNDN));
+	Dprintf("simpleCalc: %c, %s\n", input, expStr);
+	Dprintf(" ~ cur: %f, prev: %f\n", mpfr_get_d(cur_number, GMP_RNDN),
+			mpfr_get_d(prev_number, GMP_RNDN));
 	if (input == '+' || input == '-' || input == '*' || input == '/') {
 		// if the input is one of the operators
 		append = 0;
@@ -94,19 +95,20 @@ char *simpleCalc(unsigned char input, char *expStr)
 void simpleClearEntry()
 {
 	simpleCalcInit();
-	mpfr_set_ui(cur_number,0,GMP_RNDN);
-//	operator = 0;
+	mpfr_set_ui(cur_number, 0, GMP_RNDN);
+//  operator = 0;
 	lastchar = 0;
 }
 
 void simpleCalcInit()
 {
 	static int initialized = 0;
-	if (! initialized) {
+
+	if (!initialized) {
 		mpfr_init(cur_number);
 		mpfr_init(last_answer);
-		mpfr_init_set_ui(cur_number,0,GMP_RNDN);
-		mpfr_init_set_ui(last_answer,0,GMP_RNDN);
+		mpfr_init_set_ui(cur_number, 0, GMP_RNDN);
+		mpfr_init_set_ui(last_answer, 0, GMP_RNDN);
 		initialized = 1;
 	}
 }
@@ -114,9 +116,9 @@ void simpleCalcInit()
 void simpleClearAll()
 {
 	simpleCalcInit();
-	mpfr_set_ui(cur_number,0,GMP_RNDN);
-	mpfr_set_ui(last_answer,0,GMP_RNDN);
-	mpfr_set_ui(prev_number,0,GMP_RNDN);
+	mpfr_set_ui(cur_number, 0, GMP_RNDN);
+	mpfr_set_ui(last_answer, 0, GMP_RNDN);
+	mpfr_set_ui(prev_number, 0, GMP_RNDN);
 	operator = 0;
 	lastchar = 0;
 }

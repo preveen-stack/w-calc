@@ -7,7 +7,7 @@
 #include <float.h>					   /* for DBL_EPSILON */
 #include <ctype.h>					   /* for isalpha() */
 
-#if STDC_HEADERS || ! defined(HAVE_CONFIG_H) || HAVE_STRING_H
+#if ! defined(HAVE_CONFIG_H) || HAVE_STRING_H
 # include <string.h>				   /* for memset() */
 #else
 # if !HAVE_STRCHR
@@ -17,7 +17,7 @@
 char *strchr(), *strrchr();
 #endif
 
-#if defined(GUI) || TIME_WITH_SYS_TIME /* for time() */
+#if ! defined(HAVE_CONFIG_H) || TIME_WITH_SYS_TIME /* for time() */
 # include <sys/time.h>
 # include <time.h>
 #else

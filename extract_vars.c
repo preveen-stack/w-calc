@@ -1,5 +1,4 @@
 #include <stdlib.h>					   /* for NULL */
-#include <stdio.h>
 #include <ctype.h>					   /* for isalpha() and isdigit() */
 #include <string.h>					   /* for strdup() */
 #include "list.h"					   /* for List */
@@ -10,7 +9,7 @@
 List extract_vars(char *str)
 {
 	char *curs, *eov, save_char;
-	List vlist = NULL;
+	List variables = NULL;
 	char *varname;
 
 	curs = str;
@@ -55,13 +54,13 @@ List extract_vars(char *str)
 		*eov = save_char;
 		curs = eov;
 
-		// add it to the varlist
+		// add it to the set of known variables
 		if (!isfunc(varname) && !isconst(varname)) {
 			size_t i = 0;
 			char exists = 0;
 
-			while (i < listLen(vlist)) {
-				char *str = peekListElement(vlist, i);
+			while (i < listLen(variables)) {
+				char *str = peekListElement(variables, i);
 
 				if (!strcmp(str, varname)) {
 					exists = 1;
@@ -70,9 +69,9 @@ List extract_vars(char *str)
 				i++;
 			}
 			if (!exists) {
-				addToList(&vlist, (void *)varname);
+				addToList(&variables, (void *)varname);
 			}
 		}
 	}
-	return vlist;
+	return variables;
 }

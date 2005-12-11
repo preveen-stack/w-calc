@@ -1,7 +1,16 @@
-#ifndef WCALC_H
-#define WCALC_H
+/*
+ *  calculator.h
+ *  Wcalc
+ *
+ *  Created by Kyle Wheeler on Thu Feb 07 2002.
+ *  Copyright (c) 2001 Kyle Wheeler. All rights reserved.
+ *
+ */
 
-#ifndef GUI
+#ifndef WCALC_CALCULATOR_H
+#define WCALC_CALCULATOR_H
+
+#ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 #include "definitions.h"
@@ -18,7 +27,8 @@
 #define Dprintf(...) ;
 #endif
 
-enum functions {wnot,
+enum functions
+{ wnot,
 	wbnot,
 	wsin,
 	wcos,
@@ -50,8 +60,10 @@ enum functions {wnot,
 	wexp,
 	wfact,
 	wcomp,
-	wcbrt};
-enum operations {wplus,
+	wcbrt
+};
+enum operations
+{ wplus,
 	wminus,
 	wmult,
 	wdiv,
@@ -70,19 +82,23 @@ enum operations {wplus,
 	wlshft,
 	wgeq,
 	wleq,
-	wnone};
-enum commands {redisplay,nothing};
+	wnone
+};
+enum commands
+{ redisplay, nothing };
 
-void parseme (char *);
-void report_error (char *);
+void parseme(char *);
+void report_error(char *);
 void set_prettyanswer(mpfr_t num);
-char *print_this_result (mpfr_t result);
-void uber_function (mpfr_t output, enum functions func, mpfr_t input);
-void simple_exp (mpfr_t output, mpfr_t first, enum operations op, mpfr_t second);
+char *print_this_result(mpfr_t result);
+void uber_function(mpfr_t output, enum functions func, mpfr_t input);
+void simple_exp(mpfr_t output, mpfr_t first, enum operations op,
+				mpfr_t second);
 int seed_random(void);
 char *output_string(unsigned int);
 
-struct _conf {
+struct _conf
+{
 	int precision;
 	unsigned int engineering:1;
 	unsigned int picky_variables:1;

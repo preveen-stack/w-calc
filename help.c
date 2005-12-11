@@ -10,12 +10,12 @@
 #include <stdio.h>
 #include <gmp.h>
 #include <mpfr.h>
-#include "help.h"
 
-#ifndef GUI
+#ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 #include "definitions.h"
+#include "help.h"
 
 void print_interactive_help (void)
 {

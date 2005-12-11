@@ -14,10 +14,9 @@
 
 void clearHistory(void);
 void addToHistory(char *, mpfr_t);
-char * historynum(int,int);
+char *historynum(int, int);
 int historyLength(void);
 
 extern short allow_duplicates;
 extern short recalculate;
 #endif
-

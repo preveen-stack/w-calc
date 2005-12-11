@@ -81,7 +81,7 @@
 		++i;
 		sprintf(varname,"NewVariable%i",i);
 	}
-	putval(varname,blank);
+	putval(varname,blank,NULL);
 	[theList reloadData];
 }
 
