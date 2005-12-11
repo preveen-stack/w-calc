@@ -1,16 +1,10 @@
-#ifndef GUI
+#ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>					   /* for HUGE_VAL */
 #include <float.h>					   /* for DBL_EPSILON */
-#ifdef HAVE_INTTYPES_H
-#include <inttypes.h>				   /* for UINT32_MAX */
-#endif
-#ifdef HAVE_STDINT_H
-#include <stdint.h>					   /* for UINT32_MAX */
-#endif
 #include <ctype.h>					   /* for isalpha() */
 
 #if STDC_HEADERS || ! defined(HAVE_CONFIG_H) || HAVE_STRING_H
@@ -33,13 +27,11 @@ char *strchr(), *strrchr();
 #  include <time.h>
 # endif
 #endif
-#ifndef UINT32_MAX
-# define UINT32_MAX 4294967295U
-#endif
 
 #include <gmp.h>
 #include <mpfr.h>
 
+#include "uint32_max.h"
 #include "calculator.h"
 #include "variables.h"
 #include "string_manip.h"
