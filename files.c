@@ -71,11 +71,12 @@ int saveState(char *filename)
 				cptr = strdup(print_this_result(keyval->value));
 			}
 			retval = write(fd, cptr, strlen(cptr));
-			free(cptr);
 			if (retval < (int)strlen(cptr)) {
 				return_error = errno;
+				free(cptr);
 				break;
 			}
+			free(cptr);
 			retval = write(fd, "\n", 1);
 			if (retval < 1) {
 				return_error = errno;
@@ -217,16 +218,28 @@ int storeVar(char *variable)
 			goto exit_storeVar;
 		}
 		if (keyval.exp) {
-			cptr = malloc(strlen(keyval.exp) + 3);
-			snprintf(cptr, strlen(keyval.exp) + 3, "'%s'", keyval.exp);
+			cptr = malloc(strlen(keyval.exp) + 4);
+			snprintf(cptr, strlen(keyval.exp) + 4, "'%s' ", keyval.exp);
 		} else {
 			cptr = strdup(print_this_result(keyval.val));
 		}
 		retval = write(fd, cptr, strlen(cptr));
-		free(cptr);
 		if (retval < strlen(cptr)) {
 			return_error = errno;
+			free(cptr);
 			goto exit_storeVar;
+		}
+		free(cptr);
+		if (keyval.desc) {
+			cptr = malloc(strlen(keyval.desc) + 3);
+			snprintf(cptr, strlen(keyval.desc) + 3, "'%s'", keyval.desc);
+			retval = write(fd, cptr, strlen(cptr));
+			if (retval < strlen(cptr)) {
+				return_error = errno;
+				free(cptr);
+				goto exit_storeVar;
+			}
+			free(cptr);
 		}
 		retval = write(fd, "\n", 1);
 		if (retval < 1) {
