@@ -19,6 +19,8 @@ boolean operators.
 If no mathematical expression is given at the commandline, wcalc enters
 "interactive" mode. Interactive mode has more features. Also, files may be
 piped to wcalc, and they will be interpreted.
+.PP
+Within wcalc, detailed information about commands, functions, symbols, and variables can be obtained by executing: \fB\eexplain\fP \fIthing-to-explain\fP
 .SS OPTIONS
 .TP 4
 \fB\-H\fP or \fB\*=help\fP
@@ -82,7 +84,7 @@ Sets the number of bits of precision that will be used to internally represent n
 .TP
 \fB\*=ints\fP
 Toggles whether long integers will be abbreviated or not. This conflicts with engineering notation for large numbers, but not for decimals.
-.SH VARIABLES
+.SH USER-DEFINED VARIABLES
 Variables are supported and may be assigned using the = operator. To assign
 a variable use the form:
 .I foo = anylegalexpression
@@ -94,9 +96,29 @@ than assignment-time. Note that these cannot be recursive.
 .PP
 All variables may also be stored with a description of what they are. This description is added in the form of a quoted string after the assignment, like this:
 .I foo = 'anylegalexpression' 'description'
-.SH FUNCTIONS
-wcalc supports two basic kinds of functions: standard mathematical functions, and "active" variables.
-.SS MATH FUNCTIONS
+.SS ACTIVE VARIABLES
+Active variables are designed to give a functionality similar to user-defined functions. They are variables that rather than representing a value, represent an expression that is evaluated whenever the variable is evaluated. This expression may contain other variable names. For example, after the following sequence of commands:
+.PP
+.I foo=5
+.br
+.I bar='foo+4'
+.PP
+The variable \fIbar\fP will evaluate to 9, or four more than whatever foo evaluates to be. These can be stacked, like so:
+.PP
+.I baz='sin(bar)+foo'
+.PP
+In this case, baz will evaluate to be 5.15643, or the sin of whatever foo+4 is plus whatever foo is.
+.PP
+To demonstrate the utility of these active variables, here are two functions written by Stephen M. Lawson. The first computes the weekday of a given day (\fIdy\fP) in a given month (\fImo\fP) in a given year (\fIyr\fP). The value it returns is in the range of 1 to 7, where 1 is Sunday, 2 is Monday, 3 is Tuesday, and so forth.
+.PP
+weekday='(((floor((yr - floor(0.6 + 1 / mo)) / 400) - floor((yr - floor(0.6 + 1 / mo)) / 100) + floor((5 * (yr - floor(0.6 + 1 / mo))) / 4) + floor(13 * (mo + 12 * floor(0.6 + 1 / mo) + 1) / 5)) - (7 * floor((floor((yr - floor(0.6 + 1 / mo)) / 400) - floor((yr - floor(0.6 + 1 / mo)) / 100) + floor((5 * (yr - floor(0.6 + 1 / mo))) / 4) + floor(13 * (mo + 12 * floor(0.6 + 1 / mo) + 1) / 5)) / 7)) + 1) + 5 + dy) % 7 + 1'
+.PP
+The second function computes what day Easter will be for a given year (\fIyr\fP) and returns an offset from March 31st. For example, for the year 2005, it returns -4, which means March 27th. Because of leap-year problems, this only works from the year 1900 to 2099, but is a good demonstration nevertheless.
+.PP
+easter='((19 * (yr - 19 * floor(yr / 19)) + 24) - floor((19 * (yr - 19 * floor(yr / 19)) + 24) / 30) * 30) + ((2 * (yr - 4 * floor(yr / 4)) + 4 * (yr - 7 * floor(yr / 7)) + 6 * ((19 * (yr - 19 * floor(yr / 19)) + 24) - floor((19 * (yr - 19 * floor(yr / 19)) + 24) / 30) * 30) + 5) - floor((2 * (yr - 4 * floor(yr / 4)) + 4 * (yr - 7 * floor(yr / 7)) + 6 * ((19 * (yr - 19 * floor(yr / 19)) + 24) - floor((19 * (yr - 19 * floor(yr / 19)) + 24) / 30) * 30) + 5) / 7) * 7) - 9'
+.SH BUILT-IN SYMBOLS
+There are two basic kinds of built-in symbols in wcalc: functions and constants.
+.SS FUNCTIONS
 The functions supported in wcalc are almost all self-explanatory. Here are the basic descriptions.
 .TP 4
 .B "sin cos tan cot"
@@ -134,27 +156,7 @@ Returns a random integer between 0 and the number given.
 .TP
 .B "fact"
 Returns the factorial of a number.
-.SS ACTIVE VARIABLES
-Active variables are designed to give a functionality similar to user-defined functions. They are variables that rather than representing a value, represent an expression that is evaluated whenever the variable is evaluated. This expression may contain other variable names. For example, after the following sequence of commands:
-.PP
-.I foo=5
-.br
-.I bar='foo+4'
-.PP
-The variable \fIbar\fP will evaluate to 9, or four more than whatever foo evaluates to be. These can be stacked, like so:
-.PP
-.I baz='sin(bar)+foo'
-.PP
-In this case, baz will evaluate to be 5.15643, or the sin of whatever foo+4 is plus whatever foo is.
-.PP
-To demonstrate the utility of these active variables, here are two functions written by Stephen M. Lawson. The first computes the weekday of a given day (\fIdy\fP) in a given month (\fImo\fP) in a given year (\fIyr\fP). The value it returns is in the range of 1 to 7, where 1 is Sunday, 2 is Monday, 3 is Tuesday, and so forth.
-.PP
-weekday='(((floor((yr - floor(0.6 + 1 / mo)) / 400) - floor((yr - floor(0.6 + 1 / mo)) / 100) + floor((5 * (yr - floor(0.6 + 1 / mo))) / 4) + floor(13 * (mo + 12 * floor(0.6 + 1 / mo) + 1) / 5)) - (7 * floor((floor((yr - floor(0.6 + 1 / mo)) / 400) - floor((yr - floor(0.6 + 1 / mo)) / 100) + floor((5 * (yr - floor(0.6 + 1 / mo))) / 4) + floor(13 * (mo + 12 * floor(0.6 + 1 / mo) + 1) / 5)) / 7)) + 1) + 5 + dy) % 7 + 1'
-.PP
-The second function computes what day Easter will be for a given year (\fIyr\fP) and returns an offset from March 31st. For example, for the year 2005, it returns -4, which means March 27th. Because of leap-year problems, this only works from the year 1900 to 2099, but is a good demonstration nevertheless.
-.PP
-easter='((19 * (yr - 19 * floor(yr / 19)) + 24) - floor((19 * (yr - 19 * floor(yr / 19)) + 24) / 30) * 30) + ((2 * (yr - 4 * floor(yr / 4)) + 4 * (yr - 7 * floor(yr / 7)) + 6 * ((19 * (yr - 19 * floor(yr / 19)) + 24) - floor((19 * (yr - 19 * floor(yr / 19)) + 24) / 30) * 30) + 5) - floor((2 * (yr - 4 * floor(yr / 4)) + 4 * (yr - 7 * floor(yr / 7)) + 6 * ((19 * (yr - 19 * floor(yr / 19)) + 24) - floor((19 * (yr - 19 * floor(yr / 19)) + 24) / 30) * 30) + 5) / 7) * 7) - 9'
-.SH SYMBOLS
+.SS CONSTANTS
 Wcalc supports a lot of constants. Some are special (like \fBpi\fP), and some are simply mathematical or physical constants that have been hardcoded in. The physics constants are taken from \fIhttp://physics.nist.gov/constants\fP, and should all be in predictable SI units.
 .PP
 The value of \fBpi\fP is special, as it is calculated to however many bits of precision have been specified with the \fB\ebits\fP command. The default number of bits is 1024, or a value of:
@@ -430,7 +432,7 @@ Either \fIdecimal\fP, \fIoctal\fP, \fIbinary\fP, \fIhex\fP, or \fIhexadecimal\fP
 .B rounding_indication
 Either \fIno\fP, \fIsimple\fP, or \fIsig_fig\fP.
 .SH PRELOAD
-Wcalc uses a file, \fB~/.wcalc_preload\fP, to store persistent information between instances. Typically, this is used to store variables that are frequently defined. This file can be edited by hand with a standard text editor. There is also a command within wcalc (\fB\estore\fP) to append a variable definition to the end of this file.
+Wcalc uses a file, \fB~/.wcalc_preload\fP, to store persistent information between instances. Typically, this is used to store variables that are frequently defined. This file can be edited by hand with a standard text editor. There is also a command within wcalc (\fB\estore\fP) to append a variable definition to the end of this file. Any variable defined in this file is defined and available for use in any subsequent invocation of wcalc.
 .SH COPYRIGHT
 wcalc is Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005 Kyle Wheeler.
 .br
