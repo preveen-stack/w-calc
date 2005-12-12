@@ -19,15 +19,6 @@ boolean operators.
 If no mathematical expression is given at the commandline, wcalc enters
 "interactive" mode. Interactive mode has more features. Also, files may be
 piped to wcalc, and they will be interpreted.
-.PP
-Variables are supported and may be assigned using the = operator. To assign
-a variable use the form:
-.I foo = anylegalexpression
-Thereafter, that variable name is the same as the literal value it represents.
-Expressions can be stored in variables like this:
-.I foo = 'anylegalexpression'
-Expressions stored this way will be interpreted at evaluation time, rather
-than assignment-time. Note that these cannot be recursive.
 .SS OPTIONS
 .TP 4
 \fB\-H\fP or \fB\*=help\fP
@@ -91,6 +82,18 @@ Sets the number of bits of precision that will be used to internally represent n
 .TP
 \fB\*=ints\fP
 Toggles whether long integers will be abbreviated or not. This conflicts with engineering notation for large numbers, but not for decimals.
+.SH VARIABLES
+Variables are supported and may be assigned using the = operator. To assign
+a variable use the form:
+.I foo = anylegalexpression
+Thereafter, that variable name is the same as the literal value it represents.
+Expressions can be stored in variables like this:
+.I foo = 'anylegalexpression'
+Expressions stored this way will be interpreted at evaluation time, rather
+than assignment-time. Note that these cannot be recursive.
+.PP
+All variables may also be stored with a description of what they are. This description is added in the form of a quoted string after the assignment, like this:
+.I foo = 'anylegalexpression' 'description'
 .SH FUNCTIONS
 wcalc supports two basic kinds of functions: standard mathematical functions, and "active" variables.
 .SS MATH FUNCTIONS
@@ -426,6 +429,8 @@ Either \fIdecimal\fP, \fIoctal\fP, \fIbinary\fP, \fIhex\fP, or \fIhexadecimal\fP
 .TP
 .B rounding_indication
 Either \fIno\fP, \fIsimple\fP, or \fIsig_fig\fP.
+.SH PRELOAD
+Wcalc uses a file, \fB~/.wcalc_preload\fP, to store persistent information between instances. Typically, this is used to store variables that are frequently defined. This file can be edited by hand with a standard text editor. There is also a command within wcalc (\fB\estore\fP) to append a variable definition to the end of this file.
 .SH COPYRIGHT
 wcalc is Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005 Kyle Wheeler.
 .br
