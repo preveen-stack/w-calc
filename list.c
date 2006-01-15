@@ -269,9 +269,6 @@ void *getHeadOfList(List list)
 	ListHeader pl;
 
 	if (!list || !list->head) {
-		if (!list) {
-			fprintf(stderr, "getHeadOfList: null List passed\n");
-		}
 		return NULL;
 	}
 	payload = list->head->payload;
@@ -305,6 +302,37 @@ void *peekListElement(List list, size_t n)
 		pl = pl->next;
 	}
 	return pl->payload;
+}									   /*}}} */
+
+/* This returns the n'th element of the list, as if the list was an array,
+ * and removes it from the list */
+void *getListElement(List list, size_t n)
+{									   /*{{{ */
+	ListHeader pl;
+	size_t counter;
+	void *payload = NULL;
+	ListHeader returnme;
+
+	if (!list || !list->head || list->len <= n) {
+		if (!list) {
+			fprintf(stderr, "getListElement: null List passed\n");
+		}
+		return NULL;
+	}
+	pl = list->head;
+	for (counter = 1; counter < n; counter++) {
+		if (pl->next == NULL) {
+			return NULL;
+		}
+		pl = pl->next;
+	}
+	if (pl->next) {
+		payload = pl->next->payload;
+		returnme = pl->next;
+		pl->next = pl->next->next;
+		poolReturn(returnme);
+	}
+	return payload;
 }									   /*}}} */
 
 /* This returns the head of the list */
