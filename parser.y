@@ -263,9 +263,9 @@ command : HEX_CMD {
 	}
 }
 | LISTVAR_CMD {
-	extern int contents;
+	size_t num_vars = numvars();
 	int i;
-	for (i = 0; i <= contents; i++) {
+	for (i = 0; i <= num_vars; i++) {
 		struct variable *keyval = getrealnvar(i);
 		if (! keyval) continue;
 		printf("%s = ", keyval->key);
@@ -436,7 +436,7 @@ assignment : VAR WEQL exp optionalstring
 					mpfr_clear(val);
 				}
 			} else {
-				report_error("There was a problem assigning variables.");
+				report_error("There was a problem assigning the value.");
 			}
 		}
 		mpfr_clear($3);
@@ -460,7 +460,7 @@ assignment : VAR WEQL exp optionalstring
 					printf("%s = %s\n", $1, getvar_full($1).exp);
 				}
 			} else {
-				report_error("There was a problem assigning variables.");
+				report_error("There was a problem assigning the expression.");
 			}
 		}
 	} else {
