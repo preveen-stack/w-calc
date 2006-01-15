@@ -45,8 +45,9 @@ int putval(char *key, mpfr_t value, char *desc);
 int putexp(char *key, char *value, char *desc);
 int varexists(char *key);
 void initvar(void);
-void delnvar(int);
+void delnvar(size_t);
 void cleanupvar(void);
+size_t numvars();
 
 /* ******************************
  * NOTE!
@@ -65,6 +66,6 @@ struct answer getvar_full(char *key);
 /* THIS function, however, exposes the innards of the variable system.
  * do not under any circumstance un-initialize the mpfr_t
  */
-struct variable *getrealnvar(int);
+struct variable *getrealnvar(size_t);
 
 #endif
