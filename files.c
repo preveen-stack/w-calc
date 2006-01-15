@@ -40,10 +40,10 @@ int saveState(char *filename)
 		//success
 		int hindex;
 		int retval;
-		extern int contents;
+		size_t num_vars = numvars();
 
 		/* save variables */
-		for (hindex = 0; hindex < contents; hindex++) {
+		for (hindex = 0; hindex < num_vars; hindex++) {
 			struct variable *keyval = getrealnvar(hindex);
 			char *cptr;
 
