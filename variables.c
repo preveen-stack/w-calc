@@ -10,6 +10,7 @@
 #include <mpfr.h>
 
 #include "calculator.h"				   /* for report_error */
+#include "list.h"
 #include "variables.h"
 
 #define THE_VALUE 0
@@ -17,8 +18,7 @@
 #define THE_EXPRESSION 4
 #define HASH_LENGTH = 101
 
-struct variable *them = NULL;
-int contents = 0;
+List them = NULL;
 
 /* Hidden, internal functions */
 static void *getvar_core(char *key, int all_or_nothing);
@@ -27,69 +27,47 @@ void initvar(void)
 {									   /*{{{ */
 }									   /*}}} */
 
+/* This function deletes all the variables and frees all the memory. */
 void cleanupvar(void)
 {									   /*{{{ */
-	struct variable *cursor = them;
+	struct variable *freeme;
 
-	while (cursor != NULL) {
-		free(cursor->key);
-		if (cursor->exp == 1) {
-			free(cursor->expression);
+	while ((freeme = (struct variable *)getHeadOfList(them)) != NULL) {
+		free(freeme->key);
+		if (freeme->exp == 1) {
+			free(freeme->expression);
 		} else {
-			mpfr_clear(cursor->value);
+			mpfr_clear(freeme->value);
 		}
-		cursor = cursor->next;
+		free(freeme);
 	}
 }									   /*}}} */
 
-void delnvar(int i)
+/* Returns the number of variables */
+size_t numvars()
 {									   /*{{{ */
-	int j;
-	struct variable *cursor = them, *follower = NULL;
-
-	for (j = 0; j < i; ++j) {
-		follower = cursor;
-		cursor = cursor->next;
-	}
-	if (!follower) {
-		if (cursor) {
-			them = cursor->next;
-			if (cursor->key) {
-				free(cursor->key);
-			}
-			if (cursor->exp == 0) {
-				mpfr_clear(cursor->value);
-			} else {
-				free(cursor->expression);
-			}
-			free(cursor);
-		} else {
-			return;
-		}
-	} else {
-		follower->next = cursor->next;
-		if (cursor->key) {
-			free(cursor->key);
-		}
-		if (cursor->exp == 0) {
-			mpfr_clear(cursor->value);
-		} else {
-			free(cursor->expression);
-		}
-		free(cursor);
-	}
-	contents--;
+	return listLen(them);
 }									   /*}}} */
 
-struct variable *getrealnvar(int i)
+void delnvar(size_t i)
 {									   /*{{{ */
-	int j;
-	struct variable *cursor = them;
+	struct variable *freeme;
 
-	for (j = 0; j < i; ++j)
-		cursor = cursor->next;
+	freeme = (struct variable *)getListElement(them, i);
+	if (freeme) {
+		free(freeme->key);
+		if (freeme->exp == 1) {
+			free(freeme->expression);
+		} else {
+			mpfr_clear(freeme->value);
+		}
+		free(freeme);
+	}
+}									   /*}}} */
 
-	return cursor;
+struct variable *getrealnvar(size_t i)
+{									   /*{{{ */
+	return (struct variable *)getListElement(them, i);
 }									   /*}}} */
 
 struct answer getvar(char *key)
@@ -146,42 +124,44 @@ struct variable *getvarptr(char *key)
 	return (struct variable *)getvar_core(key, THE_STRUCTURE);
 }									   /*}}} */
 
+/* This function returns 1 if a variable by that key has already been created
+ * and returns 0 if a variable by that key has not been created yet */
 int varexists(char *key)
 {									   /*{{{ */
-	struct variable *cursor = them;
+	struct variable *cursor = NULL;
+	ListIterator li = NULL;
 
-	if (!cursor)
-		return 0;
-	if (!strlen(key))
+	if (!them || !strlen(key) || listLen(them) == 0)
 		return 0;
 
-	while (cursor && cursor->key &&
-		   strncmp(cursor->key, key, strlen(cursor->key) + 1)) {
-		cursor = cursor->next;
+	li = getListIterator(them);
+	while ((cursor = (struct variable *)nextListElement(li)) != NULL) {
+		if (!strncmp(cursor->key, key, strlen(cursor->key) + 1))
+			break;
+		else
+			cursor = NULL;
 	}
-	if (cursor && cursor->key &&
-		!strncmp(cursor->key, key, strlen(cursor->key) + 1)) {
-		return 1;
-	} else {
-		return 0;
-	}
+	freeListIterator(li);
+	return cursor ? 1 : 0;
 }									   /*}}} */
 
 static void *getvar_core(char *key, int all_or_nothing)
 {									   /*{{{ */
-	struct variable *cursor = them;
+	struct variable *cursor = NULL;
+	ListIterator li = NULL;
 
-	if (!cursor)
-		return NULL;
-	if (!strlen(key))
+	if (!them || *key != 0 || listLen(them) == 0)
 		return NULL;
 
-	while (cursor && cursor->key &&
-		   strncmp(cursor->key, key, strlen(cursor->key) + 1)) {
-		cursor = cursor->next;
+	li = getListIterator(them);
+	while ((cursor = (struct variable *)nextListElement(li)) != NULL) {
+		if (!strncmp(cursor->key, key, strlen(cursor->key) + 1))
+			break;
+		else
+			cursor = NULL;
 	}
-	if (cursor && cursor->key &&
-		!strncmp(cursor->key, key, strlen(cursor->key) + 1)) {
+	freeListIterator(li);
+	if (cursor) {
 		switch (all_or_nothing) {
 			case THE_VALUE:
 				if (cursor->exp) {
@@ -198,36 +178,22 @@ static void *getvar_core(char *key, int all_or_nothing)
 	return NULL;
 }									   /*}}} */
 
+/* this adds the key-expression pair to the list.
+ * if the key already exists, change the value to this */
 int putexp(char *key, char *value, char *desc)
 {									   /*{{{ */
-	struct variable *cursor = them;
+	struct variable *cursor = NULL;
 
-	if (!key)
+	if (*key == 0)
 		return -1;
 
-	if (cursor) {
-		while (cursor &&
-			   strncmp(cursor->key, key, strlen(cursor->key) + 1) > 0 &&
-			   cursor->next) {
-			cursor = cursor->next;
-		}
-
-		if (strncmp(cursor->key, key, strlen(cursor->key) + 1)) {	// add after cursor
-			struct variable *ntemp = cursor->next;
-			cursor->next = calloc(sizeof(struct variable), 1);
-			if (!cursor->next) {	   // if we can't allocate memory
-				cursor->next = ntemp;
-				return -1;
-			}
-			cursor = cursor->next;
-			cursor->next = ntemp;
-		} else {					   // change this one
-
-		}
-	} else {
-		them = cursor = calloc(sizeof(struct variable), 1);
+	cursor = getvar_core(key, THE_STRUCTURE);
+	if (!cursor) {
+		// variable named "key" doesn't exist yet, so allocate memory
+		cursor = calloc(sizeof(struct variable), 1);
+		addToList(&them, cursor);
 	}
-
+	// by this point, we have a variable (cursor) in the list (them)
 	if (cursor->key) {
 		if (cursor->expression) {
 			free(cursor->expression);
@@ -237,79 +203,56 @@ int putexp(char *key, char *value, char *desc)
 		if (cursor->description) {
 			free(cursor->description);
 		}
-		cursor->expression = (char *)strdup(value);
-		if (desc != NULL) {
-			cursor->description = (char *)strdup(desc);
-		} else {
-			cursor->description = NULL;
-		}
-		cursor->exp = 1;
-		return 0;
 	} else {
-		contents++;
 		cursor->key = (char *)strdup(key);
-		cursor->expression = (char *)strdup(value);
-		if (desc != NULL) {
-			cursor->description = (char *)strdup(desc);
-		} else {
-			cursor->description = NULL;
-		}
-		cursor->exp = 1;
-		return 0;
 	}
+	// by this point, the cursor has been prepared to accept the exp/desc
+	cursor->expression = (char *)strdup(value);
+	if (desc != NULL) {
+		cursor->description = (char *)strdup(desc);
+	} else {
+		cursor->description = NULL;
+	}
+	cursor->exp = 1;
+	return 0;
 }									   /*}}} */
 
+/* this adds the key-value pair to the list.
+ * if the key already exists, change the value to this */
 int putval(char *key, mpfr_t value, char *desc)
 {									   /*{{{ */
-	struct variable *cursor = them, *temp;
+	struct variable *cursor = NULL;
 
-	if (!key)
+	if (*key != 0)
 		return -1;
 
-	if (cursor) {
-		while (cursor && strncmp(cursor->key, key, strlen(cursor->key) + 1) &&
-			   cursor->next) {
-			cursor = cursor->next;
-		}
-
-		if (!strncmp(cursor->key, key, strlen(cursor->key) + 1)) {
-			// change this one
-		} else {
-			// add after cursor
-			temp = cursor->next;
-			cursor->next = calloc(sizeof(struct variable), 1);
-			if (!cursor->next) {	   // if we can't allocate memory
-				return -1;
-			}
-			cursor = cursor->next;
-			cursor->next = temp;
-			mpfr_init(cursor->value);
-			contents++;
-		}
-	} else {
-		them = cursor = calloc(sizeof(struct variable), 1);
-		mpfr_init(cursor->value);
-		contents = 1;
+	cursor = getvar_core(key, THE_STRUCTURE);
+	if (!cursor) {
+		// variable named "key" doesn't exist yet, so allocate memory
+		cursor = calloc(sizeof(struct variable), 1);
+		addToList(&them, cursor);
 	}
-	/* by this point, cursor points to a fully allocated structure... it may,
-	 * however, be missing a key value */
-
+	// by this point, we have a variable (cursor) in the list (them)
+	// but key may not exist, and value may not be properly initialized
 	if (!cursor->key) {
 		cursor->key = (char *)strdup(key);
-	}
-	if (cursor->expression) {
+		mpfr_init(cursor->value);
+	} else if (cursor->expression) {
 		free(cursor->expression);
 		cursor->expression = NULL;
+		mpfr_init(cursor->value);
 	}
 	if (cursor->description) {
 		free(cursor->description);
 	}
+	cursor->exp = 0;
+	// by this point, the variable has a key, and an initialized value,
+	// and is ready to receive the correct value/desc
 	if (desc != NULL) {
 		cursor->description = (char *)strdup(desc);
 	} else {
 		cursor->description = NULL;
 	}
 	mpfr_set(cursor->value, value, GMP_RNDN);
-	cursor->exp = 0;
 	return 0;
 }									   /*}}} */
