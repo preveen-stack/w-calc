@@ -35,7 +35,7 @@ void explain(char *str)
 	} else if (varexists(str)) {	   // it's a variable
 		explain_variable(str);
 	} else {						   // it's a call for help
-		printf("not implemented yet!\n");
+		printf("%s is neither a command, constant, function, or variable.\n", str);
 	}
 }									   /*}}} */
 
