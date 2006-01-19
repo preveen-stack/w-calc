@@ -150,7 +150,7 @@ static void *getvar_core(char *key, int all_or_nothing)
 	struct variable *cursor = NULL;
 	ListIterator li = NULL;
 
-	if (!them || *key != 0 || listLen(them) == 0)
+	if (!them || key == NULL || *key == 0 || listLen(them) == 0)
 		return NULL;
 
 	li = getListIterator(them);
@@ -223,7 +223,7 @@ int putval(char *key, mpfr_t value, char *desc)
 {									   /*{{{ */
 	struct variable *cursor = NULL;
 
-	if (*key != 0)
+	if (key == NULL || *key == 0)
 		return -1;
 
 	cursor = getvar_core(key, THE_STRUCTURE);
