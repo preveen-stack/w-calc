@@ -53,7 +53,7 @@ extern int history_truncate_file(char *, int);
 #include "historyManager.h"
 #include "list.h"
 
-#define TRUEFALSE (! strcmp(value,"yes") || ! strcmp(value,"true"))
+#define TRUEFALSE (! strcmp(value,"yes") || ! strcmp(value,"true") || ! strcmp(value,"1"))
 
 static int read_prefs(char *filename);
 static int read_preload(char *filename);
@@ -254,7 +254,9 @@ int main(int argc, char *argv[])
 				conf.remember_errors) {
 				addToHistory(argv[i], last_answer);
 			}
-			putval("a", last_answer, "previous answer");
+			if (putval("a", last_answer, "previous answer") != 0) {
+				fprintf(stderr, "error storing last answer\n");
+			}
 		}
 	}
 
@@ -354,7 +356,9 @@ int main(int argc, char *argv[])
 						}
 					}
 				}
-				putval("a", last_answer, "previous answer");
+				if (putval("a", last_answer, "previous answer") != 0) {
+					fprintf(stderr, "error storing last answer\n");
+				}
 
 				{
 					extern char *errstring;
@@ -414,7 +418,9 @@ int main(int argc, char *argv[])
 				printf("-> %s\n", line);
 			}
 			parseme(line);
-			putval("a", last_answer, "previous answer");
+			if (putval("a", last_answer, "previous answer") != 0) {
+				fprintf(stderr, "error storing last answer\n");
+			}
 			{
 				extern char *errstring;
 
@@ -541,7 +547,7 @@ static int read_prefs(char *filename)
 		else if (!strcmp(key, "precision_guard"))
 			conf.precision_guard = TRUEFALSE;
 		else if (!strcmp(key, "print_integers"))
-			conf.print_prefixes = TRUEFALSE;
+			conf.print_ints = TRUEFALSE;
 		else if (!strcmp(key, "thousands_delimiter"))
 			conf.thou_delimiter = value[0];
 		else if (!strcmp(key, "decimal_delimiter"))
