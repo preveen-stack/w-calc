@@ -215,22 +215,23 @@ command : HEX_CMD {
 }
 | DISPLAY_PREFS_CMD {
 	if (standard_output) {
-		printf("        Display Precision: %i %s\n",conf.precision,((conf.precision==-1)?"(auto)":""));
-		printf("       Internal Precision: %lu bits\n", (unsigned long) mpfr_get_default_prec());
-		printf("       Engineering Output: %s\n",conf.engineering?"yes":"no");
-		printf("            Output Format: %s\n",output_string(conf.output_format));
-		printf("              Use Radians: %s\n",conf.use_radians?"yes":"no");
-		printf("           Print Prefixes: %s\n",conf.print_prefixes?"yes":"no");
-		printf("      Rounding Indication: %s\n",conf.rounding_indication==SIMPLE_ROUNDING_INDICATION?"yes (simple)":(conf.rounding_indication==SIG_FIG_ROUNDING_INDICATION?"yes (sig_fig)":"no"));
-		printf("   Save Errors in History: %s\n",conf.remember_errors?"yes":"no");
-		printf("      Thousands Delimiter: '%c'\n",conf.thou_delimiter);
-		printf("        Decimal Delimiter: '%c'\n",conf.dec_delimiter);
-		printf("          Precision Guard: %s\n",conf.precision_guard?"yes":"no");
-		printf("            History Limit: %s\n",conf.history_limit?"yes":"no");
+		printf("          Display Precision: %i %s\n",conf.precision,((conf.precision==-1)?"(auto)":""));
+		printf("         Internal Precision: %lu bits\n", (unsigned long) mpfr_get_default_prec());
+		printf("         Engineering Output: %s\n",conf.engineering?"yes":"no");
+		printf("              Output Format: %s\n",output_string(conf.output_format));
+		printf("                Use Radians: %s\n",conf.use_radians?"yes":"no");
+		printf("             Print Prefixes: %s\n",conf.print_prefixes?"yes":"no");
+		printf("Avoid Abbreviating Integers: %s\n",conf.print_ints?"yes":"no");
+		printf("        Rounding Indication: %s\n",conf.rounding_indication==SIMPLE_ROUNDING_INDICATION?"yes (simple)":(conf.rounding_indication==SIG_FIG_ROUNDING_INDICATION?"yes (sig_fig)":"no"));
+		printf("     Save Errors in History: %s\n",conf.remember_errors?"yes":"no");
+		printf("        Thousands Delimiter: '%c'\n",conf.thou_delimiter);
+		printf("          Decimal Delimiter: '%c'\n",conf.dec_delimiter);
+		printf("            Precision Guard: %s\n",conf.precision_guard?"yes":"no");
+		printf("              History Limit: %s\n",conf.history_limit?"yes":"no");
 		if (conf.history_limit) {
-			printf("       History Limited To: %lu\n",conf.history_limit_len);
+			printf("         History Limited To: %lu\n",conf.history_limit_len);
 		}
-		printf("                  Verbose: %s\n",conf.verbose?"yes":"no");
+		printf("                    Verbose: %s\n",conf.verbose?"yes":"no");
 	}
 	$$ = nothing;
 }
