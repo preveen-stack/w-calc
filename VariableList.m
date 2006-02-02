@@ -10,8 +10,7 @@
 // needs to be REALLY fast
 - (int)numberOfRowsInTableView:(NSTableView *)aTableView
 {
-	extern int contents;
-	return contents;
+	return numvars();
 }
 
 // needs to be fast
@@ -95,8 +94,7 @@
 
 - (IBAction)clearVariables:(id)sender
 {
-    extern int contents;
-    int i, total=contents;
+    int i, total=numvars();
 
     for (i=0; i<total; ++i) {
 	delnvar(0);
