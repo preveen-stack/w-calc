@@ -260,6 +260,7 @@ static NSString *curFile = NULL;
 	conf.rounding_indication = [prefs integerForKey:@"roundingIndication"];
 	conf.precision_guard = [prefs boolForKey:@"precisionGuard"];
 	conf.print_ints = [prefs boolForKey:@"printInts"];
+	conf.print_commas = [prefs boolForKey:@"printCommas"];
 	conf.simple_calc = [prefs boolForKey:@"simpleCalc"];
 	/* history preferences */
 	allow_duplicates = [prefs boolForKey:@"historyDuplicatesAllowed"];
