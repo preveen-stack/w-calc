@@ -234,11 +234,10 @@ int main(int argc, char *argv[])
 	} else {
 	    extern char *errstring;
 
-#ifdef HAVE_READLINE_HISTORY
 	    if (!cmdline_input) {
+#ifdef HAVE_READLINE_HISTORY
 		char filename[PATH_MAX];
 
-		cmdline_input = 1;
 		using_history();
 		snprintf(filename, PATH_MAX, "%s/.wcalc_history",
 			 getenv("HOME"));
@@ -247,8 +246,9 @@ int main(int argc, char *argv[])
 			perror("Reading History");
 		    }
 		}
-	    }
 #endif
+		cmdline_input = 1;
+	    }
 	    if (conf.verbose) {
 		printf("-> %s\n", argv[i]);
 	    }
