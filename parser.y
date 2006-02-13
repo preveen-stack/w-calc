@@ -62,7 +62,7 @@ struct conv_req conver;
 
 %token DEC_CMD OCT_CMD HEX_CMD BIN_CMD GUARD_CMD DISPLAY_PREFS_CMD
 %token RADIAN_CMD REMEMBER_CMD LISTVAR_CMD STORE_CMD
-%token PRINT_HELP_CMD PREFIX_CMD INT_CMD VERBOSE_CMD
+%token PRINT_HELP_CMD PREFIX_CMD INT_CMD VERBOSE_CMD DELIM_CMD
 %token <integer> ENG_CMD HLIMIT_CMD ROUNDING_INDICATION_CMD
 %token <integer> PRECISION_CMD BITS_CMD BASE_CMD
 %token <conver> CONVERT_CMD
@@ -198,6 +198,13 @@ command : HEX_CMD {
 	} else if (standard_output) {
 		printf("%c cannot be the thousands separator. It is the decimal separator.\n", $1);
 	}}
+| DELIM_CMD {
+	$$ = nothing;
+	conf.print_commas = ! conf.print_commas;
+	if (standard_output) {
+		printf("Will %sshow separators when printing large numbers.\n",conf.print_commas?"not ":"");
+	}
+}
 | INT_CMD {
 	$$ = nothing;
 	conf.print_ints = ! conf.print_ints;
