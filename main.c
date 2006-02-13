@@ -581,7 +581,7 @@ static int read_prefs(char *filename)
 	    else if (!strcmp(value, "sig_fig"))
 		conf.rounding_indication = SIG_FIG_ROUNDING_INDICATION;
 	} else {
-	    fprintf(stderr, "Invalid string in wcalcrc: %s\n", key);
+	    fprintf(stderr, "Invalid key in wcalcrc: %s\n", key);
 	}
 	memset(key, 0, sizeof(key));
 	memset(value, 0, sizeof(value));
