@@ -81,6 +81,7 @@ SPACE		[ ]
 \\help                  { return(PRINT_HELP_CMD); }
 \\hlimit{DIGIT}+        { YYLVALAC->integer = atoi(yytext+7); return(HLIMIT_CMD); }
 \\ints?                 { return(INT_CMD); }
+\\del(im(iters)?)?	{ return(DELIM_CMD); }
 \\x                     { return(HEX_CMD); }
 \\li(st(vars)?)?        { return(LISTVAR_CMD); }
 \\o(ct(al)?)?           { return(OCT_CMD); }
