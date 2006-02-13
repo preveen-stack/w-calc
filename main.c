@@ -9,13 +9,13 @@
 
 #include <unistd.h>
 #include <sys/types.h>
-#include <sys/stat.h>				   /* for stat() */
-#include <ctype.h>					   /* for isdigit and isalpha */
+#include <sys/stat.h>		       /* for stat() */
+#include <ctype.h>		       /* for isdigit and isalpha */
 #include <errno.h>
-#include <fcntl.h>					   /* for open() */
-#include <limits.h>					   /* for stroul() and PATH_MAX */
+#include <fcntl.h>		       /* for open() */
+#include <limits.h>		       /* for stroul() and PATH_MAX */
 #include <gmp.h>
-#include <mpfr.h>					   /* for mpfr_t */
+#include <mpfr.h>		       /* for mpfr_t */
 
 #ifdef HAVE_LIBREADLINE
 # if defined(HAVE_READLINE_READLINE_H)
@@ -69,517 +69,522 @@ extern int yy_scan_string(const char *);
 
 int main(int argc, char *argv[])
 {
-	extern int yydebug;
-	extern int lines;
+    extern int yydebug;
+    extern int lines;
 
 #ifdef HAVE_LIBREADLINE
-	char *readme = NULL;
+    char *readme = NULL;
 #else
-	char readme[1000];
+    char readme[1000];
 #endif
-	int tty, i;
-	short cmdline_input = 0;
+    int tty, i;
+    short cmdline_input = 0;
 
-	yydebug = 1;					   /* turn on ugly YACC debugging */
-	yydebug = 0;					   /* turn off ugly YACC debugging */
+    yydebug = 1;		       /* turn on ugly YACC debugging */
+    yydebug = 0;		       /* turn off ugly YACC debugging */
 
-	initvar();
-	lists_init();
+    initvar();
+    lists_init();
 
-	/* initialize the preferences */
-	conf.precision = -1;
-	conf.engineering = 0;
-	standard_output = 1;
-	conf.picky_variables = 1;
-	conf.print_prefixes = 1;
-	conf.precision_guard = 1;
-	conf.thou_delimiter = ',';
-	conf.dec_delimiter = '.';
-	conf.print_equal = 1;
-	conf.print_ints = 0;
-	conf.verbose = 0;
+    /* initialize the preferences */
+    conf.precision = -1;
+    conf.engineering = 0;
+    standard_output = 1;
+    conf.picky_variables = 1;
+    conf.print_prefixes = 1;
+    conf.precision_guard = 1;
+    conf.thou_delimiter = ',';
+    conf.dec_delimiter = '.';
+    conf.print_equal = 1;
+    conf.print_ints = 0;
+    conf.print_commas = 0;
+    conf.verbose = 0;
 
-	mpfr_set_default_prec(1024);
-	mpfr_init_set_ui(last_answer, 0, GMP_RNDN);
+    mpfr_set_default_prec(1024);
+    mpfr_init_set_ui(last_answer, 0, GMP_RNDN);
 
-	/* load the preferences */
-	{
-		char filename[PATH_MAX];
+    /* load the preferences */
+    {
+	char filename[PATH_MAX];
 
-		snprintf(filename, PATH_MAX, "%s/.wcalcrc", getenv("HOME"));
-		if (read_prefs(filename)) {
-			perror("Writing Preferences");
-		}
-		snprintf(filename, PATH_MAX, "%s/.wcalc_preload", getenv("HOME"));
-		if (read_preload(filename)) {
-			perror("Reading Preload File");
-		}
+	snprintf(filename, PATH_MAX, "%s/.wcalcrc", getenv("HOME"));
+	if (read_prefs(filename)) {
+	    perror("Writing Preferences");
 	}
-
-	/* Parse commandline options */
-	for (i = 1; i < argc; ++i) {
-		if (!strncmp(argv[i], "-P", 2)) {
-			long int argnum;
-			char *endptr;
-
-			argnum = strtol(&(argv[i][2]), &endptr, 0);
-			if (endptr != NULL && (strlen(endptr) > 0)) {
-				fprintf(stderr,
-						"-P option requires a valid integer without spaces.\n");
-				fflush(stderr);
-				mpfr_clear(last_answer);
-				exit(EXIT_FAILURE);
-			} else {
-				conf.precision = (int)argnum;
-			}
-		} else if (!strcmp(argv[i], "-E") ||
-				   !strcmp(argv[i], "--engineering")) {
-			conf.engineering = !conf.engineering;
-		} else if (!strcmp(argv[i], "-H") || !strcmp(argv[i], "--help")) {
-			print_command_help();
-			mpfr_clear(last_answer);
-			exit(EXIT_SUCCESS);
-		} else if (!strcmp(argv[i], "-v") || !strcmp(argv[i], "--version")) {
-			printf("wcalc %s\n", VERSION);
-			mpfr_clear(last_answer);
-			exit(EXIT_SUCCESS);
-		} else if (!strcmp(argv[i], "-d") || !strcmp(argv[i], "--decimal") ||
-				   !strcmp(argv[i], "-dec")) {
-			conf.output_format = DECIMAL_FORMAT;
-		} else if (!strcmp(argv[i], "-h") || !strcmp(argv[i], "--hexadecimal")
-				   || !strcmp(argv[i], "-hex")) {
-			conf.output_format = HEXADECIMAL_FORMAT;
-		} else if (!strcmp(argv[i], "-o") || !strcmp(argv[i], "--octal") ||
-				   !strcmp(argv[i], "-oct")) {
-			conf.output_format = OCTAL_FORMAT;
-		} else if (!strcmp(argv[i], "-b") || !strcmp(argv[i], "--binary") ||
-				   !strcmp(argv[i], "-bin")) {
-			conf.output_format = BINARY_FORMAT;
-		} else if (!strcmp(argv[i], "-p") || !strcmp(argv[i], "--prefixes")) {
-			conf.print_prefixes = !conf.print_prefixes;
-			/*} else if (!strcmp(argv[i], "-l") || !strcmp(argv[i], "--lenient")) {
-			 * conf.picky_variables = 0; */
-		} else if (!strcmp(argv[i], "-r") || !strcmp(argv[i], "--radians")) {
-			conf.use_radians = !conf.use_radians;
-		} else if (!strcmp(argv[i], "-q") || !strcmp(argv[i], "--quiet")) {
-			conf.print_equal = !conf.print_equal;
-		} else if (!strcmp(argv[i], "-c") ||
-				   !strcmp(argv[i], "--conservative")) {
-			conf.precision_guard = !conf.precision_guard;
-		} else if (!strcmp(argv[i], "-R") || !strcmp(argv[i], "--remember")) {
-			conf.remember_errors = !conf.remember_errors;
-		} else if (!strncmp(argv[i], "--round=", 8)) {
-			if (!strcmp(&(argv[i][8]), "no") ||
-				!strcmp(&(argv[i][8]), "none")) {
-				conf.rounding_indication = NO_ROUNDING_INDICATION;
-			} else if (!strcmp(&(argv[i][8]), "simple")) {
-				conf.rounding_indication = SIMPLE_ROUNDING_INDICATION;
-			} else if (!strcmp(&(argv[i][8]), "sig_fig")) {
-				conf.rounding_indication = SIG_FIG_ROUNDING_INDICATION;
-			}
-		} else if (!strcmp(argv[i], "--round")) {
-			fprintf(stderr,
-					"--round requires an argument (none|simple|sig_fig)\n");
-			exit(EXIT_FAILURE);
-		} else if (!strncmp(argv[i], "--dsep=", 7)) {
-			if (strlen(argv[i]) > 8 || strlen(argv[i]) == 7) {
-				fprintf(stderr, "--dsep= must have an argument\n");
-				exit(EXIT_FAILURE);
-			}
-			if (conf.thou_delimiter != argv[i][7]) {
-				conf.dec_delimiter = argv[i][7];
-			} else {
-				fprintf(stderr,
-						"%c cannot be the decimal separator. It is the thousands separator.\n",
-						argv[i][7]);
-				exit(EXIT_FAILURE);
-			}
-		} else if (!strncmp(argv[i], "--tsep=", 7)) {
-			if (strlen(argv[i]) > 8 || strlen(argv[i]) == 7) {
-				fprintf(stderr, "--tsep= must have an argument\n");
-				exit(EXIT_FAILURE);
-			}
-			if (conf.dec_delimiter != argv[i][7]) {
-				conf.thou_delimiter = argv[i][7];
-			} else {
-				fprintf(stderr,
-						"%c cannot be the thousands separator. It is the decimal separator.\n",
-						argv[i][7]);
-				exit(EXIT_FAILURE);
-			}
-		} else if (!strncmp(argv[i], "--bits", 6)) {
-			unsigned long int argnum;
-			char *endptr;
-
-			argnum = strtoul(&(argv[i][6]), &endptr, 0);
-			if (endptr != NULL && (strlen(endptr) > 0)) {
-				fprintf(stderr,
-						"--bits option requires a valid integer without spaces.\n");
-				mpfr_clear(last_answer);
-				exit(EXIT_FAILURE);
-			} else {
-				mpfr_set_default_prec(argnum);
-			}
-		} else if (!strcmp(argv[i], "--ints")) {
-			conf.print_ints = !conf.print_ints;
-		} else if (!strcmp(argv[i], "--verbose")) {
-			conf.verbose = !conf.verbose;
-		} else if (!strcmp(argv[i], "--yydebug")) {
-			yydebug = 1;
-		} else if (!strcmp(argv[i], "-n")) {
-			conf.print_equal = 0;
-		} else {
-			extern char *errstring;
-
-#ifdef HAVE_READLINE_HISTORY
-			if (!cmdline_input) {
-				char filename[PATH_MAX];
-
-				cmdline_input = 1;
-				using_history();
-				snprintf(filename, PATH_MAX, "%s/.wcalc_history",
-						 getenv("HOME"));
-				if (read_history(filename)) {
-					if (errno != ENOENT) {
-						perror("Reading History");
-					}
-				}
-			}
-#endif
-			if (conf.verbose) {
-				printf("-> %s\n", argv[i]);
-			}
-			parseme(argv[i]);
-			if (!errstring || (errstring && !strlen(errstring)) ||
-				conf.remember_errors) {
-				addToHistory(argv[i], last_answer);
-			}
-			if (putval("a", last_answer, "previous answer") != 0) {
-				fprintf(stderr, "error storing last answer\n");
-			}
-		}
+	snprintf(filename, PATH_MAX, "%s/.wcalc_preload", getenv("HOME"));
+	if (read_preload(filename)) {
+	    perror("Reading Preload File");
 	}
+    }
 
-	if (cmdline_input) {
-#ifdef HAVE_READLINE_HISTORY
-		char filename[PATH_MAX];
+    /* Parse commandline options */
+    for (i = 1; i < argc; ++i) {
+	if (!strncmp(argv[i], "-P", 2)) {
+	    long int argnum;
+	    char *endptr;
 
-		snprintf(filename, PATH_MAX, "%s/.wcalc_history", getenv("HOME"));
-		if (write_history(filename))
-			perror("Saving History");
-		if (conf.history_limit) {
-			if (history_truncate_file(filename, conf.history_limit_len))
-				perror("Truncating History");
-		}
-#endif
-		cleanupvar();
+	    argnum = strtol(&(argv[i][2]), &endptr, 0);
+	    if (endptr != NULL && (strlen(endptr) > 0)) {
+		fprintf(stderr,
+			"-P option requires a valid integer without spaces.\n");
+		fflush(stderr);
 		mpfr_clear(last_answer);
-		mpfr_free_cache();
-		lists_cleanup();
-		exit(EXIT_SUCCESS);
-	}
+		exit(EXIT_FAILURE);
+	    } else {
+		conf.precision = (int)argnum;
+	    }
+	} else if (!strcmp(argv[i], "-E") ||
+		   !strcmp(argv[i], "--engineering")) {
+	    conf.engineering = !conf.engineering;
+	} else if (!strcmp(argv[i], "-H") || !strcmp(argv[i], "--help")) {
+	    print_command_help();
+	    mpfr_clear(last_answer);
+	    exit(EXIT_SUCCESS);
+	} else if (!strcmp(argv[i], "-v") || !strcmp(argv[i], "--version")) {
+	    printf("wcalc %s\n", VERSION);
+	    mpfr_clear(last_answer);
+	    exit(EXIT_SUCCESS);
+	} else if (!strcmp(argv[i], "-d") || !strcmp(argv[i], "--decimal") ||
+		   !strcmp(argv[i], "-dec")) {
+	    conf.output_format = DECIMAL_FORMAT;
+	} else if (!strcmp(argv[i], "-h") || !strcmp(argv[i], "--hexadecimal")
+		   || !strcmp(argv[i], "-hex")) {
+	    conf.output_format = HEXADECIMAL_FORMAT;
+	} else if (!strcmp(argv[i], "-o") || !strcmp(argv[i], "--octal") ||
+		   !strcmp(argv[i], "-oct")) {
+	    conf.output_format = OCTAL_FORMAT;
+	} else if (!strcmp(argv[i], "-b") || !strcmp(argv[i], "--binary") ||
+		   !strcmp(argv[i], "-bin")) {
+	    conf.output_format = BINARY_FORMAT;
+	} else if (!strcmp(argv[i], "-p") || !strcmp(argv[i], "--prefixes")) {
+	    conf.print_prefixes = !conf.print_prefixes;
+	    /*} else if (!strcmp(argv[i], "-l") || !strcmp(argv[i], "--lenient")) {
+	     * conf.picky_variables = 0; */
+	} else if (!strcmp(argv[i], "-r") || !strcmp(argv[i], "--radians")) {
+	    conf.use_radians = !conf.use_radians;
+	} else if (!strcmp(argv[i], "-q") || !strcmp(argv[i], "--quiet")) {
+	    conf.print_equal = !conf.print_equal;
+	} else if (!strcmp(argv[i], "-c") ||
+		   !strcmp(argv[i], "--conservative")) {
+	    conf.precision_guard = !conf.precision_guard;
+	} else if (!strcmp(argv[i], "-R") || !strcmp(argv[i], "--remember")) {
+	    conf.remember_errors = !conf.remember_errors;
+	} else if (!strncmp(argv[i], "--round=", 8)) {
+	    if (!strcmp(&(argv[i][8]), "no") ||
+		!strcmp(&(argv[i][8]), "none")) {
+		conf.rounding_indication = NO_ROUNDING_INDICATION;
+	    } else if (!strcmp(&(argv[i][8]), "simple")) {
+		conf.rounding_indication = SIMPLE_ROUNDING_INDICATION;
+	    } else if (!strcmp(&(argv[i][8]), "sig_fig")) {
+		conf.rounding_indication = SIG_FIG_ROUNDING_INDICATION;
+	    }
+	} else if (!strcmp(argv[i], "--round")) {
+	    fprintf(stderr,
+		    "--round requires an argument (none|simple|sig_fig)\n");
+	    exit(EXIT_FAILURE);
+	} else if (!strncmp(argv[i], "--dsep=", 7)) {
+	    if (strlen(argv[i]) > 8 || strlen(argv[i]) == 7) {
+		fprintf(stderr, "--dsep= must have an argument\n");
+		exit(EXIT_FAILURE);
+	    }
+	    if (conf.thou_delimiter != argv[i][7]) {
+		conf.dec_delimiter = argv[i][7];
+	    } else {
+		fprintf(stderr,
+			"%c cannot be the decimal separator. It is the thousands separator.\n",
+			argv[i][7]);
+		exit(EXIT_FAILURE);
+	    }
+	} else if (!strncmp(argv[i], "--tsep=", 7)) {
+	    if (strlen(argv[i]) > 8 || strlen(argv[i]) == 7) {
+		fprintf(stderr, "--tsep= must have an argument\n");
+		exit(EXIT_FAILURE);
+	    }
+	    if (conf.dec_delimiter != argv[i][7]) {
+		conf.thou_delimiter = argv[i][7];
+	    } else {
+		fprintf(stderr,
+			"%c cannot be the thousands separator. It is the decimal separator.\n",
+			argv[i][7]);
+		exit(EXIT_FAILURE);
+	    }
+	} else if (!strncmp(argv[i], "--bits", 6)) {
+	    unsigned long int argnum;
+	    char *endptr;
 
-	tty = isatty(0);				   /* Find out where stdin is coming from... */
-	if (tty > 0) {
-		/* if stdin is a keyboard or terminal, then use readline and prompts */
+	    argnum = strtoul(&(argv[i][6]), &endptr, 0);
+	    if (endptr != NULL && (strlen(endptr) > 0)) {
+		fprintf(stderr,
+			"--bits option requires a valid integer without spaces.\n");
+		mpfr_clear(last_answer);
+		exit(EXIT_FAILURE);
+	    } else {
+		mpfr_set_default_prec(argnum);
+	    }
+	} else if (!strcmp(argv[i], "--ints")) {
+	    conf.print_ints = !conf.print_ints;
+	} else if (!strcmp(argv[i], "--delim")) {
+	    conf.print_commas = !conf.print_commas;
+	} else if (!strcmp(argv[i], "--verbose")) {
+	    conf.verbose = !conf.verbose;
+	} else if (!strcmp(argv[i], "--yydebug")) {
+	    yydebug = 1;
+	} else if (!strcmp(argv[i], "-n")) {
+	    conf.print_equal = 0;
+	} else {
+	    extern char *errstring;
+
 #ifdef HAVE_READLINE_HISTORY
+	    if (!cmdline_input) {
 		char filename[PATH_MAX];
 
-		snprintf(filename, PATH_MAX, "%s/.wcalc_history", getenv("HOME"));
+		cmdline_input = 1;
 		using_history();
+		snprintf(filename, PATH_MAX, "%s/.wcalc_history",
+			 getenv("HOME"));
 		if (read_history(filename)) {
-			if (errno != ENOENT) {
-				perror("Reading History");
-			}
+		    if (errno != ENOENT) {
+			perror("Reading History");
+		    }
 		}
+	    }
 #endif
-		printf
-			("Enter an expression to evaluate, q to quit, or ? for help:\n");
-		while (1) {
-			lines = 1;
-			fflush(NULL);
-#ifdef HAVE_LIBREADLINE
-			readme = readline("-> ");
-#else
-			{
-				char c;
-				unsigned int i = 0;
-
-				memset(readme, 0, 1000);
-				printf("-> ");
-				fflush(stdout);
-				c = fgetc(stdin);
-				while (c != '\n' && i < 1000 && !feof(stdin) &&
-					   !ferror(stdin)) {
-					readme[i] = c;
-					c = fgetc(stdin);
-					++i;
-				}
-				if (feof(stdin) || ferror(stdin))
-					break;
-			}
-#endif
-			if (!readme) {
-				/* from the readline manpage:
-				 *      readline returns the text of the line read. A blank
-				 *      line returns the empty string. If EOF is encountered
-				 *      while reading a line, and the line is empty, NULL is
-				 *      returned. If an eof is read with a non-empty line, it
-				 *      is treated as a newline.
-				 * This means: readme == NULL is a perfectly reasonable
-				 * response from readline(), AND it means something
-				 * significant. DO NOT DO errno PARSING HERE!!!!
-				 */
-				printf("\n");
-				break;
-			}
-			/* if there is a line */
-			if (strlen(readme)) {
-				if (!strcmp(readme, "q") || !strcmp(readme, "quit") ||
-					!strcmp(readme, "\\q")) {
-					break;
-				} else if (!strncmp(readme, "\\yydebug", 8)) {
-					//addToHistory(readme, 0);
-					yydebug = !yydebug;
-					printf("Debug Mode %s\n", yydebug ? "On" : "Off");
-				} else {
-					if (conf.verbose) {
-						printf("-> %s\n", readme);
-					}
-					parseme(readme);
-					{
-						extern char *errstring;
-
-						if (!errstring || (errstring && !strlen(errstring)) ||
-							conf.remember_errors) {
-							addToHistory(readme, last_answer);
-						}
-					}
-				}
-				if (putval("a", last_answer, "previous answer") != 0) {
-					fprintf(stderr, "error storing last answer\n");
-				}
-
-				{
-					extern char *errstring;
-
-					if (errstring && strlen(errstring)) {
-						fprintf(stderr, "%s", errstring);
-						if (errstring[strlen(errstring) - 1] != '\n')
-							fprintf(stderr, "\n");
-						free(errstring);
-						errstring = NULL;
-					}
-				}
-			}
-#ifdef HAVE_LIBREADLINE
-			free(readme);
-#endif
-		}
-#ifdef HAVE_READLINE_HISTORY
-		if (write_history(filename))
-			perror("Saving History");
-		if (conf.history_limit) {
-			if (history_truncate_file(filename, conf.history_limit_len))
-				perror("Truncating History");
-		}
-#endif
-	} else if (tty < 0) {
-		fprintf(stderr, "Could not determine terminal type.\n");
-	} else {
-		/* if stdin is ANYTHING ELSE (a pipe, a file, etc), don't prompt */
-		char *line, gotten;
-		unsigned int linelen = 0, maxlinelen = 100;
-
-		while (1) {
-			line = calloc(maxlinelen, sizeof(char));
-			gotten = fgetc(stdin);
-			while (gotten != '\n' && !feof(stdin) && !ferror(stdin)) {
-				line[linelen] = gotten;
-				gotten = fgetc(stdin);
-				linelen++;
-				if (linelen > maxlinelen) {
-					char *temp;
-					temp = realloc(line, (maxlinelen + 100) * sizeof(char));
-					if (!temp) {
-						free(line);
-						fprintf(stderr,
-								"Ran out of memory. Line too long.\n");
-						exit(EXIT_FAILURE);
-					}
-					memset(temp + maxlinelen, 0, 100);
-					maxlinelen += 100;
-					line = temp;
-				}
-			}
-			if (ferror(stdin) || (feof(stdin) && linelen == 0))
-				break;
-			if (conf.verbose) {
-				printf("-> %s\n", line);
-			}
-			parseme(line);
-			if (putval("a", last_answer, "previous answer") != 0) {
-				fprintf(stderr, "error storing last answer\n");
-			}
-			{
-				extern char *errstring;
-
-				if (errstring && strlen(errstring)) {
-					fprintf(stderr, "%s", errstring);
-					if (errstring[strlen(errstring) - 1] != '\n')
-						fprintf(stderr, "\n");
-					free(errstring);
-					errstring = NULL;
-				}
-			}
-			free(line);
-			linelen = 0;
-		}
+	    if (conf.verbose) {
+		printf("-> %s\n", argv[i]);
+	    }
+	    parseme(argv[i]);
+	    if (!errstring || (errstring && !strlen(errstring)) ||
+		conf.remember_errors) {
+		addToHistory(argv[i], last_answer);
+	    }
+	    if (putval("a", last_answer, "previous answer") != 0) {
+		fprintf(stderr, "error storing last answer\n");
+	    }
 	}
+    }
 
-	clearHistory();
+    if (cmdline_input) {
+#ifdef HAVE_READLINE_HISTORY
+	char filename[PATH_MAX];
+
+	snprintf(filename, PATH_MAX, "%s/.wcalc_history", getenv("HOME"));
+	if (write_history(filename))
+	    perror("Saving History");
+	if (conf.history_limit) {
+	    if (history_truncate_file(filename, conf.history_limit_len))
+		perror("Truncating History");
+	}
+#endif
 	cleanupvar();
 	mpfr_clear(last_answer);
 	mpfr_free_cache();
 	lists_cleanup();
 	exit(EXIT_SUCCESS);
+    }
+
+    tty = isatty(0);		       /* Find out where stdin is coming from... */
+    if (tty > 0) {
+	/* if stdin is a keyboard or terminal, then use readline and prompts */
+#ifdef HAVE_READLINE_HISTORY
+	char filename[PATH_MAX];
+
+	snprintf(filename, PATH_MAX, "%s/.wcalc_history", getenv("HOME"));
+	using_history();
+	if (read_history(filename)) {
+	    if (errno != ENOENT) {
+		perror("Reading History");
+	    }
+	}
+#endif
+	printf
+	    ("Enter an expression to evaluate, q to quit, or ? for help:\n");
+	while (1) {
+	    lines = 1;
+	    fflush(NULL);
+#ifdef HAVE_LIBREADLINE
+	    readme = readline("-> ");
+#else
+	    {
+		char c;
+		unsigned int i = 0;
+
+		memset(readme, 0, 1000);
+		printf("-> ");
+		fflush(stdout);
+		c = fgetc(stdin);
+		while (c != '\n' && i < 1000 && !feof(stdin) &&
+		       !ferror(stdin)) {
+		    readme[i] = c;
+		    c = fgetc(stdin);
+		    ++i;
+		}
+		if (feof(stdin) || ferror(stdin))
+		    break;
+	    }
+#endif
+	    if (!readme) {
+		/* from the readline manpage:
+		 *      readline returns the text of the line read. A blank
+		 *      line returns the empty string. If EOF is encountered
+		 *      while reading a line, and the line is empty, NULL is
+		 *      returned. If an eof is read with a non-empty line, it
+		 *      is treated as a newline.
+		 * This means: readme == NULL is a perfectly reasonable
+		 * response from readline(), AND it means something
+		 * significant. DO NOT DO errno PARSING HERE!!!!
+		 */
+		printf("\n");
+		break;
+	    }
+	    /* if there is a line */
+	    if (strlen(readme)) {
+		if (!strcmp(readme, "q") || !strcmp(readme, "quit") ||
+		    !strcmp(readme, "\\q")) {
+		    break;
+		} else if (!strncmp(readme, "\\yydebug", 8)) {
+		    //addToHistory(readme, 0);
+		    yydebug = !yydebug;
+		    printf("Debug Mode %s\n", yydebug ? "On" : "Off");
+		} else {
+		    if (conf.verbose) {
+			printf("-> %s\n", readme);
+		    }
+		    parseme(readme);
+		    {
+			extern char *errstring;
+
+			if (!errstring || (errstring && !strlen(errstring)) ||
+			    conf.remember_errors) {
+			    addToHistory(readme, last_answer);
+			}
+		    }
+		}
+		if (putval("a", last_answer, "previous answer") != 0) {
+		    fprintf(stderr, "error storing last answer\n");
+		}
+
+		{
+		    extern char *errstring;
+
+		    if (errstring && strlen(errstring)) {
+			fprintf(stderr, "%s", errstring);
+			if (errstring[strlen(errstring) - 1] != '\n')
+			    fprintf(stderr, "\n");
+			free(errstring);
+			errstring = NULL;
+		    }
+		}
+	    }
+#ifdef HAVE_LIBREADLINE
+	    free(readme);
+#endif
+	}
+#ifdef HAVE_READLINE_HISTORY
+	if (write_history(filename))
+	    perror("Saving History");
+	if (conf.history_limit) {
+	    if (history_truncate_file(filename, conf.history_limit_len))
+		perror("Truncating History");
+	}
+#endif
+    } else if (tty < 0) {
+	fprintf(stderr, "Could not determine terminal type.\n");
+    } else {
+	/* if stdin is ANYTHING ELSE (a pipe, a file, etc), don't prompt */
+	char *line, gotten;
+	unsigned int linelen = 0, maxlinelen = 100;
+
+	while (1) {
+	    line = calloc(maxlinelen, sizeof(char));
+	    gotten = fgetc(stdin);
+	    while (gotten != '\n' && !feof(stdin) && !ferror(stdin)) {
+		line[linelen] = gotten;
+		gotten = fgetc(stdin);
+		linelen++;
+		if (linelen > maxlinelen) {
+		    char *temp;
+		    temp = realloc(line, (maxlinelen + 100) * sizeof(char));
+		    if (!temp) {
+			free(line);
+			fprintf(stderr,
+				"Ran out of memory. Line too long.\n");
+			exit(EXIT_FAILURE);
+		    }
+		    memset(temp + maxlinelen, 0, 100);
+		    maxlinelen += 100;
+		    line = temp;
+		}
+	    }
+	    if (ferror(stdin) || (feof(stdin) && linelen == 0))
+		break;
+	    if (conf.verbose) {
+		printf("-> %s\n", line);
+	    }
+	    parseme(line);
+	    if (putval("a", last_answer, "previous answer") != 0) {
+		fprintf(stderr, "error storing last answer\n");
+	    }
+	    {
+		extern char *errstring;
+
+		if (errstring && strlen(errstring)) {
+		    fprintf(stderr, "%s", errstring);
+		    if (errstring[strlen(errstring) - 1] != '\n')
+			fprintf(stderr, "\n");
+		    free(errstring);
+		    errstring = NULL;
+		}
+	    }
+	    free(line);
+	    linelen = 0;
+	}
+    }
+
+    clearHistory();
+    cleanupvar();
+    mpfr_clear(last_answer);
+    mpfr_free_cache();
+    lists_cleanup();
+    exit(EXIT_SUCCESS);
 }
 
 static int read_preload(char *filename)
 {
-	struct stat sb;
+    struct stat sb;
 
-	if (-1 == stat(filename, &sb)) {
-		if (errno != ENOENT) {
-			return -1;
-		} else {
-			return 0;
-		}
+    if (-1 == stat(filename, &sb)) {
+	if (errno != ENOENT) {
+	    return -1;
+	} else {
+	    return 0;
 	}
-	return loadState(filename, 0);
+    }
+    return loadState(filename, 0);
 }
 
 static int read_prefs(char *filename)
 {
-	int fd = open(filename, O_RDONLY);
-	char key[1000], value[100];
-	char *curs = key;
-	int retval = 1;
+    int fd = open(filename, O_RDONLY);
+    char key[1000], value[100];
+    char *curs = key;
+    int retval = 1;
 
-	fd = open(filename, O_RDONLY);
-	if (fd < 0)
-		return 0;
-	retval = read(fd, curs, 1);
-	while (retval == 1) {
-		char quoted = 0;
-
-		curs = key;
-		// read until we find a non-comment
-		while (retval == 1) {
-			// if we find a comment
-			if (*curs == '#')
-				// read until the end of line
-				while (read(fd, curs, 1) == 1 && *curs != '\n') ;
-			else if (isalpha((int)(*curs)))
-				break;
-			retval = read(fd, curs, 1);
-		}
-		// read in the key
-		quoted = 1;
-		if (*curs != '\'') {
-			++curs;
-			quoted = 0;
-		}
-		while (retval == 1) {
-			retval = read(fd, curs, 1);
-			if ((!quoted && isspace((int)(*curs))) ||
-				(quoted && *curs != '\''))
-				break;
-			++curs;
-		}
-		if (retval != 1)
-			break;
-		*curs = 0;
-		// read in the =
-		while (retval == 1 && *curs != '=') {
-			retval = read(fd, curs, 1);
-		}
-		if (retval != 1)
-			break;
-		while (retval == 1 && (isspace((int)(*curs)) || *curs == '=')) {
-			retval = read(fd, curs, 1);
-		}
-		if (retval != 1)
-			break;
-		value[0] = *curs;
-		*curs = 0;
-		curs = value;
-		// read in the value
-		quoted = 1;
-		if (*curs != '\'') {
-			++curs;
-			quoted = 0;
-		}
-		while (retval == 1) {
-			retval = read(fd, curs, 1);
-			if ((!quoted && isspace((int)(*curs))) ||
-				(quoted && *curs != '\''))
-				break;
-			++curs;
-		}
-		if (*curs == '\n')
-			*curs = 0;
-
-		if (!strcmp(key, "precision"))
-			conf.precision = atoi(value);
-		else if (!strcmp(key, "show_equals"))
-			conf.print_equal = TRUEFALSE;
-		else if (!strcmp(key, "engineering"))
-			conf.engineering = TRUEFALSE;
-		else if (!strcmp(key, "flag_undeclared"))
-			conf.picky_variables = TRUEFALSE;
-		else if (!strcmp(key, "use_radians"))
-			conf.use_radians = TRUEFALSE;
-		else if (!strcmp(key, "print_prefixes"))
-			conf.print_prefixes = TRUEFALSE;
-		else if (!strcmp(key, "save_errors"))
-			conf.remember_errors = TRUEFALSE;
-		else if (!strcmp(key, "precision_guard"))
-			conf.precision_guard = TRUEFALSE;
-		else if (!strcmp(key, "print_integers"))
-			conf.print_ints = TRUEFALSE;
-		else if (!strcmp(key, "thousands_delimiter"))
-			conf.thou_delimiter = value[0];
-		else if (!strcmp(key, "decimal_delimiter"))
-			conf.dec_delimiter = value[0];
-		else if (!strcmp(key, "history_limit")) {
-			if (!strcmp(value, "no"))
-				conf.history_limit = conf.history_limit_len = 0;
-			else {
-				conf.history_limit = 1;
-				conf.history_limit_len = strtoul(value, NULL, 0);
-			}
-		} else if (!strcmp(key, "output_format")) {
-			if (!strcmp(value, "decimal"))
-				conf.output_format = DECIMAL_FORMAT;
-			else if (!strcmp(value, "octal"))
-				conf.output_format = OCTAL_FORMAT;
-			else if (!strcmp(value, "binary"))
-				conf.output_format = BINARY_FORMAT;
-			else if (!strcmp(value, "hex") || !strcmp(value, "hexadecimal"))
-				conf.output_format = HEXADECIMAL_FORMAT;
-		} else if (!strcmp(key, "rounding_indication")) {
-			if (!strcmp(value, "no"))
-				conf.rounding_indication = NO_ROUNDING_INDICATION;
-			else if (!strcmp(value, "simple"))
-				conf.rounding_indication = SIMPLE_ROUNDING_INDICATION;
-			else if (!strcmp(value, "sig_fig"))
-				conf.rounding_indication = SIG_FIG_ROUNDING_INDICATION;
-		} else {
-			fprintf(stderr, "Invalid string in wcalcrc: %s\n", key);
-		}
-		memset(key, 0, sizeof(key));
-		memset(value, 0, sizeof(value));
-	}
+    fd = open(filename, O_RDONLY);
+    if (fd < 0)
 	return 0;
+    retval = read(fd, curs, 1);
+    while (retval == 1) {
+	char quoted = 0;
+
+	curs = key;
+	// read until we find a non-comment
+	while (retval == 1) {
+	    // if we find a comment
+	    if (*curs == '#')
+		// read until the end of line
+		while (read(fd, curs, 1) == 1 && *curs != '\n') ;
+	    else if (isalpha((int)(*curs)))
+		break;
+	    retval = read(fd, curs, 1);
+	}
+	// read in the key
+	quoted = 1;
+	if (*curs != '\'') {
+	    ++curs;
+	    quoted = 0;
+	}
+	while (retval == 1) {
+	    retval = read(fd, curs, 1);
+	    if ((!quoted && isspace((int)(*curs))) ||
+		(quoted && *curs != '\''))
+		break;
+	    ++curs;
+	}
+	if (retval != 1)
+	    break;
+	*curs = 0;
+	// read in the =
+	while (retval == 1 && *curs != '=') {
+	    retval = read(fd, curs, 1);
+	}
+	if (retval != 1)
+	    break;
+	while (retval == 1 && (isspace((int)(*curs)) || *curs == '=')) {
+	    retval = read(fd, curs, 1);
+	}
+	if (retval != 1)
+	    break;
+	value[0] = *curs;
+	*curs = 0;
+	curs = value;
+	// read in the value
+	quoted = 1;
+	if (*curs != '\'') {
+	    ++curs;
+	    quoted = 0;
+	}
+	while (retval == 1) {
+	    retval = read(fd, curs, 1);
+	    if ((!quoted && isspace((int)(*curs))) ||
+		(quoted && *curs != '\''))
+		break;
+	    ++curs;
+	}
+	if (*curs == '\n')
+	    *curs = 0;
+
+	if (!strcmp(key, "precision"))
+	    conf.precision = atoi(value);
+	else if (!strcmp(key, "show_equals"))
+	    conf.print_equal = TRUEFALSE;
+	else if (!strcmp(key, "engineering"))
+	    conf.engineering = TRUEFALSE;
+	else if (!strcmp(key, "flag_undeclared"))
+	    conf.picky_variables = TRUEFALSE;
+	else if (!strcmp(key, "use_radians"))
+	    conf.use_radians = TRUEFALSE;
+	else if (!strcmp(key, "print_prefixes"))
+	    conf.print_prefixes = TRUEFALSE;
+	else if (!strcmp(key, "save_errors"))
+	    conf.remember_errors = TRUEFALSE;
+	else if (!strcmp(key, "precision_guard"))
+	    conf.precision_guard = TRUEFALSE;
+	else if (!strcmp(key, "print_integers"))
+	    conf.print_ints = TRUEFALSE;
+	else if (!strcmp(key, "print_delimiters"))
+	    conf.print_commas = TRUEFALSE;
+	else if (!strcmp(key, "thousands_delimiter"))
+	    conf.thou_delimiter = value[0];
+	else if (!strcmp(key, "decimal_delimiter"))
+	    conf.dec_delimiter = value[0];
+	else if (!strcmp(key, "history_limit")) {
+	    if (!strcmp(value, "no"))
+		conf.history_limit = conf.history_limit_len = 0;
+	    else {
+		conf.history_limit = 1;
+		conf.history_limit_len = strtoul(value, NULL, 0);
+	    }
+	} else if (!strcmp(key, "output_format")) {
+	    if (!strcmp(value, "decimal"))
+		conf.output_format = DECIMAL_FORMAT;
+	    else if (!strcmp(value, "octal"))
+		conf.output_format = OCTAL_FORMAT;
+	    else if (!strcmp(value, "binary"))
+		conf.output_format = BINARY_FORMAT;
+	    else if (!strcmp(value, "hex") || !strcmp(value, "hexadecimal"))
+		conf.output_format = HEXADECIMAL_FORMAT;
+	} else if (!strcmp(key, "rounding_indication")) {
+	    if (!strcmp(value, "no"))
+		conf.rounding_indication = NO_ROUNDING_INDICATION;
+	    else if (!strcmp(value, "simple"))
+		conf.rounding_indication = SIMPLE_ROUNDING_INDICATION;
+	    else if (!strcmp(value, "sig_fig"))
+		conf.rounding_indication = SIG_FIG_ROUNDING_INDICATION;
+	} else {
+	    fprintf(stderr, "Invalid string in wcalcrc: %s\n", key);
+	}
+	memset(key, 0, sizeof(key));
+	memset(value, 0, sizeof(value));
+    }
+    return 0;
 }
