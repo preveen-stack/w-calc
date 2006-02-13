@@ -116,6 +116,7 @@ struct _conf
 	unsigned int print_ints:1;
 	unsigned int simple_calc:1;
 	unsigned int verbose:1;
+	unsigned int print_commas:1;
 };
 
 /* configuration */

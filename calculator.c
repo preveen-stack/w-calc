@@ -37,6 +37,7 @@ char *strchr(), *strrchr();
 #include "string_manip.h"
 #include "files.h"
 #include "number_formatting.h"
+#include "add_commas.h"
 #include "list.h"
 #include "extract_vars.h"
 
@@ -829,6 +830,15 @@ char *print_this_result(mpfr_t result)
 	    case NO_ROUNDING_INDICATION:
 		not_all_displayed = 0;
 		break;
+	}
+    }
+
+    // add commas
+    if (conf.print_commas) {
+	char *str = add_commas(pa,conf.output_format);
+	if (str) {
+	    free(pa);
+	    pa = str;
 	}
     }
 
