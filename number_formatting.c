@@ -99,7 +99,6 @@ char *num_to_str_complex(mpfr_t num, int base, int engr, int prec, int prefix)
 	retstr = precision_formatted_number(s, e, prec, base, prefix);
     }
     mpfr_free_str(s);
-#warning INSERT COMMAS HERE
     return retstr;
 }
 
