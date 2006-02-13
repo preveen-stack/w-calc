@@ -59,7 +59,7 @@ am_wcalc_OBJECTS = parser.$(OBJEXT) scanner.$(OBJEXT) help.$(OBJEXT) \
 	conversion.$(OBJEXT) main.$(OBJEXT) \
 	number_formatting.$(OBJEXT) explain.$(OBJEXT) list.$(OBJEXT) \
 	extract_vars.$(OBJEXT) isconst.$(OBJEXT) isfunc.$(OBJEXT) \
-	evalvar.$(OBJEXT)
+	add_commas.$(OBJEXT) evalvar.$(OBJEXT)
 wcalc_OBJECTS = $(am_wcalc_OBJECTS)
 wcalc_DEPENDENCIES =
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I.
@@ -167,15 +167,16 @@ target_alias = @target_alias@
 AM_YFLAGS = -dt
 #AM_LFLAGS = -w
 wcalc_SOURCES = calculator.h variables.h string_manip.h help.h parser.y \
-				string_manip.h historyManager.h files.h conversion.h \
-				scanner.l help.c calculator.c string_manip.c historyManager.c \
-				files.c variables.c conversion.c main.c number_formatting.c \
-				explain.h explain.c \
-				list.h list.c \
-				extract_vars.h extract_vars.c \
-				isconst.h isconst.c \
-				isfunc.h isfunc.c \
-				evalvar.h evalvar.c
+		string_manip.h historyManager.h files.h conversion.h \
+		scanner.l help.c calculator.c string_manip.c historyManager.c \
+		files.c variables.c conversion.c main.c number_formatting.c \
+		explain.h explain.c \
+		list.h list.c \
+		extract_vars.h extract_vars.c \
+		isconst.h isconst.c \
+		isfunc.h isfunc.c \
+		add_commas.h add_commas.c \
+		evalvar.h evalvar.c
 
 AM_CFLAGS = -O2 -Wall
 wcalc_LDADD = @LEXLIB@
@@ -268,6 +269,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/add_commas.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/calculator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/conversion.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/evalvar.Po@am__quote@

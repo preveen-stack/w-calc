@@ -2,15 +2,16 @@ bin_PROGRAMS = wcalc
 AM_YFLAGS = -dt
 #AM_LFLAGS = -w
 wcalc_SOURCES = calculator.h variables.h string_manip.h help.h parser.y \
-				string_manip.h historyManager.h files.h conversion.h \
-				scanner.l help.c calculator.c string_manip.c historyManager.c \
-				files.c variables.c conversion.c main.c number_formatting.c \
-				explain.h explain.c \
-				list.h list.c \
-				extract_vars.h extract_vars.c \
-				isconst.h isconst.c \
-				isfunc.h isfunc.c \
-				evalvar.h evalvar.c
+		string_manip.h historyManager.h files.h conversion.h \
+		scanner.l help.c calculator.c string_manip.c historyManager.c \
+		files.c variables.c conversion.c main.c number_formatting.c \
+		explain.h explain.c \
+		list.h list.c \
+		extract_vars.h extract_vars.c \
+		isconst.h isconst.c \
+		isfunc.h isfunc.c \
+		add_commas.h add_commas.c \
+		evalvar.h evalvar.c
 AM_CFLAGS = -O2 -Wall
 wcalc_LDADD = @LEXLIB@
 man_MANS = wcalc.1
