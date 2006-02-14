@@ -20,6 +20,7 @@ char * add_commas(char *input, int base)
     char separator;
     char dec_delim = conf.dec_delimiter;
 
+    Dprintf("add_commas: %s, %i\n",input, base);
     if (NULL == input) { return NULL; }
     delimiter = strchr(input,dec_delim);
     if (NULL == delimiter) {
@@ -65,6 +66,7 @@ char * add_commas(char *input, int base)
     copyfrom = input;
     copyto = tmpstring;
     while (*copyfrom && *copyfrom != dec_delim) {
+	Dprintf("from: %s to: %s \n",copyfrom,tmpstring);
 	*copyto++ = *copyfrom++;
 	if (prefix != 0) {
 	    prefix --;
