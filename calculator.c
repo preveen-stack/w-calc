@@ -709,7 +709,7 @@ char *print_this_result_dbl(double result)
 	    scanerror = 0;
 	}
 	printf("%s%s\n",
-	       conf.print_equal ? (not_all_displayed ? " ~= " : " = ")
+	       conf.print_equal ? (not_all_displayed ? "~= " : " = ")
 	       : (not_all_displayed ? "~" : ""), pa);
     }
 
