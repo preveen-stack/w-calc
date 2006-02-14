@@ -691,6 +691,14 @@ char *print_this_result_dbl(double result)
 	}			       /*}}} */
     }				       // if
 
+    if (conf.print_commas) {
+	char *str = add_commas(pa,conf.output_format);
+	if (str) {
+	    free(pa);
+	    pa = str;
+	}
+    }
+
     if (standard_output) {
 	if (errstring && strlen(errstring)) {
 	    extern int scanerror;
