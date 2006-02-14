@@ -239,6 +239,7 @@ command : HEX_CMD {
 			printf("         History Limited To: %lu\n",conf.history_limit_len);
 		}
 		printf("                    Verbose: %s\n",conf.verbose?"yes":"no");
+		printf("         Display Delimiters: %s\n",conf.print_commas?"yes":"no");
 	}
 	$$ = nothing;
 }
