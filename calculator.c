@@ -770,6 +770,10 @@ char *print_this_result(mpfr_t result)
 	    // if you want precision_guard and automatic precision,
 	    // then we have to go with the tried and true "double" method
 	    // ... unless it's an int and you want ints printed whole
+
+	    // I know that DBL_EPSILON can be calculated like so:
+	    // 2^(mpfr_get_prec(result)-1) HOWEVER, printf magically handles
+	    // numbers like 5.1 that I don't even wanna begin to think about
 	    if (conf.precision_guard && conf.precision < 0) {
 		Dprintf("precision guard and automatic precision\n");
 		if (!conf.print_ints || !is_mpfr_int(result)) {
