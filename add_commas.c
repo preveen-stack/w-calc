@@ -53,6 +53,9 @@ char * add_commas(char *input, int base)
     if (! conf.print_prefixes) {
 	prefix = 0;
     }
+    if (*input == '-') {
+	prefix++;
+    }
 
     // the meat of the function
     if (delimiter - input < (skip+prefix)) {
