@@ -391,46 +391,46 @@ The format of the file is that each line is either blank or an assignment. Comme
 The possible keys are:
 .TP
 .B precision
-Either true ("yes" or "true") or false (anything else).
+A number defining the display precision. Equivalent to the \fB\eP\fP command, where -1 means "auto" and anything else specifies the number of decimal places. This does not affect the behind-the-scenes precision.
 .TP
 .B show_equals
-Either true ("yes" or "true") or false (anything else).
+Either true ("yes" or "true") or false (anything else). Equivalent to the \fB--quiet\fP argument. Specifies whether answers will begin with an equals sign or not.
 .TP
 .B engineering
-Either true ("yes" or "true") or false (anything else).
-.TP
-.B flag_undeclared
-Either true ("yes" or "true") or false (anything else).
+Either true ("yes" or "true") or false (anything else). Equivalent to the \fB\eengineering\fP command. Specifies whether answers will be displayed in engineering notation or not.
 .TP
 .B use_radians
-Either true ("yes" or "true") or false (anything else).
+Either true ("yes" or "true") or false (anything else). Equivalent to the \fB\eradians\fP command. Specifies whether trigonometric functions accept input in radians or degrees.
 .TP
 .B print_prefixes
-Either true ("yes" or "true") or false (anything else).
+Either true ("yes" or "true") or false (anything else). Equivalent to the \fB\eprefixes\fP command. Specifies whether base prefixes (e.g. 0x for hexadecimal numbers) are used when displaying output.
 .TP
 .B save_errors
-Either true ("yes" or "true") or false (anything else).
+Either true ("yes" or "true") or false (anything else). Equivalent to the \fB\eremember_errors\fP command. Specifies whether lines that contain a syntax error are added to the history or not.
 .TP
 .B precision_guard
-Either true ("yes" or "true") or false (anything else).
+Either true ("yes" or "true") or false (anything else). Equivalent to the \fB\econservative\fP command. Specifies whether the display will attempt to eliminate numbers too small to be accurate (hopefully, these are only errors created by the binary approximation of the inputs).
 .TP
 .B print_integers
-Either true ("yes" or "true") or false (anything else).
+Either true ("yes" or "true") or false (anything else). Equivalent to the \fB\eints\fP command. Specifies whether whole integers will be printed un-abbreviated or not. This conflicts with engineering notation for large integers, but not for decimals.
+.TP
+.B print_delimiters
+Either true ("yes" or "true") or false (anything else). Equivalent to the \fB\edelimiters\fP command. Specifies whether delimiters will be added to output when displaying.
 .TP
 .B thousands_delimiter
-Uses the next character after the equals sign as its value.
+Uses the next character after the equals sign as its value. Equivalent to the \fB\etsep\fP command. Specifies what the thousands delimiter is, and can affect output if \fBprint_delimiters\fP is enabled.
 .TP
 .B decimal_delimiter
-Uses the next character after the equals sign as its value.
+Uses the next character after the equals sign as its value. Equivalent to the \fB\edsep\fP command. Specifies what the decimal delimiter is.
 .TP
 .B history_limit
-Either "no", for no limit, or a number.
+Either "no", for no limit, or a number. Equivalent to the \fB\ehlimit\fP command.
 .TP
 .B output_format
 Either \fIdecimal\fP, \fIoctal\fP, \fIbinary\fP, \fIhex\fP, or \fIhexadecimal\fP.
 .TP
 .B rounding_indication
-Either \fIno\fP, \fIsimple\fP, or \fIsig_fig\fP.
+Either \fIno\fP, \fIsimple\fP, or \fIsig_fig\fP. Equivalent to the \fB\erounding\fP command.
 .SH PRELOAD
 Wcalc uses a file, \fB~/.wcalc_preload\fP, to store persistent information between instances. Typically, this is used to store variables that are frequently defined. This file can be edited by hand with a standard text editor. There is also a command within wcalc (\fB\estore\fP) to append a variable definition to the end of this file. Any variable defined in this file is defined and available for use in any subsequent invocation of wcalc.
 .SH COPYRIGHT
