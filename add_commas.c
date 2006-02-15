@@ -6,6 +6,7 @@
 # include <string.h>
 #endif
 #include <stdlib.h>		       /* for calloc() */
+#include <ctype.h>
 
 #include "calculator.h"
 #include "add_commas.h"
@@ -22,6 +23,7 @@ char * add_commas(char *input, int base)
 
     Dprintf("add_commas: %s, %i\n",input, base);
     if (NULL == input) { return NULL; }
+    if (! isdigit(*input)) { return NULL; }
     delimiter = strchr(input,dec_delim);
     if (NULL == delimiter) {
 	dec_delim = 0;
