@@ -20,6 +20,7 @@ char * add_commas(char *input, int base)
     unsigned char ctr;
     char separator;
     char dec_delim = conf.dec_delimiter;
+    size_t preflen;
 
     Dprintf("add_commas: %s, %i\n",input, base);
     if (NULL == input) { return NULL; }
@@ -29,6 +30,7 @@ char * add_commas(char *input, int base)
 	dec_delim = 0;
 	delimiter = strrchr(input,0);
     }
+    Dprintf("add_commas: input: %s\n",input);
     switch (base) {
 	default:
 	case DECIMAL_FORMAT:
@@ -60,10 +62,12 @@ char * add_commas(char *input, int base)
     }
 
     // the meat of the function
-    if (delimiter - input < (skip+prefix)) {
+    preflen = delimiter - input;
+    if (preflen < (skip+prefix)) {
 	return NULL;
     }
-    tmpstring = calloc(sizeof(char),(delimiter-input)+strlen(input));
+    Dprintf("tmpstring is alloc'd to be %u long\n",preflen+strlen(input));
+    tmpstring = calloc(preflen+strlen(input),sizeof(char));
     ctr = (delimiter-(input+prefix))%skip;
     if (ctr == 0) {
 	ctr = skip;
@@ -87,9 +91,11 @@ char * add_commas(char *input, int base)
     if (*(copyto-1) == separator) {
 	*(copyto-1) = dec_delim;
     }
-    copyfrom++;
-    while (*copyfrom) {
-	*copyto++ = *copyfrom++;
+    if (*copyfrom) {
+	copyfrom++;
+	while (*copyfrom) {
+	    *copyto++ = *copyfrom++;
+	}
     }
     return tmpstring;
 }
