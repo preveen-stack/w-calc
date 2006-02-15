@@ -72,6 +72,7 @@ List extract_vars(char *str)
 				addToList(&variables, (void *)varname);
 			}
 		}
+		free(varname);
 	}
 	return variables;
 }
