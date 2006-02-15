@@ -39,6 +39,9 @@ void cleanupvar(void)
 		} else {
 			mpfr_clear(freeme->value);
 		}
+		if (freeme->description) {
+		    free(freeme->description);
+		}
 		free(freeme);
 	}
 }									   /*}}} */
