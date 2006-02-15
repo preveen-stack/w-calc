@@ -58,6 +58,9 @@
 /* Define to 1 if you have the `modf' function. */
 #undef HAVE_MODF
 
+/* "MPFR version 2.2 or better" */
+#undef HAVE_MPFR_22
+
 /* Define to 1 if you have the `pow' function. */
 #undef HAVE_POW
 
