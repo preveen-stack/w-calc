@@ -151,8 +151,10 @@ oneline : exp eoln
 	compute = 1;
 }
 | error eoln {
-	report_error("3 Error in scanner halts parser.");
-	compute = 1;
+    // there is the possibility of lost memory here,
+    // because "error" has no data type
+    report_error("3 Error in scanner halts parser.");
+    compute = 1;
 }
 /* if we got an error on the line */
 ;
