@@ -357,7 +357,7 @@ inline unsigned long listLen(List list)
 /* This returns a list iterator to a list */
 ListIterator getListIterator(List list)
 {									   /*{{{ */
-	ListIterator li = malloc(sizeof(ListIterator));
+	ListIterator li = malloc(sizeof(struct _list_iterator));
 
 	li->cur = list->head;
 	li->l = list;
