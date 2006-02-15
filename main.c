@@ -275,6 +275,7 @@ int main(int argc, char *argv[])
 		perror("Truncating History");
 	}
 #endif
+	clearHistory();
 	cleanupvar();
 	mpfr_clear(last_answer);
 	mpfr_free_cache();
