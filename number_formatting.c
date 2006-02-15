@@ -57,7 +57,7 @@ char *num_to_str_complex(mpfr_t num, int base, int engr, int prec, int prefix)
     }
 
     s = mpfr_get_str(NULL, &e, base, 0, num, GMP_RNDN);
-    /* s is the string, allocated big enough to hold the whole thing
+    /* s is the string
      * e is the number of integers (the exponent) if positive
      *
      * Now, if there's odd formatting involved, make mpfr do the rounding,
@@ -83,7 +83,8 @@ char *num_to_str_complex(mpfr_t num, int base, int engr, int prec, int prefix)
 		    e++;
 		}
 	    } else {
-		s = mpfr_get_str(s, &e, base, significant_figures, num,
+		mpfr_free_str(s);
+		s = mpfr_get_str(NULL, &e, base, significant_figures, num,
 				 GMP_RNDN);
 	    }
 	} else {
