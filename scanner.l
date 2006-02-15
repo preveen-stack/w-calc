@@ -358,7 +358,7 @@ irand { return(WIRAND); }
 fact { return(WFACT); }
 comp { return(WCOMP); }
 eint { return(WEINT); }
-gamma { return(WGAMMA); }
+Gamma { return(WGAMMA); }
 lngamma { return(WLNGAMMA); }
 zeta { return(WZETA); }
 
