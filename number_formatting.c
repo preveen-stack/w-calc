@@ -120,7 +120,7 @@ char *precision_formatted_number(char *digits, mp_exp_t exp, int precision,
 
     // ten extra, 'cuz of the *possible* exponent
     full_length = length + 10;
-    curs = retstring = (char *)calloc(sizeof(char), full_length);
+    curs = retstring = (char *)calloc(full_length, sizeof(char));
     Dprintf("length: %lu, full_length: %lu\n", length, full_length);
     // now, copy the digits into the output string, carefully
 
