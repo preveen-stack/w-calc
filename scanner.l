@@ -275,7 +275,12 @@ Z(0|zero|ZERO)	{ mpfr_init_set_str(YYLVALAC->number,W_IMPEDANCE_OF_VACUUM,0,GMP_
                   return(NUMBER); }
 \302\276	{ mpfr_init_set_d(YYLVALAC->number,0.75,GMP_RNDN);
                   return(NUMBER); }
-K	{ mpfr_init(YYLVALAC->number); mpfr_const_catalan(YYLVALAC->number,GMP_RNDN);
+K	{
+#ifdef HAVE_MPFR_22
+mpfr_init(YYLVALAC->number); mpfr_const_catalan(YYLVALAC->number,GMP_RNDN);
+#else
+mpfr_init_set_str(YYLVALAC->number, W_CATALAN, 0, GMP_RNDN);
+#endif
 	return(NUMBER); }
 
 %{ /* These are the grouping symbols */
