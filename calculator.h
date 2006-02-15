@@ -29,72 +29,72 @@
 
 enum functions
 { wnot,
-	wbnot,
-	wsin,
-	wcos,
-	wtan,
-	wcot,
-	wsec,
-	wcsc,
-	wasin,
-	wacos,
-	watan,
-	wacot,
-	wasec,
-	wacsc,
-	wsinh,
-	wcosh,
-	wtanh,
-	wcoth,
-	wsech,
-	wcsch,
-	wasinh,
-	wacosh,
-	watanh,
-	wacoth,
-	wasech,
-	wacsch,
-	wlog,
-	wlogtwo,
-	wln,
-	wround,
-	wneg,
-	wabs,
-	wsqrt,
-	wfloor,
-	wceil,
-	wrand,
-	wirand,
-	wexp,
-	wfact,
-	wcomp,
-	weint,
-	wgamma,
-	wlngamma,
-	wzeta,
-	wcbrt
+    wbnot,
+    wsin,
+    wcos,
+    wtan,
+    wcot,
+    wsec,
+    wcsc,
+    wasin,
+    wacos,
+    watan,
+    wacot,
+    wasec,
+    wacsc,
+    wsinh,
+    wcosh,
+    wtanh,
+    wcoth,
+    wsech,
+    wcsch,
+    wasinh,
+    wacosh,
+    watanh,
+    wacoth,
+    wasech,
+    wacsch,
+    wlog,
+    wlogtwo,
+    wln,
+    wround,
+    wneg,
+    wabs,
+    wsqrt,
+    wfloor,
+    wceil,
+    wrand,
+    wirand,
+    wexp,
+    wfact,
+    wcomp,
+    weint,
+    wgamma,
+    wlngamma,
+    wzeta,
+    wcbrt
 };
 enum operations
 { wplus,
-	wminus,
-	wmult,
-	wdiv,
-	wmod,
-	wpow,
-	wor,
-	wbor,
-	wbxor,
-	wand,
-	wband,
-	wequal,
-	wnequal,
-	wgt,
-	wlt,
-	wrshft,
-	wlshft,
-	wgeq,
-	wleq,
-	wnone
+    wminus,
+    wmult,
+    wdiv,
+    wmod,
+    wpow,
+    wor,
+    wbor,
+    wbxor,
+    wand,
+    wband,
+    wequal,
+    wnequal,
+    wgt,
+    wlt,
+    wrshft,
+    wlshft,
+    wgeq,
+    wleq,
+    wnone
 };
 enum commands
 { redisplay, nothing };
@@ -111,24 +111,24 @@ char *output_string(unsigned int);
 
 struct _conf
 {
-	int precision;
-	unsigned int engineering:1;
-	unsigned int picky_variables:1;
-	unsigned int use_radians:1;
-	unsigned int output_format:4;
-	unsigned int print_prefixes:1;
-	unsigned int rounding_indication:4;
-	unsigned int remember_errors:1;
-	unsigned char thou_delimiter;
-	unsigned char dec_delimiter;
-	unsigned int precision_guard:1;
-	unsigned int history_limit:1;
-	unsigned long history_limit_len;
-	unsigned int print_equal:1;
-	unsigned int print_ints:1;
-	unsigned int simple_calc:1;
-	unsigned int verbose:1;
-	unsigned int print_commas:1;
+    int precision;
+    unsigned int engineering:1;
+    unsigned int picky_variables:1;
+    unsigned int use_radians:1;
+    unsigned int output_format:4;
+    unsigned int print_prefixes:1;
+    unsigned int rounding_indication:4;
+    unsigned int remember_errors:1;
+    unsigned char thou_delimiter;
+    unsigned char dec_delimiter;
+    unsigned int precision_guard:1;
+    unsigned int history_limit:1;
+    unsigned long history_limit_len;
+    unsigned int print_equal:1;
+    unsigned int print_ints:1;
+    unsigned int simple_calc:1;
+    unsigned int verbose:1;
+    unsigned int print_commas:1;
 };
 
 /* configuration */

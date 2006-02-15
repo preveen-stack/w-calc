@@ -8,60 +8,60 @@
 @interface WcalcController : NSObject
 {
     IBOutlet NSMenuItem *affectKeyboardMenu;
-	IBOutlet NSMenuItem *baseMenu;
-	IBOutlet NSMenuItem *saveMenuItem;
-	IBOutlet NSMenuItem *saveAsMenuItem;
+    IBOutlet NSMenuItem *baseMenu;
+    IBOutlet NSMenuItem *saveMenuItem;
+    IBOutlet NSMenuItem *saveAsMenuItem;
 
-	IBOutlet NSWindow *mainWindow;
-	IBOutlet NSWindow *inspectorWindow;
-	IBOutlet InspectorController *inspector;
+    IBOutlet NSWindow *mainWindow;
+    IBOutlet NSWindow *inspectorWindow;
+    IBOutlet InspectorController *inspector;
 
     IBOutlet NSButton *capsLockKey;
     IBOutlet NSButton *shiftKey1;
     IBOutlet NSButton *shiftKey2;
-	IBOutlet NSButton *engineeringNotation;
-	IBOutlet NSButton *historyDuplicates;
-	IBOutlet NSButton *pickyVariables;
-	IBOutlet NSButton *printPrefixes;
-	IBOutlet NSButton *useRadians;
-	IBOutlet NSButton *updateHistory;
-	IBOutlet NSButton *strictSyntax;
-	IBOutlet NSButton *decimalKey;
-	IBOutlet NSButton *rememberErrors;
-	IBOutlet NSButton *enterKey;
-	IBOutlet NSButton *limitHistory;
-	IBOutlet NSButton *precisionGuard;
-	IBOutlet NSButton *printInts;
-	IBOutlet NSButton *simpleCalculator;
+    IBOutlet NSButton *engineeringNotation;
+    IBOutlet NSButton *historyDuplicates;
+    IBOutlet NSButton *pickyVariables;
+    IBOutlet NSButton *printPrefixes;
+    IBOutlet NSButton *useRadians;
+    IBOutlet NSButton *updateHistory;
+    IBOutlet NSButton *strictSyntax;
+    IBOutlet NSButton *decimalKey;
+    IBOutlet NSButton *rememberErrors;
+    IBOutlet NSButton *enterKey;
+    IBOutlet NSButton *limitHistory;
+    IBOutlet NSButton *precisionGuard;
+    IBOutlet NSButton *printInts;
+    IBOutlet NSButton *simpleCalculator;
 
     IBOutlet NSTextField *AnswerField;
     IBOutlet NSTextField *ExpressionField;
-	IBOutlet NSTextField *limitHistoryLen;
-	IBOutlet NSTextField *limitHistoryLenTag;
+    IBOutlet NSTextField *limitHistoryLen;
+    IBOutlet NSTextField *limitHistoryLenTag;
 
-	IBOutlet NSDrawer *baseDrawer;
+    IBOutlet NSDrawer *baseDrawer;
 
-	IBOutlet NSMatrix *outputFormat;
-	IBOutlet NSMatrix *outputFormat2;
+    IBOutlet NSMatrix *outputFormat;
+    IBOutlet NSMatrix *outputFormat2;
 
     IBOutlet id errorController;
     IBOutlet id historyList;
     IBOutlet id PrecisionSlider;
     IBOutlet id theKeyboard;
-	IBOutlet id keypad;
+    IBOutlet id keypad;
 
-	IBOutlet NSPanel *thePrefPanel;
-	IBOutlet NSPanel *conversionWindow;
+    IBOutlet NSPanel *thePrefPanel;
+    IBOutlet NSPanel *conversionWindow;
 
-	IBOutlet NSPopUpButton *roundingIndication;
-	IBOutlet NSPopUpButton *convertType;
+    IBOutlet NSPopUpButton *roundingIndication;
+    IBOutlet NSPopUpButton *convertType;
 
-	IBOutlet NSTableView *variableList;
-	IBOutlet NSTableView *convertFrom;
-	IBOutlet NSTableView *convertTo;
+    IBOutlet NSTableView *variableList;
+    IBOutlet NSTableView *convertFrom;
+    IBOutlet NSTableView *convertTo;
 
-	bool just_answered;
-	NSView *superview;
+    bool just_answered;
+    NSView *superview;
 }
 - (IBAction)clear:(id)sender;
 - (IBAction)enterData:(id)sender;

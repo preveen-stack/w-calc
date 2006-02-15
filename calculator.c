@@ -389,7 +389,8 @@ int find_recursion_core(List oldvars)
 		// free the rest of the newvars list
 		do {
 		    free(newVarname);
-		} while ((newVarname = (char *)getHeadOfList(newvars)) != NULL);
+		} while ((newVarname =
+			  (char *)getHeadOfList(newvars)) != NULL);
 		free(error);
 		freeListIterator(oldvarsIterator);
 		return 1;
@@ -438,7 +439,7 @@ void set_prettyanswer(mpfr_t num)
 	free(pretty_answer);
     }
     temp = print_this_result(num);
-    Dprintf("set_prettyanswer: %s\n",temp);
+    Dprintf("set_prettyanswer: %s\n", temp);
     if (temp) {
 	pretty_answer = (char *)strdup(temp);
     } else {
@@ -701,7 +702,8 @@ char *print_this_result_dbl(double result)
     }				       // if
 
     if (conf.print_commas) {
-	char *str = add_commas(pa,conf.output_format);
+	char *str = add_commas(pa, conf.output_format);
+
 	if (str) {
 	    free(pa);
 	    pa = str;
@@ -790,12 +792,12 @@ char *print_this_result(mpfr_t result)
 		    //XXX: what is the following if() for?
 		    //if (mpfr_get_d(result, GMP_RNDN) !=
 		    //mpfr_get_si(result, GMP_RNDN)) {
-			double res = mpfr_get_d(result, GMP_RNDN);
+		    double res = mpfr_get_d(result, GMP_RNDN);
 
-			if (fabs(res) < DBL_EPSILON) {
-			    res = 0.0;
-			}
-			return print_this_result_dbl(res);
+		    if (fabs(res) < DBL_EPSILON) {
+			res = 0.0;
+		    }
+		    return print_this_result_dbl(res);
 		    //}
 		}
 	    }
@@ -856,7 +858,8 @@ char *print_this_result(mpfr_t result)
 
     // add commas
     if (conf.print_commas) {
-	char *str = add_commas(pa,conf.output_format);
+	char *str = add_commas(pa, conf.output_format);
+
 	if (str) {
 	    free(pa);
 	    pa = str;
@@ -1099,16 +1102,16 @@ void uber_function(mpfr_t output, enum functions func, mpfr_t input)
 		    mpfr_mul(output, output, temp, GMP_RNDN);
 		}
 		break;
-	    case wasec: /* from mathematica
-			   http://mathworld.wolfram.com/InverseSecant.html */
+	    case wasec:	       /* from mathematica
+				        * http://mathworld.wolfram.com/InverseSecant.html */
 		mpfr_pow_si(output, input, -1, GMP_RNDN);
 		mpfr_acos(output, output, GMP_RNDN);
 		if (!conf.use_radians) {
 		    mpfr_mul(output, output, temp, GMP_RNDN);
 		}
 		break;
-	    case wacsc: /* from mathematica
-	    http://mathworld.wolfram.com/InverseCosecant.html */
+	    case wacsc:	       /* from mathematica
+				        * http://mathworld.wolfram.com/InverseCosecant.html */
 		mpfr_pow_si(output, input, -1, GMP_RNDN);
 		mpfr_asin(output, output, GMP_RNDN);
 		if (!conf.use_radians) {

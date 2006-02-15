@@ -13,21 +13,21 @@
 #include <mpfr.h>
 
 void uber_conversion(mpfr_t output, int utype, int fromunit, int tounit,
-					 mpfr_t value);
+		     mpfr_t value);
 int identify_units(char *unit1, char *unit2);
 int unit_id(int utype, char *unit);
 
 struct conversion
 {
-	char *factor;
-	char *name;
-	char *aka[7];
+    char *factor;
+    char *name;
+    char *aka[7];
 };
 
 struct conv_req
 {
-	char *u1;
-	char *u2;
+    char *u1;
+    char *u2;
 };
 
 /* Conversion Types */

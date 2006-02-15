@@ -258,9 +258,9 @@ int main(int argc, char *argv[])
 		addToHistory(argv[i], last_answer);
 	    }
 	    if (errstring && strlen(errstring)) {
-		fprintf(stderr,"%s",errstring);
+		fprintf(stderr, "%s", errstring);
 		if (errstring[strlen(errstring) - 1] != '\n')
-		    fprintf(stderr,"\n");
+		    fprintf(stderr, "\n");
 		free(errstring);
 		errstring = NULL;
 	    }

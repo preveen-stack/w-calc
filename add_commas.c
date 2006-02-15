@@ -13,7 +13,7 @@
 
 /* this function returns a copy of the input string with delimiters
  * appropriate for the specified base. */
-char * add_commas(char *input, int base)
+char *add_commas(char *input, int base)
 {
     char *copyto, *copyfrom, *tmpstring, *delimiter;
     unsigned int skip, prefix;
@@ -22,15 +22,19 @@ char * add_commas(char *input, int base)
     char dec_delim = conf.dec_delimiter;
     size_t preflen;
 
-    Dprintf("add_commas: %s, %i\n",input, base);
-    if (NULL == input) { return NULL; }
-    if (! isdigit(*input)) { return NULL; }
-    delimiter = strchr(input,dec_delim);
+    Dprintf("add_commas: %s, %i\n", input, base);
+    if (NULL == input) {
+	return NULL;
+    }
+    if (!isdigit(*input)) {
+	return NULL;
+    }
+    delimiter = strchr(input, dec_delim);
     if (NULL == delimiter) {
 	dec_delim = 0;
-	delimiter = strrchr(input,0);
+	delimiter = strrchr(input, 0);
     }
-    Dprintf("add_commas: input: %s\n",input);
+    Dprintf("add_commas: input: %s\n", input);
     switch (base) {
 	default:
 	case DECIMAL_FORMAT:
@@ -54,31 +58,30 @@ char * add_commas(char *input, int base)
 	    separator = conf.thou_delimiter;
 	    break;
     }
-    if (! conf.print_prefixes) {
+    if (!conf.print_prefixes) {
 	prefix = 0;
     }
     if (*input == '-') {
 	prefix++;
     }
-
     // the meat of the function
     preflen = delimiter - input;
-    if (preflen < (skip+prefix)) {
+    if (preflen < (skip + prefix)) {
 	return NULL;
     }
-    Dprintf("tmpstring is alloc'd to be %u long\n",preflen+strlen(input));
-    tmpstring = calloc(preflen+strlen(input),sizeof(char));
-    ctr = (delimiter-(input+prefix))%skip;
+    Dprintf("tmpstring is alloc'd to be %u long\n", preflen + strlen(input));
+    tmpstring = calloc(preflen + strlen(input), sizeof(char));
+    ctr = (delimiter - (input + prefix)) % skip;
     if (ctr == 0) {
 	ctr = skip;
     }
     copyfrom = input;
     copyto = tmpstring;
     while (*copyfrom && *copyfrom != dec_delim) {
-	Dprintf("from: %s to: %s \n",copyfrom,tmpstring);
+	Dprintf("from: %s to: %s \n", copyfrom, tmpstring);
 	*copyto++ = *copyfrom++;
 	if (prefix != 0) {
-	    prefix --;
+	    prefix--;
 	    continue;
 	}
 	if (--ctr == 0) {
@@ -88,8 +91,8 @@ char * add_commas(char *input, int base)
 	    ctr = skip;
 	}
     }
-    if (*(copyto-1) == separator) {
-	*(copyto-1) = dec_delim;
+    if (*(copyto - 1) == separator) {
+	*(copyto - 1) = dec_delim;
     }
     if (*copyfrom) {
 	copyfrom++;
@@ -99,4 +102,3 @@ char * add_commas(char *input, int base)
     }
     return tmpstring;
 }
-

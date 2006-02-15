@@ -21,20 +21,20 @@ char *strchr(), *strrchr();
 
 struct variable
 {
-	char *key;
-	char *expression;
-	char *description;
-	mpfr_t value;
-	unsigned int exp:1;
-	struct variable *next;
+    char *key;
+    char *expression;
+    char *description;
+    mpfr_t value;
+    unsigned int exp:1;
+    struct variable *next;
 };
 
 struct answer
 {
-	mpfr_t val;
-	char *exp;
-	char *desc;
-	unsigned int err:1;
+    mpfr_t val;
+    char *exp;
+    char *desc;
+    unsigned int err:1;
 };
 
 // requires a working mpfr_t
