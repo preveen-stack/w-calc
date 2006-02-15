@@ -430,6 +430,7 @@ void set_prettyanswer(mpfr_t num)
 	free(pretty_answer);
     }
     temp = print_this_result(num);
+    Dprintf("set_prettyanswer: %s\n",temp);
     if (temp) {
 	pretty_answer = (char *)strdup(temp);
     } else {
@@ -1026,6 +1027,8 @@ void uber_function(mpfr_t output, enum functions func, mpfr_t input)
 		case wcos:
 		case wtan:
 		case wcot:
+		case wsec:
+		case wcsc:
 		    mpfr_const_pi(temp, GMP_RNDN);
 		    mpfr_mul(input, input, temp, GMP_RNDN);
 		    mpfr_div_ui(input, input, 180, GMP_RNDN);
@@ -1034,6 +1037,8 @@ void uber_function(mpfr_t output, enum functions func, mpfr_t input)
 		case wacos:
 		case watan:
 		case wacot:
+		case wasec:
+		case wacsc:
 		    mpfr_const_pi(temp, GMP_RNDN);
 		    mpfr_pow_si(temp, temp, -1, GMP_RNDN);
 		    mpfr_mul_ui(temp, temp, 180, GMP_RNDN);
@@ -1053,8 +1058,13 @@ void uber_function(mpfr_t output, enum functions func, mpfr_t input)
 		mpfr_tan(output, input, GMP_RNDN);
 		break;
 	    case wcot:
-		mpfr_tan(output, input, GMP_RNDN);
-		mpfr_pow_si(output, output, -1, GMP_RNDN);
+		mpfr_cot(output, input, GMP_RNDN);
+		break;
+	    case wsec:
+		mpfr_sec(output, input, GMP_RNDN);
+		break;
+	    case wcsc:
+		mpfr_csc(output, input, GMP_RNDN);
 		break;
 	    case wasin:
 		mpfr_asin(output, input, GMP_RNDN);
@@ -1081,6 +1091,22 @@ void uber_function(mpfr_t output, enum functions func, mpfr_t input)
 		    mpfr_mul(output, output, temp, GMP_RNDN);
 		}
 		break;
+	    case wasec: /* from mathematica
+			   http://mathworld.wolfram.com/InverseSecant.html */
+		mpfr_pow_si(output, input, -1, GMP_RNDN);
+		mpfr_acos(output, output, GMP_RNDN);
+		if (!conf.use_radians) {
+		    mpfr_mul(output, output, temp, GMP_RNDN);
+		}
+		break;
+	    case wacsc: /* from mathematica
+	    http://mathworld.wolfram.com/InverseCosecant.html */
+		mpfr_pow_si(output, input, -1, GMP_RNDN);
+		mpfr_asin(output, output, GMP_RNDN);
+		if (!conf.use_radians) {
+		    mpfr_mul(output, output, temp, GMP_RNDN);
+		}
+		break;
 	    case wsinh:
 		mpfr_sinh(output, input, GMP_RNDN);
 		break;
@@ -1091,8 +1117,13 @@ void uber_function(mpfr_t output, enum functions func, mpfr_t input)
 		mpfr_tanh(output, input, GMP_RNDN);
 		break;
 	    case wcoth:
-		mpfr_tanh(output, input, GMP_RNDN);
-		mpfr_pow_si(output, output, -1, GMP_RNDN);
+		mpfr_coth(output, input, GMP_RNDN);
+		break;
+	    case wsech:
+		mpfr_sech(output, input, GMP_RNDN);
+		break;
+	    case wcsch:
+		mpfr_csch(output, input, GMP_RNDN);
 		break;
 	    case wasinh:
 		mpfr_asinh(output, input, GMP_RNDN);
@@ -1106,6 +1137,14 @@ void uber_function(mpfr_t output, enum functions func, mpfr_t input)
 	    case wacoth:
 		mpfr_pow_si(input, input, -1, GMP_RNDN);
 		mpfr_atanh(output, input, GMP_RNDN);
+		break;
+	    case wasech:
+		mpfr_pow_si(output, input, -1, GMP_RNDN);
+		mpfr_acosh(output, output, GMP_RNDN);
+		break;
+	    case wacsch:
+		mpfr_pow_si(output, input, -1, GMP_RNDN);
+		mpfr_asinh(output, output, GMP_RNDN);
 		break;
 	    case wlog:
 		mpfr_log10(output, input, GMP_RNDN);
@@ -1175,6 +1214,18 @@ void uber_function(mpfr_t output, enum functions func, mpfr_t input)
 		mpz_clear(integer);
 		mpz_clear(intout);
 	    }
+		break;
+	    case weint:
+		mpfr_eint(output, input, GMP_RNDN);
+		break;
+	    case wgamma:
+		mpfr_gamma(output, input, GMP_RNDN);
+		break;
+	    case wlngamma:
+		mpfr_lngamma(output, input, GMP_RNDN);
+		break;
+	    case wzeta:
+		mpfr_zeta(output, input, GMP_RNDN);
 		break;
 	    default:
 		mpfr_set(output, input, GMP_RNDN);

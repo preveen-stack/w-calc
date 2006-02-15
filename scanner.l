@@ -235,7 +235,7 @@ sigma|\317\203 { mpfr_init_set_str(YYLVALAC->number,W_STEFAN_BOLTZMANN,0,GMP_RND
                   return(NUMBER); }
 alpha|\316\261 { mpfr_init_set_str(YYLVALAC->number,W_FINE_STRUCTURE,0,GMP_RNDN);
                   return(NUMBER); }
-gamma|GAMMA|\316\263 { mpfr_init_set_str(YYLVALAC->number,W_EULER,0,GMP_RNDN);
+gamma|GAMMA|\316\263 { mpfr_init(YYLVALAC->number); mpfr_const_euler(YYLVALAC->number,GMP_RNDN);
                   return(NUMBER); }
 re	{ mpfr_init_set_str(YYLVALAC->number,W_ELECTRON_RADIUS,0,GMP_RNDN);
                   return(NUMBER); }
@@ -275,6 +275,8 @@ Z(0|zero|ZERO)	{ mpfr_init_set_str(YYLVALAC->number,W_IMPEDANCE_OF_VACUUM,0,GMP_
                   return(NUMBER); }
 \302\276	{ mpfr_init_set_d(YYLVALAC->number,0.75,GMP_RNDN);
                   return(NUMBER); }
+K	{ mpfr_init(YYLVALAC->number); mpfr_const_catalan(YYLVALAC->number,GMP_RNDN);
+	return(NUMBER); }
 
 %{ /* These are the grouping symbols */
     %}
@@ -317,22 +319,30 @@ xor			{ return(WBXOR); }
 
 %{ /* These are functions (unary operations) */
     %}
-sin { return(WSIN); }
-cos { return(WCOS); }
+sin(e)? { return(WSIN); }
+cos(in(e)?)? { return(WCOS); }
 tan { return(WTAN); }
 cot { return(WCOT); }
+sec(ant)? { return(WSEC); }
+csc|cosecant { return(WCSC); }
 (asin)|(arcsin)|(sin^-1) { return(WASIN); }
 (acos)|(arccos)|(cos^-1) { return(WACOS); }
 (atan)|(arctan)|(tan^-1) { return(WATAN); }
 (acot)|(arccot)|(cot^-1) { return(WACOT); }
+(asec)|(arcsec)|(sec^-1) { return(WASEC); }
+(acsc)|(arccsc)|(csc^-1) { return(WACSC); }
 sinh { return(WSINH); }
 cosh { return(WCOSH); }
 tanh { return(WTANH); }
 coth { return(WCOTH); }
+sech { return(WSECH); }
+csch { return(WCSCH); }
 asinh|arsinh|areasinh|(sinh^-1) { return(WASINH); }
 acosh|arcosh|areacosh|(cosh^-1) { return(WACOSH); }
 atanh|artanh|areatanh|(tanh^-1) { return(WATANH); }
 acoth|arcoth|areacoth|(tanh^-1) { return(WACOTH); }
+asech|areasech|(sech^-1) { return(WASECH); }
+acsch|areacsch|(csch^-1) { return(WACSCH); }
 log { return(WLOG); }
 logtwo { return(WLOGTWO); }
 ln { return(WLN); }
@@ -347,6 +357,10 @@ rand { return(WRAND); }
 irand { return(WIRAND); }
 fact { return(WFACT); }
 comp { return(WCOMP); }
+eint { return(WEINT); }
+gamma { return(WGAMMA); }
+lngamma { return(WLNGAMMA); }
+zeta { return(WZETA); }
 
 '[^']*' {
     char * temp = strdup(yytext+1);

@@ -74,7 +74,8 @@ struct conv_req conver;
 
 %token WBNOT WNOT WLOG WLN WROUND WABS WSQRT WCEIL WFLOOR WCBRT WLOGTWO WBANG
 %token WSIN WCOS WTAN WASIN WACOS WATAN WSINH WCOSH WTANH WASINH WACOSH WATANH
-%token WCOT WACOT WCOTH WACOTH WRAND WIRAND WFACT WCOMP
+%token WCOT WACOT WCOTH WACOTH WRAND WIRAND WFACT WCOMP WSEC WCSC WASEC WACSC
+%token WSECH WCSCH WASECH WACSCH WEINT WGAMMA WLNGAMMA WZETA
 
 %token <number> NUMBER
 %token <variable> VAR STRING OPEN_CMD SAVE_CMD
@@ -541,18 +542,26 @@ func : WSIN { $$ = wsin; }
 | WCOS { $$ = wcos; }
 | WTAN { $$ = wtan; }
 | WCOT { $$ = wcot; }
+| WSEC { $$ = wsec; }
+| WCSC { $$ = wcsc; }
 | WASIN { $$ = wasin; }
 | WACOS { $$ = wacos; }
 | WATAN { $$ = watan; }
 | WACOT { $$ = wacot; }
+| WASEC { $$ = wasec; }
+| WACSC { $$ = wacsc; }
 | WSINH { $$ = wsinh; }
 | WCOSH { $$ = wcosh; }
 | WTANH { $$ = wtanh; }
 | WCOTH { $$ = wcoth; }
+| WSECH { $$ = wsech; }
+| WCSCH { $$ = wcsch; }
 | WASINH { $$ = wasinh; }
 | WACOSH { $$ = wacosh; }
 | WATANH { $$ = watanh; }
 | WACOTH { $$ = wacoth; }
+| WASECH { $$ = wasech; }
+| WACSCH { $$ = wacsch; }
 | WLOG { $$ = wlog; }
 | WLOGTWO { $$ = wlogtwo; }
 | WLN { $$ = wln; }
@@ -569,6 +578,10 @@ func : WSIN { $$ = wsin; }
 | WNOT { $$ = wnot; }
 | WFACT { $$ = wfact; }
 | WCOMP { $$ = wcomp; }
+| WEINT { $$ = weint; }
+| WGAMMA { $$ = wgamma; }
+| WLNGAMMA { $$ = wlngamma; }
+| WZETA { $$ = wzeta; }
 ;
 
 nullexp : PAR REN
