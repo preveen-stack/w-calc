@@ -69,7 +69,7 @@ List extract_vars(char *str)
 				i++;
 			}
 			if (!exists) {
-				addToList(&variables, (void *)varname);
+				addToList(&variables, (void *)strdup(varname));
 			}
 		}
 		free(varname);
