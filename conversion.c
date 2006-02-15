@@ -337,6 +337,8 @@ void uber_conversion (mpfr_t output, int utype, int fromunit, int tounit, mpfr_t
         mpfr_init_set_str(fromfac,ltable[fromunit].factor,0,GMP_RNDN);
         mpfr_div(tofac,tofac,fromfac,GMP_RNDN);
         mpfr_mul(output,tofac,value,GMP_RNDN);
+        mpfr_clear(tofac);
+        mpfr_clear(fromfac);
     } else {
         mpfr_t temp;
 

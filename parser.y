@@ -597,27 +597,31 @@ sign : WMINUS { $$ = -1; }
 exp_l2 : exp_l3
 | exp_l3 WSQR { mpfr_init($$); mpfr_sqr($$,$1,GMP_RNDN); mpfr_clear($1); }
 | sign exp_l2 oval { mpfr_init($$);
-					 mpfr_mul($2,$2,$3,GMP_RNDN);
-					 mpfr_mul_si($$,$2,$1,GMP_RNDN);
-					 mpfr_clear($2);
-					 mpfr_clear($3); }
+		     mpfr_mul($2,$2,$3,GMP_RNDN);
+		     mpfr_mul_si($$,$2,$1,GMP_RNDN);
+		     mpfr_clear($2);
+		     mpfr_clear($3); }
 ;
 
-oval : exp_l3 oval
+oval : exp_l3 oval {
+     mpfr_init_set($$,$1,GMP_RNDN);
+     mpfr_clear($1);
+     mpfr_clear($2);
+}
 | { mpfr_init_set_ui($$,1,GMP_RNDN); }
 ;
 
 exp_l3 : capsule oval { mpfr_init($$);
                         simple_exp($$,$1,wmult,$2);
-						mpfr_clear($1);
-						mpfr_clear($2);}
+			mpfr_clear($1);
+			mpfr_clear($2);}
 | capsule WPOW sign exp_l3 oval { mpfr_init($$);
-								  mpfr_mul_si($4,$4,$3,GMP_RNDN);
-								  mpfr_pow($1,$1,$4,GMP_RNDN);
-								  mpfr_mul($$,$1,$5,GMP_RNDN);
-								  mpfr_clear($1);
-								  mpfr_clear($4);
-								  mpfr_clear($5);}
+				  mpfr_mul_si($4,$4,$3,GMP_RNDN);
+				  mpfr_pow($1,$1,$4,GMP_RNDN);
+				  mpfr_mul($$,$1,$5,GMP_RNDN);
+				  mpfr_clear($1);
+				  mpfr_clear($4);
+				  mpfr_clear($5);}
 ;
 
 parenthated: PAR exp REN
