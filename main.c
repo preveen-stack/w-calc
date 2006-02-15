@@ -257,6 +257,13 @@ int main(int argc, char *argv[])
 		conf.remember_errors) {
 		addToHistory(argv[i], last_answer);
 	    }
+	    if (errstring && strlen(errstring)) {
+		fprintf(stderr,"%s",errstring);
+		if (errstring[strlen(errstring) - 1] != '\n')
+		    fprintf(stderr,"\n");
+		free(errstring);
+		errstring = NULL;
+	    }
 	    if (putval("a", last_answer, "previous answer") != 0) {
 		fprintf(stderr, "error storing last answer\n");
 	    }
