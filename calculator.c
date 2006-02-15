@@ -256,12 +256,12 @@ static char *flatten(char *str)
 	    }
 	    // get the number
 	    varvalue = num_to_str_complex(f, 10, 0, -1, 1);
-	    free(varname);
 	    mpfr_clear(f);
 	} else {		       // not a known var: itza literal (e.g. cos)
 	    varvalue = (char *)strdup(varname);
 	}
 	nlen = strlen(varvalue);
+	free(varname);
 
 	// now, put it back in the string
 	// it is a var, and needs parenthesis
