@@ -386,6 +386,10 @@ int find_recursion_core(List oldvars)
 			 "%s was found twice in symbol descent. Recursive variables are not allowed.",
 			 newVarname);
 		report_error(error);
+		// free the rest of the newvars list
+		do {
+		    free(newVarname);
+		} while ((newVarname = (char *)getHeadOfList(newvars)) != NULL);
 		free(error);
 		freeListIterator(oldvarsIterator);
 		return 1;
@@ -400,6 +404,10 @@ int find_recursion_core(List oldvars)
 	if (retval != 0) {
 	    break;
 	}
+    }
+    // make sure newvars is empty (so all that memory gets freed)
+    while ((newVarname = (char *)getHeadOfList(newvars)) != NULL) {
+	free(newVarname);
     }
     freeListIterator(oldvarsIterator);
     return retval;
