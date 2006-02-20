@@ -24,6 +24,7 @@ void *peekListElement(List, size_t);
 void *getListElement(List, size_t);
 inline void *peekAheadInList(List);
 inline unsigned long listLen(List);
+void removeFromList(List, void *);
 void freeList(List *);
 
 /* ListIterator operations */

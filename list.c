@@ -400,3 +400,37 @@ void freeListIterator(ListIterator li)
 {				       /*{{{ */
     free(li);
 }				       /*}}} */
+
+/* This searches the list for a specific value, and removes it */
+void removeFromList(List list, void * item)
+{
+    ListHeader pl;
+    ListHeader returnme;
+
+    if (!list || !list->head) {
+	if (!list) {
+	    fprintf(stderr, "getListElement: null List passed\n");
+	}
+	return;
+    }
+    pl = list->head;
+    if (pl->payload == item) {
+	list->head = list->head->next;
+	poolReturn(pl);
+    } else {
+	while (pl->next && pl->next != list->tail) {
+	    if (pl->next->payload == item) {
+		break;
+	    }
+	    if (pl->next->next == NULL) {
+		return;
+	    }
+	    pl = pl->next;
+	}
+	if (pl->next && pl->next->payload == item) {
+	    returnme = pl->next;
+	    pl->next = pl->next->next;
+	    poolReturn(returnme);
+	}
+    }
+}
