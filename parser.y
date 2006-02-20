@@ -96,7 +96,7 @@ struct conv_req conver;
 %left WNOT WBNOT WNEG
 %right WPOW
 
-%expect 1211
+%expect 1583
 
 %% 	/* beginning of the parsing rules	*/
 
@@ -153,6 +153,7 @@ oneline : exp eoln
 | error eoln {
     // there is the possibility of lost memory here,
     // because "error" has no data type
+    // (and because I'm passing around *actual* mpfr_t's rather than pointers to them)
     report_error("3 Error in scanner halts parser.");
     compute = 1;
 }
