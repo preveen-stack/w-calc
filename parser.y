@@ -30,23 +30,23 @@ char *strchr (), *strrchr ();
 #include "conversion.h"
 #include "number_formatting.h"
 
-	/* Based on the headstart code by Shawn Ostermann
-	* modified by Kyle Wheeler
-	*/
+/* Based on the headstart code by Shawn Ostermann
+* modified by Kyle Wheeler
+*/
 
-	/* include debugging code, in case we want it */
+/* include debugging code, in case we want it */
 #define YYDEBUG 1
 
-	/* to make it stop complaining about undeclared functions */
-	int yylex();
-	int yyerror(char *error_string, ...);
+/* to make it stop complaining about undeclared functions */
+int yylex();
+int yyerror(char *error_string, ...);
 
-	int lines = 1;
-	int synerrors = 0;
-	short scanerror = 0;
-	char * errstring = NULL;
+int lines = 1;
+int synerrors = 0;
+short scanerror = 0;
+char * errstring = NULL;
 
-	%}
+%}
 
 
 %union	{ /* the types that we use in the tokens */
@@ -611,7 +611,7 @@ oval : exp_l3 oval {
      mpfr_clear($1);
      mpfr_clear($2);
 }
-| { mpfr_init_set_ui($$,1,GMP_RNDN); }
+| { mpfr_inig_set_ui($$,1,GMP_RNDN); }
 ;
 
 exp_l3 : capsule oval { mpfr_init($$);
