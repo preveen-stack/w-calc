@@ -29,7 +29,6 @@
 extern void add_history();
 extern int write_history();
 extern int read_history();
-extern int history_truncate_file(char *, int);
 # endif	/* defined(HAVE_READLINE_HISTORY_H) */
 /* no history */
 #endif /* HAVE_READLINE_HISTORY */
