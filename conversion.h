@@ -21,7 +21,7 @@ struct conversion
 {
     char *factor;
     char *name;
-    char *aka[7];
+    char *aka[9];
 };
 
 struct conv_req
