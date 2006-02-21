@@ -611,7 +611,7 @@ oval : exp_l3 oval {
      mpfr_clear($1);
      mpfr_clear($2);
 }
-| { mpfr_inig_set_ui($$,1,GMP_RNDN); }
+| { mpfr_init_set_ui($$,1,GMP_RNDN); }
 ;
 
 exp_l3 : capsule oval { mpfr_init($$);
