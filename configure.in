@@ -18,11 +18,10 @@ AC_CHECK_LIB([m], [acos])
 #AC_CHECK_LIB([termcap], [clear])
 # FIXME: Replace `main' with a function in `-lreadline':
 AC_ARG_WITH(readline,[  --without-readline      do not try to find and use the readline library],nc_cv_readline=$withval,nc_cv_readline=yes)
-if test $"$nc_cv_readline" = yes ; then
-dnl	AC_CHECK_LIB([readline], [_readline])
+if test "$nc_cv_readline" = yes ; then
 	VL_LIB_READLINE
-dnl	PGAC_CHECK_READLINE
 fi
+
 AC_CHECK_LIB(gmp, __gmpz_init, ,
        [AC_CHECK_LIB(gmp, mpz_init, ,
          [AC_CHECK_LIB(gmp2, mpz_init)])])
