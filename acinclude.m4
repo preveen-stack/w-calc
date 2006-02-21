@@ -1,5 +1,6 @@
 dnl Available from the GNU Autoconf Macro Archive at:
-dnl http://www.gnu.org/software/ac-archive/htmldoc/vl_lib_readline.html
+dnl http://autoconf-archive.cryp.to/vl_lib_readline.html
+dnl last modified 2002-04-04
 dnl
 AC_DEFUN([VL_LIB_READLINE], [
   AC_CACHE_CHECK([for a readline compatible library],
