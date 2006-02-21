@@ -55,7 +55,7 @@ NDIGIT		[123456789]
 LETTER		[a-zA-Z]
 WHITESPACE	[ \t]
 ACCEPTABLE	[_:0-9]
-UNITCHRS	[-_a-zA-Z0-9^/µÅ]
+UNITCHRS	[-_a-zA-Z0-9^./µÅ]
 SPACE		[ ]
 
 /* The rest of this after the '%%' is lex rules */
