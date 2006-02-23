@@ -1270,6 +1270,9 @@ void uber_function(mpfr_t output, enum functions func, mpfr_t input)
 	    case wzeta:
 		mpfr_zeta(output, input, GMP_RNDN);
 		break;
+	    case wbnot:
+		mpfr_set_uj(output, ~ mpfr_get_uj(input, GMP_RNDN), GMP_RNDN);
+		break;
 	    default:
 		mpfr_set(output, input, GMP_RNDN);
 		break;
