@@ -29,7 +29,7 @@ AC_CHECK_LIB(mpfr, mpfr_free_str, , [AC_MSG_ERROR(
 [Need MPFR 2.1.x or better. see http://www.mpfr.org])])
 
 # what version of mpfr
-AC_CHECK_FUNC(mpfr_set_uj, [AC_DEFINE(HAVE_MPFR_21,1,"MPFR version 2.1 or better")])
+AC_CHECK_FUNC(__gmpfr_set_uj, [AC_DEFINE(HAVE_MPFR_21,1,"MPFR version 2.1 or better")])
 AC_CHECK_FUNC(mpfr_sec, [AC_DEFINE(HAVE_MPFR_22,1,"MPFR version 2.2 or better")])
 
 # Checks for header files.
