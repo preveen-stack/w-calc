@@ -123,7 +123,8 @@ The general gist of the GPL is this: This program is free. You may do as you lik
 * Known Bugs *
 **************
 
-There are still some problems in the grammar with implicit multiplication in exotic cases... they aren't too big, because you can get around them by simply being explicit, but I'm working on fixing that. (The grammar is hard!)
+The grammar has too many shift/reduce conflicts.
+Leaks memory when there's a parse error.
 
 If you find more bugs, please LET ME KNOW!
 

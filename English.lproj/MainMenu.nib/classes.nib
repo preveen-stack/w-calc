@@ -21,7 +21,12 @@
             OUTLETS = {errorDialog = id; errorMessage = id; }; 
             SUPERCLASS = NSObject; 
         }, 
-        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {"" = id; }; 
+            CLASS = FirstResponder; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSObject; 
+        }, 
         {
             ACTIONS = {clearHistory = id; rowSelected = id; }; 
             CLASS = HistoryList; 
@@ -33,7 +38,12 @@
             ACTIONS = {closeIt = id; onClose = id; openIt = id; toggleIt = id; }; 
             CLASS = InspectorController; 
             LANGUAGE = ObjC; 
-            OUTLETS = {affectInspectorMenu = NSMenuItem; inspectorWindow = NSWindow; }; 
+            OUTLETS = {
+                affectInspectorMenu = NSMenuItem; 
+                historyList = NSTableView; 
+                inspectorWindow = NSWindow; 
+                variableList = NSTableView; 
+            }; 
             SUPERCLASS = NSObject; 
         }, 
         {CLASS = Interpreter; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
@@ -42,6 +52,14 @@
             LANGUAGE = ObjC; 
             OUTLETS = {AnswerField = NSTextField; mainController = id; }; 
             SUPERCLASS = NSTextField; 
+        }, 
+        {CLASS = NSSegmentedControl; LANGUAGE = ObjC; SUPERCLASS = NSControl; }, 
+        {
+            ACTIONS = {addVar = id; clearVars = id; delVar = id; showList = id; }; 
+            CLASS = PersVarList; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {theList = NSTableView; theWindow = NSWindow; }; 
+            SUPERCLASS = NSObject; 
         }, 
         {
             ACTIONS = {displayPrefs = id; setPrefs = id; showPrefs = id; }; 
@@ -73,6 +91,7 @@
         {
             ACTIONS = {
                 clear = id; 
+                closeWindow = id; 
                 convert = id; 
                 displayPrefs = id; 
                 enterData = id; 
@@ -99,6 +118,8 @@
                 affectKeyboardMenu = NSMenuItem; 
                 baseDrawer = NSDrawer; 
                 baseMenu = NSMenuItem; 
+                bitsPref = NSTextField; 
+                bitsStepper = NSStepper; 
                 capsLockKey = NSButton; 
                 conversionMenu = NSMenuItem; 
                 conversionWindow = NSPanel; 
@@ -118,10 +139,13 @@
                 limitHistoryLen = NSTextField; 
                 limitHistoryLenTag = NSTextField; 
                 mainWindow = NSWindow; 
+                meta = NSApplication; 
                 outputFormat = NSMatrix; 
                 outputFormat2 = NSMatrix; 
+                persVarsWindow = NSWindow; 
                 pickyVariables = NSButton; 
                 precisionGuard = NSButton; 
+                printDelimiters = NSButton; 
                 printInts = NSButton; 
                 printPrefixes = NSButton; 
                 rememberErrors = NSButton; 

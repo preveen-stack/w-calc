@@ -13,6 +13,8 @@
 	[prefs setObject:@"YES" forKey:@"historyShowing"];
 	[affectInspectorMenu setTitle:@"Hide Inspector"];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onClose:) name:NSWindowWillCloseNotification object:inspectorWindow];
+	[variableList reloadData];
+	[historyList reloadData];
 	[inspectorWindow makeKeyAndOrderFront:self];
 }
 

@@ -8,6 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		2721CD4A0869C13400E3BB4D /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2721CD490869C13400E3BB4D /* Info.plist */; };
+		2729A40209B1ECE5001F07F4 /* add_commas.h in Headers */ = {isa = PBXBuildFile; fileRef = 2729A40009B1ECE5001F07F4 /* add_commas.h */; };
+		2729A40309B1ECE5001F07F4 /* add_commas.c in Sources */ = {isa = PBXBuildFile; fileRef = 2729A40109B1ECE5001F07F4 /* add_commas.c */; };
+		2729A40409B1ECE5001F07F4 /* add_commas.h in Headers */ = {isa = PBXBuildFile; fileRef = 2729A40009B1ECE5001F07F4 /* add_commas.h */; };
+		2729A40509B1ECE5001F07F4 /* add_commas.c in Sources */ = {isa = PBXBuildFile; fileRef = 2729A40109B1ECE5001F07F4 /* add_commas.c */; };
+		2729A53809B256DA001F07F4 /* PersVarList.h in Headers */ = {isa = PBXBuildFile; fileRef = 2729A53609B256DA001F07F4 /* PersVarList.h */; };
+		2729A53909B256DA001F07F4 /* PersVarList.m in Sources */ = {isa = PBXBuildFile; fileRef = 2729A53709B256DA001F07F4 /* PersVarList.m */; };
 		272C376308C3FDAF009EA18F /* number_formatting.h in Headers */ = {isa = PBXBuildFile; fileRef = 272C375F08C3FDAF009EA18F /* number_formatting.h */; };
 		272C376408C3FDAF009EA18F /* number_formatting.c in Sources */ = {isa = PBXBuildFile; fileRef = 272C376008C3FDAF009EA18F /* number_formatting.c */; };
 		273655E6094C63910043391C /* list.h in Headers */ = {isa = PBXBuildFile; fileRef = 273655E4094C63910043391C /* list.h */; };
@@ -135,6 +141,10 @@
 		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		2721CD490869C13400E3BB4D /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = Info.plist; sourceTree = "<group>"; };
+		2729A40009B1ECE5001F07F4 /* add_commas.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = add_commas.h; sourceTree = "<group>"; };
+		2729A40109B1ECE5001F07F4 /* add_commas.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = add_commas.c; sourceTree = "<group>"; };
+		2729A53609B256DA001F07F4 /* PersVarList.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = PersVarList.h; sourceTree = "<group>"; };
+		2729A53709B256DA001F07F4 /* PersVarList.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = PersVarList.m; sourceTree = "<group>"; };
 		272C375F08C3FDAF009EA18F /* number_formatting.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = number_formatting.h; sourceTree = "<group>"; };
 		272C376008C3FDAF009EA18F /* number_formatting.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = number_formatting.c; sourceTree = "<group>"; };
 		273655E4094C63910043391C /* list.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = list.h; sourceTree = "<group>"; };
@@ -247,6 +257,8 @@
 				F5A165F8030711ED01A80164 /* ConversionList.m */,
 				27FAECF0093FAE5A00D7EE3E /* InspectorController.h */,
 				27FAECF1093FAE5A00D7EE3E /* InspectorController.m */,
+				2729A53609B256DA001F07F4 /* PersVarList.h */,
+				2729A53709B256DA001F07F4 /* PersVarList.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -336,6 +348,8 @@
 			isa = PBXGroup;
 			children = (
 				F5DEAE8F021254A501A80164 /* definitions.h */,
+				2729A40009B1ECE5001F07F4 /* add_commas.h */,
+				2729A40109B1ECE5001F07F4 /* add_commas.c */,
 				F5B29D6601F7391601A80164 /* calculator.h */,
 				F5B29D6501F7391601A80164 /* calculator.c */,
 				27365609094C642B0043391C /* evalvar.c */,
@@ -392,6 +406,7 @@
 				27365607094C64170043391C /* isconst.h in Headers */,
 				27365608094C64170043391C /* isfunc.h in Headers */,
 				2736560E094C642B0043391C /* evalvar.h in Headers */,
+				2729A40409B1ECE5001F07F4 /* add_commas.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -424,6 +439,8 @@
 				27365603094C64170043391C /* isconst.h in Headers */,
 				27365604094C64170043391C /* isfunc.h in Headers */,
 				2736560C094C642B0043391C /* evalvar.h in Headers */,
+				2729A40209B1ECE5001F07F4 /* add_commas.h in Headers */,
+				2729A53809B256DA001F07F4 /* PersVarList.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -577,6 +594,7 @@
 				27365605094C64170043391C /* isconst.c in Sources */,
 				27365606094C64170043391C /* isfunc.c in Sources */,
 				2736560D094C642B0043391C /* evalvar.c in Sources */,
+				2729A40509B1ECE5001F07F4 /* add_commas.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -611,6 +629,8 @@
 				27365601094C64170043391C /* isconst.c in Sources */,
 				27365602094C64170043391C /* isfunc.c in Sources */,
 				2736560B094C642B0043391C /* evalvar.c in Sources */,
+				2729A40309B1ECE5001F07F4 /* add_commas.c in Sources */,
+				2729A53909B256DA001F07F4 /* PersVarList.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -699,7 +719,7 @@
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_ENABLE_PASCAL_STRINGS = NO;
 				GCC_MODEL_TUNING = G4;
-				GCC_OPTIMIZATION_LEVEL = 2;
+				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					GUI,
@@ -712,7 +732,6 @@
 				GCC_WARN_MISSING_PARENTHESES = YES;
 				GCC_WARN_PEDANTIC = NO;
 				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNKNOWN_PRAGMAS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_LABEL = YES;
@@ -734,7 +753,8 @@
 				PRIVATE_HEADERS_FOLDER_PATH = "$(CONTENTS_FOLDER_PATH)/PrivateHeaders";
 				PRODUCT_NAME = Wcalc;
 				SECTORDER_FLAGS = "";
-				SEPARATE_STRIP = YES;
+				SEPARATE_STRIP = NO;
+				STRIP_INSTALLED_PRODUCT = NO;
 				WARNING_CFLAGS = (
 					"-Wchar-subscripts",
 					"-Wcomment",
@@ -751,8 +771,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 2.1.1;
+				CURRENT_PROJECT_VERSION = 2.2;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				MACOSX_DEPLOYMENT_TARGET = "";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Development;

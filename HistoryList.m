@@ -19,7 +19,7 @@
 		val = historynum(rowIndex,2);
 
 	if (! val)
-		return @"BAD ROW";
+		return @"BAD ROW (history manager)";
 
 	return [NSString stringWithUTF8String:val];
 }

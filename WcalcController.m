@@ -115,7 +115,7 @@ static NSString *curFile = NULL;
 - (IBAction)menuConstant:(id)sender
 {
 	NSString *str = [ExpressionField stringValue];
-	NSString *str2;
+	NSString *str2 = @"error!";
 
 	switch ([sender tag]) {
 		case 1: str2 = [NSString stringWithFormat:@"%C", 0x03c0]; break;
@@ -123,6 +123,7 @@ static NSString *curFile = NULL;
 		case 3: str2 = [NSString stringWithFormat:@"%C", 0x03b3]; break;
 		case 4: str2 = @"g"; break;
 		case 5: str2 = @"Cc"; break;
+		case 8: str = @"K"; break;
 
 		case 101: str2 = @"Z0"; break;
 		case 102: str2 = [NSString stringWithFormat:@"%C0", 0x03b5]; break;
@@ -212,8 +213,19 @@ static NSString *curFile = NULL;
 		case 23: str2 = @"acot("; break;
 		case 24: str2 = @"coth("; break;
 		case 25: str2 = @"acoth("; break;
-                case 26: str2 = @"rand("; break;
-                case 27: str2 = @"irand("; break;
+		case 26: str2 = @"rand("; break;
+		case 27: str2 = @"irand("; break;
+		case 28: str2 = @"Gamma("; break;
+		case 29: str2 = @"lnGamma("; break;
+		case 30: str2 = @"zeta("; break;
+		case 31: str2 = @"sec("; break;
+		case 32: str2 = @"csc("; break;
+		case 33: str2 = @"asec("; break;
+		case 34: str2 = @"acsc("; break;
+		case 35: str2 = @"sech("; break;
+		case 36: str2 = @"csch("; break;
+		case 37: str2 = @"asech("; break;
+		case 38: str2 = @"acsch("; break;
 		default: return;
 	}
 	[ExpressionField setStringValue:[str2 stringByAppendingString:str]];
@@ -235,7 +247,7 @@ static NSString *curFile = NULL;
 		[prefs setObject:@"NO" forKey:@"flagUndefinedVariables"];
 		[prefs setObject:@"YES" forKey:@"useRadians"];
 		[prefs setObject:@"0" forKey:@"outputFormat"];
-		[prefs setObject:@"NO" forKey:@"printPrefixes"];
+		[prefs setObject:@"YES" forKey:@"printPrefixes"];
 		[prefs setObject:@"NO" forKey:@"updateHistory"];
 		[prefs setObject:@"YES" forKey:@"strictSyntax"];
 		[prefs setObject:@"0" forKey:@"roundingIndication"];
@@ -247,6 +259,8 @@ static NSString *curFile = NULL;
 		[prefs setObject:@"1000" forKey:@"historyLimitLength"];
 		[prefs setObject:@"NO" forKey:@"printInts"];
 		[prefs setObject:@"NO" forKey:@"simpleCalc"];
+		[prefs setObject:@"NO" forKey:@"printDelimiters"];
+		[prefs setObject:@"1024" forKey:@"internalPrecision"];
 		Dprintf("initializing finished\n");
 	}
 	conf.precision = [prefs integerForKey:@"precision"];
@@ -254,13 +268,12 @@ static NSString *curFile = NULL;
 	conf.picky_variables = [prefs boolForKey:@"flagUndefinedVariables"];
 	conf.use_radians = [prefs boolForKey:@"useRadians"];
 	conf.output_format = [prefs integerForKey:@"outputFormat"];
-	[PrecisionSlider setEnabled:(conf.output_format==DECIMAL_FORMAT)];
 	conf.print_prefixes = [prefs boolForKey:@"printPrefixes"];
 /*	conf.strict_syntax = [prefs boolForKey:@"strictSyntax"]; */
 	conf.rounding_indication = [prefs integerForKey:@"roundingIndication"];
 	conf.precision_guard = [prefs boolForKey:@"precisionGuard"];
 	conf.print_ints = [prefs boolForKey:@"printInts"];
-	conf.print_commas = [prefs boolForKey:@"printCommas"];
+	conf.print_commas = [prefs boolForKey:@"printDelimiters"];
 	conf.simple_calc = [prefs boolForKey:@"simpleCalc"];
 	/* history preferences */
 	allow_duplicates = [prefs boolForKey:@"historyDuplicatesAllowed"];
@@ -268,6 +281,13 @@ static NSString *curFile = NULL;
 	conf.remember_errors = [prefs boolForKey:@"rememberErrors"];
 	conf.history_limit = [prefs boolForKey:@"historyLimit"];
 	conf.history_limit_len = [prefs integerForKey:@"historyLimitLen"];
+	if ([prefs integerForKey:@"internalPrecision"] < 32) {
+		[prefs setObject:@"32" forKey:@"internalPrecision"];
+	}
+	if ([prefs integerForKey:@"internalPrecision"] > 4096) {
+		[prefs setObject:@"4096" forKey:@"internalPrecision"];
+	}
+	mpfr_set_default_prec([prefs integerForKey:@"internalPrecision"]);
 	Dprintf("preferences read\n");
 
 	[PrecisionSlider setIntValue:conf.precision];
@@ -350,9 +370,6 @@ static NSString *curFile = NULL;
 		simpleClearAll();
 		Dprintf("simple all cleared\n");
 	}
-	Dprintf("default precision is...\n");
-	mpfr_set_default_prec(1024);
-	Dprintf("1024\n");
 	mpfr_init_set_ui(last_answer, 0, GMP_RNDN);
 	Dprintf("last answer cleared\n");
 }
@@ -360,6 +377,7 @@ static NSString *curFile = NULL;
 - (void)openBDrawer: (id) sender
 {
 	[baseDrawer open];
+	[baseMenu setTitle:@"Close Base Drawer"];
 }
 
 - (void)openIDrawer: (id) sender
@@ -643,7 +661,7 @@ static NSString *curFile = NULL;
 	if (! [baseDrawer state]) {
 		[baseDrawer open];
 		[prefs setObject:@"YES" forKey:@"baseShowing"];
-		[baseMenu setTitle:@"Hide Base Drawer"];
+		[baseMenu setTitle:@"Close Base Drawer"];
 	} else {
 		[baseDrawer close];
 		[prefs setObject:@"NO" forKey:@"baseShowing"];
@@ -694,10 +712,11 @@ static NSString *curFile = NULL;
 			if (olde != conf.output_format) {
 				need_redraw = 1;
 				[prefs setObject:[NSString stringWithFormat:@"%i",conf.output_format] forKey:@"outputFormat"];
-				[PrecisionSlider setEnabled:(conf.output_format==DECIMAL_FORMAT)];
 				[printPrefixes setEnabled:(conf.output_format!=DECIMAL_FORMAT)];
 				[engineeringNotation setEnabled:(conf.output_format==DECIMAL_FORMAT)];
 			}
+			[outputFormat selectCellWithTag:conf.output_format];
+			[outputFormat2 selectCellWithTag:conf.output_format];
 				break;
 		case 6: // Print Prefixes
 			olde = conf.print_prefixes;
@@ -784,6 +803,31 @@ static NSString *curFile = NULL;
 				[updateHistory setEnabled:!conf.simple_calc];
 				[useRadians setEnabled:!conf.simple_calc];
 			}
+			break;
+		case 17:
+			olde = conf.print_commas;
+			conf.print_commas = ([sender state]==NSOnState);
+			if (olde != conf.print_commas) {
+				need_redraw = 1;
+				[prefs setObject:(conf.print_ints?@"YES":@"NO") forKey:@"printDelimiters"];
+			}
+			break;
+		case 18:
+			olde = mpfr_get_default_prec();
+			mpfr_set_default_prec([sender intValue]);
+			if (olde != mpfr_get_default_prec()) {
+				[bitsStepper takeIntValueFrom:sender];
+				[prefs setObject:[NSString stringWithFormat:@"%lu",mpfr_get_default_prec()] forKey:@"internalPrecision"];
+			}
+			break;
+		case 19:
+			olde = mpfr_get_default_prec();
+			mpfr_set_default_prec([bitsStepper intValue]);
+			if (olde != mpfr_get_default_prec()) {
+				[bitsPref takeIntValueFrom:bitsStepper];
+				[prefs setObject:[NSString stringWithFormat:@"%lu",mpfr_get_default_prec()] forKey:@"internalPrecision"];
+			}
+			break;
 		default: return;
 	}
 
@@ -934,6 +978,9 @@ static NSString *curFile = NULL;
 	[printInts setState:(conf.print_ints?NSOnState:NSOffState)];
 	[precisionGuard setState:(conf.precision_guard?NSOnState:NSOffState)];
 	[simpleCalculator setState:(conf.simple_calc?NSOnState:NSOffState)];
+	[printDelimiters setState:(conf.print_commas?NSOnState:NSOffState)];
+	[bitsPref setIntValue:mpfr_get_default_prec()];
+	[bitsStepper setIntValue:mpfr_get_default_prec()];
 
 	/* disable irrelevant preferences */
 	[historyDuplicates setEnabled:!conf.simple_calc];
@@ -951,6 +998,17 @@ static NSString *curFile = NULL;
 	    char len[6];
 	    sprintf(len,"%lu",conf.history_limit_len);
 	    [limitHistoryLen setStringValue:[NSString stringWithFormat:@"%s",len]];
+	}
+}
+
+- (IBAction)closeWindow:(id)sender
+{
+	if ([inspectorWindow isKeyWindow]) {
+		[inspectorWindow close];
+	} else if ([persVarsWindow isKeyWindow]) {
+		[persVarsWindow close];
+	} else if ([mainWindow isKeyWindow]) {
+		[mainWindow close];
 	}
 }
 

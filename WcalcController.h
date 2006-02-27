@@ -14,6 +14,7 @@
 
     IBOutlet NSWindow *mainWindow;
     IBOutlet NSWindow *inspectorWindow;
+	IBOutlet NSWindow *persVarsWindow;
     IBOutlet InspectorController *inspector;
 
     IBOutlet NSButton *capsLockKey;
@@ -33,13 +34,17 @@
     IBOutlet NSButton *precisionGuard;
     IBOutlet NSButton *printInts;
     IBOutlet NSButton *simpleCalculator;
+	IBOutlet NSButton *printDelimiters;
 
     IBOutlet NSTextField *AnswerField;
     IBOutlet NSTextField *ExpressionField;
     IBOutlet NSTextField *limitHistoryLen;
     IBOutlet NSTextField *limitHistoryLenTag;
+	IBOutlet NSTextField *bitsPref;
 
     IBOutlet NSDrawer *baseDrawer;
+	
+	IBOutlet NSStepper *bitsStepper;
 
     IBOutlet NSMatrix *outputFormat;
     IBOutlet NSMatrix *outputFormat2;
@@ -59,6 +64,8 @@
     IBOutlet NSTableView *variableList;
     IBOutlet NSTableView *convertFrom;
     IBOutlet NSTableView *convertTo;
+	
+	IBOutlet NSApplication *meta;
 
     bool just_answered;
     NSView *superview;
@@ -80,6 +87,7 @@
 - (IBAction)open:(id)sender;
 - (IBAction)save:(id)sender;
 - (IBAction)saveAs:(id)sender;
+- (IBAction)closeWindow:(id)sender;
 
 - (void)displayAnswer;
 - (void)displayErrno:(int)err forFile:(NSString*)filename;

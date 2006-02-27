@@ -16,16 +16,25 @@
 // needs to be fast
 - (id)tableView:(NSTableView *)aTableView objectValueForTableColumn:(NSTableColumn*)col row:(int)rowIndex
 {
-	struct variable *keyval = getrealnvar(rowIndex);
+	struct variable *keyval;
+	static struct variable *keyval_cache = NULL;
+	static int rowIndex_cache = -1;
 
+	if (rowIndex == rowIndex_cache) {
+		rowIndex_cache = -1;
+		keyval = keyval_cache;
+	} else {
+		rowIndex_cache = rowIndex;
+		keyval = keyval_cache = getrealnvar(rowIndex);
+	}
 	if (! keyval)
-		return @"BAD ROW";
+		return @"BAD ROW (VariableList)";
 
 	if ([[col identifier] isEqualToString:@"value"]) {
 		if (keyval->exp)
 			return [NSString stringWithUTF8String:keyval->expression];
 		else
-			return [NSString localizedStringWithFormat:@"%g",mpfr_get_d(keyval->value, GMP_RNDN)];
+			return [NSString stringWithUTF8String:print_this_result(keyval->value)];
 	} else if ([[col identifier] isEqualToString:@"variable"]) {
 		return [NSString stringWithUTF8String:(keyval->key)];
 	} else {
@@ -58,13 +67,14 @@
 		int i,j;
 		free(theval->key);
 		theval->key = strdup([anObject UTF8String]);
-		for (j=i=0;i<strlen(theval->key);++i) {
+		strstrip(' ',theval->key);
+/*		for (j=i=0;i<strlen(theval->key);++i) {
 			if (theval->key[i] != ' ') {
 				theval->key[j] = theval->key[i];
 				++j;
 			}
 		}
-		for (;j<i;++j) theval->key[j] = '\0';
+		for (;j<i;++j) theval->key[j] = '\0';*/
 	}
 }
 
