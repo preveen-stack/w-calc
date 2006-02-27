@@ -69,7 +69,7 @@ char *add_commas(char *input, int base)
     if (preflen < (skip + prefix)) {
 	return NULL;
     }
-    Dprintf("tmpstring is alloc'd to be %u long\n", preflen + strlen(input));
+    Dprintf("tmpstring is alloc'd to be %lu long\n", preflen + strlen(input));
     tmpstring = calloc(preflen + strlen(input), sizeof(char));
     ctr = (delimiter - (input + prefix)) % skip;
     if (ctr == 0) {
