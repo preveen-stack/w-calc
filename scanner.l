@@ -364,7 +364,7 @@ fact { return(WFACT); }
 comp { return(WCOMP); }
 eint { return(WEINT); }
 Gamma { return(WGAMMA); }
-lngamma { return(WLNGAMMA); }
+ln[gG]amma { return(WLNGAMMA); }
 zeta { return(WZETA); }
 
 '[^']*' {
