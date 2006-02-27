@@ -70,7 +70,7 @@ void delnvar(size_t i)
 
 struct variable *getrealnvar(size_t i)
 {				       /*{{{ */
-    return (struct variable *)getListElement(them, i);
+    return (struct variable *)peekListElement(them, i);
 }				       /*}}} */
 
 struct answer getvar(char *key)
@@ -153,8 +153,9 @@ static void *getvar_core(char *key, int all_or_nothing)
     struct variable *cursor = NULL;
     ListIterator li = NULL;
 
-    if (!them || key == NULL || *key == 0 || listLen(them) == 0)
+    if (!them || key == NULL || *key == 0 || listLen(them) == 0) {
 	return NULL;
+    }
 
     li = getListIterator(them);
     while ((cursor = (struct variable *)nextListElement(li)) != NULL) {
@@ -226,13 +227,14 @@ int putval(char *key, mpfr_t value, char *desc)
 {				       /*{{{ */
     struct variable *cursor = NULL;
 
-    if (key == NULL || *key == 0)
+    if (key == NULL || *key == 0) {
 	return -1;
+    }
 
     cursor = getvar_core(key, THE_STRUCTURE);
     if (!cursor) {
 	// variable named "key" doesn't exist yet, so allocate memory
-	cursor = calloc(sizeof(struct variable), 1);
+	cursor = calloc(1, sizeof(struct variable));
 	addToList(&them, cursor);
     }
     // by this point, we have a variable (cursor) in the list (them)
