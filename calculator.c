@@ -1,5 +1,7 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
+#else
+#define HAVE_MPFR_22
 #endif
 #include <stdlib.h>
 #include <stdio.h>
@@ -255,7 +257,11 @@ static char *flatten(char *str)
 		mpfr_clear(a.val);
 	    }
 	    // get the number
-	    varvalue = num_to_str_complex(f, 10, 0, -1, 1);
+	    {
+		char junk;
+
+		varvalue = num_to_str_complex(f, 10, 0, -1, 1, &junk);
+	    }
 	    mpfr_clear(f);
 	} else {		       // not a known var: itza literal (e.g. cos)
 	    varvalue = (char *)strdup(varname);
@@ -813,23 +819,24 @@ char *print_this_result(mpfr_t result)
     if (pa != NULL) {
 	free(pa);
     }
+    not_all_displayed = 0;
     pa = num_to_str_complex(result, base, conf.engineering, conf.precision,
-			    conf.print_prefixes);
+			    conf.print_prefixes, &not_all_displayed);
 
     /* now, decide whether it's been rounded or not */
     if (mpfr_inf_p(result) || mpfr_nan_p(result)) {
 	// if it is infinity, it's all there ;)
 	not_all_displayed = 0;
-    } else {
+    } else if (not_all_displayed == 0) {
 	/* rounding guess */
 	switch (conf.rounding_indication) {
 	    case SIMPLE_ROUNDING_INDICATION:
 	    {
-		char *pa2;
+		char *pa2, junk;
 
 		pa2 =
 		    num_to_str_complex(result, base, conf.engineering, -1,
-				       conf.print_prefixes);
+				       conf.print_prefixes, &junk);
 		not_all_displayed = (strlen(pa) < strlen(pa2));
 		free(pa2);
 	    }
@@ -855,7 +862,9 @@ char *print_this_result(mpfr_t result)
 		break;
 	}
     }
-
+    if (conf.rounding_indication == NO_ROUNDING_INDICATION) {
+	not_all_displayed = 0;
+    }
     // add commas
     if (conf.print_commas) {
 	char *str = add_commas(pa, conf.output_format);
@@ -866,7 +875,7 @@ char *print_this_result(mpfr_t result)
 	}
     }
 
-    if (standard_output) {
+  if (standard_output) {
 	if (errstring && strlen(errstring)) {
 	    extern int scanerror;
 
@@ -876,7 +885,7 @@ char *print_this_result(mpfr_t result)
 	    scanerror = 0;
 	}
 	printf("%s%s\n",
-	       conf.print_equal ? (not_all_displayed ? " ~= " : " = ")
+	       conf.print_equal ? (not_all_displayed ? "~= " : " = ")
 	       : (not_all_displayed ? "~" : ""), pa);
     }
 
@@ -1272,9 +1281,9 @@ void uber_function(mpfr_t output, enum functions func, mpfr_t input)
 		break;
 	    case wbnot:
 #ifdef _MPFR_H_HAVE_INTMAX_T
-		mpfr_set_uj(output, ~ mpfr_get_uj(input, GMP_RNDN), GMP_RNDN);
+		mpfr_set_uj(output, ~mpfr_get_uj(input, GMP_RNDN), GMP_RNDN);
 #else
-		mpfr_set_ui(output, ~ mpfr_get_ui(input, GMP_RNDN), GMP_RNDN);
+		mpfr_set_ui(output, ~mpfr_get_ui(input, GMP_RNDN), GMP_RNDN);
 #endif
 		break;
 	    default:
