@@ -404,8 +404,8 @@ command : HEX_CMD {
 | BASE_CMD
 {
 	if ($1 >= 2 && $1 <= 36) {
-		char * str;
-		str = num_to_str_complex(last_answer, $1, conf.engineering, -1, conf.print_prefixes);
+		char * str, junk;
+		str = num_to_str_complex(last_answer, $1, conf.engineering, -1, conf.print_prefixes, &junk);
 		printf("base %i: %s\n",$1,str);
 	} else {
 		report_error("Number too large.");
