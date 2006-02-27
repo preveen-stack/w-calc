@@ -21,7 +21,8 @@ static char *engineering_formatted_number(char *digits, mp_exp_t exp,
 					  int precision, int base,
 					  int prefix);
 static char *automatically_formatted_number(char *digits, mp_exp_t exp,
-					    int base, int prefix);
+					    int base, int prefix,
+					    char *truncated_flag);
 static char *precision_formatted_number(char *digits, mp_exp_t exp,
 					int precision, int base, int prefix);
 
@@ -31,7 +32,8 @@ static char *precision_formatted_number(char *digits, mp_exp_t exp,
  * string, and does all the fancy presentation stuff we've come to expect from
  * wcalc.
  */
-char *num_to_str_complex(mpfr_t num, int base, int engr, int prec, int prefix)
+char *num_to_str_complex(mpfr_t num, int base, int engr, int prec, int prefix,
+			 char *truncated_flag)
 {
     char *s, *retstr;
     mp_exp_t e;
@@ -92,10 +94,13 @@ char *num_to_str_complex(mpfr_t num, int base, int engr, int prec, int prefix)
 	}
     }
     Dprintf("post-mpfr e: %li s: %s\n", (long int)e, s);
+    *truncated_flag = 0;
     if (engr != 0) {
 	retstr = engineering_formatted_number(s, e, prec, base, prefix);
     } else if (-1 == prec) {
-	retstr = automatically_formatted_number(s, e, base, prefix);
+	retstr =
+	    automatically_formatted_number(s, e, base, prefix,
+					   truncated_flag);
     } else {
 	retstr = precision_formatted_number(s, e, prec, base, prefix);
     }
@@ -182,7 +187,7 @@ char *precision_formatted_number(char *digits, mp_exp_t exp, int precision,
 }
 
 char *automatically_formatted_number(char *digits, mp_exp_t exp, int base,
-				     int prefix)
+				     int prefix, char *truncated_flag)
 {
     size_t length = strlen(digits) + 2;	// the null and the decimal
     size_t full_length;
@@ -241,6 +246,10 @@ char *automatically_formatted_number(char *digits, mp_exp_t exp, int base,
 
     // this variable exists because snprintf's return value is unreliable.
     // and can be larger than the number of digits printed
+    if (strlen(dcurs) > 10) {
+	dcurs[10] = 0;
+	*truncated_flag = 1;
+    }
     printed = ((length - 1 < strlen(dcurs)) ? length - 1 : strlen(dcurs));
     snprintf(curs, length, "%s", dcurs);
     length -= printed;
