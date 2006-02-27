@@ -11,12 +11,11 @@ struct _listheader
     void *payload;
     struct _listheader *pool_next;
 };
-typedef struct _listheader *ListHeader;
 
 struct _list
 {
-    ListHeader head;
-    ListHeader tail;
+    struct _listheader *head;
+    struct _listheader *tail;
     unsigned long len;
     struct _list *pool_next;
     struct _list *pool_prev;
@@ -41,12 +40,12 @@ static struct cleanup *lCleanupPool = NULL;
 static inline List get_l(void);
 static void fill_l_pool(void);
 
-static ListHeader lhPool = NULL;
+static struct _listheader *lhPool = NULL;
 static unsigned long long lhPoolSize = 0;	/* for exponential growth */
 static struct cleanup *lhCleanupPool = NULL;
-static inline ListHeader get_lh(void);
+static inline struct _listheader * get_lh(void);
 static void fill_lh_pool(void);
-static void poolReturn(ListHeader lh);
+static void poolReturn(struct _listheader *lh);
 
 /* This sets up the memory pool(s) */
 void lists_init()
@@ -59,7 +58,7 @@ void lists_init()
 void lists_cleanup()
 {				       /*{{{ */
     struct cleanup *freec;
-    ListHeader freeme;
+    struct _listheader *freeme;
     List freeme2;
 
     while (lhCleanupPool != NULL) {
@@ -79,7 +78,7 @@ void lists_cleanup()
 }				       /*}}} */
 
 /* This returns a struct to the pool */
-void poolReturn(ListHeader lh)
+void poolReturn(struct _listheader *lh)
 {				       /*{{{ */
     memset(lh, 0, sizeof(struct _listheader));
     lh->pool_next = lhPool;
@@ -90,8 +89,8 @@ void poolReturn(ListHeader lh)
  * size) */
 static void fill_lh_pool()
 {				       /*{{{ */
-    ListHeader tlist;
-    ListHeader temp;
+    struct _listheader *tlist;
+    struct _listheader *temp;
     struct cleanup *ch;
     size_t newobjcount;
     size_t i;
@@ -148,7 +147,7 @@ void freeList(List * lst)
     }
 
     while (thelist->len > 0 && thelist->head != NULL) {
-	ListHeader h = thelist->head;
+	struct _listheader *h = thelist->head;
 
 	thelist->head = h->next;
 	thelist->len--;
@@ -170,9 +169,9 @@ void freeList(List * lst)
 }				       /*}}} */
 
 /* this fetches a new list header from the pool */
-static inline ListHeader get_lh()
+static inline struct _listheader *get_lh()
 {				       /*{{{ */
-    ListHeader lh;
+    struct _listheader *lh;
 
     if (NULL == lhPool) {
 	fill_lh_pool();
@@ -206,7 +205,7 @@ static inline List get_l()
 void addToList(List * lst, void *addme)
 {				       /*{{{ */
     List list;
-    ListHeader pl;
+    struct _listheader *pl;
 
     pl = get_lh();
     pl->payload = addme;
@@ -236,7 +235,7 @@ void addToList(List * lst, void *addme)
 void addToListHead(List * lst, void *addme)
 {				       /*{{{ */
     List list;
-    ListHeader pl;
+    struct _listheader *pl;
 
     pl = get_lh();
     pl->payload = addme;
@@ -266,7 +265,7 @@ void addToListHead(List * lst, void *addme)
 void *getHeadOfList(List list)
 {				       /*{{{ */
     void *payload;
-    ListHeader pl;
+    struct _listheader *pl;
 
     if (!list || !list->head) {
 	return NULL;
@@ -285,7 +284,7 @@ void *getHeadOfList(List list)
 /* This returns the n'th element of the list, as if the list was an array */
 void *peekListElement(List list, size_t n)
 {				       /*{{{ */
-    ListHeader pl;
+    struct _listheader *pl;
     size_t counter;
 
     if (!list || !list->head || list->len <= n) {
@@ -308,10 +307,10 @@ void *peekListElement(List list, size_t n)
  * and removes it from the list */
 void *getListElement(List list, size_t n)
 {				       /*{{{ */
-    ListHeader pl;
+    struct _listheader *pl;
     size_t counter;
     void *payload = NULL;
-    ListHeader returnme;
+    struct _listheader *returnme;
 
     if (!list || !list->head || list->len <= n) {
 	if (!list) {
@@ -320,17 +319,26 @@ void *getListElement(List list, size_t n)
 	return NULL;
     }
     pl = list->head;
-    for (counter = 1; counter < n; counter++) {
-	if (pl->next == NULL) {
-	    return NULL;
+    if (n > 0) {
+	for (counter = 1; counter < n; counter++) {
+	    if (pl->next == NULL) {
+		return NULL;
+	    }
+	    pl = pl->next;
 	}
-	pl = pl->next;
-    }
-    if (pl->next) {
-	payload = pl->next->payload;
-	returnme = pl->next;
-	pl->next = pl->next->next;
-	poolReturn(returnme);
+	if (pl->next) {
+	    payload = pl->next->payload;
+	    returnme = pl->next;
+	    pl->next = pl->next->next;
+	    poolReturn(returnme);
+	}
+    } else {
+	payload = pl->payload;
+	returnme = pl;
+	list->head = pl->next;
+	if (list->tail == returnme) {
+	    list->tail = NULL;
+	}
     }
     return payload;
 }				       /*}}} */
@@ -404,8 +412,8 @@ void freeListIterator(ListIterator li)
 /* This searches the list for a specific value, and removes it */
 void removeFromList(List list, void * item)
 {
-    ListHeader pl;
-    ListHeader returnme;
+    struct _listheader *pl;
+    struct _listheader *returnme;
 
     if (!list || !list->head) {
 	if (!list) {
