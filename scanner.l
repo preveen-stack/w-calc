@@ -400,6 +400,7 @@ zeta { return(WZETA); }
         report_error("Invalid characters for base 10");
     } else {
         unsigned int t = count_digits(yytext);
+	Dprintf("simple decimals digits in %s: %u (%u)\n",yytext,t,sig_figs);
         if (t<sig_figs) sig_figs = t;
     }
 
@@ -417,6 +418,7 @@ zeta { return(WZETA); }
         report_error("Invalid characters for base 10");
     } else {
         unsigned int t = count_digits(yytext) - ((yytext[0]=='0')?1:0);
+	Dprintf("zero optional decimal digits in %s: %u (%u)\n",yytext,t,sig_figs);
         if (t<sig_figs) sig_figs = t;
     }
     return(NUMBER);
@@ -437,6 +439,17 @@ zeta { return(WZETA); }
         report_error("Invalid characters for base 10");
     } else {
         unsigned int t = count_digits(yytext);
+	char * period = strchr(yytext,'.');
+	Dprintf("period: %s\n",period);
+	if (period == NULL) { // no period means subtract the zeros
+	    period = yytext+strlen(yytext)-1;
+	    while (*period == '0') {
+		t--;
+		period--;
+	    }
+	Dprintf("period: %s\n",period);
+	}
+	Dprintf("big ugly digits in %s: %u (%u)\n",yytext,t,sig_figs);
         if (t<sig_figs) sig_figs = t;
     }
     return(NUMBER);
@@ -458,6 +471,7 @@ zeta { return(WZETA); }
             mpfr_out_str(stdout,DEFAULT_BASE,0, YYLVALAC->number, GMP_RNDN);
             printf("\n");
         }
+	Dprintf("hex digits in %s: %u (%u)\n",yytext,t,sig_figs);
         if (t<sig_figs) sig_figs = t;
     }
     return(NUMBER);
@@ -481,6 +495,7 @@ zeta { return(WZETA); }
         /*sscanf(yytext,"%lo",&value);
         yylval.number = value; */
         t = yyleng-1; //strlen(yytext+1);
+	Dprintf("octal digits in %s: %u (%u)\n",yytext,t,sig_figs);
         if (t<sig_figs) sig_figs = t;
         return(NUMBER);
     }
@@ -509,6 +524,7 @@ zeta { return(WZETA); }
                 mpfr_out_str(stdout,DEFAULT_BASE,0, YYLVALAC->number, GMP_RNDN);
                 printf("\n");
             }
+	Dprintf("binary digits in %s: %u (%u)\n",yytext,t,sig_figs);
             if (t<sig_figs) sig_figs = t;
         }
     }
