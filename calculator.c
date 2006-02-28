@@ -582,6 +582,7 @@ char *print_this_result_dbl(double result)
     } else {
 	char *curs;
 
+	Dprintf("normal numbers\n");
 	switch (conf.output_format) {  /*{{{ */
 	    case DECIMAL_FORMAT:
 	    {
@@ -604,16 +605,20 @@ char *print_this_result_dbl(double result)
 			    pa[index] = conf.dec_delimiter;
 		    }
 		}
+		Dprintf("pa: %s\n",pa);
 		switch (conf.rounding_indication) {
 		    case SIMPLE_ROUNDING_INDICATION:
+			Dprintf("simple\n");
 			not_all_displayed =
 			    (modf(result * pow(10, decimal_places), &junk)) ?
 			    1 : 0;
 			break;
 		    case SIG_FIG_ROUNDING_INDICATION:
+			Dprintf("sigfig\n");
 			if (sig_figs < UINT32_MAX) {
 			    unsigned int t = count_digits(pa);
 
+			    Dprintf("digits in pa: %u (%u)\n",t,sig_figs);
 			    if (pa[0] == '0' && pa[1] != '\0') {
 				--t;
 			    } else if (pa[0] == '-' && pa[1] == '0') {
@@ -621,11 +626,12 @@ char *print_this_result_dbl(double result)
 			    }
 			    not_all_displayed = (t < sig_figs);
 			} else {
-			    not_all_displayed = 0;
+			    not_all_displayed = 1;
 			}
 			break;
 		    default:
 		    case NO_ROUNDING_INDICATION:
+			Dprintf("none\n");
 			not_all_displayed = 0;
 			break;
 		}
@@ -822,6 +828,7 @@ char *print_this_result(mpfr_t result)
     not_all_displayed = 0;
     pa = num_to_str_complex(result, base, conf.engineering, conf.precision,
 			    conf.print_prefixes, &not_all_displayed);
+    Dprintf("not_all_displayed = %i\n",not_all_displayed);
 
     /* now, decide whether it's been rounded or not */
     if (mpfr_inf_p(result) || mpfr_nan_p(result)) {
@@ -833,6 +840,7 @@ char *print_this_result(mpfr_t result)
 	    case SIMPLE_ROUNDING_INDICATION:
 	    {
 		char *pa2, junk;
+		Dprintf("simple full\n");
 
 		pa2 =
 		    num_to_str_complex(result, base, conf.engineering, -1,
@@ -843,14 +851,11 @@ char *print_this_result(mpfr_t result)
 		break;
 	    case SIG_FIG_ROUNDING_INDICATION:
 		/* sig_figs is how many we need to display */
+		Dprintf("sigfig full\n");
 		if (sig_figs < UINT32_MAX) {
 		    unsigned int t = count_digits(pa);
 
-		    if (pa[0] == '0' && pa[1] != '\0') {
-			--t;
-		    } else if (pa[0] == '-' && pa[1] == '0') {
-			--t;
-		    }
+		    Dprintf("digits in pa: %u (%u)\n",t,sig_figs);
 		    not_all_displayed = (t < sig_figs);
 		} else {
 		    not_all_displayed = 0;
@@ -858,6 +863,7 @@ char *print_this_result(mpfr_t result)
 		break;
 	    default:
 	    case NO_ROUNDING_INDICATION:
+		Dprintf("none full\n");
 		not_all_displayed = 0;
 		break;
 	}
