@@ -246,10 +246,6 @@ char *automatically_formatted_number(char *digits, mp_exp_t exp, int base,
 
     // this variable exists because snprintf's return value is unreliable.
     // and can be larger than the number of digits printed
-    if (strlen(dcurs) > 10) {
-	dcurs[10] = 0;
-	*truncated_flag = 1;
-    }
     printed = ((length - 1 < strlen(dcurs)) ? length - 1 : strlen(dcurs));
     snprintf(curs, length, "%s", dcurs);
     length -= printed;
@@ -257,6 +253,16 @@ char *automatically_formatted_number(char *digits, mp_exp_t exp, int base,
 
     // strip off the trailing 0's
     zero_strip(retstring);
+    {
+	char * period = strchr(retstring,'.');
+	Dprintf("retstring: %s\n",retstring);
+	Dprintf("period: %s\n",period);
+	if (period && strlen(period) > 10) {
+	    period[10] = 0;
+	    *truncated_flag = 1;
+	    zero_strip(retstring);
+	}
+    }
 
     // copy in an exponent if necessary
     if (exp != 0) {
