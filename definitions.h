@@ -69,7 +69,9 @@
 "not ** or and equals eq ne xor\n\n"\
 "sin cos tan cot asin acos atan acot\n"\
 "sinh cosh tanh coth asinh acosh atanh acoth\n"\
-"log ln logtwo round abs ceil floor sqrt cbrt comp\n\n"\
+"log ln logtwo round abs ceil floor sqrt cbrt comp\n"\
+"Gamma lnGamma zeta\n"\
+"\n"\
 "e pi Na k Cc ec R G g Me Mp Mn Md u amu c h mu0 epsilon0\n"\
 "muB muN b ao F Vm NAk eV sigma alpha gamma re Kj Rk Rinf\n"\
 "Eh Gf Mmu Mt Mh Malpha n0 c1 c2 G0 Phi0 K\n"\

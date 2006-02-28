@@ -11,6 +11,7 @@ static char *funcs[] = { "sin", "cos", "tan", "cot",
     "sqrt", "cbrt",
     "exp", "fact", "comp",
     "rand", "irand",
+    "Gamma","lngamma","lnGamma","zeta",
     0
 };
 
