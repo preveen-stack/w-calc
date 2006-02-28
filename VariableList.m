@@ -64,17 +64,9 @@
 			theval->exp = 1;
 		}
 	} else if ([ch isEqualToString:@"variable"]) {
-		int i,j;
 		free(theval->key);
 		theval->key = strdup([anObject UTF8String]);
 		strstrip(' ',theval->key);
-/*		for (j=i=0;i<strlen(theval->key);++i) {
-			if (theval->key[i] != ' ') {
-				theval->key[j] = theval->key[i];
-				++j;
-			}
-		}
-		for (;j<i;++j) theval->key[j] = '\0';*/
 	}
 }
 
