@@ -1,13 +1,11 @@
-#include <mpfr.h>
 #include "string_manip.h"
 #include "calculator.h"
 #include "list.h"
 #include "PersVarList.h"
 
 struct pers_var {
-	char *name;
-	mpfr_t val;
-	char *exp;
+    char *name;
+    char *exp;
 };
 
 static List persVars = NULL;
@@ -16,56 +14,46 @@ static List persVars = NULL;
 
 - (int)numberOfRowsInTableView:(NSTableView *)aTableView
 {
-	return listLen(persVars);
+    return listLen(persVars);
 }
 
 - (id)tableView:(NSTableView *)aTableView objectValueForTableColumn:(NSTableColumn*)col row:(int)rowIndex
 {
-	struct pers_var * cursor = peekListElement(persVars, rowIndex);
-	
-	if (! cursor) {
-		return @"BAD ROW";
-	}
-	if ([[col identifier] isEqualToString:@"value"]) {
-		if (cursor->exp)
-			return [NSString stringWithUTF8String:cursor->exp];
-		else
-			return [NSString stringWithUTF8String:print_this_result(cursor->val)];
-	} else if ([[col identifier] isEqualToString:@"name"]) {
-		return [NSString stringWithUTF8String:(cursor->name)];
-	} else {
-		printf("col identifier: %s\n",[[col identifier] cString]);
-		return @"BAD COLUMN";
-	}
+    struct pers_var * cursor = peekListElement(persVars, rowIndex);
+
+    if (! cursor) {
+	return @"BAD ROW";
+    }
+    if ([[col identifier] isEqualToString:@"value"]) {
+	    return [NSString stringWithUTF8String:cursor->exp];
+    } else if ([[col identifier] isEqualToString:@"name"]) {
+	   return [NSString stringWithUTF8String:(cursor->name)];
+    } else {
+	return @"BAD COLUMN";
+    }
 }
 
 - (void)tableView:(NSTableView*)aTableView setObjectValue:(id)anObject forTableColumn:(NSTableColumn*)col row:(int)rowIndex
 {
-	struct pers_var *cursor = peekListElement(persVars, rowIndex);
-	
-	if ([[col identifier] isEqualToString:@"value"]) {
-		char * input = strdup([anObject UTF8String]);
-		if (justnumbers(input)) {
-			mpfr_t la;
-			
-			mpfr_init_set(la, last_answer, GMP_RNDN);
-			parseme(input);
-			mpfr_set(cursor->val, last_answer, GMP_RNDN);
-			if (cursor->exp) {
-				free(cursor->exp);
-				cursor->exp = NULL;
-			}
-			mpfr_set(last_answer, la, GMP_RNDN);
-			mpfr_clear(la);
-		} else {
-			cursor->exp = input;
-			mpfr_set_ui(cursor->val, 0, GMP_RNDN);
-		}
-	} else if ([[col identifier] isEqualToString:@"name"]) {
-		free(cursor->name);
-		cursor->name = strdup([anObject UTF8String]);
-		strstrip(' ',cursor->name);
-	}
+    struct pers_var *cursor = peekListElement(persVars, rowIndex);
+    NSMutableDictionary *temp = [NSMutableDictionary dictionaryWithCapacity:listLen(persVars)];
+    ListIterator li = NULL;
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+
+    if ([[col identifier] isEqualToString:@"value"]) {
+	free(cursor->exp);
+	cursor->exp = strdup([anObject UTF8String]);
+    } else if ([[col identifier] isEqualToString:@"name"]) {
+	free(cursor->name);
+	cursor->name = strdup([anObject UTF8String]);
+	strstrip(' ',cursor->name);
+    }
+    li = getListIterator(persVars);
+    while ((cursor = (struct pers_var *)nextListElement(li)) != NULL) {
+	[temp setObject:[NSString stringWithUTF8String:cursor->exp]
+		 forKey:[NSString stringWithUTF8String:cursor->name]];
+    }
+    [prefs setObject:temp forKey:@"persistentVariables"];
 }
 
 struct pers_var *getpersvar(char *key)
@@ -88,7 +76,7 @@ struct pers_var *getpersvar(char *key)
     return cursor;
 }
 
-int putpersvar(char *name, mpfr_t value, char *exp)
+int putpersvar(char *name, char *exp)
 {
     struct pers_var *cursor = NULL;
 
@@ -102,69 +90,91 @@ int putpersvar(char *name, mpfr_t value, char *exp)
     }
     if (!cursor->name) {
 	cursor->name = strdup(name);
-	mpfr_init_set_ui(cursor->val, 0, GMP_RNDN);
     } else if (cursor->exp) {
 	free(cursor->exp);
-	cursor->exp = NULL;
-	mpfr_set_ui(cursor->val, 0, GMP_RNDN);
     }
-
-    if (value) {
-	mpfr_set(cursor->val, value, GMP_RNDN);
-    } else {
-	cursor->exp = strdup(exp);
-    }
+    cursor->exp = strdup(exp);
     return 0;
 }
 
 int persvarexists(char* key)
 {
-	struct pers_var *cursor = NULL;
-	ListIterator li = NULL;
+    struct pers_var *cursor = NULL;
+    ListIterator li = NULL;
 
-	if (!persVars || !strlen(key) || listLen(persVars) == 0) {
-		return 0;
-	}
-	li = getListIterator(persVars);
-	while ((cursor = (struct pers_var *)nextListElement(li)) != NULL) {
-		if (!strncmp(cursor->name, key, strlen(cursor->name) + 1))
-			break;
-		else
-			cursor = NULL;
-	}
-	freeListIterator(li);
-	return cursor ? 1 : 0;
+    if (!persVars || !strlen(key) || listLen(persVars) == 0) {
+	return 0;
+    }
+    li = getListIterator(persVars);
+    while ((cursor = (struct pers_var *)nextListElement(li)) != NULL) {
+	if (!strncmp(cursor->name, key, strlen(cursor->name) + 1))
+	    break;
+	else
+	    cursor = NULL;
+    }
+    freeListIterator(li);
+    return cursor ? 1 : 0;
 }
 
 - (IBAction)addVar:(id)sender
 {
-	char varname[20];
-	int i=1;
-	mpfr_t blank;
-	
-	mpfr_init_set_ui(blank,0,GMP_RNDN);
+    char varname[20];
+    int i=1;
+
+    sprintf(varname,"NewVariable%i",i);
+    while(persvarexists(varname)) {
+	++i;
 	sprintf(varname,"NewVariable%i",i);
-	while(persvarexists(varname)) {
-		++i;
-		sprintf(varname,"NewVariable%i",i);
-	}
-	putpersvar(varname,blank,NULL);
-	[theList reloadData];
+    }
+    putpersvar(varname,"0");
+    [theList reloadData];
 }
 
 - (IBAction)clearVars:(id)sender
 {
-	printf("clearVars\n");
+	while (listLen(persVars) > 0) {
+		getListElement(persVars,0);
+	}
+	[theList reloadData];
 }
 
 - (IBAction)delVar:(id)sender
 {
-	printf("delVar\n");
+	if ([theList selectedRow] > -1) {
+		getListElement(persVars,[theList selectedRow]);
+		[theList reloadData];
+	}
 }
 
 - (IBAction)showList:(id)sender
 {
-	[theWindow makeKeyAndOrderFront:self];
+    if (persVars == NULL) {
+	NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+	NSDictionary *temp = [prefs dictionaryForKey:@"persistentVariables"];
+	NSEnumerator *enumerator = [temp keyEnumerator];
+	id key;
+
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onClose:) name:NSWindowWillCloseNotification object:theWindow];
+	while ((key = [enumerator nextObject])) {
+	    putpersvar(strdup([key UTF8String]),strdup([[temp objectForKey:key] UTF8String]));
+	}
+    }
+    [theWindow makeKeyAndOrderFront:self];
+}
+
+- (IBAction)onClose:(id)sender
+{
+    struct pers_var *cursor = NULL;
+    NSMutableDictionary *temp = [NSMutableDictionary dictionaryWithCapacity:listLen(persVars)];
+    ListIterator li = NULL;
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+	
+    li = getListIterator(persVars);
+    while ((cursor = (struct pers_var *)nextListElement(li)) != NULL) {
+	[temp setObject:[NSString stringWithUTF8String:cursor->exp]
+		 forKey:[NSString stringWithUTF8String:cursor->name]];
+    }
+    [prefs setObject:temp forKey:@"persistentVariables"];
 }
 
 @end
