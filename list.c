@@ -340,6 +340,7 @@ void *getListElement(List list, size_t n)
 	    list->tail = NULL;
 	}
     }
+    list->len --;
     return payload;
 }				       /*}}} */
 
