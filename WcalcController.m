@@ -281,6 +281,15 @@ static NSString *curFile = NULL;
 	conf.remember_errors = [prefs boolForKey:@"rememberErrors"];
 	conf.history_limit = [prefs boolForKey:@"historyLimit"];
 	conf.history_limit_len = [prefs integerForKey:@"historyLimitLen"];
+	{
+	    NSDictionary *temp = [prefs dictionaryForKey:@"persistentVariables"];
+	    NSEnumerator *enumerator = [temp keyEnumerator];
+	    id key;
+	    
+	    while ((key = [enumerator nextObject])) {
+		putexp(strdup([key UTF8String]),strdup([[temp objectForKey:key] UTF8String]),"preloaded");
+	    }	    
+	}
 	if ([prefs integerForKey:@"internalPrecision"] < 32) {
 		[prefs setObject:@"32" forKey:@"internalPrecision"];
 	}
