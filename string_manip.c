@@ -54,15 +54,15 @@ unsigned int count_digits(char *curs)
     unsigned int counter = 0;
     char base = 10;
 
-    if (strncmp(curs,"0x",2)) {
+    if (curs[0] == '0' && curs[1] == 'x') {
 	base = 16;
 	curs += 2;
-    } else if (strncmp(curs,"0",2)) {
-	base = 8;
-	curs += 1;
-    } else if (strncmp(curs,"0b",2)) {
+    } else if (curs[0] == '0' && curs[1] == 'b') {
 	base = 2;
 	curs += 2;
+    } else if (curs[0] == '0') {
+	base = 8;
+	curs += 1;
     }
     while (curs && *curs && *curs != 'e' && *curs != 'E') {
 	if (isdigit((int)(*curs)) || (base == 16 && (*curs == 'a' || *curs == 'b' || *curs == 'c' || *curs == 'd' || *curs == 'e' || *curs == 'f' || *curs == 'A' || *curs == 'B' || *curs == 'C' || *curs == 'D' || *curs == 'E' || *curs == 'F'))) {
