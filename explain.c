@@ -47,9 +47,9 @@ void explain_command(char *str)
 	printf("This displays the output in binary.\n");
     } else if (!strcmp(str, "store")) {
 	printf
-	    ("Saves the variable specified in the preload file, ~/.wcalc_preload. Use like so: \\store variablename");
+	    ("Saves the variable specified in the preload file, ~/.wcalc_preload. Use like so: \\store variablename\n");
     } else if (!strcmp(str, "q")) {
-	printf("Exits the program.");
+	printf("Exits the program.\n");
     } else if (!strcmp(str, "d") || !strcmp(str, "dec") ||
 	       !strcmp(str, "decimal")) {
 	printf("This displays the output in decimal.\n");
