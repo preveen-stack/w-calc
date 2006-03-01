@@ -4,10 +4,10 @@
 
 @interface InspectorController : NSObject
 {
-    IBOutlet NSWindow *inspectorWindow;
-	IBOutlet NSMenuItem *affectInspectorMenu;
-	IBOutlet NSTableView *variableList;
-	IBOutlet NSTableView *historyList;
+    IBOutlet NSPanel *inspectorWindow;
+    IBOutlet NSMenuItem *affectInspectorMenu;
+    IBOutlet NSTableView *variableList;
+    IBOutlet NSTableView *historyList;
 }
 - (IBAction)closeIt:(id)sender;
 - (IBAction)openIt:(id)sender;

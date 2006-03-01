@@ -15,7 +15,8 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onClose:) name:NSWindowWillCloseNotification object:inspectorWindow];
 	[variableList reloadData];
 	[historyList reloadData];
-	[inspectorWindow makeKeyAndOrderFront:self];
+	[inspectorWindow setBecomesKeyOnlyIfNeeded:YES];
+	[inspectorWindow orderFront:self];
 }
 
 - (IBAction)toggleIt:(id)sender

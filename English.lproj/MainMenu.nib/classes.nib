@@ -41,7 +41,7 @@
             OUTLETS = {
                 affectInspectorMenu = NSMenuItem; 
                 historyList = NSTableView; 
-                inspectorWindow = NSWindow; 
+                inspectorWindow = NSPanel; 
                 variableList = NSTableView; 
             }; 
             SUPERCLASS = NSObject; 
