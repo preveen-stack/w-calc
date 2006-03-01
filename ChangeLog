@@ -1,3 +1,11 @@
+2006-03-01 09:02  memoryhole
+
+	* PersVarList.m, list.c: fix crash when theres an empty list
+
+2006-02-28 22:03  memoryhole
+
+	* ChangeLog: post-release commit
+
 2006-02-28 21:52  memoryhole
 
 	* Wcalc-nonFHS.pmproj: Releasing 2.2
