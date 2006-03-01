@@ -366,8 +366,12 @@ inline unsigned long listLen(List list)
 /* This returns a list iterator to a list */
 ListIterator getListIterator(List list)
 {				       /*{{{ */
-    ListIterator li = malloc(sizeof(struct _list_iterator));
+    ListIterator li;
 
+    if (!list) {
+	return NULL;
+    }
+    li = malloc(sizeof(struct _list_iterator));
     li->cur = list->head;
     li->l = list;
     return li;
@@ -398,16 +402,17 @@ void *nextListElement(ListIterator li)
 /* This sets the iterator back to the beginning */
 void resetListIterator(ListIterator li)
 {				       /*{{{ */
-    if (!li) {
-	return;
+    if (li) {
+	li->cur = li->l->head;
     }
-    li->cur = li->l->head;
 }				       /*}}} */
 
 /* This frees up a list iterator */
 void freeListIterator(ListIterator li)
 {				       /*{{{ */
-    free(li);
+    if (li) {
+	free(li);
+    }
 }				       /*}}} */
 
 /* This searches the list for a specific value, and removes it */

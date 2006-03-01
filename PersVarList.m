@@ -168,13 +168,15 @@ int persvarexists(char* key)
     NSMutableDictionary *temp = [NSMutableDictionary dictionaryWithCapacity:listLen(persVars)];
     ListIterator li = NULL;
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-	
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:NSWindowWillCloseNotification object:theWindow];
     li = getListIterator(persVars);
     while ((cursor = (struct pers_var *)nextListElement(li)) != NULL) {
 	[temp setObject:[NSString stringWithUTF8String:cursor->exp]
 		 forKey:[NSString stringWithUTF8String:cursor->name]];
     }
     [prefs setObject:temp forKey:@"persistentVariables"];
+    freeListIterator(li);
 }
 
 @end
