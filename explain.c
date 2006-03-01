@@ -292,6 +292,8 @@ void explain_constant(char *str)
 	       !strcmp(str, "PhiZERO")) {
 	printf
 	    ("Magnetic flux quantum. The quantum of magnetic flux passing through a superconductor.");
+    } else if (!strcmp(str, "K")) {
+	printf("Catalan's constant commonly appears in estimates of combinatorial functions and in certain classes of sums and definite integrals.");
     }
     printf("\n");
 }				       /*}}} */
@@ -345,6 +347,12 @@ void explain_function(char *str)
 	printf("Returns the factorial of the input number.");
     } else if (!strcmp(str, "comp")) {
 	printf("Returns the one's complement of the input number.");
+    } else if (!strcmp(str, "zeta")) {
+	printf("Returns the Riemann zeta function of the input number. This is used primarily in number theory, but also has applications in physics, probability theory, and applied statistics.");
+    } else if (!strcmp(str, "Gamma")) {
+	printf("Returns the Gamma function of the input number. The Gamma function extends the factorial function to complex and non-natural numbers.");
+    } else if (!strcmp(str, "lnGamma")) {
+	printf("Returns the natural log of the Gamma function of the input number.");
     }
     printf("\n");
 }				       /*}}} */
