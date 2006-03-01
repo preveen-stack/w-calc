@@ -1285,6 +1285,14 @@ void uber_function(mpfr_t output, enum functions func, mpfr_t input)
 	    case wzeta:
 		mpfr_zeta(output, input, GMP_RNDN);
 		break;
+	    case wsinc:
+		if (mpfr_zero_p(input)) {
+		    mpfr_set_ui(output, 1, GMP_RNDN);
+		} else {
+		    mpfr_sin(output, input, GMP_RNDN);
+		    mpfr_div(output, output, input, GMP_RNDN);
+		}
+		break;
 	    case wbnot:
 #ifdef _MPFR_H_HAVE_INTMAX_T
 		mpfr_set_uj(output, ~mpfr_get_uj(input, GMP_RNDN), GMP_RNDN);

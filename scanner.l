@@ -329,7 +329,7 @@ cos(in(e)?)? { return(WCOS); }
 tan { return(WTAN); }
 cot { return(WCOT); }
 sec(ant)? { return(WSEC); }
-csc|cosecant { return(WCSC); }
+csc|cosec(ant)? { return(WCSC); }
 (asin)|(arcsin)|(sin^-1) { return(WASIN); }
 (acos)|(arccos)|(cos^-1) { return(WACOS); }
 (atan)|(arctan)|(tan^-1) { return(WATAN); }
@@ -348,6 +348,7 @@ atanh|artanh|areatanh|(tanh^-1) { return(WATANH); }
 acoth|arcoth|areacoth|(tanh^-1) { return(WACOTH); }
 asech|areasech|(sech^-1) { return(WASECH); }
 acsch|areacsch|(csch^-1) { return(WACSCH); }
+sinc { return(WSINC); }
 log { return(WLOG); }
 logtwo { return(WLOGTWO); }
 ln { return(WLN); }

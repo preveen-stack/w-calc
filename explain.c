@@ -294,6 +294,8 @@ void explain_constant(char *str)
 	    ("Magnetic flux quantum. The quantum of magnetic flux passing through a superconductor.");
     } else if (!strcmp(str, "K")) {
 	printf("Catalan's constant commonly appears in estimates of combinatorial functions and in certain classes of sums and definite integrals.");
+    } else if (!strcmp(str, "sinc")) {
+	printf("Sinus cardinalis, also known as the interpolation function, filtering function, or the first spherical Bessel function, is the product of a sine function and a monotonically decreasing function.");
     }
     printf("\n");
 }				       /*}}} */
