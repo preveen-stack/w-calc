@@ -223,10 +223,10 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>27C40A3409B42FC10043C42F</string>
+						<string>27C40A5D09B542DB0043C42F</string>
 						<key>history</key>
 						<array>
-							<string>2729A5D809B28ED5001F07F4</string>
+							<string>27C40A4709B52DA70043C42F</string>
 						</array>
 					</dict>
 					<key>SplitCount</key>
@@ -329,8 +329,8 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>31</integer>
-									<integer>28</integer>
+									<integer>11</integer>
+									<integer>1</integer>
 									<integer>0</integer>
 								</array>
 							</array>
@@ -370,7 +370,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CE0B20306471E060097A5F4</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>WcalcController.m</string>
+								<string>VariableList.h</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -378,11 +378,11 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CE0B20406471E060097A5F4</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>WcalcController.m</string>
+										<string>VariableList.h</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>27C40A3309B42FC10043C42F</string>
+										<string>27C40A5C09B542DB0043C42F</string>
 										<key>history</key>
 										<array>
 											<string>2721CD220869C0C400E3BB4D</string>
@@ -404,7 +404,6 @@
 											<string>272C35E808C16738009EA18F</string>
 											<string>272C364108C17F5E009EA18F</string>
 											<string>272C373F08C21615009EA18F</string>
-											<string>272C374008C21615009EA18F</string>
 											<string>2773DCF40917EF3400DBDA9D</string>
 											<string>27E050E50918749700928DC2</string>
 											<string>276C7001091D1AB7005A5B75</string>
@@ -429,7 +428,8 @@
 											<string>2729A57B09B25D0B001F07F4</string>
 											<string>2729A57C09B25D0B001F07F4</string>
 											<string>27C40A3109B42FC10043C42F</string>
-											<string>2729A55909B25AE9001F07F4</string>
+											<string>27C40A5A09B542DB0043C42F</string>
+											<string>272C374008C21615009EA18F</string>
 										</array>
 										<key>prevStack</key>
 										<array>
@@ -478,7 +478,7 @@
 											<string>2729A45D09B22FE2001F07F4</string>
 											<string>2729A55E09B25AE9001F07F4</string>
 											<string>2729A55F09B25AE9001F07F4</string>
-											<string>27C40A3209B42FC10043C42F</string>
+											<string>27C40A5B09B542DB0043C42F</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -536,9 +536,9 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>27C409C809B41B420043C42F</string>
+				<string>27C40A4D09B53BB00043C42F</string>
 				<string>1CE0B1FE06471DED0097A5F4</string>
-				<string>27C409C909B41B420043C42F</string>
+				<string>27C40A4E09B53BB00043C42F</string>
 				<string>1CE0B20306471E060097A5F4</string>
 				<string>1CE0B20506471E060097A5F4</string>
 			</array>
@@ -657,7 +657,7 @@
 	<key>StatusbarIsVisible</key>
 	<true/>
 	<key>TimeStamp</key>
-	<real>162803649.91253701</real>
+	<real>162874075.492769</real>
 	<key>ToolbarDisplayMode</key>
 	<integer>1</integer>
 	<key>ToolbarIsVisible</key>
@@ -672,15 +672,10 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>27C409E509B4229D0043C42F</string>
-		<string>27C409E609B4229D0043C42F</string>
-		<string>2721CC52086652BA00E3BB4D</string>
-		<string>1CD10A99069EF8BA00B06720</string>
-		<string>27C409C409B41B390043C42F</string>
-		<string>2729A58809B25D0B001F07F4</string>
-		<string>1C0AD2B3069F1EA900FABCE6</string>
-		<string>/Users/kyle/Wcalc/Wcalc.xcodeproj</string>
 		<string>276C702E09208343005A5B75</string>
+		<string>1C0AD2B3069F1EA900FABCE6</string>
+		<string>2729A58809B25D0B001F07F4</string>
+		<string>/Users/kyle/Wcalc/Wcalc.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
 	<string>393 324 942 704 0 0 1400 1028 </string>
@@ -704,7 +699,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CD0528F0623707200166675</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>WcalcController.m</string>
+								<string></string>
 								<key>StatusBarVisibility</key>
 								<true/>
 							</dict>
@@ -726,7 +721,7 @@
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXBuildLogShowsTranscriptDefaultKey</key>
-								<string>{{0, 122}, {789, 322}}</string>
+								<string>{{0, 83}, {789, 361}}</string>
 								<key>PBXProjectModuleGUID</key>
 								<string>XCMainBuildResultsModuleGUID</string>
 								<key>PBXProjectModuleLabel</key>
@@ -764,7 +759,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>276C702E09208343005A5B75</string>
-				<string>27C409BD09B41B390043C42F</string>
+				<string>27C40A5509B542D90043C42F</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>
@@ -775,7 +770,7 @@
 			<key>WindowToolGUID</key>
 			<string>276C702E09208343005A5B75</string>
 			<key>WindowToolIsVisible</key>
-			<true/>
+			<false/>
 		</dict>
 		<dict>
 			<key>FirstTimeWindowDisplayed</key>
@@ -1124,9 +1119,9 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C0AD2B3069F1EA900FABCE6</string>
-				<string>27C409C509B41B390043C42F</string>
+				<string>27C40A5009B53BB00043C42F</string>
 				<string>1CD0528B0623707200166675</string>
-				<string>27C409C609B41B390043C42F</string>
+				<string>27C40A5109B53BB00043C42F</string>
 			</array>
 			<key>ToolbarConfiguration</key>
 			<string>xcode.toolbar.config.run</string>
@@ -1135,7 +1130,7 @@
 			<key>WindowToolGUID</key>
 			<string>1C0AD2B3069F1EA900FABCE6</string>
 			<key>WindowToolIsVisible</key>
-			<true/>
+			<false/>
 		</dict>
 		<dict>
 			<key>Identifier</key>

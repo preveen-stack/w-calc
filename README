@@ -1,6 +1,6 @@
 Hello!
 
-This is Wcalc 2.1.2!
+This is Wcalc 2.2!
 
 1. What's New
 2. Intro
@@ -13,14 +13,32 @@ This is Wcalc 2.1.2!
 * What's New *
 **************
 
-BUGFIXES:
- - Corrected areasinh function names (thanks Marco Thill!) (GUI)
- - Variables as expressions should be quoted correctly (BOTH)
- - Drawers work again (GUI)
- - Inspector is now a separate window (GUI)
- - Funky resizing behavior gone permanently (GUI)
 FEATURES:
- - Attempts to detect broken MPFR installations (CLI)
+ - Persistent variables (GUI)
+ - Added a \explain command (CLI)
+ - Added a \store command (CLI)
+ - Added a description (comment) to saved variables (CLI)
+ - Added the ability to print numbers with separators (BOTH)
+ - Added Gamma, lnGamma, sinc, and zeta functions (BOTH)
+ - Added catalan (K) and enhanced the Euler constant (BOTH)
+ - Added internal bitcount control to GUI (GUI)
+BUGFIXES:
+ - Corrected some minor usability bugs (GUI)
+ - No longer confuses equivalence testing with assignment (BOTH)
+ - Faster recursion detection (BOTH)
+ - Corrected \save behavior (BOTH)
+ - Better portability (CLI)
+ - Much more extensive documentation (CLI)
+ - Corrected the print_integers preference (CLI)
+ - Corrected precision_guard test (BOTH)
+ - Corrected significant figure counting (BOTH)
+ - Corrected behavior for systems without READLINE_HISTORY (CLI)
+ - Corrected several memory use errors and potential crashes (BOTH)
+ - Corrected lost errors (CLI)
+ - Corrected unit names (BOTH)
+ - Units may be plural (CLI)
+ - Implemented ~ as binary not (BOTH)
+ - Non-base ten decimals no longer infinitely long (BOTH)
 
 *********
 * INTRO *
@@ -66,11 +84,12 @@ Wcalc supports the following functions:
 sin cos tan cot asin acos atan acot
 sinh cosh tanh coth asinh acosh atanh acoth
 log ln logtwo round abs ceil floor sqrt cbrt comp
+Gamma lnGamma zeta sinc
 
 Wcalc has a few built-in constants:
 e pi Na k Cc ec R G g Me Mp Mn Md u amu c h mu0 epsilon0
 muB muN b ao F Vm NAk eV sigma alpha gamma re Kj Rk Rinf
-Eh Gf Mmu Mt Mh Malpha n0 c1 c2 G0 Phi0
+Eh Gf Mmu Mt Mh Malpha n0 c1 c2 G0 Phi0 K
 random irandom rand irand
 
 Wcalc supports user-defined variables. You define a variable like this:
