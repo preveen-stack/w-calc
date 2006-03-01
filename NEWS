@@ -1,3 +1,43 @@
+--- Version 2.2.1 ---
+Mar 01 2006 - Kyle Wheeler
+ - Fixed crash if you open the Persistent Variables window and immediately close it (GUI)
+--- Version 2.2 ---
+Feb 28 2006 - Kyle Wheeler
+ - Added sinc (BOTH)
+ - Added documentation of Gamma, lnGamma, zeta, K, and sinc (CLI)
+ - Added persistent variables (GUI)
+Feb 27 2006 - Kyle Wheeler
+ - Non-base ten decimals no longer infinitely long (BOTH)
+Feb 26 2006 - Kyle Wheeler
+ - Added internal bitcount control to GUI (GUI)
+ - MPFR version compatibility (CLI)
+Feb 23 2006 - Kyle Wheeler
+ - Implemented ~ as binary not (BOTH)
+Feb 21 2006 - Kyle Wheeler
+ - Units may be plural (CLI)
+ - Corrected unit names (BOTH)
+Feb 15 2006 - Kyle Wheeler
+ - Corrected several memory use errors and potential crashes (BOTH)
+ - Corrected lost errors (CLI)
+ - Added Gamma, lnGamma, sinc, and zeta functions (BOTH)
+ - added catalan (K) and enhanced the Euler constant (BOTH)
+Feb 14 2006 - Kyle Wheeler
+ - Much more extensive documentation (CLI)
+ - Added the ability to print numbers with separators (BOTH)
+Feb 13 2006 - Kyle Wheeler
+ - Corrected behavior for systems without READLINE_HISTORY (CLI)
+ - Corrected precision_guard test (BOTH)
+ - Corrected significant figure counting (BOTH)
+Jan 19 2006 - Kyle Wheeler
+ - Corrected the print_integers preference (CLI)
+Dec 10 2006 - Kyle Wheeler
+ - Better portability (CLI)
+ - Added a \explain command (CLI)
+ - Added a \store command (CLI)
+ - Faster recursion detection (BOTH)
+ - No longer confuses equivalence testing with assignment (BOTH)
+ - Corrected some minor usability bugs (GUI)
+ - Corrected \save behavior (BOTH)
 --- Version 2.1.2 ---
 Dec 01 2005 - Kyle Wheeler
  - Fixed the resize behavior once and for all with a separate inspector (GUI)

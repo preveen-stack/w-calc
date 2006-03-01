@@ -1,6 +1,6 @@
 Hello!
 
-This is Wcalc 2.2!
+This is Wcalc 2.2.1!
 
 1. What's New
 2. Intro
@@ -13,32 +13,8 @@ This is Wcalc 2.2!
 * What's New *
 **************
 
-FEATURES:
- - Persistent variables (GUI)
- - Added a \explain command (CLI)
- - Added a \store command (CLI)
- - Added a description (comment) to saved variables (CLI)
- - Added the ability to print numbers with separators (BOTH)
- - Added Gamma, lnGamma, sinc, and zeta functions (BOTH)
- - Added catalan (K) and enhanced the Euler constant (BOTH)
- - Added internal bitcount control to GUI (GUI)
 BUGFIXES:
- - Corrected some minor usability bugs (GUI)
- - No longer confuses equivalence testing with assignment (BOTH)
- - Faster recursion detection (BOTH)
- - Corrected \save behavior (BOTH)
- - Better portability (CLI)
- - Much more extensive documentation (CLI)
- - Corrected the print_integers preference (CLI)
- - Corrected precision_guard test (BOTH)
- - Corrected significant figure counting (BOTH)
- - Corrected behavior for systems without READLINE_HISTORY (CLI)
- - Corrected several memory use errors and potential crashes (BOTH)
- - Corrected lost errors (CLI)
- - Corrected unit names (BOTH)
- - Units may be plural (CLI)
- - Implemented ~ as binary not (BOTH)
- - Non-base ten decimals no longer infinitely long (BOTH)
+ - Doesn't crash when the Persistent Variables window is closed with no changes and no variables (GUI)
 
 *********
 * INTRO *
