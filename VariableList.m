@@ -104,4 +104,36 @@
     [theList reloadData];
 }
 
+- (IBAction)copyMe:(id)sender
+{
+    NSPasteboard* pboard=[NSPasteboard generalPasteboard];
+    NSString *theString = @"";
+    NSIndexSet* rowEnumerator=[theList selectedRowIndexes];
+    unsigned int index=0;
+    
+    // Set the pasteboard types you want here.
+    [pboard declareTypes:[NSArray arrayWithObject:NSStringPboardType] owner:self];
+    
+    index = [rowEnumerator firstIndex];
+    do {
+	struct variable *keyval = getrealnvar(index);
+	if (keyval == NULL) {
+	    theString = [theString stringByAppendingString:@"BAD ROW\n"];
+	} else {
+	    theString = [theString stringByAppendingFormat:@"%s\t%s\n", keyval->key, keyval->exp?keyval->expression:print_this_result(keyval->value)];
+	}
+    } while ((index = [rowEnumerator indexGreaterThanIndex:index]) != NSNotFound);
+    [pboard setString:theString forType:NSStringPboardType];    
+}
+
+// ** Make sure we don't enable the copy menu item unless there is something to copy.
+- (BOOL)validateMenuItem:(id <NSMenuItem>)menuItem
+{
+    if ([menuItem tag]==666)
+    {
+	return ([theList numberOfSelectedRows]>0);
+    }
+    return YES;
+}
+
 @end

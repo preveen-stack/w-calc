@@ -12,4 +12,5 @@
 - (IBAction)newVariable:(id)sender;
 - (IBAction)delVariable:(id)sender;
 - (IBAction)clearVariables:(id)sender;
+- (IBAction)copyMe:(id)sender;
 @end

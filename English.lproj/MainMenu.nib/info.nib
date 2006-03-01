@@ -6,6 +6,10 @@
 	<string>335 102 531 453 0 0 1344 986 </string>
 	<key>IBEditorPositions</key>
 	<dict>
+		<key>2082</key>
+		<string>794 634 70 49 0 0 1400 1028 </string>
+		<key>2090</key>
+		<string>914 123 79 106 0 0 1400 1028 </string>
 		<key>29</key>
 		<string>608 910 468 44 0 0 1400 1028 </string>
 		<key>981</key>
@@ -24,7 +28,9 @@
 		<integer>2028</integer>
 		<integer>981</integer>
 		<integer>1792</integer>
+		<integer>2090</integer>
 		<integer>412</integer>
+		<integer>2082</integer>
 		<integer>29</integer>
 	</array>
 	<key>IBSystem Version</key>

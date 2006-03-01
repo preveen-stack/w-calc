@@ -40,4 +40,32 @@
     [theList reloadData];
 }
 
+- (IBAction)copyMe:(id)sender
+{
+    NSPasteboard* pboard=[NSPasteboard generalPasteboard];
+    NSString *theString = @"";
+    NSIndexSet* rowEnumerator=[theList selectedRowIndexes];
+    unsigned int index=0;
+
+    // Set the pasteboard types you want here.
+    [pboard declareTypes:[NSArray arrayWithObject:NSStringPboardType] owner:self];
+    
+    index = [rowEnumerator firstIndex];
+    do {
+	// Here, you'd look up the data in your data source instead, and add data to the pasteboard for one or more of the types.
+	theString = [theString stringByAppendingFormat:@"%s\t%s\n", historynum(index,1), historynum(index,2)];
+    } while ((index = [rowEnumerator indexGreaterThanIndex:index]) != NSNotFound);
+    [pboard setString:theString forType:NSStringPboardType];    
+}
+
+// ** Make sure we don't enable the copy menu item unless there is something to copy.
+- (BOOL)validateMenuItem:(id <NSMenuItem>)menuItem
+{
+    if ([menuItem tag]==666)
+    {
+	return ([theList numberOfSelectedRows]>0);
+    }
+    return YES;
+}
+
 @end

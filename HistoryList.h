@@ -13,4 +13,5 @@
 - (int)numberOfRowsInTableView:(NSTableView *)atv;
 - (id)tableView:(NSTableView *)atv objectValueForTableColumn:(NSTableColumn*)col row:(int)rowIndex;
 - (IBAction)clearHistory:(id)sender;
+- (IBAction)copyMe:(id)sender;
 @end

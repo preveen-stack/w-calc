@@ -28,7 +28,7 @@
             SUPERCLASS = NSObject; 
         }, 
         {
-            ACTIONS = {clearHistory = id; rowSelected = id; }; 
+            ACTIONS = {clearHistory = id; copyMe = id; rowSelected = id; }; 
             CLASS = HistoryList; 
             LANGUAGE = ObjC; 
             OUTLETS = {expressionField = NSTextField; theList = NSTableView; }; 
@@ -82,7 +82,7 @@
             SUPERCLASS = NSObject; 
         }, 
         {
-            ACTIONS = {clearVariables = id; delVariable = id; newVariable = id; }; 
+            ACTIONS = {clearVariables = id; copyMe = id; delVariable = id; newVariable = id; }; 
             CLASS = VariableList; 
             LANGUAGE = ObjC; 
             OUTLETS = {theList = NSTableView; }; 
