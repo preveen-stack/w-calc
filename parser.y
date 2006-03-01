@@ -96,7 +96,7 @@ struct conv_req conver;
 %left WNOT WBNOT WNEG
 %right WPOW
 
-%expect 1583
+%expect 1614
 
 %% 	/* beginning of the parsing rules	*/
 
