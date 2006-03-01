@@ -1,3 +1,45 @@
+2006-02-28 21:52  memoryhole
+
+	* Wcalc-nonFHS.pmproj: Releasing 2.2
+
+2006-02-28 21:48  memoryhole
+
+	* Wcalc.pmproj, Wcalc.xcodeproj/kyle.mode1,
+	  Wcalc.xcodeproj/kyle.pbxuser, README: Releasing 2.2
+
+2006-02-28 21:27  memoryhole
+
+	* wcalc.1: sinc
+
+2006-02-28 21:22  memoryhole
+
+	* parser.y: sinc
+
+2006-02-28 21:16  memoryhole
+
+	* definitions.h: sinc
+
+2006-02-28 21:12  memoryhole
+
+	* calculator.c, calculator.h, explain.c, isfunc.c, parser.y,
+	  scanner.l: sinc
+
+2006-02-28 20:55  memoryhole
+
+	* explain.c: explanations of Gamma, lnGamma, zeta, and K
+
+2006-02-28 20:28  memoryhole
+
+	* explain.c: added a \n
+
+2006-02-28 10:21  memoryhole
+
+	* isfunc.c, definitions.h, isconst.c, wcalc.1: new symbols
+
+2006-02-28 02:57  memoryhole
+
+	* ChangeLog: [no log message]
+
 2006-02-28 02:29  memoryhole
 
 	* English.lproj/MainMenu.nib/info.nib,
