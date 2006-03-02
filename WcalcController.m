@@ -653,12 +653,12 @@ static NSString *curFile = NULL;
 {
 	static char initialized = 0;
 	if (! [theKeyboard isVisible]) {
-		[theKeyboard makeKeyAndOrderFront:self];
+		[theKeyboard setBecomesKeyOnlyIfNeeded:YES];
+		[theKeyboard orderFront:self];
 		if (! initialized) {
 			[theKeyboard center];
 			initialized = 1;
 		}
-		[theKeyboard setFrameAutosaveName:@"wcalc_keyboard"];
 	} else {
 		[theKeyboard close];
 	}
