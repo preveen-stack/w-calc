@@ -64,7 +64,7 @@ unsigned int count_digits(char *curs)
 	base = 8;
 	curs += 1;
     }
-    while (curs && *curs && *curs != 'e' && *curs != 'E') {
+    while (curs && *curs && *curs != 'e' && *curs != 'E' && *curs != '@') {
 	if (isdigit((int)(*curs)) || (base == 16 && (*curs == 'a' || *curs == 'b' || *curs == 'c' || *curs == 'd' || *curs == 'e' || *curs == 'f' || *curs == 'A' || *curs == 'B' || *curs == 'C' || *curs == 'D' || *curs == 'E' || *curs == 'F'))) {
 	    counter ++;
 	}
