@@ -77,7 +77,7 @@ char *add_commas(char *input, int base)
     }
     copyfrom = input;
     copyto = tmpstring;
-    while (*copyfrom && *copyfrom != dec_delim) {
+    while (*copyfrom && *copyfrom != dec_delim && *copyfrom != 'E' && *copyfrom != 'e') {
 	Dprintf("from: %s to: %s \n", copyfrom, tmpstring);
 	*copyto++ = *copyfrom++;
 	if (prefix != 0) {
@@ -91,8 +91,13 @@ char *add_commas(char *input, int base)
 	    ctr = skip;
 	}
     }
+    Dprintf("*(copyto - 1) == %c\n",*(copyto-1));
+    Dprintf("*(copyfrom - 1) == %c\n",*(copyfrom-1));
     if (*(copyto - 1) == separator) {
 	*(copyto - 1) = dec_delim;
+    }
+    if (*copyfrom == 'e' || *copyfrom == 'E') {
+	*copyto++ = *copyfrom;
     }
     if (*copyfrom) {
 	copyfrom++;
