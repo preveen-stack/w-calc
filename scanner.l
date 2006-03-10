@@ -408,28 +408,30 @@ zeta { return(WZETA); }
     return(NUMBER);
 }
 
-(0?\.{DIGIT}*) {
+0?[.][0-9]*([eE][+-]?[1-9][0-9]*)? {
     /* zero-optional decimal */
     extern int yydebug;
     int retval;
 
+    Dprintf("zero-optional decimal\n");
     if (yydebug) printf("nonambiguous %s => ", yytext);
     retval = mpfr_init_set_str(YYLVALAC->number, yytext, DEFAULT_BASE, GMP_RNDN);
     if (-1 == retval) {
         report_error("Invalid characters for base 10");
     } else {
-        unsigned int t = count_digits(yytext) - ((yytext[0]=='0')?1:0);
+        unsigned int t = count_digits(yytext);
 	Dprintf("zero optional decimal digits in %s: %u (%u)\n",yytext,t,sig_figs);
         if (t<sig_figs) sig_figs = t;
     }
     return(NUMBER);
 }
 
-(({NDIGIT}(({DIGIT}*)|({DIGIT}{0,2}([,]{DIGIT}{3})+)))|({NDIGIT}(({DIGIT}*)|({DIGIT}{0,2}([,]{DIGIT}{3})+))[.]{DIGIT}*))(e[+-]?{DIGIT}+)? {
+[1-9]([0-9]*|([0-9]{0,2}([,][0-9]{3})+))([.][0-9]*)?([eE][+-]?[1-9][0-9]*)? {
     /* big ugly */
     extern int yydebug;
     int retval;
 
+    Dprintf("big ugly (%s)\n",yytext);
     /* strip out ignored characters */
     strstrip(',',yytext);
 
@@ -456,18 +458,19 @@ zeta { return(WZETA); }
     return(NUMBER);
 }
 
-0x[0-9a-fA-F]+ {
+0x[0-9a-fA-F]+([.][0-9a-fA-F]*)?([@][+-]?[1-9a-fA-F][0-9a-fA-F]*)? {
     /* hex */
     extern int yydebug;
     int retval;
 
+    Dprintf("hex\n");
     if (yydebug) printf("complex one %s => ", yytext);
     retval = mpfr_init_set_str(YYLVALAC->number,yytext,16,GMP_RNDN);
 
     if (-1 == retval) {
         report_error("some characters invalid for base 16");
     } else {
-        unsigned int t = yyleng-2; //strlen(yytext+2);
+        unsigned int t = count_digits(yytext); //strlen(yytext+2);
         if (yydebug) {
             mpfr_out_str(stdout,DEFAULT_BASE,0, YYLVALAC->number, GMP_RNDN);
             printf("\n");
@@ -478,11 +481,12 @@ zeta { return(WZETA); }
     return(NUMBER);
 }
 
-0{DIGIT}* {
+0[0-9]*([.][0-9]*)?([eE][+-]?[0-9]+)? {
     /* octal */
     //char err[strlen(yytext)+57];
     char err[yyleng+57];
     char *errpat = "Incorrect number format (%s) - expected 0-7 for octal";
+    Dprintf("octal\n");
     if (strchr(yytext,'8') || strchr(yytext,'9')) {
         snprintf(err,yyleng+57,errpat,yytext);
         report_error(err);
@@ -502,12 +506,13 @@ zeta { return(WZETA); }
     }
 }
 
-0b[0-9]+ {
+0b[0-9]+([.][0-9]*)?([eE][+-]?[0-9]+)? {
     /* binary */
     extern int yydebug;
     //char err[strlen(yytext)+57];
     char err[yyleng+57];
 
+    Dprintf("binary\n");
     /* verify the digits */
     if (strchr(yytext,'2') || strchr(yytext,'3') || strchr(yytext,'4') || strchr(yytext,'5') || strchr(yytext,'6') || strchr(yytext,'7') || strchr(yytext,'8') || strchr(yytext,'9')) {
         snprintf(err,yyleng+57,"Incorrect number format (%s) - expected 0 or 1 for binary",yytext);
@@ -520,7 +525,7 @@ zeta { return(WZETA); }
         if (-1 == retval) {
             report_error("Expected a 0 or 1 for binary.");
         } else {
-            unsigned int t = yyleng-2; //strlen(yytext+2);
+            unsigned int t = count_digits(yytext); //strlen(yytext+2);
             if (yydebug) {
                 mpfr_out_str(stdout,DEFAULT_BASE,0, YYLVALAC->number, GMP_RNDN);
                 printf("\n");
