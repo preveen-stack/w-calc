@@ -1017,16 +1017,13 @@ void simple_exp(mpfr_t output, mpfr_t first, enum operations op,
 		if (mpfr_zero_p(second)) {
 		    mpfr_set_nan(output);
 		} else {
-		    /* find the biggest integer (temp) for which
-		     * first-temp*second is positive, then return the value
-		     * first-temp*second */
+		    /* divide, round to zero, multiply, subtract
+		     *
+		     * in essence, find the value x in the equation:
+		     * first = second * temp + x */
 		    mpfr_set_ui(temp, 0, GMP_RNDN);
-		    while (mpfr_cmp_ui(output, 0) > 0) {
-			mpfr_add_ui(temp, temp, 1, GMP_RNDN);	// temp++
-			mpfr_mul(output, temp, second, GMP_RNDN);	// temp*second
-			mpfr_sub(output, first, output, GMP_RNDN);
-		    }
-		    mpfr_sub_ui(temp, temp, 1, GMP_RNDN);
+		    mpfr_div(temp, first, second, GMP_RNDN);
+		    mpfr_rint(temp, temp, GMP_RNDZ); // makes zeros work
 		    mpfr_mul(output, temp, second, GMP_RNDN);
 		    mpfr_sub(output, first, output, GMP_RNDN);
 		}
