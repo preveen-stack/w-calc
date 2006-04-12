@@ -1210,7 +1210,7 @@ void uber_function(mpfr_t output, enum functions func, mpfr_t input)
 		mpfr_rint(output, input, GMP_RNDN);
 		break;
 	    case wneg:
-		mpfr_mul_si(output, input, -1, GMP_RNDN);
+		mpfr_neg(output, input, GMP_RNDN);
 		break;
 	    case wnot:
 		mpfr_set_ui(output, mpfr_zero_p(input), GMP_RNDN);
