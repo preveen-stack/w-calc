@@ -206,7 +206,7 @@ command : HEX_CMD {
 	$$ = nothing;
 	conf.print_commas = ! conf.print_commas;
 	if (standard_output) {
-		printf("Will %sshow separators when printing large numbers.\n",conf.print_commas?"not ":"");
+		printf("Will %sshow separators when printing large numbers.\n",conf.print_commas?"":"not ");
 	}
 }
 | INT_CMD {
