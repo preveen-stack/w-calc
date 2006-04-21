@@ -49,7 +49,7 @@ AC_DEFUN([VL_LIB_READLINE], [
     AC_CACHE_CHECK([whether readline supports history],
                    vl_cv_lib_readline_history, [
       vl_cv_lib_readline_history="no"
-      AC_TRY_LINK_FUNC(add_history, vl_cv_lib_readline_history="yes")
+      AC_TRY_LINK_FUNC(history_truncate_file, vl_cv_lib_readline_history="yes")
     ])
     if test "$vl_cv_lib_readline_history" = "yes"; then
       AC_DEFINE(HAVE_READLINE_HISTORY, 1,
