@@ -85,6 +85,7 @@ void parseme(char *pthis)
     compute = 1;
     sig_figs = UINT32_MAX;
 
+    Dprintf("parsing: %s\n", pthis);
     sanitized = (char *)strdup(pthis);
 
     /* Convert to standard notation (american comma and period) if there are
@@ -1021,10 +1022,17 @@ void simple_exp(mpfr_t output, mpfr_t first, enum operations op,
 		     *
 		     * in essence, find the value x in the equation:
 		     * first = second * temp + x */
-		    mpfr_set_ui(temp, 0, GMP_RNDN);
-		    mpfr_div(temp, first, second, GMP_RNDN);
-		    mpfr_rint(temp, temp, GMP_RNDZ); // makes zeros work
-		    mpfr_mul(output, temp, second, GMP_RNDN);
+		    mpfr_div(output, first, second, GMP_RNDN);
+		    if (conf.c_style_mod) {
+			mpfr_rint(output, output, GMP_RNDZ); // makes zeros work
+		    } else {
+			if (mpfr_sgn(first) >= 0) {
+			    mpfr_floor(output, output);
+			} else {
+			    mpfr_ceil(output, output);
+			}
+		    }
+		    mpfr_mul(output, output, second, GMP_RNDN);
 		    mpfr_sub(output, first, output, GMP_RNDN);
 		}
 		break;

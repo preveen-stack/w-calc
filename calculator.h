@@ -130,6 +130,8 @@ struct _conf
     unsigned int simple_calc:1;
     unsigned int verbose:1;
     unsigned int print_commas:1;
+    unsigned int live_precision:1;
+    unsigned int c_style_mod:1;
 };
 
 /* configuration */
