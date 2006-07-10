@@ -42,6 +42,9 @@ char *strchr(), *strrchr();
 #include "add_commas.h"
 #include "list.h"
 #include "extract_vars.h"
+#ifdef MEMWATCH
+#include "memwatch.h"
+#endif
 
 /* variables everyone needs to get to */
 mpfr_t last_answer;
@@ -55,6 +58,7 @@ unsigned int sig_figs = UINT32_MAX;
 /* communication with the frontend */
 char standard_output = 1;
 char not_all_displayed = 0;
+char *pa = NULL;
 
 struct _conf conf;
 
@@ -442,9 +446,11 @@ void set_prettyanswer(mpfr_t num)
 {				       /*{{{ */
     char *temp;
 
+    Dprintf("set_prettyanswer\n");
     if (pretty_answer) {
 	free(pretty_answer);
     }
+    Dprintf("set_prettyanswer - call print_this_result\n");
     temp = print_this_result(num);
     Dprintf("set_prettyanswer: %s\n", temp);
     if (temp) {
@@ -452,12 +458,13 @@ void set_prettyanswer(mpfr_t num)
     } else {
 	pretty_answer = NULL;
     }
+    Dprintf("set_prettyanswer - done\n");
 }				       /*}}} */
 
 char *print_this_result_dbl(double result)
 {				       /*{{{ */
-    static char format[10];
-    static char *pa = NULL, *tmp;
+    char format[10];
+    static char *tmp;
     static char pa_dyn = 1;
     extern char *errstring;
     unsigned int decimal_places = 0;
@@ -779,11 +786,10 @@ int is_mpfr_int(mpfr_t potential_int)
 
 char *print_this_result(mpfr_t result)
 {				       /*{{{ */
-    static char *pa = NULL;
     extern char *errstring;
     unsigned int base = 0;
 
-    Dprintf("print_this_result (%f)\n", mpfr_get_d(result, GMP_RNDN));
+    Dprintf("print_this_result (%f) in format %i\n", mpfr_get_d(result, GMP_RNDN), conf.output_format);
     // output in the proper base and format
     switch (conf.output_format) {
 	case HEXADECIMAL_FORMAT:
