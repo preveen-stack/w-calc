@@ -34,6 +34,7 @@ irandom
 100! # should be abbreviated
 1410.06-645.06 # should be 765 if precision_guard is on
 1e-9 # should be 1E-9
-0.9e-9
+0.9e-9 # should be 9E-10
+50e-9 # check the rounding indicator
 -340%-60
 360%60
