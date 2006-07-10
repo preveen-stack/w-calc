@@ -1,3 +1,4 @@
+#include <pthread.h>
 #include "calculator.h"
 #include "variables.h"
 #include "conversion.h"
@@ -8,6 +9,10 @@
 #include "files.h"
 #include "MyTextField.h"
 #include "simpleCalc.h"
+#include "list.h"
+#ifdef MEMWATCH
+#include "memwatch.h"
+#endif
 
 #define KEYPAD_HEIGHT 165
 #define MIN_WINDOW_WIDTH 171
@@ -298,7 +303,7 @@ static NSString *curFile = NULL;
 	    }	    
 	}
 	if ([prefs integerForKey:@"internalPrecision"] < 32) {
-		[prefs setObject:@"32" forKey:@"internalPrecision"];
+		[prefs setObject:@"1024" forKey:@"internalPrecision"];
 	}
 	if ([prefs integerForKey:@"internalPrecision"] > 4096) {
 		[prefs setObject:@"4096" forKey:@"internalPrecision"];
@@ -388,6 +393,7 @@ static NSString *curFile = NULL;
 	}
 	mpfr_init_set_ui(last_answer, 0, GMP_RNDN);
 	Dprintf("last answer cleared\n");
+	pthread_mutex_init(&displayLock,NULL);
 }
 
 - (void)openBDrawer: (id) sender
@@ -403,22 +409,32 @@ static NSString *curFile = NULL;
 
 - (IBAction)setPrecision:(id)sender
 {
-	int last_pres=0;
-	NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-
-	last_pres = [prefs integerForKey:@"precision"];
-
-	if (last_pres == [PrecisionSlider intValue])
-		return;
-	else
-		last_pres = [PrecisionSlider intValue];
-
-	conf.precision = last_pres;
-	[prefs setObject:[NSString stringWithFormat:@"%i",conf.precision] forKey:@"precision"];
-
+    int last_pres=0;
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    
+    last_pres = [prefs integerForKey:@"precision"];
+    
+    if (last_pres == [PrecisionSlider intValue])
+	return;
+    else
+	last_pres = [PrecisionSlider intValue];
+    
+    Dprintf("setPrecision: %i to %i\n",conf.precision,last_pres);
+    conf.precision = last_pres;
+    [prefs setObject:[NSString stringWithFormat:@"%i",conf.precision] forKey:@"precision"];
+    Dprintf("setPrecision - prefs set\n");
+    
+    Dprintf("getting lock\n");
+    pthread_mutex_lock(&displayLock);
+    Dprintf("locked\n");
+    {
 	set_prettyanswer(last_answer);
-
+	Dprintf("setPrecision - set_prettyanswer\n");
 	[self displayAnswer];
+	Dprintf("setPrecision - done\n");
+    }
+    pthread_mutex_unlock(&displayLock);
+    Dprintf("unlocked\n");
 }
 
 - (IBAction)go:(id)sender
@@ -444,19 +460,22 @@ static NSString *curFile = NULL;
 {
 	extern char * errstring;
 
-	Dprintf("display answer\n");
+	Dprintf("displayAnswer\n");
 	/* if there is an error, display it */
 	if (errstring && strlen(errstring)) {
 		extern int scanerror;
 		scanerror = 0;
-		Dprintf("%s\n",errstring);
+		Dprintf("displayAnswer error %s\n",errstring);
 		[errorController throwAlert:[NSString stringWithUTF8String:errstring]];
 		free(errstring);
 		errstring = NULL;
 	}
 	/* display the answer */
+	Dprintf("displayAnswer - pretty_answer(%p)\n",pretty_answer);
+	Dprintf("displayAnswer - %s\n",pretty_answer);
 	[AnswerField setStringValue:[NSString stringWithFormat:@"%s",pretty_answer]];
 	[AnswerField setTextColor:(not_all_displayed?[NSColor redColor]:[NSColor blackColor])];
+	Dprintf("displayAnswer - changing size\n");
 	{ // Make the Answerfield big enough to display the answer
 		NSRect curFrame, newFrame;
 		curFrame = [AnswerField frame];
@@ -488,7 +507,7 @@ static NSString *curFile = NULL;
 			[ExpressionField setHidden:FALSE];
 		}
 	}
-
+	Dprintf("displayAnswer - refresh inspector\n");
 	// if the drawer is open, refresh the data.
 	if ([inspectorWindow isVisible]) {
 		[variableList reloadData];
@@ -496,10 +515,13 @@ static NSString *curFile = NULL;
 	}
 	just_answered = TRUE;
 	// refresh the prefs if necessary
+	Dprintf("displayAnswer - refresh prefs\n");
 	if ([thePrefPanel isVisible])
 		[self displayPrefs:0];
+	Dprintf("displayAnswer - cleaning up\n");
 	[outputFormat2 selectCellWithTag:conf.output_format];
 	[ExpressionField selectText:self];
+	Dprintf("displayAnswer - done\n");
 }
 
 - (IBAction)convert:(id)sender
@@ -1042,6 +1064,23 @@ static NSString *curFile = NULL;
 	} else if ([mainWindow isKeyWindow]) {
 		[mainWindow close];
 	}
+}
+
+- (IBAction)quit:(id)sender
+{
+    clearHistory();
+    cleanupvar();
+    if (pretty_answer) {
+	extern char *pa;
+	free(pretty_answer);
+	if (pa) {
+	    free(pa);
+	}
+    }
+    mpfr_clear(last_answer);
+    mpfr_free_cache();
+    lists_cleanup();
+    exit(EXIT_SUCCESS);
 }
 
 @end
