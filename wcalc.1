@@ -87,27 +87,42 @@ Toggles whether long integers will be abbreviated or not. This conflicts with en
 .SH USER-DEFINED VARIABLES
 Variables are supported and may be assigned using the = operator. To assign
 a variable use the form:
-.I foo = anylegalexpression
+.RS
+.PP
+foo = anylegalexpression
+.RE
+.PP
 Thereafter, that variable name is the same as the literal value it represents.
 Expressions can be stored in variables like this:
-.I foo = 'anylegalexpression'
+.RS
+.PP
+foo = 'anylegalexpression'
+.RE
+.PP
 Expressions stored this way will be interpreted at evaluation time, rather
 than assignment-time. Note that these cannot be recursive.
 .PP
 All variables may also be stored with a description of what they are. This description is added in the form of a quoted string after the assignment, like this:
-.I foo = 'anylegalexpression' 'description'
+.RS
+.PP
+foo = 'anylegalexpression' 'description'
+.RE
 .SS ACTIVE VARIABLES
 Active variables are designed to give a functionality similar to user-defined functions. They are variables that rather than representing a value, represent an expression that is evaluated whenever the variable is evaluated. This expression may contain other variable names. For example, after the following sequence of commands:
+.RS
 .PP
-.I foo=5
+foo=5
 .br
-.I bar='foo+4'
+bar='foo+4'
+.RE
 .PP
-The variable \fIbar\fP will evaluate to 9, or four more than whatever foo evaluates to be. These can be stacked, like so:
+The variable \fIbar\fP will evaluate to 9, or four more than whatever \fIfoo\fP evaluates to be. These can be stacked, like so:
+.RS
 .PP
-.I baz='sin(bar)+foo'
+baz='sin(bar)+foo'
+.RE
 .PP
-In this case, baz will evaluate to be 5.15643, or the sin of whatever foo+4 is plus whatever foo is.
+In this case, \fIbaz\fP will evaluate to be 5.15643, or the sin of whatever \fIfoo\fP+4 is plus whatever \fIfoo\fP is.
 .PP
 To demonstrate the utility of these active variables, here are two functions written by Stephen M. Lawson. The first computes the weekday of a given day (\fIdy\fP) in a given month (\fImo\fP) in a given year (\fIyr\fP). The value it returns is in the range of 1 to 7, where 1 is Sunday, 2 is Monday, 3 is Tuesday, and so forth.
 .PP
@@ -446,6 +461,17 @@ Either \fIdecimal\fP, \fIoctal\fP, \fIbinary\fP, \fIhex\fP, or \fIhexadecimal\fP
 .TP
 .B rounding_indication
 Either \fIno\fP, \fIsimple\fP, or \fIsig_fig\fP. Equivalent to the \fB\erounding\fP command.
+.TP
+.B c_style_mod
+Either true ("yes" or "true") or false (anything else). Equivalent to the \fB\ecmod\fP command. Specifies whether the modulo operator (%) will behave as it does in the C programming language, or whether it will use a more flexible method. This only affects modulo operations where negative numbers are involved. As an example, with \fBc_style_mod\fP set to true (the default):
+.RS
+.PP
+-340 % 60 == -40; 340 % -60 == 40; -340 % -60 == -40
+.PP
+However, with \fBc_style_mod\fP set to false:
+.PP
+-340 % 60 == -40; 340 % -60 == -20; -340 % -60 == 20
+.RE
 .SH PRELOAD
 Wcalc uses a file, \fB~/.wcalc_preload\fP, to store persistent information between instances. Typically, this is used to store variables that are frequently defined. This file can be edited by hand with a standard text editor. There is also a command within wcalc (\fB\estore\fP) to append a variable definition to the end of this file. Any variable defined in this file is defined and available for use in any subsequent invocation of wcalc.
 .SH COPYRIGHT
