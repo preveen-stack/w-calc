@@ -14,17 +14,21 @@
 #include "calculator.h"
 #include "string_manip.h"
 #include "number_formatting.h"
+#ifdef MEMWATCH
+#include "memwatch.h"
+#endif
 
 static size_t zero_strip(char *num);
 static void add_prefix(char *num, size_t length, int base);
 static char *engineering_formatted_number(char *digits, mp_exp_t exp,
-					  int precision, int base,
-					  int prefix);
+					  const int precision, const int base,
+					  const int prefix);
 static char *automatically_formatted_number(char *digits, mp_exp_t exp,
-					    int base, int prefix,
+					    const int base, const int prefix,
 					    char *truncated_flag);
 static char *precision_formatted_number(char *digits, mp_exp_t exp,
-					int precision, int base, int prefix);
+					const int precision, const int base,
+					const int prefix);
 
 /* this function takes a number (mpfr_t) and prints it.
  * This is a blatant ripoff of mpfr's mpfr_out_str(), because it formats things
@@ -32,7 +36,8 @@ static char *precision_formatted_number(char *digits, mp_exp_t exp,
  * string, and does all the fancy presentation stuff we've come to expect from
  * wcalc.
  */
-char *num_to_str_complex(mpfr_t num, int base, int engr, int prec, int prefix,
+char *num_to_str_complex(const mpfr_t num, const int base, const int engr,
+			 const int prec, const int prefix,
 			 char *truncated_flag)
 {
     char *s, *retstr;
@@ -108,8 +113,9 @@ char *num_to_str_complex(mpfr_t num, int base, int engr, int prec, int prefix,
     return retstr;
 }
 
-char *precision_formatted_number(char *digits, mp_exp_t exp, int precision,
-				 int base, int prefix)
+char *precision_formatted_number(char *digits, mp_exp_t exp,
+				 const int precision, const int base,
+				 const int prefix)
 {
     size_t length = strlen(digits) + 2;	// the null and the decimal
     size_t full_length;
@@ -186,8 +192,8 @@ char *precision_formatted_number(char *digits, mp_exp_t exp, int precision,
     return retstring;
 }
 
-char *automatically_formatted_number(char *digits, mp_exp_t exp, int base,
-				     int prefix, char *truncated_flag)
+char *automatically_formatted_number(char *digits, mp_exp_t exp, const int base,
+				     const int prefix, char *truncated_flag)
 {
     size_t length = strlen(digits) + 2;	// the null and the decimal
     size_t full_length;
@@ -254,9 +260,10 @@ char *automatically_formatted_number(char *digits, mp_exp_t exp, int base,
     // strip off the trailing 0's
     zero_strip(retstring);
     {
-	char * period = strchr(retstring,'.');
-	Dprintf("retstring: %s\n",retstring);
-	Dprintf("period: %s\n",period);
+	char *period = strchr(retstring, '.');
+
+	Dprintf("retstring: %s\n", retstring);
+	Dprintf("period: %s\n", period);
 	if (period && strlen(period) > 10) {
 	    period[10] = 0;
 	    *truncated_flag = 1;
@@ -275,8 +282,9 @@ char *automatically_formatted_number(char *digits, mp_exp_t exp, int base,
     return retstring;
 }
 
-char *engineering_formatted_number(char *digits, mp_exp_t exp, int precision,
-				   int base, int prefix)
+char *engineering_formatted_number(char *digits, mp_exp_t exp,
+				   const int precision, const int base,
+				   const int prefix)
 {
     size_t length = strlen(digits) + 2;	// the null and the decimal
     size_t full_length;
