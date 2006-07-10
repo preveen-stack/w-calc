@@ -1,5 +1,8 @@
 #include "calculator.h"
 #include "AboutBoxController.h"
+#ifdef MEMWATCH
+#include "memwatch.h"
+#endif
 
 @implementation AboutBoxController
 
