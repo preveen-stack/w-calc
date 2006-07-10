@@ -1,3 +1,77 @@
+2006-07-10 01:25  memoryhole
+
+	* README, Wcalc-nonFHS.pmproj, Wcalc.pmproj,
+	  English.lproj/MainMenu.nib/classes.nib,
+	  English.lproj/MainMenu.nib/info.nib,
+	  English.lproj/MainMenu.nib/keyedobjects.nib,
+	  Wcalc.xcodeproj/kyle.mode1, Wcalc.xcodeproj/kyle.pbxuser: just a
+	  touch
+
+2006-07-10 00:59  memoryhole
+
+	* WcalcController.m: more memory tidying
+
+2006-07-10 00:46  memoryhole
+
+	* WcalcController.m: declaring the mutex
+
+2006-07-10 00:14  memoryhole
+
+	* ConversionList.m, ErrorController.m, HistoryList.m,
+	  InspectorController.m, MyTextField.m, OldVariableList.m,
+	  PersVarList.m, VariableList.m, add_commas.c, conversion.c,
+	  evalvar.c, explain.c, extract_vars.c, historyManager.c,
+	  isconst.c, isfunc.c, list.c, main.m, memwatch.c, memwatch.h,
+	  parser.y, scanner.l, simpleCalc.c, string_manip.c, theDelegate.m,
+	  variables.c: MEMWATCH
+
+2006-07-10 00:10  memoryhole
+
+	* WcalcController.h: added quit function
+
+2006-07-10 00:10  memoryhole
+
+	* WcalcController.m: memory cleanup, mutex-protecting the
+	  change-precision slider, MEMWATCH
+
+2006-07-10 00:06  memoryhole
+
+	* calculator.c: memory cleanup, MEMWATCH
+
+2006-07-10 00:03  memoryhole
+
+	* explain.c: explain cmod
+
+2006-07-09 23:55  memoryhole
+
+	* main.c, files.c: memory cleanup, MEMWATCH
+
+2006-07-09 23:53  memoryhole
+
+	* number_formatting.c, number_formatting.h: some consts, MEMWATCH
+
+2006-07-09 23:50  memoryhole
+
+	* test.simple: 0.9e-9 test cases
+
+2006-07-09 23:48  memoryhole
+
+	* help.c: better details
+
+2006-07-09 23:03  memoryhole
+
+	* AboutBoxController.m: MEMWATCH
+
+2006-07-09 22:58  memoryhole
+
+	* Info.plist, README, English.lproj/InfoPlist.strings,
+	  Wcalc.xcodeproj/kyle.mode1, Wcalc.xcodeproj/kyle.pbxuser,
+	  Wcalc.xcodeproj/project.pbxproj: version, prerelease commit 2.2.2
+
+2006-07-09 22:37  memoryhole
+
+	* ChangeLog: [no log message]
+
 2006-07-09 22:10  memoryhole
 
 	* configure, configure.in, definitions.h: new version
