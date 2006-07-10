@@ -2,6 +2,9 @@
 #include "calculator.h"
 #include "list.h"
 #include "PersVarList.h"
+#ifdef MEMWATCH
+#include "memwatch.h"
+#endif
 
 struct pers_var {
     char *name;

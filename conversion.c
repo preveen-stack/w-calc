@@ -14,6 +14,9 @@
 #include <string.h> /* for strcmp() */
 #include "calculator.h"
 #include "conversion.h"
+#ifdef MEMWATCH
+#include "memwatch.h"
+#endif
 
 /* The conversion tables */
 

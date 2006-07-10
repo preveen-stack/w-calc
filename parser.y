@@ -32,6 +32,9 @@ char *strchr (), *strrchr ();
 #include "files.h"
 #include "conversion.h"
 #include "number_formatting.h"
+#ifdef MEMWATCH
+#include "memwatch.h"
+#endif
 
 /* Based on the headstart code by Shawn Ostermann
 * modified by Kyle Wheeler

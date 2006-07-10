@@ -6,6 +6,9 @@
 #include <stdio.h>
 #include <gmp.h>
 #include <mpfr.h>
+#ifdef MEMWATCH
+#include "memwatch.h"
+#endif
 
 static char lastchar = 0;
 static char operator = 0;

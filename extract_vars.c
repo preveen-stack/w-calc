@@ -5,6 +5,9 @@
 #include "isfunc.h"
 #include "isconst.h"
 #include "extract_vars.h"
+#ifdef MEMWATCH
+#include "memwatch.h"
+#endif
 
 List extract_vars(char *str)
 {

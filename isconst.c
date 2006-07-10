@@ -1,4 +1,7 @@
 #include <string.h>
+#ifdef MEMWATCH
+#include "memwatch.h"
+#endif
 
 static char *consts[] = {
     "e","pi","PI","pI","Pi","random","irandom","Na","NA",

@@ -10,6 +10,9 @@
 
 #include "calculator.h"
 #include "add_commas.h"
+#ifdef MEMWATCH
+#include "memwatch.h"
+#endif
 
 /* this function returns a copy of the input string with delimiters
  * appropriate for the specified base. */

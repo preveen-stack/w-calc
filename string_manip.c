@@ -12,6 +12,9 @@
 #include "config.h"
 #endif
 #include "string_manip.h"
+#ifdef MEMWATCH
+#include "memwatch.h"
+#endif
 
 void strstrip(char strip, char *str)
 {

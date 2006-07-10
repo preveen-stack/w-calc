@@ -25,6 +25,9 @@
 #include "parser.h"
 #include "string_manip.h"
 #include "explain.h"
+#ifdef MEMWATCH
+#include "memwatch.h"
+#endif
 
     extern short scanerror;
 

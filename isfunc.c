@@ -1,4 +1,7 @@
 #include <string.h>
+#ifdef MEMWATCH
+#include "memwatch.h"
+#endif
 
 static char *funcs[] = { "sin", "cos", "tan", "cot",
     "asin", "acos", "atan", "acot",

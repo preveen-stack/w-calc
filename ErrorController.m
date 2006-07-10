@@ -1,4 +1,7 @@
 #include "ErrorController.h"
+#ifdef MEMWATCH
+#include "memwatch.h"
+#endif
 
 @implementation ErrorController
 

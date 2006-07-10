@@ -8,6 +8,9 @@
 
 #import "variables.h"
 #import "VariableList.h"
+#ifdef MEMWATCH
+#include "memwatch.h"
+#endif
 
 @implementation NSTableDataSource
 

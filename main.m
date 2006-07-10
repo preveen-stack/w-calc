@@ -14,6 +14,9 @@
 #include "variables.h"
 
 #include "WcalcController.h"
+#ifdef MEMWATCH
+#include "memwatch.h"
+#endif
 
 int main(int argc, const char *argv[])
 {

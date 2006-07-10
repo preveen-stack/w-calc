@@ -5,6 +5,9 @@
 
 #include "gmp.h"
 #include "mpfr.h"
+#ifdef MEMWATCH
+#include "memwatch.h"
+#endif
 
 @implementation VariableList
 // needs to be REALLY fast
