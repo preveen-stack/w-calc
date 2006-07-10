@@ -1,3 +1,128 @@
+2006-07-09 22:10  memoryhole
+
+	* configure, configure.in, definitions.h: new version
+
+2006-07-09 22:09  memoryhole
+
+	* test.simple, English.lproj/MainMenu.nib/classes.nib,
+	  English.lproj/MainMenu.nib/info.nib,
+	  English.lproj/MainMenu.nib/keyedobjects.nib,
+	  Wcalc.xcodeproj/kyle.mode1, Wcalc.xcodeproj/kyle.pbxuser,
+	  Wcalc.xcodeproj/project.pbxproj: [no log message]
+
+2006-07-09 22:08  memoryhole
+
+	* wcalc.1: added c_style_mod pref keyword
+
+2006-07-09 22:06  memoryhole
+
+	* parser.y, scanner.l: added \cmod command
+
+2006-07-09 22:04  memoryhole
+
+	* main.c: added live precision toggle, % style prefs, and the
+	  c_style_mod pref keyword
+
+2006-07-09 22:02  memoryhole
+
+	* number_formatting.c: eliminate the negative zeros
+
+2006-07-09 22:00  memoryhole
+
+	* calculator.c, calculator.h: added live precision toggle, % style
+	  prefs
+
+2006-07-09 21:57  memoryhole
+
+	* WcalcController.h, WcalcController.m: added live precision
+	  toggle, % style prefs, improved the prefs versioning, and fixed
+	  some whitespace
+
+2006-07-09 19:55  memoryhole
+
+	* Makefile.am, Makefile.in: dont need optimization by default
+
+2006-04-21 16:28  memoryhole
+
+	* acinclude.m4, aclocal.m4, configure: better history detection
+
+2006-04-12 17:54  memoryhole
+
+	* parser.y: this was backwards
+
+2006-04-12 17:54  memoryhole
+
+	* calculator.c: probably faster
+
+2006-03-20 19:27  memoryhole
+
+	* calculator.c: make mod (%) efficient
+
+2006-03-09 22:08  memoryhole
+
+	* scanner.l: fixes the 0.9e-9 bug, and enables exponents and
+	  decimals and such on the other bases
+
+2006-03-09 22:07  memoryhole
+
+	* add_commas.c: fixes the exponent brokenness
+
+2006-03-09 22:04  memoryhole
+
+	* string_manip.c: now handles of hex exponents
+
+2006-03-02 20:58  memoryhole
+
+	* English.lproj/MainMenu.nib/: info.nib, keyedobjects.nib: no
+	  printing, and standardize the appearance of some windows
+
+2006-03-02 08:35  memoryhole
+
+	* WcalcController.m: keyboard is now a one-click affair
+
+2006-03-02 08:35  memoryhole
+
+	* English.lproj/MainMenu.nib/: info.nib, keyedobjects.nib:
+	  Preloaded Variables buttons, renamed the menu item, added more
+	  auto-save names
+
+2006-03-01 14:10  memoryhole
+
+	* HistoryList.h, HistoryList.m, VariableList.h, VariableList.m,
+	  English.lproj/MainMenu.nib/classes.nib,
+	  English.lproj/MainMenu.nib/info.nib,
+	  English.lproj/MainMenu.nib/keyedobjects.nib,
+	  Wcalc.xcodeproj/kyle.mode1, Wcalc.xcodeproj/kyle.pbxuser: can
+	  copy from history/variable list.
+
+2006-03-01 12:35  memoryhole
+
+	* InspectorController.h, InspectorController.m,
+	  English.lproj/MainMenu.nib/classes.nib,
+	  English.lproj/MainMenu.nib/info.nib,
+	  English.lproj/MainMenu.nib/keyedobjects.nib,
+	  Wcalc.xcodeproj/kyle.mode1, Wcalc.xcodeproj/kyle.pbxuser:
+	  Inspector is now a panel
+
+2006-03-01 10:42  memoryhole
+
+	* Info.plist, NEWS, README, Wcalc-nonFHS.pmproj, Wcalc.pmproj,
+	  configure, English.lproj/InfoPlist.strings,
+	  English.lproj/MainMenu.nib/info.nib,
+	  English.lproj/MainMenu.nib/keyedobjects.nib,
+	  Wcalc.xcodeproj/kyle.mode1, Wcalc.xcodeproj/kyle.pbxuser:
+	  post-release commit
+
+2006-03-01 09:15  memoryhole
+
+	* configure.in, definitions.h, Wcalc.xcodeproj/kyle.mode1,
+	  Wcalc.xcodeproj/kyle.pbxuser, Wcalc.xcodeproj/project.pbxproj:
+	  incrementing version
+
+2006-03-01 09:05  memoryhole
+
+	* ChangeLog: [no log message]
+
 2006-03-01 09:02  memoryhole
 
 	* PersVarList.m, list.c: fix crash when theres an empty list
@@ -844,160 +969,160 @@
 
 	* ConversionList.m: comply with ObjC charset restrictions
 
-2005-10-27 09:23  memoryhole
+2005-10-27 10:23  memoryhole
 
 	* test.recursion, test.vars: more tests
 
-2005-10-27 09:22  memoryhole
+2005-10-27 10:22  memoryhole
 
 	* files.c, main.c, parser.y, scanner.l, calculator.h: added verbose
 	  command
 
-2005-10-27 09:22  memoryhole
+2005-10-27 10:22  memoryhole
 
 	* variables.c: removed debugging printouts
 
-2005-10-27 09:07  memoryhole
+2005-10-27 10:07  memoryhole
 
 	* calculator.c: dprintf cleanup
 
-2005-10-27 09:04  memoryhole
+2005-10-27 10:04  memoryhole
 
 	* variables.c: bug in storing variables when theres only one
 	  variable fixed
 
-2005-10-26 20:03  memoryhole
+2005-10-26 21:03  memoryhole
 
 	* files.c: removed a length limitation
 
-2005-10-26 19:54  memoryhole
+2005-10-26 20:54  memoryhole
 
 	* calculator.c: cleanup and removed a nondynamic string (aka
 	  possible overflow)
 
-2005-10-26 19:53  memoryhole
+2005-10-26 20:53  memoryhole
 
 	* parser.y, scanner.l: the \base command
 
-2005-10-26 19:52  memoryhole
+2005-10-26 20:52  memoryhole
 
 	* aclocal.m4: downgraded for OSX
 
-2005-10-26 10:11  memoryhole
+2005-10-26 11:11  memoryhole
 
 	* wcalc.1: updates and corrections
 
-2005-10-26 09:26  memoryhole
+2005-10-26 10:26  memoryhole
 
 	* parser.y: minor readability tweaks
 
-2005-10-26 09:25  memoryhole
+2005-10-26 10:25  memoryhole
 
 	* Makefile.in: automake regen
 
-2005-10-26 09:24  memoryhole
+2005-10-26 10:24  memoryhole
 
 	* main.c: typo
 
-2005-10-26 09:20  memoryhole
+2005-10-26 10:20  memoryhole
 
 	* main.c: more useful command-line options
 
-2005-10-26 09:01  memoryhole
+2005-10-26 10:01  memoryhole
 
 	* calculator.h: pedantic compatability
 
-2005-10-26 09:00  memoryhole
+2005-10-26 10:00  memoryhole
 
 	* acinclude.m4: remove extra printout in readline detection
 
-2005-10-26 08:59  memoryhole
+2005-10-26 09:59  memoryhole
 
 	* Makefile.am: parser.h is sometimes missed in the cleaning phase
 
-2005-10-02 11:36  memoryhole
+2005-10-02 12:36  memoryhole
 
 	* wcalc.1: Fixed irand/fact bug - noticed by Daniele Sempione
 
-2005-09-10 22:56  memoryhole
+2005-09-10 23:56  memoryhole
 
 	* Makefile.am, Makefile.in: more automake distclean cleanup
 
-2005-09-10 22:49  memoryhole
+2005-09-10 23:49  memoryhole
 
 	* Makefile.am: shouldnt use maintainer-clean for this purpose
 
-2005-09-10 22:38  memoryhole
+2005-09-10 23:38  memoryhole
 
 	* Makefile.in: removing CVS directories
 
-2005-09-10 22:36  memoryhole
+2005-09-10 23:36  memoryhole
 
 	* Makefile.am: now removes CVS files when I do a "make
 	  maintainer-clean"
 
-2005-09-10 22:30  memoryhole
+2005-09-10 23:30  memoryhole
 
 	* Makefile.am, Makefile.in, aclocal.m4, configure: newer auto*
 	  tools, and now it gets rid of the lex/yacc stuff
 
-2005-08-30 13:09  memoryhole
+2005-08-30 14:09  memoryhole
 
 	* calculator.c, historyManager.c, main.c, test.vars, variables.c,
 	  variables.h: some more memory leaks, all small, most irrelevant
 
-2005-08-30 10:51  memoryhole
+2005-08-30 11:51  memoryhole
 
 	* calculator.c: fix longstanding memory leak. lets hope its a
 	  cross-platform solution
 
-2005-08-30 10:30  memoryhole
+2005-08-30 11:30  memoryhole
 
 	* calculator.c: memory leak
 
-2005-08-29 22:04  memoryhole
+2005-08-29 23:04  memoryhole
 
 	* ChangeLog: cvs2cl
 
-2005-08-29 22:02  memoryhole
+2005-08-29 23:02  memoryhole
 
 	* number_formatting.c, Wcalc.xcodeproj/kyle.mode1,
 	  Wcalc.xcodeproj/kyle.pbxuser, Wcalc.xcodeproj/project.pbxproj:
 	  compile warnings
 
-2005-08-29 21:34  memoryhole
+2005-08-29 22:34  memoryhole
 
 	* test.simple: 100!
 
-2005-08-29 20:26  memoryhole
+2005-08-29 21:26  memoryhole
 
 	* number_formatting.c, number_formatting.h: less namespace
 	  pollution
 
-2005-08-29 20:24  memoryhole
+2005-08-29 21:24  memoryhole
 
 	* Makefile.am, Makefile.in, calculator.c, number_formatting.c,
 	  number_formatting.h: fixed a crasher in large number output --
 	  better organized the number formatting stuff
 
-2005-08-29 17:56  memoryhole
+2005-08-29 18:56  memoryhole
 
 	* calculator.c: allow for the display of REALLY long numbers
 
-2005-08-29 16:25  memoryhole
+2005-08-29 17:25  memoryhole
 
 	* calculator.c, files.c, main.c, parser.y, scanner.l, variables.c:
 	  OpenBSD portability fixes
 
-2005-08-29 13:40  memoryhole
+2005-08-29 14:40  memoryhole
 
 	* NEWS: old fix
 
-2005-08-28 11:41  memoryhole
+2005-08-28 12:41  memoryhole
 
 	* ChangeLog: cvs2cl
 
-2005-08-28 11:00  memoryhole
+2005-08-28 12:00  memoryhole
 
 	* VariableList.m, main.c, parser.y, variables.c,
 	  English.lproj/MainMenu.nib/info.nib,
@@ -1005,85 +1130,85 @@
 	  Wcalc.xcodeproj/kyle.mode1, Wcalc.xcodeproj/kyle.pbxuser,
 	  Wcalc.xcodeproj/project.pbxproj: variable corrections
 
-2005-08-28 11:00  memoryhole
+2005-08-28 12:00  memoryhole
 
 	* calculator.c: comment spelling correction
 
-2005-08-28 09:28  memoryhole
+2005-08-28 10:28  memoryhole
 
 	* COPYING.txt, COPYRIGHT, NEWS, ReadMe.rtf, Wcalc.pmproj,
 	  Wcalc.pmsp, test.simple, Wcalc.xcodeproj/kyle.mode1,
 	  Wcalc.xcodeproj/kyle.pbxuser, Wcalc.xcodeproj/project.pbxproj:
 	  hopefully, last commit of version 2.0
 
-2005-08-28 09:25  memoryhole
+2005-08-28 10:25  memoryhole
 
 	* Info.plist: correct version
 
-2005-08-28 09:24  memoryhole
+2005-08-28 10:24  memoryhole
 
 	* calculator.c: that was stupid - I should have seen that before
 
-2005-08-28 09:11  memoryhole
+2005-08-28 10:11  memoryhole
 
 	* parser.y: Corrected a little precedence stuff in the parser.
 	  Managed to reduce conflicts too! :)
 
-2005-08-28 01:02  memoryhole
+2005-08-28 02:02  memoryhole
 
 	* ChangeLog: cvs2cl
 
-2005-08-28 00:53  memoryhole
+2005-08-28 01:53  memoryhole
 
 	* English.lproj/InfoPlist.strings, Wcalc.xcodeproj/kyle.mode1,
 	  Wcalc.xcodeproj/kyle.pbxuser, Wcalc.xcodeproj/project.pbxproj:
 	  new version
 
-2005-08-28 00:47  memoryhole
+2005-08-28 01:47  memoryhole
 
 	* Info.plist: version strings from the old Wcalc .plist
 
-2005-08-28 00:44  memoryhole
+2005-08-28 01:44  memoryhole
 
 	* Info.plist: Yes, THIS software
 
-2005-08-28 00:42  memoryhole
+2005-08-28 01:42  memoryhole
 
 	* main.c: initialization and whitespace
 
-2005-08-28 00:41  memoryhole
+2005-08-28 01:41  memoryhole
 
 	* variables.c, parser.y, scanner.l: whitespace
 
-2005-08-28 00:41  memoryhole
+2005-08-28 01:41  memoryhole
 
 	* calculator.c: initialization cannot be here
 
-2005-08-28 00:40  memoryhole
+2005-08-28 01:40  memoryhole
 
 	* WcalcController.m: Fixed a few crashes, fixed a toggle/toggle
 	  weirdness, and made the AnswerField automatically expand.
 
-2005-08-28 00:37  memoryhole
+2005-08-28 01:37  memoryhole
 
 	* WcalcController.h: minor cleanup plus the #import thing
 
-2005-08-28 00:36  memoryhole
+2005-08-28 01:36  memoryhole
 
 	* AboutBoxController.h, AboutBoxController.m, ConversionList.h,
 	  ConversionList.m, ErrorController.h, ErrorController.m,
 	  HistoryList.h, HistoryList.m, MyTextField.h, MyTextField.m,
 	  VariableList.h, VariableList.m, main.m: #import is deprecated now
 
-2005-08-28 00:33  memoryhole
+2005-08-28 01:33  memoryhole
 
 	* theDelegate.h, theDelegate.m: #import is deprecated now
 
-2005-08-28 00:31  memoryhole
+2005-08-28 01:31  memoryhole
 
 	* wcalc.info, wcalc.spec: new version
 
-2005-08-28 00:31  memoryhole
+2005-08-28 01:31  memoryhole
 
 	* English.lproj/MainMenu.nib/info.nib,
 	  English.lproj/MainMenu.nib/keyedobjects.nib,
@@ -1091,7 +1216,7 @@
 	  Wcalc.xcodeproj/project.pbxproj: The usual stuff (preparing for a
 	  new release)
 
-2005-08-27 16:48  memoryhole
+2005-08-27 17:48  memoryhole
 
 	* English.lproj/MainMenu.nib/info.nib,
 	  English.lproj/MainMenu.nib/keyedobjects.nib,
@@ -1100,11 +1225,11 @@
 	  behavior. Since I moved to a text-format nib, CVS shouldn't be
 	  screwing it up again.
 
-2005-08-27 16:48  memoryhole
+2005-08-27 17:48  memoryhole
 
 	* ConversionList.m: silly semicolon
 
-2005-08-27 13:51  memoryhole
+2005-08-27 14:51  memoryhole
 
 	* ConversionList.m, conversion.c, conversion.h, help.c, parser.y,
 	  scanner.l, test.errors, test.simple,
@@ -1113,7 +1238,7 @@
 	  Wcalc.xcodeproj/kyle.mode1, Wcalc.xcodeproj/kyle.pbxuser,
 	  Wcalc.xcodeproj/project.pbxproj: Compiles and works!
 
-2005-08-27 12:29  memoryhole
+2005-08-27 13:29  memoryhole
 
 	* ConversionList.m, Info.plist, VariableList.m, WcalcController.m,
 	  calculator.c, main.m, parser.y, English.lproj/InfoPlist.strings,
@@ -1125,201 +1250,201 @@
 	  WHERE the Info.plist file is in the get-info dialog box of the
 	  _native target.
 
-2005-07-28 09:27  memoryhole
+2005-07-28 10:27  memoryhole
 
 	* calculator.c: fixed integers printing too many decimals
 
-2005-07-21 15:11  memoryhole
+2005-07-21 16:11  memoryhole
 
 	* calculator.c: You'd think this would be a memory leak, but it
 	  isn't for some reason
 
-2005-07-21 15:11  memoryhole
+2005-07-21 16:11  memoryhole
 
 	* config.h.in, configure, configure.in: portability for Debian
 
-2005-07-21 13:58  memoryhole
+2005-07-21 14:58  memoryhole
 
 	* simpleCalc.c: cleanup
 
-2005-07-21 13:57  memoryhole
+2005-07-21 14:57  memoryhole
 
 	* scanner.l: cleanup (use yyleng instead of strlen())
 
-2005-07-21 13:54  memoryhole
+2005-07-21 14:54  memoryhole
 
 	* main.c: cleanup and trim an extra mpfr_t for efficiency
 
-2005-07-21 13:53  memoryhole
+2005-07-21 14:53  memoryhole
 
 	* historyManager.c, parser.y: cleanup
 
-2005-07-21 13:51  memoryhole
+2005-07-21 14:51  memoryhole
 
 	* files.c: cleanup and trim an extra mpfr_t for efficiency
 
-2005-07-21 13:50  memoryhole
+2005-07-21 14:50  memoryhole
 
 	* conversion.c: just clarify things for when I go grepping
 
-2005-07-21 13:49  memoryhole
+2005-07-21 14:49  memoryhole
 
 	* calculator.h: some cleanup
 
-2005-07-21 13:47  memoryhole
+2005-07-21 14:47  memoryhole
 
 	* calculator.c: some cleanup, fixed some #includes, and fixed
 	  variable substitution
 
-2005-07-20 02:19  memoryhole
+2005-07-20 03:19  memoryhole
 
 	* Makefile.am, Makefile.in, conversion.c, conversion.h, main.c,
 	  parser.y, scanner.l: conversions work!
 
-2005-07-19 23:13  memoryhole
+2005-07-20 00:13  memoryhole
 
 	* calculator.c, calculator.h, definitions.h, parser.y, scanner.l:
 	  added xor and comp()
 
-2005-07-19 18:05  memoryhole
+2005-07-19 19:05  memoryhole
 
 	* calculator.c: output function doesn't crash anymore, and the
 	  bitshifts work properly now
 
-2005-07-19 18:03  memoryhole
+2005-07-19 19:03  memoryhole
 
 	* configure, configure.in: version 2.0
 
-2005-07-19 11:48  memoryhole
+2005-07-19 12:48  memoryhole
 
 	* wcalc.1: it had gotten stagnant
 
-2005-07-19 11:48  memoryhole
+2005-07-19 12:48  memoryhole
 
 	* scanner.l: typo
 
-2005-07-19 11:48  memoryhole
+2005-07-19 12:48  memoryhole
 
 	* main.c: add a few more configuration options
 
-2005-07-19 11:47  memoryhole
+2005-07-19 12:47  memoryhole
 
 	* help.c: be more helpful
 
-2005-07-19 11:46  memoryhole
+2005-07-19 12:46  memoryhole
 
 	* calculator.c: Fixed a seg-fault in really long numbers.
 
-2005-07-19 11:45  memoryhole
+2005-07-19 12:45  memoryhole
 
 	* WcalcController.m: Fixed the menu thingy
 
-2005-07-18 20:55  memoryhole
+2005-07-18 21:55  memoryhole
 
 	* parser.y, main.c: fix memory leaks
 
-2005-07-18 12:42  memoryhole
+2005-07-18 13:42  memoryhole
 
 	* calculator.c: implemented sig_fig rounding indication (huh, ended
 	  up identical to the old one) and fixed several things that were
 	  wrong with the old implementation
 
-2005-07-18 12:40  memoryhole
+2005-07-18 13:40  memoryhole
 
 	* scanner.l: oops, left debugging printfs in there
 
-2005-07-18 12:40  memoryhole
+2005-07-18 13:40  memoryhole
 
 	* main.c: increase the default accuracy? why not?
 
-2005-07-18 12:29  memoryhole
+2005-07-18 13:29  memoryhole
 
 	* help.c: most recent major thing
 
-2005-07-18 12:18  memoryhole
+2005-07-18 13:18  memoryhole
 
 	* parser.y: removed several unnecessary doubles, added the \bits
 	  command, and fixed the \prefs display to be slightly more useful
 
-2005-07-18 12:14  memoryhole
+2005-07-18 13:14  memoryhole
 
 	* scanner.l: fixed some sigfig problems, and several unnecessary
 	  doubles
 
-2005-07-18 12:13  memoryhole
+2005-07-18 13:13  memoryhole
 
 	* string_manip.c: correct formatting
 
-2005-07-18 12:10  memoryhole
+2005-07-18 13:10  memoryhole
 
 	* main.c: ~/.wcalcrc parsing was broken
 
-2005-07-18 10:01  memoryhole
+2005-07-18 11:01  memoryhole
 
 	* main.c: use libhistory properly, and finally fix the damn
 	  readline problems
 
-2005-07-17 23:45  memoryhole
+2005-07-18 00:45  memoryhole
 
 	* help.c: Info about the \bits command
 
-2005-07-17 23:45  memoryhole
+2005-07-18 00:45  memoryhole
 
 	* calculator.c: Implemented binary operations, and a few other
 	  minor tweaks. Still much cruft in the second display function.
 
-2005-07-17 09:41  memoryhole
+2005-07-17 10:41  memoryhole
 
 	* WcalcController.m: fixed the constants menu, added all the mpfr
 	  stuff
 
-2005-07-17 09:40  memoryhole
+2005-07-17 10:40  memoryhole
 
 	* simpleCalc.c: mpfr stuff added
 
-2005-07-17 09:38  memoryhole
+2005-07-17 10:38  memoryhole
 
 	* definitions.h: more constants, corrected constants
 
-2005-07-17 09:36  memoryhole
+2005-07-17 10:36  memoryhole
 
 	* variables.c, variables.h: variable_exists test (read: efficiency)
 
-2005-07-17 09:36  memoryhole
+2005-07-17 10:36  memoryhole
 
 	* scanner.l: more constants, and no mpfr_inits()
 
-2005-07-17 09:35  memoryhole
+2005-07-17 10:35  memoryhole
 
 	* main.c: this should get initialized automatically now
 
-2005-07-17 09:34  memoryhole
+2005-07-17 10:34  memoryhole
 
 	* parser.y: damn mpfr_clears()
 
-2005-07-17 09:33  memoryhole
+2005-07-17 10:33  memoryhole
 
 	* conversion.h: the correct mpfr includes
 
-2005-07-17 09:32  memoryhole
+2005-07-17 10:32  memoryhole
 
 	* calculator.c: fixes to display and the random numbers, and also
 	  initialization
 
-2005-07-17 09:30  memoryhole
+2005-07-17 10:30  memoryhole
 
 	* MyTextField.h, VariableList.m: mpfr stuff added
 
-2005-06-19 14:17  memoryhole
+2005-06-19 15:17  memoryhole
 
 	* English.lproj/MainMenu.nib/: info.nib, keyedobjects.nib: We're
 	  ditching 10.2 support.
 
-2005-06-19 14:14  memoryhole
+2005-06-19 15:14  memoryhole
 
 	* English.lproj/MainMenu.nib/objects.nib: BAM!
 
-2005-06-10 12:39  memoryhole
+2005-06-10 13:39  memoryhole
 
 	* calculator.c, calculator.h, config.h.in, configure, configure.in,
 	  conversion.c, conversion.h, definitions.h, files.c,
@@ -1329,16 +1454,16 @@
 	  Wcalc.xcodeproj/kyle.mode1, Wcalc.xcodeproj/kyle.pbxuser,
 	  Wcalc.xcodeproj/project.pbxproj: Arbitrary Precision Compiles!
 
-2005-06-10 09:46  memoryhole
+2005-06-10 10:46  memoryhole
 
 	* WcalcController.m: Fixed SourceForge bug 1218205
 
-2005-06-10 00:41  memoryhole
+2005-06-10 01:41  memoryhole
 
 	* variables.c: Just formatting - the mpfr_t stuff will be along in
 	  a bit
 
-2005-06-10 00:01  memoryhole
+2005-06-10 01:01  memoryhole
 
 	* historyManager.c: Just formatting - the mpfr_t changes will be
 	  along in a moment.
@@ -1453,46 +1578,46 @@
 
 	* calculator.h: Added Dprintf
 
-2003-09-30 17:48  memoryhole
+2003-09-30 18:48  memoryhole
 
 	* files.c: Ran it through 'indent'
 
-2003-09-30 17:05  memoryhole
+2003-09-30 18:05  memoryhole
 
 	* files.c: Fixed file loading.
 
-2003-08-31 22:47  memoryhole
+2003-08-31 23:47  memoryhole
 
 	* calculator.c: Fixed bug
 
-2003-08-31 22:36  memoryhole
+2003-08-31 23:36  memoryhole
 
 	* calculator.c: Code cleanup, started the parenthesis hack.... not
 	  done yet.
 
-2003-08-25 14:44  memoryhole
+2003-08-25 15:44  memoryhole
 
 	* calculator.c, parser.y: Fixed error stickyness.
 
-2003-08-22 15:27  memoryhole
+2003-08-22 16:27  memoryhole
 
 	* main.c: Fixed piped input with active variables
 
-2003-08-22 14:53  memoryhole
+2003-08-22 15:53  memoryhole
 
 	* calculator.c: Cleaned up find_recursion per Ingo van Lil's
 	  suggestion.
 
-2003-08-21 16:49  memoryhole
+2003-08-21 17:49  memoryhole
 
 	* wcalc.info: added the wcalc.rc to the doc files
 
-2003-08-21 16:47  memoryhole
+2003-08-21 17:47  memoryhole
 
 	* NEWS, ReadMe.rtf, Wcalc.pmsp, configure, configure.in,
 	  wcalc.info, wcalc.rc, wcalc.spec: New version.
 
-2003-08-21 16:17  memoryhole
+2003-08-21 17:17  memoryhole
 
 	* WcalcController.h, WcalcController.m, config.h.in, configure,
 	  definitions.h, English.lproj/InfoPlist.strings,
@@ -1501,45 +1626,45 @@
 	  English.lproj/MainMenu.nib/objects.nib: Put the printInts
 	  preference into the GUI, updated some things for the new version.
 
-2003-08-21 12:16  memoryhole
+2003-08-21 13:16  memoryhole
 
 	* parser.y: Fixed extraneous output when there's errors.
 
-2003-08-20 22:20  memoryhole
+2003-08-20 23:20  memoryhole
 
 	* parser.y: More good error messages.
 
-2003-08-20 22:08  memoryhole
+2003-08-20 23:08  memoryhole
 
 	* parser.y: More sensible error messages when you try to assign new
 	  values to constants.
 
-2003-08-20 21:49  memoryhole
+2003-08-20 22:49  memoryhole
 
 	* calculator.c: Took the extra variable parsing out of recursion
 	  checking.
 
-2003-08-20 21:25  memoryhole
+2003-08-20 22:25  memoryhole
 
 	* calculator.c: Fixed a crasher on Linux (Ingo van Lil).
 
-2003-08-20 10:56  memoryhole
+2003-08-20 11:56  memoryhole
 
 	* wcalc.info: Silly hard-wrapping.
 
-2003-08-20 10:55  memoryhole
+2003-08-20 11:55  memoryhole
 
 	* wcalc.info: Updated for new version.
 
-2003-08-20 09:40  memoryhole
+2003-08-20 10:40  memoryhole
 
 	* COPYRIGHT, Wcalc.pmsp, wcalc.info: New version stuff
 
-2003-08-19 21:57  memoryhole
+2003-08-19 22:57  memoryhole
 
 	* config.h.in, parser.y: Compiling fixes.
 
-2003-08-19 17:13  memoryhole
+2003-08-19 18:13  memoryhole
 
 	* ChangeLog, NEWS, ReadMe.rtf, WcalcController.m, configure,
 	  configure.in, wcalc.info, wcalc.spec,
@@ -1547,67 +1672,67 @@
 	  English.lproj/MainMenu.nib/info.nib,
 	  English.lproj/MainMenu.nib/objects.nib: New version.
 
-2003-08-19 16:28  memoryhole
+2003-08-19 17:28  memoryhole
 
 	* help.c: Updating for new version.
 
-2003-08-19 16:15  memoryhole
+2003-08-19 17:15  memoryhole
 
 	* wcalc.1: Fixed lots of stuff
 
-2003-08-19 13:29  memoryhole
+2003-08-19 14:29  memoryhole
 
 	* definitions.h: Documentation
 
-2003-08-19 12:09  memoryhole
+2003-08-19 13:09  memoryhole
 
 	* parser.y: Small bit of labelling.
 
-2003-08-19 12:06  memoryhole
+2003-08-19 13:06  memoryhole
 
 	* calculator.c: Fixed command/variable conflicts.
 
-2003-08-19 11:43  memoryhole
+2003-08-19 12:43  memoryhole
 
 	* calculator.c: Fixed a memory leak in the recursion detection.
 
-2003-08-18 21:51  memoryhole
+2003-08-18 22:51  memoryhole
 
 	* calculator.c: Fixed a repeatable crash on linux (flex is weird).
 	  Fixed the recursion detection.
 
-2003-08-18 21:38  memoryhole
+2003-08-18 22:38  memoryhole
 
 	* main.c: Missing a semicolon.
 
-2003-08-17 20:33  memoryhole
+2003-08-17 21:33  memoryhole
 
 	* main.c: Small, one-time, memory leak, before the main loop gets
 	  going.
 
-2003-08-09 03:22  memoryhole
+2003-08-09 04:22  memoryhole
 
 	* wcalc.info: Wcalc is not part of fink. This is the current .info
 	  file for creating the .deb file.
 
-2003-08-09 03:13  memoryhole
+2003-08-09 04:13  memoryhole
 
 	* calculator.c, calculator.h, parser.y, scanner.l: Added irandom,
 	  rand(), and irand(). rand(x) is a number between 0 and x.
 	  irand(x) is an integer between 0 and x. irandom is a random
 	  integer.
 
-2003-08-09 03:11  memoryhole
+2003-08-09 04:11  memoryhole
 
 	* files.c, historyManager.c: Fixed some signed/unsigned comparison
 	  warnings.
 
-2003-07-12 01:28  memoryhole
+2003-07-12 02:28  memoryhole
 
 	* calculator.c, calculator.h, parser.y, scanner.l: Added bitwise
 	  operators & and | and ~
 
-2003-04-19 11:56  memoryhole
+2003-04-19 12:56  memoryhole
 
 	* calculator.c, parser.y: Fixed the flatten problems. Removed some
 	  compile warnings on Solaris.
@@ -1968,71 +2093,71 @@
 
 	* parser.y: Fixed a crasher in error reporting.
 
-2002-10-20 15:48  kyle
+2002-10-20 16:48  kyle
 
 	* Makefile, parser.y, wcalc.spec: New version, small bugfix.
 
-2002-10-20 15:41  kyle
+2002-10-20 16:41  kyle
 
 	* ReadMe.rtf: New version
 
-2002-10-20 15:41  kyle
+2002-10-20 16:41  kyle
 
 	* Makefile, Wcalc.pmsp: New version.
 
-2002-10-20 15:40  kyle
+2002-10-20 16:40  kyle
 
 	* main.c: Fixed the defaults for the precision guard.
 
-2002-10-20 14:56  kyle
+2002-10-20 15:56  kyle
 
 	* calculator.c, calculator.h, WcalcController.m: Implemented
 	  toggling precision control
 
-2002-10-20 14:55  kyle
+2002-10-20 15:55  kyle
 
 	* definitions.h, ChangeLog: New version
 
-2002-10-20 14:55  kyle
+2002-10-20 15:55  kyle
 
 	* main.c: Documented \conservative
 
-2002-10-20 14:54  kyle
+2002-10-20 15:54  kyle
 
 	* parser.y, scanner.l: Added the \conservative command, to toggle
 	  conservative precision
 
-2002-10-20 14:47  kyle
+2002-10-20 15:47  kyle
 
 	* main.c: Documented \list
 
-2002-10-03 00:04  kyle
+2002-10-03 01:04  kyle
 
 	* parser.y, scanner.l: Lists variables in command-line mode.
 
-2002-09-08 21:16  kyle
+2002-09-08 22:16  kyle
 
 	* scanner.l: Another way to tell it "hex"
 
-2002-08-30 11:11  kyle
+2002-08-30 12:11  kyle
 
 	* Makefile: Alternate compiling for redhat
 
-2002-08-11 22:43  kyle
+2002-08-11 23:43  kyle
 
 	* English.lproj/MainMenu.nib/: info.nib, objects.nib: [no log
 	  message]
 
-2002-08-11 22:43  kyle
+2002-08-11 23:43  kyle
 
 	* ChangeLog, Makefile, MyTextField.m, ReadMe.rtf, Wcalc.pmsp,
 	  main.c, wcalc.1: Distribution
 
-2002-08-11 21:24  kyle
+2002-08-11 22:24  kyle
 
 	* ReadMe.rtf, Wcalc.pmsp: Synching before release
 
-2002-08-11 21:21  kyle
+2002-08-11 22:21  kyle
 
 	* definitions.h, English.lproj/InfoPlist.strings,
 	  English.lproj/MainMenu.nib/classes.nib,
@@ -2040,88 +2165,88 @@
 	  English.lproj/MainMenu.nib/objects.nib: Changed the version
 	  numbers
 
-2002-08-11 17:53  kyle
+2002-08-11 18:53  kyle
 
 	* MyTextField.m: Removed debugging printouts.
 
-2002-08-11 17:53  kyle
+2002-08-11 18:53  kyle
 
 	* ConversionList.h, ConversionList.m, WcalcController.h,
 	  WcalcController.m: Conversion functions are available in the GUI.
 
-2002-08-11 17:52  kyle
+2002-08-11 18:52  kyle
 
 	* conversion.c, conversion.h: Conversion functions now work.
 
-2002-08-11 12:38  kyle
+2002-08-11 13:38  kyle
 
 	* calculator.c: uber_converstion belongs in conversion.c
 
-2002-08-02 01:13  kyle
+2002-08-02 02:13  kyle
 
 	* calculator.c, calculator.h, conversion.c, conversion.h,
 	  scanner.l: Getting a start on the conversions stuff.
 
-2002-07-31 11:34  kyle
+2002-07-31 12:34  kyle
 
 	* string_manip.h: Stupid gcc and it's end of line at end of file
 	  nonsense.
 
-2002-07-31 01:05  kyle
+2002-07-31 02:05  kyle
 
 	* scanner.l: Added shell-style comment support.
 
-2002-07-31 00:56  kyle
+2002-07-31 01:56  kyle
 
 	* parser.y, scanner.l: Added expression/string support.
 
-2002-07-31 00:55  kyle
+2002-07-31 01:55  kyle
 
 	* calculator.c: Fixed variable reassignment.  Fixed exessive
 	  printouts in command-line mode.  Added expression support
 	  (command-line mode).
 
-2002-07-31 00:25  kyle
+2002-07-31 01:25  kyle
 
 	* calculator.c: Fixed a possible infinite loop.
 
-2002-07-31 00:25  kyle
+2002-07-31 01:25  kyle
 
 	* scanner.l: Added support for comments.
 
-2002-07-30 23:50  kyle
+2002-07-31 00:50  kyle
 
 	* main.c: Made the default to print prefixes (0x, etc) Added the
 	  standard -h argument support.  Changed to match variables.c
 	  changes.
 
-2002-07-30 23:47  kyle
+2002-07-31 00:47  kyle
 
 	* MyTextField.m: Removed spacebar actions (now it's normal again).
 	  Removed errors from arrow keys.
 
-2002-07-30 23:46  kyle
+2002-07-31 00:46  kyle
 
 	* VariableList.m: Handles expressions now.
 
-2002-07-30 23:45  kyle
+2002-07-31 00:45  kyle
 
 	* string_manip.h, string_manip.c: Added justnumbers.
 
-2002-07-30 23:44  kyle
+2002-07-31 00:44  kyle
 
 	* scanner.l: Changed the precision syntax a bit.  Added bitshifts.
 
-2002-07-30 23:41  kyle
+2002-07-31 00:41  kyle
 
 	* parser.y: Added bitshifts.  Updated for changes in variables.c.
 
-2002-07-30 23:37  kyle
+2002-07-31 00:37  kyle
 
 	* variables.h: Added expressions to the variable struct.  Added the
 	  answer struct.  Synched the function definitions with variables.c
 
-2002-07-30 23:35  kyle
+2002-07-31 00:35  kyle
 
 	* variables.c: Added the _full functions for pulling out
 	  expressions too.  Made the getvar functions return answer
@@ -2130,101 +2255,101 @@
 	  function for inserting expressions.  Renamed putvar to putval
 	  (for consistency)
 
-2002-07-30 23:25  kyle
+2002-07-31 00:25  kyle
 
 	* calculator.c: Added the flatten function to pre-parse variables
 	  (and handle "active" variables recursively).	Fixed the bitshift
 	  functions.
 
-2002-07-29 20:35  kyle
+2002-07-29 21:35  kyle
 
 	* calculator.c, calculator.h: Added left and right bitshifts.
 
-2002-05-21 10:04  kyle
+2002-05-21 11:04  kyle
 
 	* WcalcController.h, WcalcController.m: Handles '=' and 'clear' at
 	  input-time now (sorta). (also a small change getting ready for
 	  dynamic variables... probably breaks it - will commit more later
 	  that fix it again)
 
-2002-05-21 09:51  kyle
+2002-05-21 10:51  kyle
 
 	* MyTextField.h, MyTextField.m: Handles '=' and 'clear' at
 	  input-time now (sorta).
 
-2002-04-12 15:53  kyle
+2002-04-12 16:53  kyle
 
 	* wcalc.spec: Updated the version
 
-2002-04-12 15:45  kyle
+2002-04-12 16:45  kyle
 
 	* English.lproj/MainMenu.nib/: classes.nib, info.nib, objects.nib:
 	  [no log message]
 
-2002-04-12 15:44  kyle
+2002-04-12 16:44  kyle
 
 	* libreadline.a: New version of the library.
 
-2002-04-12 15:29  kyle
+2002-04-12 16:29  kyle
 
 	* main.c: Setup reverse-lookup table for characters (we'll need it
 	  when we print errors/numbers back out)
 
-2002-04-12 15:26  kyle
+2002-04-12 16:26  kyle
 
 	* scanner.l: Using reverse-lookup table for error formatting.
 
-2002-04-12 15:25  kyle
+2002-04-12 16:25  kyle
 
 	* calculator.c: Took out debugging printfs
 
-2002-04-12 15:23  kyle
+2002-04-12 16:23  kyle
 
 	* WcalcController.m, calculator.h, variables.c: Setup
 	  reverse-lookup table for characters (we'll need it when we print
 	  errors/numbers back out)
 
-2002-04-12 15:03  kyle
+2002-04-12 16:03  kyle
 
 	* WcalcController.h: Organized the code a bit.
 
-2002-04-12 15:03  kyle
+2002-04-12 16:03  kyle
 
 	* WcalcController.m: No use_commas pref!
 
-2002-04-12 15:02  kyle
+2002-04-12 16:02  kyle
 
 	* scanner.l: Scanner error hides internationalization futzing.
 
-2002-04-12 14:59  kyle
+2002-04-12 15:59  kyle
 
 	* calculator.c: Stripped out the bogus internationalizing loop.
 
-2002-04-12 14:58  kyle
+2002-04-12 15:58  kyle
 
 	* parser.y, calculator.h: No comma-command!
 
-2002-04-12 14:57  kyle
+2002-04-12 15:57  kyle
 
 	* scanner.l: Back to American-only (may be some cruft left in
 	  there... I'll get it later)
 
-2002-04-12 14:56  kyle
+2002-04-12 15:56  kyle
 
 	* main.c: Specify separators on the fly in cmd-line.
 
-2002-04-12 13:03  kyle
+2002-04-12 14:03  kyle
 
 	* WcalcController.m, calculator.c, calculator.h, variables.c:
 	  Initial preprocessor support!
 
-2002-04-10 00:03  kyle
+2002-04-10 01:03  kyle
 
 	* WcalcController.h, WcalcController.m, calculator.h, main.c,
 	  parser.y, scanner.l: Added a preference to optionally forget
 	  expressions that produce errors and don't return values.
 
-2002-04-09 18:40  kyle
+2002-04-09 19:40  kyle
 
 	* WcalcController.m, theDelegate.m: Minor code cleanups
 
