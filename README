@@ -26,6 +26,7 @@ BUGFIXES:
  - Make mod (%) efficient (BOTH)
  - Improved detection of readline history (CLI)
  - Removed negative zero display (BOTH)
+ - Fixed several small memory leaks (BOTH)
 
 *********
 * INTRO *

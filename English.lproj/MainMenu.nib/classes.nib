@@ -99,6 +99,7 @@
                 menuConstant = id; 
                 menuFunction = id; 
                 open = id; 
+                quit = id; 
                 save = id; 
                 saveAs = id; 
                 setPrecision = id; 
