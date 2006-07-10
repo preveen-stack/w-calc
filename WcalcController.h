@@ -14,7 +14,7 @@
 
     IBOutlet NSWindow *mainWindow;
     IBOutlet NSWindow *inspectorWindow;
-	IBOutlet NSWindow *persVarsWindow;
+    IBOutlet NSWindow *persVarsWindow;
     IBOutlet InspectorController *inspector;
 
     IBOutlet NSButton *capsLockKey;
@@ -34,24 +34,27 @@
     IBOutlet NSButton *precisionGuard;
     IBOutlet NSButton *printInts;
     IBOutlet NSButton *simpleCalculator;
-	IBOutlet NSButton *printDelimiters;
+    IBOutlet NSButton *printDelimiters;
+    IBOutlet NSButton *livePrecision;
+    IBOutlet NSButton *cModPref;
 
     IBOutlet NSTextField *AnswerField;
     IBOutlet NSTextField *ExpressionField;
     IBOutlet NSTextField *limitHistoryLen;
     IBOutlet NSTextField *limitHistoryLenTag;
-	IBOutlet NSTextField *bitsPref;
+    IBOutlet NSTextField *bitsPref;
 
     IBOutlet NSDrawer *baseDrawer;
 	
-	IBOutlet NSStepper *bitsStepper;
+    IBOutlet NSStepper *bitsStepper;
 
     IBOutlet NSMatrix *outputFormat;
     IBOutlet NSMatrix *outputFormat2;
 
+    IBOutlet NSSlider *PrecisionSlider;
+    
     IBOutlet id errorController;
     IBOutlet id historyList;
-    IBOutlet id PrecisionSlider;
     IBOutlet id theKeyboard;
     IBOutlet id keypad;
 
@@ -65,7 +68,7 @@
     IBOutlet NSTableView *convertFrom;
     IBOutlet NSTableView *convertTo;
 	
-	IBOutlet NSApplication *meta;
+    IBOutlet NSApplication *meta;
 
     bool just_answered;
     NSView *superview;
