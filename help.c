@@ -16,6 +16,9 @@
 #endif
 #include "definitions.h"
 #include "help.h"
+#ifdef MEMWATCH
+#include "memwatch.h"
+#endif
 
 void print_interactive_help (void)
 {
@@ -76,6 +79,7 @@ void print_command_help (void)
 		 "Spaces are ignored (unknown symbols cause errors or are treated as variables)\n"
 		 "This calculator accepts input in decimal (1.00), scientific notation (1.0e5),\n"
 		 "octal (088), hexadecimal (0xff), and in binary (0b11).\n\n"
+		 "-H, --help               Prints this help.\n"
 		 "-v, --version            Prints the version number.\n"
 		 "-Px                      Sets the precision, where x is the desired precision.\n"
 		 "                         This setting only affects output.\n"
@@ -90,13 +94,18 @@ void print_command_help (void)
 		 "                         binary forms.\n"
 		 "-l, --lenient            Makes the parser assume that uninitialized variables\n"
 		 "                         have a value of zero.\n"
-		 "-r, --radians            This makes all trigonometric functions work in radians.\n\n"
+		 "-r, --radians            This makes all trigonometric functions work in radians.\n"
+		 "-q, --quiet              This suppresses the = sign.\n"
+		 "-c, --conservative       This toggles the precision guard for display.\n"
+		 "\n"
 		 "Variables are supported and may be assigned using the = operator.\n"
 		 "To assign a variable, use the form:\n"
 		 "foo = anylegalexpression\n"
 		 "Thereafter, that variable name is the same as the literal value it represents.\n\n"
 		 "Executing this program without any arguments enters an 'interactive' mode\n"
-		 "with a few more features and options.\n\n"
+		 "with a few more features and options.\n"
+		 "\n"
+		 "This is only a subset of the supporte options. See the man page for complete documentation.\n"
 		 );
 }
 
