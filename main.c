@@ -99,6 +99,7 @@ int main(int argc, char *argv[])
     conf.print_ints = 0;
     conf.print_commas = 0;
     conf.verbose = 0;
+    conf.c_style_mod = 1;
 
     mpfr_set_default_prec(1024);
     mpfr_init_set_ui(last_answer, 0, GMP_RNDN);
@@ -588,8 +589,10 @@ static int read_prefs(char *filename)
 		conf.rounding_indication = SIMPLE_ROUNDING_INDICATION;
 	    else if (!strcmp(value, "sig_fig"))
 		conf.rounding_indication = SIG_FIG_ROUNDING_INDICATION;
+	} else if (!strcmp(key, "c_style_mod")) {
+	    conf.c_style_mod = TRUEFALSE;
 	} else {
-	    fprintf(stderr, "Invalid key in wcalcrc: %s\n", key);
+	    fprintf(stderr, "Unrecognized key in wcalcrc: %s\n", key);
 	}
 	memset(key, 0, sizeof(key));
 	memset(value, 0, sizeof(value));
