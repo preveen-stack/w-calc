@@ -25,6 +25,9 @@
 #include "variables.h"
 
 #include "files.h"
+#ifdef MEMWATCH
+#include "memwatch.h"
+#endif
 
 /* this is for communicating with the scanner */
 char *open_file = NULL;
@@ -184,6 +187,7 @@ int loadState(char *filename, int into_history)
 		     conf.remember_errors) && into_history) {
 		    addToHistory(linebuf, last_answer);
 		}
+		free(safe);
 	    }
 	    linelen = 0;
 	    memset(linebuf, 0, maxlinelen);
@@ -195,6 +199,7 @@ int loadState(char *filename, int into_history)
 	if (close(fd) != 0) {
 	    return_error = errno;
 	}
+	free(linebuf);
     } else {
 	return_error = errno;
     }

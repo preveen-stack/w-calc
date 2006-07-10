@@ -52,6 +52,9 @@ extern int history_truncate_file(char *, int);
 #include "files.h"
 #include "historyManager.h"
 #include "list.h"
+#ifdef MEMWATCH
+#include "memwatch.h"
+#endif
 
 #define TRUEFALSE (! strcmp(value,"yes") || ! strcmp(value,"true") || ! strcmp(value,"1"))
 
@@ -424,8 +427,10 @@ int main(int argc, char *argv[])
 		    line = temp;
 		}
 	    }
-	    if (ferror(stdin) || (feof(stdin) && linelen == 0))
+	    if (ferror(stdin) || (feof(stdin) && linelen == 0)) {
+		free(line);
 		break;
+	    }
 	    if (conf.verbose) {
 		printf("-> %s\n", line);
 	    }
@@ -451,6 +456,13 @@ int main(int argc, char *argv[])
 
     clearHistory();
     cleanupvar();
+    if (pretty_answer) {
+	extern char *pa;
+	free(pretty_answer);
+	if (pa) {
+	    free(pa);
+	}
+    }
     mpfr_clear(last_answer);
     mpfr_free_cache();
     lists_cleanup();
