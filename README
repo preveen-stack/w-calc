@@ -1,6 +1,6 @@
 Hello!
 
-This is Wcalc 2.2.1!
+This is Wcalc 2.2.2!
 
 1. What's New
 2. Intro
@@ -13,8 +13,19 @@ This is Wcalc 2.2.1!
 * What's New *
 **************
 
+FEATURES:
+ - Inspector is now a panel, rather than a drawer (GUI)
+ - Can copy from the history/variable list (GUI)
+ - Hexadecimal exponents can now be expressed with an @ symbol (BOTH)
+ - Added preference to turn off live precision sliding (GUI)
+ - Added preference to change mod (%) behavior (BOTH)
+
 BUGFIXES:
- - Doesn't crash when the Persistent Variables window is closed with no changes and no variables (GUI)
+ - Corrected some UI inconsistencies (GUI)
+ - Corrected the 0.9e-9 bug (allow negative exponents now) (BOTH)
+ - Make mod (%) efficient (BOTH)
+ - Improved detection of readline history (CLI)
+ - Removed negative zero display (BOTH)
 
 *********
 * INTRO *
