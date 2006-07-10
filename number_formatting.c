@@ -51,7 +51,7 @@ char *num_to_str_complex(mpfr_t num, int base, int engr, int prec, int prefix,
 	}
     }
     if (mpfr_zero_p(num)) {
-	if (mpfr_sgn(num) > 0) {
+	if (mpfr_sgn(num) >= 0) {
 	    return (char *)strdup("0");
 	} else {
 	    return (char *)strdup("-0");
