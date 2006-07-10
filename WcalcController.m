@@ -25,6 +25,7 @@ static char update_history = 0;
 NSButton *e;
 NSTextField *ef;
 static NSString *curFile = NULL;
+static pthread_mutex_t displayLock;
 
 @implementation WcalcController
 
