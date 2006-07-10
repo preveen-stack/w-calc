@@ -120,6 +120,7 @@
                 baseMenu = NSMenuItem; 
                 bitsPref = NSTextField; 
                 bitsStepper = NSStepper; 
+                cModPref = NSButton; 
                 capsLockKey = NSButton; 
                 conversionMenu = NSMenuItem; 
                 conversionWindow = NSPanel; 
@@ -138,6 +139,7 @@
                 limitHistory = NSButton; 
                 limitHistoryLen = NSTextField; 
                 limitHistoryLenTag = NSTextField; 
+                livePrecision = NSButton; 
                 mainWindow = NSWindow; 
                 meta = NSApplication; 
                 outputFormat = NSMatrix; 

@@ -111,32 +111,6 @@
 		27FAECF3093FAE5A00D7EE3E /* InspectorController.m in Sources */ = {isa = PBXBuildFile; fileRef = 27FAECF1093FAE5A00D7EE3E /* InspectorController.m */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXBuildStyle section */
-		4A9504CCFFE6A4B311CA0CBA /* Development */ = {
-			isa = PBXBuildStyle;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				OPTIMIZATION_CFLAGS = "-O0 -g";
-				ZERO_LINK = YES;
-			};
-			name = Development;
-		};
-		4A9504CDFFE6A4B311CA0CBA /* Deployment */ = {
-			isa = PBXBuildStyle;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				OPTIMIZATION_CFLAGS = "-O2";
-				ZERO_LINK = NO;
-			};
-			name = Deployment;
-		};
-/* End PBXBuildStyle section */
-
 /* Begin PBXFileReference section */
 		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
@@ -458,21 +432,6 @@
 			);
 			buildRules = (
 			);
-			buildSettings = {
-				HEADER_SEARCH_PATHS = /sw/include;
-				LIBRARY_SEARCH_PATHS = /Users/kyle/Wcalc;
-				OTHER_REZFLAGS = "";
-				PREBINDING = NO;
-				PRODUCT_NAME = wcalc;
-				REZ_EXECUTABLE = YES;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wall",
-					"-Wunused",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-			};
 			dependencies = (
 			);
 			name = wcalc;
@@ -491,29 +450,6 @@
 			);
 			buildRules = (
 			);
-			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = "";
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					GUI,
-					STDC_HEADERS,
-				);
-				HEADER_SEARCH_PATHS = "";
-				LIBRARY_SEARCH_PATHS = "";
-				OTHER_CFLAGS = (
-					"-Wall",
-					"-Wunused",
-				);
-				OTHER_LDFLAGS = "-ll";
-				PRODUCT_NAME = Wcalc;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-				WRAPPER_EXTENSION = app;
-			};
 			dependencies = (
 			);
 			name = Wcalc.app;
@@ -527,12 +463,6 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = 27B38FA40859DCBE00C2FE3C /* Build configuration list for PBXProject "Wcalc" */;
-			buildSettings = {
-			};
-			buildStyles = (
-				4A9504CCFFE6A4B311CA0CBA /* Development */,
-				4A9504CDFFE6A4B311CA0CBA /* Deployment */,
-			);
 			hasScannedForEncodings = 1;
 			mainGroup = 29B97314FDCFA39411CA2CEA /* Wcalc */;
 			projectDirPath = "";
@@ -773,6 +703,7 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 2.2.1;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				HEADER_SEARCH_PATHS = "-I/Users/kyle/Wcalc/";
 				MACOSX_DEPLOYMENT_TARGET = "";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -907,6 +838,7 @@
 			buildSettings = {
 				CURRENT_PROJECT_VERSION = 2.2;
 				GCC_OPTIMIZATION_LEVEL = 2;
+				HEADER_SEARCH_PATHS = "-I/Users/kyle/Wcalc/";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Deployment;
@@ -968,6 +900,7 @@
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 2.0;
+				HEADER_SEARCH_PATHS = "-I/Users/kyle/Wcalc/";
 			};
 			name = "Deployment debug";
 		};
