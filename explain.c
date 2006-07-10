@@ -123,6 +123,8 @@ void explain_command(char *str)
     } else if (!strcmp(str, "explain")) {
 	printf
 	    ("Gives you information about commands, variables, constants and functions.\n");
+    } else if (!strcmp(str, "cmod")) {
+	printf("Changes how the modulus operator (%%) behaves with negative numbers.\n The default is to behave like the C programming language modulus, the other is slightly more flexible. For example, with the default setting:\n\n\t-340 %% 60 == -40; 340 %% -60 == 40; -340 %% -60 == -40\n\nWhen this setting is toggled, it behaves like this:\n\n\t-340 %% 60 == -40; 340 %% -60 == -20; -340 %% -60 == 20\n");
     } else {
 	printf("Undefined command.\n");
     }
