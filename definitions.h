@@ -11,7 +11,7 @@
 #define WCALC_DEFINITIONS
 
 #ifndef HAVE_CONFIG_H
-#define VERSION "2.2.1"
+#define VERSION "2.2.2"
 #endif
 
 #define W_EXTRA 5
