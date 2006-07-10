@@ -17,6 +17,9 @@ char *strchr (), *strrchr ();
 # include <limits.h> /* MPFR uses ULONG_MAX on some systems */
 #endif
 
+#include <gmp.h>
+#include <mpfr.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
@@ -61,7 +64,7 @@ struct conv_req conver;
 }
 
 %token DEC_CMD OCT_CMD HEX_CMD BIN_CMD GUARD_CMD DISPLAY_PREFS_CMD
-%token RADIAN_CMD REMEMBER_CMD LISTVAR_CMD STORE_CMD
+%token RADIAN_CMD REMEMBER_CMD LISTVAR_CMD STORE_CMD CMOD_CMD
 %token PRINT_HELP_CMD PREFIX_CMD INT_CMD VERBOSE_CMD DELIM_CMD
 %token <integer> ENG_CMD HLIMIT_CMD ROUNDING_INDICATION_CMD
 %token <integer> PRECISION_CMD BITS_CMD BASE_CMD
@@ -244,6 +247,7 @@ command : HEX_CMD {
 		}
 		printf("                    Verbose: %s\n",conf.verbose?"yes":"no");
 		printf("         Display Delimiters: %s\n",conf.print_commas?"yes":"no");
+		printf("            Modulo Operator: %s\n",conf.c_style_mod?"C-style":"not C-style");
 	}
 	$$ = nothing;
 }
@@ -421,6 +425,13 @@ command : HEX_CMD {
 		report_error("Failure!");
 	}
 	free($2);
+}
+| CMOD_CMD
+{
+	$$ = nothing;
+	conf.c_style_mod = ! conf.c_style_mod;
+	if (standard_output)
+		printf("The mod (%%) operation will %sbehave like it does in the C programming language.\n",conf.c_style_mod?"":"not ");
 }
 ;
 

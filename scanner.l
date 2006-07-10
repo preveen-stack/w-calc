@@ -153,6 +153,7 @@ SPACE		[ ]
 \\verbose               { return(VERBOSE_CMD); }
 \\explain{SPACE}.*	{ explain(yytext+9); }
 \\store			{ return(STORE_CMD); }
+\\cmod			{ return(CMOD_CMD); }
 
 %{ /* These are comments */
 %}
