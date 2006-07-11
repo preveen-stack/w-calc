@@ -395,7 +395,7 @@ static pthread_mutex_t displayLock;
 	mpfr_init_set_ui(last_answer, 0, GMP_RNDN);
 	Dprintf("last answer cleared\n");
 	pthread_mutex_init(&displayLock,NULL);
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(quit:) name:NSWindowWillCloseNotification object:inspectorWindow];
+	[[NSNotificationCenter defaultCenter] addObserver:mainWindow selector:@selector(quit:) name:NSWindowWillCloseNotification object:inspectorWindow];
 }
 
 - (void)openBDrawer: (id) sender
