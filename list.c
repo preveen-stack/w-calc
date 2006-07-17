@@ -432,7 +432,13 @@ void removeFromList(List list, void * item)
     }
     pl = list->head;
     if (pl->payload == item) {
-	list->head = list->head->next;
+	if (list->head == list->tail) {
+	    list->head = list->tail = NULL;
+	    list->len = 0;
+	} else {
+	    list->len --;
+	    list->head = list->head->next;
+	}
 	poolReturn(pl);
     } else {
 	while (pl->next && pl->next != list->tail) {
