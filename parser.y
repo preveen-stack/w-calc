@@ -370,10 +370,13 @@ command : HEX_CMD {
 	$$ = nothing;
 }
 | BITS_CMD {
+	char err[200];
 	if ($1 < MPFR_PREC_MIN) {
-		report_error("Number too small.");
+		snprintf(err, 100, "Minimum precision is %lu.\n", (unsigned long)MPFR_PREC_MIN);
+		report_error(err);
 	} else if ($1 > MPFR_PREC_MAX) {
-		report_error("Number too large.");
+		snprintf(err, 100, "Maximum precision is %lu.\n", (unsigned long)MPFR_PREC_MAX);
+		report_error(err);
 	} else {
 		mpfr_set_default_prec($1);
 	}
@@ -415,7 +418,7 @@ command : HEX_CMD {
 		str = num_to_str_complex(last_answer, $1, conf.engineering, -1, conf.print_prefixes, &junk);
 		printf("base %i: %s\n",$1,str);
 	} else {
-		report_error("Number too large.");
+		report_error("Base must be greater than one and less than 37.");
 	}
 	$$ = nothing;
 }
