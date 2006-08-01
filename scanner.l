@@ -76,13 +76,16 @@ SPACE		[ ]
 \\dsep.                 { YYLVALAC->character = yytext[5]; return(DSEP_CMD); }
 \\e(ng(ineering)?)?{DIGIT}* { char * foo = yytext;
     while (*foo && ! isdigit((int)(*foo))) ++foo;
-    if (*foo != 0) YYLVALAC->integer = atoi(foo);
+    if (*foo != 0) YYLVALAC->integer = strtol(foo, NULL, 0);
     else YYLVALAC->integer = -1;
     return(ENG_CMD);}
 \\cons(ervative)?       { return(GUARD_CMD); }
 \\h(ex(adecimal)?)?     { return(HEX_CMD); }
 \\help                  { return(PRINT_HELP_CMD); }
-\\hlimit{DIGIT}+        { YYLVALAC->integer = atoi(yytext+7); return(HLIMIT_CMD); }
+\\hlimit{SPACE}*{DIGIT}+        {
+	YYLVALAC->integer = strtol(yytext+7, NULL, 0);
+	return(HLIMIT_CMD);
+}
 \\ints?                 { return(INT_CMD); }
 \\del(im(iters)?)?	{ return(DELIM_CMD); }
 \\x                     { return(HEX_CMD); }
@@ -102,7 +105,10 @@ SPACE		[ ]
     YYLVALAC->variable = returnme;
     Dprintf("filename: %s\n",returnme);
     return(OPEN_CMD); }
-\\p[-]?{DIGIT}+         { YYLVALAC->integer = atoi(yytext+2); return(PRECISION_CMD);}
+\\p{SPACE}*(({DIGIT}+)|(-1))         {
+	YYLVALAC->integer = strtol(yytext+2, NULL, 0);
+	return(PRECISION_CMD);
+}
 \\pre(fix(es)?)?        { return(PREFIX_CMD); }
 \\pref(s|erences)?      { return(DISPLAY_PREFS_CMD); }
 \\r(ad(ians)?)?         { return(RADIAN_CMD); }
@@ -115,7 +121,10 @@ SPACE		[ ]
 \\rou(nd(ing)?)?        { YYLVALAC->integer = -1;
                           return(ROUNDING_INDICATION_CMD); }
 \\re(member(_errors)?)? { return(REMEMBER_CMD); }
-\\bits{DIGIT}+		{ YYLVALAC->integer = atoi(yytext+5); return(BITS_CMD); }
+\\bits{SPACE}*{DIGIT}+		{
+	YYLVALAC->integer = strtol(yytext+5, NULL, 0);
+	return(BITS_CMD);
+}
 \\save[ ].*                {
     char * curs = yytext+5, *returnme;
     while (curs && *curs && *curs == ' ')
@@ -152,7 +161,10 @@ SPACE		[ ]
     YYLVALAC->conver.u2 = strdup(unittwo);
     return(CONVERT_CMD);
 }
-\\base{DIGIT}+          { YYLVALAC->integer = atoi(yytext+5); return(BASE_CMD); }
+\\base{SPACE}*{DIGIT}+          {
+	YYLVALAC->integer = strtol(yytext+5, NULL, 0);
+	return(BASE_CMD);
+}
 \\verbose               { return(VERBOSE_CMD); }
 \\explain{SPACE}.*	{ explain(yytext+9); }
 \\store			{ return(STORE_CMD); }
