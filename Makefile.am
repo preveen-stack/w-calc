@@ -12,7 +12,6 @@ wcalc_SOURCES = calculator.h variables.h string_manip.h help.h parser.y \
 		isfunc.h isfunc.c \
 		add_commas.h add_commas.c \
 		evalvar.h evalvar.c
-AM_CFLAGS = -Wall
 wcalc_LDADD = @LEXLIB@
 man_MANS = wcalc.1
 clean-local:
