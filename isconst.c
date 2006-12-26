@@ -3,7 +3,7 @@
 #include "memwatch.h"
 #endif
 
-static char *consts[] = {
+const char *consts[] = {
     "e","pi","PI","pI","Pi","random","irandom","Na","NA",
     "k","Cc","ec","R","G","g","Me","Mp","Mn","Md","u",
     "amu","c","h","mu0","muzero","muZERO","epsilonzero",

@@ -3,7 +3,7 @@
 #include "memwatch.h"
 #endif
 
-static char *funcs[] = { "sin", "cos", "tan", "cot",
+const char *funcs[] = { "sin", "cos", "tan", "cot",
     "asin", "acos", "atan", "acot",
     "arcsin", "arccos", "arctan", "arccot",
     "sinh", "cosh", "tanh", "coth",
