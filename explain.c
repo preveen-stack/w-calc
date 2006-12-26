@@ -25,6 +25,7 @@ void explain_function(char *);
 void explain(char *str)
 {				       /*{{{ */
     if (!str || !*str) {
+	printf("Nothing to explain.\n");
 	return;
     }
     if (!strcmp(str, "q")) {
