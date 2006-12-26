@@ -73,17 +73,28 @@ SPACE		[ ]
 
 \\b(in(ary)?)?		{ return(BIN_CMD); }
 \\d(ec(imal)?)?		{ return(DEC_CMD); }
-\\dsep.                 { YYLVALAC->character = yytext[5]; return(DSEP_CMD); }
-\\e(ng(ineering)?)?{DIGIT}* { char * foo = yytext;
-    while (*foo && ! isdigit((int)(*foo))) ++foo;
-    if (*foo != 0) YYLVALAC->integer = strtol(foo, NULL, 0);
+\\dsep{WHITESPACE}*.     {
+	int i = 5;
+	while (isspace(yytext[i])) i++;
+	if (yytext[i] == 0) i--;
+	YYLVALAC->character = yytext[i];
+	return(DSEP_CMD);
+}
+\\e(ng(ineering)?)?{WHITESPACE}*{DIGIT}* {
+	int i = 2;
+    while (! isdigit((int)(yytext[i]))) ++i;
+    if (yytext[i] != 0) YYLVALAC->integer = strtoul(yytext+i, NULL, 0);
     else YYLVALAC->integer = -1;
-    return(ENG_CMD);}
+    return(ENG_CMD);
+}
 \\cons(ervative)?       { return(GUARD_CMD); }
 \\h(ex(adecimal)?)?     { return(HEX_CMD); }
 \\help                  { return(PRINT_HELP_CMD); }
-\\hlimit{SPACE}*{DIGIT}+        {
-	YYLVALAC->integer = strtol(yytext+7, NULL, 0);
+\\hlimit{WHITESPACE}*{DIGIT}+ {
+	int i = 7;
+	while (isspace(yytext[i])) ++i;
+	if (yytext[i] != 0) YYLVALAC->integer = strtoul(yytext+i, NULL, 0);
+	else YYLVALAC->integer = 0;
 	return(HLIMIT_CMD);
 }
 \\ints?                 { return(INT_CMD); }
@@ -91,22 +102,25 @@ SPACE		[ ]
 \\x                     { return(HEX_CMD); }
 \\li(st(vars)?)?        { return(LISTVAR_CMD); }
 \\o(ct(al)?)?           { return(OCT_CMD); }
-\\open[ ].*             {
-    char * curs = yytext+5, *returnme;
+\\open{WHITESPACE}+.*        {
+	int i = 5;
+    char *returnme;
     Dprintf("open\n");
-    while (curs && *curs && *curs == ' ')
-        curs++;
-    returnme = strdup(curs);
-    curs = returnme+(int)strlen(returnme)-1;
-    while (curs && *curs && *curs == ' ') {
-        *curs = 0;
-        curs--;
+    while (isspace(yytext[i])) ++i;
+    returnme = strdup(yytext + i);
+	/* now trim trailing whitespace */
+	i = (int)strlen(returnme) - 1;
+    while (isspace(returnme[i])) {
+        returnme[i] = 0;
+        i--;
     }
     YYLVALAC->variable = returnme;
     Dprintf("filename: %s\n",returnme);
     return(OPEN_CMD); }
-\\p{SPACE}*(({DIGIT}+)|(-1))         {
-	YYLVALAC->integer = strtol(yytext+2, NULL, 0);
+\\p{WHITESPACE}*(({DIGIT}+)|(-1)) {
+	int i = 2;
+	while (isspace(yytext[i])) ++i;
+	YYLVALAC->integer = strtol(yytext+i, NULL, 0);
 	return(PRECISION_CMD);
 }
 \\pre(fix(es)?)?        { return(PREFIX_CMD); }
@@ -121,52 +135,73 @@ SPACE		[ ]
 \\rou(nd(ing)?)?        { YYLVALAC->integer = -1;
                           return(ROUNDING_INDICATION_CMD); }
 \\re(member(_errors)?)? { return(REMEMBER_CMD); }
-\\bits{SPACE}*{DIGIT}+		{
-	YYLVALAC->integer = strtol(yytext+5, NULL, 0);
+\\bits{WHITESPACE}*{DIGIT}+ {
+	int i = 5;
+	while (isspace(yytext[i])) ++i;
+	YYLVALAC->integer = strtoul(yytext+i, NULL, 0);
 	return(BITS_CMD);
 }
-\\save[ ].*                {
-    char * curs = yytext+5, *returnme;
-    while (curs && *curs && *curs == ' ')
-        curs++;
-    returnme = strdup(curs);
-    curs = returnme+(int)strlen(returnme)-1;
-    while (curs && *curs && *curs == ' ') {
-        *curs = 0;
-        curs--;
+\\save{WHITESPACE}.*         {
+	int i = 5;
+    char *returnme;
+	while (isspace(yytext[i])) ++i;
+    returnme = strdup(yytext + i);
+	/* now trim trailing whitespace */
+	i = (int)strlen(returnme) - 1;
+    while (isspace(returnme[i])) {
+        returnme[i] = 0;
+        i--;
     }
     YYLVALAC->variable = returnme;
     return(SAVE_CMD); }
-\\tsep.                 { YYLVALAC->character = yytext[5]; return(TSEP_CMD); }
+\\tsep{WHITESPACE}*.       {
+	int i = 5;
+	while (isspace(yytext[i])) ++i;
+	if (yytext[i] == 0) i--;
+	YYLVALAC->character = yytext[i];
+	return(TSEP_CMD);
+}
 \?                      { return(PRINT_HELP_CMD); }
 [Hh][Ee][Ll][Pp]        { return(PRINT_HELP_CMD); }
-\\c(onv(ert)?)?{SPACE}+{UNITCHRS}+{SPACE}+to{SPACE}+{UNITCHRS}+ {
-    char *unitone, *unittwo;
-    unitone = strchr(yytext,' ')+1;
-    unittwo = strchr(unitone,' ');
-    while (*unittwo == ' ') { *unittwo++ = 0; /* space */ }
-    *unittwo++ = 0; /* t */
-    *unittwo++ = 0; /* o */
-    while (*unittwo == ' ') { *unittwo++ = 0; /* space */ }
+\\c(onv(ert)?)?{WHITESPACE}+{UNITCHRS}+({WHITESPACE}+to)?{WHITESPACE}+{UNITCHRS}+ {
+    char *unitone;
+	int i = 2;
+	/* find the first space */
+	while (! isspace(yytext[i])) ++i;
+	/* find the end of that space */
+	while (isspace(yytext[i])) ++i;
+    unitone = yytext + i;
+	/* skip the unit */
+	while (! isspace(yytext[i])) ++i;
+	yytext[i++] = 0;
+	/* onward to the word "to" */
+	while (isspace(yytext[i])) ++i;
+	if (yytext[i] == 't' && yytext[i+1] == 'o' && isspace(yytext[i+2])) {
+		i += 3; /* to */
+	}
+	/* seek the next unit */
+	while (isspace(yytext[i])) ++i;
     YYLVALAC->conver.u1 = strdup(unitone);
-    YYLVALAC->conver.u2 = strdup(unittwo);
+    YYLVALAC->conver.u2 = strdup(yytext+i);
     return(CONVERT_CMD);
 }
-\\c(onv(ert)?)?{SPACE}+{UNITCHRS}+{SPACE}+{UNITCHRS}+ {
-    char *unitone, *unittwo;
-    unitone = strchr(yytext,' ')+1;
-    unittwo = strchr(unitone,' ');
-    while (*unittwo == ' ') { *unittwo++ = 0; /* space */ }
-    YYLVALAC->conver.u1 = strdup(unitone);
-    YYLVALAC->conver.u2 = strdup(unittwo);
-    return(CONVERT_CMD);
-}
-\\base{SPACE}*{DIGIT}+          {
-	YYLVALAC->integer = strtol(yytext+5, NULL, 0);
+\\base{WHITESPACE}*{DIGIT}+  {
+	int i = 5;
+	while (isspace(yytext[i])) ++i;
+	YYLVALAC->integer = strtoul(yytext + i, NULL, 0);
 	return(BASE_CMD);
 }
 \\verbose               { return(VERBOSE_CMD); }
-\\explain{SPACE}.*	{ explain(yytext+9); }
+\\explain{WHITESPACE}*.*	{
+	int i = 9, j;
+	while (isspace(yytext[i])) ++i;
+	j = strlen(yytext+i);
+	while (isspace(yytext[j])) {
+		yytext[j] = 0;
+		j--;
+	}
+	explain(yytext+i);
+}
 \\store			{ return(STORE_CMD); }
 \\cmod			{ return(CMOD_CMD); }
 
