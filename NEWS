@@ -1,3 +1,25 @@
+Dec 26 2006 - Kyle Wheeler
+ - Added tab-completion (CLI)
+--- Version 2.2.2 ---
+Jul 09 2006 - Kyle Wheeler
+ - Added live precision toggle (GUI)
+ - Added modulus style preferences (BOTH)
+ - Improved preferences versioning (GUI)
+ - Eliminated negative zeros (BOTH)
+ - Improved commandline help (CLI)
+ - Plugged several small memory leaks (BOTH)
+ - Put a mutex around the precision slider update (GUI)
+Apr 21 2006 - Kyle Wheeler
+ - Better readline history detection (CLI)
+Mar 20 2006 - Kyle Wheeler
+ - Made modulus operator (%) efficient (BOTH)
+Mar 09 2006 - Kyle Wheeler
+ - Improved exponent handling for hex numbers (BOTH)
+ - Fixed the negative exponent bug (BOTH)
+Mar 02 2006 - Kyle Wheeler
+ - Improved several UI inconsistencies (GUI)
+Mar 01 2006 - Kyle Wheeler
+ - Added ability to copy from history/variable list (GUI)
 --- Version 2.2.1 ---
 Mar 01 2006 - Kyle Wheeler
  - Fixed crash if you open the Persistent Variables window and immediately close it (GUI)
