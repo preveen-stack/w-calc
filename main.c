@@ -131,7 +131,8 @@ char ** wcalc_completion(const char *text, int start, int end)
 
     //printf("\ncompleting: %s\n", text);
     if ('\\' == rl_line_buffer[0]) {
-	if (NULL == strchr(rl_line_buffer, ' ') && NULL == strchr(rl_line_buffer, '\t')) {
+	if (NULL == strchr(rl_line_buffer, ' ') &&
+	    NULL == strchr(rl_line_buffer, '\t')) {
 	    COMPLETE(qcommands);
 	} else if (strncmp("\\explain", rl_line_buffer, 8) == 0) {
 	    int i = 8;
@@ -141,14 +142,20 @@ char ** wcalc_completion(const char *text, int start, int end)
 		COMPLETE(funcs);
 		COMPLETE(qcommands);
 	    }
-	} else if (strncmp("\\open", rl_line_buffer, 5) == 0 || strncmp("\\save", rl_line_buffer, 5) == 0) {
+	} else if (strncmp("\\open", rl_line_buffer, 5) == 0 ||
+		   strncmp("\\save", rl_line_buffer, 5) == 0) {
 	    int i = 5;
 	    while (isspace(rl_line_buffer[i])) ++i;
 	    if (i == start) {
 		retvals = rl_completion_matches(text, rl_filename_completion_function);
 		return retvals;
 	    }
-	} else if ((strncmp("\\rou", rl_line_buffer, 4) == 0 && isspace(rl_line_buffer[4])) || (strncmp("\\round", rl_line_buffer, 6) == 0 && isspace(rl_line_buffer[6])) || (strncmp("\\rounding", rl_line_buffer, 9) == 0 && isspace(rl_line_buffer[9]))) {
+	} else if ((strncmp("\\rou", rl_line_buffer, 4) == 0 &&
+		    isspace(rl_line_buffer[4])) ||
+		   (strncmp("\\round", rl_line_buffer, 6) == 0 &&
+		    isspace(rl_line_buffer[6])) ||
+		   (strncmp("\\rounding", rl_line_buffer, 9) == 0 &&
+		    isspace(rl_line_buffer[9]))) {
 	    int i = 4;
 	    while (! isspace(rl_line_buffer[i])) ++i;
 	    while (isspace(rl_line_buffer[i])) ++i;
@@ -156,7 +163,12 @@ char ** wcalc_completion(const char *text, int start, int end)
 		retvals = rl_completion_matches(text, tc_rounding);
 		return retvals;
 	    }
-	} else if ((strncmp("\\c", rl_line_buffer, 2) == 0 && isspace(rl_line_buffer[2])) || (strncmp("\\conv", rl_line_buffer, 5) == 0 && isspace(rl_line_buffer[5])) || (strncmp("\\convert", rl_line_buffer, 8) == 0 && isspace(rl_line_buffer[8]))) {
+	} else if ((strncmp("\\c", rl_line_buffer, 2) == 0 &&
+		    isspace(rl_line_buffer[2])) ||
+		   (strncmp("\\conv", rl_line_buffer, 5) == 0 &&
+		    isspace(rl_line_buffer[5])) ||
+		   (strncmp("\\convert", rl_line_buffer, 8) == 0 &&
+		    isspace(rl_line_buffer[8]))) {
 	    int i = 2;
 	    extern const struct conversion lengths[], areas[], volumes[], masses[], speeds[], powers[], forces[], accelerations[];
 	    extern const struct conversion * conversions[];
@@ -188,7 +200,9 @@ char ** wcalc_completion(const char *text, int start, int end)
 			for (unit = 0; conversions[unit_cat][unit].name; unit++) {
 			    COMPLETE(conversions[unit_cat][unit].aka);
 			}
-		    } else if (strncmp(rl_line_buffer+i,"to",2) == 0 && isspace(rl_line_buffer[i+2])) {
+			addToList(&tc_options, "to");
+		    } else if (strncmp(rl_line_buffer+i,"to",2) == 0 &&
+			       isspace(rl_line_buffer[i+2])) {
 			i += 2;
 			while (isspace(rl_line_buffer[i])) ++i;
 			if (i == start) {
