@@ -715,6 +715,8 @@ static int read_prefs(char *filename)
 	    conf.print_prefixes = TRUEFALSE;
 	else if (!strcmp(key, "save_errors"))
 	    conf.remember_errors = TRUEFALSE;
+	else if (!strcmp(key, "remember_errors"))
+	    conf.remember_errors = TRUEFALSE;
 	else if (!strcmp(key, "precision_guard"))
 	    conf.precision_guard = TRUEFALSE;
 	else if (!strcmp(key, "print_integers"))
