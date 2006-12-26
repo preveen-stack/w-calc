@@ -238,6 +238,14 @@ const struct conversion accelerations[] = {
     {NULL,NULL,{NULL}}
 };
 
+const struct conversion temperatures[] = {
+    {"", "Kelvin", {"kelvin", "Kelvin", "K", NULL}},
+    {"", "Celsius", {"celsius", "Celsius", "C", NULL}},
+    {"", "Rankine", {"rankine", "Rankine", NULL}},
+    {"", "Farenheit", {"farenheit", "Farenheit", "F", NULL}},
+    {"", "Reaumur", {"reaumur", "Reaumur", "R", NULL}},
+    {NULL,NULL,{NULL}}
+};
 
 char * from_temperatures[] = {
     "[%1.15f]",                     // kelvin
@@ -264,10 +272,34 @@ const struct conversion * conversions[] = {
     powers,
     forces,
     accelerations,
+    temperatures,
     NULL
 };
 
 #define CONVERS(x) (x>7)?accelerations:((x>6)?forces:((x>5)?powers:((x>4)?speeds:((x>3)?masses:((x>2)?volumes:((x>1)?areas:lengths))))))
+
+/* returns the category number of the unit */
+int identify_unit(char * unit)
+{
+    size_t cat_num;
+    int u = -1;
+
+    for (cat_num = 0; conversions[cat_num] != NULL; cat_num++) {
+        size_t unit_num;
+        const struct conversion * category = conversions[cat_num];
+
+        for (unit_num = 0; category[unit_num].name != NULL; unit_num++) {
+            size_t abbrev_num;
+
+            for (abbrev_num = 0; category[unit_num].aka[abbrev_num] != NULL; abbrev_num++) {
+                if (!strcmp(category[unit_num].aka[abbrev_num], unit)) {
+                    return cat_num;
+                }
+            }
+        }
+    }
+    return -1;
+}
 
 int identify_units(char * unit1, char * unit2)
 {

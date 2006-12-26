@@ -10,6 +10,7 @@ wcalc_SOURCES = calculator.h variables.h string_manip.h help.h parser.y \
 		extract_vars.h extract_vars.c \
 		isconst.h isconst.c \
 		isfunc.h isfunc.c \
+		iscmd.h iscmd.c \
 		add_commas.h add_commas.c \
 		evalvar.h evalvar.c
 wcalc_LDADD = @LEXLIB@

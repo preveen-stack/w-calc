@@ -14,6 +14,7 @@
 
 void uber_conversion(mpfr_t output, int utype, int fromunit, int tounit,
 		     mpfr_t value);
+int identify_unit(char *unit);
 int identify_units(char *unit1, char *unit2);
 int unit_id(int utype, char *unit);
 
@@ -71,6 +72,6 @@ struct conv_req
 #define RANKINE		2
 #define FARENHEIT	3
 #define REAUMUR		4
-extern const struct conversion *conversions[MAX_TYPE + 1];
+extern const struct conversion *conversions[MAX_TYPE + 2];
 
 #endif

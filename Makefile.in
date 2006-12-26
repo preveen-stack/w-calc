@@ -90,10 +90,10 @@ wcalc_SOURCES = calculator.h variables.h string_manip.h help.h parser.y \
 		extract_vars.h extract_vars.c \
 		isconst.h isconst.c \
 		isfunc.h isfunc.c \
+		iscmd.h iscmd.c \
 		add_commas.h add_commas.c \
 		evalvar.h evalvar.c
 
-AM_CFLAGS = -Wall
 wcalc_LDADD = @LEXLIB@
 man_MANS = wcalc.1
 subdir = .
@@ -109,8 +109,8 @@ am_wcalc_OBJECTS = parser.$(OBJEXT) scanner.$(OBJEXT) help.$(OBJEXT) \
 	historyManager.$(OBJEXT) files.$(OBJEXT) variables.$(OBJEXT) \
 	conversion.$(OBJEXT) main.$(OBJEXT) number_formatting.$(OBJEXT) \
 	explain.$(OBJEXT) list.$(OBJEXT) extract_vars.$(OBJEXT) \
-	isconst.$(OBJEXT) isfunc.$(OBJEXT) add_commas.$(OBJEXT) \
-	evalvar.$(OBJEXT)
+	isconst.$(OBJEXT) isfunc.$(OBJEXT) iscmd.$(OBJEXT) \
+	add_commas.$(OBJEXT) evalvar.$(OBJEXT)
 wcalc_OBJECTS = $(am_wcalc_OBJECTS)
 wcalc_DEPENDENCIES =
 wcalc_LDFLAGS =
@@ -127,8 +127,9 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/evalvar.Po ./$(DEPDIR)/explain.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/extract_vars.Po ./$(DEPDIR)/files.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/help.Po ./$(DEPDIR)/historyManager.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/isconst.Po ./$(DEPDIR)/isfunc.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/list.Po ./$(DEPDIR)/main.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/iscmd.Po ./$(DEPDIR)/isconst.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/isfunc.Po ./$(DEPDIR)/list.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/main.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/number_formatting.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/parser.Po ./$(DEPDIR)/scanner.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/string_manip.Po \
@@ -231,6 +232,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/files.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/help.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/historyManager.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/iscmd.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/isconst.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/isfunc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/list.Po@am__quote@
