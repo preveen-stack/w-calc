@@ -70,21 +70,23 @@ static int read_preload(char *filename);
 extern int yyparse(void);
 extern int yy_scan_string(const char *);
 
+#ifdef HAVE_LIBREADLINE
 static List tc_options = NULL;
 
-char * tc_generator(const char *text, int state)
-{
-    char * ret = getHeadOfList(tc_options);
+char *tc_generator(const char *text, int state)
+{				       /*{{{ */
+    char *ret = getHeadOfList(tc_options);
+
     if (ret)
 	return strdup(ret);
     else
 	return NULL;
-}
+}				       /*}}} */
 
-char * tc_rounding(const char *text, int state)
-{
+char *tc_rounding(const char *text, int state)
+{				       /*{{{ */
     static unsigned int i = 0;
-    char * rounding[] = {"none", "simple", "sig_fig", 0};
+    char *rounding[] = { "none", "simple", "sig_fig", 0 };
     if (state == 0) {
 	i = 0;
     }
@@ -95,7 +97,7 @@ char * tc_rounding(const char *text, int state)
 	i++;
     }
     return NULL;
-}
+}				       /*}}} */
 
 #define COMPLETE(strs) do { \
     compareindex = 0; \
@@ -118,16 +120,16 @@ char * tc_rounding(const char *text, int state)
     } \
 } while (0)
 
-char ** wcalc_completion(const char *text, int start, int end)
-{/*{{{*/
+char **wcalc_completion(const char *text, int start, int end)
+{				       /*{{{ */
     extern char *commands[];
     extern char *qcommands[];
     extern char *consts[];
     extern char *funcs[];
     int curs = 0;
-    char * comparecurs = consts[0];
+    char *comparecurs = consts[0];
     int compareindex = 0;
-    char ** retvals = NULL;
+    char **retvals = NULL;
 
     //printf("\ncompleting: %s\n", text);
     if ('\\' == rl_line_buffer[0]) {
@@ -136,7 +138,9 @@ char ** wcalc_completion(const char *text, int start, int end)
 	    COMPLETE(qcommands);
 	} else if (strncmp("\\explain", rl_line_buffer, 8) == 0) {
 	    int i = 8;
-	    while (isspace(rl_line_buffer[i])) ++i;
+
+	    while (isspace(rl_line_buffer[i]))
+		++i;
 	    if (i == start) {
 		COMPLETE(consts);
 		COMPLETE(funcs);
@@ -145,38 +149,52 @@ char ** wcalc_completion(const char *text, int start, int end)
 	} else if (strncmp("\\open", rl_line_buffer, 5) == 0 ||
 		   strncmp("\\save", rl_line_buffer, 5) == 0) {
 	    int i = 5;
-	    while (isspace(rl_line_buffer[i])) ++i;
+
+	    while (isspace(rl_line_buffer[i]))
+		++i;
 	    if (i == start) {
-		retvals = rl_completion_matches(text, rl_filename_completion_function);
+		retvals =
+		    rl_completion_matches(text,
+					  rl_filename_completion_function);
 		return retvals;
 	    }
-	} else if ((strncmp("\\rou", rl_line_buffer, 4) == 0 &&
-		    isspace(rl_line_buffer[4])) ||
-		   (strncmp("\\round", rl_line_buffer, 6) == 0 &&
-		    isspace(rl_line_buffer[6])) ||
-		   (strncmp("\\rounding", rl_line_buffer, 9) == 0 &&
-		    isspace(rl_line_buffer[9]))) {
+	} else
+	    if ((strncmp("\\rou", rl_line_buffer, 4) == 0 &&
+		 isspace(rl_line_buffer[4])) ||
+		(strncmp("\\round", rl_line_buffer, 6) == 0 &&
+		 isspace(rl_line_buffer[6])) ||
+		(strncmp("\\rounding", rl_line_buffer, 9) == 0 &&
+		 isspace(rl_line_buffer[9]))) {
 	    int i = 4;
-	    while (! isspace(rl_line_buffer[i])) ++i;
-	    while (isspace(rl_line_buffer[i])) ++i;
+
+	    while (!isspace(rl_line_buffer[i]))
+		++i;
+	    while (isspace(rl_line_buffer[i]))
+		++i;
 	    if (i == start) {
 		retvals = rl_completion_matches(text, tc_rounding);
 		return retvals;
 	    }
-	} else if ((strncmp("\\c", rl_line_buffer, 2) == 0 &&
-		    isspace(rl_line_buffer[2])) ||
-		   (strncmp("\\conv", rl_line_buffer, 5) == 0 &&
-		    isspace(rl_line_buffer[5])) ||
-		   (strncmp("\\convert", rl_line_buffer, 8) == 0 &&
-		    isspace(rl_line_buffer[8]))) {
+	} else
+	    if ((strncmp("\\c", rl_line_buffer, 2) == 0 &&
+		 isspace(rl_line_buffer[2])) ||
+		(strncmp("\\conv", rl_line_buffer, 5) == 0 &&
+		 isspace(rl_line_buffer[5])) ||
+		(strncmp("\\convert", rl_line_buffer, 8) == 0 &&
+		 isspace(rl_line_buffer[8]))) {
 	    int i = 2;
-	    extern const struct conversion lengths[], areas[], volumes[], masses[], speeds[], powers[], forces[], accelerations[];
-	    extern const struct conversion * conversions[];
-	    while (! isspace(rl_line_buffer[i])) ++i;
-	    while (isspace(rl_line_buffer[i])) ++i;
+	    extern const struct conversion lengths[], areas[], volumes[],
+		masses[], speeds[], powers[], forces[], accelerations[];
+	    extern const struct conversion *conversions[];
+
+	    while (!isspace(rl_line_buffer[i]))
+		++i;
+	    while (isspace(rl_line_buffer[i]))
+		++i;
 	    if (i == start) {
 		/* complete on ALL units */
 		size_t unit, conversion;
+
 		for (conversion = 0; conversions[conversion]; conversion++) {
 		    for (unit = 0; conversions[conversion][unit].name; unit++) {
 			COMPLETE(conversions[conversion][unit].aka);
@@ -184,31 +202,39 @@ char ** wcalc_completion(const char *text, int start, int end)
 		}
 	    } else {
 		/* seek past the previous unit... */
-		char * unit1 = rl_line_buffer + i;
+		char *unit1 = rl_line_buffer + i;
 		char saved_char;
 		int unit_cat;
-		while(! isspace(rl_line_buffer[i])) ++i;
+
+		while (!isspace(rl_line_buffer[i]))
+		    ++i;
 		saved_char = rl_line_buffer[i];
 		rl_line_buffer[i] = 0;
 		unit_cat = identify_unit(unit1);
 		rl_line_buffer[i] = saved_char;
 		if (unit_cat != -1) {
-		    while (isspace(rl_line_buffer[i])) ++i;
+		    while (isspace(rl_line_buffer[i]))
+			++i;
 		    if (i == start) {
 			size_t unit;
+
 			/* complete on COMPATABLE units */
-			for (unit = 0; conversions[unit_cat][unit].name; unit++) {
+			for (unit = 0; conversions[unit_cat][unit].name;
+			     unit++) {
 			    COMPLETE(conversions[unit_cat][unit].aka);
 			}
 			addToList(&tc_options, "to");
-		    } else if (strncmp(rl_line_buffer+i,"to",2) == 0 &&
-			       isspace(rl_line_buffer[i+2])) {
+		    } else if (strncmp(rl_line_buffer + i, "to", 2) == 0 &&
+			       isspace(rl_line_buffer[i + 2])) {
 			i += 2;
-			while (isspace(rl_line_buffer[i])) ++i;
+			while (isspace(rl_line_buffer[i]))
+			    ++i;
 			if (i == start) {
 			    size_t unit;
+
 			    /* complete on COMPATABLE units */
-			    for (unit = 0; conversions[unit_cat][unit].name; unit++) {
+			    for (unit = 0; conversions[unit_cat][unit].name;
+				 unit++) {
 				COMPLETE(conversions[unit_cat][unit].aka);
 			    }
 			}
@@ -221,14 +247,15 @@ char ** wcalc_completion(const char *text, int start, int end)
 	COMPLETE(consts);
 	COMPLETE(funcs);
     }
-    rl_attempted_completion_over = 1; // do not use standard file completion
+    rl_attempted_completion_over = 1;  // do not use standard file completion
     rl_completion_entry_function = tc_generator;
     retvals = rl_completion_matches(text, tc_generator);
     return retvals;
-}/*}}}*/
+}				       /*}}} */
+#endif
 
 int main(int argc, char *argv[])
-{
+{				       /*{{{ */
     extern int yydebug;
     extern int lines;
 
@@ -545,6 +572,7 @@ int main(int argc, char *argv[])
 			    fprintf(stderr, "\n");
 			free(errstring);
 			errstring = NULL;
+			/*rl_stuff_char('f');*/
 		    }
 		}
 	    }
@@ -619,6 +647,7 @@ int main(int argc, char *argv[])
     cleanupvar();
     if (pretty_answer) {
 	extern char *pa;
+
 	free(pretty_answer);
 	if (pa) {
 	    free(pa);
@@ -628,10 +657,10 @@ int main(int argc, char *argv[])
     mpfr_free_cache();
     lists_cleanup();
     exit(EXIT_SUCCESS);
-}
+}				       /*}}} */
 
 static int read_preload(char *filename)
-{
+{				       /*{{{ */
     struct stat sb;
 
     if (-1 == stat(filename, &sb)) {
@@ -642,10 +671,10 @@ static int read_preload(char *filename)
 	}
     }
     return loadState(filename, 0);
-}
+}				       /*}}} */
 
 static int read_prefs(char *filename)
-{
+{				       /*{{{ */
     int fd = open(filename, O_RDONLY);
     char key[1000], value[100];
     char *curs = key;
@@ -773,4 +802,4 @@ static int read_prefs(char *filename)
 	memset(value, 0, sizeof(value));
     }
     return 0;
-}
+}				       /*}}} */
