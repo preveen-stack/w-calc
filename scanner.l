@@ -588,13 +588,13 @@ zeta { return(WZETA); }
     return(NUMBER);
 }
 
-(({DIGIT})|[,.])* {
+(({DIGIT})|[,.])+ {
     /* This is the garbage-number collector */
     /* char errmsg[] = "Confusing number format (%s)\nDecimal Separator: '%c'\nThousands Separator: '%c'"; */
     char errmsg[] = "Confusing number format (%s)";
     char *err;
     int i;
-    unsigned int len = yyleng + (int)strlen(errmsg) - 5;
+    unsigned int len = yyleng + (int)strlen(errmsg);
     err = (char *)calloc(sizeof(char),len);
     for (i=0;i<yyleng;++i) {
         if (yytext[i] == ',')
