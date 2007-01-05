@@ -107,7 +107,7 @@ struct conv_req conver;
 %left WNOT WBNOT WNEG
 %right WPOW
 
-%expect 1614
+%expect 1560
 
 %% 	/* beginning of the parsing rules	*/
 
@@ -487,13 +487,13 @@ assignment : ASSIGNMENT exp optionalstring
 		free($3);
 	}
 }
-| VARIABLE EQUALS_SIGN STRING optionalstring
+| ASSIGNMENT STRING optionalstring
 {
 	if (compute && ! scanerror) {
 		if (standard_output && !strcmp($1,"q")) {
 			report_error("q cannot be assigned an expression. q is used to exit.");
 		} else {
-			if (putexp($1,$3,$4) == 0) {
+			if (putexp($1,$2,$3) == 0) {
 				if (standard_output) {
 					printf("%s = %s\n", $1, getvar_full($1).exp);
 				}
@@ -506,9 +506,9 @@ assignment : ASSIGNMENT exp optionalstring
 		report_error("Scanner error halts parser.");
 	}
 	free($1);
-	free($3);
-	if ($4 != NULL) {
-		free($4);
+	free($2);
+	if ($3 != NULL) {
+		free($3);
 	}
 }
 | NUMBER EQUALS_SIGN exp optionalstring
@@ -523,22 +523,6 @@ assignment : ASSIGNMENT exp optionalstring
 {
 	report_error("Constants cannot be assigned to other values.");
 	free($3);
-	if ($4 != NULL) {
-		free($4);
-	}
-}
-| func EQUALS_SIGN STRING optionalstring
-{
-	report_error("Functions cannot be assigned to values.");
-	free($3);
-	if ($4 != NULL) {
-		free($4);
-	}
-}
-| func EQUALS_SIGN exp optionalstring
-{
-	report_error("Functions cannot be assigned to values.");
-	mpfr_clear($3);
 	if ($4 != NULL) {
 		free($4);
 	}

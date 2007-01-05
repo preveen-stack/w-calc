@@ -538,7 +538,6 @@ zeta { POS_STR(); return(WZETA); }
 
 '[^']*' {
     char * temp = strdup(yytext+1);
-    //temp[(int)strlen(temp)-1] = 0;
     temp[yyleng-2] = 0;
     YYLVALAC->variable = temp;
 	POS_STR();
@@ -549,9 +548,19 @@ zeta { POS_STR(); return(WZETA); }
 	int i = 0;
 	while (!isspace(yytext[i]) && yytext[i] != '=') i++;
 	yytext[i] = 0;
-	YYLVALAC->variable = strdup(yytext);
+	if (isfunc(yytext)) {
+		report_error("'%s' is a function and functions cannot be reassigned.", yytext);
+		scanerror = 1;
+	} else if (isconst(yytext)) {
+		report_error("'%s' is a pre-defined constant, which cannot be reassigned.", yytext);
+		scanerror = 1;
+	} else {
+		YYLVALAC->variable = strdup(yytext);
+	}
 	POS_STR();
-	return(ASSIGNMENT);
+	if (! scanerror) {
+		return(ASSIGNMENT);
+	}
 }
 
 {LETTER}+({LETTER}|{ACCEPTABLE})* {
@@ -560,9 +569,7 @@ zeta { POS_STR(); return(WZETA); }
 		POS_STR();
 		return(VARIABLE);
 	} else {
-		char err[yyleng+100];
-		snprintf(err,yyleng+100,"Undefined variable: %s",yytext);
-		report_error(err);
+		report_error("Undefined variable: %s", yytext);
 		scanerror = 1;
 		POS_STR();
 	}
@@ -586,6 +593,7 @@ zeta { POS_STR(); return(WZETA); }
 
     if (-1 == retval) {
         report_error("Invalid characters for base 10");
+		scanerror = 1;
     } else {
         unsigned int t = count_digits(yytext);
 	Dprintf("simple decimals digits in %s: %u (%u)\n",yytext,t,sig_figs);
@@ -606,6 +614,7 @@ zeta { POS_STR(); return(WZETA); }
     retval = mpfr_init_set_str(YYLVALAC->number, yytext, DEFAULT_BASE, GMP_RNDN);
     if (-1 == retval) {
         report_error("Invalid characters for base 10");
+		scanerror = 1;
     } else {
         unsigned int t = count_digits(yytext);
 	Dprintf("zero optional decimal digits in %s: %u (%u)\n",yytext,t,sig_figs);
@@ -629,6 +638,7 @@ zeta { POS_STR(); return(WZETA); }
 
     if (-1 == retval) {
         report_error("Invalid characters for base 10");
+		scanerror = 1;
     } else {
         unsigned int t = count_digits(yytext);
 	char * period = strchr(yytext,'.');
@@ -659,6 +669,7 @@ zeta { POS_STR(); return(WZETA); }
 
     if (-1 == retval) {
         report_error("some characters invalid for base 16");
+		scanerror = 1;
     } else {
         unsigned int t = count_digits(yytext); //strlen(yytext+2);
         if (yydebug) {
@@ -675,12 +686,9 @@ zeta { POS_STR(); return(WZETA); }
 0[0-9]*([.][0-9]*)?([eE][+-]?[0-9]+)? {
     /* octal */
     //char err[strlen(yytext)+57];
-    char err[yyleng+57];
-    char *errpat = "Incorrect number format (%s) - expected 0-7 for octal";
     Dprintf("octal\n");
     if (strchr(yytext,'8') || strchr(yytext,'9')) {
-        snprintf(err,yyleng+57,errpat,yytext);
-        report_error(err);
+        report_error("Incorrect number format (%s) - expected 0-7 for octal", yytext);
         scanerror = 1;
 		POS_STR();
     } else {
@@ -688,7 +696,10 @@ zeta { POS_STR(); return(WZETA); }
         unsigned int t;
         int retval;
         retval = mpfr_init_set_str(YYLVALAC->number,yytext,8,GMP_RNDN);
-        if (-1 == retval) report_error(strerror(errno));
+        if (-1 == retval) {
+			report_error(strerror(errno));
+			scanerror = 1;
+		}
         /*sscanf(yytext,"%lo",&value);
         yylval.number = value; */
         t = yyleng-1; //strlen(yytext+1);
@@ -702,14 +713,11 @@ zeta { POS_STR(); return(WZETA); }
 0b[0-9]+([.][0-9]*)?([eE][+-]?[0-9]+)? {
     /* binary */
     extern int yydebug;
-    //char err[strlen(yytext)+57];
-    char err[yyleng+57];
 
     Dprintf("binary\n");
     /* verify the digits */
     if (strchr(yytext,'2') || strchr(yytext,'3') || strchr(yytext,'4') || strchr(yytext,'5') || strchr(yytext,'6') || strchr(yytext,'7') || strchr(yytext,'8') || strchr(yytext,'9')) {
-        snprintf(err,yyleng+57,"Incorrect number format (%s) - expected 0 or 1 for binary",yytext);
-        report_error(err);
+        report_error("Incorrect number format (%s) - expected 0 or 1 for binary", yytext);
         scanerror = 1;
     } else {
         int retval;
@@ -717,6 +725,7 @@ zeta { POS_STR(); return(WZETA); }
         retval = mpfr_init_set_str(YYLVALAC->number,yytext,2,GMP_RNDN);
         if (-1 == retval) {
             report_error("Expected a 0 or 1 for binary.");
+			scanerror = 1;
         } else {
             unsigned int t = count_digits(yytext); //strlen(yytext+2);
             if (yydebug) {
@@ -733,22 +742,16 @@ zeta { POS_STR(); return(WZETA); }
 
 (({DIGIT})|[,.])+ {
     /* This is the garbage-number collector */
-    /* char errmsg[] = "Confusing number format (%s)\nDecimal Separator: '%c'\nThousands Separator: '%c'"; */
-    char errmsg[] = "Confusing number format (%s)";
-    char *err;
     int i;
-    unsigned int len = yyleng + (int)strlen(errmsg);
-    err = (char *)calloc(sizeof(char),len);
     for (i=0;i<yyleng;++i) {
-        if (yytext[i] == ',')
-        yytext[i] = conf.thou_delimiter;
-        else if (yytext[i] == '.')
-        yytext[i] = conf.dec_delimiter;
+        if (yytext[i] == ',') {
+			yytext[i] = conf.thou_delimiter;
+        } else if (yytext[i] == '.') {
+			yytext[i] = conf.dec_delimiter;
+		}
     }
-    snprintf(err,len,errmsg,yytext,conf.dec_delimiter,conf.thou_delimiter);
-    report_error(err);
+    report_error("Confusing number format (%s)", yytext);
     scanerror = 1;
-    free(err);
 	POS_STR();
 }
 
@@ -758,8 +761,7 @@ zeta { POS_STR(); return(WZETA); }
 	char error[50];
     if (*yytext == ',') *yytext = conf.thou_delimiter;
     else if (*yytext == '.') *yytext = conf.dec_delimiter;
-    snprintf(error, 50, "scanner(%i): cannot understand character\n", (unsigned char) (*yytext));
-    report_error(error);
+    report_error("scanner(%i): cannot understand character", (unsigned char) (yytext[0]));
     scanerror = 1;
 	POS_CHAR();
 }

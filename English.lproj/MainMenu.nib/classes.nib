@@ -81,6 +81,7 @@
             }; 
             SUPERCLASS = NSObject; 
         }, 
+        {CLASS = ThrottledSlider; LANGUAGE = ObjC; SUPERCLASS = NSSlider; }, 
         {
             ACTIONS = {clearVariables = id; copyMe = id; delVariable = id; newVariable = id; }; 
             CLASS = VariableList; 
