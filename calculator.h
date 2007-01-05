@@ -101,7 +101,8 @@ enum commands
 { redisplay, nothing };
 
 void parseme(char *);
-void report_error(char *);
+void report_error(char * fmt, ...);
+void display_and_clear_errstring(void);
 void set_prettyanswer(mpfr_t num);
 char *print_this_result(mpfr_t result);
 void uber_function(mpfr_t output, enum functions func, mpfr_t input);

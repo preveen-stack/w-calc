@@ -46,6 +46,12 @@
 #define YYLVALAC (&yylval)
 #endif
 
+int line_is_a_command = 0;
+int column = 0;
+
+#define POS_CHAR() do { column ++; } while(0)
+#define POS_STR() do { column += yyleng; } while (0)
+
 /* Everything up to the funny characters on the next line */
 /* goes directly into the lex.yy.c file */
 %}
@@ -64,20 +70,22 @@ SPACE		[ ]
 /* The rest of this after the '%%' is lex rules */
 %%
 
-{WHITESPACE}+	{ /* Just ignore white space */ }
+{WHITESPACE}+	{ POS_STR(); }
 
 "\n"            { return(EOLN); }
 
 %{ /* These are commands */
 %}
 
-\\b(in(ary)?)?		{ return(BIN_CMD); }
-\\d(ec(imal)?)?		{ return(DEC_CMD); }
+\\b(in(ary)?)?		{ line_is_a_command = 1; POS_STR(); return(BIN_CMD); }
+\\d(ec(imal)?)?		{ line_is_a_command = 1; POS_STR(); return(DEC_CMD); }
 \\dsep{WHITESPACE}*.     {
 	int i = 5;
 	while (isspace(yytext[i])) i++;
 	if (yytext[i] == 0) i--;
 	YYLVALAC->character = yytext[i];
+	line_is_a_command = 1;
+	POS_STR();
 	return(DSEP_CMD);
 }
 \\e(ng(ineering)?)?{WHITESPACE}*{DIGIT}* {
@@ -85,24 +93,28 @@ SPACE		[ ]
     while (! isdigit((int)(yytext[i]))) ++i;
     if (yytext[i] != 0) YYLVALAC->integer = strtoul(yytext+i, NULL, 0);
     else YYLVALAC->integer = -1;
+	line_is_a_command = 1;
+	POS_STR();
     return(ENG_CMD);
 }
-\\cons(ervative)?       { return(GUARD_CMD); }
-\\h(ex(adecimal)?)?     { return(HEX_CMD); }
-\\help                  { return(PRINT_HELP_CMD); }
+\\cons(ervative)?       { line_is_a_command = 1; POS_STR(); return(GUARD_CMD); }
+\\h(ex(adecimal)?)?     { line_is_a_command = 1; POS_STR(); return(HEX_CMD); }
+\\help           { line_is_a_command = 1; POS_STR(); return(PRINT_HELP_CMD); }
 \\hlimit{WHITESPACE}*{DIGIT}+ {
 	int i = 7;
 	while (isspace(yytext[i])) ++i;
 	if (yytext[i] != 0) YYLVALAC->integer = strtoul(yytext+i, NULL, 0);
 	else YYLVALAC->integer = 0;
+	line_is_a_command = 1;
+	POS_STR();
 	return(HLIMIT_CMD);
 }
-\\ints?                 { return(INT_CMD); }
-\\del(im(iters)?)?	{ return(DELIM_CMD); }
-\\x                     { return(HEX_CMD); }
-\\li(st(vars)?)?        { return(LISTVAR_CMD); }
-\\o(ct(al)?)?           { return(OCT_CMD); }
-\\open{WHITESPACE}+.*        {
+\\ints?             { line_is_a_command = 1; POS_STR(); return(INT_CMD); }
+\\del(im(iters)?)?	{ line_is_a_command = 1; POS_STR(); return(DELIM_CMD); }
+\\x                 { line_is_a_command = 1; POS_STR(); return(HEX_CMD); }
+\\li(st(vars)?)?    { line_is_a_command = 1; POS_STR(); return(LISTVAR_CMD); }
+\\o(ct(al)?)?       { line_is_a_command = 1; POS_STR(); return(OCT_CMD); }
+\\open{WHITESPACE}+.*   {
 	int i = 5;
     char *returnme;
     Dprintf("open\n");
@@ -116,32 +128,55 @@ SPACE		[ ]
     }
     YYLVALAC->variable = returnme;
     Dprintf("filename: %s\n",returnme);
-    return(OPEN_CMD); }
+    line_is_a_command = 1;
+	POS_STR();
+	return(OPEN_CMD);
+}
 \\p{WHITESPACE}*(({DIGIT}+)|(-1)) {
 	int i = 2;
 	while (isspace(yytext[i])) ++i;
 	YYLVALAC->integer = strtol(yytext+i, NULL, 0);
+	line_is_a_command = 1;
+	POS_STR();
 	return(PRECISION_CMD);
 }
-\\pre(fix(es)?)?        { return(PREFIX_CMD); }
-\\pref(s|erences)?      { return(DISPLAY_PREFS_CMD); }
-\\r(ad(ians)?)?         { return(RADIAN_CMD); }
-\\rou(nd(ing)?)?{WHITESPACE}+no(ne)? { YYLVALAC->integer = NO_ROUNDING_INDICATION;
-                          return(ROUNDING_INDICATION_CMD); }
-\\rou(nd(ing)?)?{WHITESPACE}+simple { YYLVALAC->integer = SIMPLE_ROUNDING_INDICATION;
-                          return(ROUNDING_INDICATION_CMD); }
-\\rou(nd(ing)?)?{WHITESPACE}+sig_fig { YYLVALAC->integer = SIG_FIG_ROUNDING_INDICATION;
-                          return(ROUNDING_INDICATION_CMD); }
-\\rou(nd(ing)?)?        { YYLVALAC->integer = -1;
-                          return(ROUNDING_INDICATION_CMD); }
-\\re(member(_errors)?)? { return(REMEMBER_CMD); }
+\\pre(fix(es)?)?        { line_is_a_command = 1; POS_STR(); return(PREFIX_CMD); }
+\\pref(s|erences)?		{ line_is_a_command = 1; POS_STR(); return(DISPLAY_PREFS_CMD); }
+\\r(ad(ians)?)?         { line_is_a_command = 1; POS_STR(); return(RADIAN_CMD); }
+\\rou(nd(ing)?)?{WHITESPACE}+no(ne)? {
+	YYLVALAC->integer = NO_ROUNDING_INDICATION;
+	line_is_a_command = 1;
+	POS_STR();
+	return(ROUNDING_INDICATION_CMD);
+}
+\\rou(nd(ing)?)?{WHITESPACE}+simple {
+	YYLVALAC->integer = SIMPLE_ROUNDING_INDICATION;
+	line_is_a_command = 1;
+	POS_STR();
+	return(ROUNDING_INDICATION_CMD);
+}
+\\rou(nd(ing)?)?{WHITESPACE}+sig_fig {
+	YYLVALAC->integer = SIG_FIG_ROUNDING_INDICATION;
+	line_is_a_command = 1;
+	POS_STR();
+	return(ROUNDING_INDICATION_CMD);
+}
+\\rou(nd(ing)?)?        {
+	YYLVALAC->integer = -1;
+	line_is_a_command = 1;
+	POS_STR();
+	return(ROUNDING_INDICATION_CMD);
+}
+\\re(member(_errors)?)?		{ line_is_a_command = 1; POS_STR(); return(REMEMBER_CMD); }
 \\bits{WHITESPACE}*{DIGIT}+ {
 	int i = 5;
 	while (isspace(yytext[i])) ++i;
 	YYLVALAC->integer = strtoul(yytext+i, NULL, 0);
+	line_is_a_command = 1;
+	POS_STR();
 	return(BITS_CMD);
 }
-\\save{WHITESPACE}.*         {
+\\save{WHITESPACE}.*		{
 	int i = 5;
     char *returnme;
 	while (isspace(yytext[i])) ++i;
@@ -153,16 +188,21 @@ SPACE		[ ]
         i--;
     }
     YYLVALAC->variable = returnme;
-    return(SAVE_CMD); }
+	line_is_a_command = 1;
+	POS_STR();
+    return(SAVE_CMD);
+}
 \\tsep{WHITESPACE}*.       {
 	int i = 5;
 	while (isspace(yytext[i])) ++i;
 	if (yytext[i] == 0) i--;
 	YYLVALAC->character = yytext[i];
+	line_is_a_command = 1;
+	POS_STR();
 	return(TSEP_CMD);
 }
-\?                      { return(PRINT_HELP_CMD); }
-[Hh][Ee][Ll][Pp]        { return(PRINT_HELP_CMD); }
+\?                      { line_is_a_command = 1; POS_STR(); return(PRINT_HELP_CMD); }
+[Hh][Ee][Ll][Pp]        { line_is_a_command = 1; POS_STR(); return(PRINT_HELP_CMD); }
 \\c(onv(ert)?)?{WHITESPACE}+{UNITCHRS}+({WHITESPACE}+to)?{WHITESPACE}+{UNITCHRS}+ {
     char *unitone;
 	int i = 2;
@@ -183,15 +223,19 @@ SPACE		[ ]
 	while (isspace(yytext[i])) ++i;
     YYLVALAC->conver.u1 = strdup(unitone);
     YYLVALAC->conver.u2 = strdup(yytext+i);
-    return(CONVERT_CMD);
+    line_is_a_command = 1;
+	POS_STR();
+	return(CONVERT_CMD);
 }
 \\base{WHITESPACE}*{DIGIT}+  {
 	int i = 5;
 	while (isspace(yytext[i])) ++i;
 	YYLVALAC->integer = strtoul(yytext + i, NULL, 0);
+	line_is_a_command = 1;
+	POS_STR();
 	return(BASE_CMD);
 }
-\\verbose               { return(VERBOSE_CMD); }
+\\verbose					{ line_is_a_command = 1; POS_STR(); return(VERBOSE_CMD); }
 \\explain{WHITESPACE}*.*	{
 	int i = 9, j;
 	while (isspace(yytext[i])) ++i;
@@ -201,60 +245,94 @@ SPACE		[ ]
 		j--;
 	}
 	explain(yytext+i);
+	line_is_a_command = 1;
+	POS_STR();
 }
-\\store			{ return(STORE_CMD); }
-\\cmod			{ return(CMOD_CMD); }
+\\store			{ line_is_a_command = 1; POS_STR(); return(STORE_CMD); }
+\\cmod			{ line_is_a_command = 1; POS_STR(); return(CMOD_CMD); }
 
 %{ /* These are comments */
 %}
-\/\*.*\*\/              { }
-\/\/.*                  { }
-\#.*                    { }
+\/\*.*\*\/              { POS_STR(); }
+\/\/.*                  { POS_STR(); }
+\#.*                    { POS_STR(); }
 
 
 %{ /* These are the constants (except random) */
     %}
-(e)			{ mpfr_init_set_str(YYLVALAC->number,W_E,0,GMP_RNDN); return(NUMBER); }
-([pP][iI])|(\317\200)	{ mpfr_init(YYLVALAC->number); mpfr_const_pi(YYLVALAC->number,GMP_RNDN);
-                  return(NUMBER); }
-random			{ seed_random();
-                  mpfr_init(YYLVALAC->number);
-                  while (mpfr_urandomb(YYLVALAC->number,randstate) != 0) ;
-                  mpfr_mul_ui(YYLVALAC->number,YYLVALAC->number,UINT32_MAX,GMP_RNDN);
-                  return(NUMBER); }
-irandom		{ seed_random();
-                  mpfr_init(YYLVALAC->number);
-                  while (mpfr_urandomb(YYLVALAC->number,randstate) != 0) ;
-                  mpfr_mul_ui(YYLVALAC->number,YYLVALAC->number,UINT32_MAX,GMP_RNDN);
-                  mpfr_rint(YYLVALAC->number,YYLVALAC->number,GMP_RNDN);
-                  return(NUMBER); }
-N[aA]	{ mpfr_init_set_str(YYLVALAC->number,W_AVOGADROS_CONSTANT,0,GMP_RNDN);
-                  return(NUMBER); }
-k	{ mpfr_init_set_str(YYLVALAC->number,W_BOLTZMANN_CONSTANT,0,GMP_RNDN);
-                  return(NUMBER); }
+(e)			{
+	mpfr_init_set_str(YYLVALAC->number,W_E,0,GMP_RNDN);
+	POS_STR();
+	return(NUMBER);
+}
+([pP][iI])|(\317\200)	{
+	mpfr_init(YYLVALAC->number);
+	mpfr_const_pi(YYLVALAC->number,GMP_RNDN);
+	POS_STR();
+	return(NUMBER);
+}
+random			{
+	seed_random();
+	mpfr_init(YYLVALAC->number);
+	while (mpfr_urandomb(YYLVALAC->number,randstate) != 0) ;
+	mpfr_mul_ui(YYLVALAC->number,YYLVALAC->number,UINT32_MAX,GMP_RNDN);
+	POS_STR();
+	return(NUMBER);
+}
+irandom		{
+	seed_random();
+	mpfr_init(YYLVALAC->number);
+	while (mpfr_urandomb(YYLVALAC->number,randstate) != 0) ;
+	mpfr_mul_ui(YYLVALAC->number,YYLVALAC->number,UINT32_MAX,GMP_RNDN);
+	mpfr_rint(YYLVALAC->number,YYLVALAC->number,GMP_RNDN);
+	POS_STR();
+	return(NUMBER);
+}
+N[aA]	{
+	mpfr_init_set_str(YYLVALAC->number,W_AVOGADROS_CONSTANT,0,GMP_RNDN);
+	POS_STR();
+	return(NUMBER);
+}
+k	{
+	mpfr_init_set_str(YYLVALAC->number,W_BOLTZMANN_CONSTANT,0,GMP_RNDN);
+	POS_STR();
+	return(NUMBER);
+}
 Cc	{ mpfr_init_set_str(YYLVALAC->number,W_COULOMB_CONSTANT,0,GMP_RNDN);
+	POS_STR();
                   return(NUMBER); }
 ec	{ mpfr_init_set_str(YYLVALAC->number,W_ELEMENTARY_CHARGE,0,GMP_RNDN);
+	POS_STR();
                   return(NUMBER); }
 R	{ mpfr_init_set_str(YYLVALAC->number,W_MOLAR_GAS_CONSTANT,0,GMP_RNDN);
+	POS_STR();
                   return(NUMBER); }
 G	{ mpfr_init_set_str(YYLVALAC->number,W_GRAVITATIONAL_CONSTANT,0,GMP_RNDN);
+	POS_STR();
                   return(NUMBER); }
 g	{ mpfr_init_set_str(YYLVALAC->number,W_GRAVITATIONAL_ACCELLERATION,0,GMP_RNDN);
+	POS_STR();
                   return(NUMBER); }
 Me	{ mpfr_init_set_str(YYLVALAC->number,W_ELECTRON_MASS,0,GMP_RNDN);
+	POS_STR();
                   return(NUMBER); }
 Mp	{ mpfr_init_set_str(YYLVALAC->number,W_PROTON_MASS,0,GMP_RNDN);
+	POS_STR();
                   return(NUMBER); }
 Mn	{ mpfr_init_set_str(YYLVALAC->number,W_NEUTRON_MASS,0,GMP_RNDN);
+	POS_STR();
                   return(NUMBER); }
 Md	{ mpfr_init_set_str(YYLVALAC->number,W_DEUTERON_MASS,0,GMP_RNDN);
+	POS_STR();
                   return(NUMBER); }
 (u)|(amu) { mpfr_init_set_str(YYLVALAC->number,W_ATOMIC_MASS,0,GMP_RNDN);
+	POS_STR();
                   return(NUMBER); }
 c	{ mpfr_init_set_str(YYLVALAC->number,W_SPEED_OF_LIGHT,0,GMP_RNDN);
+	POS_STR();
                   return(NUMBER); }
 h	{ mpfr_init_set_str(YYLVALAC->number,W_PLANCK_CONSTANT,0,GMP_RNDN);
+	POS_STR();
                   return(NUMBER); }
 (\302\265|\316\274|mu)(0|zero|ZERO) {
                   mpfr_t temp;
@@ -265,66 +343,97 @@ h	{ mpfr_init_set_str(YYLVALAC->number,W_PLANCK_CONSTANT,0,GMP_RNDN);
                   mpfr_mul_ui(YYLVALAC->number,YYLVALAC->number,4,GMP_RNDN);
                   mpfr_mul(YYLVALAC->number,YYLVALAC->number,temp,GMP_RNDN);
                   mpfr_clear(temp);
+	POS_STR();
                   return(NUMBER); }
 (epsilon|EPSILON|\316\265)(0|zero|ZERO) { mpfr_init_set_str(YYLVALAC->number,W_PERMITTIVITY_OF_FREE_SPACE,0,GMP_RNDN);
+	POS_STR();
                   return(NUMBER); }
 (\302\265|\316\274|mu)B	{ mpfr_init_set_str(YYLVALAC->number,W_BOHR_MAGNETON,0,GMP_RNDN);
+	POS_STR();
                   return(NUMBER); }
 (\302\265|\316\274|mu)N	{ mpfr_init_set_str(YYLVALAC->number,W_NUCLEAR_MAGNETON,0,GMP_RNDN);
+	POS_STR();
                   return(NUMBER); }
 b	{ mpfr_init_set_str(YYLVALAC->number,W_WIEN_DISPLACEMENT,0,GMP_RNDN);
+	POS_STR();
                   return(NUMBER); }
 ao	{ mpfr_init_set_str(YYLVALAC->number,W_BOHR_RADIUS,0,GMP_RNDN);
+	POS_STR();
                   return(NUMBER); }
 F	{ mpfr_init_set_str(YYLVALAC->number,W_FARADAY_CONSTANT,0,GMP_RNDN);
+	POS_STR();
                   return(NUMBER); }
 (Vm)|(NAk) { mpfr_init_set_str(YYLVALAC->number,W_MOLAR_VOLUME_OF_IDEAL_GAS,0,GMP_RNDN);
+	POS_STR();
                   return(NUMBER); }
 eV	{ mpfr_init_set_str(YYLVALAC->number,W_ELECTRON_VOLT,0,GMP_RNDN);
+	POS_STR();
                   return(NUMBER); }
 sigma|\317\203 { mpfr_init_set_str(YYLVALAC->number,W_STEFAN_BOLTZMANN,0,GMP_RNDN);
+	POS_STR();
                   return(NUMBER); }
 alpha|\316\261 { mpfr_init_set_str(YYLVALAC->number,W_FINE_STRUCTURE,0,GMP_RNDN);
+	POS_STR();
                   return(NUMBER); }
 gamma|GAMMA|\316\263 { mpfr_init(YYLVALAC->number); mpfr_const_euler(YYLVALAC->number,GMP_RNDN);
+	POS_STR();
                   return(NUMBER); }
 re	{ mpfr_init_set_str(YYLVALAC->number,W_ELECTRON_RADIUS,0,GMP_RNDN);
+	POS_STR();
                   return(NUMBER); }
 Kj	{ mpfr_init_set_str(YYLVALAC->number,W_JOSEPHSON_CONSTANT,0,GMP_RNDN);
+	POS_STR();
                   return(NUMBER); }
 Rk	{ mpfr_init_set_str(YYLVALAC->number,W_VON_KLITZING_CONSTANT,0,GMP_RNDN);
+	POS_STR();
                   return(NUMBER); }
 R(inf|\342\210\236)	{ mpfr_init_set_str(YYLVALAC->number,W_RYDBERG_CONSTANT,0,GMP_RNDN);
+	POS_STR();
                   return(NUMBER); }
 Eh	{ mpfr_init_set_str(YYLVALAC->number,W_HARTREE_ENERGY,0,GMP_RNDN);
+	POS_STR();
                   return(NUMBER); }
 Gf	{ mpfr_init_set_str(YYLVALAC->number,W_FERMI_COUPLING_CONSTANT,0,GMP_RNDN);
+	POS_STR();
                   return(NUMBER); }
 M(\302\265|\316\274|mu)	{ mpfr_init_set_str(YYLVALAC->number,W_MUON_MASS,0,GMP_RNDN);
+	POS_STR();
                   return(NUMBER); }
 M(t|tau|\317\204)	{ mpfr_init_set_str(YYLVALAC->number,W_TAU_MASS,0,GMP_RNDN);
+	POS_STR();
                   return(NUMBER); }
 Mh	{ mpfr_init_set_str(YYLVALAC->number,W_HELION_MASS,0,GMP_RNDN);
+	POS_STR();
                   return(NUMBER); }
 M(alpha|\316\261)	{ mpfr_init_set_str(YYLVALAC->number,W_ALPHA_PARTICLE_MASS,0,GMP_RNDN);
+	POS_STR();
                   return(NUMBER); }
 n(0|zero|ZERO)	{ mpfr_init_set_str(YYLVALAC->number,W_LOSCHMIDT_CONSTANT,0,GMP_RNDN);
+	POS_STR();
                   return(NUMBER); }
 c1	{ mpfr_init_set_str(YYLVALAC->number,W_FIRST_RADIATION_CONSTANT,0,GMP_RNDN);
+	POS_STR();
                   return(NUMBER); }
 c2	{ mpfr_init_set_str(YYLVALAC->number,W_SECOND_RADIATION_CONSTANT,0,GMP_RNDN);
+	POS_STR();
                   return(NUMBER); }
 G(0|zero|ZERO)	{ mpfr_init_set_str(YYLVALAC->number,W_CONDUCTANCE_QUANTUM,0,GMP_RNDN);
+	POS_STR();
                   return(NUMBER); }
 Z(0|zero|ZERO)	{ mpfr_init_set_str(YYLVALAC->number,W_IMPEDANCE_OF_VACUUM,0,GMP_RNDN);
+	POS_STR();
                   return(NUMBER); }
 (Phi|\316\246)(0|zero|ZERO)	{ mpfr_init_set_str(YYLVALAC->number,W_MAGNETIC_FLUX_QUANTUM,0,GMP_RNDN);
+	POS_STR();
                   return(NUMBER); }
 \302\274	{ mpfr_init_set_d(YYLVALAC->number,0.25,GMP_RNDN);
+	POS_STR();
                   return(NUMBER); }
 \302\275	{ mpfr_init_set_d(YYLVALAC->number,0.5,GMP_RNDN);
+	POS_STR();
                   return(NUMBER); }
 \302\276	{ mpfr_init_set_d(YYLVALAC->number,0.75,GMP_RNDN);
+	POS_STR();
                   return(NUMBER); }
 K	{
 #ifdef HAVE_MPFR_22
@@ -332,107 +441,134 @@ mpfr_init(YYLVALAC->number); mpfr_const_catalan(YYLVALAC->number,GMP_RNDN);
 #else
 mpfr_init_set_str(YYLVALAC->number, W_CATALAN, 0, GMP_RNDN);
 #endif
+	POS_STR();
 	return(NUMBER); }
 
 %{ /* These are the grouping symbols */
     %}
-[(] { return(PAR); }
-[)] { return(REN); }
-[{] { return(WBRA); }
-[}] { return(WKET); }
-\[  { return(WSBRA); }
-\]  { return(WSKET); }
+[(] { POS_STR(); return(OPEN_PARENTHESES); }
+[)] { POS_STR(); return(CLOSE_PARENTHESES); }
+[{] { POS_STR(); return(OPEN_BRACE); }
+[}] { POS_STR(); return(CLOSE_BRACE); }
+\[  { POS_STR(); return(OPEN_BRACKET); }
+\]  { POS_STR(); return(CLOSE_BRACKET); }
 
 %{ /* These are the binary operations */
     %}
-not|\302\254		{ return(WNOT); }
-[!]			{ return(WBANG); }
-[*][*]|\302\262		{ return(WSQR); }
-[+]			{ return(WPLUS); }
-[*]|\303\227		{ return(WMULT); }
-[/]|\303\267		{ return(WDIV); }
-[%]			{ return(WMOD); }
-[=]			{ return(WEQL); }
-(\^)			{ return(WPOW); }
-\|                      { return(WBOR); }
-\&                      { return(WBAND); }
-\~                      { return(WBNOT); }
-(\|\|)|(or)|\342\210\250	{ return(WOR); }
-(\&\&)|(and)|\342\210\247	{ return(WAND); }
-(\=\=)|(equals)|(eq)	{ return(WEQUAL); }
-(\!\=)|(ne)|(\342\211\240)	{ return(WNEQUAL); }
-xor			{ return(WBXOR); }
-\>			{ return(WGT); }
-\<			{ return(WLT); }
-\>\>                    { return(WRSHFT); }
-\<\<                    { return(WLSHFT); }
-(\>\=)|(\342\211\245)	{ return(WGEQ); }
-(\<\=)|(\342\211\244)	{ return(WLEQ); }
+not					{ POS_STR(); return(WNOT); }
+\302\254			{ POS_CHAR(); return(WNOT); }
+[!]					{ POS_CHAR(); return(WBANG); }
+[*][*]				{ POS_STR(); return(WSQR); }
+\302\262			{ POS_CHAR(); return(WSQR); }
+[+]					{ POS_CHAR(); return(WPLUS); }
+[*]|\303\227		{ POS_CHAR(); return(WMULT); }
+[/]|\303\267		{ POS_CHAR(); return(WDIV); }
+[%]					{ POS_CHAR(); return(WMOD); }
+[=]					{ POS_CHAR(); return(EQUALS_SIGN); }
+(\^)				{ POS_CHAR(); return(WPOW); }
+\|                  { POS_CHAR(); return(WBOR); }
+\&                  { POS_CHAR(); return(WBAND); }
+\~                  { POS_CHAR(); return(WBNOT); }
+(\|\|)|(or)			{ POS_STR(); return(WOR); }
+\342\210\250		{ POS_CHAR(); return(WOR); }
+(\&\&)|(and)		{ POS_STR(); return(WAND); }
+\342\210\247		{ POS_CHAR(); return(WAND); }
+(\=\=)|(equals)|(eq)	{ POS_STR(); return(WEQUAL); }
+(\!\=)|(ne)			{ POS_STR(); return(WNEQUAL); }
+\342\211\240		{ POS_CHAR(); return(WNEQUAL); }
+xor					{ POS_STR(); return(WBXOR); }
+\>					{ POS_CHAR(); return(WGT); }
+\<					{ POS_CHAR(); return(WLT); }
+\>\>                { POS_STR(); return(WRSHFT); }
+\<\<                { POS_STR(); return(WLSHFT); }
+\>\=				{ POS_STR(); return(WGEQ); }
+\342\211\245		{ POS_CHAR(); return(WGEQ); }
+\<\=				{ POS_STR(); return(WLEQ); }
+\342\211\244		{ POS_CHAR(); return(WLEQ); }
 
 %{ /* This is a special operator/function */
     %}
-\-|\342\210\222  { return(WMINUS); }
+\-|\342\210\222  { POS_CHAR(); return(WMINUS); }
 
 %{ /* These are functions (unary operations) */
     %}
-sin(e)? { return(WSIN); }
-cos(in(e)?)? { return(WCOS); }
-tan { return(WTAN); }
-cot { return(WCOT); }
-sec(ant)? { return(WSEC); }
-csc|cosec(ant)? { return(WCSC); }
-(asin)|(arcsin)|(sin^-1) { return(WASIN); }
-(acos)|(arccos)|(cos^-1) { return(WACOS); }
-(atan)|(arctan)|(tan^-1) { return(WATAN); }
-(acot)|(arccot)|(cot^-1) { return(WACOT); }
-(asec)|(arcsec)|(sec^-1) { return(WASEC); }
-(acsc)|(arccsc)|(csc^-1) { return(WACSC); }
-sinh { return(WSINH); }
-cosh { return(WCOSH); }
-tanh { return(WTANH); }
-coth { return(WCOTH); }
-sech { return(WSECH); }
-csch { return(WCSCH); }
-asinh|arsinh|areasinh|(sinh^-1) { return(WASINH); }
-acosh|arcosh|areacosh|(cosh^-1) { return(WACOSH); }
-atanh|artanh|areatanh|(tanh^-1) { return(WATANH); }
-acoth|arcoth|areacoth|(tanh^-1) { return(WACOTH); }
-asech|areasech|(sech^-1) { return(WASECH); }
-acsch|areacsch|(csch^-1) { return(WACSCH); }
-sinc { return(WSINC); }
-log { return(WLOG); }
-logtwo { return(WLOGTWO); }
-ln { return(WLN); }
-round { return(WROUND); }
-abs { return(WABS); }
-(sqrt)|(\342\210\232) { return(WSQRT); }
-exp { return(WEXP); }
-floor { return(WFLOOR); }
-(ceil)|(ceiling) { return(WCEIL); }
-cbrt { return(WCBRT); }
-rand { return(WRAND); }
-irand { return(WIRAND); }
-fact { return(WFACT); }
-comp { return(WCOMP); }
-eint { return(WEINT); }
-Gamma { return(WGAMMA); }
-ln[gG]amma { return(WLNGAMMA); }
-zeta { return(WZETA); }
+sin(e)? { POS_STR(); return(WSIN); }
+cos(in(e)?)? { POS_STR(); return(WCOS); }
+tan { POS_STR(); return(WTAN); }
+cot { POS_STR(); return(WCOT); }
+sec(ant)? { POS_STR(); return(WSEC); }
+csc|cosec(ant)? { POS_STR(); return(WCSC); }
+(asin)|(arcsin)|(sin^-1) { POS_STR(); return(WASIN); }
+(acos)|(arccos)|(cos^-1) { POS_STR(); return(WACOS); }
+(atan)|(arctan)|(tan^-1) { POS_STR(); return(WATAN); }
+(acot)|(arccot)|(cot^-1) { POS_STR(); return(WACOT); }
+(asec)|(arcsec)|(sec^-1) { POS_STR(); return(WASEC); }
+(acsc)|(arccsc)|(csc^-1) { POS_STR(); return(WACSC); }
+sinh { POS_STR(); return(WSINH); }
+cosh { POS_STR(); return(WCOSH); }
+tanh { POS_STR(); return(WTANH); }
+coth { POS_STR(); return(WCOTH); }
+sech { POS_STR(); return(WSECH); }
+csch { POS_STR(); return(WCSCH); }
+asinh|arsinh|areasinh|(sinh^-1) { POS_STR(); return(WASINH); }
+acosh|arcosh|areacosh|(cosh^-1) { POS_STR(); return(WACOSH); }
+atanh|artanh|areatanh|(tanh^-1) { POS_STR(); return(WATANH); }
+acoth|arcoth|areacoth|(tanh^-1) { POS_STR(); return(WACOTH); }
+asech|areasech|(sech^-1) { POS_STR(); return(WASECH); }
+acsch|areacsch|(csch^-1) { POS_STR(); return(WACSCH); }
+sinc { POS_STR(); return(WSINC); }
+log { POS_STR(); return(WLOG); }
+logtwo { POS_STR(); return(WLOGTWO); }
+ln { POS_STR(); return(WLN); }
+round { POS_STR(); return(WROUND); }
+abs { POS_STR(); return(WABS); }
+(sqrt)|(\342\210\232) { POS_STR(); return(WSQRT); }
+exp { POS_STR(); return(WEXP); }
+floor { POS_STR(); return(WFLOOR); }
+(ceil)|(ceiling) { POS_STR(); return(WCEIL); }
+cbrt { POS_STR(); return(WCBRT); }
+rand { POS_STR(); return(WRAND); }
+irand { POS_STR(); return(WIRAND); }
+fact { POS_STR(); return(WFACT); }
+comp { POS_STR(); return(WCOMP); }
+eint { POS_STR(); return(WEINT); }
+Gamma { POS_STR(); return(WGAMMA); }
+ln[gG]amma { POS_STR(); return(WLNGAMMA); }
+zeta { POS_STR(); return(WZETA); }
 
 '[^']*' {
     char * temp = strdup(yytext+1);
     //temp[(int)strlen(temp)-1] = 0;
     temp[yyleng-2] = 0;
     YYLVALAC->variable = temp;
+	POS_STR();
     return(STRING);
 }
 
-{LETTER}+({LETTER}|{ACCEPTABLE})* {
-    YYLVALAC->variable = strdup(yytext);
-    return(VAR);
+{LETTER}+({LETTER}|{ACCEPTABLE})*{WHITESPACE}*= {
+	int i = 0;
+	while (!isspace(yytext[i]) && yytext[i] != '=') i++;
+	yytext[i] = 0;
+	YYLVALAC->variable = strdup(yytext);
+	POS_STR();
+	return(ASSIGNMENT);
 }
 
-%{ /* international */
+{LETTER}+({LETTER}|{ACCEPTABLE})* {
+	if (line_is_a_command) {
+		YYLVALAC->variable = strdup(yytext);
+		POS_STR();
+		return(VARIABLE);
+	} else {
+		char err[yyleng+100];
+		snprintf(err,yyleng+100,"Undefined variable: %s",yytext);
+		report_error(err);
+		scanerror = 1;
+		POS_STR();
+	}
+}
+
+%{
 %}
 
 ({NDIGIT}{DIGIT}{0,2}\.{DIGIT}{3})(e[+-]?{DIGIT}+)? {
@@ -456,6 +592,7 @@ zeta { return(WZETA); }
         if (t<sig_figs) sig_figs = t;
     }
 
+	POS_STR();
     return(NUMBER);
 }
 
@@ -474,6 +611,7 @@ zeta { return(WZETA); }
 	Dprintf("zero optional decimal digits in %s: %u (%u)\n",yytext,t,sig_figs);
         if (t<sig_figs) sig_figs = t;
     }
+	POS_STR();
     return(NUMBER);
 }
 
@@ -496,16 +634,17 @@ zeta { return(WZETA); }
 	char * period = strchr(yytext,'.');
 	Dprintf("period: %s\n",period);
 	if (period == NULL) { // no period means subtract the zeros
-	    period = yytext+strlen(yytext)-1;
-	    while (*period == '0') {
+		period = yytext+strlen(yytext)-1;
+		while (*period == '0') {
 		t--;
 		period--;
-	    }
+		}
 	Dprintf("period: %s\n",period);
 	}
 	Dprintf("big ugly digits in %s: %u (%u)\n",yytext,t,sig_figs);
         if (t<sig_figs) sig_figs = t;
     }
+	POS_STR();
     return(NUMBER);
 }
 
@@ -529,6 +668,7 @@ zeta { return(WZETA); }
 	Dprintf("hex digits in %s: %u (%u)\n",yytext,t,sig_figs);
         if (t<sig_figs) sig_figs = t;
     }
+	POS_STR();
     return(NUMBER);
 }
 
@@ -542,6 +682,7 @@ zeta { return(WZETA); }
         snprintf(err,yyleng+57,errpat,yytext);
         report_error(err);
         scanerror = 1;
+		POS_STR();
     } else {
         /*unsigned long int value;*/
         unsigned int t;
@@ -553,6 +694,7 @@ zeta { return(WZETA); }
         t = yyleng-1; //strlen(yytext+1);
 	Dprintf("octal digits in %s: %u (%u)\n",yytext,t,sig_figs);
         if (t<sig_figs) sig_figs = t;
+		POS_STR();
         return(NUMBER);
     }
 }
@@ -585,6 +727,7 @@ zeta { return(WZETA); }
             if (t<sig_figs) sig_figs = t;
         }
     }
+	POS_STR();
     return(NUMBER);
 }
 
@@ -606,15 +749,19 @@ zeta { return(WZETA); }
     report_error(err);
     scanerror = 1;
     free(err);
+	POS_STR();
 }
 
 %{ /* if we haven't matched anything yet, then it's illegal */
     %}
-. { char error[50];
+. {
+	char error[50];
     if (*yytext == ',') *yytext = conf.thou_delimiter;
     else if (*yytext == '.') *yytext = conf.dec_delimiter;
     snprintf(error, 50, "scanner(%i): cannot understand character\n", (unsigned char) (*yytext));
     report_error(error);
-    scanerror = 1;}
+    scanerror = 1;
+	POS_CHAR();
+}
 
 %%

@@ -4,6 +4,7 @@
 #define HAVE_MPFR_22
 #endif
 #include <stdlib.h>
+#include <stdarg.h>
 #include <stdio.h>
 #include <math.h>		       /* for HUGE_VAL */
 #include <float.h>		       /* for DBL_EPSILON */
@@ -109,17 +110,13 @@ void parseme(char *pthis)
 	unsigned int i;
 
 	for (i = 0; i < strlen(sanitized); ++i) {
-	    char errmsg[1000];
-
 	    if ((conf.thou_delimiter != '.' && conf.dec_delimiter != '.' &&
 		 sanitized[i] == '.') || (conf.thou_delimiter != ',' &&
 					  conf.dec_delimiter != ',' &&
 					  sanitized[i] == ',')) {
 		// throw an error
-		snprintf(errmsg, 1000,
-			 "Improperly formatted numbers! (%c,%c)\n",
-			 conf.thou_delimiter, conf.dec_delimiter);
-		report_error(errmsg);
+		report_error("Improperly formatted numbers! (%c,%c)\n",
+			     conf.thou_delimiter, conf.dec_delimiter);
 		synerrors = 1;
 		break;
 	    } else if (sanitized[i] == conf.thou_delimiter)
@@ -152,10 +149,12 @@ void parseme(char *pthis)
 	free(sanitized);
 	sanitized = temp;
     }
+    /* reset the position tracker */
+    {
+	extern int column;
 
-
-    /* Hold my Place */
-//  stackcur = stacklast + 1;
+	column = 0;
+    }
     /* Evaluate the Expression
      * These two lines borrowed from:
      * http://www.bgw.org/tutorials/programming/c/lex_yacc/main.c
@@ -176,8 +175,8 @@ void parseme(char *pthis)
 	Dprintf("open_file\n");
 	retval = loadState(filename, 1);
 	if (retval) {
-	    report_error("Could not load file.");
-	    report_error((char *)strerror(retval));
+	    report_error("Could not load file (%s).",
+			 (char *)strerror(retval));
 	}
     }
   exiting:
@@ -391,18 +390,15 @@ int find_recursion_core(List oldvars)
 		(char *)nextListElement(oldvarsIterator)) != NULL) {
 	    if (!strcmp(newVarname, oldVarname)) {
 		unsigned int len = strlen(newVarname) + 73;
-		char *error = malloc(sizeof(char) * len);
 
-		snprintf(error, len,
-			 "%s was found twice in symbol descent. Recursive variables are not allowed.",
-			 newVarname);
-		report_error(error);
+		report_error
+		    ("%s was found twice in symbol descent. Recursive variables are not allowed.",
+		     newVarname);
 		// free the rest of the newvars list
 		do {
 		    free(newVarname);
 		} while ((newVarname =
 			  (char *)getHeadOfList(newvars)) != NULL);
-		free(error);
 		freeListIterator(oldvarsIterator);
 		return 1;
 	    }
@@ -425,20 +421,78 @@ int find_recursion_core(List oldvars)
     return retval;
 }				       /*}}} */
 
-void report_error(char *err)
+void report_error(char *err_fmt, ...)
 {				       /*{{{ */
     extern char *errstring;
+    extern int errloc;
+    extern int column;
+    extern int lines;
+    extern int show_line_numbers;
     char *tempstring;
     unsigned int len;
+    va_list ap;
+    char *this_error;
+
+    va_start(ap, err_fmt);
+
+    this_error = calloc(strlen(err_fmt) + 1000, sizeof(char));
+    vsnprintf(this_error, strlen(err_fmt) + 1000, err_fmt, ap);
+    len = strlen(this_error) + 100;
+
+    va_end(ap);
+
+    /* okay, now this_error has the current error text in it */
 
     if (errstring) {
-	len = strlen(errstring) + 2 + strlen(err);
-	tempstring = calloc(sizeof(char), len);
-	snprintf(tempstring, len, "%s\n%s", errstring, err);
+	len += strlen(errstring);
+    }
+    tempstring = calloc(len, sizeof(char));
+    if (errstring) {
+	if (show_line_numbers) {
+	    snprintf(tempstring, len, "%s\nError on line %i: %s", errstring,
+		     lines, this_error);
+	} else {
+	    snprintf(tempstring, len, "%s\n%s", errstring, this_error);
+	}
 	free(errstring);
-	errstring = tempstring;
     } else {
-	errstring = (char *)strdup(err);
+	if (show_line_numbers) {
+	    snprintf(tempstring, len, "Error on line %i: %s", lines,
+		     this_error);
+	} else {
+	    snprintf(tempstring, len, "%s", this_error);
+	}
+    }
+    errstring = tempstring;
+    free(this_error);
+    if (errloc == -1) {
+	errloc = column;
+    }
+}				       /*}}} */
+
+void display_and_clear_errstring()
+{				       /*{{{ */
+    extern int scanerror;
+    extern char *errstring;
+    extern int errloc;
+
+    if (errstring && errstring[0]) {
+	if (errloc != -1) {
+	    int i;
+
+	    fprintf(stderr, "   ");
+	    for (i = 0; i < errloc; i++) {
+		fprintf(stderr, " ");
+	    }
+	    fprintf(stderr, "^\n");
+	    errloc = -1;
+	}
+	fprintf(stderr, "%s", errstring);
+	if (errstring[strlen(errstring) - 1] != '\n')
+	    fprintf(stderr, "\n");
+	free(errstring);
+	errstring = NULL;
+	scanerror = 0;
     }
 }				       /*}}} */
 
@@ -613,7 +667,7 @@ char *print_this_result_dbl(double result)
 			    pa[index] = conf.dec_delimiter;
 		    }
 		}
-		Dprintf("pa: %s\n",pa);
+		Dprintf("pa: %s\n", pa);
 		switch (conf.rounding_indication) {
 		    case SIMPLE_ROUNDING_INDICATION:
 			Dprintf("simple\n");
@@ -626,7 +680,7 @@ char *print_this_result_dbl(double result)
 			if (sig_figs < UINT32_MAX) {
 			    unsigned int t = count_digits(pa);
 
-			    Dprintf("digits in pa: %u (%u)\n",t,sig_figs);
+			    Dprintf("digits in pa: %u (%u)\n", t, sig_figs);
 			    if (pa[0] == '0' && pa[1] != '\0') {
 				--t;
 			    } else if (pa[0] == '-' && pa[1] == '0') {
@@ -732,12 +786,7 @@ char *print_this_result_dbl(double result)
 
     if (standard_output) {
 	if (errstring && strlen(errstring)) {
-	    extern int scanerror;
-
-	    fprintf(stderr, "%s\n", errstring);
-	    free(errstring);
-	    errstring = NULL;
-	    scanerror = 0;
+	    display_and_clear_errstring();
 	}
 	printf("%s%s\n",
 	       conf.print_equal ? (not_all_displayed ? "~= " : " = ")
@@ -789,7 +838,8 @@ char *print_this_result(mpfr_t result)
     extern char *errstring;
     unsigned int base = 0;
 
-    Dprintf("print_this_result (%f) in format %i\n", mpfr_get_d(result, GMP_RNDN), conf.output_format);
+    Dprintf("print_this_result (%f) in format %i\n",
+	    mpfr_get_d(result, GMP_RNDN), conf.output_format);
     // output in the proper base and format
     switch (conf.output_format) {
 	case HEXADECIMAL_FORMAT:
@@ -835,7 +885,7 @@ char *print_this_result(mpfr_t result)
     not_all_displayed = 0;
     pa = num_to_str_complex(result, base, conf.engineering, conf.precision,
 			    conf.print_prefixes, &not_all_displayed);
-    Dprintf("not_all_displayed = %i\n",not_all_displayed);
+    Dprintf("not_all_displayed = %i\n", not_all_displayed);
 
     /* now, decide whether it's been rounded or not */
     if (mpfr_inf_p(result) || mpfr_nan_p(result)) {
@@ -847,6 +897,7 @@ char *print_this_result(mpfr_t result)
 	    case SIMPLE_ROUNDING_INDICATION:
 	    {
 		char *pa2, junk;
+
 		Dprintf("simple full\n");
 
 		pa2 =
@@ -862,7 +913,7 @@ char *print_this_result(mpfr_t result)
 		if (sig_figs < UINT32_MAX) {
 		    unsigned int t = count_digits(pa);
 
-		    Dprintf("digits in pa: %u (%u)\n",t,sig_figs);
+		    Dprintf("digits in pa: %u (%u)\n", t, sig_figs);
 		    not_all_displayed = (t < sig_figs);
 		} else {
 		    not_all_displayed = 0;
@@ -888,14 +939,9 @@ char *print_this_result(mpfr_t result)
 	}
     }
 
-  if (standard_output) {
+    if (standard_output) {
 	if (errstring && strlen(errstring)) {
-	    extern int scanerror;
-
-	    fprintf(stderr, "%s\n", errstring);
-	    free(errstring);
-	    errstring = NULL;
-	    scanerror = 0;
+	    display_and_clear_errstring();
 	}
 	printf("%s%s\n",
 	       conf.print_equal ? (not_all_displayed ? "~= " : " = ")
@@ -1030,7 +1076,7 @@ void simple_exp(mpfr_t output, mpfr_t first, enum operations op,
 		     * first = second * temp + x */
 		    mpfr_div(output, first, second, GMP_RNDN);
 		    if (conf.c_style_mod) {
-			mpfr_rint(output, output, GMP_RNDZ); // makes zeros work
+			mpfr_rint(output, output, GMP_RNDZ);	// makes zeros work
 		    } else {
 			if (mpfr_sgn(first) >= 0) {
 			    mpfr_floor(output, output);

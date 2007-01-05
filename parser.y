@@ -53,6 +53,8 @@ int lines = 1;
 int synerrors = 0;
 short scanerror = 0;
 char * errstring = NULL;
+int errloc = -1;
+int show_line_numbers = 0;
 
 %}
 
@@ -75,8 +77,9 @@ struct conv_req conver;
 %token <integer> PRECISION_CMD BITS_CMD BASE_CMD
 %token <conver> CONVERT_CMD
 
-%token EOLN PAR REN WBRA WKET WSBRA WSKET
-%token WPLUS WMINUS WMULT WDIV WMOD WEQL WPOW WEXP WSQR
+%token EOLN OPEN_PARENTHESES CLOSE_PARENTHESES OPEN_BRACE
+%token CLOSE_BRACE OPEN_BRACKET CLOSE_BRACKET
+%token WPLUS WMINUS WMULT WDIV WMOD EQUALS_SIGN WPOW WEXP WSQR
 %token WOR WAND WEQUAL WNEQUAL WGT WLT WGEQ WLEQ
 %token WLSHFT WRSHFT WBOR WBAND WBXOR
 
@@ -86,7 +89,7 @@ struct conv_req conver;
 %token WSECH WCSCH WASECH WACSCH WEINT WGAMMA WLNGAMMA WZETA WSINC
 
 %token <number> NUMBER
-%token <variable> VAR STRING OPEN_CMD SAVE_CMD
+%token <variable> VARIABLE STRING OPEN_CMD SAVE_CMD ASSIGNMENT
 %token <character> DSEP_CMD TSEP_CMD
 
 %type <number> exp exp_l2 exp_l3
@@ -118,9 +121,10 @@ lines : oneline
 
 oneline : exp eoln
 {
+	extern int line_is_a_command;
+
 	if (scanerror) {
 		scanerror = synerrors = 0;
-		report_error("Error in scanner halts parser.");
 	} else {
 		if (! synerrors && ! yynerrs) {
 			set_prettyanswer($1);
@@ -132,11 +136,17 @@ oneline : exp eoln
 	}
 	mpfr_clear($1);
 	compute = 1;
+	line_is_a_command = 0;
 }
 | assignment eoln {
+	extern int line_is_a_command;
+
 	compute = 1;
+	line_is_a_command = 0;
 }
 | command eoln {
+	extern int line_is_a_command;
+
 	switch ($1) {
 		case redisplay:
 			if (! synerrors) {
@@ -149,27 +159,33 @@ oneline : exp eoln
 		case nothing: break;
 	}
 	compute = 1;
+	line_is_a_command = 0;
 }
 | eoln	/* blank line */
 {
+	extern int line_is_a_command;
+
 	if (scanerror) {
 		scanerror = synerrors = 0;
-		report_error("2 Error in scanner halts parser.");
 	}
 	compute = 1;
+	line_is_a_command = 0;
 }
 | error eoln {
-    // there is the possibility of lost memory here,
-    // because "error" has no data type
-    // (and because I'm passing around *actual* mpfr_t's rather than pointers to them)
-    report_error("3 Error in scanner halts parser.");
+	extern int line_is_a_command;
+
+    /* there is the possibility of lost memory here,
+     * because "error" has no data type
+     * (and because I'm passing around *actual* mpfr_t's
+	 * rather than pointers to them) */
+    /* report_error("3 Error in scanner halts parser."); */
     compute = 1;
+	line_is_a_command = 0;
 }
 /* if we got an error on the line */
 ;
 
-eoln : EOLN
-{ ++lines; }
+eoln : EOLN { ++lines; }
 ;
 
 command : HEX_CMD {
@@ -366,19 +382,15 @@ command : HEX_CMD {
 	int retval;
 	retval = saveState($1);
 	if (retval) {
-		report_error("Could not save file.");
-		report_error((char*)strerror(retval));
+		report_error("Could not save file. (%s)", (char*)strerror(retval));
 	}
 	$$ = nothing;
 }
 | BITS_CMD {
-	char err[200];
 	if ($1 < MPFR_PREC_MIN) {
-		snprintf(err, 100, "Minimum precision is %lu.\n", (unsigned long)MPFR_PREC_MIN);
-		report_error(err);
+		report_error("Minimum precision is %lu.\n", (unsigned long)MPFR_PREC_MIN);
 	} else if ($1 > MPFR_PREC_MAX) {
-		snprintf(err, 100, "Maximum precision is %lu.\n", (unsigned long)MPFR_PREC_MAX);
-		report_error(err);
+		report_error("Maximum precision is %lu.\n", (unsigned long)MPFR_PREC_MAX);
 	} else {
 		mpfr_set_default_prec($1);
 	}
@@ -386,28 +398,22 @@ command : HEX_CMD {
 }
 | CONVERT_CMD
 {
-	int category;
-	char * errstr;
-	unsigned int len;
-	category = identify_units($1.u1,$1.u2);
-	if (category == -1) {
-		report_error("Units must be in the same category.");
-	} else if (category == -2) {
-		report_error("Units provided are not recognized.");
-	} else if (category == -3) {
-		len = strlen($1.u1)+45;
-		errstr = calloc(sizeof(char),len);
-		snprintf(errstr,len,"First unit provided was not recognized (%s).",$1.u1);
-		report_error(errstr);
-		free(errstr);
-	} else if (category == -4) {
-		len = strlen($1.u2)+46;
-		errstr = calloc(sizeof(char),len);
-		snprintf(errstr,len,"Second unit provided was not recognized (%s).",$1.u2);
-		report_error(errstr);
-		free(errstr);
-	} else {
-		uber_conversion(last_answer,category,unit_id(category,$1.u1),unit_id(category,$1.u2),last_answer);
+	int category = identify_units($1.u1,$1.u2);
+	switch (category) {
+		case -1:
+			report_error("Units must be in the same category.");
+			break;
+		case -2:
+			report_error("Units provided are not recognized.");
+			break;
+		case -3:
+			report_error("First unit provided was not recognized (%s).", $1.u1);
+			break;
+		case -4:
+			report_error("Second unit provided was not recognized (%s).", $1.u2);
+			break;
+		default:
+			uber_conversion(last_answer,category,unit_id(category,$1.u1),unit_id(category,$1.u2),last_answer);
 	}
 	free($1.u1);
 	free($1.u2);
@@ -424,13 +430,13 @@ command : HEX_CMD {
 	}
 	$$ = nothing;
 }
-| STORE_CMD VAR
+| STORE_CMD VARIABLE
 {
 	int retval = storeVar($2);
 	if (retval == 0) {
 		printf("successfully stored %s\n",$2);
 	} else {
-		report_error("Failure!");
+		report_error("Failure to store variable!");
 	}
 	free($2);
 }
@@ -451,14 +457,14 @@ optionalstring : STRING {
 			   }
 			   ;
 
-assignment : VAR WEQL exp optionalstring
+assignment : ASSIGNMENT exp optionalstring
 {
 	if (compute && ! scanerror) {
 		/* if standard_error, q is reserved */
 		if (standard_output && !strcmp($1,"q")) {
 			report_error("q cannot be assigned a value. q is used to exit.");
 		} else {
-			if (putval($1,$3,$4) == 0) {
+			if (putval($1,$2,$3) == 0) {
 				if (standard_output) {
 					mpfr_t val;
 					mpfr_init(val);
@@ -471,17 +477,17 @@ assignment : VAR WEQL exp optionalstring
 				report_error("There was a problem assigning the value.");
 			}
 		}
-		mpfr_clear($3);
+		mpfr_clear($2);
 	} else {
 		scanerror = 0;
 		report_error("Scanner error halts parser.");
 	}
 	free($1);
-	if ($4 != NULL) {
-		free($4);
+	if ($3 != NULL) {
+		free($3);
 	}
 }
-| VAR WEQL STRING optionalstring
+| VARIABLE EQUALS_SIGN STRING optionalstring
 {
 	if (compute && ! scanerror) {
 		if (standard_output && !strcmp($1,"q")) {
@@ -505,7 +511,7 @@ assignment : VAR WEQL exp optionalstring
 		free($4);
 	}
 }
-| NUMBER WEQL exp optionalstring
+| NUMBER EQUALS_SIGN exp optionalstring
 {
 	report_error("Constants cannot be assigned to other values.");
 	mpfr_clear($3);
@@ -513,7 +519,7 @@ assignment : VAR WEQL exp optionalstring
 		free($4);
 	}
 }
-| NUMBER WEQL STRING optionalstring
+| NUMBER EQUALS_SIGN STRING optionalstring
 {
 	report_error("Constants cannot be assigned to other values.");
 	free($3);
@@ -521,7 +527,7 @@ assignment : VAR WEQL exp optionalstring
 		free($4);
 	}
 }
-| func WEQL STRING optionalstring
+| func EQUALS_SIGN STRING optionalstring
 {
 	report_error("Functions cannot be assigned to values.");
 	free($3);
@@ -529,7 +535,7 @@ assignment : VAR WEQL exp optionalstring
 		free($4);
 	}
 }
-| func WEQL exp optionalstring
+| func EQUALS_SIGN exp optionalstring
 {
 	report_error("Functions cannot be assigned to values.");
 	mpfr_clear($3);
@@ -607,9 +613,9 @@ func : WSIN { $$ = wsin; }
 | WSINC { $$ = wsinc; }
 ;
 
-nullexp : PAR REN
-| WBRA WKET
-| WSBRA WSKET
+nullexp : OPEN_PARENTHESES CLOSE_PARENTHESES
+| OPEN_BRACE CLOSE_BRACE
+| OPEN_BRACKET CLOSE_BRACKET
 ;
 
 sign : WMINUS { $$ = -1; }
@@ -647,11 +653,11 @@ exp_l3 : capsule oval { mpfr_init($$);
 				  mpfr_clear($5);}
 ;
 
-parenthated: PAR exp REN
+parenthated: OPEN_PARENTHESES exp CLOSE_PARENTHESES
 		   { mpfr_init($$); mpfr_set($$,$2,GMP_RNDN); mpfr_clear($2); }
-		   | WBRA exp WKET
+		   | OPEN_BRACE exp CLOSE_BRACE
 		   { mpfr_init($$); mpfr_set($$,$2,GMP_RNDN); mpfr_clear($2); }
-		   | WSBRA exp WSKET
+		   | OPEN_BRACKET exp CLOSE_BRACKET
 		   { mpfr_init($$); mpfr_set($$,$2,GMP_RNDN); mpfr_clear($2); }
 		   | nullexp { mpfr_init_set_ui($$,0,GMP_RNDN); }
 		   ;
@@ -685,23 +691,14 @@ capsule: parenthated
 int
 yyerror(char *error_string, ...) {
     va_list ap;
-    int line_nmb(void);
-
-	/*    FILE *f = stderr; */
 	char error[1000];
-
-    va_start(ap,error_string);
 
     ++synerrors;
 
-	snprintf(error,1000,"Error on line %i: ", lines);
-	vsnprintf(error+strlen(error),1000-strlen(error),error_string,ap);
-	report_error(error);
-
-	/*    fprintf(f,"Error on line %d: ", lines);
-    vfprintf(f,error_string,ap);
-    fprintf(f,"\n");
-	fflush(f); */
+    va_start(ap,error_string);
+	vsnprintf(error,1000,error_string,ap);
     va_end(ap);
+
+	report_error(error);
 	return 0;
 }

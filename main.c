@@ -567,11 +567,7 @@ int main(int argc, char *argv[])
 		    extern char *errstring;
 
 		    if (errstring && strlen(errstring)) {
-			fprintf(stderr, "%s", errstring);
-			if (errstring[strlen(errstring) - 1] != '\n')
-			    fprintf(stderr, "\n");
-			free(errstring);
-			errstring = NULL;
+			display_and_clear_errstring();
 			/*rl_stuff_char('f');*/
 		    }
 		}
@@ -594,7 +590,9 @@ int main(int argc, char *argv[])
 	/* if stdin is ANYTHING ELSE (a pipe, a file, etc), don't prompt */
 	char *line, gotten;
 	unsigned int linelen = 0, maxlinelen = 100;
+	extern int show_line_numbers;
 
+	show_line_numbers = 1;
 	while (1) {
 	    line = calloc(maxlinelen, sizeof(char));
 	    gotten = fgetc(stdin);
@@ -628,14 +626,16 @@ int main(int argc, char *argv[])
 		fprintf(stderr, "error storing last answer\n");
 	    }
 	    {
-		extern char *errstring;
+		extern int errloc;
 
-		if (errstring && strlen(errstring)) {
-		    fprintf(stderr, "%s", errstring);
+		if (errloc != -1) {
+		    errloc = -1;
+		    display_and_clear_errstring();
+		    /*fprintf(stderr, "%s", errstring);
 		    if (errstring[strlen(errstring) - 1] != '\n')
 			fprintf(stderr, "\n");
 		    free(errstring);
-		    errstring = NULL;
+		    errstring = NULL;*/
 		}
 	    }
 	    free(line);
