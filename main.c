@@ -77,9 +77,10 @@ char *tc_generator(const char *text, int state)
 {				       /*{{{ */
     char *ret = getHeadOfList(tc_options);
 
-    if (ret)
-	return strdup(ret);
-    else
+    if (ret) {
+	printf("ret: %s\n",ret);
+	return ret;
+    } else
 	return NULL;
 }				       /*}}} */
 
@@ -100,35 +101,32 @@ char *tc_rounding(const char *text, int state)
 }				       /*}}} */
 
 #define COMPLETE(strs) do { \
-    compareindex = 0; \
-    curs = 0; \
-    comparecurs = strs[0]; \
-    while (strs[compareindex] != NULL) { \
-	if (text[curs] == 0) { /* add to the list of possibilities */ \
-	    addToList(&tc_options, strs[compareindex]); \
-	    curs = 0; \
-	    compareindex++; \
-	    comparecurs = strs[compareindex]; \
-	} else if (text[curs] == *comparecurs) { \
-	    curs++; \
-	    comparecurs++; \
+    int compareword = 0; \
+    int comparechar = 0; \
+    int textcurs = 0; \
+    while (strs[compareword] != NULL) { \
+	if (text[textcurs] == 0) { /* add to the list of possibilities */ \
+	    addToList(&tc_options, strdup(strs[compareword])); \
+	    textcurs = 0; \
+	    comparechar = 0; \
+	    compareword++; \
+	} else if (text[textcurs] == strs[compareword][comparechar]) { \
+	    textcurs++; \
+	    comparechar++; \
 	} else { /* not a possibility: next! */ \
-	    curs = 0; \
-	    compareindex++; \
-	    comparecurs = strs[compareindex]; \
+	    textcurs = 0; \
+	    compareword++; \
+	    comparechar = 0; \
 	} \
     } \
 } while (0)
 
 char **wcalc_completion(const char *text, int start, int end)
 {				       /*{{{ */
-    extern char *commands[];
-    extern char *qcommands[];
-    extern char *consts[];
-    extern char *funcs[];
-    int curs = 0;
-    char *comparecurs = consts[0];
-    int compareindex = 0;
+    extern const char *commands[];
+    extern const char *qcommands[];
+    extern const char *consts[];
+    extern const char *funcs[];
     char **retvals = NULL;
 
     //printf("\ncompleting: %s\n", text);
@@ -223,7 +221,7 @@ char **wcalc_completion(const char *text, int start, int end)
 			     unit++) {
 			    COMPLETE(conversions[unit_cat][unit].aka);
 			}
-			addToList(&tc_options, "to");
+			addToList(&tc_options, strdup("to"));
 		    } else if (strncmp(rl_line_buffer + i, "to", 2) == 0 &&
 			       isspace(rl_line_buffer[i + 2])) {
 			i += 2;
