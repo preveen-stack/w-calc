@@ -1,6 +1,6 @@
 /*%pure-parser */
 /* this may be a bison-only thing... */
-%error-verbose
+/*%error-verbose*/
 %{
 /*#define REENTRANT_PARSER */
 #ifdef HAVE_CONFIG_H
