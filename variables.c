@@ -55,6 +55,48 @@ size_t numvars()
     return listLen(them);
 }				       /*}}} */
 
+/* prints out all the variables */
+void printvariables(void)
+{/*{{{*/
+    ListIterator li = NULL;
+    struct variable *cursor = NULL;
+
+    if (!them || listLen(them) == 0)
+	return;
+
+    li = getListIterator(them);
+    while ((cursor = (struct variable *)nextListElement(li)) != NULL) {
+	printf("%s = ", cursor->key);
+	if (cursor->exp) {
+	    printf("%s\n", cursor->expression);
+	} else {
+	    printf("%g\n", mpfr_get_d(cursor->value, GMP_RNDN));
+	}
+    }
+    freeListIterator(li);
+}/*}}}*/
+
+/* returns a list of variables (only the base array is malloc'd, the rest must
+ * NOT be freed */
+char **listvarnames(void)
+{/*{{{*/
+    size_t i;
+    char **ret = calloc(listLen(them) + 1, sizeof(char *));
+    ListIterator li = NULL;
+    struct variable *cursor = NULL;
+
+    if (!them || listLen(them) == 0)
+	return ret;
+
+    li = getListIterator(them);
+    i = 0;
+    while ((cursor = (struct variable *)nextListElement(li)) != NULL) {
+	ret[i++] = cursor->key;
+    }
+    freeListIterator(li);
+    return ret;
+/*}}}*/}
+
 void delnvar(size_t i)
 {				       /*{{{ */
     struct variable *freeme;

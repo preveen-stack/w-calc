@@ -42,12 +42,17 @@ void getvarval(mpfr_t out, char *key);
 
 // requires a working mpfr_t (duh)
 int putval(char *key, mpfr_t value, char *desc);
+
 int putexp(char *key, char *value, char *desc);
 int varexists(char *key);
 void initvar(void);
 void delnvar(size_t);
 void cleanupvar(void);
 size_t numvars();
+void printvariables(void);
+
+// this returns a char ** that must be freed. DO NOT free its contents
+char ** listvarnames(void);
 
 /* ******************************
  * NOTE!

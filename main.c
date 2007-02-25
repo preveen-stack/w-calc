@@ -78,7 +78,6 @@ char *tc_generator(const char *text, int state)
     char *ret = getHeadOfList(tc_options);
 
     if (ret) {
-	printf("ret: %s\n",ret);
 	return ret;
     } else
 	return NULL;
@@ -127,6 +126,7 @@ char **wcalc_completion(const char *text, int start, int end)
     extern const char *qcommands[];
     extern const char *consts[];
     extern const char *funcs[];
+    char **variables;
     char **retvals = NULL;
 
     //printf("\ncompleting: %s\n", text);
@@ -140,9 +140,12 @@ char **wcalc_completion(const char *text, int start, int end)
 	    while (isspace(rl_line_buffer[i]))
 		++i;
 	    if (i == start) {
+		COMPLETE(qcommands);
 		COMPLETE(consts);
 		COMPLETE(funcs);
-		COMPLETE(qcommands);
+		variables = listvarnames();
+		COMPLETE(variables);
+		free(variables);
 	    }
 	} else if (strncmp("\\open", rl_line_buffer, 5) == 0 ||
 		   strncmp("\\save", rl_line_buffer, 5) == 0) {
@@ -244,6 +247,9 @@ char **wcalc_completion(const char *text, int start, int end)
 	COMPLETE(qcommands);
 	COMPLETE(consts);
 	COMPLETE(funcs);
+	variables = listvarnames();
+	COMPLETE(variables);
+	free(variables);
     }
     rl_attempted_completion_over = 1;  // do not use standard file completion
     rl_completion_entry_function = tc_generator;

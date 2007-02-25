@@ -301,18 +301,7 @@ command : HEX_CMD {
 	}
 }
 | LISTVAR_CMD {
-	size_t num_vars = numvars();
-	int i;
-	for (i = 0; i <= num_vars; i++) {
-		struct variable *keyval = getrealnvar(i);
-		if (! keyval) continue;
-		printf("%s = ", keyval->key);
-		if (keyval->exp) {
-			printf("%s\n", keyval->expression);
-		} else {
-			printf("%g\n", mpfr_get_d(keyval->value, GMP_RNDN));
-		}
-	}
+	printvariables();
 	$$ = nothing;
 }
 | ENG_CMD {
