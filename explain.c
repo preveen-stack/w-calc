@@ -24,9 +24,17 @@ void explain_function(char *);
 
 void explain(char *str)
 {				       /*{{{ */
+    int curs;
+
     if (!str || !*str) {
 	printf("Nothing to explain.\n");
 	return;
+    }
+    /* for sanity's sake, remove any trailing whitespace */
+    curs = strlen(str) - 1;
+    while (isspace(str[curs]) && curs > 0) {
+	str[curs] = 0;
+	curs--;
     }
     if (!strcmp(str, "q")) {
 	printf("Quits the program.");
@@ -128,7 +136,8 @@ void explain_command(char *str)
 	printf
 	    ("Gives you information about commands, variables, constants and functions.\n");
     } else if (!strcmp(str, "cmod")) {
-	printf("Changes how the modulus operator (%%) behaves with negative numbers.\n The default is to behave like the C programming language modulus, the other is slightly more flexible. For example, with the default setting:\n\n\t-340 %% 60 == -40; 340 %% -60 == 40; -340 %% -60 == -40\n\nWhen this setting is toggled, it behaves like this:\n\n\t-340 %% 60 == -40; 340 %% -60 == -20; -340 %% -60 == 20\n");
+	printf
+	    ("Changes how the modulus operator (%%) behaves with negative numbers.\n The default is to behave like the C programming language modulus, the other is slightly more flexible. For example, with the default setting:\n\n\t-340 %% 60 == -40; 340 %% -60 == 40; -340 %% -60 == -40\n\nWhen this setting is toggled, it behaves like this:\n\n\t-340 %% 60 == -40; 340 %% -60 == -20; -340 %% -60 == 20\n");
     } else {
 	printf("Undefined command.\n");
     }
@@ -299,9 +308,11 @@ void explain_constant(char *str)
 	printf
 	    ("Magnetic flux quantum. The quantum of magnetic flux passing through a superconductor.");
     } else if (!strcmp(str, "K")) {
-	printf("Catalan's constant commonly appears in estimates of combinatorial functions and in certain classes of sums and definite integrals.");
+	printf
+	    ("Catalan's constant commonly appears in estimates of combinatorial functions and in certain classes of sums and definite integrals.");
     } else if (!strcmp(str, "sinc")) {
-	printf("Sinus cardinalis, also known as the interpolation function, filtering function, or the first spherical Bessel function, is the product of a sine function and a monotonically decreasing function.");
+	printf
+	    ("Sinus cardinalis, also known as the interpolation function, filtering function, or the first spherical Bessel function, is the product of a sine function and a monotonically decreasing function.");
     }
     printf("\n");
 }				       /*}}} */
@@ -356,11 +367,14 @@ void explain_function(char *str)
     } else if (!strcmp(str, "comp")) {
 	printf("Returns the one's complement of the input number.");
     } else if (!strcmp(str, "zeta")) {
-	printf("Returns the Riemann zeta function of the input number. This is used primarily in number theory, but also has applications in physics, probability theory, and applied statistics.");
+	printf
+	    ("Returns the Riemann zeta function of the input number. This is used primarily in number theory, but also has applications in physics, probability theory, and applied statistics.");
     } else if (!strcmp(str, "Gamma")) {
-	printf("Returns the Gamma function of the input number. The Gamma function extends the factorial function to complex and non-natural numbers.");
+	printf
+	    ("Returns the Gamma function of the input number. The Gamma function extends the factorial function to complex and non-natural numbers.");
     } else if (!strcmp(str, "lnGamma")) {
-	printf("Returns the natural log of the Gamma function of the input number.");
+	printf
+	    ("Returns the natural log of the Gamma function of the input number.");
     }
     printf("\n");
 }				       /*}}} */
