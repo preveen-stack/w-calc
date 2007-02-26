@@ -9,11 +9,10 @@
 #ifndef WCALC_CONVERSIONS
 #define WCALC_CONVERSIONS
 
-#include <gmp.h>
-#include <mpfr.h>
+#include "number.h"
 
-void uber_conversion(mpfr_t output, int utype, int fromunit, int tounit,
-		     mpfr_t value);
+void uber_conversion(Number output, int utype, int fromunit, int tounit,
+		     Number value);
 int identify_unit(char *unit);
 int identify_units(char *unit1, char *unit2);
 int unit_id(int utype, char *unit);

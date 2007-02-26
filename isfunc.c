@@ -1,4 +1,5 @@
 #include <string.h>
+#include "config.h"
 #ifdef MEMWATCH
 #include "memwatch.h"
 #endif
@@ -13,8 +14,11 @@ const char *funcs[] = { "sin", "cos", "tan", "cot",
     "round", "abs", "floor", "ceil", "ceiling",
     "sqrt", "cbrt",
     "exp", "fact", "comp",
+#ifdef HAVE_MPFR_22
+    "eint","Gamma","gamma","lngamma","lnGamma",
+#endif
     "rand", "irand",
-    "Gamma","lngamma","lnGamma","zeta","sinc",
+    "zeta","sinc",
     0
 };
 

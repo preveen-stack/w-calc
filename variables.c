@@ -6,9 +6,7 @@
 # include <string.h>
 #endif
 
-#include <gmp.h>
-#include <mpfr.h>
-
+#include "number.h"
 #include "calculator.h"		       /* for report_error */
 #include "list.h"
 #include "variables.h"
@@ -40,7 +38,7 @@ void cleanupvar(void)
 	if (freeme->exp == 1) {
 	    free(freeme->expression);
 	} else {
-	    mpfr_clear(freeme->value);
+	    num_free(freeme->value);
 	}
 	if (freeme->description) {
 	    free(freeme->description);
@@ -70,7 +68,7 @@ void printvariables(void)
 	if (cursor->exp) {
 	    printf("%s\n", cursor->expression);
 	} else {
-	    printf("%g\n", mpfr_get_d(cursor->value, GMP_RNDN));
+	    printf("%g\n", num_get_d(cursor->value));
 	}
     }
     freeListIterator(li);
@@ -107,7 +105,7 @@ void delnvar(size_t i)
 	if (freeme->exp == 1) {
 	    free(freeme->expression);
 	} else {
-	    mpfr_clear(freeme->value);
+	    num_free(freeme->value);
 	}
 	free(freeme);
     }
@@ -121,10 +119,10 @@ struct variable *getrealnvar(size_t i)
 struct answer getvar(char *key)
 {				       /*{{{ */
     struct answer ans;
-    mpfr_t *t = getvar_core(key, THE_VALUE);
+    Number *t = getvar_core(key, THE_VALUE);
 
     if (t) {
-	mpfr_init_set(ans.val, *t, GMP_RNDN);
+	num_init_set(ans.val, *t);
 	ans.err = 0;
 	ans.exp = NULL;
     } else {
@@ -136,12 +134,12 @@ struct answer getvar(char *key)
     return ans;
 }				       /*}}} */
 
-void getvarval(mpfr_t out, char *key)
+void getvarval(Number out, char *key)
 {				       /*{{{ */
-    mpfr_t *t = getvar_core(key, THE_VALUE);
+    Number *t = getvar_core(key, THE_VALUE);
 
     if (t) {
-	mpfr_set(out, *t, GMP_RNDN);
+	num_set(out, *t);
     }
 }				       /*}}} */
 
@@ -152,7 +150,7 @@ struct answer getvar_full(char *key)
 
     var = getvar_core(key, THE_STRUCTURE);
     if (var && !var->exp) {
-	mpfr_init_set(ans.val, var->value, GMP_RNDN);
+	num_init_set(ans.val, var->value);
 	ans.err = 0;
 	ans.exp = NULL;
 	ans.desc = var->description;
@@ -247,7 +245,7 @@ int putexp(char *key, char *value, char *desc)
 	if (cursor->expression) {
 	    free(cursor->expression);
 	} else {
-	    mpfr_clear(cursor->value);
+	    num_free(cursor->value);
 	}
 	if (cursor->description) {
 	    free(cursor->description);
@@ -268,7 +266,7 @@ int putexp(char *key, char *value, char *desc)
 
 /* this adds the key-value pair to the list.
  * if the key already exists, change the value to this */
-int putval(char *key, mpfr_t value, char *desc)
+int putval(char *key, Number value, char *desc)
 {				       /*{{{ */
     struct variable *cursor = NULL;
 
@@ -286,11 +284,11 @@ int putval(char *key, mpfr_t value, char *desc)
     // but key may not exist, and value may not be properly initialized
     if (!cursor->key) {
 	cursor->key = (char *)strdup(key);
-	mpfr_init(cursor->value);
+	num_init(cursor->value);
     } else if (cursor->expression) {
 	free(cursor->expression);
 	cursor->expression = NULL;
-	mpfr_init(cursor->value);
+	num_init(cursor->value);
     }
     if (cursor->description) {
 	free(cursor->description);
@@ -303,6 +301,6 @@ int putval(char *key, mpfr_t value, char *desc)
     } else {
 	cursor->description = NULL;
     }
-    mpfr_set(cursor->value, value, GMP_RNDN);
+    num_set(cursor->value, value);
     return 0;
 }				       /*}}} */

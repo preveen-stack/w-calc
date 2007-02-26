@@ -92,6 +92,7 @@ wcalc_SOURCES = calculator.h variables.h string_manip.h help.h parser.y \
 		isfunc.h isfunc.c \
 		iscmd.h iscmd.c \
 		add_commas.h add_commas.c \
+		number.h number.c \
 		evalvar.h evalvar.c
 
 wcalc_LDADD = @LEXLIB@
@@ -110,7 +111,7 @@ am_wcalc_OBJECTS = parser.$(OBJEXT) scanner.$(OBJEXT) help.$(OBJEXT) \
 	conversion.$(OBJEXT) main.$(OBJEXT) number_formatting.$(OBJEXT) \
 	explain.$(OBJEXT) list.$(OBJEXT) extract_vars.$(OBJEXT) \
 	isconst.$(OBJEXT) isfunc.$(OBJEXT) iscmd.$(OBJEXT) \
-	add_commas.$(OBJEXT) evalvar.$(OBJEXT)
+	add_commas.$(OBJEXT) number.$(OBJEXT) evalvar.$(OBJEXT)
 wcalc_OBJECTS = $(am_wcalc_OBJECTS)
 wcalc_DEPENDENCIES =
 wcalc_LDFLAGS =
@@ -129,7 +130,7 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/help.Po ./$(DEPDIR)/historyManager.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/iscmd.Po ./$(DEPDIR)/isconst.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/isfunc.Po ./$(DEPDIR)/list.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/main.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/main.Po ./$(DEPDIR)/number.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/number_formatting.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/parser.Po ./$(DEPDIR)/scanner.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/string_manip.Po \
@@ -237,6 +238,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/isfunc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/list.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/number.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/number_formatting.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/parser.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/scanner.Po@am__quote@

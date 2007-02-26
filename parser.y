@@ -15,12 +15,8 @@
 # endif
 char *strchr (), *strrchr ();
 #endif
-#if HAVE_LIMITS_H
-# include <limits.h> /* MPFR uses ULONG_MAX on some systems */
-#endif
 
-#include <gmp.h>
-#include <mpfr.h>
+#include "number.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -62,7 +58,7 @@ int show_line_numbers = 0;
 %union	{ /* the types that we use in the tokens */
 enum functions function;
 enum operations operation;
-mpfr_t number;
+Number number;
 int integer;
 enum commands cmd;
 char * variable;
@@ -128,13 +124,13 @@ oneline : exp eoln
 	} else {
 		if (! synerrors && ! yynerrs) {
 			set_prettyanswer($1);
-			mpfr_set(last_answer,$1,GMP_RNDN);
+			num_set(last_answer,$1);
 		} else {
 			synerrors = 0;
 			report_error("Too many errors.");
 		}
 	}
-	mpfr_clear($1);
+	num_free($1);
 	compute = 1;
 	line_is_a_command = 0;
 }
@@ -176,7 +172,7 @@ oneline : exp eoln
 
     /* there is the possibility of lost memory here,
      * because "error" has no data type
-     * (and because I'm passing around *actual* mpfr_t's
+     * (and because I'm passing around *actual* Number's
 	 * rather than pointers to them) */
     /* report_error("3 Error in scanner halts parser."); */
     compute = 1;
@@ -251,7 +247,7 @@ command : HEX_CMD {
 | DISPLAY_PREFS_CMD {
 	if (standard_output) {
 		printf("          Display Precision: %i %s\n",conf.precision,((conf.precision==-1)?"(auto)":""));
-		printf("         Internal Precision: %lu bits\n", (unsigned long) mpfr_get_default_prec());
+		printf("         Internal Precision: %lu bits\n", (unsigned long) num_get_default_prec());
 		printf("         Engineering Output: %s\n",conf.engineering?"yes":"no");
 		printf("              Output Format: %s\n",output_string(conf.output_format));
 		printf("                Use Radians: %s\n",conf.use_radians?"yes":"no");
@@ -376,12 +372,12 @@ command : HEX_CMD {
 	$$ = nothing;
 }
 | BITS_CMD {
-	if ($1 < MPFR_PREC_MIN) {
-		report_error("Minimum precision is %lu.\n", (unsigned long)MPFR_PREC_MIN);
-	} else if ($1 > MPFR_PREC_MAX) {
-		report_error("Maximum precision is %lu.\n", (unsigned long)MPFR_PREC_MAX);
+	if ($1 < NUM_PREC_MIN) {
+		report_error("Minimum precision is %lu.\n", (unsigned long)NUM_PREC_MIN);
+	} else if ($1 > NUM_PREC_MAX) {
+		report_error("Maximum precision is %lu.\n", (unsigned long)NUM_PREC_MAX);
 	} else {
-		mpfr_set_default_prec($1);
+		num_set_default_prec($1);
 	}
 	$$ = nothing;
 }
@@ -455,18 +451,18 @@ assignment : ASSIGNMENT exp optionalstring
 		} else {
 			if (putval($1,$2,$3) == 0) {
 				if (standard_output) {
-					mpfr_t val;
-					mpfr_init(val);
+					Number val;
+					num_init(val);
 					printf($1);
 					getvarval(val, $1);
 					print_this_result(val);
-					mpfr_clear(val);
+					num_free(val);
 				}
 			} else {
 				report_error("There was a problem assigning the value.");
 			}
 		}
-		mpfr_clear($2);
+		num_free($2);
 	} else {
 		scanerror = 0;
 		report_error("Scanner error halts parser.");
@@ -503,7 +499,7 @@ assignment : ASSIGNMENT exp optionalstring
 | NUMBER EQUALS_SIGN exp optionalstring
 {
 	report_error("Constants cannot be assigned to other values.");
-	mpfr_clear($3);
+	num_free($3);
 	if ($4 != NULL) {
 		free($4);
 	}
@@ -518,24 +514,24 @@ assignment : ASSIGNMENT exp optionalstring
 }
 ;
 
-exp : exp WMINUS exp { mpfr_init($$); simple_exp($$, $1, wminus, $3); mpfr_clear($1); mpfr_clear($3); }
-| exp WPLUS exp { mpfr_init($$); simple_exp($$, $1, wplus, $3); mpfr_clear($1); mpfr_clear($3); }
-| exp WAND exp { mpfr_init($$); simple_exp($$, $1, wand, $3); mpfr_clear($1); mpfr_clear($3); }
-| exp WOR exp { mpfr_init($$); simple_exp($$, $1, wor, $3); mpfr_clear($1); mpfr_clear($3); }
-| exp WBOR exp { mpfr_init($$); simple_exp($$, $1, wbor, $3); mpfr_clear($1); mpfr_clear($3); }
-| exp WBXOR exp { mpfr_init($$); simple_exp($$, $1, wbxor, $3); mpfr_clear($1); mpfr_clear($3); }
-| exp WBAND exp { mpfr_init($$); simple_exp($$, $1, wband, $3); mpfr_clear($1); mpfr_clear($3); }
-| exp WEQUAL exp { mpfr_init($$); simple_exp($$, $1, wequal, $3); mpfr_clear($1); mpfr_clear($3); }
-| exp WNEQUAL exp { mpfr_init($$); simple_exp($$, $1, wnequal, $3); mpfr_clear($1); mpfr_clear($3); }
-| exp WGT exp { mpfr_init($$); simple_exp($$, $1, wgt, $3); mpfr_clear($1); mpfr_clear($3); }
-| exp WLT exp { mpfr_init($$); simple_exp($$, $1, wlt, $3); mpfr_clear($1); mpfr_clear($3); }
-| exp WGEQ exp { mpfr_init($$); simple_exp($$, $1, wgeq, $3); mpfr_clear($1); mpfr_clear($3); }
-| exp WLEQ exp { mpfr_init($$); simple_exp($$, $1, wleq, $3); mpfr_clear($1); mpfr_clear($3); }
-| exp WLSHFT exp { mpfr_init($$); simple_exp($$, $1, wlshft, $3); mpfr_clear($1); mpfr_clear($3); }
-| exp WRSHFT exp { mpfr_init($$); simple_exp($$, $1, wrshft, $3); mpfr_clear($1); mpfr_clear($3); }
-| exp WMULT exp { mpfr_init($$); simple_exp($$, $1, wmult, $3); mpfr_clear($1); mpfr_clear($3); }
-| exp WDIV exp { mpfr_init($$); simple_exp($$, $1, wdiv, $3); mpfr_clear($1); mpfr_clear($3); }
-| exp WMOD exp { mpfr_init($$); simple_exp($$, $1, wmod, $3); mpfr_clear($1); mpfr_clear($3); }
+exp : exp WMINUS exp { num_init($$); simple_exp($$, $1, wminus, $3); num_free($1); num_free($3); }
+| exp WPLUS exp { num_init($$); simple_exp($$, $1, wplus, $3); num_free($1); num_free($3); }
+| exp WAND exp { num_init($$); simple_exp($$, $1, wand, $3); num_free($1); num_free($3); }
+| exp WOR exp { num_init($$); simple_exp($$, $1, wor, $3); num_free($1); num_free($3); }
+| exp WBOR exp { num_init($$); simple_exp($$, $1, wbor, $3); num_free($1); num_free($3); }
+| exp WBXOR exp { num_init($$); simple_exp($$, $1, wbxor, $3); num_free($1); num_free($3); }
+| exp WBAND exp { num_init($$); simple_exp($$, $1, wband, $3); num_free($1); num_free($3); }
+| exp WEQUAL exp { num_init($$); simple_exp($$, $1, wequal, $3); num_free($1); num_free($3); }
+| exp WNEQUAL exp { num_init($$); simple_exp($$, $1, wnequal, $3); num_free($1); num_free($3); }
+| exp WGT exp { num_init($$); simple_exp($$, $1, wgt, $3); num_free($1); num_free($3); }
+| exp WLT exp { num_init($$); simple_exp($$, $1, wlt, $3); num_free($1); num_free($3); }
+| exp WGEQ exp { num_init($$); simple_exp($$, $1, wgeq, $3); num_free($1); num_free($3); }
+| exp WLEQ exp { num_init($$); simple_exp($$, $1, wleq, $3); num_free($1); num_free($3); }
+| exp WLSHFT exp { num_init($$); simple_exp($$, $1, wlshft, $3); num_free($1); num_free($3); }
+| exp WRSHFT exp { num_init($$); simple_exp($$, $1, wrshft, $3); num_free($1); num_free($3); }
+| exp WMULT exp { num_init($$); simple_exp($$, $1, wmult, $3); num_free($1); num_free($3); }
+| exp WDIV exp { num_init($$); simple_exp($$, $1, wdiv, $3); num_free($1); num_free($3); }
+| exp WMOD exp { num_init($$); simple_exp($$, $1, wmod, $3); num_free($1); num_free($3); }
 | exp_l2
 ;
 
@@ -597,65 +593,65 @@ sign : WMINUS { $$ = -1; }
 ;
 
 exp_l2 : exp_l3
-| exp_l3 WSQR { mpfr_init($$); mpfr_sqr($$,$1,GMP_RNDN); mpfr_clear($1); }
-| sign exp_l2 oval { mpfr_init($$);
-		     mpfr_mul($2,$2,$3,GMP_RNDN);
-		     mpfr_mul_si($$,$2,$1,GMP_RNDN);
-		     mpfr_clear($2);
-		     mpfr_clear($3); }
+| exp_l3 WSQR { num_init($$); num_sqr($$,$1); num_free($1); }
+| sign exp_l2 oval { num_init($$);
+		     num_mul($2,$2,$3);
+		     num_mul_si($$,$2,$1);
+		     num_free($2);
+		     num_free($3); }
 ;
 
 oval : exp_l3 oval {
-     mpfr_init_set($$,$1,GMP_RNDN);
-     mpfr_clear($1);
-     mpfr_clear($2);
+     num_init_set($$,$1);
+     num_free($1);
+     num_free($2);
 }
-| { mpfr_init_set_ui($$,1,GMP_RNDN); }
+| { num_init_set_ui($$,1); }
 ;
 
-exp_l3 : capsule oval { mpfr_init($$);
+exp_l3 : capsule oval { num_init($$);
                         simple_exp($$,$1,wmult,$2);
-			mpfr_clear($1);
-			mpfr_clear($2);}
-| capsule WPOW sign exp_l3 oval { mpfr_init($$);
-				  mpfr_mul_si($4,$4,$3,GMP_RNDN);
-				  mpfr_pow($1,$1,$4,GMP_RNDN);
-				  mpfr_mul($$,$1,$5,GMP_RNDN);
-				  mpfr_clear($1);
-				  mpfr_clear($4);
-				  mpfr_clear($5);}
+			num_free($1);
+			num_free($2);}
+| capsule WPOW sign exp_l3 oval { num_init($$);
+				  num_mul_si($4,$4,$3);
+				  num_pow($1,$1,$4);
+				  num_mul($$,$1,$5);
+				  num_free($1);
+				  num_free($4);
+				  num_free($5);}
 ;
 
 parenthated: OPEN_PARENTHESES exp CLOSE_PARENTHESES
-		   { mpfr_init($$); mpfr_set($$,$2,GMP_RNDN); mpfr_clear($2); }
+		   { num_init($$); num_set($$,$2); num_free($2); }
 		   | OPEN_BRACE exp CLOSE_BRACE
-		   { mpfr_init($$); mpfr_set($$,$2,GMP_RNDN); mpfr_clear($2); }
+		   { num_init($$); num_set($$,$2); num_free($2); }
 		   | OPEN_BRACKET exp CLOSE_BRACKET
-		   { mpfr_init($$); mpfr_set($$,$2,GMP_RNDN); mpfr_clear($2); }
-		   | nullexp { mpfr_init_set_ui($$,0,GMP_RNDN); }
+		   { num_init($$); num_set($$,$2); num_free($2); }
+		   | nullexp { num_init_set_ui($$,0); }
 		   ;
 
 capsule: parenthated
-	   { mpfr_init($$); mpfr_set($$,$1,GMP_RNDN); mpfr_clear($1); }
+	   { num_init($$); num_set($$,$1); num_free($1); }
 	   | NUMBER
 	   | capsule WBANG
 	   {
-	   mpfr_init($$);
-	   mpfr_fac_ui($$,mpfr_get_ui($1,GMP_RNDN),GMP_RNDN);
-	   mpfr_clear($1);
+	   num_init($$);
+	   num_factorial($$,num_get_ui($1));
+	   num_free($1);
 	   }
 	   | func parenthated %prec WMULT
 	   {
-	   mpfr_init($$);
+	   num_init($$);
 	   uber_function($$,$1,$2);
-	   mpfr_clear($2);
+	   num_free($2);
 	   }
 	   | func sign capsule %prec WEQUAL
 	   {
-	   mpfr_init($$);
-	   mpfr_mul_si($3,$3,$2,GMP_RNDN);
+	   num_init($$);
+	   num_mul_si($3,$3,$2);
 	   uber_function($$,$1,$3);
-	   mpfr_clear($3);
+	   num_free($3);
 	   }
 ;
 

@@ -12,6 +12,7 @@
 #endif
 #include <stdio.h>
 #include <string.h> /* for strcmp() */
+#include "number.h"
 #include "calculator.h"
 #include "conversion.h"
 #ifdef MEMWATCH
@@ -362,46 +363,46 @@ int unit_id(int utype, char * unit)
     return -1;
 }
 
-void uber_conversion (mpfr_t output, int utype, int fromunit, int tounit, mpfr_t value)
+void uber_conversion (Number output, int utype, int fromunit, int tounit, Number value)
 {
     if (utype != TEMPERATURE_C) {
         const struct conversion *ltable = conversions[utype];
-        mpfr_t tofac, fromfac;
+        Number tofac, fromfac;
 
-        mpfr_init_set_str(tofac,ltable[tounit].factor,0,GMP_RNDN);
-        mpfr_init_set_str(fromfac,ltable[fromunit].factor,0,GMP_RNDN);
-        mpfr_div(tofac,tofac,fromfac,GMP_RNDN);
-        mpfr_mul(output,tofac,value,GMP_RNDN);
-        mpfr_clear(tofac);
-        mpfr_clear(fromfac);
+        num_init_set_str(tofac, ltable[tounit].factor, 0);
+        num_init_set_str(fromfac, ltable[fromunit].factor, 0);
+        num_div(tofac, tofac, fromfac);
+        num_mul(output, tofac, value);
+        num_free(tofac);
+        num_free(fromfac);
     } else {
-        mpfr_t temp;
+        Number temp;
 
-        mpfr_init(temp);
+        num_init(temp);
         /* convert to kelvin */
         switch (fromunit) {
             case KELVIN:
                 break;
             case CELSIUS:
-                mpfr_set_d(temp,273.15,GMP_RNDN);
-                mpfr_add(value,value,temp,GMP_RNDN);
+                num_set_d(temp, 273.15);
+                num_add(value, value, temp);
                 break;
             case RANKINE:
-                mpfr_set_d(temp,1.8,GMP_RNDN);
-                mpfr_div(value,value,temp,GMP_RNDN);
+                num_set_d(temp, 1.8);
+                num_div(value, value, temp);
                 break;
             case FARENHEIT:
-                mpfr_sub_ui(value,value,32,GMP_RNDN);
-                mpfr_set_d(temp,1.8,GMP_RNDN);
-                mpfr_div(value,value,temp,GMP_RNDN);
-                mpfr_set_d(temp,273.15,GMP_RNDN);
-                mpfr_add(value,value,temp,GMP_RNDN);
+                num_sub_ui(value,value, 32);
+                num_set_d(temp, 1.8);
+                num_div(value, value, temp);
+                num_set_d(temp, 273.15);
+                num_add(value, value, temp);
                 break;
             case REAUMUR:
-                mpfr_set_d(temp,(5/4),GMP_RNDN);
-                mpfr_mul(value,value,temp,GMP_RNDN);
-                mpfr_set_d(temp,273.15,GMP_RNDN);
-                mpfr_add(value,value,temp,GMP_RNDN);
+                num_set_d(temp, (5.0/4.0));
+                num_mul(value, value, temp);
+                num_set_d(temp, 273.15);
+                num_add(value, value, temp);
                 break;
         }
         /* convert from kelvin */
@@ -409,28 +410,28 @@ void uber_conversion (mpfr_t output, int utype, int fromunit, int tounit, mpfr_t
             case KELVIN:
                 break;
             case CELSIUS:
-                mpfr_set_d(temp,273.15,GMP_RNDN);
-                mpfr_sub(output,value,temp,GMP_RNDN);
+                num_set_d(temp, 273.15);
+                num_sub(output, value, temp);
                 break;
             case RANKINE:
-                mpfr_set_d(temp,1.8,GMP_RNDN);
-                mpfr_mul(output,value,temp,GMP_RNDN);
+                num_set_d(temp, 1.8);
+                num_mul(output, value, temp);
                 break;
             case FARENHEIT:
-                mpfr_set_d(temp,273.15,GMP_RNDN);
-                mpfr_sub(value,value,temp,GMP_RNDN);
-                mpfr_set_d(temp,1.8,GMP_RNDN);
-                mpfr_mul(value,value,temp,GMP_RNDN);
-                mpfr_add_ui(output,value,32,GMP_RNDN);
+                num_set_d(temp, 273.15);
+                num_sub(value, value, temp);
+                num_set_d(temp, 1.8);
+                num_mul(value, value, temp);
+                num_add_ui(output, value, 32);
                 break;
             case REAUMUR:
-                mpfr_set_d(temp,273.15,GMP_RNDN);
-                mpfr_sub(value,value,temp,GMP_RNDN);
-                mpfr_set_d(temp,(4/5),GMP_RNDN);
-                mpfr_mul(output,value,temp,GMP_RNDN);
+                num_set_d(temp, 273.15);
+                num_sub(value, value, temp);
+                num_set_d(temp, (4.0/5.0));
+                num_mul(output, value, temp);
                 break;
         }
-        mpfr_clear(temp);
+        num_free(temp);
 /* The old way *//*
         //char stage1[100];
         //char composite[100];

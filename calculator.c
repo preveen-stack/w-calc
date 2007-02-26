@@ -31,8 +31,7 @@ char *strchr(), *strrchr();
 # endif
 #endif
 
-#include <gmp.h>
-#include <mpfr.h>
+#include "number.h"
 
 #include "uint32_max.h"
 #include "calculator.h"
@@ -48,9 +47,8 @@ char *strchr(), *strrchr();
 #endif
 
 /* variables everyone needs to get to */
-mpfr_t last_answer;
+Number last_answer;
 char *pretty_answer = NULL;
-gmp_randstate_t randstate;
 
 /* communication with the parser */
 char compute = 1;
@@ -250,15 +248,15 @@ static char *flatten(char *str)
 	// if it's a variable, evaluate it
 	a = getvar_full(varname);
 	if (!a.err) {		       // it is a var
-	    mpfr_t f;
+	    Number f;
 
-	    mpfr_init(f);
+	    num_init(f);
 	    if (a.exp) {	       // it is an expression
 		parseme(a.exp);
-		mpfr_set(f, last_answer, GMP_RNDN);
+		num_set(f, last_answer);
 	    } else {		       // it is a value
-		mpfr_set(f, a.val, GMP_RNDN);
-		mpfr_clear(a.val);
+		num_set(f, a.val);
+		num_free(a.val);
 	    }
 	    // get the number
 	    {
@@ -266,7 +264,7 @@ static char *flatten(char *str)
 
 		varvalue = num_to_str_complex(f, 10, 0, -1, 1, &junk);
 	    }
-	    mpfr_clear(f);
+	    num_free(f);
 	} else {		       // not a known var: itza literal (e.g. cos)
 	    varvalue = (char *)strdup(varname);
 	}
@@ -376,7 +374,7 @@ int find_recursion_core(List oldvars)
     if (a.err)
 	return 0;
     if (!a.exp) {
-	mpfr_clear(a.val);
+	num_free(a.val);
 	return 0;
     }
 
@@ -496,7 +494,7 @@ void display_and_clear_errstring()
     }
 }				       /*}}} */
 
-void set_prettyanswer(mpfr_t num)
+void set_prettyanswer(Number num)
 {				       /*{{{ */
     char *temp;
 
@@ -796,50 +794,13 @@ char *print_this_result_dbl(double result)
     return pa;
 }				       /*}}} */
 
-int is_mpfr_int(mpfr_t potential_int)
-{				       /*{{{ */
-    char *str, *curs;
-    mp_exp_t eptr;
-    int base;
-
-    switch (conf.output_format) {
-	case HEXADECIMAL_FORMAT:
-	    base = 16;
-	    break;
-	default:
-	case DECIMAL_FORMAT:
-	    base = 10;
-	    break;
-	case OCTAL_FORMAT:
-	    base = 8;
-	    break;
-	case BINARY_FORMAT:
-	    base = 2;
-	    break;
-    }
-    str = mpfr_get_str(NULL, &eptr, base, 0, potential_int, GMP_RNDN);
-    if (eptr < 0)
-	goto not_an_int;
-    curs = str + eptr;
-    while (curs && *curs) {
-	if (*curs != '0')
-	    goto not_an_int;
-	curs++;
-    }
-    mpfr_free_str(str);
-    return 1;
-  not_an_int:
-    mpfr_free_str(str);
-    return 0;
-}				       /*}}} */
-
-char *print_this_result(mpfr_t result)
+char *print_this_result(Number result)
 {				       /*{{{ */
     extern char *errstring;
     unsigned int base = 0;
 
     Dprintf("print_this_result (%f) in format %i\n",
-	    mpfr_get_d(result, GMP_RNDN), conf.output_format);
+	    num_get_d(result), conf.output_format);
     // output in the proper base and format
     switch (conf.output_format) {
 	case HEXADECIMAL_FORMAT:
@@ -856,12 +817,12 @@ char *print_this_result(mpfr_t result)
 	    // numbers like 5.1 that I don't even wanna begin to think about
 	    if (conf.precision_guard && conf.precision < 0) {
 		Dprintf("precision guard and automatic precision\n");
-		if (!conf.print_ints || !is_mpfr_int(result)) {
+		if (!conf.print_ints || !is_int(result)) {
 		    Dprintf("no print_ints or it isn't an int\n");
 		    //XXX: what is the following if() for?
 		    //if (mpfr_get_d(result, GMP_RNDN) !=
 		    //mpfr_get_si(result, GMP_RNDN)) {
-		    double res = mpfr_get_d(result, GMP_RNDN);
+		    double res = num_get_d(result);
 
 		    if (fabs(res) < DBL_EPSILON) {
 			res = 0.0;
@@ -888,7 +849,7 @@ char *print_this_result(mpfr_t result)
     Dprintf("not_all_displayed = %i\n", not_all_displayed);
 
     /* now, decide whether it's been rounded or not */
-    if (mpfr_inf_p(result) || mpfr_nan_p(result)) {
+    if (num_is_inf(result) || num_is_nan(result)) {
 	// if it is infinity, it's all there ;)
 	not_all_displayed = 0;
     } else if (not_all_displayed == 0) {
@@ -951,159 +912,118 @@ char *print_this_result(mpfr_t result)
     return pa;
 }				       /*}}} */
 
-void simple_exp(mpfr_t output, mpfr_t first, enum operations op,
-		mpfr_t second)
+void simple_exp(Number output, Number first, enum operations op,
+		Number second)
 {				       /*{{{ */
     if (compute) {
-	mpfr_t temp;
+	Number temp;
 
-	mpfr_init(temp);
-	Dprintf("simple_exp: %f %i %f\n", mpfr_get_d(first, GMP_RNDN), op,
-		mpfr_get_d(second, GMP_RNDN));
+	num_init(temp);
+	Dprintf("simple_exp: %f %i %f\n", num_get_d(first), op,
+		num_get_d(second));
 
 	switch (op) {
 	    default:
-		mpfr_set_d(output, 0.0, GMP_RNDN);
+		num_set_d(output, 0.0);
 		break;
 	    case wequal:
-		mpfr_set_ui(output, mpfr_equal_p(first, second), GMP_RNDN);
+		num_set_ui(output, num_is_equal(first, second));
 		break;
 	    case wnequal:
-		mpfr_set_ui(output, !mpfr_equal_p(first, second), GMP_RNDN);
+		num_set_ui(output, !num_is_equal(first, second));
 		break;
 	    case wgt:
-		mpfr_set_ui(output, mpfr_greater_p(first, second), GMP_RNDN);
+		num_set_ui(output, num_is_greater(first, second));
 		break;
 	    case wlt:
-		mpfr_set_ui(output, mpfr_less_p(first, second), GMP_RNDN);
+		num_set_ui(output, num_is_less(first, second));
 		break;
 	    case wgeq:
-		mpfr_set_ui(output, mpfr_greaterequal_p(first, second),
-			    GMP_RNDN);
+		num_set_ui(output, num_is_greaterequal(first, second));
 		break;
 	    case wleq:
-		mpfr_set_ui(output, mpfr_lessequal_p(first, second),
-			    GMP_RNDN);
+		num_set_ui(output, num_is_lessequal(first, second));
 		break;
 	    case wplus:
-		mpfr_add(output, first, second, GMP_RNDN);
+		num_add(output, first, second);
 		break;
 	    case wminus:
-		mpfr_sub(output, first, second, GMP_RNDN);
+		num_sub(output, first, second);
 		break;
 	    case wmult:
-		mpfr_mul(output, first, second, GMP_RNDN);
+		num_mul(output, first, second);
 		break;
 	    case wdiv:
-		mpfr_div(output, first, second, GMP_RNDN);
+		num_div(output, first, second);
 		break;
 	    case wpow:
-		mpfr_pow(output, first, second, GMP_RNDN);
+		num_pow(output, first, second);
 		break;
 	    case wor:
-		mpfr_set_ui(output, (!mpfr_zero_p(first)) ||
-			    (!mpfr_zero_p(second)), GMP_RNDN);
+		num_set_ui(output, (!num_is_zero(first)) ||
+			    (!num_is_zero(second)));
 		break;
 	    case wand:
-		mpfr_set_ui(output, (!mpfr_zero_p(first)) &&
-			    (!mpfr_zero_p(second)), GMP_RNDN);
+		num_set_ui(output, (!num_is_zero(first)) &&
+			    (!num_is_zero(second)));
 		break;
 	    case wbor:
-	    {
-		mpz_t intfirst, intsecond, intoutput;
-
-		mpz_init(intfirst);
-		mpz_init(intsecond);
-		mpz_init(intoutput);
-		mpfr_get_z(intfirst, first, GMP_RNDN);
-		mpfr_get_z(intsecond, second, GMP_RNDN);
-		mpz_ior(intoutput, intfirst, intsecond);
-		mpfr_set_z(output, intoutput, GMP_RNDN);
-		mpz_clear(intfirst);
-		mpz_clear(intsecond);
-		mpz_clear(intoutput);
-	    }
+		num_bor(output, first, second);
 		break;
 	    case wband:
-	    {
-		mpz_t intfirst, intsecond, intoutput;
-
-		mpz_init(intfirst);
-		mpz_init(intsecond);
-		mpz_init(intoutput);
-		mpfr_get_z(intfirst, first, GMP_RNDN);
-		mpfr_get_z(intsecond, second, GMP_RNDN);
-		mpz_and(intoutput, intfirst, intsecond);
-		mpfr_set_z(output, intoutput, GMP_RNDN);
-		mpz_clear(intfirst);
-		mpz_clear(intsecond);
-		mpz_clear(intoutput);
-	    }
+		num_band(output, first, second);
 		break;
 	    case wbxor:
-	    {
-		mpz_t intfirst, intsecond, intoutput;
-
-		mpz_init(intfirst);
-		mpz_init(intsecond);
-		mpz_init(intoutput);
-		mpfr_get_z(intfirst, first, GMP_RNDN);
-		mpfr_get_z(intsecond, second, GMP_RNDN);
-		mpz_xor(intoutput, intfirst, intsecond);
-		mpfr_set_z(output, intoutput, GMP_RNDN);
-		mpz_clear(intfirst);
-		mpz_clear(intsecond);
-		mpz_clear(intoutput);
-	    }
+		num_bxor(output, first, second);
 		break;
 	    case wlshft:
-		mpfr_set_ui(temp, 2, GMP_RNDN);
-		mpfr_pow(temp, temp, second, GMP_RNDN);
-		mpfr_mul(output, first, temp, GMP_RNDN);
+		num_set_ui(temp, 2);
+		num_pow(temp, temp, second);
+		num_mul(output, first, temp);
 		break;
 	    case wrshft:
-		mpfr_set_ui(temp, 2, GMP_RNDN);
-		mpfr_pow(temp, temp, second, GMP_RNDN);
-		mpfr_div(output, first, temp, GMP_RNDN);
+		num_set_ui(temp, 2);
+		num_pow(temp, temp, second);
+		num_div(output, first, temp);
 		break;
 	    case wmod:
-		if (mpfr_zero_p(second)) {
-		    mpfr_set_nan(output);
+		if (num_is_zero(second)) {
+		    num_set_nan(output);
 		} else {
 		    /* divide, round to zero, multiply, subtract
 		     *
 		     * in essence, find the value x in the equation:
 		     * first = second * temp + x */
-		    mpfr_div(output, first, second, GMP_RNDN);
+		    num_div(output, first, second);
 		    if (conf.c_style_mod) {
-			mpfr_rint(output, output, GMP_RNDZ);	// makes zeros work
+			num_rintz(output, output);	// makes zeros work
 		    } else {
-			if (mpfr_sgn(first) >= 0) {
-			    mpfr_floor(output, output);
+			if (num_sign(first) >= 0) {
+			    num_floor(output, output);
 			} else {
-			    mpfr_ceil(output, output);
+			    num_ceil(output, output);
 			}
 		    }
-		    mpfr_mul(output, output, second, GMP_RNDN);
-		    mpfr_sub(output, first, output, GMP_RNDN);
+		    num_mul(output, output, second);
+		    num_sub(output, first, output);
 		}
 		break;
 	}
-	Dprintf("returns: %f\n", mpfr_get_d(output, GMP_RNDN));
-	mpfr_clear(temp);
+	Dprintf("returns: %f\n", num_get_d(output));
+	num_free(temp);
 	return;
     } else {
-	mpfr_set_ui(output, 0, GMP_RNDN);
+	num_set_ui(output, 0);
 	return;
     }
 }				       /*}}} */
 
-void uber_function(mpfr_t output, enum functions func, mpfr_t input)
+void uber_function(Number output, enum functions func, Number input)
 {				       /*{{{ */
     if (compute) {
-	mpfr_t temp;
+	Number temp;
 
-	mpfr_init(temp);
+	num_init(temp);
 	if (!conf.use_radians) {
 	    switch (func) {
 		case wsin:
@@ -1112,9 +1032,9 @@ void uber_function(mpfr_t output, enum functions func, mpfr_t input)
 		case wcot:
 		case wsec:
 		case wcsc:
-		    mpfr_const_pi(temp, GMP_RNDN);
-		    mpfr_mul(input, input, temp, GMP_RNDN);
-		    mpfr_div_ui(input, input, 180, GMP_RNDN);
+		    num_const_pi(temp);
+		    num_mul(input, input, temp);
+		    num_div_ui(input, input, 180);
 		    break;
 		case wasin:
 		case wacos:
@@ -1122,9 +1042,9 @@ void uber_function(mpfr_t output, enum functions func, mpfr_t input)
 		case wacot:
 		case wasec:
 		case wacsc:
-		    mpfr_const_pi(temp, GMP_RNDN);
-		    mpfr_pow_si(temp, temp, -1, GMP_RNDN);
-		    mpfr_mul_ui(temp, temp, 180, GMP_RNDN);
+		    num_const_pi(temp);
+		    num_pow_si(temp, temp, -1);
+		    num_mul_ui(temp, temp, 180);
 		    break;
 		default:
 		    break;
@@ -1132,260 +1052,187 @@ void uber_function(mpfr_t output, enum functions func, mpfr_t input)
 	}
 	switch (func) {
 	    case wsin:
-		mpfr_sin(output, input, GMP_RNDN);
+		num_sin(output, input);
 		break;
 	    case wcos:
-		mpfr_cos(output, input, GMP_RNDN);
+		num_cos(output, input);
 		break;
 	    case wtan:
-		mpfr_tan(output, input, GMP_RNDN);
+		num_tan(output, input);
 		break;
 	    case wcot:
-#ifdef HAVE_MPFR_22
-		mpfr_cot(output, input, GMP_RNDN);
-#else
-		mpfr_tan(output, input, GMP_RNDN);
-		mpfr_pow_si(output, output, -1, GMP_RNDN);
-#endif
+		num_cot(output, input);
 		break;
 	    case wsec:
-#ifdef HAVE_MPFR_22
-		mpfr_sec(output, input, GMP_RNDN);
-#else
-		mpfr_cos(output, input, GMP_RNDN);
-		mpfr_pow_si(output, output, -1, GMP_RNDN);
-#endif
+		num_sec(output, input);
 		break;
 	    case wcsc:
-#ifdef HAVE_MPFR_22
-		mpfr_csc(output, input, GMP_RNDN);
-#else
-		mpfr_sin(output, input, GMP_RNDN);
-		mpfr_pow_si(output, output, -1, GMP_RNDN);
-#endif
+		num_csc(output, input);
 		break;
 	    case wasin:
-		mpfr_asin(output, input, GMP_RNDN);
+		num_asin(output, input);
 		if (!conf.use_radians) {
-		    mpfr_mul(output, output, temp, GMP_RNDN);
+		    num_mul(output, output, temp);
 		}
 		break;
 	    case wacos:
-		mpfr_acos(output, input, GMP_RNDN);
+		num_acos(output, input);
 		if (!conf.use_radians) {
-		    mpfr_mul(output, output, temp, GMP_RNDN);
+		    num_mul(output, output, temp);
 		}
 		break;
 	    case watan:
-		mpfr_atan(output, input, GMP_RNDN);
+		num_atan(output, input);
 		if (!conf.use_radians) {
-		    mpfr_mul(output, output, temp, GMP_RNDN);
+		    num_mul(output, output, temp);
 		}
 		break;
 	    case wacot:
-		mpfr_pow_si(output, input, -1, GMP_RNDN);
-		mpfr_atan(output, output, GMP_RNDN);
+		num_pow_si(output, input, -1);
+		num_atan(output, output);
 		if (!conf.use_radians) {
-		    mpfr_mul(output, output, temp, GMP_RNDN);
+		    num_mul(output, output, temp);
 		}
 		break;
 	    case wasec:
-		mpfr_pow_si(output, input, -1, GMP_RNDN);
-		mpfr_acos(output, output, GMP_RNDN);
+		num_pow_si(output, input, -1);
+		num_acos(output, output);
 		if (!conf.use_radians) {
-		    mpfr_mul(output, output, temp, GMP_RNDN);
+		    num_mul(output, output, temp);
 		}
 		break;
 	    case wacsc:
-		mpfr_pow_si(output, input, -1, GMP_RNDN);
-		mpfr_asin(output, output, GMP_RNDN);
+		num_pow_si(output, input, -1);
+		num_asin(output, output);
 		if (!conf.use_radians) {
-		    mpfr_mul(output, output, temp, GMP_RNDN);
+		    num_mul(output, output, temp);
 		}
 		break;
 	    case wsinh:
-		mpfr_sinh(output, input, GMP_RNDN);
+		num_sinh(output, input);
 		break;
 	    case wcosh:
-		mpfr_cosh(output, input, GMP_RNDN);
+		num_cosh(output, input);
 		break;
 	    case wtanh:
-		mpfr_tanh(output, input, GMP_RNDN);
+		num_tanh(output, input);
 		break;
 	    case wcoth:
-#ifdef HAVE_MPFR_22
-		mpfr_coth(output, input, GMP_RNDN);
-#else
-		mpfr_tanh(output, input, GMP_RNDN);
-		mpfr_pow_si(output, output, -1, GMP_RNDN);
-#endif
+		num_coth(output, input);
 		break;
 	    case wsech:
-#ifdef HAVE_MPFR_22
-		mpfr_sech(output, input, GMP_RNDN);
-#else
-		mpfr_cosh(output, input, GMP_RNDN);
-		mpfr_pow_si(output, output, -1, GMP_RNDN);
-#endif
+		num_sech(output, input);
 		break;
 	    case wcsch:
-#ifdef HAVE_MPFR_22
-		mpfr_csch(output, input, GMP_RNDN);
-#else
-		mpfr_sinh(output, input, GMP_RNDN);
-		mpfr_pow_si(output, output, -1, GMP_RNDN);
-#endif
+		num_csch(output, input);
 		break;
 	    case wasinh:
-		mpfr_asinh(output, input, GMP_RNDN);
+		num_asinh(output, input);
 		break;
 	    case wacosh:
-		mpfr_acosh(output, input, GMP_RNDN);
+		num_acosh(output, input);
 		break;
 	    case watanh:
-		mpfr_atanh(output, input, GMP_RNDN);
+		num_atanh(output, input);
 		break;
 	    case wacoth:
-		mpfr_pow_si(input, input, -1, GMP_RNDN);
-		mpfr_atanh(output, input, GMP_RNDN);
+		num_acoth(output, input);
 		break;
 	    case wasech:
-		mpfr_pow_si(output, input, -1, GMP_RNDN);
-		mpfr_acosh(output, output, GMP_RNDN);
+		num_asech(output, input);
 		break;
 	    case wacsch:
-		mpfr_pow_si(output, input, -1, GMP_RNDN);
-		mpfr_asinh(output, output, GMP_RNDN);
+		num_acsch(output, input);
 		break;
 	    case wlog:
-		mpfr_log10(output, input, GMP_RNDN);
+		num_log10(output, input);
 		break;
 	    case wlogtwo:
-		mpfr_log2(output, input, GMP_RNDN);
+		num_log2(output, input);
 		break;
 	    case wln:
-		mpfr_log(output, input, GMP_RNDN);
+		num_log(output, input);
 		break;
 	    case wround:
-		mpfr_rint(output, input, GMP_RNDN);
+		num_rint(output, input);
 		break;
 	    case wneg:
-		mpfr_neg(output, input, GMP_RNDN);
+		num_neg(output, input);
 		break;
 	    case wnot:
-		mpfr_set_ui(output, mpfr_zero_p(input), GMP_RNDN);
+		num_set_ui(output, num_is_zero(input));
 		break;
 	    case wabs:
-		mpfr_abs(output, input, GMP_RNDN);
+		num_abs(output, input);
 		break;
 	    case wsqrt:
-		mpfr_sqrt(output, input, GMP_RNDN);
+		num_sqrt(output, input);
 		break;
 	    case wfloor:
-		mpfr_floor(output, input);
+		num_floor(output, input);
 		break;
 	    case wceil:
-		mpfr_ceil(output, input);
+		num_ceil(output, input);
 		break;
 	    case wrand:
-		seed_random();
-		while (mpfr_urandomb(output, randstate) != 0) ;
-		mpfr_mul(output, output, input, GMP_RNDN);
-		if (mpfr_cmp_si(input, 0) < 0) {
-		    mpfr_mul_si(output, output, -1, GMP_RNDN);
+		while (num_random(output) != 0) ;
+		num_mul(output, output, input);
+		if (num_cmp_si(input, 0) < 0) {
+		    num_mul_si(output, output, -1);
 		}
 		break;
 	    case wirand:
-		seed_random();
-		while (mpfr_urandomb(output, randstate) != 0) ;
-		mpfr_mul(output, output, input, GMP_RNDN);
-		if (mpfr_cmp_si(input, 0) < 0) {
-		    mpfr_mul_si(output, output, -1, GMP_RNDN);
+		while (num_random(output) != 0) ;
+		num_mul(output, output, input);
+		if (num_cmp_si(input, 0) < 0) {
+		    num_mul_si(output, output, -1);
 		}
-		mpfr_rint(output, output, GMP_RNDN);
+		num_rint(output, output);
 		break;
 	    case wcbrt:
-		mpfr_cbrt(output, input, GMP_RNDN);
+		num_cbrt(output, input);
 		break;
 	    case wexp:
-		mpfr_exp(output, input, GMP_RNDN);
+		num_exp(output, input);
 		break;
 	    case wfact:
-		mpfr_fac_ui(output, mpfr_get_ui(input, GMP_RNDN), GMP_RNDN);
+		num_factorial(output, num_get_ui(input));
 		break;
 	    case wcomp:
-	    {
-		mpz_t integer, intout;
-
-		mpz_init(integer);
-		mpz_init(intout);
-		mpfr_get_z(integer, input, GMP_RNDN);
-		mpz_com(intout, integer);
-		mpfr_set_z(output, intout, GMP_RNDN);
-		mpz_clear(integer);
-		mpz_clear(intout);
-	    }
+		num_comp(output, input);
 		break;
 #ifdef HAVE_MPFR_22
 	    case weint:
-		mpfr_eint(output, input, GMP_RNDN);
+		num_eint(output, input);
 		break;
 #endif
 	    case wgamma:
-		mpfr_gamma(output, input, GMP_RNDN);
+		num_gamma(output, input);
 		break;
 #ifdef HAVE_MPFR_22
 	    case wlngamma:
-		mpfr_lngamma(output, input, GMP_RNDN);
+		num_lngamma(output, input);
 		break;
 #endif
 	    case wzeta:
-		mpfr_zeta(output, input, GMP_RNDN);
+		num_zeta(output, input);
 		break;
 	    case wsinc:
-		if (mpfr_zero_p(input)) {
-		    mpfr_set_ui(output, 1, GMP_RNDN);
-		} else {
-		    mpfr_sin(output, input, GMP_RNDN);
-		    mpfr_div(output, output, input, GMP_RNDN);
-		}
+		num_sinc(output, input);
 		break;
 	    case wbnot:
-#ifdef _MPFR_H_HAVE_INTMAX_T
-		mpfr_set_uj(output, ~mpfr_get_uj(input, GMP_RNDN), GMP_RNDN);
-#else
-		mpfr_set_ui(output, ~mpfr_get_ui(input, GMP_RNDN), GMP_RNDN);
-#endif
+		num_bnot(output, input);
 		break;
 	    default:
-		mpfr_set(output, input, GMP_RNDN);
+		num_set(output, input);
 		break;
 	}
-	mpfr_clear(temp);
+	num_free(temp);
 	return;
     } else {
-	mpfr_set_ui(output, 0, GMP_RNDN);
+	num_set_ui(output, 0);
 	return;
     }
-}				       /*}}} */
-
-int seed_random(void)
-{				       /*{{{ */
-    static char seeded = 0;
-
-    if (!seeded) {
-	struct timeval tp;
-
-	if (gettimeofday(&tp, NULL) != 0) {
-	    perror("gettimeofday");
-	    exit(EXIT_FAILURE);
-	}
-	gmp_randinit_default(randstate);
-	gmp_randseed_ui(randstate, (unsigned long)(tp.tv_usec));
-	//srandom(time(NULL));
-	seeded = 1;
-    }
-    return 1;
 }				       /*}}} */
 
 char *output_string(unsigned int o)

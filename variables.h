@@ -16,32 +16,31 @@ char *strchr(), *strrchr();
 #include <stdlib.h>
 #include <stdio.h>
 
-#include <gmp.h>
-#include <mpfr.h>
+#include "number.h"
 
 struct variable
 {
     char *key;
     char *expression;
     char *description;
-    mpfr_t value;
+    Number value;
     unsigned int exp:1;
     struct variable *next;
 };
 
 struct answer
 {
-    mpfr_t val;
+    Number val;
     char *exp;
     char *desc;
     unsigned int err:1;
 };
 
-// requires a working mpfr_t
-void getvarval(mpfr_t out, char *key);
+// requires a working Number
+void getvarval(Number out, char *key);
 
-// requires a working mpfr_t (duh)
-int putval(char *key, mpfr_t value, char *desc);
+// requires a working Number
+int putval(char *key, Number value, char *desc);
 
 int putexp(char *key, char *value, char *desc);
 int varexists(char *key);
@@ -57,8 +56,8 @@ char ** listvarnames(void);
 /* ******************************
  * NOTE!
  * If you use these functions, they return
- * fully functioning mpfr_t structures that must be
- * mpfr_clear()'d when you're done with 'em.
+ * fully functioning Number structures that must be
+ * num_free()'d when you're done with 'em.
  */
 
 /* getvar returns only the value, or an error if it doesn't have one */
@@ -69,7 +68,7 @@ struct answer getvar(char *key);
 struct answer getvar_full(char *key);
 
 /* THIS function, however, exposes the innards of the variable system.
- * do not under any circumstance un-initialize the mpfr_t
+ * do not under any circumstance un-initialize the Number
  */
 struct variable *getrealnvar(size_t);
 

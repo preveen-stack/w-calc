@@ -9,11 +9,10 @@
 
 #ifndef WCALC_HISTORY_MANAGER
 
-#include <gmp.h>
-#include <mpfr.h>
+#include "number.h"
 
 void clearHistory(void);
-void addToHistory(char *, mpfr_t);
+void addToHistory(char *, Number);
 char *historynum(int, int);
 int historyLength(void);
 

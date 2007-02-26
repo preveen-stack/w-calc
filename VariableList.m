@@ -3,8 +3,7 @@
 #include "string_manip.h"
 #include "VariableList.h"
 
-#include "gmp.h"
-#include "mpfr.h"
+#include "number.h"
 #ifdef MEMWATCH
 #include "memwatch.h"
 #endif
@@ -54,14 +53,14 @@
 	if ([ch isEqualToString:@"value"]) {
 		char * input=strdup([anObject UTF8String]);
 		if (justnumbers(input)) {
-			mpfr_t la;
+			Number la;
 
-			mpfr_init_set(la, last_answer, GMP_RNDN);
+			num_init_set(la, last_answer);
 			parseme(input);
-			mpfr_set(theval->value, last_answer, GMP_RNDN);
+			num_set(theval->value, last_answer);
 			theval->exp = 0;
-			mpfr_set(last_answer, la, GMP_RNDN);
-			mpfr_clear(la);
+			num_set(last_answer, la);
+			num_free(la);
 		} else {
 			theval->expression = input;
 			theval->exp = 1;
@@ -77,9 +76,9 @@
 {
 	char varname[20];
 	int i=1;
-	mpfr_t blank;
+	Number blank;
 
-	mpfr_init_set_ui(blank,0,GMP_RNDN);
+	num_init_set_ui(blank,0);
 	sprintf(varname,"NewVariable%i",i);
 	while(varexists(varname)) {
 		++i;

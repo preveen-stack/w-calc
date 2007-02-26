@@ -11,12 +11,11 @@
 #include <string.h>
 #include <stdio.h>		       /* might make readline happy */
 
-#include <gmp.h>
-#include <mpfr.h>
-
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+
+#include "number.h"
 #include "historyManager.h"
 #include "calculator.h"
 
@@ -44,7 +43,7 @@ short recalculate = 0;
 struct entry
 {
     char *exp;
-    mpfr_t ans;
+    Number ans;
     unsigned int calc:1;
 };
 
@@ -62,7 +61,7 @@ void clearHistory()
 
     for (i = 0; i < histlen; i++) {
 	free(history[i].exp);
-	mpfr_clear(history[i].ans);
+	num_free(history[i].ans);
     }
     if (histlen) {
 	free(history);
@@ -70,7 +69,7 @@ void clearHistory()
     }
 }
 
-void addToHistory(char *expression, mpfr_t answer)
+void addToHistory(char *expression, Number answer)
 {
 #ifdef HAVE_READLINE_HISTORY
     add_history(expression);
@@ -86,7 +85,7 @@ void addToHistory(char *expression, mpfr_t answer)
 		free(history);
 		return;
 	    }
-	    mpfr_init_set(history->ans, answer, GMP_RNDN);
+	    num_init_set(history->ans, answer);
 	    histlen = 1;
 	}
     } else {			       /* a history exists */
@@ -110,7 +109,7 @@ void addToHistory(char *expression, mpfr_t answer)
 		    history[histlen].exp = strdup(expression);
 		else
 		    history[histlen].exp = NULL;
-		mpfr_init_set(history[histlen].ans, answer, GMP_RNDN);
+		num_init_set(history[histlen].ans, answer);
 		/* why is this if statement here? */
 		if (!temp[histlen].exp)
 		    return;
@@ -123,14 +122,14 @@ void addToHistory(char *expression, mpfr_t answer)
 		    free(history[0].exp);
 		for (i = 0; i < histlen - 1; ++i) {
 		    history[i].exp = history[i + 1].exp;
-		    mpfr_set(history[i].ans, history[i + 1].ans, GMP_RNDN);
+		    num_set(history[i].ans, history[i + 1].ans);
 		    history[i].calc = history[i + 1].calc;
 		}
 		if (expression)
 		    history[histlen - 1].exp = strdup(expression);
 		else
 		    history[histlen - 1].exp = NULL;
-		mpfr_set(history[histlen - 1].ans, answer, GMP_RNDN);
+		num_set(history[histlen - 1].ans, answer);
 		return;
 	    }
 	}
@@ -146,7 +145,7 @@ char *historynum(int step, int col)
 
 	if (recalculate) {
 	    parseme(history[step].exp);
-	    mpfr_set(history[step].ans, last_answer, GMP_RNDN);
+	    num_set(history[step].ans, last_answer);
 	    history[step].calc = 1;
 	    if (all_calculated()) {
 		recalculate = 0;

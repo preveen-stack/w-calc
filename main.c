@@ -14,8 +14,7 @@
 #include <errno.h>
 #include <fcntl.h>		       /* for open() */
 #include <limits.h>		       /* for stroul() and PATH_MAX */
-#include <gmp.h>
-#include <mpfr.h>		       /* for mpfr_t */
+#include "number.h"
 
 #ifdef HAVE_LIBREADLINE
 # if defined(HAVE_READLINE_READLINE_H)
@@ -292,8 +291,8 @@ int main(int argc, char *argv[])
     conf.verbose = 0;
     conf.c_style_mod = 1;
 
-    mpfr_set_default_prec(1024);
-    mpfr_init_set_ui(last_answer, 0, GMP_RNDN);
+    init_numbers();
+    num_init_set_ui(last_answer, 0);
 
     /* load the preferences */
     {
@@ -320,7 +319,7 @@ int main(int argc, char *argv[])
 		fprintf(stderr,
 			"-P option requires a valid integer without spaces.\n");
 		fflush(stderr);
-		mpfr_clear(last_answer);
+		num_free(last_answer);
 		exit(EXIT_FAILURE);
 	    } else {
 		conf.precision = (int)argnum;
@@ -330,11 +329,11 @@ int main(int argc, char *argv[])
 	    conf.engineering = !conf.engineering;
 	} else if (!strcmp(argv[i], "-H") || !strcmp(argv[i], "--help")) {
 	    print_command_help();
-	    mpfr_clear(last_answer);
+	    num_free(last_answer);
 	    exit(EXIT_SUCCESS);
 	} else if (!strcmp(argv[i], "-v") || !strcmp(argv[i], "--version")) {
 	    printf("wcalc %s\n", VERSION);
-	    mpfr_clear(last_answer);
+	    num_free(last_answer);
 	    exit(EXIT_SUCCESS);
 	} else if (!strcmp(argv[i], "-d") || !strcmp(argv[i], "--decimal") ||
 		   !strcmp(argv[i], "-dec")) {
@@ -408,10 +407,16 @@ int main(int argc, char *argv[])
 	    if (endptr != NULL && (strlen(endptr) > 0)) {
 		fprintf(stderr,
 			"--bits option requires a valid integer without spaces.\n");
-		mpfr_clear(last_answer);
+		num_free(last_answer);
 		exit(EXIT_FAILURE);
 	    } else {
-		mpfr_set_default_prec(argnum);
+		if (argnum < NUM_PREC_MIN) {
+		    fprintf(stderr,"Minimum precision is %lu.\n", (unsigned long)NUM_PREC_MIN);
+		} else if (argnum > NUM_PREC_MAX) {
+		    fprintf(stderr,"Maximum precision is %lu.\n", (unsigned long)NUM_PREC_MAX);
+		} else {
+		    num_set_default_prec(argnum);
+		}
 	    }
 	} else if (!strcmp(argv[i], "--ints")) {
 	    conf.print_ints = !conf.print_ints;
@@ -476,8 +481,7 @@ int main(int argc, char *argv[])
 #endif
 	clearHistory();
 	cleanupvar();
-	mpfr_clear(last_answer);
-	mpfr_free_cache();
+	num_free(last_answer);
 	lists_cleanup();
 	exit(EXIT_SUCCESS);
     }
@@ -657,8 +661,7 @@ int main(int argc, char *argv[])
 	    free(pa);
 	}
     }
-    mpfr_clear(last_answer);
-    mpfr_free_cache();
+    num_free(last_answer);
     lists_cleanup();
     exit(EXIT_SUCCESS);
 }				       /*}}} */

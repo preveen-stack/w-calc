@@ -20,6 +20,7 @@
 #include <math.h>
 #include <errno.h>
 #include <ctype.h> /* for isdigit() */
+#include "number.h"
 #include "calculator.h"
 #include "conversion.h"
 #include "parser.h"
@@ -261,186 +262,180 @@ SPACE		[ ]
 %{ /* These are the constants (except random) */
     %}
 (e)			{
-	mpfr_init_set_str(YYLVALAC->number,W_E,0,GMP_RNDN);
+	num_init_set_str(YYLVALAC->number,W_E,0);
 	POS_STR();
 	return(NUMBER);
 }
 ([pP][iI])|(\317\200)	{
-	mpfr_init(YYLVALAC->number);
-	mpfr_const_pi(YYLVALAC->number,GMP_RNDN);
+	num_init(YYLVALAC->number);
+	num_const_pi(YYLVALAC->number);
 	POS_STR();
 	return(NUMBER);
 }
 random			{
-	seed_random();
-	mpfr_init(YYLVALAC->number);
-	while (mpfr_urandomb(YYLVALAC->number,randstate) != 0) ;
-	mpfr_mul_ui(YYLVALAC->number,YYLVALAC->number,UINT32_MAX,GMP_RNDN);
+	num_init(YYLVALAC->number);
+	while (num_random(YYLVALAC->number) != 0) ;
+	num_mul_ui(YYLVALAC->number,YYLVALAC->number,UINT32_MAX);
 	POS_STR();
 	return(NUMBER);
 }
 irandom		{
-	seed_random();
-	mpfr_init(YYLVALAC->number);
-	while (mpfr_urandomb(YYLVALAC->number,randstate) != 0) ;
-	mpfr_mul_ui(YYLVALAC->number,YYLVALAC->number,UINT32_MAX,GMP_RNDN);
-	mpfr_rint(YYLVALAC->number,YYLVALAC->number,GMP_RNDN);
+	num_init(YYLVALAC->number);
+	while (num_random(YYLVALAC->number) != 0) ;
+	num_mul_ui(YYLVALAC->number,YYLVALAC->number,UINT32_MAX);
+	num_rint(YYLVALAC->number,YYLVALAC->number);
 	POS_STR();
 	return(NUMBER);
 }
 N[aA]	{
-	mpfr_init_set_str(YYLVALAC->number,W_AVOGADROS_CONSTANT,0,GMP_RNDN);
+	num_init_set_str(YYLVALAC->number,W_AVOGADROS_CONSTANT,0);
 	POS_STR();
 	return(NUMBER);
 }
 k	{
-	mpfr_init_set_str(YYLVALAC->number,W_BOLTZMANN_CONSTANT,0,GMP_RNDN);
+	num_init_set_str(YYLVALAC->number,W_BOLTZMANN_CONSTANT,0);
 	POS_STR();
 	return(NUMBER);
 }
-Cc	{ mpfr_init_set_str(YYLVALAC->number,W_COULOMB_CONSTANT,0,GMP_RNDN);
+Cc	{ num_init_set_str(YYLVALAC->number,W_COULOMB_CONSTANT,0);
 	POS_STR();
                   return(NUMBER); }
-ec	{ mpfr_init_set_str(YYLVALAC->number,W_ELEMENTARY_CHARGE,0,GMP_RNDN);
+ec	{ num_init_set_str(YYLVALAC->number,W_ELEMENTARY_CHARGE,0);
 	POS_STR();
                   return(NUMBER); }
-R	{ mpfr_init_set_str(YYLVALAC->number,W_MOLAR_GAS_CONSTANT,0,GMP_RNDN);
+R	{ num_init_set_str(YYLVALAC->number,W_MOLAR_GAS_CONSTANT,0);
 	POS_STR();
                   return(NUMBER); }
-G	{ mpfr_init_set_str(YYLVALAC->number,W_GRAVITATIONAL_CONSTANT,0,GMP_RNDN);
+G	{ num_init_set_str(YYLVALAC->number,W_GRAVITATIONAL_CONSTANT,0);
 	POS_STR();
                   return(NUMBER); }
-g	{ mpfr_init_set_str(YYLVALAC->number,W_GRAVITATIONAL_ACCELLERATION,0,GMP_RNDN);
+g	{ num_init_set_str(YYLVALAC->number,W_GRAVITATIONAL_ACCELLERATION,0);
 	POS_STR();
                   return(NUMBER); }
-Me	{ mpfr_init_set_str(YYLVALAC->number,W_ELECTRON_MASS,0,GMP_RNDN);
+Me	{ num_init_set_str(YYLVALAC->number,W_ELECTRON_MASS,0);
 	POS_STR();
                   return(NUMBER); }
-Mp	{ mpfr_init_set_str(YYLVALAC->number,W_PROTON_MASS,0,GMP_RNDN);
+Mp	{ num_init_set_str(YYLVALAC->number,W_PROTON_MASS,0);
 	POS_STR();
                   return(NUMBER); }
-Mn	{ mpfr_init_set_str(YYLVALAC->number,W_NEUTRON_MASS,0,GMP_RNDN);
+Mn	{ num_init_set_str(YYLVALAC->number,W_NEUTRON_MASS,0);
 	POS_STR();
                   return(NUMBER); }
-Md	{ mpfr_init_set_str(YYLVALAC->number,W_DEUTERON_MASS,0,GMP_RNDN);
+Md	{ num_init_set_str(YYLVALAC->number,W_DEUTERON_MASS,0);
 	POS_STR();
                   return(NUMBER); }
-(u)|(amu) { mpfr_init_set_str(YYLVALAC->number,W_ATOMIC_MASS,0,GMP_RNDN);
+(u)|(amu) { num_init_set_str(YYLVALAC->number,W_ATOMIC_MASS,0);
 	POS_STR();
                   return(NUMBER); }
-c	{ mpfr_init_set_str(YYLVALAC->number,W_SPEED_OF_LIGHT,0,GMP_RNDN);
+c	{ num_init_set_str(YYLVALAC->number,W_SPEED_OF_LIGHT,0);
 	POS_STR();
                   return(NUMBER); }
-h	{ mpfr_init_set_str(YYLVALAC->number,W_PLANCK_CONSTANT,0,GMP_RNDN);
+h	{ num_init_set_str(YYLVALAC->number,W_PLANCK_CONSTANT,0);
 	POS_STR();
                   return(NUMBER); }
 (\302\265|\316\274|mu)(0|zero|ZERO) {
-                  mpfr_t temp;
-                  mpfr_init(YYLVALAC->number);
-                  mpfr_init(temp);
-                  mpfr_set_d(temp,1e-7,GMP_RNDN);
-                  mpfr_const_pi(YYLVALAC->number,GMP_RNDN);
-                  mpfr_mul_ui(YYLVALAC->number,YYLVALAC->number,4,GMP_RNDN);
-                  mpfr_mul(YYLVALAC->number,YYLVALAC->number,temp,GMP_RNDN);
-                  mpfr_clear(temp);
+                  Number temp;
+                  num_init(YYLVALAC->number);
+                  num_init(temp);
+                  num_set_d(temp,1e-7);
+                  num_const_pi(YYLVALAC->number);
+                  num_mul_ui(YYLVALAC->number,YYLVALAC->number,4);
+                  num_mul(YYLVALAC->number,YYLVALAC->number,temp);
+                  num_free(temp);
+		  POS_STR();
+                  return(NUMBER); }
+(epsilon|EPSILON|\316\265)(0|zero|ZERO) { num_init_set_str(YYLVALAC->number,W_PERMITTIVITY_OF_FREE_SPACE,0);
 	POS_STR();
                   return(NUMBER); }
-(epsilon|EPSILON|\316\265)(0|zero|ZERO) { mpfr_init_set_str(YYLVALAC->number,W_PERMITTIVITY_OF_FREE_SPACE,0,GMP_RNDN);
+(\302\265|\316\274|mu)B	{ num_init_set_str(YYLVALAC->number,W_BOHR_MAGNETON,0);
 	POS_STR();
                   return(NUMBER); }
-(\302\265|\316\274|mu)B	{ mpfr_init_set_str(YYLVALAC->number,W_BOHR_MAGNETON,0,GMP_RNDN);
+(\302\265|\316\274|mu)N	{ num_init_set_str(YYLVALAC->number,W_NUCLEAR_MAGNETON,0);
 	POS_STR();
                   return(NUMBER); }
-(\302\265|\316\274|mu)N	{ mpfr_init_set_str(YYLVALAC->number,W_NUCLEAR_MAGNETON,0,GMP_RNDN);
+b	{ num_init_set_str(YYLVALAC->number,W_WIEN_DISPLACEMENT,0);
 	POS_STR();
                   return(NUMBER); }
-b	{ mpfr_init_set_str(YYLVALAC->number,W_WIEN_DISPLACEMENT,0,GMP_RNDN);
+ao	{ num_init_set_str(YYLVALAC->number,W_BOHR_RADIUS,0);
 	POS_STR();
                   return(NUMBER); }
-ao	{ mpfr_init_set_str(YYLVALAC->number,W_BOHR_RADIUS,0,GMP_RNDN);
+F	{ num_init_set_str(YYLVALAC->number,W_FARADAY_CONSTANT,0);
 	POS_STR();
                   return(NUMBER); }
-F	{ mpfr_init_set_str(YYLVALAC->number,W_FARADAY_CONSTANT,0,GMP_RNDN);
+(Vm)|(NAk) { num_init_set_str(YYLVALAC->number,W_MOLAR_VOLUME_OF_IDEAL_GAS,0);
 	POS_STR();
                   return(NUMBER); }
-(Vm)|(NAk) { mpfr_init_set_str(YYLVALAC->number,W_MOLAR_VOLUME_OF_IDEAL_GAS,0,GMP_RNDN);
+eV	{ num_init_set_str(YYLVALAC->number,W_ELECTRON_VOLT,0);
 	POS_STR();
                   return(NUMBER); }
-eV	{ mpfr_init_set_str(YYLVALAC->number,W_ELECTRON_VOLT,0,GMP_RNDN);
+sigma|\317\203 { num_init_set_str(YYLVALAC->number,W_STEFAN_BOLTZMANN,0);
 	POS_STR();
                   return(NUMBER); }
-sigma|\317\203 { mpfr_init_set_str(YYLVALAC->number,W_STEFAN_BOLTZMANN,0,GMP_RNDN);
+alpha|\316\261 { num_init_set_str(YYLVALAC->number,W_FINE_STRUCTURE,0);
 	POS_STR();
                   return(NUMBER); }
-alpha|\316\261 { mpfr_init_set_str(YYLVALAC->number,W_FINE_STRUCTURE,0,GMP_RNDN);
+gamma|GAMMA|\316\263 { num_init(YYLVALAC->number); num_const_euler(YYLVALAC->number);
 	POS_STR();
                   return(NUMBER); }
-gamma|GAMMA|\316\263 { mpfr_init(YYLVALAC->number); mpfr_const_euler(YYLVALAC->number,GMP_RNDN);
+re	{ num_init_set_str(YYLVALAC->number,W_ELECTRON_RADIUS,0);
 	POS_STR();
                   return(NUMBER); }
-re	{ mpfr_init_set_str(YYLVALAC->number,W_ELECTRON_RADIUS,0,GMP_RNDN);
+Kj	{ num_init_set_str(YYLVALAC->number,W_JOSEPHSON_CONSTANT,0);
 	POS_STR();
                   return(NUMBER); }
-Kj	{ mpfr_init_set_str(YYLVALAC->number,W_JOSEPHSON_CONSTANT,0,GMP_RNDN);
+Rk	{ num_init_set_str(YYLVALAC->number,W_VON_KLITZING_CONSTANT,0);
 	POS_STR();
                   return(NUMBER); }
-Rk	{ mpfr_init_set_str(YYLVALAC->number,W_VON_KLITZING_CONSTANT,0,GMP_RNDN);
+R(inf|\342\210\236)	{ num_init_set_str(YYLVALAC->number,W_RYDBERG_CONSTANT,0);
 	POS_STR();
                   return(NUMBER); }
-R(inf|\342\210\236)	{ mpfr_init_set_str(YYLVALAC->number,W_RYDBERG_CONSTANT,0,GMP_RNDN);
+Eh	{ num_init_set_str(YYLVALAC->number,W_HARTREE_ENERGY,0);
 	POS_STR();
                   return(NUMBER); }
-Eh	{ mpfr_init_set_str(YYLVALAC->number,W_HARTREE_ENERGY,0,GMP_RNDN);
+Gf	{ num_init_set_str(YYLVALAC->number,W_FERMI_COUPLING_CONSTANT,0);
 	POS_STR();
                   return(NUMBER); }
-Gf	{ mpfr_init_set_str(YYLVALAC->number,W_FERMI_COUPLING_CONSTANT,0,GMP_RNDN);
+M(\302\265|\316\274|mu)	{ num_init_set_str(YYLVALAC->number,W_MUON_MASS,0);
 	POS_STR();
                   return(NUMBER); }
-M(\302\265|\316\274|mu)	{ mpfr_init_set_str(YYLVALAC->number,W_MUON_MASS,0,GMP_RNDN);
+M(t|tau|\317\204)	{ num_init_set_str(YYLVALAC->number,W_TAU_MASS,0);
 	POS_STR();
                   return(NUMBER); }
-M(t|tau|\317\204)	{ mpfr_init_set_str(YYLVALAC->number,W_TAU_MASS,0,GMP_RNDN);
+Mh	{ num_init_set_str(YYLVALAC->number,W_HELION_MASS,0);
 	POS_STR();
                   return(NUMBER); }
-Mh	{ mpfr_init_set_str(YYLVALAC->number,W_HELION_MASS,0,GMP_RNDN);
+M(alpha|\316\261)	{ num_init_set_str(YYLVALAC->number,W_ALPHA_PARTICLE_MASS,0);
 	POS_STR();
                   return(NUMBER); }
-M(alpha|\316\261)	{ mpfr_init_set_str(YYLVALAC->number,W_ALPHA_PARTICLE_MASS,0,GMP_RNDN);
+n(0|zero|ZERO)	{ num_init_set_str(YYLVALAC->number,W_LOSCHMIDT_CONSTANT,0);
 	POS_STR();
                   return(NUMBER); }
-n(0|zero|ZERO)	{ mpfr_init_set_str(YYLVALAC->number,W_LOSCHMIDT_CONSTANT,0,GMP_RNDN);
+c1	{ num_init_set_str(YYLVALAC->number,W_FIRST_RADIATION_CONSTANT,0);
 	POS_STR();
                   return(NUMBER); }
-c1	{ mpfr_init_set_str(YYLVALAC->number,W_FIRST_RADIATION_CONSTANT,0,GMP_RNDN);
+c2	{ num_init_set_str(YYLVALAC->number,W_SECOND_RADIATION_CONSTANT,0);
 	POS_STR();
                   return(NUMBER); }
-c2	{ mpfr_init_set_str(YYLVALAC->number,W_SECOND_RADIATION_CONSTANT,0,GMP_RNDN);
+G(0|zero|ZERO)	{ num_init_set_str(YYLVALAC->number,W_CONDUCTANCE_QUANTUM,0);
 	POS_STR();
                   return(NUMBER); }
-G(0|zero|ZERO)	{ mpfr_init_set_str(YYLVALAC->number,W_CONDUCTANCE_QUANTUM,0,GMP_RNDN);
+Z(0|zero|ZERO)	{ num_init_set_str(YYLVALAC->number,W_IMPEDANCE_OF_VACUUM,0);
 	POS_STR();
                   return(NUMBER); }
-Z(0|zero|ZERO)	{ mpfr_init_set_str(YYLVALAC->number,W_IMPEDANCE_OF_VACUUM,0,GMP_RNDN);
+(Phi|\316\246)(0|zero|ZERO)	{ num_init_set_str(YYLVALAC->number,W_MAGNETIC_FLUX_QUANTUM,0);
 	POS_STR();
                   return(NUMBER); }
-(Phi|\316\246)(0|zero|ZERO)	{ mpfr_init_set_str(YYLVALAC->number,W_MAGNETIC_FLUX_QUANTUM,0,GMP_RNDN);
+\302\274	{ num_init_set_d(YYLVALAC->number,0.25);
 	POS_STR();
                   return(NUMBER); }
-\302\274	{ mpfr_init_set_d(YYLVALAC->number,0.25,GMP_RNDN);
+\302\275	{ num_init_set_d(YYLVALAC->number,0.5);
 	POS_STR();
                   return(NUMBER); }
-\302\275	{ mpfr_init_set_d(YYLVALAC->number,0.5,GMP_RNDN);
+\302\276	{ num_init_set_d(YYLVALAC->number,0.75);
 	POS_STR();
                   return(NUMBER); }
-\302\276	{ mpfr_init_set_d(YYLVALAC->number,0.75,GMP_RNDN);
-	POS_STR();
-                  return(NUMBER); }
-K	{
-#ifdef HAVE_MPFR_22
-mpfr_init(YYLVALAC->number); mpfr_const_catalan(YYLVALAC->number,GMP_RNDN);
-#else
-mpfr_init_set_str(YYLVALAC->number, W_CATALAN, 0, GMP_RNDN);
-#endif
+K	{ num_init(YYLVALAC->number);
+	num_const_catalan(YYLVALAC->number);
 	POS_STR();
 	return(NUMBER); }
 
@@ -589,7 +584,7 @@ zeta { POS_STR(); return(WZETA); }
     if (yydebug)
         printf("ambiguous %s\n", yytext);
 
-    retval = mpfr_init_set_str(YYLVALAC->number, yytext, DEFAULT_BASE, GMP_RNDN);
+    retval = num_init_set_str(YYLVALAC->number, yytext, DEFAULT_BASE);
 
     if (-1 == retval) {
         report_error("Invalid characters for base 10");
@@ -611,7 +606,7 @@ zeta { POS_STR(); return(WZETA); }
 
     Dprintf("zero-optional decimal\n");
     if (yydebug) printf("nonambiguous %s => ", yytext);
-    retval = mpfr_init_set_str(YYLVALAC->number, yytext, DEFAULT_BASE, GMP_RNDN);
+    retval = num_init_set_str(YYLVALAC->number, yytext, DEFAULT_BASE);
     if (-1 == retval) {
         report_error("Invalid characters for base 10");
 		scanerror = 1;
@@ -634,7 +629,7 @@ zeta { POS_STR(); return(WZETA); }
     strstrip(',',yytext);
 
     if (yydebug) printf("complex one %s => ", yytext);
-    retval = mpfr_init_set_str(YYLVALAC->number, yytext, DEFAULT_BASE, GMP_RNDN);
+    retval = num_init_set_str(YYLVALAC->number, yytext, DEFAULT_BASE);
 
     if (-1 == retval) {
         report_error("Invalid characters for base 10");
@@ -665,7 +660,7 @@ zeta { POS_STR(); return(WZETA); }
 
     Dprintf("hex\n");
     if (yydebug) printf("complex one %s => ", yytext);
-    retval = mpfr_init_set_str(YYLVALAC->number,yytext,16,GMP_RNDN);
+    retval = num_init_set_str(YYLVALAC->number,yytext,16);
 
     if (-1 == retval) {
         report_error("some characters invalid for base 16");
@@ -673,7 +668,7 @@ zeta { POS_STR(); return(WZETA); }
     } else {
         unsigned int t = count_digits(yytext); //strlen(yytext+2);
         if (yydebug) {
-            mpfr_out_str(stdout,DEFAULT_BASE,0, YYLVALAC->number, GMP_RNDN);
+            num_out_str(stdout,DEFAULT_BASE,YYLVALAC->number);
             printf("\n");
         }
 	Dprintf("hex digits in %s: %u (%u)\n",yytext,t,sig_figs);
@@ -695,7 +690,7 @@ zeta { POS_STR(); return(WZETA); }
         /*unsigned long int value;*/
         unsigned int t;
         int retval;
-        retval = mpfr_init_set_str(YYLVALAC->number,yytext,8,GMP_RNDN);
+        retval = num_init_set_str(YYLVALAC->number,yytext,8);
         if (-1 == retval) {
 			report_error(strerror(errno));
 			scanerror = 1;
@@ -722,14 +717,14 @@ zeta { POS_STR(); return(WZETA); }
     } else {
         int retval;
 
-        retval = mpfr_init_set_str(YYLVALAC->number,yytext,2,GMP_RNDN);
+        retval = num_init_set_str(YYLVALAC->number,yytext,2);
         if (-1 == retval) {
             report_error("Expected a 0 or 1 for binary.");
 			scanerror = 1;
         } else {
             unsigned int t = count_digits(yytext); //strlen(yytext+2);
             if (yydebug) {
-                mpfr_out_str(stdout,DEFAULT_BASE,0, YYLVALAC->number, GMP_RNDN);
+                num_out_str(stdout,DEFAULT_BASE,YYLVALAC->number);
                 printf("\n");
             }
 	Dprintf("binary digits in %s: %u (%u)\n",yytext,t,sig_figs);

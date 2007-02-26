@@ -10,6 +10,7 @@
 #include "MyTextField.h"
 #include "simpleCalc.h"
 #include "list.h"
+#include "number.h"
 #ifdef MEMWATCH
 #include "memwatch.h"
 #endif
@@ -298,10 +299,10 @@ static pthread_mutex_t displayLock;
 	    NSDictionary *temp = [prefs dictionaryForKey:@"persistentVariables"];
 	    NSEnumerator *enumerator = [temp keyEnumerator];
 	    id key;
-	    
+
 	    while ((key = [enumerator nextObject])) {
 		putexp(strdup([key UTF8String]),strdup([[temp objectForKey:key] UTF8String]),"preloaded");
-	    }	    
+	    }
 	}
 	if ([prefs integerForKey:@"internalPrecision"] < 32) {
 		[prefs setObject:@"1024" forKey:@"internalPrecision"];
@@ -309,7 +310,8 @@ static pthread_mutex_t displayLock;
 	if ([prefs integerForKey:@"internalPrecision"] > 4096) {
 		[prefs setObject:@"4096" forKey:@"internalPrecision"];
 	}
-	mpfr_set_default_prec([prefs integerForKey:@"internalPrecision"]);
+	init_numbers();
+	num_set_default_prec([prefs integerForKey:@"internalPrecision"]);
 	Dprintf("preferences read\n");
 
 	[PrecisionSlider setIntValue:conf.precision];
@@ -392,7 +394,7 @@ static pthread_mutex_t displayLock;
 		simpleClearAll();
 		Dprintf("simple all cleared\n");
 	}
-	mpfr_init_set_ui(last_answer, 0, GMP_RNDN);
+	num_init_set_ui(last_answer, 0);
 	Dprintf("last answer cleared\n");
 	pthread_mutex_init(&displayLock,NULL);
 	[[NSNotificationCenter defaultCenter] addObserver:mainWindow selector:@selector(quit:) name:NSWindowWillCloseNotification object:inspectorWindow];
@@ -854,20 +856,20 @@ static pthread_mutex_t displayLock;
 			}
 			break;
 		case 18:
-		    olde = mpfr_get_default_prec();
-		    mpfr_set_default_prec([sender intValue]);
-		    if (olde != mpfr_get_default_prec()) {
+		    olde = num_get_default_prec();
+		    num_set_default_prec([sender intValue]);
+		    if (olde != num_get_default_prec()) {
 			[bitsStepper takeIntValueFrom:sender];
-			[prefs setObject:[NSString stringWithFormat:@"%lu",mpfr_get_default_prec()] forKey:@"internalPrecision"];
+			[prefs setObject:[NSString stringWithFormat:@"%lu",num_get_default_prec()] forKey:@"internalPrecision"];
 		    }
 			break;
 		case 19:
-		    olde = mpfr_get_default_prec();
-		    mpfr_set_default_prec([bitsStepper intValue]);
-		    if (olde != mpfr_get_default_prec()) {
+		    olde = num_get_default_prec();
+		    num_set_default_prec([bitsStepper intValue]);
+		    if (olde != num_get_default_prec()) {
 			need_redraw = 2;
 			[bitsPref takeIntValueFrom:bitsStepper];
-			[prefs setObject:[NSString stringWithFormat:@"%lu",mpfr_get_default_prec()] forKey:@"internalPrecision"];
+			[prefs setObject:[NSString stringWithFormat:@"%lu",num_get_default_prec()] forKey:@"internalPrecision"];
 		    }
 			break;
 		case 20:
@@ -1033,8 +1035,8 @@ static pthread_mutex_t displayLock;
     [precisionGuard setState:(conf.precision_guard?NSOnState:NSOffState)];
     [simpleCalculator setState:(conf.simple_calc?NSOnState:NSOffState)];
     [printDelimiters setState:(conf.print_commas?NSOnState:NSOffState)];
-    [bitsPref setIntValue:mpfr_get_default_prec()];
-    [bitsStepper setIntValue:mpfr_get_default_prec()];
+    [bitsPref setIntValue:num_get_default_prec()];
+    [bitsStepper setIntValue:num_get_default_prec()];
     [livePrecision setState:(conf.live_precision?NSOnState:NSOffState)];
     [cModPref setState:(conf.c_style_mod?NSOnState:NSOffState)];
     
@@ -1079,8 +1081,7 @@ static pthread_mutex_t displayLock;
 	    free(pa);
 	}
     }
-    mpfr_clear(last_answer);
-    mpfr_free_cache();
+    num_free(last_answer);
     lists_cleanup();
     pthread_mutex_destroy(&displayLock);
     exit(EXIT_SUCCESS);

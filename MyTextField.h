@@ -3,8 +3,7 @@
 #include <Cocoa/Cocoa.h>
 #include "WcalcController.h"
 
-#include <gmp.h>
-#include <mpfr.h>
+#include "number.h"
 
 @interface MyTextField : NSTextField
 {
@@ -14,8 +13,8 @@
 	/* "Simple Calculator" Variables */
 	char lastchar;
 	char oper;
-	mpfr_t cur_number;
-	mpfr_t prev_number;
+	Number cur_number;
+	Number prev_number;
 }
 - (void)keyDown:(NSEvent*) theEvent;
 - (void)keyUp:(NSEvent*) theEvent;
