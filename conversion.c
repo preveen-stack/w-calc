@@ -180,7 +180,7 @@ const struct conversion speeds[] = {
     {"1",                      "Feet/second",                   {"f/s",NULL}},
     {"60",                     "Feet/minute",                   {"f/m",NULL}},
     {"0.0909090909090909091",  "Furlongs/minute",               {"fur/m",NULL}},
-    {"1.0972853161278995",     "Kilometers/hour",               {"km/h",NULL}},
+    {"1.0972853161278995",     "Kilometers/hour",               {"km/h","kph","kilometer/hr","kilometers/hr","kilometer/hour","kilometers/hour",NULL}},
     {"0.5924837511331251",     "Knots",                         {"k","knot","knots",NULL}},
     {"5.454644629902362",      "Leagues/day",                   {"leagues/day","league/day",NULL}},
     {"0.0009191187537183524",  "Mach (dry air, 273 kelvin)",    {"M","Ma","mach","machs",NULL}},
