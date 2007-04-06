@@ -246,7 +246,7 @@ void explain_constant(char *str)
     } else if (!strcmp(str, "b")) {
 	printf
 	    ("Wein displacement constant. Defines the relationship between the thermodynamic temperature of a black body and the wavelength at which the intensity of the radiation is the greatest.");
-    } else if (!strcmp(str, "ao")) {
+    } else if (!strcmp(str, "a0")) {
 	printf
 	    ("Bohr radius. A single electron orbiting at the lowest possible energy in a hydrogen atom orbits at this distance.");
     } else if (!strcmp(str, "F")) {
