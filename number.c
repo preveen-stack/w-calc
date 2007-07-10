@@ -1,5 +1,6 @@
 #include "number.h"
 #include "calculator.h"
+#include <string.h> /* for strlen() */
 #include <stdlib.h> /* for atexit() */
 
 #ifdef HAVE_LIBMPFR
