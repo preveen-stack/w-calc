@@ -117,11 +117,15 @@ char *precision_formatted_number(char *digits, mp_exp_t exp,
 				 const int precision, const int base,
 				 const int prefix)
 {
-    size_t length = strlen(digits) + 2;	// the null and the decimal
+    size_t length;
     size_t full_length;
     size_t decimal_count = 0;
     size_t print_limit;
     char *retstring, *curs, *dcurs = digits;
+
+    length = strlen(digits);
+    if (exp > length) length = exp;
+    length += 3;
 
     if (length < precision + 3) {      // leading zero, decimal, and null
 	length = precision + 3;
@@ -153,9 +157,12 @@ char *precision_formatted_number(char *digits, mp_exp_t exp,
     if (exp > 0) {
 	snprintf(curs++, length--, "%c", *dcurs++);
 	exp--;			       // leading digit
-	while (exp > 0) {
+	while (exp > 0 && *dcurs) {
 	    snprintf(curs++, length--, "%c", *dcurs++);
 	    exp--;
+	}
+	for (;exp > 0; exp--) {
+	    snprintf(curs++, length--, "0");
 	}
     } else {
 	snprintf(curs++, length--, "0");
@@ -195,15 +202,20 @@ char *precision_formatted_number(char *digits, mp_exp_t exp,
 char *automatically_formatted_number(char *digits, mp_exp_t exp, const int base,
 				     const int prefix, char *truncated_flag)
 {
-    size_t length = strlen(digits) + 2;	// the null and the decimal
+    size_t length;
     size_t full_length;
     size_t decimal_count = 0;
     size_t printed;
     char *retstring, *curs, *dcurs = digits;
 
+    length = strlen(digits);
+    if (exp > length) length = exp;
+    length += 3; /* the null, the (possible) sign, and the decimal */
+
     Dprintf("Automatically Formatted Number\n");
     Dprintf("digits: %s(%u), exp: %i, base: %i, prefix: %i\n", digits,
 	    (unsigned)length, (int)exp, base, prefix);
+    Dprintf("strlen(digits): %i\n", strlen(digits));
 
     // ten extra, 'cuz of the *possible* exponent
     full_length = length + 10;
@@ -225,13 +237,17 @@ char *automatically_formatted_number(char *digits, mp_exp_t exp, const int base,
 	length -= nc - curs;
 	curs = nc;
     }
+    Dprintf("ready for ints: %s\n", retstring);
     // copy over the integers
     if (exp > 0) {
 	snprintf(curs++, length--, "%c", *dcurs++);
 	exp--;			       // leading digit
-	while (exp > 0) {
+	while (exp > 0 && *dcurs) {
 	    snprintf(curs++, length--, "%c", *dcurs++);
 	    exp--;
+	}
+	for (;exp > 0; exp--) {
+	    snprintf(curs++, length--, "0");
 	}
     } else {
 	snprintf(curs++, length--, "0");
@@ -286,9 +302,13 @@ char *engineering_formatted_number(char *digits, mp_exp_t exp,
 				   const int precision, const int base,
 				   const int prefix)
 {
-    size_t length = strlen(digits) + 2;	// the null and the decimal
+    size_t length;
     size_t full_length;
     char *retstring, *curs, *dcurs = digits;
+
+    length = strlen(digits);
+    if (exp > length) length = exp;
+    length += 3; /* the null, the (possible) sign, and the decimal */
 
     Dprintf("Engineering Formatted Number\n");
     Dprintf("digits: %s(%u), exp: %i, prec: %i, prefix: %i\n", digits,
