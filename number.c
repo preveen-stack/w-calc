@@ -54,19 +54,13 @@ int is_int(Number potential_int)
 	    break;
     }
     str = mpfr_get_str(NULL, &eptr, base, 0, potential_int, GMP_RNDN);
-    if (eptr < 0)
-	goto not_an_int;
-    curs = str + eptr;
-    while (curs && *curs) {
-	if (*curs != '0')
-	    goto not_an_int;
-	curs++;
+    if (eptr < 0 || eptr < strlen(str)) {
+	mpfr_free_str(str);
+	return 0;
+    } else {
+	mpfr_free_str(str);
+	return 1;
     }
-    mpfr_free_str(str);
-    return 1;
-not_an_int:
-    mpfr_free_str(str);
-    return 0;
 #else
 #endif
 }
