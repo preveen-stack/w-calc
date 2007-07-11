@@ -148,7 +148,7 @@ static pthread_mutex_t displayLock;
 		case 207: str2 = [NSString stringWithFormat:@"%C0", 0x03a6]; break;
 
 		case 301: str2 = [NSString stringWithFormat:@"M%C", 0x03b1]; break;
-		case 302: str2 = @"ao"; break;
+		case 302: str2 = @"a0"; break;
 		case 303: str2 = @"Md"; break;
 		case 304: str2 = @"Me"; break;
 		case 305: str2 = @"re"; break;

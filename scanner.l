@@ -356,7 +356,7 @@ h	{ num_init_set_str(YYLVALAC->number,W_PLANCK_CONSTANT,0);
 b	{ num_init_set_str(YYLVALAC->number,W_WIEN_DISPLACEMENT,0);
 	POS_STR();
                   return(NUMBER); }
-ao	{ num_init_set_str(YYLVALAC->number,W_BOHR_RADIUS,0);
+a0	{ num_init_set_str(YYLVALAC->number,W_BOHR_RADIUS,0);
 	POS_STR();
                   return(NUMBER); }
 F	{ num_init_set_str(YYLVALAC->number,W_FARADAY_CONSTANT,0);
