@@ -387,8 +387,6 @@ int find_recursion_core(List oldvars)
 	while ((oldVarname =
 		(char *)nextListElement(oldvarsIterator)) != NULL) {
 	    if (!strcmp(newVarname, oldVarname)) {
-		unsigned int len = strlen(newVarname) + 73;
-
 		report_error
 		    ("%s was found twice in symbol descent. Recursive variables are not allowed.",
 		     newVarname);

@@ -121,7 +121,7 @@ char *tc_rounding(const char *text, int state)
 
 char **wcalc_completion(const char *text, int start, int end)
 {				       /*{{{ */
-    extern const char *commands[];
+    /*extern const char *commands[];*/
     extern const char *qcommands[];
     extern const char *consts[];
     extern const char *funcs[];
@@ -183,8 +183,8 @@ char **wcalc_completion(const char *text, int start, int end)
 		(strncmp("\\convert", rl_line_buffer, 8) == 0 &&
 		 isspace(rl_line_buffer[8]))) {
 	    int i = 2;
-	    extern const struct conversion lengths[], areas[], volumes[],
-		masses[], speeds[], powers[], forces[], accelerations[];
+	    /*extern const struct conversion lengths[], areas[], volumes[],
+		masses[], speeds[], powers[], forces[], accelerations[];*/
 	    extern const struct conversion *conversions[];
 
 	    while (!isspace(rl_line_buffer[i]))

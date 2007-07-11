@@ -1,5 +1,7 @@
 #include "number.h"
 #include "calculator.h"
+#include <sys/time.h> /* for gettimeofday() */
+#include <stdio.h> /* for perror() */
 #include <string.h> /* for strlen() */
 #include <stdlib.h> /* for atexit() */
 
@@ -35,7 +37,7 @@ void init_numbers(void)
 int is_int(Number potential_int)
 {
 #ifdef HAVE_LIBMPFR
-    char *str, *curs;
+    char *str;
     mp_exp_t eptr;
     int base;
 

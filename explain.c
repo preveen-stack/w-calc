@@ -2,6 +2,7 @@
 #include "config.h"
 #endif
 #include <string.h>
+#include <ctype.h> /* for isspace() */
 #include <gmp.h>
 #include <mpfr.h>
 #include "uint32_max.h"

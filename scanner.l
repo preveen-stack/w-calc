@@ -26,6 +26,8 @@
 #include "parser.h"
 #include "string_manip.h"
 #include "explain.h"
+#include "isfunc.h" /* for isfunc() */
+#include "isconst.h" /* for isconst() */
 #ifdef MEMWATCH
 #include "memwatch.h"
 #endif
@@ -753,7 +755,6 @@ zeta { POS_STR(); return(WZETA); }
 %{ /* if we haven't matched anything yet, then it's illegal */
     %}
 . {
-	char error[50];
     if (*yytext == ',') *yytext = conf.thou_delimiter;
     else if (*yytext == '.') *yytext = conf.dec_delimiter;
     report_error("scanner(%i): cannot understand character", (unsigned char) (yytext[0]));
