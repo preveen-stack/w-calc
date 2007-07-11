@@ -34,7 +34,7 @@
 #define W_BOHR_MAGNETON "927.400949e-26" /* J T^-1 */
 #define W_NUCLEAR_MAGNETON "5.05078343e-27" /* J T^-1 */
 #define W_WIEN_DISPLACEMENT "2.8977685e-3" /* m K */
-#define W_BOHR_RADIUS "0.5291772108e-10"
+#define W_BOHR_RADIUS "5.291772108e-11" /* m */
 #define W_FARADAY_CONSTANT "96485.3383" /* C mol^-1 */
 #define W_MOLAR_VOLUME_OF_IDEAL_GAS "22.413996e-3" /* m^3 mol^-1 */
 #define W_ELECTRON_VOLT "1.60217653e-19" /* J */
