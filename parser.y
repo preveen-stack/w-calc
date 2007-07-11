@@ -247,25 +247,25 @@ command : HEX_CMD {
 }
 | DISPLAY_PREFS_CMD {
 	if (standard_output) {
-		printf("          Display Precision: %i %s (\\p)\n",conf.precision,((conf.precision==-1)?"(auto)":""));
-		printf("         Internal Precision: %lu bits (\\bits)\n", (unsigned long) num_get_default_prec());
-		printf("         Engineering Output: %s (\\e)\n",conf.engineering?"yes":"no");
-		printf("              Output Format: %s (\\b, \\d, \\h, \\o)\n",output_string(conf.output_format));
-		printf("                Use Radians: %s (\\r or \\radians)\n",conf.use_radians?"yes":"no");
-		printf("             Print Prefixes: %s (\\pre or \\prefixes)\n",conf.print_prefixes?"yes":"no");
-		printf("Avoid Abbreviating Integers: %s (\\ints)\n",conf.print_ints?"yes":"no");
-		printf("        Rounding Indication: %s (\\round)\n",conf.rounding_indication==SIMPLE_ROUNDING_INDICATION?"yes (simple)":(conf.rounding_indication==SIG_FIG_ROUNDING_INDICATION?"yes (sig_fig)":"no"));
-		printf("     Save Errors in History: %s (\\re)\n",conf.remember_errors?"yes":"no");
-		printf("        Thousands Delimiter: '%c' (\\tsep)\n",conf.thou_delimiter);
-		printf("          Decimal Delimiter: '%c' (\\dsep)\n",conf.dec_delimiter);
-		printf("            Precision Guard: %s (\\cons)\n",conf.precision_guard?"yes":"no");
-		printf("              History Limit: %s (\\hlimit)\n",conf.history_limit?"yes":"no");
+		printf("          Display Precision: %-3i %s               -> \\p\n",conf.precision,((conf.precision==-1)?"(auto)":"      "));
+		printf("         Internal Precision: %-24lu -> \\bits\n", (unsigned long) num_get_default_prec());
+		printf("         Engineering Output: %s                      -> \\e\n",conf.engineering?"yes":"no ");
+		printf("              Output Format: %s -> \\b, \\d, \\h, \\o\n",output_string(conf.output_format));
+		printf("                Use Radians: %s                      -> \\r or \\radians\n",conf.use_radians?"yes":"no ");
+		printf("             Print Prefixes: %s                      -> \\pre or \\prefixes\n",conf.print_prefixes?"yes":"no ");
+		printf("Avoid Abbreviating Integers: %s                      -> \\ints\n",conf.print_ints?"yes":"no ");
+		printf("        Rounding Indication: %s            -> \\round\n",conf.rounding_indication==SIMPLE_ROUNDING_INDICATION?"yes (simple) ":(conf.rounding_indication==SIG_FIG_ROUNDING_INDICATION?"yes (sig_fig)":"no           "));
+		printf("     Save Errors in History: %s                      -> \\re\n",conf.remember_errors?"yes":"no ");
+		printf("        Thousands Delimiter: '%c'                      -> \\tsep\n",conf.thou_delimiter);
+		printf("          Decimal Delimiter: '%c'                      -> \\dsep\n",conf.dec_delimiter);
+		printf("            Precision Guard: %s                      -> \\cons\n",conf.precision_guard?"yes":"no ");
+		printf("              History Limit: %s                      -> \\hlimit\n",conf.history_limit?"yes":"no ");
 		if (conf.history_limit) {
 			printf("         History Limited To: %lu\n",conf.history_limit_len);
 		}
-		printf("                    Verbose: %s (\\verbose)\n",conf.verbose?"yes":"no");
-		printf("         Display Delimiters: %s (\\delim)\n",conf.print_commas?"yes":"no");
-		printf("            Modulo Operator: %s (\\cmod)\n",conf.c_style_mod?"C-style":"not C-style");
+		printf("                    Verbose: %s                      -> \\verbose\n",conf.verbose?"yes":"no ");
+		printf("         Display Delimiters: %s                      -> \\delim\n",conf.print_commas?"yes":"no ");
+		printf("            Modulo Operator: %s              -> \\cmod\n",conf.c_style_mod?"C-style    ":"not C-style");
 	}
 	$$ = nothing;
 }
