@@ -1235,18 +1235,18 @@ void uber_function(Number output, enum functions func, Number input)
     }
 }				       /*}}} */
 
-char *output_string(unsigned int o)
+char *output_string(const unsigned int o)
 {				       /*{{{ */
     switch (o) {
 	case HEXADECIMAL_FORMAT:
 	    return "hexadecimal format (0xf)";
 	case OCTAL_FORMAT:
-	    return "octal format (08)";
+	    return "octal format (08)       ";
 	case BINARY_FORMAT:
-	    return "binary format (0b1)";
+	    return "binary format (0b1)     ";
 	case DECIMAL_FORMAT:
-	    return "decimal format (9)";
+	    return "decimal format (9)      ";
 	default:
-	    return "error, unknown format";
+	    return "error, unknown format   ";
     }
 }				       /*}}} */
