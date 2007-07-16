@@ -215,7 +215,7 @@ char *automatically_formatted_number(char *digits, mp_exp_t exp, const int base,
     Dprintf("Automatically Formatted Number\n");
     Dprintf("digits: %s(%u), exp: %i, base: %i, prefix: %i\n", digits,
 	    (unsigned)length, (int)exp, base, prefix);
-    Dprintf("strlen(digits): %i\n", strlen(digits));
+    Dprintf("strlen(digits): %u\n", (unsigned)strlen(digits));
 
     // ten extra, 'cuz of the *possible* exponent
     full_length = length + 10;
