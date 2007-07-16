@@ -31,7 +31,7 @@ struct conv_req
 };
 
 /* Conversion Types */
-#define MAX_TYPE        8
+#define MAX_TYPE        10
 #define LENGTH_C        0 /*-*/
 #define AREA_C          1 /*-*/
 #define VOLUME_C        2 /*-*/
@@ -40,7 +40,9 @@ struct conv_req
 #define POWER_C         5 /*-*/
 #define FORCE_C         6 /*-*/
 #define ACCELERATION_C  7 /*-*/
-#define TEMPERATURE_C   8 /**/
+#define TEMPERATURE_C   8 /*-*/
+#define ANGLE_C		9 /*-*/
+#define PRESSURE_C	10 /**/
 /* Astronomical Units */
 #define MAX_ASTRONOMICAL_UNIT 5
 #define A_METERS          0
@@ -49,21 +51,25 @@ struct conv_req
 #define LIGHT_YEAR        4
 #define PARSEC            5
 /* Length Units */
-#define LENGTH_UNIT_COUNT		30
+#define LENGTH_UNIT_COUNT		87
 /* Area Units */
-#define AREA_UNIT_COUNT			37
+#define AREA_UNIT_COUNT			74
 /* Volume Units */
-#define VOLUME_UNIT_COUNT		41
+#define VOLUME_UNIT_COUNT		136
+/* Angle Units */
+#define ANGLE_UNIT_COUNT		12
 /* Mass Units */
-#define MASS_UNIT_COUNT			21
+#define MASS_UNIT_COUNT			66
 /* Speed Units */
-#define SPEED_UNIT_COUNT		10
+#define SPEED_UNIT_COUNT		17
 /* Power Units */
-#define POWER_UNIT_COUNT		11
+#define POWER_UNIT_COUNT		45
 /* Force Units */
-#define FORCE_UNIT_COUNT		7
+#define FORCE_UNIT_COUNT		13
 /* Acceleration Units */
-#define ACCELERATION_UNIT_COUNT	18
+#define ACCELERATION_UNIT_COUNT		23
+/* Pressure Units */
+#define PRESSURE_UNIT_COUNT		41
 /* Temperature Units */
 #define TEMPERATURE_UNIT_COUNT	5
 #define KELVIN		0
