@@ -23,7 +23,11 @@
 #include "number.h"
 #include "calculator.h"
 #include "conversion.h"
+#ifdef HAVE_CONFIG_H
 #include "parser.h"
+#else
+#include "y.tab.h"
+#endif
 #include "string_manip.h"
 #include "explain.h"
 #include "isfunc.h" /* for isfunc() */
@@ -636,21 +640,21 @@ zeta { POS_STR(); return(WZETA); }
     if (-1 == retval) {
         report_error("Invalid characters for base 10");
 		scanerror = 1;
-    } else {
-        unsigned int t = count_digits(yytext);
-	char * period = strchr(yytext,'.');
-	Dprintf("period: %s\n",period);
-	if (period == NULL) { // no period means subtract the zeros
-		period = yytext+strlen(yytext)-1;
-		while (*period == '0') {
-		t--;
-		period--;
+	} else {
+		unsigned int t = count_digits(yytext);
+		char * period = strchr(yytext,'.');
+		Dprintf("period: %s\n",period);
+		if (period == NULL) { // no period means subtract the zeros
+			period = yytext+strlen(yytext)-1;
+			while (*period == '0') {
+				t--;
+				period--;
+			}
+			Dprintf("period: %s\n",period);
 		}
-	Dprintf("period: %s\n",period);
+		Dprintf("big ugly digits in %s: %u (%u)\n",yytext,t,sig_figs);
+		if (t<sig_figs) sig_figs = t;
 	}
-	Dprintf("big ugly digits in %s: %u (%u)\n",yytext,t,sig_figs);
-        if (t<sig_figs) sig_figs = t;
-    }
 	POS_STR();
     return(NUMBER);
 }
