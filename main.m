@@ -9,11 +9,8 @@
 #include <Cocoa/Cocoa.h>
 
 #include "calculator.h"
-#include "conversion.h"
-#include "parser.h"
 #include "variables.h"
 
-#include "WcalcController.h"
 #ifdef MEMWATCH
 #include "memwatch.h"
 #endif
