@@ -27,6 +27,8 @@
 		case FORCE_C: return FORCE_UNIT_COUNT;
 		case ACCELERATION_C: return ACCELERATION_UNIT_COUNT;
 		case TEMPERATURE_C: return TEMPERATURE_UNIT_COUNT;
+		case ANGLE_C: return ANGLE_UNIT_COUNT;
+		case PRESSURE_C: return PRESSURE_UNIT_COUNT;
 		default:
 			return 0;
 	}
