@@ -659,7 +659,7 @@ zeta { POS_STR(); return(WZETA); }
     return(NUMBER);
 }
 
-0x[0-9a-fA-F]+([.][0-9a-fA-F]*)?([@][+-]?[1-9a-fA-F][0-9a-fA-F]*)? {
+0x[0-9a-fA-F]+([.][0-9a-fA-F]*)?([@][+-]?0?[1-9a-fA-F][0-9a-fA-F]*)? {
     /* hex */
     extern int yydebug;
     int retval;
