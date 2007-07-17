@@ -57,11 +57,20 @@ int is_int(Number potential_int)
 	    break;
     }
     str = mpfr_get_str(NULL, &eptr, base, 0, potential_int, GMP_RNDN);
+    /* remove the trailing zeros (which are just precision placeholders) */
+    {
+	size_t curs = strlen(str)-1;
+	while (str[curs] == '0') {
+	    str[curs--] = '\0';
+	}
+    }
     if (eptr < 0 || eptr < strlen(str)) {
 	mpfr_free_str(str);
+	Dprintf("IS NOT an int!\n");
 	return 0;
     } else {
 	mpfr_free_str(str);
+	Dprintf("IS an int!\n");
 	return 1;
     }
 #else
