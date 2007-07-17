@@ -262,6 +262,7 @@ static char *flatten(char *str)
 	    {
 		char junk;
 
+		// This value must fully reproduce the contents of f (thus, the -2 in arg 4)
 		varvalue = num_to_str_complex(f, 10, 0, -2, 1, &junk);
 	    }
 	    num_free(f);
