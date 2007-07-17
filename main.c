@@ -348,16 +348,16 @@ int main(int argc, char *argv[])
 	    num_free(last_answer);
 	    exit(EXIT_SUCCESS);
 	} else if (!strcmp(argv[i], "-d") || !strcmp(argv[i], "--decimal") ||
-		   !strcmp(argv[i], "-dec")) {
+		   !strcmp(argv[i], "-dec") || !strcmp(argv[i], "--dec")) {
 	    conf.output_format = DECIMAL_FORMAT;
 	} else if (!strcmp(argv[i], "-h") || !strcmp(argv[i], "--hexadecimal")
-		   || !strcmp(argv[i], "-hex")) {
+		   || !strcmp(argv[i], "-hex") || !strcmp(argv[i], "--hex")) {
 	    conf.output_format = HEXADECIMAL_FORMAT;
 	} else if (!strcmp(argv[i], "-o") || !strcmp(argv[i], "--octal") ||
-		   !strcmp(argv[i], "-oct")) {
+		   !strcmp(argv[i], "-oct") || !strcmp(argv[i], "--oct")) {
 	    conf.output_format = OCTAL_FORMAT;
 	} else if (!strcmp(argv[i], "-b") || !strcmp(argv[i], "--binary") ||
-		   !strcmp(argv[i], "-bin")) {
+		   !strcmp(argv[i], "-bin") || !strcmp(argv[i], "--bin")) {
 	    conf.output_format = BINARY_FORMAT;
 	} else if (!strcmp(argv[i], "-p") || !strcmp(argv[i], "--prefixes")) {
 	    conf.print_prefixes = !conf.print_prefixes;
