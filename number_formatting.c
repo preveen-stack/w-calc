@@ -23,6 +23,8 @@ static void add_prefix(char *num, size_t length, int base);
 static char *engineering_formatted_number(char *digits, mp_exp_t exp,
 					  const int precision, const int base,
 					  const int prefix);
+static char *full_precision_formatted_number(char *digits, mp_exp_t exp,
+					    const int base, const int prefix);
 static char *automatically_formatted_number(char *digits, mp_exp_t exp,
 					    const int base, const int prefix,
 					    char *truncated_flag);
@@ -100,7 +102,9 @@ char *num_to_str_complex(const mpfr_t num, const int base, const int engr,
     }
     Dprintf("post-mpfr e: %li s: %s\n", (long int)e, s);
     *truncated_flag = 0;
-    if (engr != 0) {
+    if (-2 == prec) {
+	retstr = full_precision_formatted_number(s, e, base, prefix);
+    } else if (engr != 0) {
 	retstr = engineering_formatted_number(s, e, prec, base, prefix);
     } else if (-1 == prec) {
 	retstr =
@@ -110,6 +114,7 @@ char *num_to_str_complex(const mpfr_t num, const int base, const int engr,
 	retstr = precision_formatted_number(s, e, prec, base, prefix);
     }
     mpfr_free_str(s);
+    Dprintf("return string: %s\n", retstr);
     return retstr;
 }
 
@@ -199,6 +204,94 @@ char *precision_formatted_number(char *digits, mp_exp_t exp,
     return retstring;
 }
 
+char *full_precision_formatted_number(char *digits, mp_exp_t exp, const int base,
+				     const int prefix)
+{
+    size_t length;
+    size_t full_length;
+    size_t decimal_count = 0;
+    size_t printed;
+    char *retstring, *curs, *dcurs = digits;
+
+    length = strlen(digits);
+    if (exp > length) length = exp;
+    length += 3; /* the null, the (possible) sign, and the decimal */
+
+    Dprintf("Full Precision Formatted Number\n");
+    Dprintf("digits: %s(%u), exp: %i, base: %i, prefix: %i\n", digits,
+	    (unsigned)length, (int)exp, base, prefix);
+    Dprintf("strlen(digits): %u\n", (unsigned)strlen(digits));
+
+    // ten extra, 'cuz of the *possible* exponent
+    full_length = length + 10;
+    curs = retstring = (char *)calloc(sizeof(char), full_length);
+    Dprintf("length: %lu, full_length: %lu\n", length, full_length);
+
+    // now, copy the digits into the output string, carefully
+
+    // copy over the negative sign
+    if (*dcurs == '-') {
+	snprintf(curs++, length--, "%c", *dcurs++);
+    }
+    // copy in a prefix
+    if (prefix) {
+	char *nc;
+
+	add_prefix(curs, length, base);
+	nc = strchr(curs, '\0');
+	length -= nc - curs;
+	curs = nc;
+    }
+    Dprintf("ready for ints: %s\n", retstring);
+    // copy over the integers
+    if (exp > 0) {
+	snprintf(curs++, length--, "%c", *dcurs++);
+	exp--;			       // leading digit
+	while (exp > 0 && *dcurs) {
+	    snprintf(curs++, length--, "%c", *dcurs++);
+	    exp--;
+	}
+	for (;exp > 0; exp--) {
+	    snprintf(curs++, length--, "0");
+	}
+    } else {
+	snprintf(curs++, length--, "0");
+    }
+    // the decimal
+    snprintf(curs++, length--, ".");
+    Dprintf("the integers: %s\n", retstring);
+    Dprintf("length: %lu, full_length: %lu\n", length, full_length);
+    // XXX: Currently, this function is not used for decimals, so...
+
+    // the leading decimal zeros
+    while (exp < 0) {
+	snprintf(curs++, length--, "0");
+	exp++;
+	decimal_count++;
+    }
+    // the rest of the mantissa (the decimals)
+
+    // this variable exists because snprintf's return value is unreliable.
+    // and can be larger than the number of digits printed
+    printed = ((length - 1 < strlen(dcurs)) ? length - 1 : strlen(dcurs));
+    snprintf(curs, length, "%s", dcurs);
+    length -= printed;
+    decimal_count += printed;
+
+    // strip off the trailing 0's
+    zero_strip(retstring);
+
+    // copy in an exponent if necessary
+    if (exp != 0) {
+	curs = strchr(retstring, '\0');
+	Dprintf("space left: %lu\n", full_length - (curs - retstring));
+	snprintf(curs, full_length - (curs - retstring),
+		 (base <= 10 ? "e%ld" : "@%ld"), (long)exp);
+    }
+
+    return retstring;
+}
+
 char *automatically_formatted_number(char *digits, mp_exp_t exp, const int base,
 				     const int prefix, char *truncated_flag)
 {
@@ -274,8 +367,11 @@ char *automatically_formatted_number(char *digits, mp_exp_t exp, const int base,
     decimal_count += printed;
 
     // strip off the trailing 0's
-    zero_strip(retstring);
-    {
+    zero_strip(retstring); { /* XXX: This seems like a stupid hack. Is this for
+				readability? Note to self: remove this if it
+				ever becomes an issue again (and merge
+				full_precision_formatted_number back with this
+				function). */
 	char *period = strchr(retstring, '.');
 
 	Dprintf("retstring: %s\n", retstring);
