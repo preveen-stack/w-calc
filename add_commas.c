@@ -16,14 +16,17 @@
 
 /* this function returns a copy of the input string with delimiters
  * appropriate for the specified base. */
-char *add_commas(char *input, int base)
+char *add_commas(const char *input, const int base)
 {
-    char *copyto, *copyfrom, *tmpstring, *delimiter;
+    char *tmpstring, *delimiter;
     unsigned int skip, prefix;
     unsigned char ctr;
     char separator;
     char dec_delim = conf.dec_delimiter;
     size_t preflen;
+    size_t fromcurs, tocurs;
+    char * exponent_chars;
+    const size_t input_len = strlen(input);
 
     Dprintf("add_commas: %s, %i\n", input, base);
     if (NULL == input) {
@@ -44,21 +47,25 @@ char *add_commas(char *input, int base)
 	    skip = 3;
 	    prefix = 0;
 	    separator = conf.thou_delimiter;
+	    exponent_chars = "eE";
 	    break;
 	case HEXADECIMAL_FORMAT:
 	    skip = 2;
 	    prefix = 2;
 	    separator = ' ';
+	    exponent_chars = "@";
 	    break;
 	case OCTAL_FORMAT:
 	    skip = 4;
 	    prefix = 1;
 	    separator = conf.thou_delimiter;
+	    exponent_chars = "eE";
 	    break;
 	case BINARY_FORMAT:
 	    skip = 8;
 	    prefix = 2;
 	    separator = conf.thou_delimiter;
+	    exponent_chars = "eE";
 	    break;
     }
     if (!conf.print_prefixes) {
@@ -78,34 +85,35 @@ char *add_commas(char *input, int base)
     if (ctr == 0) {
 	ctr = skip;
     }
-    copyfrom = input;
-    copyto = tmpstring;
-    while (*copyfrom && *copyfrom != dec_delim && *copyfrom != 'E' && *copyfrom != 'e') {
-	Dprintf("from: %s to: %s \n", copyfrom, tmpstring);
-	*copyto++ = *copyfrom++;
+    fromcurs = 0;
+    tocurs = 0;
+    while (fromcurs < input_len && input[fromcurs] != dec_delim &&
+	    strchr(exponent_chars, input[fromcurs]) == NULL) {
+	Dprintf("from: %s to: %s \n", input+fromcurs, tmpstring);
+	tmpstring[tocurs++] = input[fromcurs++];
 	if (prefix != 0) {
 	    prefix--;
 	    continue;
 	}
 	if (--ctr == 0) {
-	    *copyto++ = separator;
+	    tmpstring[tocurs++] = separator;
 	}
 	if (ctr == 0) {
 	    ctr = skip;
 	}
     }
-    Dprintf("*(copyto - 1) == %c\n",*(copyto-1));
-    Dprintf("*(copyfrom - 1) == %c\n",*(copyfrom-1));
-    if (*(copyto - 1) == separator) {
-	*(copyto - 1) = dec_delim;
+    Dprintf("tmpstring[tocurs-1] == %c\n",tmpstring[tocurs-1]);
+    Dprintf("  input[fromcurs-1] == %c\n",input[fromcurs-1]);
+    if (tmpstring[tocurs - 1] == separator) {
+	tmpstring[tocurs - 1] = dec_delim;
     }
-    if (*copyfrom == 'e' || *copyfrom == 'E') {
-	*copyto++ = *copyfrom;
+    if (input[fromcurs] == 'e' || input[fromcurs] == 'E') {
+	tmpstring[tocurs++] = input[fromcurs];
     }
-    if (*copyfrom) {
-	copyfrom++;
-	while (*copyfrom) {
-	    *copyto++ = *copyfrom++;
+    if (fromcurs < input_len) {
+	fromcurs++;
+	while (fromcurs < input_len) {
+	    tmpstring[tocurs++] = input[fromcurs++];
 	}
     }
     return tmpstring;

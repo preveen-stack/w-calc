@@ -10,11 +10,13 @@
 #ifndef KBW_STRING_MANIP
 #define KBW_STRING_MANIP
 
-void strstrip(char, char *);
-void strswap(char, char, char *);
-void strswap2(char, char, char *);
-unsigned int count_digits(char *);
-int justnumbers(char *);
+void strstrip(const char, char *);
+/* this replaces all instances of sw in str with ap */
+void strswap(const char sw, const char ap, char * str);
+/* this replaces all instances of sw in str with ap, and all instances of ap in str with sw */
+void strswap2(const char sw, const char ap, char * str);
+unsigned int count_digits(const char *);
+int justnumbers(const char *);
 void stripComments(char *);
 
 #endif
