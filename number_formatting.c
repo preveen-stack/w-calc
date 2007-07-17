@@ -129,7 +129,8 @@ char *precision_formatted_number(char *digits, mp_exp_t exp,
     char *retstring, *curs, *dcurs = digits;
 
     length = strlen(digits);
-    if (exp > length) length = exp;
+    /* testing against both zero and length because length is unsigned */
+    if (exp > 0 && exp > length) length = exp;
     length += 3;
 
     if (length < precision + 3) {      // leading zero, decimal, and null
@@ -214,7 +215,8 @@ char *full_precision_formatted_number(char *digits, mp_exp_t exp, const int base
     char *retstring, *curs, *dcurs = digits;
 
     length = strlen(digits);
-    if (exp > length) length = exp;
+    /* testing against both zero and length because length is unsigned */
+    if (exp > 0 && exp > length) length = exp;
     length += 3; /* the null, the (possible) sign, and the decimal */
 
     Dprintf("Full Precision Formatted Number\n");
@@ -302,7 +304,8 @@ char *automatically_formatted_number(char *digits, mp_exp_t exp, const int base,
     char *retstring, *curs, *dcurs = digits;
 
     length = strlen(digits);
-    if (exp > length) length = exp;
+    /* testing against both zero and length because length is unsigned */
+    if (exp > 0 && exp > length) length = exp;
     length += 3; /* the null, the (possible) sign, and the decimal */
 
     Dprintf("Automatically Formatted Number\n");
@@ -403,7 +406,8 @@ char *engineering_formatted_number(char *digits, mp_exp_t exp,
     char *retstring, *curs, *dcurs = digits;
 
     length = strlen(digits);
-    if (exp > length) length = exp;
+    /* testing against both zero and length because length is unsigned */
+    if (exp > 0 && exp > length) length = exp;
     length += 3; /* the null, the (possible) sign, and the decimal */
 
     Dprintf("Engineering Formatted Number\n");
