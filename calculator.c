@@ -861,7 +861,7 @@ char *print_this_result(Number result)
 		Dprintf("simple full\n");
 
 		pa2 =
-		    num_to_str_complex(result, base, conf.engineering, -1,
+		    num_to_str_complex(result, base, conf.engineering, -2,
 				       conf.print_prefixes, &junk);
 		not_all_displayed = (strlen(pa) < strlen(pa2));
 		free(pa2);
