@@ -38,3 +38,7 @@ irandom
 50e-9 # check the rounding indicator
 -340%-60
 360%60
+23.05-14.5-8.55 # should be zero if precision_guard is on
+23.05 # should be 23.05
+a # should be 23.05
+a-14.5-8.55 # should be 0, not -1E-09
