@@ -459,19 +459,18 @@ char *engineering_formatted_number(char *digits, mp_exp_t exp,
 }
 
 /* this function removes zeros and decimals from the back end of a number,
- * and returns how many it stripped */
+ * and returns how many characters it stripped */
 size_t zero_strip(char *num)
 {
-    char *curs = strchr(num, '\0');
+    size_t curs = strlen(num) - 1;
     size_t count = 0;
 
-    curs--;
-    while ('0' == *curs) {
-	*curs-- = '\0';
+    while ('0' == num[curs]) {
+	num[curs--] = '\0';
 	count++;
     }
-    if ('.' == *curs) {
-	*curs = '\0';
+    if ('.' == num[curs]) {
+	num[curs] = '\0';
 	count++;
     }
     return count;
