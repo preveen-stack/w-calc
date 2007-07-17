@@ -56,6 +56,7 @@ extern int history_truncate_file(char *, int);
 #endif
 
 #define TRUEFALSE (! strcmp(value,"yes") || ! strcmp(value,"true") || ! strcmp(value,"1"))
+#define BIG_STRING 4096
 
 static int read_prefs(char *filename);
 static int read_preload(char *filename);
@@ -265,7 +266,7 @@ int main(int argc, char *argv[])
 #ifdef HAVE_LIBREADLINE
     char *readme = NULL;
 #else
-    char readme[1000];
+    char readme[BIG_STRING];
 #endif
     int tty, i;
     short cmdline_input = 0;
@@ -297,14 +298,25 @@ int main(int argc, char *argv[])
     /* load the preferences */
     {
 	char filename[PATH_MAX];
+	int foundflag = 0;
 
-	snprintf(filename, PATH_MAX, "%s/.wcalcrc", getenv("HOME"));
-	if (read_prefs(filename)) {
-	    perror("Writing Preferences");
+	/* quick check the commandline for a --defaults argument */
+	for (i = 1; i < argc; ++i) {
+	    if (!strcmp(argv[i], "--defaults")) {
+		foundflag = 1;
+		break;
+	    }
 	}
-	snprintf(filename, PATH_MAX, "%s/.wcalc_preload", getenv("HOME"));
-	if (read_preload(filename)) {
-	    perror("Reading Preload File");
+
+	if (foundflag == 0) {
+	    snprintf(filename, PATH_MAX, "%s/.wcalcrc", getenv("HOME"));
+	    if (read_prefs(filename)) {
+		perror("Writing Preferences");
+	    }
+	    snprintf(filename, PATH_MAX, "%s/.wcalc_preload", getenv("HOME"));
+	    if (read_preload(filename)) {
+		perror("Reading Preload File");
+	    }
 	}
     }
 
@@ -428,6 +440,8 @@ int main(int argc, char *argv[])
 	    yydebug = 1;
 	} else if (!strcmp(argv[i], "-n")) {
 	    conf.print_equal = 0;
+	} else if (!strcmp(argv[i], "--defaults")) {
+	    /* ignore this argument */
 	} else {
 	    extern char *errstring;
 
@@ -516,11 +530,11 @@ int main(int argc, char *argv[])
 		char c;
 		unsigned int i = 0;
 
-		memset(readme, 0, 1000);
+		memset(readme, 0, BIG_STRING);
 		printf("-> ");
 		fflush(stdout);
 		c = fgetc(stdin);
-		while (c != '\n' && i < 1000 && !feof(stdin) &&
+		while (c != '\n' && i < BIG_STRING && !feof(stdin) &&
 		       !ferror(stdin)) {
 		    readme[i] = c;
 		    c = fgetc(stdin);
@@ -597,7 +611,7 @@ int main(int argc, char *argv[])
     } else {
 	/* if stdin is ANYTHING ELSE (a pipe, a file, etc), don't prompt */
 	char *line, gotten;
-	unsigned int linelen = 0, maxlinelen = 100;
+	unsigned int linelen = 0, maxlinelen = BIG_STRING;
 	extern int show_line_numbers;
 
 	show_line_numbers = 1;
@@ -610,15 +624,15 @@ int main(int argc, char *argv[])
 		linelen++;
 		if (linelen > maxlinelen) {
 		    char *temp;
-		    temp = realloc(line, (maxlinelen + 100) * sizeof(char));
+		    temp = realloc(line, (maxlinelen + BIG_STRING) * sizeof(char));
 		    if (!temp) {
 			free(line);
 			fprintf(stderr,
 				"Ran out of memory. Line too long.\n");
 			exit(EXIT_FAILURE);
 		    }
-		    memset(temp + maxlinelen, 0, 100);
-		    maxlinelen += 100;
+		    memset(temp + maxlinelen, 0, BIG_STRING);
+		    maxlinelen += BIG_STRING;
 		    line = temp;
 		}
 	    }
@@ -683,73 +697,78 @@ static int read_preload(char *filename)
 static int read_prefs(char *filename)
 {				       /*{{{ */
     int fd = open(filename, O_RDONLY);
-    char key[1000], value[100];
-    char *curs = key;
+    char key[BIG_STRING], value[BIG_STRING];
+    size_t curs = 0;
     int retval = 1;
 
     fd = open(filename, O_RDONLY);
     if (fd < 0)
 	return 0;
-    retval = read(fd, curs, 1);
+    retval = 1;
     while (retval == 1) {
 	char quoted = 0;
+	char junk;
 
-	curs = key;
+	memset(value, 0, BIG_STRING);
+	memset(key, 0, BIG_STRING);
+
+	curs = 0;
 	// read until we find a non-comment
-	while (retval == 1) {
+	while (1 == (retval = read(fd, &(key[curs]), 1))) {
 	    // if we find a comment
-	    if (*curs == '#')
+	    if (key[curs] == '#') {
 		// read until the end of line
-		while (read(fd, curs, 1) == 1 && *curs != '\n') ;
-	    else if (isalpha((int)(*curs)))
+		junk = 0;
+		while (read(fd, &junk, 1) == 1 && junk != '\n') ;
+	    } else if (isalpha((int)(key[curs])))
 		break;
-	    retval = read(fd, curs, 1);
 	}
+	if (retval != 1)
+	    break;
 	// read in the key
 	quoted = 1;
-	if (*curs != '\'') {
-	    ++curs;
+	if (key[curs] != '\'') {
+	    curs++;
 	    quoted = 0;
 	}
-	while (retval == 1) {
-	    retval = read(fd, curs, 1);
-	    if ((!quoted && isspace((int)(*curs))) ||
-		(quoted && *curs != '\''))
+	while (retval == 1 && curs < BIG_STRING) {
+	    retval = read(fd, &(key[curs]), 1);
+	    if ((!quoted && isspace((int)(key[curs]))) ||
+		(quoted && key[curs] != '\''))
 		break;
 	    ++curs;
 	}
 	if (retval != 1)
 	    break;
-	*curs = 0;
+	key[curs] = 0;
 	// read in the =
-	while (retval == 1 && *curs != '=') {
-	    retval = read(fd, curs, 1);
+	junk = 0;
+	while (retval == 1 && junk != '=') {
+	    retval = read(fd, &junk, 1);
 	}
 	if (retval != 1)
 	    break;
-	while (retval == 1 && (isspace((int)(*curs)) || *curs == '=')) {
-	    retval = read(fd, curs, 1);
+	while (retval == 1 && (isspace((int)junk) || junk == '=')) {
+	    retval = read(fd, &junk, 1);
 	}
 	if (retval != 1)
 	    break;
-	value[0] = *curs;
-	*curs = 0;
-	curs = value;
+	value[0] = junk;
+	curs = 0;
 	// read in the value
 	quoted = 1;
-	if (*curs != '\'') {
+	if (value[0] != '\'') {
 	    ++curs;
 	    quoted = 0;
 	}
-	while (retval == 1) {
-	    retval = read(fd, curs, 1);
-	    if ((!quoted && isspace((int)(*curs))) ||
-		(quoted && *curs != '\''))
+	while (retval == 1 && value[curs-1] && curs < BIG_STRING) {
+	    retval = read(fd, &(value[curs]), 1);
+	    if ((!quoted && isspace((int)(value[curs]))) ||
+		(quoted && value[curs] != '\''))
 		break;
-	    ++curs;
+	    curs++;
 	}
-	if (*curs == '\n')
-	    *curs = 0;
+	value[curs] = 0;
 
 	if (!strcmp(key, "precision"))
 	    conf.precision = atoi(value);
