@@ -226,6 +226,6 @@ double num_get_d(Number);
 #endif
 
 void init_numbers(void);
-int is_int(Number);
+int is_int(const Number);
 
 #endif /* NUMBER_H */

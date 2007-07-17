@@ -901,7 +901,7 @@ const struct conversion * conversions[] = {
 #define CONVERS(x) (x>10)?pressures:((x>9)?angles:((x>8)?temperatures:((x>7)?accelerations:((x>6)?forces:((x>5)?powers:((x>4)?speeds:((x>3)?masses:((x>2)?volumes:((x>1)?areas:lengths)))))))))
 
 /* returns the category number of the unit */
-int identify_unit(char * unit)
+int identify_unit(const char * unit)
 {
     size_t cat_num;
 
@@ -922,7 +922,7 @@ int identify_unit(char * unit)
     return -1;
 }
 
-int identify_units(char * unit1, char * unit2)
+int identify_units(const char * unit1, const char * unit2)
 {
     size_t cat_num;
     int u1 = -1, u2 = -1;
@@ -965,7 +965,7 @@ int identify_units(char * unit1, char * unit2)
     return -2;
 }
 
-int unit_id(int utype, char * unit)
+int unit_id(const int utype, const char * unit)
 {
     size_t unit_num;
 
@@ -983,7 +983,7 @@ int unit_id(int utype, char * unit)
     return -1;
 }
 
-void uber_conversion (Number output, int utype, int fromunit, int tounit, Number value)
+void uber_conversion (Number output, const int utype, const int fromunit, const int tounit, Number value)
 {
     if (utype != TEMPERATURE_C) {
         const struct conversion *ltable = conversions[utype];

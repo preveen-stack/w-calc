@@ -22,7 +22,7 @@
 List them = NULL;
 
 /* Hidden, internal functions */
-static void *getvar_core(char *key, int all_or_nothing);
+static void *getvar_core(const char *key, const int all_or_nothing);
 
 void initvar(void)
 {				       /*{{{ */
@@ -95,7 +95,7 @@ char **listvarnames(void)
     return ret;
 /*}}}*/}
 
-void delnvar(size_t i)
+void delnvar(const size_t i)
 {				       /*{{{ */
     struct variable *freeme;
 
@@ -111,12 +111,12 @@ void delnvar(size_t i)
     }
 }				       /*}}} */
 
-struct variable *getrealnvar(size_t i)
+struct variable *getrealnvar(const size_t i)
 {				       /*{{{ */
     return (struct variable *)peekListElement(them, i);
 }				       /*}}} */
 
-struct answer getvar(char *key)
+struct answer getvar(const char *key)
 {				       /*{{{ */
     struct answer ans;
     Number *t = getvar_core(key, THE_VALUE);
@@ -134,7 +134,7 @@ struct answer getvar(char *key)
     return ans;
 }				       /*}}} */
 
-void getvarval(Number out, char *key)
+void getvarval(Number out, const char *key)
 {				       /*{{{ */
     Number *t = getvar_core(key, THE_VALUE);
 
@@ -143,7 +143,7 @@ void getvarval(Number out, char *key)
     }
 }				       /*}}} */
 
-struct answer getvar_full(char *key)
+struct answer getvar_full(const char *key)
 {				       /*{{{ */
     struct answer ans;
     struct variable *var;
@@ -165,14 +165,9 @@ struct answer getvar_full(char *key)
     return ans;
 }				       /*}}} */
 
-struct variable *getvarptr(char *key)
-{				       /*{{{ */
-    return (struct variable *)getvar_core(key, THE_STRUCTURE);
-}				       /*}}} */
-
 /* This function returns 1 if a variable by that key has already been created
  * and returns 0 if a variable by that key has not been created yet */
-int varexists(char *key)
+int varexists(const char *key)
 {				       /*{{{ */
     struct variable *cursor = NULL;
     ListIterator li = NULL;
@@ -191,7 +186,7 @@ int varexists(char *key)
     return cursor ? 1 : 0;
 }				       /*}}} */
 
-static void *getvar_core(char *key, int all_or_nothing)
+static void *getvar_core(const char *key, const int all_or_nothing)
 {				       /*{{{ */
     struct variable *cursor = NULL;
     ListIterator li = NULL;
@@ -227,7 +222,7 @@ static void *getvar_core(char *key, int all_or_nothing)
 
 /* this adds the key-expression pair to the list.
  * if the key already exists, change the value to this */
-int putexp(char *key, char *value, char *desc)
+int putexp(const char *key, const char *value, const char *desc)
 {				       /*{{{ */
     struct variable *cursor = NULL;
 
@@ -266,7 +261,7 @@ int putexp(char *key, char *value, char *desc)
 
 /* this adds the key-value pair to the list.
  * if the key already exists, change the value to this */
-int putval(char *key, Number value, char *desc)
+int putval(const char *key, const Number value, const char *desc)
 {				       /*{{{ */
     struct variable *cursor = NULL;
 

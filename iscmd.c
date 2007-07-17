@@ -27,7 +27,7 @@ const char *qcommands[] = {
     0
 };
 
-int iscmd(char *str)
+int iscmd(const char *str)
 {
     size_t i;
 

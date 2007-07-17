@@ -18,42 +18,45 @@
 #include "memwatch.h"
 #endif
 
-void explain_command(char *);
-void explain_variable(char *);
-void explain_constant(char *);
-void explain_function(char *);
+static void explain_command(const char *);
+static void explain_variable(const char *);
+static void explain_constant(const char *);
+static void explain_function(const char *);
 
-void explain(char *str)
+void explain(const char *str)
 {				       /*{{{ */
     int curs;
+    char * mystr;
 
     if (!str || !*str) {
 	printf("Nothing to explain.\n");
 	return;
     }
+    mystr = strdup(str);
     /* for sanity's sake, remove any trailing whitespace */
-    curs = strlen(str) - 1;
-    while (isspace(str[curs]) && curs > 0) {
-	str[curs] = 0;
+    curs = strlen(mystr) - 1;
+    while (isspace(mystr[curs]) && curs > 0) {
+	mystr[curs] = 0;
 	curs--;
     }
-    if (!strcmp(str, "q")) {
+    if (!strcmp(mystr, "q")) {
 	printf("Quits the program.");
-    } else if (*str == '\\') {	       // it's a command
-	explain_command(str);
-    } else if (isconst(str)) {	       // it's a constant
-	explain_constant(str);
-    } else if (isfunc(str)) {	       // it's a function
-	explain_function(str);
-    } else if (varexists(str)) {       // it's a variable
-	explain_variable(str);
+    } else if (*mystr == '\\') {	       // it's a command
+	explain_command(mystr);
+    } else if (isconst(mystr)) {	       // it's a constant
+	explain_constant(mystr);
+    } else if (isfunc(mystr)) {	       // it's a function
+	explain_function(mystr);
+    } else if (varexists(mystr)) {       // it's a variable
+	explain_variable(mystr);
     } else {			       // it's a call for help
 	printf("%s is neither a command, constant, function, or variable.\n",
-	       str);
+	       mystr);
     }
+    free(mystr);
 }				       /*}}} */
 
-void explain_command(char *str)
+static void explain_command(const char *str)
 {				       /*{{{ */
     str++;
     if (!strcmp(str, "b") || !strcmp(str, "bin") || !strcmp(str, "binary")) {
@@ -144,7 +147,7 @@ void explain_command(char *str)
     }
 }				       /*}}} */
 
-void explain_variable(char *str)
+static void explain_variable(const char *str)
 {				       /*{{{ */
     struct answer var;
 
@@ -187,7 +190,7 @@ void explain_variable(char *str)
     }
 }				       /*}}} */
 
-void explain_constant(char *str)
+static void explain_constant(const char *str)
 {				       /*{{{ */
     if (!strcmp(str, "e")) {
 	printf
@@ -318,7 +321,7 @@ void explain_constant(char *str)
     printf("\n");
 }				       /*}}} */
 
-void explain_function(char *str)
+static void explain_function(const char *str)
 {				       /*{{{ */
     if (!strcmp(str, "sin") || !strcmp(str, "cos") || !strcmp(str, "tan") ||
 	!strcmp(str, "cot")) {

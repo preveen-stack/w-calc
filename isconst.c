@@ -14,7 +14,7 @@ const char *consts[] = {
     0
 };
 
-int isconst(char *str)
+int isconst(const char *str)
 {
     size_t i;
 

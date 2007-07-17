@@ -34,7 +34,7 @@ void init_numbers(void)
     atexit(numbers_cleanup);
 }
 
-int is_int(Number potential_int)
+int is_int(const Number potential_int)
 {
 #ifdef HAVE_LIBMPFR
     char *str;

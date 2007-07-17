@@ -6,7 +6,7 @@
 #include "memwatch.h"
 #endif
 
-char *evalvar(char *varname)
+char *evalvar(const char *varname)
 {
     struct answer a;
     char *varvalue, junk;

@@ -77,7 +77,7 @@ static int find_recursion(char *);
 static int find_recursion_core(List);
 static char *flatten(char *str);
 
-void parseme(char *pthis)
+void parseme(const char *pthis)
 {				       /*{{{ */
     extern int synerrors;
     short numbers = 0;
@@ -183,6 +183,9 @@ void parseme(char *pthis)
     return;
 }				       /*}}} */
 
+/* this function should probably stop flattening if it sees a comment, but
+ * that's so rare (and hardly processor intensive) that it's not worth digging
+ * at the moment */
 static char *flatten(char *str)
 {				       /*{{{ */
     char *curs = str, *eov, *nstr;
@@ -352,7 +355,7 @@ static int recursion(char *str)
     return retval;
 }				       /*}}} */
 
-int find_recursion(char *instring)
+static int find_recursion(char *instring)
 {				       /*{{{ */
     List vl = NULL;
     int retval;
@@ -363,7 +366,7 @@ int find_recursion(char *instring)
     return retval;
 }				       /*}}} */
 
-int find_recursion_core(List oldvars)
+static int find_recursion_core(List oldvars)
 {				       /*{{{ */
     List newvars = NULL;
     ListIterator oldvarsIterator;
@@ -418,7 +421,7 @@ int find_recursion_core(List oldvars)
     return retval;
 }				       /*}}} */
 
-void report_error(char *err_fmt, ...)
+void report_error(const char *err_fmt, ...)
 {				       /*{{{ */
     extern char *errstring;
     extern int errloc;
@@ -493,7 +496,7 @@ void display_and_clear_errstring()
     }
 }				       /*}}} */
 
-void set_prettyanswer(Number num)
+void set_prettyanswer(const Number num)
 {				       /*{{{ */
     char *temp;
 
@@ -512,7 +515,7 @@ void set_prettyanswer(Number num)
     Dprintf("set_prettyanswer - done\n");
 }				       /*}}} */
 
-char *print_this_result_dbl(double result)
+static char *print_this_result_dbl(const double result)
 {				       /*{{{ */
     char format[10];
     static char *tmp;
@@ -641,12 +644,13 @@ char *print_this_result_dbl(double result)
     } else {
 	char *curs;
 
-	Dprintf("normal numbers\n");
+	Dprintf("normal numbers (format: %s)\n", format);
 	switch (conf.output_format) {  /*{{{ */
 	    case DECIMAL_FORMAT:
 	    {
 		double junk;
 
+		Dprintf("fabs = %f, conf.engineering = %i, conf.print_ints = %i\n", fabs(modf(result, &junk)), conf.engineering, conf.print_ints);
 		/* This is the big call */
 		if (fabs(modf(result, &junk)) != 0.0 || conf.engineering ||
 		    !conf.print_ints) {
@@ -654,6 +658,7 @@ char *print_this_result_dbl(double result)
 		} else {
 		    snprintf(pa, 310, "%1.0f", result);
 		}
+		Dprintf("pa (unlocalized): %s\n", pa);
 		/* was it as good for you as it was for me?
 		 * now, you must localize it */
 		{
@@ -743,16 +748,19 @@ char *print_this_result_dbl(double result)
 		    pa[1] = 'b';
 		}
 		// print it
-		for (i = conf.print_prefixes * 2; place >= 0; ++i) {
-		    double t = pow(2.0, place);
+		{
+		    double temp = result;
+		    for (i = conf.print_prefixes * 2; place >= 0; ++i) {
+			double t = pow(2.0, place);
 
-		    if (result >= t) {
-			pa[i] = '1';
-			result -= t;
-		    } else {
-			pa[i] = '0';
+			if (temp >= t) {
+			    pa[i] = '1';
+			    temp -= t;
+			} else {
+			    pa[i] = '0';
+			}
+			--place;
 		    }
-		    --place;
 		}
 		pa[i + 1] = 0;
 
@@ -793,7 +801,7 @@ char *print_this_result_dbl(double result)
     return pa;
 }				       /*}}} */
 
-char *print_this_result(Number result)
+char *print_this_result(const Number result)
 {				       /*{{{ */
     extern char *errstring;
     unsigned int base = 0;
@@ -911,8 +919,8 @@ char *print_this_result(Number result)
     return pa;
 }				       /*}}} */
 
-void simple_exp(Number output, Number first, enum operations op,
-		Number second)
+void simple_exp(Number output, const Number first, const enum operations op,
+		const Number second)
 {				       /*{{{ */
     if (compute) {
 	Number temp;
@@ -1017,7 +1025,7 @@ void simple_exp(Number output, Number first, enum operations op,
     }
 }				       /*}}} */
 
-void uber_function(Number output, enum functions func, Number input)
+void uber_function(Number output, const enum functions func, Number input)
 {				       /*{{{ */
     if (compute) {
 	Number temp;

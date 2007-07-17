@@ -22,7 +22,7 @@ const char *funcs[] = { "sin", "cos", "tan", "cot",
     0
 };
 
-int isfunc(char *str)
+int isfunc(const char *str)
 {
     size_t i;
 

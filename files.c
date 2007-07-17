@@ -135,7 +135,7 @@ int saveState(char *filename)
     return return_error;
 }				       /*}}} */
 
-int loadState(char *filename, int into_history)
+int loadState(const char *filename, const int into_history)
 {				       /*{{{ */
     int fd, return_error = 0;
     int standard_output_save = standard_output;
@@ -207,7 +207,7 @@ int loadState(char *filename, int into_history)
     return return_error;
 }				       /*}}} */
 
-int storeVar(char *variable)
+int storeVar(const char *variable)
 {				       /*{{{ */
     int fd, retval = 0, return_error = 0;
     char filename[PATH_MAX];

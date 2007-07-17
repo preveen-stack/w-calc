@@ -10,8 +10,8 @@
 #ifndef WCALC_FILES
 #define WCALC_FILES
 
-int saveState(char *filename);
-int loadState(char *filename, int into_history);
-int storeVar(char *variable);
+int saveState(char *filename); // filename is freed by saveState
+int loadState(const char *filename, const int into_history);
+int storeVar(const char *variable);
 
 #endif

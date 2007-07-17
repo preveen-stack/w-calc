@@ -1,6 +1,6 @@
 #ifndef WCALC_ISFUNC
 #define WCALC_ISFUNC
 
-int isfunc(char *str);
+int isfunc(const char *str);
 
 #endif

@@ -37,15 +37,15 @@ struct answer
 };
 
 // requires a working Number
-void getvarval(Number out, char *key);
+void getvarval(Number out, const char *key);
 
 // requires a working Number
-int putval(char *key, Number value, char *desc);
+int putval(const char *key, const Number value, const char *desc);
 
-int putexp(char *key, char *value, char *desc);
-int varexists(char *key);
+int putexp(const char *key, const char *value, const char *desc);
+int varexists(const char *key);
 void initvar(void);
-void delnvar(size_t);
+void delnvar(const size_t n);
 void cleanupvar(void);
 size_t numvars();
 void printvariables(void);
@@ -61,15 +61,15 @@ char ** listvarnames(void);
  */
 
 /* getvar returns only the value, or an error if it doesn't have one */
-struct answer getvar(char *key);
+struct answer getvar(const char *key);
 
 /* getvar returns whatever is known about the variable, or an error if
  * it doesn't exist */
-struct answer getvar_full(char *key);
+struct answer getvar_full(const char *key);
 
 /* THIS function, however, exposes the innards of the variable system.
  * do not under any circumstance un-initialize the Number
  */
-struct variable *getrealnvar(size_t);
+struct variable *getrealnvar(const size_t n);
 
 #endif

@@ -15,8 +15,7 @@
 #endif
 #include "definitions.h"
 
-#include <gmp.h>
-#include <mpfr.h>
+#include "number.h"
 
 #ifdef EBUG
 #include <stdio.h>
@@ -100,16 +99,16 @@ enum operations
 enum commands
 { redisplay, nothing };
 
-void parseme(char *);
-void report_error(char * fmt, ...);
+void parseme(const char *);
+void report_error(const char * fmt, ...);
 void display_and_clear_errstring(void);
-void set_prettyanswer(mpfr_t num);
-char *print_this_result(mpfr_t result);
-void uber_function(mpfr_t output, enum functions func, mpfr_t input);
-void simple_exp(mpfr_t output, mpfr_t first, enum operations op,
-				mpfr_t second);
+void set_prettyanswer(const Number num);
+char *print_this_result(const Number result);
+void uber_function(Number output, const enum functions func, Number input);
+void simple_exp(Number output, const Number first, const enum operations op,
+				const Number second);
 int seed_random(void);
-char *output_string(unsigned int);
+char *output_string(const unsigned int);
 
 struct _conf
 {
@@ -139,7 +138,7 @@ struct _conf
 extern struct _conf conf;
 
 /* results */
-extern mpfr_t last_answer;
+extern Number last_answer;
 extern char *pretty_answer;
 
 /* communication with parser */
