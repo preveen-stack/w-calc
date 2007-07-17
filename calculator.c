@@ -262,7 +262,7 @@ static char *flatten(char *str)
 	    {
 		char junk;
 
-		varvalue = num_to_str_complex(f, 10, 0, -1, 1, &junk);
+		varvalue = num_to_str_complex(f, 10, 0, -2, 1, &junk);
 	    }
 	    num_free(f);
 	} else {		       // not a known var: itza literal (e.g. cos)
