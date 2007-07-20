@@ -158,11 +158,22 @@
                 shiftKey1 = NSButton; 
                 shiftKey2 = NSButton; 
                 simpleCalculator = NSButton; 
+                sizeToggleMenu = NSMenuItem; 
                 theKeyboard = id; 
                 thePrefPanel = NSPanel; 
                 updateHistory = NSButton; 
                 useRadians = NSButton; 
                 variableList = id; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            CLASS = WcalcService; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                historyList = NSTableView; 
+                inspectorWindow = NSWindow; 
+                variableList = NSTableView; 
             }; 
             SUPERCLASS = NSObject; 
         }, 
