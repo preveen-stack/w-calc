@@ -111,20 +111,20 @@
     NSPasteboard* pboard=[NSPasteboard generalPasteboard];
     NSString *theString = @"";
     NSIndexSet* rowEnumerator=[theList selectedRowIndexes];
-    unsigned int index=0;
+    unsigned int theIndex=0;
     
     // Set the pasteboard types you want here.
     [pboard declareTypes:[NSArray arrayWithObject:NSStringPboardType] owner:self];
     
-    index = [rowEnumerator firstIndex];
+    theIndex = [rowEnumerator firstIndex];
     do {
-	struct variable *keyval = getrealnvar(index);
+	struct variable *keyval = getrealnvar(theIndex);
 	if (keyval == NULL) {
 	    theString = [theString stringByAppendingString:@"BAD ROW\n"];
 	} else {
 	    theString = [theString stringByAppendingFormat:@"%s\t%s\n", keyval->key, keyval->exp?keyval->expression:print_this_result(keyval->value)];
 	}
-    } while ((index = [rowEnumerator indexGreaterThanIndex:index]) != NSNotFound);
+    } while ((theIndex = [rowEnumerator indexGreaterThanIndex:theIndex]) != NSNotFound);
     [pboard setString:theString forType:NSStringPboardType];    
 }
 
