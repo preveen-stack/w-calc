@@ -661,14 +661,8 @@ static char *print_this_result_dbl(const double result)
 		Dprintf("pa (unlocalized): %s\n", pa);
 		/* was it as good for you as it was for me?
 		 * now, you must localize it */
-		{
-		    unsigned int index;
-
-		    for (index = 0; index < strlen(pa); ++index) {
-			if (pa[index] == '.')
-			    pa[index] = conf.dec_delimiter;
-		    }
-		}
+		strswap('.',conf.dec_delimiter,pa);
+		
 		Dprintf("pa: %s\n", pa);
 		switch (conf.rounding_indication) {
 		    case SIMPLE_ROUNDING_INDICATION:
