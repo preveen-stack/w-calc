@@ -11,6 +11,7 @@
     IBOutlet NSMenuItem *baseMenu;
     IBOutlet NSMenuItem *saveMenuItem;
     IBOutlet NSMenuItem *saveAsMenuItem;
+    IBOutlet NSMenuItem *sizeToggleMenu;
 
     IBOutlet NSWindow *mainWindow;
     IBOutlet NSWindow *inspectorWindow;

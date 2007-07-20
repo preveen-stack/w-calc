@@ -51,11 +51,13 @@ static pthread_mutex_t displayLock;
 	    - ans.size.height
 	    - prec.size.height
 	    - 57 /* the size of the rest of the window, including title bar */;
+	[sizeToggleMenu setTitle:@"Show Keypad"];
     } else {
 	// if adding the keypad, change the window height
 	mainwindow.size.height += KEYPAD_HEIGHT;
 	mainwindow.origin.y -= KEYPAD_HEIGHT;
 	mainwindow.size.width = MIN_WINDOW_WIDTH;
+	[sizeToggleMenu setTitle:@"Hide Keypad"];
     }
 
     exp.size.width = prec.size.width = mainwindow.size.width - FIELD_WIDTH_DIFFERENCE;
@@ -398,6 +400,7 @@ static pthread_mutex_t displayLock;
     Dprintf("last answer cleared\n");
     pthread_mutex_init(&displayLock,NULL);
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(quit:) name:NSWindowWillCloseNotification object:mainWindow];
+    NSUpdateDynamicServices();
 }
 
 - (void)openBDrawer: (id) sender
