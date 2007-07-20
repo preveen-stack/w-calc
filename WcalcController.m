@@ -34,7 +34,7 @@ static pthread_mutex_t displayLock;
 {
     static BOOL shrinking = TRUE;
     NSRect mainwindow = [mainWindow frame];
-    NSRect exp = [ExpressionField frame];
+    NSRect expr = [ExpressionField frame];
     NSRect prec = [PrecisionSlider frame];
     NSRect ans = [AnswerField frame];
     NSSize w;
@@ -47,7 +47,7 @@ static pthread_mutex_t displayLock;
 	// this is set in case the calc starts up toggled (under other
 	// conditions it is not strictly necessary, because the ExpressionField
 	// has achieved the correct size automatically
-	exp.size.height = mainwindow.size.height
+	expr.size.height = mainwindow.size.height
 	    - ans.size.height
 	    - prec.size.height
 	    - 57 /* the size of the rest of the window, including title bar */;
@@ -60,14 +60,14 @@ static pthread_mutex_t displayLock;
 	[sizeToggleMenu setTitle:@"Hide Keypad"];
     }
 
-    exp.size.width = prec.size.width = mainwindow.size.width - FIELD_WIDTH_DIFFERENCE;
+    expr.size.width = prec.size.width = mainwindow.size.width - FIELD_WIDTH_DIFFERENCE;
 
     if (shrinking) {
 	[keypad removeFromSuperview];
-	exp.origin.y -= KEYPAD_HEIGHT;
+	expr.origin.y -= KEYPAD_HEIGHT;
 	prec.origin.y -= KEYPAD_HEIGHT;
     } else {
-	exp.origin.y += KEYPAD_HEIGHT;
+	expr.origin.y += KEYPAD_HEIGHT;
 	prec.origin.y += KEYPAD_HEIGHT;
     }
 
@@ -99,7 +99,7 @@ static pthread_mutex_t displayLock;
 	[prefs setObject:@"YES" forKey:@"toggled"];
     }
 
-    [ExpressionField setFrame:exp];
+    [ExpressionField setFrame:expr];
     [PrecisionSlider setFrame:prec];
 
     [superview addSubview:ExpressionField];
@@ -613,9 +613,9 @@ static pthread_mutex_t displayLock;
 	    if (! conf.simple_calc) {
 		[self go:sender];
 	    } else {
-		char * exp = strdup([[ExpressionField stringValue] UTF8String]);
+		char * expr = strdup([[ExpressionField stringValue] UTF8String]);
 		char * ret;
-		ret = simpleCalc('=',exp);
+		ret = simpleCalc('=',expr);
 		if (ret) {
 		    [ExpressionField setStringValue:[NSString stringWithUTF8String:ret]];
 		    free(ret);
@@ -623,7 +623,7 @@ static pthread_mutex_t displayLock;
 		    [self displayAnswer];
 		    [ExpressionField setStringValue:[AnswerField stringValue]];
 		}
-		free(exp);
+		free(expr);
 	    }
 	    break;
 	case 105: /* the divide key on the onscreen keypad */
@@ -651,14 +651,14 @@ static pthread_mutex_t displayLock;
 		}
 		just_answered = FALSE;
 	    } else { /* stupid calculator */
-		char *ret, *exp;
-		exp = strdup([[ExpressionField stringValue] UTF8String]);
+		char *ret, *expr;
+		expr = strdup([[ExpressionField stringValue] UTF8String]);
 		if (tag == 105) {
-		    ret = simpleCalc('/',exp);
+		    ret = simpleCalc('/',expr);
 		} else {
-		    ret = simpleCalc([sent characterAtIndex:0],exp);
+		    ret = simpleCalc([sent characterAtIndex:0],expr);
 		}
-		free(exp);
+		free(expr);
 		if (ret) {
 		    [ExpressionField setStringValue:[NSString stringWithUTF8String:ret]];
 		    free(ret);
@@ -812,9 +812,8 @@ static pthread_mutex_t displayLock;
 	    }
 	    break;
 	case 14: // History length limit
-	    olde = conf.history_limit_len;
-	    conf.history_limit_len = [sender intValue];
-	    if (olde != conf.history_limit_len) {
+	    if ((unsigned)[sender intValue] != conf.history_limit_len) {
+		conf.history_limit_len = [sender intValue];
 		[prefs setObject:[NSString stringWithFormat:@"%i",conf.history_limit_len] forKey:@"historyLimitLength"];
 	    }
 	    break;
@@ -859,17 +858,15 @@ static pthread_mutex_t displayLock;
 	    }
 	    break;
 	case 18:
-	    olde = num_get_default_prec();
-	    num_set_default_prec([sender intValue]);
-	    if (olde != num_get_default_prec()) {
+	    if ((unsigned)[sender intValue] != num_get_default_prec()) {
+		num_set_default_prec([sender intValue]);
 		[bitsStepper takeIntValueFrom:sender];
 		[prefs setObject:[NSString stringWithFormat:@"%lu",num_get_default_prec()] forKey:@"internalPrecision"];
 	    }
 	    break;
 	case 19:
-	    olde = num_get_default_prec();
-	    num_set_default_prec([bitsStepper intValue]);
-	    if (olde != num_get_default_prec()) {
+	    if ((unsigned)[bitsStepper intValue] != num_get_default_prec()) {
+		num_set_default_prec([bitsStepper intValue]);
 		need_redraw = 2;
 		[bitsPref takeIntValueFrom:bitsStepper];
 		[prefs setObject:[NSString stringWithFormat:@"%lu",num_get_default_prec()] forKey:@"internalPrecision"];
