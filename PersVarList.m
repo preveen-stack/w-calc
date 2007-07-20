@@ -79,7 +79,7 @@ struct pers_var *getpersvar(char *key)
     return cursor;
 }
 
-int putpersvar(char *name, char *exp)
+int putpersvar(char *name, char *expr)
 {
     struct pers_var *cursor = NULL;
 
@@ -96,7 +96,7 @@ int putpersvar(char *name, char *exp)
     } else if (cursor->exp) {
 	free(cursor->exp);
     }
-    cursor->exp = strdup(exp);
+    cursor->exp = strdup(expr);
     return 0;
 }
 

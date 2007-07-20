@@ -73,18 +73,18 @@
 			{
 				char thechar = [[theEvent characters] characterAtIndex:0];
 				char * ret;
-				char * exp;
+				char * expr;
 				unsigned len = [[self stringValue] length];
-				exp = strdup([[[self stringValue] substringToIndex:len-1] UTF8String]);
-				ret = simpleCalc(thechar,exp);
+				expr = strdup([[[self stringValue] substringToIndex:len-1] UTF8String]);
+				ret = simpleCalc(thechar,expr);
 				if (ret) {
 					[self setStringValue:[NSString stringWithUTF8String:ret]];
 					free(ret);
 				} else {
-					[self setStringValue:[NSString stringWithUTF8String:exp]];
+					[self setStringValue:[NSString stringWithUTF8String:expr]];
 					[mainController displayAnswer];
 				}
-				free(exp);
+				free(expr);
 				break;
 			}
 		}
