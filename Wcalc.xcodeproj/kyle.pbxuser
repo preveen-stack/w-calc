@@ -2807,6 +2807,11 @@
 		name = MachineExceptions.h;
 		path = /System/Library/Frameworks/CoreServices.framework/Frameworks/CarbonCore.framework/Headers/MachineExceptions.h;
 		sourceTree = "<absolute>";
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {824, 4970}}";
+			sepNavSelRange = "{9868, 99}";
+			sepNavVisRect = "{{0, 3920}, {742, 154}}";
+		};
 	};
 	275D2E160C5166210056D137 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
@@ -2849,6 +2854,26 @@
 		name = MachineExceptions.h;
 		path = /System/Library/Frameworks/CoreServices.framework/Frameworks/CarbonCore.framework/Headers/MachineExceptions.h;
 		sourceTree = "<absolute>";
+	};
+	275D2E200C51CEFD0056D137 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 275D2E150C5166210056D137 /* MachineExceptions.h */;
+		name = "typedef CALLBACK_API_C( OSStatus , ExceptionHandlerProcPtr )(ExceptionInformation * theException);";
+		rLen = 99;
+		rLoc = 9868;
+		rType = 0;
+		vrLen = 548;
+		vrLoc = 9559;
+	};
+	275D2E210C51CF030056D137 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 2721CD490869C13400E3BB4D /* Info.plist */;
+		name = "Info.plist: 44";
+		rLen = 0;
+		rLoc = 1239;
+		rType = 0;
+		vrLen = 625;
+		vrLoc = 743;
 	};
 	276C7001091D1AB7005A5B75 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
@@ -4214,6 +4239,8 @@
 			275D2E160C5166210056D137 /* PBXTextBookmark */ = 275D2E160C5166210056D137 /* PBXTextBookmark */;
 			275D2E170C5166210056D137 /* PBXTextBookmark */ = 275D2E170C5166210056D137 /* PBXTextBookmark */;
 			275D2E1A0C5166550056D137 /* PBXTextBookmark */ = 275D2E1A0C5166550056D137 /* PBXTextBookmark */;
+			275D2E200C51CEFD0056D137 /* PBXTextBookmark */ = 275D2E200C51CEFD0056D137 /* PBXTextBookmark */;
+			275D2E210C51CF030056D137 /* PBXTextBookmark */ = 275D2E210C51CF030056D137 /* PBXTextBookmark */;
 			276C7001091D1AB7005A5B75 = 276C7001091D1AB7005A5B75 /* PBXTextBookmark */;
 			276C7002091D1AB7005A5B75 = 276C7002091D1AB7005A5B75 /* PBXTextBookmark */;
 			2773DCF40917EF3400DBDA9D = 2773DCF40917EF3400DBDA9D /* PBXTextBookmark */;
