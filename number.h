@@ -119,6 +119,7 @@
 
 #define num_cmp_si(n,si) mpfr_cmp_si((n), (si))
 
+#define num_prec_t mp_prec_t
 #define num_get_default_prec() mpfr_get_default_prec()
 #define num_set_default_prec(prec) mpfr_set_default_prec(prec)
 
