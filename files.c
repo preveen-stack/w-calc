@@ -41,7 +41,7 @@ int saveState(char *filename)
     free(filename);
     if (fd >= 0) {
 	//success
-	int hindex;
+	size_t hindex;
 	int retval;
 	size_t num_vars = numvars();
 
@@ -241,7 +241,7 @@ int storeVar(const char *variable)
 	    cptr = strdup(print_this_result(keyval.val));
 	}
 	retval = write(fd, cptr, strlen(cptr));
-	if (retval < strlen(cptr)) {
+	if (retval < (int)strlen(cptr)) {
 	    return_error = errno;
 	    free(cptr);
 	    goto exit_storeVar;
@@ -251,7 +251,7 @@ int storeVar(const char *variable)
 	    cptr = malloc(strlen(keyval.desc) + 3);
 	    snprintf(cptr, strlen(keyval.desc) + 3, "'%s'", keyval.desc);
 	    retval = write(fd, cptr, strlen(cptr));
-	    if (retval < strlen(cptr)) {
+	    if (retval < (int)strlen(cptr)) {
 		return_error = errno;
 		free(cptr);
 		goto exit_storeVar;

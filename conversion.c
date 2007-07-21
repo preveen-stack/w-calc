@@ -924,8 +924,8 @@ int identify_unit(const char * unit)
 
 int identify_units(const char * unit1, const char * unit2)
 {
-    size_t cat_num;
-    int u1 = -1, u2 = -1;
+    ssize_t cat_num;
+    ssize_t u1 = -1, u2 = -1;
 
     for (cat_num = 0; conversions[cat_num] != NULL; cat_num++) {
         size_t unit_num;
