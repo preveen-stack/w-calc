@@ -14,7 +14,7 @@
 void clearHistory(void);
 void addToHistory(char *, Number);
 char *historynum(int, int);
-int historyLength(void);
+size_t historyLength(void);
 
 extern short allow_duplicates;
 extern short recalculate;

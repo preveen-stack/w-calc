@@ -49,7 +49,7 @@ struct entry
 
 /* Private Variables */
 static struct entry *history = NULL;
-static unsigned long histlen = 0;
+static size_t histlen = 0;
 
 /* Private Functions */
 static int all_calculated(void);
@@ -177,7 +177,7 @@ static void clear_calculated(void)
     }
 }
 
-int historyLength(void)
+size_t historyLength(void)
 {
     return histlen;
 }
