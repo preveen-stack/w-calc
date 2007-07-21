@@ -375,7 +375,7 @@ command : HEX_CMD {
 | BITS_CMD {
 	if ($1 < NUM_PREC_MIN) {
 		report_error("Minimum precision is %lu.\n", (unsigned long)NUM_PREC_MIN);
-	} else if ($1 > NUM_PREC_MAX) {
+	} else if ($1 > (signed)NUM_PREC_MAX) {
 		report_error("Maximum precision is %lu.\n", (unsigned long)NUM_PREC_MAX);
 	} else {
 		num_set_default_prec($1);
