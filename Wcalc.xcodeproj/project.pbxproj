@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2704376C0C4584640024DB8D /* number.c in Sources */ = {isa = PBXBuildFile; fileRef = 2704376A0C4584640024DB8D /* number.c */; };
+		2704376D0C4584640024DB8D /* number.h in Headers */ = {isa = PBXBuildFile; fileRef = 2704376B0C4584640024DB8D /* number.h */; };
+		2704376E0C4584640024DB8D /* number.c in Sources */ = {isa = PBXBuildFile; fileRef = 2704376A0C4584640024DB8D /* number.c */; };
+		2704376F0C4584640024DB8D /* number.h in Headers */ = {isa = PBXBuildFile; fileRef = 2704376B0C4584640024DB8D /* number.h */; };
 		2721CD4A0869C13400E3BB4D /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2721CD490869C13400E3BB4D /* Info.plist */; };
 		2729A40209B1ECE5001F07F4 /* add_commas.h in Headers */ = {isa = PBXBuildFile; fileRef = 2729A40009B1ECE5001F07F4 /* add_commas.h */; };
 		2729A40309B1ECE5001F07F4 /* add_commas.c in Sources */ = {isa = PBXBuildFile; fileRef = 2729A40109B1ECE5001F07F4 /* add_commas.c */; };
@@ -41,6 +45,8 @@
 		2736560D094C642B0043391C /* evalvar.c in Sources */ = {isa = PBXBuildFile; fileRef = 27365609094C642B0043391C /* evalvar.c */; };
 		2736560E094C642B0043391C /* evalvar.h in Headers */ = {isa = PBXBuildFile; fileRef = 2736560A094C642B0043391C /* evalvar.h */; };
 		2754E89408C11276007F45CF /* libfl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2754E89208C11276007F45CF /* libfl.a */; };
+		275D2B5E0C5032E50056D137 /* WcalcService.h in Headers */ = {isa = PBXBuildFile; fileRef = 275D2B5C0C5032E50056D137 /* WcalcService.h */; };
+		275D2B5F0C5032E50056D137 /* WcalcService.m in Sources */ = {isa = PBXBuildFile; fileRef = 275D2B5D0C5032E50056D137 /* WcalcService.m */; };
 		2773DD3409180D4300DBDA9D /* calculator.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B29D6601F7391601A80164 /* calculator.h */; };
 		2773DD3509180D4300DBDA9D /* variables.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B29D7401F7394501A80164 /* variables.h */; };
 		2773DD3609180D4300DBDA9D /* definitions.h in Headers */ = {isa = PBXBuildFile; fileRef = F5DEAE8F021254A501A80164 /* definitions.h */; };
@@ -64,8 +70,6 @@
 		2773DD660918117900DBDA9D /* historyManager.h in Headers */ = {isa = PBXBuildFile; fileRef = F574E09D01FD122F01A80164 /* historyManager.h */; };
 		27BDF4C8059F712200CF1DF6 /* simpleCalc.c in Sources */ = {isa = PBXBuildFile; fileRef = 27BDF4C4059F712100CF1DF6 /* simpleCalc.c */; };
 		27BDF4C9059F712200CF1DF6 /* simpleCalc.h in Headers */ = {isa = PBXBuildFile; fileRef = 27BDF4C5059F712100CF1DF6 /* simpleCalc.h */; };
-		27C1F3540A622C980072F397 /* ThrottledSlider.h in Headers */ = {isa = PBXBuildFile; fileRef = 27C1F3520A622C980072F397 /* ThrottledSlider.h */; };
-		27C1F3550A622C980072F397 /* ThrottledSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C1F3530A622C980072F397 /* ThrottledSlider.m */; };
 		27D39129059BEA850035F25F /* AboutBoxController.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B29D6101F7391001A80164 /* AboutBoxController.h */; };
 		27D3912A059BEA850035F25F /* calculator.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B29D6601F7391601A80164 /* calculator.h */; };
 		27D3912B059BEA850035F25F /* ErrorController.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B29D6901F7392301A80164 /* ErrorController.h */; };
@@ -116,6 +120,8 @@
 /* Begin PBXFileReference section */
 		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		2704376A0C4584640024DB8D /* number.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = number.c; sourceTree = "<group>"; };
+		2704376B0C4584640024DB8D /* number.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = number.h; sourceTree = "<group>"; };
 		2721CD490869C13400E3BB4D /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = Info.plist; sourceTree = "<group>"; };
 		2729A40009B1ECE5001F07F4 /* add_commas.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = add_commas.h; sourceTree = "<group>"; };
 		2729A40109B1ECE5001F07F4 /* add_commas.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = add_commas.c; sourceTree = "<group>"; };
@@ -138,6 +144,8 @@
 		2754E89208C11276007F45CF /* libfl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfl.a; path = /opt/local/lib/libfl.a; sourceTree = "<absolute>"; };
 		275710BC042D0472004ACA36 /* files.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = files.h; sourceTree = "<group>"; };
 		275710BD042D0472004ACA36 /* files.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = files.c; sourceTree = "<group>"; };
+		275D2B5C0C5032E50056D137 /* WcalcService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WcalcService.h; sourceTree = "<group>"; };
+		275D2B5D0C5032E50056D137 /* WcalcService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WcalcService.m; sourceTree = "<group>"; };
 		2773DD4F09180D4300DBDA9D /* wcalc */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = wcalc; sourceTree = BUILT_PRODUCTS_DIR; };
 		277DB27D042F5173004ACA36 /* COPYING */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = COPYING; sourceTree = "<group>"; };
 		277DB27F042F51A5004ACA36 /* NEWS */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = NEWS; sourceTree = "<group>"; };
@@ -145,8 +153,6 @@
 		2799DA4403FAD61400CA71DD /* help.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = help.c; sourceTree = "<group>"; };
 		27BDF4C4059F712100CF1DF6 /* simpleCalc.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = simpleCalc.c; sourceTree = "<group>"; };
 		27BDF4C5059F712100CF1DF6 /* simpleCalc.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = simpleCalc.h; sourceTree = "<group>"; };
-		27C1F3520A622C980072F397 /* ThrottledSlider.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ThrottledSlider.h; sourceTree = "<group>"; };
-		27C1F3530A622C980072F397 /* ThrottledSlider.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ThrottledSlider.m; sourceTree = "<group>"; };
 		27D3915A059BEA860035F25F /* Wcalc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Wcalc.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		27FAECF0093FAE5A00D7EE3E /* InspectorController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = InspectorController.h; sourceTree = "<group>"; };
 		27FAECF1093FAE5A00D7EE3E /* InspectorController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = InspectorController.m; sourceTree = "<group>"; };
@@ -214,6 +220,8 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				275D2B5C0C5032E50056D137 /* WcalcService.h */,
+				275D2B5D0C5032E50056D137 /* WcalcService.m */,
 				F5B29D6101F7391001A80164 /* AboutBoxController.h */,
 				F5B29D6201F7391001A80164 /* AboutBoxController.m */,
 				F5B29D6901F7392301A80164 /* ErrorController.h */,
@@ -237,8 +245,6 @@
 				27FAECF1093FAE5A00D7EE3E /* InspectorController.m */,
 				2729A53609B256DA001F07F4 /* PersVarList.h */,
 				2729A53709B256DA001F07F4 /* PersVarList.m */,
-				27C1F3520A622C980072F397 /* ThrottledSlider.h */,
-				27C1F3530A622C980072F397 /* ThrottledSlider.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -360,6 +366,8 @@
 				F574E09E01FD122F01A80164 /* historyManager.c */,
 				272C375F08C3FDAF009EA18F /* number_formatting.h */,
 				272C376008C3FDAF009EA18F /* number_formatting.c */,
+				2704376A0C4584640024DB8D /* number.c */,
+				2704376B0C4584640024DB8D /* number.h */,
 			);
 			name = "Shared Code";
 			sourceTree = "<group>";
@@ -387,6 +395,7 @@
 				27365608094C64170043391C /* isfunc.h in Headers */,
 				2736560E094C642B0043391C /* evalvar.h in Headers */,
 				2729A40409B1ECE5001F07F4 /* add_commas.h in Headers */,
+				2704376F0C4584640024DB8D /* number.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -421,7 +430,8 @@
 				2736560C094C642B0043391C /* evalvar.h in Headers */,
 				2729A40209B1ECE5001F07F4 /* add_commas.h in Headers */,
 				2729A53809B256DA001F07F4 /* PersVarList.h in Headers */,
-				27C1F3540A622C980072F397 /* ThrottledSlider.h in Headers */,
+				2704376D0C4584640024DB8D /* number.h in Headers */,
+				275D2B5E0C5032E50056D137 /* WcalcService.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -532,6 +542,7 @@
 				27365606094C64170043391C /* isfunc.c in Sources */,
 				2736560D094C642B0043391C /* evalvar.c in Sources */,
 				2729A40509B1ECE5001F07F4 /* add_commas.c in Sources */,
+				2704376E0C4584640024DB8D /* number.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -568,7 +579,8 @@
 				2736560B094C642B0043391C /* evalvar.c in Sources */,
 				2729A40309B1ECE5001F07F4 /* add_commas.c in Sources */,
 				2729A53909B256DA001F07F4 /* PersVarList.m in Sources */,
-				27C1F3550A622C980072F397 /* ThrottledSlider.m in Sources */,
+				2704376C0C4584640024DB8D /* number.c in Sources */,
+				275D2B5F0C5032E50056D137 /* WcalcService.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -594,6 +606,141 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		275D2DBF0C514B850056D137 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEAD_CODE_STRIPPING = YES;
+				DEPLOYMENT_POSTPROCESSING = YES;
+				GCC_CW_ASM_SYNTAX = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_ENABLE_PASCAL_STRINGS = NO;
+				GCC_OPTIMIZATION_LEVEL = 2;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = STDC_HEADERS;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
+				GCC_WARN_MISSING_PARENTHESES = YES;
+				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNKNOWN_PRAGMAS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_PARAMETER = NO;
+				GCC_WARN_UNUSED_VALUE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = /opt/local/include;
+				LIBRARY_SEARCH_PATHS = (
+					/opt/local/lib,
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
+				);
+				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)\"";
+				MACOSX_DEPLOYMENT_TARGET = 10.3;
+				OTHER_LDFLAGS = (
+					/opt/local/lib/libmpfr.a,
+					/opt/local/lib/libgmp.a,
+					/opt/local/lib/libreadline.a,
+					/opt/local/lib/libncursesw.a,
+				);
+				PREBINDING = YES;
+				PRODUCT_NAME = wcalc;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wchar-subscripts",
+					"-Wcomment",
+					"-Wimplicit",
+					"-Wmain",
+					"-Wsequence-point",
+				);
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+		275D2DC00C514B850056D137 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = ppc;
+				COPY_PHASE_STRIP = YES;
+				DEAD_CODE_STRIPPING = YES;
+				DEPLOYMENT_POSTPROCESSING = YES;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_AUTO_VECTORIZATION = NO;
+				GCC_CW_ASM_SYNTAX = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DEBUGGING_SYMBOLS = full;
+				GCC_DYNAMIC_NO_PIC = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_ENABLE_PASCAL_STRINGS = NO;
+				GCC_ENABLE_SYMBOL_SEPARATION = NO;
+				GCC_FAST_OBJC_DISPATCH = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_MODEL_TUNING = "";
+				GCC_NO_NIL_RECEIVERS = NO;
+				GCC_OPTIMIZATION_LEVEL = 2;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					GUI,
+					STDC_HEADERS,
+				);
+				GCC_STRICT_ALIASING = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
+				GCC_WARN_MISSING_PARENTHESES = YES;
+				GCC_WARN_PEDANTIC = NO;
+				GCC_WARN_SHADOW = YES;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNKNOWN_PRAGMAS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_PARAMETER = NO;
+				GCC_WARN_UNUSED_VALUE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					/opt/local/include,
+					/home/kyle/Wcalc,
+				);
+				INFOPLIST_FILE = Info.plist;
+				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)\"";
+				MACOSX_DEPLOYMENT_TARGET = 10.3;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = (
+					/Users/kyle/Wcalc/libmpfr.a,
+					/Users/kyle/Wcalc/libgmp.a,
+				);
+				PRIVATE_HEADERS_FOLDER_PATH = "$(CONTENTS_FOLDER_PATH)/PrivateHeaders";
+				PRODUCT_NAME = Wcalc;
+				SECTORDER_FLAGS = "";
+				SEPARATE_STRIP = YES;
+				STRIP_INSTALLED_PRODUCT = YES;
+				WARNING_CFLAGS = (
+					"-Wchar-subscripts",
+					"-Wcomment",
+					"-Wimplicit",
+					"-Wmain",
+					"-Wsequence-point",
+				);
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+		275D2DC10C514B850056D137 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 2.3;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				HEADER_SEARCH_PATHS = "-I/Users/kyle/Wcalc/";
+				MACOSX_DEPLOYMENT_TARGET = "";
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Deployment;
+		};
 		276C6F5D091A9B97005A5B75 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -620,7 +767,11 @@
 				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = /opt/local/include;
-				LIBRARY_SEARCH_PATHS = /opt/local/lib;
+				LIBRARY_SEARCH_PATHS = (
+					/opt/local/lib,
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
+				);
+				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)\"";
 				MACOSX_DEPLOYMENT_TARGET = 10.3;
 				OTHER_LDFLAGS = (
 					/opt/local/lib/libmpfr.a,
@@ -647,6 +798,7 @@
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEPLOYMENT_POSTPROCESSING = NO;
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_AUTO_VECTORIZATION = NO;
@@ -681,12 +833,12 @@
 					/home/kyle/Wcalc,
 				);
 				INFOPLIST_FILE = Info.plist;
-				LIBRARY_SEARCH_PATHS = /opt/local/lib;
+				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)\"";
 				MACOSX_DEPLOYMENT_TARGET = 10.3;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
-					/opt/local/lib/libmpfr.a,
-					/opt/local/lib/libgmp.a,
+					/Users/kyle/Wcalc/libmpfr.a,
+					/Users/kyle/Wcalc/libgmp.a,
 				);
 				PRIVATE_HEADERS_FOLDER_PATH = "$(CONTENTS_FOLDER_PATH)/PrivateHeaders";
 				PRODUCT_NAME = Wcalc;
@@ -709,60 +861,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 2.2.2;
+				CURRENT_PROJECT_VERSION = 2.3;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				HEADER_SEARCH_PATHS = "-I/Users/kyle/Wcalc/";
 				MACOSX_DEPLOYMENT_TARGET = "";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Development;
-		};
-		2773DD4D09180D4300DBDA9D /* Deployment */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DEAD_CODE_STRIPPING = YES;
-				DEPLOYMENT_POSTPROCESSING = YES;
-				GCC_CW_ASM_SYNTAX = NO;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_ENABLE_PASCAL_STRINGS = NO;
-				GCC_OPTIMIZATION_LEVEL = 2;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
-				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
-				GCC_WARN_MISSING_PARENTHESES = YES;
-				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				GCC_WARN_UNKNOWN_PRAGMAS = YES;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_LABEL = YES;
-				GCC_WARN_UNUSED_PARAMETER = NO;
-				GCC_WARN_UNUSED_VALUE = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = /opt/local/include;
-				LIBRARY_SEARCH_PATHS = /opt/local/lib;
-				MACOSX_DEPLOYMENT_TARGET = 10.3;
-				OTHER_LDFLAGS = (
-					/opt/local/lib/libmpfr.a,
-					/opt/local/lib/libgmp.a,
-					/opt/local/lib/libreadline.a,
-					/opt/local/lib/libncursesw.a,
-				);
-				PREBINDING = YES;
-				PRODUCT_NAME = wcalc;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wchar-subscripts",
-					"-Wcomment",
-					"-Wimplicit",
-					"-Wmain",
-					"-Wsequence-point",
-				);
-				ZERO_LINK = NO;
-			};
-			name = Deployment;
 		};
 		2773DD4E09180D4300DBDA9D /* Deployment debug */ = {
 			isa = XCBuildConfiguration;
@@ -789,67 +894,6 @@
 				ZERO_LINK = NO;
 			};
 			name = "Deployment debug";
-		};
-		27B38FA20859DCBE00C2FE3C /* Deployment */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DEAD_CODE_STRIPPING = YES;
-				DEPLOYMENT_POSTPROCESSING = YES;
-				FRAMEWORK_SEARCH_PATHS = "";
-				GCC_CW_ASM_SYNTAX = NO;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_DYNAMIC_NO_PIC = YES;
-				GCC_ENABLE_PASCAL_STRINGS = NO;
-				GCC_MODEL_TUNING = G4;
-				GCC_OPTIMIZATION_LEVEL = 2;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
-				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
-				GCC_WARN_MISSING_PARENTHESES = YES;
-				GCC_WARN_PEDANTIC = NO;
-				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				GCC_WARN_UNKNOWN_PRAGMAS = YES;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_LABEL = YES;
-				GCC_WARN_UNUSED_PARAMETER = NO;
-				GCC_WARN_UNUSED_VALUE = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = /opt/local/include;
-				INFOPLIST_FILE = Info.plist;
-				LIBRARY_SEARCH_PATHS = /opt/local/lib;
-				MACOSX_DEPLOYMENT_TARGET = 10.3;
-				OTHER_LDFLAGS = (
-					/opt/local/lib/libmpfr.a,
-					/opt/local/lib/libgmp.a,
-				);
-				PRIVATE_HEADERS_FOLDER_PATH = "$(CONTENTS_FOLDER_PATH)/PrivateHeaders";
-				PRODUCT_NAME = Wcalc;
-				SECTORDER_FLAGS = "";
-				SEPARATE_STRIP = YES;
-				WARNING_CFLAGS = (
-					"-Wchar-subscripts",
-					"-Wcomment",
-					"-Wimplicit",
-					"-Wmain",
-					"-Wsequence-point",
-				);
-				WRAPPER_EXTENSION = app;
-				ZERO_LINK = NO;
-			};
-			name = Deployment;
-		};
-		27B38FA60859DCBE00C2FE3C /* Deployment */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CURRENT_PROJECT_VERSION = 2.2;
-				GCC_OPTIMIZATION_LEVEL = 2;
-				HEADER_SEARCH_PATHS = "-I/Users/kyle/Wcalc/";
-				VERSIONING_SYSTEM = "apple-generic";
-			};
-			name = Deployment;
 		};
 		27F1CAFC08C41EC600B42878 /* Deployment debug */ = {
 			isa = XCBuildConfiguration;
@@ -880,7 +924,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = /opt/local/include;
 				INFOPLIST_FILE = Info.plist;
-				LIBRARY_SEARCH_PATHS = /opt/local/lib;
+				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)\"";
 				MACOSX_DEPLOYMENT_TARGET = 10.3;
 				OPTIMIZATION_CFLAGS = "-O2";
 				OTHER_CFLAGS = (
@@ -888,8 +932,8 @@
 					"-Wunused",
 				);
 				OTHER_LDFLAGS = (
-					/opt/local/lib/libmpfr.a,
-					/opt/local/lib/libgmp.a,
+					/Users/kyle/Wcalc/libmpfr.a,
+					/Users/kyle/Wcalc/libgmp.a,
 				);
 				PRODUCT_NAME = Wcalc;
 				SECTORDER_FLAGS = "";
@@ -907,8 +951,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 2.0;
+				CURRENT_PROJECT_VERSION = 2.3;
 				HEADER_SEARCH_PATHS = "-I/Users/kyle/Wcalc/";
+				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = "Deployment debug";
 		};
@@ -918,8 +963,8 @@
 		2773DD4B09180D4300DBDA9D /* Build configuration list for PBXNativeTarget "wcalc" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				2773DD4D09180D4300DBDA9D /* Deployment */,
 				276C6F5D091A9B97005A5B75 /* Development */,
+				275D2DBF0C514B850056D137 /* Deployment */,
 				2773DD4E09180D4300DBDA9D /* Deployment debug */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -928,8 +973,8 @@
 		27B38FA00859DCBE00C2FE3C /* Build configuration list for PBXNativeTarget "Wcalc.app" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				27B38FA20859DCBE00C2FE3C /* Deployment */,
 				276C6F5E091A9B97005A5B75 /* Development */,
+				275D2DC00C514B850056D137 /* Deployment */,
 				27F1CAFC08C41EC600B42878 /* Deployment debug */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -938,8 +983,8 @@
 		27B38FA40859DCBE00C2FE3C /* Build configuration list for PBXProject "Wcalc" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				27B38FA60859DCBE00C2FE3C /* Deployment */,
 				276C6F5F091A9B97005A5B75 /* Development */,
+				275D2DC10C514B850056D137 /* Deployment */,
 				27F1CAFD08C41EC600B42878 /* Deployment debug */,
 			);
 			defaultConfigurationIsVisible = 0;
