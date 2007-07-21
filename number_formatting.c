@@ -24,7 +24,8 @@ static char *engineering_formatted_number(char *digits, mp_exp_t exp,
 					  const int precision, const int base,
 					  const int prefix);
 static char *full_precision_formatted_number(char *digits, mp_exp_t exp,
-					    const int base, const int prefix);
+					     const int base,
+					     const int prefix);
 static char *automatically_formatted_number(char *digits, mp_exp_t exp,
 					    const int base, const int prefix,
 					    char *truncated_flag);
@@ -130,11 +131,12 @@ char *precision_formatted_number(char *digits, mp_exp_t exp,
 
     length = strlen(digits);
     /* testing against both zero and length because length is unsigned */
-    if (exp > 0 && exp > length) length = exp;
+    if (exp > 0 && (size_t)exp > length)
+	length = exp;
     length += 3;
 
-    if (length < precision + 3) {      // leading zero, decimal, and null
-	length = precision + 3;
+    if (length < (size_t) (precision + 3)) {	// leading zero, decimal, and null
+	length = (size_t) (precision + 3);
     }
     Dprintf("Precision Formatted Number\n");
     Dprintf("digits: %s(%u), exp: %i, base: %i, prefix: %i, precision: %i\n",
@@ -167,7 +169,7 @@ char *precision_formatted_number(char *digits, mp_exp_t exp,
 	    snprintf(curs++, length--, "%c", *dcurs++);
 	    exp--;
 	}
-	for (;exp > 0; exp--) {
+	for (; exp > 0; exp--) {
 	    snprintf(curs++, length--, "0");
 	}
     } else {
@@ -182,7 +184,7 @@ char *precision_formatted_number(char *digits, mp_exp_t exp,
 		(int)exp);
 	// everything after this is affected by decimalcount
 	// copy in the leading zeros
-	while (exp < 0 && decimal_count <= precision) {
+	while (exp < 0 && (ssize_t)decimal_count <= precision) {
 	    snprintf(curs++, length--, "0");
 	    exp++;
 	    decimal_count++;
@@ -205,8 +207,8 @@ char *precision_formatted_number(char *digits, mp_exp_t exp,
     return retstring;
 }
 
-char *full_precision_formatted_number(char *digits, mp_exp_t exp, const int base,
-				     const int prefix)
+char *full_precision_formatted_number(char *digits, mp_exp_t exp,
+				      const int base, const int prefix)
 {
     size_t length;
     size_t full_length;
@@ -216,8 +218,9 @@ char *full_precision_formatted_number(char *digits, mp_exp_t exp, const int base
 
     length = strlen(digits);
     /* testing against both zero and length because length is unsigned */
-    if (exp > 0 && exp > length) length = exp;
-    length += 3; /* the null, the (possible) sign, and the decimal */
+    if (exp > 0 && (size_t)exp > length)
+	length = exp;
+    length += 3;		       /* the null, the (possible) sign, and the decimal */
 
     Dprintf("Full Precision Formatted Number\n");
     Dprintf("digits: %s(%u), exp: %i, base: %i, prefix: %i\n", digits,
@@ -253,7 +256,7 @@ char *full_precision_formatted_number(char *digits, mp_exp_t exp, const int base
 	    snprintf(curs++, length--, "%c", *dcurs++);
 	    exp--;
 	}
-	for (;exp > 0; exp--) {
+	for (; exp > 0; exp--) {
 	    snprintf(curs++, length--, "0");
 	}
     } else {
@@ -294,8 +297,9 @@ char *full_precision_formatted_number(char *digits, mp_exp_t exp, const int base
     return retstring;
 }
 
-char *automatically_formatted_number(char *digits, mp_exp_t exp, const int base,
-				     const int prefix, char *truncated_flag)
+char *automatically_formatted_number(char *digits, mp_exp_t exp,
+				     const int base, const int prefix,
+				     char *truncated_flag)
 {
     size_t length;
     size_t full_length;
@@ -305,8 +309,9 @@ char *automatically_formatted_number(char *digits, mp_exp_t exp, const int base,
 
     length = strlen(digits);
     /* testing against both zero and length because length is unsigned */
-    if (exp > 0 && exp > length) length = exp;
-    length += 3; /* the null, the (possible) sign, and the decimal */
+    if (exp > 0 && (size_t)exp > length)
+	length = exp;
+    length += 3;		       /* the null, the (possible) sign, and the decimal */
 
     Dprintf("Automatically Formatted Number\n");
     Dprintf("digits: %s(%u), exp: %i, base: %i, prefix: %i\n", digits,
@@ -342,7 +347,7 @@ char *automatically_formatted_number(char *digits, mp_exp_t exp, const int base,
 	    snprintf(curs++, length--, "%c", *dcurs++);
 	    exp--;
 	}
-	for (;exp > 0; exp--) {
+	for (; exp > 0; exp--) {
 	    snprintf(curs++, length--, "0");
 	}
     } else {
@@ -370,11 +375,11 @@ char *automatically_formatted_number(char *digits, mp_exp_t exp, const int base,
     decimal_count += printed;
 
     // strip off the trailing 0's
-    zero_strip(retstring); { /* XXX: This seems like a stupid hack. Is this for
-				readability? Note to self: remove this if it
-				ever becomes an issue again (and merge
-				full_precision_formatted_number back with this
-				function). */
+    zero_strip(retstring); {	       /* XXX: This seems like a stupid hack. Is this for
+				        * readability? Note to self: remove this if it
+				        * ever becomes an issue again (and merge
+				        * full_precision_formatted_number back with this
+				        * function). */
 	char *period = strchr(retstring, '.');
 
 	Dprintf("retstring: %s\n", retstring);
@@ -407,8 +412,9 @@ char *engineering_formatted_number(char *digits, mp_exp_t exp,
 
     length = strlen(digits);
     /* testing against both zero and length because length is unsigned */
-    if (exp > 0 && exp > length) length = exp;
-    length += 3; /* the null, the (possible) sign, and the decimal */
+    if (exp > 0 && (size_t)exp > length)
+	length = exp;
+    length += 3;		       /* the null, the (possible) sign, and the decimal */
 
     Dprintf("Engineering Formatted Number\n");
     Dprintf("digits: %s(%u), exp: %i, prec: %i, prefix: %i\n", digits,
