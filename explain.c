@@ -163,13 +163,13 @@ static void explain_variable(const char *str)
 	printf("%s uses the following variables:\n", str);
 	strings = extract_vars(var.exp);
 	while (listLen(strings) > 0) {
-	    char *str = (char *)getHeadOfList(strings);
-	    char *value = evalvar(str);
+	    char *curstr = (char *)getHeadOfList(strings);
+	    char *value = evalvar(curstr);
 
-	    printf("\t%s\t(currently: %s)\n", str,
+	    printf("\t%s\t(currently: %s)\n", curstr,
 		   value ? value : "undefined");
-	    if (str) {
-		free(str);
+	    if (curstr) {
+		free(curstr);
 	    }
 	    if (value) {
 		free(value);
