@@ -63,9 +63,9 @@ List extract_vars(char *str)
 	    char exists = 0;
 
 	    while (i < listLen(variables)) {
-		char *str = peekListElement(variables, i);
+		char *peekstr = peekListElement(variables, i);
 
-		if (!strcmp(str, varname)) {
+		if (!strcmp(peekstr, varname)) {
 		    exists = 1;
 		    break;
 		}
