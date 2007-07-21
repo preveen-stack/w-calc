@@ -1,6 +1,6 @@
 Hello!
 
-This is Wcalc 2.2.2!
+This is Wcalc 2.3!
 
 1. What's New
 2. Intro
@@ -14,19 +14,21 @@ This is Wcalc 2.2.2!
 **************
 
 FEATURES:
- - Inspector is now a panel, rather than a drawer (GUI)
- - Can copy from the history/variable list (GUI)
- - Hexadecimal exponents can now be expressed with an @ symbol (BOTH)
- - Added preference to turn off live precision sliding (GUI)
- - Added preference to change mod (%) behavior (BOTH)
+ - Added Wcalc Service to the Service menu (GUI)
+ - Tab-completion (CLI)
+ - Compiled as a Universal Binary (BOTH)
+ - Added angle and pressure conversions (BOTH)
+ - More specific error reporting (CLI)
+
+IMPROVEMENTS:
+ - More forgiving about number formatting (BOTH)
+ - Improved \prefs listing (CLI)
+ - Improved units abbreviations (BOTH)
 
 BUGFIXES:
- - Corrected some UI inconsistencies (GUI)
- - Corrected the 0.9e-9 bug (allow negative exponents now) (BOTH)
- - Make mod (%) efficient (BOTH)
- - Improved detection of readline history (CLI)
- - Removed negative zero display (BOTH)
- - Fixed several small memory leaks (BOTH)
+ - Fixed the inspector-window-quits-program bug (GUI)
+ - Fixed the insufficient variable precision bug (BOTH)
+ - Fixed integer detection (BOTH)
 
 *********
 * INTRO *
@@ -76,7 +78,7 @@ Gamma lnGamma zeta sinc
 
 Wcalc has a few built-in constants:
 e pi Na k Cc ec R G g Me Mp Mn Md u amu c h mu0 epsilon0
-muB muN b ao F Vm NAk eV sigma alpha gamma re Kj Rk Rinf
+muB muN b a0 F Vm NAk eV sigma alpha gamma re Kj Rk Rinf
 Eh Gf Mmu Mt Mh Malpha n0 c1 c2 G0 Phi0 K
 random irandom rand irand
 
@@ -115,7 +117,7 @@ You can, however, print a number in any base (without a prefix) by using the \ba
 
 Installing the regular (GUI) version of Wcalc is easy - copy it to your Applications folder! To install the command-line version on OSX, use the .pkg file.
 
-For people who may install and use Wcalc on other Unix systems, there are other packages available for download. The source for Wcalc is available on SourceForge from the Wcalc home page, and some RPM packages are available as well. Install as you would usually install from source or from RPM. If you're really new to this sort of thing, there's some information in the INSTALL file.
+For people who may install and use Wcalc on other Unix systems, there are other packages available for download. The source for Wcalc is available on SourceForge from the Wcalc home page. Install as you would usually install from source. If you're really new to this sort of thing, there's some information in the INSTALL file.
 
 ***********
 * License *
