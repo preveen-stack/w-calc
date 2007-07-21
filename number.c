@@ -64,7 +64,7 @@ int is_int(const Number potential_int)
 	    str[curs--] = '\0';
 	}
     }
-    if (eptr < 0 || eptr < strlen(str)) {
+    if (eptr < 0 || (size_t)eptr < strlen(str)) {
 	mpfr_free_str(str);
 	Dprintf("IS NOT an int!\n");
 	return 0;
