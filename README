@@ -123,8 +123,10 @@ For people who may install and use Wcalc on other Unix systems, there are other 
 * License *
 ***********
 
-Wcalc is made available under the GNU Public License (GPL), version 2. The full text of the License is in the file titled COPYING as distributed with the source, or is available here:
-http://www.gnu.org/copyleft/gpl.html
+Wcalc is made available under the GNU Public License (GPL), version 2, or (at
+your option) any later version of that license. The full text of the License is
+in the file titled COPYING as distributed with the source, or is available
+here: http://www.gnu.org/copyleft/gpl.html
 
 The general gist of the GPL is this: This program is free. You may do as you like with it, including sell the binaries, as long as you don't modify the program or use it as part of another program. If, however, you download the source code of this program and either modify the source (and give it to people) or use pieces of the source in your own program (and give THAT to people), you must distribute that program and its source code under the GPL as well.
 
