@@ -100,7 +100,7 @@ struct conv_req conver;
 %left WEQUAL WNEQUAL WGT WLT WGEQ WLEQ
 %left WMINUS WPLUS
 %left WMULT WDIV WMOD WLSHFT WRSHFT
-%right WBANG
+%right WBANG WSQR
 %left WNOT WBNOT WNEG
 %right WPOW
 
@@ -594,7 +594,6 @@ sign : WMINUS { $$ = -1; }
 ;
 
 exp_l2 : exp_l3
-| exp_l3 WSQR { num_init($$); num_sqr($$,$1); num_free($1); }
 | sign exp_l2 oval { num_init($$);
 		     num_mul($2,$2,$3);
 		     num_mul_si($$,$2,$1);
@@ -641,6 +640,7 @@ capsule: parenthated
 	   num_factorial($$,num_get_ui($1));
 	   num_free($1);
 	   }
+	   | capsule WSQR { num_init($$); num_sqr($$,$1); num_free($1); }
 	   | func parenthated %prec WMULT
 	   {
 	   num_init($$);
