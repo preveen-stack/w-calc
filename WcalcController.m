@@ -249,34 +249,35 @@ static pthread_mutex_t displayLock;
 
     Dprintf("awakeFromNib\n");
     prefsVersion = [prefs integerForKey:@"initialized"];
+    if (prefsVersion < 3) {
+	[prefs setObject:@"3" forKey:@"initialized"];
+	[prefs setObject:@"147" forKey:@"maxSliderPrecision"];
+    }
     if (prefsVersion < 2) {
-	Dprintf("prefs not initialized\n");
-	[prefs setObject:@"2" forKey:@"initialized"];
 	[prefs setObject:@"YES" forKey:@"livePrecision"];
 	[prefs setObject:@"1024" forKey:@"internalPrecision"];
 	[prefs setObject:@"YES" forKey:@"cModStyle"];
-	if (prefsVersion < 1) {
-	    [prefs setObject:@"-1" forKey:@"precision"];
-	    [prefs setObject:@"NO" forKey:@"engineeringNotation"];
-	    [prefs setObject:@"NO" forKey:@"historyDuplicatesAllowed"];
-	    [prefs setObject:@"NO" forKey:@"flagUndefinedVariables"];
-	    [prefs setObject:@"YES" forKey:@"useRadians"];
-	    [prefs setObject:@"0" forKey:@"outputFormat"];
-	    [prefs setObject:@"YES" forKey:@"printPrefixes"];
-	    [prefs setObject:@"NO" forKey:@"updateHistory"];
-	    [prefs setObject:@"YES" forKey:@"strictSyntax"];
-	    [prefs setObject:@"0" forKey:@"roundingIndication"];
-	    [prefs setObject:@"NO" forKey:@"historyShowing"];
-	    [prefs setObject:@"YES" forKey:@"rememberErrors"];
-	    [prefs setObject:@"NO" forKey:@"baseShowing"];
-	    [prefs setObject:@"YES" forKey:@"precisionGuard"];
-	    [prefs setObject:@"NO" forKey:@"historyLimit"];
-	    [prefs setObject:@"1000" forKey:@"historyLimitLength"];
-	    [prefs setObject:@"NO" forKey:@"printInts"];
-	    [prefs setObject:@"NO" forKey:@"simpleCalc"];
-	    [prefs setObject:@"NO" forKey:@"printDelimiters"];
-	}
-	Dprintf("initializing finished\n");
+    }
+    if (prefsVersion < 1) {
+	[prefs setObject:@"-1" forKey:@"precision"];
+	[prefs setObject:@"NO" forKey:@"engineeringNotation"];
+	[prefs setObject:@"NO" forKey:@"historyDuplicatesAllowed"];
+	[prefs setObject:@"NO" forKey:@"flagUndefinedVariables"];
+	[prefs setObject:@"YES" forKey:@"useRadians"];
+	[prefs setObject:@"0" forKey:@"outputFormat"];
+	[prefs setObject:@"YES" forKey:@"printPrefixes"];
+	[prefs setObject:@"NO" forKey:@"updateHistory"];
+	[prefs setObject:@"YES" forKey:@"strictSyntax"];
+	[prefs setObject:@"0" forKey:@"roundingIndication"];
+	[prefs setObject:@"NO" forKey:@"historyShowing"];
+	[prefs setObject:@"YES" forKey:@"rememberErrors"];
+	[prefs setObject:@"NO" forKey:@"baseShowing"];
+	[prefs setObject:@"YES" forKey:@"precisionGuard"];
+	[prefs setObject:@"NO" forKey:@"historyLimit"];
+	[prefs setObject:@"1000" forKey:@"historyLimitLength"];
+	[prefs setObject:@"NO" forKey:@"printInts"];
+	[prefs setObject:@"NO" forKey:@"simpleCalc"];
+	[prefs setObject:@"NO" forKey:@"printDelimiters"];
     }
     conf.precision = [prefs integerForKey:@"precision"];
     conf.engineering = [prefs boolForKey:@"engineeringNotation"];
@@ -487,32 +488,32 @@ static pthread_mutex_t displayLock;
 	NSRect curFrame, newFrame;
 	curFrame = [AnswerField frame];
 	newFrame = curFrame;
-	printf("newFrame.origin.x %f, newFrame.origin.y %f\n", newFrame.origin.x, newFrame.origin.y);
 	//newFrame.size.height = 10000000.0; // arbitrarily big number
 	newFrame.size = [[AnswerField cell] cellSizeForBounds:newFrame];
 	if (curFrame.size.height != newFrame.size.height) {
-	    size_t newHeight;
-	    int difference;
+	    size_t newHeight = newFrame.size.height;
+	    int difference = newHeight - curFrame.size.height;
 	    NSRect windowFrame = [mainWindow frame];
-	    NSSize ms;
-	    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+	    int nonAnswerPixels = windowFrame.size.height - curFrame.size.height;
+	    NSSize ms = [mainWindow minSize];
 
-	    newHeight = newFrame.size.height;
 	    newFrame = curFrame;
 	    newFrame.size.height = newHeight;
-	    difference = newHeight - curFrame.size.height;
-	    if ([prefs boolForKey:@"toggled"]) {
-		windowFrame.size.height = newFrame.size.height+91;
-	    } else {
-		windowFrame.size.height = newFrame.size.height+256;
+	    ms.height += difference;
+	    windowFrame.size.height += difference;
+	    if (windowFrame.size.height < newFrame.size.height + nonAnswerPixels) {
+		windowFrame.size.height = newFrame.size.height + nonAnswerPixels;
 	    }
 	    windowFrame.origin.y -= difference;
 	    curFrame = [ExpressionField frame];
 	    [AnswerField setHidden:TRUE];
 	    [ExpressionField setHidden:TRUE];
 	    [mainWindow setFrame:windowFrame display:YES animate:YES];
-	    ms = [mainWindow minSize];
-	    ms.height += difference;
+	    windowFrame = [mainWindow frame];
+	    /* At this point, the windowFrame may not be *quite* what I wanted it to be,
+		screens being of finite size and all... so we have to recalculate the size
+		that the AnswerField should be. */
+	    newFrame.size.height = windowFrame.size.height - nonAnswerPixels;
 	    [mainWindow setMinSize:ms];
 	    [AnswerField setFrame:newFrame];
 	    [ExpressionField setFrame:curFrame];
@@ -866,7 +867,7 @@ static pthread_mutex_t displayLock;
 	case 18:
 	    if ((unsigned)[sender intValue] != num_get_default_prec()) {
 		[bitsStepper takeIntValueFrom:sender];
-		num_set_default_prec([bitStepper intValue]); // to handle limits placed on bitsStepper
+		num_set_default_prec([bitsStepper intValue]); // to handle limits placed on bitsStepper
 		[prefs setObject:[NSString stringWithFormat:@"%lu",num_get_default_prec()] forKey:@"internalPrecision"];
 	    }
 	    break;
