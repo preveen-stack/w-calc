@@ -42,4 +42,5 @@ irandom
 23.05 # should be 23.05
 a # should be 23.05
 a-14.5-8.55 # should be 0, not -1E-09
-2**3 # should be 12, equiv. to: (2^2)*3
+2^3 # should be 8
+2**3 # should be 8, equiv to 2^3
