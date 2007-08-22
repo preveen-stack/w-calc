@@ -865,8 +865,8 @@ static pthread_mutex_t displayLock;
 	    break;
 	case 18:
 	    if ((unsigned)[sender intValue] != num_get_default_prec()) {
-		num_set_default_prec([sender intValue]);
 		[bitsStepper takeIntValueFrom:sender];
+		num_set_default_prec([bitStepper intValue]); // to handle limits placed on bitsStepper
 		[prefs setObject:[NSString stringWithFormat:@"%lu",num_get_default_prec()] forKey:@"internalPrecision"];
 	    }
 	    break;
