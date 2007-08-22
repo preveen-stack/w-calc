@@ -487,19 +487,29 @@ static pthread_mutex_t displayLock;
 	NSRect curFrame, newFrame;
 	curFrame = [AnswerField frame];
 	newFrame = curFrame;
+	printf("newFrame.origin.x %f, newFrame.origin.y %f\n", newFrame.origin.x, newFrame.origin.y);
 	//newFrame.size.height = 10000000.0; // arbitrarily big number
 	newFrame.size = [[AnswerField cell] cellSizeForBounds:newFrame];
 	if (curFrame.size.height != newFrame.size.height) {
 	    size_t newHeight;
 	    int difference;
-	    NSRect windowFrame;
+	    NSRect windowFrame = [mainWindow frame];
 	    NSSize ms;
+	    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+
 	    newHeight = newFrame.size.height;
 	    newFrame = curFrame;
 	    newFrame.size.height = newHeight;
 	    difference = newHeight - curFrame.size.height;
-	    windowFrame = [mainWindow frame];
-	    windowFrame.size.height += difference;
+	    printf("newFrame.size.height: %f\n", newFrame.size.height);
+	    printf("windowFrame.size.height: %f\n", windowFrame.size.height);
+	    printf("difference: %i\n", difference);
+	    if ([prefs boolForKey:@"toggled"]) {
+		windowFrame.size.height = newFrame.size.height+91;
+	    } else {
+		windowFrame.size.height = newFrame.size.height+256;
+	    }
+	    printf("windowFrame.size.height: %f\n", windowFrame.size.height);
 	    windowFrame.origin.y -= difference;
 	    curFrame = [ExpressionField frame];
 	    [AnswerField setHidden:TRUE];
@@ -885,10 +895,26 @@ static pthread_mutex_t displayLock;
 	    conf.c_style_mod = ([sender state] == NSOnState);
 	    if (olde != conf.c_style_mod) {
 		need_redraw = 2;
-		printf("AHA!\n");
 		[prefs setObject:(conf.c_style_mod?@"YES":@"NO") forKey:@"cModStyle"];
 	    }
 	    break;
+	case 22:
+	    if ((unsigned)[sliderStepper intValue] != [PrecisionSlider maxValue]) {
+		unsigned long tmp = [sliderStepper intValue];
+		[PrecisionSlider setMaxValue:(double)tmp];
+		[sliderPref takeIntValueFrom:sliderStepper];
+		[prefs setObject:[NSString stringWithFormat:@"%lu",tmp] forKey:@"maxSliderPrecision"];
+	    }
+	    break;
+	case 23:
+	    if ((double)[sender intValue] != [PrecisionSlider maxValue]) {
+		[sliderStepper takeIntValueFrom:sender];
+		// these handle limits placed on sliderStepper
+		[sliderPref takeIntValueFrom:sliderStepper];
+		[PrecisionSlider setMaxValue:[sliderStepper doubleValue]];
+		[prefs setObject:[NSString stringWithFormat:@"%lu",[sliderStepper intValue]] forKey:@"maxSliderPrecision"];
+	    }
+	    break;    
 	default: return;
     }
 
@@ -1039,6 +1065,8 @@ static pthread_mutex_t displayLock;
     [bitsStepper setIntValue:num_get_default_prec()];
     [livePrecision setState:(conf.live_precision?NSOnState:NSOffState)];
     [cModPref setState:(conf.c_style_mod?NSOnState:NSOffState)];
+    [sliderPref setIntValue:(int)[PrecisionSlider maxValue]];
+    [sliderStepper setIntValue:(int)[PrecisionSlider maxValue]];
 
     /* disable irrelevant preferences */
     [historyDuplicates setEnabled:!conf.simple_calc];

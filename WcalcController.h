@@ -44,10 +44,12 @@
     IBOutlet NSTextField *limitHistoryLen;
     IBOutlet NSTextField *limitHistoryLenTag;
     IBOutlet NSTextField *bitsPref;
+    IBOutlet NSTextField *sliderPref;
 
     IBOutlet NSDrawer *baseDrawer;
 	
     IBOutlet NSStepper *bitsStepper;
+    IBOutlet NSStepper *sliderStepper;
 
     IBOutlet NSMatrix *outputFormat;
     IBOutlet NSMatrix *outputFormat2;

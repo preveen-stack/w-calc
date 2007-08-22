@@ -159,6 +159,8 @@
                 shiftKey2 = NSButton; 
                 simpleCalculator = NSButton; 
                 sizeToggleMenu = NSMenuItem; 
+                sliderPref = NSTextField; 
+                sliderStepper = NSStepper; 
                 theKeyboard = id; 
                 thePrefPanel = NSPanel; 
                 updateHistory = NSButton; 
