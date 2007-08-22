@@ -501,15 +501,11 @@ static pthread_mutex_t displayLock;
 	    newFrame = curFrame;
 	    newFrame.size.height = newHeight;
 	    difference = newHeight - curFrame.size.height;
-	    printf("newFrame.size.height: %f\n", newFrame.size.height);
-	    printf("windowFrame.size.height: %f\n", windowFrame.size.height);
-	    printf("difference: %i\n", difference);
 	    if ([prefs boolForKey:@"toggled"]) {
 		windowFrame.size.height = newFrame.size.height+91;
 	    } else {
 		windowFrame.size.height = newFrame.size.height+256;
 	    }
-	    printf("windowFrame.size.height: %f\n", windowFrame.size.height);
 	    windowFrame.origin.y -= difference;
 	    curFrame = [ExpressionField frame];
 	    [AnswerField setHidden:TRUE];
