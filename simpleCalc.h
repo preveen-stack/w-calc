@@ -2,7 +2,7 @@
 #define SIMPLECALC_H
 
 void simpleEval();
-char *simpleCalc(unsigned char input, char *expStr);
+char *simpleCalc(const unsigned char input, const char *expStr);
 void simpleClearEntry();
 void simpleClearAll();
 

@@ -74,15 +74,21 @@
 				char thechar = [[theEvent characters] characterAtIndex:0];
 				char * ret;
 				char * expr;
-				unsigned len = [[self stringValue] length];
-				expr = strdup([[[self stringValue] substringToIndex:len-1] UTF8String]);
-				ret = simpleCalc(thechar,expr);
+				if (keycode == 76) { // enter
+				    expr = strdup([[self stringValue] UTF8String]);
+				    ret = simpleCalc('=',expr);
+				} else {
+				    unsigned len = [[self stringValue] length];
+				    expr = strdup([[[self stringValue] substringToIndex:len-1] UTF8String]);
+				    ret = simpleCalc(thechar,expr);
+				}
 				if (ret) {
 					[self setStringValue:[NSString stringWithUTF8String:ret]];
 					free(ret);
 				} else {
 					[self setStringValue:[NSString stringWithUTF8String:expr]];
 					[mainController displayAnswer];
+					[self setStringValue:[AnswerField stringValue]];
 				}
 				free(expr);
 				break;

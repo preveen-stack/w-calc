@@ -584,13 +584,13 @@ static pthread_mutex_t displayLock;
 		}
 	    } else {
 		if (! [[ExpressionField stringValue] isEqualToString:@"0"]) {
-				     [ExpressionField setStringValue:@"0"];
-				     [ExpressionField selectText:self];
-				     simpleClearEntry();
-		} else if (! [[AnswerField stringValue] isEqualToString:@"0"]) {
-					    [AnswerField setStringValue:@"0"];
-					    [ExpressionField selectText:self];
-					    simpleClearAll();
+		    [ExpressionField setStringValue:@"0"];
+		    [ExpressionField selectText:self];
+		    simpleClearEntry();
+		} else {
+		    [AnswerField setStringValue:@"0"];
+		    [ExpressionField selectText:self];
+		    simpleClearAll();
 		}
 	    }
 	    break;
@@ -634,7 +634,9 @@ static pthread_mutex_t displayLock;
 	    }
 	    break;
 	case 105: /* the divide key on the onscreen keypad */
-	 default:
+	case 106: /* the minus key on the onscreen keypad */
+	case 107: /* the times key on the onscreen keypad */
+	default:
 	    if (! conf.simple_calc) { /* the real power of Wcalc */
 		if (just_answered == FALSE) {
 		    [ExpressionField setStringValue:[[ExpressionField stringValue] stringByAppendingString:sent]];
@@ -660,10 +662,12 @@ static pthread_mutex_t displayLock;
 	    } else { /* stupid calculator */
 		char *ret, *expr;
 		expr = strdup([[ExpressionField stringValue] UTF8String]);
-		if (tag == 105) {
-		    ret = simpleCalc('/',expr);
-		} else {
-		    ret = simpleCalc([sent characterAtIndex:0],expr);
+		Dprintf("expr: %s\n",expr);
+		switch (tag) {
+		    case 105: ret = simpleCalc('/', expr); break;
+		    case 106: ret = simpleCalc('-', expr); break;
+		    case 107: ret = simpleCalc('*', expr); break;
+		    default:  ret = simpleCalc([sent characterAtIndex:0], expr);
 		}
 		free(expr);
 		if (ret) {
