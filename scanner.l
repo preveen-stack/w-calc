@@ -459,7 +459,7 @@ K	{ num_init(YYLVALAC->number);
 not					{ POS_STR(); return(WNOT); }
 \302\254			{ POS_CHAR(); return(WNOT); }
 [!]					{ POS_CHAR(); return(WBANG); }
-[*][*]				{ POS_STR(); return(WSQR); }
+[*][*]				{ POS_STR(); return(WPOW); }
 \302\262			{ POS_CHAR(); return(WSQR); }
 [+]					{ POS_CHAR(); return(WPLUS); }
 [*]|\303\227		{ POS_CHAR(); return(WMULT); }
