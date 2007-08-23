@@ -1,6 +1,7 @@
 #include "simpleCalc.h"
 #include "calculator.h"
 #include "number.h"
+#include "string_manip.h"
 #include <ctype.h>		       // for isdigit
 #include <string.h>		       // for strcmp/strlen/stpcpy/strdup
 #include <stdlib.h>		       // for calloc
@@ -48,14 +49,30 @@ char *simpleCalc(const unsigned char input, const char *expStr)
     switch (input) {
 	case '+': case '-': case '*': case '/':
 	    if (operationPending) {
-		num_set_str(cur_number, expStr, 10);
+		char * expdup = strdup(expStr);
+		// Americanize the numbers
+		strstrip(conf.thou_delimiter, expdup);
+		if (conf.dec_delimiter != '.') {
+		    strswap(conf.dec_delimiter, '.', expdup);
+		}
+		num_set_str(cur_number, expdup, 10);
+		free(expdup);
+		
 		simpleCalcEval(operationPending);
 		operationPending = input;
 		append = 0;
 		set_prettyanswer(prev_number);
 		return strdup(pretty_answer);
 	    } else {
-		num_set_str(prev_number, expStr, 10);
+		char * expdup = strdup(expStr);
+		// Americanize the numbers
+		strstrip(conf.thou_delimiter, expdup);
+		if (conf.dec_delimiter != '.') {
+		    strswap(conf.dec_delimiter, '.', expdup);
+		}
+		num_set_str(prev_number, expdup, 10);
+		free(expdup);
+		
 		operationPending = input;
 		append = 0;
 		return strdup(expStr);
@@ -64,10 +81,23 @@ char *simpleCalc(const unsigned char input, const char *expStr)
 	case '=':
 	    append = 0;
 	    if (! operationPending) {
-		// do nothing
-		num_set_str(prev_number, expStr, 10);
+		char * expdup = strdup(expStr);
+		// Americanize the numbers
+		strstrip(conf.thou_delimiter, expdup);
+		if (conf.dec_delimiter != '.') {
+		    strswap(conf.dec_delimiter, '.', expdup);
+		}
+		num_set_str(prev_number, expdup, 10);
+		free(expdup);
 	    } else {
-		num_set_str(cur_number, expStr, 10);
+		char * expdup = strdup(expStr);
+		// Americanize the numbers
+		strstrip(conf.thou_delimiter, expdup);
+		if (conf.dec_delimiter != '.') {
+		    strswap(conf.dec_delimiter, '.', expdup);
+		}
+		num_set_str(cur_number, expdup, 10);
+		free(expdup);
 		simpleCalcEval(operationPending);
 		operationPending = 0;
 	    }
