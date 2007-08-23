@@ -249,6 +249,7 @@ static pthread_mutex_t displayLock;
 
     Dprintf("awakeFromNib\n");
     prefsVersion = [prefs integerForKey:@"initialized"];
+    Dprintf("prefsVersion: %i\n", prefsVersion);
     if (prefsVersion < 3) {
 	[prefs setObject:@"3" forKey:@"initialized"];
 	[prefs setObject:@"147" forKey:@"maxSliderPrecision"];
@@ -292,6 +293,7 @@ static pthread_mutex_t displayLock;
     conf.print_commas = [prefs boolForKey:@"printDelimiters"];
     conf.simple_calc = [prefs boolForKey:@"simpleCalc"];
     conf.live_precision = [prefs boolForKey:@"livePrecision"];
+    [PrecisionSlider setMaxValue:[prefs floatForKey:@"maxSliderPrecision"]];
     /* history preferences */
     allow_duplicates = [prefs boolForKey:@"historyDuplicatesAllowed"];
     update_history = [prefs boolForKey:@"updateHistory"];
@@ -939,16 +941,26 @@ static pthread_mutex_t displayLock;
 
 - (IBAction)showPrefs:(id)sender
 {
-    static char initialized = 0;
+    //static char initialized = 0;
     [self displayPrefs:sender];
     [thePrefPanel setBecomesKeyOnlyIfNeeded:TRUE];
     [thePrefPanel orderFront:self];
     // centering at first
-    if (! initialized) {
+    /*if (! initialized) {
 	initialized=1;
 	[thePrefPanel center];
-    }
+    }*/
+    // this should be redundant
     [thePrefPanel setFrameAutosaveName:@"wcalc_prefs"];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(savePrefs:) name:NSWindowWillCloseNotification object:thePrefPanel];
+}
+
+- (IBAction)savePrefs:(id)sender
+{
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    
+    Dprintf("synching the prefs to disk\n");
+    [prefs synchronize];
 }
 
 - (IBAction)open:(id)sender
@@ -1101,6 +1113,9 @@ static pthread_mutex_t displayLock;
 
 - (IBAction)quit:(id)sender
 {
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+
+    [prefs synchronize];
     clearHistory();
     cleanupvar();
     if (pretty_answer) {

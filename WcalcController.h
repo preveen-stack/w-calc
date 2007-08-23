@@ -95,6 +95,7 @@
 - (IBAction)saveAs:(id)sender;
 - (IBAction)closeWindow:(id)sender;
 - (IBAction)quit:(id)sender;
+- (IBAction)savePrefs:(id)sender;
 
 - (void)displayAnswer;
 - (void)displayErrno:(int)err forFile:(NSString*)filename;
