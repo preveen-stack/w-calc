@@ -228,8 +228,8 @@
 				F5B29D6A01F7392301A80164 /* ErrorController.m */,
 				F5B29D7701F7395001A80164 /* WcalcController.h */,
 				F5B29D7801F7395001A80164 /* WcalcController.m */,
-				27BDF4C4059F712100CF1DF6 /* simpleCalc.c */,
 				27BDF4C5059F712100CF1DF6 /* simpleCalc.h */,
+				27BDF4C4059F712100CF1DF6 /* simpleCalc.c */,
 				F5B29D6001F738F601A80164 /* Shared Code */,
 				F521994601FA8EC401A80164 /* VariableList.h */,
 				F521994301FA86B001A80164 /* VariableList.m */,
@@ -733,7 +733,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 2.3;
+				CURRENT_PROJECT_VERSION = 2.3.1;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				HEADER_SEARCH_PATHS = "-I/Users/kyle/Wcalc/";
 				MACOSX_DEPLOYMENT_TARGET = "";
@@ -861,7 +861,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 2.3;
+				CURRENT_PROJECT_VERSION = 2.3.1;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				HEADER_SEARCH_PATHS = "-I/Users/kyle/Wcalc/";
 				MACOSX_DEPLOYMENT_TARGET = "";
@@ -951,7 +951,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 2.3;
+				CURRENT_PROJECT_VERSION = 2.3.1;
 				HEADER_SEARCH_PATHS = "-I/Users/kyle/Wcalc/";
 				VERSIONING_SYSTEM = "apple-generic";
 			};

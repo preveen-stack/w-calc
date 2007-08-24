@@ -102,6 +102,7 @@
                 quit = id; 
                 save = id; 
                 saveAs = id; 
+                savePrefs = id; 
                 setPrecision = id; 
                 setPrefs = id; 
                 shConversions = id; 
