@@ -1,3 +1,100 @@
+2007-08-24 16:27  memoryhole
+
+	* WcalcController.m, English.lproj/MainMenu.nib/keyedobjects.nib,
+	  Wcalc.xcodeproj/kyle.mode1, Wcalc.xcodeproj/kyle.pbxuser: comp,
+	  fact, exp, and sinc were missing from the GUI
+
+2007-08-24 16:27  memoryhole
+
+	* explain.c: sinc and exp were missing documentation
+
+2007-08-24 15:50  memoryhole
+
+	* Info.plist, Makefile.in, aclocal.m4, configure, configure.in,
+	  definitions.h, English.lproj/InfoPlist.strings,
+	  English.lproj/MainMenu.nib/classes.nib,
+	  English.lproj/MainMenu.nib/info.nib,
+	  English.lproj/MainMenu.nib/keyedobjects.nib,
+	  Wcalc.xcodeproj/kyle.mode1, Wcalc.xcodeproj/kyle.pbxuser,
+	  Wcalc.xcodeproj/project.pbxproj: version bump to 2.3.1, and some
+	  minor changes to make compiling easier
+
+2007-08-23 14:53  memoryhole
+
+	* WcalcController.h, WcalcController.m: make prefs behave
+	  themselves (sync on quit and on closing the prefs window) and
+	  restore the maxPrecisionValue from the saved pref on awakeFromNib
+
+2007-08-23 12:36  memoryhole
+
+	* MyTextField.m: handle maliciousness and weirdness a bit better.
+	  delete and backspace are now synonyms for CLEAR
+
+2007-08-23 12:35  memoryhole
+
+	* simpleCalc.c: handle input number formatting properly (commas,
+	  periods, internationalization, etc.)
+
+2007-08-22 17:11  memoryhole
+
+	* test.simple: correct the test for FORTRAN-style **
+
+2007-08-22 17:10  memoryhole
+
+	* MyTextField.m, WcalcController.m, simpleCalc.c, simpleCalc.h:
+	  major overhaul of the simpleCalc subsystem, to make it more
+	  robust. still needs work to handle quasi-malicious users, but it
+	  already works better than it used to (no crashing!)
+
+2007-08-22 14:51  memoryhole
+
+	* WcalcController.m: correct interface glitch when resizing windows
+	  that have already been resized
+
+2007-08-22 13:51  memoryhole
+
+	* WcalcController.m: correct interface glitch when setting bit
+	  precision
+
+2007-08-22 13:39  memoryhole
+
+	* WcalcController.m: removed debugging printouts
+
+2007-08-22 13:29  memoryhole
+
+	* scanner.l: converting ** back into FORTRAN-style exponent
+	  notation
+
+2007-08-22 13:21  memoryhole
+
+	* WcalcController.h, WcalcController.m,
+	  English.lproj/MainMenu.nib/classes.nib,
+	  English.lproj/MainMenu.nib/info.nib,
+	  English.lproj/MainMenu.nib/keyedobjects.nib: Fix display when
+	  going back from extreme sizes. Also, added slider-max preference
+
+2007-08-14 11:50  memoryhole
+
+	* parser.y, test.simple: fix squaring syntax errors (e.g. 2**3 =
+	  12)
+
+2007-08-02 20:01  memoryhole
+
+	* README, wcalc.1: update for GPLv2+ compatability
+
+2007-08-02 19:51  memoryhole
+
+	* COPYRIGHT: update for GPLv2+ compatability
+
+2007-07-21 00:02  memoryhole
+
+	* ChangeLog, NEWS, README: version 2.3 commit
+
+2007-07-20 23:53  memoryhole
+
+	* Wcalc-nonFHS.pmproj, Wcalc.pmproj, Wcalc.xcodeproj/kyle.mode1,
+	  Wcalc.xcodeproj/kyle.pbxuser: [no log message]
+
 2007-07-20 21:46  memoryhole
 
 	* Wcalc.xcodeproj/: kyle.mode1, kyle.pbxuser, project.pbxproj: [no
