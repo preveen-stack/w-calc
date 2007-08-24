@@ -235,6 +235,11 @@ static pthread_mutex_t displayLock;
 	case 36: str2 = @"csch("; break;
 	case 37: str2 = @"asech("; break;
 	case 38: str2 = @"acsch("; break;
+	case 39: str2 = @"eint("; break;
+	case 40: str2 = @"sinc("; break;
+	case 41: str2 = @"exp("; break;
+	case 42: str2 = @"fact("; break;
+	case 43: str2 = @"comp("; break;
 	default: return;
     }
     [ExpressionField setStringValue:[str2 stringByAppendingString:str]];
