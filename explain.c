@@ -352,8 +352,6 @@ static void explain_function(const char *str)
 	printf("The absolute value (the distance of the number from zero).");
     } else if (!strcmp(str, "sqrt")) {
 	printf("The square root function.");
-    } else if (!strcmp(str, "exp")) {
-	printf("Returns the exponential of the input number.");
     } else if (!strcmp(str, "floor")) {
 	printf
 	    ("Returns the biggest integer that is not bigger than the input number.");
@@ -379,6 +377,15 @@ static void explain_function(const char *str)
     } else if (!strcmp(str, "lnGamma")) {
 	printf
 	    ("Returns the natural log of the Gamma function of the input number.");
+    } else if (!strcmp(str, "eint")) {
+	printf("The exponential integral function.");
+    } else if (!strcmp(str, "sinc")) {
+	printf("Returns the sampling function, which is 1 if the input is 0, or sin(x)/x otherwise.");
+    } else if (!strcmp(str, "exp")) {
+	printf("Returns the value of e to the given power. Equivalent to: e^");
+    } else {
+	printf
+	    ("Hrm... this function doesn't have any documentation! Pester the developer!");
     }
     printf("\n");
 }				       /*}}} */
