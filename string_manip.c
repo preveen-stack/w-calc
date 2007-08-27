@@ -27,17 +27,15 @@ char *strchr(), *strrchr();
 
 void strstrip(const char strip, char *str)
 {
-    char *left, *right;
+    size_t left, right;
 
-    for (left = right = str; *right; ++right) {
-	if (right && *right && *right != strip) {
-	    *left = *right;
-	    ++left;
+    for (left = right = 0; str[right] != 0; ++right) {
+	if (str[right] != 0 && str[right] != strip) {
+	    str[left++] = str[right];
 	}
     }
     while (left != right) {
-	*left = 0;
-	++left;
+	str[left++] = 0;
     }
 }
 
@@ -45,10 +43,10 @@ void strswap(const char sw, const char ap, char *str)
 {
     size_t curs = 0;
     if (!str) return;
-    while (str[curs]) {
+    while (str[curs] != 0) {
 	if (str[curs] == sw)
 	    str[curs] = ap;
-	++curs;
+	curs++;
     }
 }
 
@@ -56,7 +54,7 @@ void strswap2(const char sw, const char ap, char *str)
 {
     size_t curs = 0;
     if (!str) return;
-    while (str[curs]) {
+    while (str[curs] != 0) {
 	if (str[curs] == sw)
 	    str[curs] = ap;
 	else if (str[curs] == ap)
@@ -90,7 +88,7 @@ unsigned int count_digits(const char *str)
 	exponent_chars = "eE";
 	base_chars = "12345670";
     }
-    while (str[curs] && strchr(exponent_chars, str[curs]) == NULL) {
+    while (str[curs] != 0 && strchr(exponent_chars, str[curs]) == NULL) {
 	if (strchr(base_chars, str[curs]) != NULL) {
 	    counter ++;
 	}
@@ -103,9 +101,9 @@ int justnumbers(const char *str)
 {
     size_t curs = 0;
     if (!str) return 0;
-    while (str[curs] && (isdigit((int)(str[curs])) || ispunct((int)(str[curs]))))
+    while (str[curs] != 0 && (isdigit((int)(str[curs])) || ispunct((int)(str[curs]))))
 	curs++;
-    if (!str[curs])		       // if we reached the end of the string
+    if (str[curs] == 0)		       // if we reached the end of the string
 	return 1;
     else
 	return 0;
@@ -115,7 +113,7 @@ void stripComments(char *str)
 {
     size_t curs = 0;
     size_t follower = 0;
-    char update_follower = 1;
+    int update_follower = 1;
 
     if (!str) return;
     while (str[curs] != '\0') {
@@ -132,7 +130,7 @@ void stripComments(char *str)
 	    update_follower = 1;
 	    curs += 2;
 	}
-	if (update_follower) {
+	if (update_follower != 0) {
 	    str[follower] = str[curs];
 	    follower++;
 	}
