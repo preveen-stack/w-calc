@@ -901,9 +901,9 @@ const struct conversion * conversions[] = {
 #define CONVERS(x) (x>10)?pressures:((x>9)?angles:((x>8)?temperatures:((x>7)?accelerations:((x>6)?forces:((x>5)?powers:((x>4)?speeds:((x>3)?masses:((x>2)?volumes:((x>1)?areas:lengths)))))))))
 
 /* returns the category number of the unit */
-int identify_unit(const char * unit)
+ssize_t identify_unit(const char * unit)
 {
-    size_t cat_num;
+    ssize_t cat_num;
 
     for (cat_num = 0; conversions[cat_num] != NULL; cat_num++) {
         size_t unit_num;
@@ -922,7 +922,7 @@ int identify_unit(const char * unit)
     return -1;
 }
 
-int identify_units(const char * unit1, const char * unit2)
+ssize_t identify_units(const char * unit1, const char * unit2)
 {
     ssize_t cat_num;
     ssize_t u1 = -1, u2 = -1;
@@ -965,7 +965,7 @@ int identify_units(const char * unit1, const char * unit2)
     return -2;
 }
 
-int unit_id(const int utype, const char * unit)
+ssize_t unit_id(const int utype, const char * unit)
 {
     size_t unit_num;
 
@@ -976,7 +976,7 @@ int unit_id(const int utype, const char * unit)
                 (conversions[utype])[unit_num].aka[abbrev_num] != NULL ;
                 abbrev_num++) {
             if (!strcmp((conversions[utype])[unit_num].aka[abbrev_num], unit)) {
-                return unit_num;
+                return (ssize_t)unit_num;
             }
         }
     }
@@ -998,8 +998,8 @@ void uber_conversion (Number output, const int utype, const int fromunit, const 
          *   (it used to be :
          *      *((fromfac)/(tofac))
          */
-        num_init_set_str(tofac, ltable[tounit].factor, 10);
-        num_init_set_str(fromfac, ltable[fromunit].factor, 10);
+        (void)num_init_set_str(tofac, ltable[tounit].factor, 10);
+        (void)num_init_set_str(fromfac, ltable[fromunit].factor, 10);
         switch (utype) {
             case LENGTH_C:
             case AREA_C:

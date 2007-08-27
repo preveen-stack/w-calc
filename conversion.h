@@ -13,9 +13,9 @@
 
 void uber_conversion(Number output, const int utype, const int fromunit, const int tounit,
 		     Number value);
-int identify_unit(const char *unit);
-int identify_units(const char *unit1, const char *unit2);
-int unit_id(const int utype, const char *unit);
+ssize_t identify_unit(const char *unit);
+ssize_t identify_units(const char *unit1, const char *unit2);
+ssize_t unit_id(const int utype, const char *unit);
 
 struct conversion
 {
