@@ -120,8 +120,8 @@ struct _conf
     unsigned int print_prefixes:1;
     unsigned int rounding_indication:4;
     unsigned int remember_errors:1;
-    unsigned char thou_delimiter;
-    unsigned char dec_delimiter;
+    char thou_delimiter;
+    char dec_delimiter;
     unsigned int precision_guard:1;
     unsigned int history_limit:1;
     unsigned long history_limit_len;
@@ -148,9 +148,6 @@ extern unsigned int sig_figs;
 /* communication with the frontend */
 extern char standard_output;
 extern char not_all_displayed;
-
-/* random state */
-extern gmp_randstate_t randstate;
 
 #define DECIMAL_FORMAT 0
 #define OCTAL_FORMAT 1
