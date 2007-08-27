@@ -3,6 +3,7 @@
 
 #include "list.h"
 
+/*@null@*/
 List extract_vars(char *str);
 
 #endif

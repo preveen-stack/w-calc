@@ -1,4 +1,5 @@
 #include <string.h>
+#include "isconst.h"
 #ifdef MEMWATCH
 #include "memwatch.h"
 #endif
@@ -19,7 +20,7 @@ int isconst(const char *str)
     size_t i;
 
     for (i=0; consts[i]; i++) {
-	if (!strcmp(consts[i], str)) {
+	if (strcmp(consts[i], str) == 0) {
 	    return 1;
 	}
     }

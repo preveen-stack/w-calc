@@ -1,4 +1,5 @@
 #include <string.h>
+#include "iscmd.h"
 #ifdef MEMWATCH
 #include "memwatch.h"
 #endif
@@ -32,7 +33,7 @@ int iscmd(const char *str)
     size_t i;
 
     for (i = 0; commands[i]; i++) {
-	if (!strcmp(commands[i], str)) {
+	if (strcmp(commands[i], str) == 0) {
 	    return 1;
 	}
     }

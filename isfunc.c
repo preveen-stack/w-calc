@@ -1,5 +1,8 @@
 #include <string.h>
-#include "config.h"
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+#include "isfunc.h"
 #ifdef MEMWATCH
 #include "memwatch.h"
 #endif
@@ -27,7 +30,7 @@ int isfunc(const char *str)
     size_t i;
 
     for (i = 0; funcs[i]; i++) {
-	if (!strcmp(funcs[i], str)) {
+	if (strcmp(funcs[i], str) == 0) {
 	    return 1;
 	}
     }

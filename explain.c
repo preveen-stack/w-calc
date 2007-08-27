@@ -3,8 +3,7 @@
 #endif
 #include <string.h>
 #include <ctype.h> /* for isspace() */
-#include <gmp.h>
-#include <mpfr.h>
+#include "number.h"
 #include "uint32_max.h"
 #include "variables.h"
 #include "calculator.h"
@@ -25,10 +24,10 @@ static void explain_function(const char *);
 
 void explain(const char *str)
 {				       /*{{{ */
-    int curs;
+    size_t curs;
     char * mystr;
 
-    if (!str || !*str) {
+    if (str == NULL || str[0] == 0) {
 	printf("Nothing to explain.\n");
 	return;
     }
@@ -120,7 +119,7 @@ static void explain_command(const char *str)
     } else if (!strcmp(str, "bits")) {
 	printf
 	    ("Sets the number of bits used internally to represent numbers. Used like this: \\bitsX where X is a number that must be above %li and below %li.\n",
-	     (long int)MPFR_PREC_MIN, (long int)MPFR_PREC_MAX);
+	     (long int)NUM_PREC_MIN, (long int)NUM_PREC_MAX);
     } else if (!strcmp(str, "save")) {
 	printf
 	    ("Saves the history and variable list to a file. Used like this: \\saveXXXXX where XXXXX is the name of the file to save.\n");
@@ -175,8 +174,8 @@ static void explain_variable(const char *str)
 		free(value);
 	    }
 	}
+	freeList(&strings);
     } else {
-	extern char standard_output;
 	char std_save;
 
 	std_save = standard_output;

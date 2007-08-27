@@ -9,6 +9,7 @@
 #include "memwatch.h"
 #endif
 
+/*@null@*/
 List extract_vars(char *str)
 {
     char *curs, *eov, save_char;
