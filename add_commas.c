@@ -16,11 +16,11 @@
 
 /* this function returns a copy of the input string with delimiters
  * appropriate for the specified base. */
+/*@null@*/
 char *add_commas(const char *input, const int base)
 {
     char *tmpstring, *delimiter;
-    unsigned int skip, prefix;
-    unsigned char ctr;
+    unsigned int skip, prefix, ctr;
     char separator;
     char dec_delim = conf.dec_delimiter;
     size_t preflen;
@@ -32,7 +32,7 @@ char *add_commas(const char *input, const int base)
     if (NULL == input) {
 	return NULL;
     }
-    if (!isdigit(*input)) {
+    if (0 == isdigit(*input)) {
 	return NULL;
     }
     delimiter = strchr(input, dec_delim);
@@ -68,20 +68,23 @@ char *add_commas(const char *input, const int base)
 	    exponent_chars = "eE";
 	    break;
     }
-    if (!conf.print_prefixes) {
+    if (0 == conf.print_prefixes) {
 	prefix = 0;
     }
     if (*input == '-') {
 	prefix++;
     }
     // the meat of the function
-    preflen = delimiter - input;
-    if (preflen < (skip + prefix)) {
+    preflen = (size_t)(delimiter - input);
+    if (preflen < (size_t)(skip + prefix)) {
 	return NULL;
     }
     Dprintf("tmpstring is alloc'd to be %lu long\n", preflen + strlen(input));
     tmpstring = calloc(preflen + strlen(input), sizeof(char));
-    ctr = (delimiter - (input + prefix)) % skip;
+    if (tmpstring == NULL) {
+	return NULL;
+    }
+    ctr = (unsigned int)((delimiter - (input + prefix)) % skip);
     if (ctr == 0) {
 	ctr = skip;
     }
