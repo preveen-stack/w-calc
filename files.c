@@ -16,9 +16,6 @@
 #include <stdlib.h>		       /* for free() */
 #include <limits.h>		       /* for PATH_MAX */
 
-#include <gmp.h>
-#include <mpfr.h>
-
 #include "historyManager.h"
 #include "string_manip.h"
 #include "calculator.h"
