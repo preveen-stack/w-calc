@@ -24,6 +24,7 @@
 # else /* !defined(HAVE_READLINE_H) */
 extern char *readline();
 # endif	/* !defined(HAVE_READLINE_H) */
+/*@null@*/
 char *cmdline = NULL;
 #else /* !defined(HAVE_READLINE_READLINE_H) */
 /* no readline */
@@ -71,8 +72,10 @@ extern int yyparse(void);
 extern int yy_scan_string(const char *);
 
 #ifdef HAVE_LIBREADLINE
+/*@null@*/
 static List tc_options = NULL;
 
+/*@null@*/
 char *tc_generator(const char *text, int state)
 {				       /*{{{ */
     char *ret = getHeadOfList(tc_options);
@@ -83,6 +86,7 @@ char *tc_generator(const char *text, int state)
 	return NULL;
 }				       /*}}} */
 
+/*@null@*/
 char *tc_rounding(const char *text, int state)
 {				       /*{{{ */
     static unsigned int i = 0;
@@ -90,7 +94,7 @@ char *tc_rounding(const char *text, int state)
     if (state == 0) {
 	i = 0;
     }
-    while (rounding[i] != 0) {
+    while (rounding[i] != NULL) {
 	if (strncmp(text, rounding[i], strlen(text)) == 0) {
 	    return strdup(rounding[i++]);
 	}
@@ -205,7 +209,7 @@ char **wcalc_completion(const char *text, int start, int end)
 		/* seek past the previous unit... */
 		char *unit1 = rl_line_buffer + i;
 		char saved_char;
-		int unit_cat;
+		ssize_t unit_cat;
 
 		while (!isspace(rl_line_buffer[i]))
 		    ++i;

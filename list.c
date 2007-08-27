@@ -36,15 +36,20 @@ struct cleanup
     void *data;
 };
 
+/*@null@*/
 static List lPool = NULL;
+/*@null@*/
 static List lPoolUsed = NULL;
 static unsigned long long lPoolSize = 0;	/* for exponential growth */
+/*@null@*/
 static struct cleanup *lCleanupPool = NULL;
 static inline List get_l(void);
 static void fill_l_pool(void);
 
+/*@null@*/
 static struct _listheader *lhPool = NULL;
 static unsigned long long lhPoolSize = 0;	/* for exponential growth */
+/*@null@*/
 static struct cleanup *lhCleanupPool = NULL;
 static inline struct _listheader * get_lh(void);
 static void fill_lh_pool(void);
@@ -357,7 +362,7 @@ inline void *peekAheadInList(List list)
 }				       /*}}} */
 
 /* This tells you how many items there are in the list */
-inline unsigned long listLen(List list)
+inline size_t listLen(List list)
 {				       /*{{{ */
     if (list) {
 	return list->len;

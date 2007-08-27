@@ -19,11 +19,11 @@ void lists_cleanup(void);
 /* List operations */
 void addToList(List *, void *);
 void addToListHead(List *, void *);
-void *getHeadOfList(List);
-void *peekListElement(List, size_t);
+void *getHeadOfList(List/*@null@*/);
+void *peekListElement(List/*@null@*/, size_t);
 void *getListElement(List, size_t);
 inline void *peekAheadInList(List);
-inline unsigned long listLen(List);
+inline size_t listLen(List/*@null@*/);
 void removeFromList(List, void *);
 void freeList(List *);
 
