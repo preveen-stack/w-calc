@@ -8,8 +8,7 @@
 #include <stdio.h>		       /* for snprintf() */
 #include <stdlib.h>		       /* for calloc() */
 
-#include <gmp.h>
-#include <mpfr.h>
+#include "number.h"
 
 #include "calculator.h"
 #include "string_manip.h"
@@ -20,16 +19,16 @@
 
 static size_t zero_strip(char *num);
 static void add_prefix(char *num, size_t length, int base);
-static char *engineering_formatted_number(char *digits, mp_exp_t exp,
+static char *engineering_formatted_number(char *digits, num_exp_t exp,
 					  const int precision, const int base,
 					  const int prefix);
-static char *full_precision_formatted_number(char *digits, mp_exp_t exp,
+static char *full_precision_formatted_number(char *digits, num_exp_t exp,
 					     const int base,
 					     const int prefix);
-static char *automatically_formatted_number(char *digits, mp_exp_t exp,
+static char *automatically_formatted_number(char *digits, num_exp_t exp,
 					    const int base, const int prefix,
 					    char *truncated_flag);
-static char *precision_formatted_number(char *digits, mp_exp_t exp,
+static char *precision_formatted_number(char *digits, num_exp_t exp,
 					const int precision, const int base,
 					const int prefix);
 
@@ -39,34 +38,34 @@ static char *precision_formatted_number(char *digits, mp_exp_t exp,
  * string, and does all the fancy presentation stuff we've come to expect from
  * wcalc.
  */
-char *num_to_str_complex(const mpfr_t num, const int base, const int engr,
+char *num_to_str_complex(const Number num, const int base, const int engr,
 			 const int prec, const int prefix,
 			 char *truncated_flag)
 {
     char *s, *retstr;
-    mp_exp_t e;
+    num_exp_t e;
 
     Dprintf("num_to_str_complex: base: %i, engr: %i, prec: %i, prefix: %i\n",
 	    base, engr, prec, prefix);
-    if (mpfr_nan_p(num)) {
+    if (num_is_nan(num)) {
 	return (char *)strdup("@NaN@");
     }
-    if (mpfr_inf_p(num)) {
-	if (mpfr_sgn(num) > 0) {
+    if (num_is_inf(num)) {
+	if (num_sign(num) > 0) {
 	    return (char *)strdup("@Inf@");
 	} else {
 	    return (char *)strdup("-@Inf@");
 	}
     }
-    if (mpfr_zero_p(num)) {
-	if (mpfr_sgn(num) >= 0) {
+    if (num_is_zero(num)) {
+	if (num_sign(num) >= 0) {
 	    return (char *)strdup("0");
 	} else {
 	    return (char *)strdup("-0");
 	}
     }
 
-    s = mpfr_get_str(NULL, &e, base, 0, num, GMP_RNDN);
+    s = num_get_str(NULL, &e, base, 0, num);
     /* s is the string
      * e is the number of integers (the exponent) if positive
      *
@@ -83,7 +82,7 @@ char *num_to_str_complex(const mpfr_t num, const int base, const int engr,
 	     * printf("prec: %i\n", prec); */
 	    significant_figures = ((e > 0) ? e : 0) + prec;
 	    if (significant_figures < 2) {	/* why is this the minimum? */
-		s = mpfr_get_str(s, &e, base, 2, num, GMP_RNDN);
+		s = num_get_str(s, &e, base, 2, num);
 		if (s[1] > '4') {      /* XXX: LAME! */
 		    unsigned foo;
 
@@ -93,12 +92,11 @@ char *num_to_str_complex(const mpfr_t num, const int base, const int engr,
 		    e++;
 		}
 	    } else {
-		mpfr_free_str(s);
-		s = mpfr_get_str(NULL, &e, base, significant_figures, num,
-				 GMP_RNDN);
+		num_free_str(s);
+		s = num_get_str(NULL, &e, base, significant_figures, num);
 	    }
 	} else {
-	    s = mpfr_get_str(NULL, &e, base, 1 + prec, num, GMP_RNDN);
+	    s = num_get_str(NULL, &e, base, 1 + prec, num);
 	}
     }
     Dprintf("post-mpfr e: %li s: %s\n", (long int)e, s);
@@ -114,12 +112,12 @@ char *num_to_str_complex(const mpfr_t num, const int base, const int engr,
     } else {
 	retstr = precision_formatted_number(s, e, prec, base, prefix);
     }
-    mpfr_free_str(s);
+    num_free_str(s);
     Dprintf("return string: %s\n", retstr);
     return retstr;
 }
 
-char *precision_formatted_number(char *digits, mp_exp_t exp,
+char *precision_formatted_number(char *digits, num_exp_t exp,
 				 const int precision, const int base,
 				 const int prefix)
 {
@@ -207,7 +205,7 @@ char *precision_formatted_number(char *digits, mp_exp_t exp,
     return retstring;
 }
 
-char *full_precision_formatted_number(char *digits, mp_exp_t exp,
+char *full_precision_formatted_number(char *digits, num_exp_t exp,
 				      const int base, const int prefix)
 {
     size_t length;
@@ -297,7 +295,7 @@ char *full_precision_formatted_number(char *digits, mp_exp_t exp,
     return retstring;
 }
 
-char *automatically_formatted_number(char *digits, mp_exp_t exp,
+char *automatically_formatted_number(char *digits, num_exp_t exp,
 				     const int base, const int prefix,
 				     char *truncated_flag)
 {
@@ -402,7 +400,7 @@ char *automatically_formatted_number(char *digits, mp_exp_t exp,
     return retstring;
 }
 
-char *engineering_formatted_number(char *digits, mp_exp_t exp,
+char *engineering_formatted_number(char *digits, num_exp_t exp,
 				   const int precision, const int base,
 				   const int prefix)
 {
