@@ -43,6 +43,7 @@ typedef mp_exp_t num_exp_t;
 #define num_set_ui(n,ui) mpfr_set_ui((n), (ui), GMP_RNDN)
 #define num_set_str(n,str,base) mpfr_set_str((n), (str), (base), GMP_RNDN)
 #define num_set_nan(n) mpfr_set_nan(n)
+#define num_set_inf(n,s) mpfr_set_inf(n,s)
 
 #define num_add(ret,n1,n2) mpfr_add((ret), (n1), (n2), GMP_RNDN)
 #define num_sub(ret,n1,n2) mpfr_sub((ret), (n1), (n2), GMP_RNDN)
