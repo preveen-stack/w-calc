@@ -444,6 +444,14 @@ K	{ num_init(YYLVALAC->number);
 	num_const_catalan(YYLVALAC->number);
 	POS_STR();
 	return(NUMBER); }
+@NaN@	{ num_init(YYLVALAC->number);
+	num_set_nan(YYLVALAC->number);
+	POS_STR();
+	return (NUMBER); }
+@Inf@	{ num_init(YYLVALAC->number);
+	num_set_inf(YYLVALAC->number,1);
+	POS_STR();
+	return (NUMBER); }
 
 %{ /* These are the grouping symbols */
     %}
