@@ -97,9 +97,12 @@ SPACE		[ ]
 }
 \\e(ng(ineering)?)?{WHITESPACE}*{DIGIT}* {
 	int i = 2;
-    while (! isdigit((int)(yytext[i]))) ++i;
-    if (yytext[i] != 0) YYLVALAC->integer = strtoul(yytext+i, NULL, 0);
-    else YYLVALAC->integer = -1;
+    while (yytext[i] != 0 && ! isdigit((int)(yytext[i]))) ++i;
+    if (yytext[i] != 0 && yytext[i] != '\n') {
+		YYLVALAC->integer = strtoul(yytext+i, NULL, 0);
+    } else {
+		YYLVALAC->integer = -1;
+	}
 	line_is_a_command = 1;
 	POS_STR();
     return(ENG_CMD);
@@ -214,12 +217,12 @@ SPACE		[ ]
     char *unitone;
 	int i = 2;
 	/* find the first space */
-	while (! isspace(yytext[i])) ++i;
+	while (yytext[i] != 0 && ! isspace(yytext[i])) ++i;
 	/* find the end of that space */
 	while (isspace(yytext[i])) ++i;
     unitone = yytext + i;
 	/* skip the unit */
-	while (! isspace(yytext[i])) ++i;
+	while (yytext[i] != 0 && ! isspace(yytext[i])) ++i;
 	yytext[i++] = 0;
 	/* onward to the word "to" */
 	while (isspace(yytext[i])) ++i;
@@ -555,7 +558,7 @@ zeta { POS_STR(); return(WZETA); }
 
 {LETTER}+({LETTER}|{ACCEPTABLE})*{WHITESPACE}*= {
 	int i = 0;
-	while (!isspace(yytext[i]) && yytext[i] != '=') i++;
+	while (yytext[i] != 0 && !isspace(yytext[i]) && yytext[i] != '=') i++;
 	yytext[i] = 0;
 	if (isfunc(yytext)) {
 		report_error("'%s' is a function and functions cannot be reassigned.", yytext);
