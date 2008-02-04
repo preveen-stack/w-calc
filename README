@@ -1,6 +1,6 @@
 Hello!
 
-This is Wcalc 2.3!
+This is Wcalc 2.3.1!
 
 1. What's New
 2. Intro
@@ -13,22 +13,16 @@ This is Wcalc 2.3!
 * What's New *
 **************
 
-FEATURES:
- - Added Wcalc Service to the Service menu (GUI)
- - Tab-completion (CLI)
- - Compiled as a Universal Binary (BOTH)
- - Added angle and pressure conversions (BOTH)
- - More specific error reporting (CLI)
-
 IMPROVEMENTS:
- - More forgiving about number formatting (BOTH)
- - Improved \prefs listing (CLI)
- - Improved units abbreviations (BOTH)
+ - Preferences saved more reliably (GUI)
+ - Can now alter maximum slider precision (GUI)
+ - Added sinc/exp/fact/comp functions to the menu (GUI)
+ - Fixed FORTRAN-style syntax errors (BOTH)
+ - Updated license to be GPLv2+ compatible (BOTH)
 
 BUGFIXES:
- - Fixed the inspector-window-quits-program bug (GUI)
- - Fixed the insufficient variable precision bug (BOTH)
- - Fixed integer detection (BOTH)
+ - Fixed display glitches when auto-resizing due to extremely large numbers (GUI)
+ - Fixed simple calc mode, more reliable, removed crashes (GUI)
 
 *********
 * INTRO *
@@ -54,8 +48,8 @@ Wcalc recognizes the following symbols:
 % (modulo (read: the remainder when integers are divided))
 ! (factorial or boolean NOT)
 ^ (exponent. four squared is 4^2)
-> (less than)
-< (greater than)
+< (less than)
+> (greater than)
 <= (less than or equal to)
 >= (greater than or equal to)
 == (equal)
