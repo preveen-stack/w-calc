@@ -21,7 +21,8 @@ static size_t zero_strip(char *num);
 static void add_prefix(char *num, size_t length, int base);
 static char *engineering_formatted_number(char *digits, num_exp_t exp,
 					  const int precision, const int base,
-					  const int prefix);
+					  const int prefix,
+					  char *truncated_flag);
 static char *full_precision_formatted_number(char *digits, num_exp_t exp,
 					     const int base,
 					     const int prefix);
@@ -99,18 +100,20 @@ char *num_to_str_complex(const Number num, const int base,
 	} else {
 	    int left_digits = 0;
 	    Number temp;
+
 	    Dprintf("engr == auto || engr == always\n");
 	    /* first, count how many figures to the left of the decimal */
 	    num_init_set(temp, num);
 	    while (num_get_d(temp) >= 1.0) {
 		num_div_ui(temp, temp, base);
-		left_digits ++;
+		left_digits++;
 	    }
 	    num_free(temp);
 	    if (left_digits == 0) {
 		left_digits = 1;
 	    }
-	    Dprintf("left_digits = %i, asking for %i\n", left_digits, left_digits+prec);
+	    Dprintf("left_digits = %i, asking for %i\n", left_digits,
+		    left_digits + prec);
 	    s = num_get_str(NULL, &e, base, left_digits + prec, num);
 	}
     }
@@ -123,15 +126,15 @@ char *num_to_str_complex(const Number num, const int base,
 	    case always:
 		Dprintf("ALWAYS print engineering\n");
 		retstr =
-		    engineering_formatted_number(s, e, prec, base, prefix);
+		    engineering_formatted_number(s, e, prec, base, prefix,
+						 truncated_flag);
 		break;
 	    case never:
 		Dprintf("NEVER print engineering\n");
 		retstr = precision_formatted_number(s, e, prec, base, prefix);
 		break;
 	    case automatic:
-		Dprintf
-		    ("AUTOMATICALLY decide on engineering formatting\n");
+		Dprintf("AUTOMATICALLY decide on engineering formatting\n");
 		retstr =
 		    automatically_formatted_number(s, e, prec, base, prefix,
 						   truncated_flag);
@@ -399,14 +402,11 @@ char *automatically_formatted_number(char *digits, num_exp_t exp,
 
     if (precision == -1) {
 	char *period;
+
 	// strip off the trailing 0's
 	zero_strip(retstring);
-    
-    				       /* XXX: This seems like a stupid hack. Is this for
-				        * readability? Note to self: remove this if it
-				        * ever becomes an issue again (and merge
-				        * full_precision_formatted_number back with this
-				        * function). */
+	/* XXX: This is a stupid hack; the idea is just to get the mpfr output
+	 * to match the double output. */
 	period = strchr(retstring, '.');
 	Dprintf("retstring: %s\n", retstring);
 	Dprintf("period: %s\n", period);
@@ -416,15 +416,15 @@ char *automatically_formatted_number(char *digits, num_exp_t exp,
 	    zero_strip(retstring);
 	}
     } else if (precision >= 0) {
-	char * period = strchr(retstring, '.') + 1;
+	char *period = strchr(retstring, '.') + 1;
+
 	Dprintf("period: %s\n", period);
-	if (period && strlen(period) > (size_t)precision) {
+	if (period && strlen(period) > (size_t) precision) {
 	    Dprintf("truncating down to precision...\n");
 	    period[precision] = 0;
 	    *truncated_flag = 1;
 	}
     }
-
     // copy in an exponent if necessary
     if (exp != 0) {
 	curs = strchr(retstring, '\0');
@@ -438,7 +438,7 @@ char *automatically_formatted_number(char *digits, num_exp_t exp,
 
 char *engineering_formatted_number(char *digits, num_exp_t exp,
 				   const int precision, const int base,
-				   const int prefix)
+				   const int prefix, char *truncated_flag)
 {
     size_t length;
     size_t full_length;
@@ -486,19 +486,31 @@ char *engineering_formatted_number(char *digits, num_exp_t exp,
     // note that the digits are already correctly rounded and I've already
     // allocated enough space, because of how I asked mpfr for the original
     // digit string.
-    snprintf(curs, length, "%s", dcurs);
+    snprintf(curs, length+1, "%s", dcurs);
     Dprintf("the decimals: %s\n", retstring);
 
     // strip off the trailing 0's
     if (-1 == precision) {
+	char * period;
 	zero_strip(retstring);
+	/* XXX: This is a stupid hack; the idea is just to get the mpfr output
+	 * to match (roughly) the double output. */
+	period = strchr(retstring, '.');
+	Dprintf("retstring: %s\n", retstring);
+	Dprintf("period: %s\n", period);
+	if (period && strlen(period) > 10) {
+	    period[10] = 0;
+	    *truncated_flag = 1;
+	    zero_strip(retstring);
+	}
     } else {
-	char * period = strchr(retstring, '.') + 1;
+	char *period = strchr(retstring, '.') + 1;
+
 	Dprintf("period: %s\n", period);
 	if (period && strlen(period) > precision) {
 	    Dprintf("truncating down to precision...\n");
 	    period[precision] = 0;
-	    /* *truncated_flag = 1; XXX: what is this flag for again? */
+	    *truncated_flag = 1;
 	}
     }
     // copy in an exponent
