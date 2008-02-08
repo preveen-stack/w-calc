@@ -107,6 +107,24 @@ SPACE		[ ]
 	POS_STR();
     return(ENG_CMD);
 }
+\\e(ng(ineering)?)?{WHITESPACE}+automatic {
+    POS_STR();
+    YYLVALAC->integer = 1;
+    line_is_a_command = 1;
+    return(ENG_CMD);
+}
+\\e(ng(ineering)?)?{WHITESPACE}+always {
+    POS_STR();
+    YYLVALAC->integer = 2;
+    line_is_a_command = 1;
+    return(ENG_CMD);
+}
+\\e(ng(ineering)?)?{WHITESPACE}+never {
+    POS_STR();
+    YYLVALAC->integer = 3;
+    line_is_a_command = 1;
+    return(ENG_CMD);
+}
 \\cons(ervative)?       { line_is_a_command = 1; POS_STR(); return(GUARD_CMD); }
 \\h(ex(adecimal)?)?     { line_is_a_command = 1; POS_STR(); return(HEX_CMD); }
 \\help           { line_is_a_command = 1; POS_STR(); return(PRINT_HELP_CMD); }

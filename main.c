@@ -342,11 +342,9 @@ int main(int argc, char *argv[])
 	    }
 	} else if (!strcmp(argv[i], "-E") ||
 		   !strcmp(argv[i], "--engineering")) {
-	    switch (conf.engineering) {
-		case always: conf.engineering = never; break;
-		case never: conf.engineering = automatic; break;
-		case automatic: conf.engineering = always; break;
-	    }
+	    conf.engineering = always;
+	} else if (!strcmp(argv[i], "-EE")) {
+	    conf.engineering = never;
 	} else if (!strcmp(argv[i], "-H") || !strcmp(argv[i], "--help")) {
 	    print_command_help();
 	    num_free(last_answer);

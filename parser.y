@@ -310,7 +310,11 @@ command : HEX_CMD {
 			case automatic: conf.engineering = always; break;
 		}
 	} else {
-		conf.engineering = $1;
+		switch($1) {
+			case 1: conf.engineering = automatic; break;
+			case 2: conf.engineering = always; break;
+			case 3: conf.engineering = never; break;
+		}
 	}
 	if (standard_output)
 		printf("Engineering notation is %s\n",(conf.engineering==always)?"always used":(conf.engineering==never)?"never used":"used if convenient");
