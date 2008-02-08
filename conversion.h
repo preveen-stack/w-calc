@@ -9,6 +9,8 @@
 #ifndef WCALC_CONVERSIONS
 #define WCALC_CONVERSIONS
 
+#include <sys/types.h> /* for ssize_t */
+#include <unistd.h> /* also for ssize_t */
 #include "number.h"
 
 void uber_conversion(Number output, const int utype, const int fromunit, const int tounit,
