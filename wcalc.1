@@ -16,9 +16,12 @@ expressions. It supports all standard mathematical operations, parenthesis,
 brackets, trigonometric functions, hyperbolic trig functions, logs, and
 boolean operators.
 .PP
-If no mathematical expression is given at the commandline, wcalc enters
-"interactive" mode. Interactive mode has more features. Also, files may be
-piped to wcalc, and they will be interpreted.
+wcalc accepts input in a variety of manners. I it will evaluate If no
+mathematical expression is given at the commandline, it will evaluate the
+contents of an environment variable named \fIwcalc_input\fP if one exists. If
+that variable is not set, wcalc will try to read input from standard input
+(i.e. piped input). If there is no input from that, wcalc enters "interactive"
+mode. Interactive mode has more features.
 .PP
 Within wcalc, detailed information about commands, functions, symbols, and variables can be obtained by executing: \fB\eexplain\fP \fIthing-to-explain\fP
 .SS OPTIONS

@@ -487,6 +487,44 @@ int main(int argc, char *argv[])
 	}
     }
 
+    if (! cmdline_input) {
+	extern char *errstring;
+	char * envinput = getenv("wcalc_input");
+	if (envinput) {
+#ifdef HAVE_READLINE_HISTORY
+	    char filename[PATH_MAX];
+
+	    using_history();
+	    snprintf(filename, PATH_MAX, "%s/.wcalc_history",
+		    getenv("HOME"));
+	    if (read_history(filename)) {
+		if (errno != ENOENT) {
+		    perror("Reading History");
+		}
+	    }
+#endif
+	    cmdline_input = 1;
+	    if (conf.verbose) {
+		printf("-> %s\n", envinput);
+	    }
+	    parseme(envinput);
+	    if (!errstring || (errstring && !strlen(errstring)) ||
+		conf.remember_errors) {
+		addToHistory(envinput, last_answer);
+	    }
+	    if (errstring && strlen(errstring)) {
+		fprintf(stderr, "%s", errstring);
+		if (errstring[strlen(errstring) - 1] != '\n')
+		    fprintf(stderr, "\n");
+		free(errstring);
+		errstring = NULL;
+	    }
+	    if (putval("a", last_answer, "previous answer") != 0) {
+		fprintf(stderr, "error storing last answer\n");
+	    }
+	}
+    }
+
     if (cmdline_input) {
 #ifdef HAVE_READLINE_HISTORY
 	char filename[PATH_MAX];
