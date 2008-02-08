@@ -26,6 +26,7 @@ static char *full_precision_formatted_number(char *digits, num_exp_t exp,
 					     const int base,
 					     const int prefix);
 static char *automatically_formatted_number(char *digits, num_exp_t exp,
+					    const int precision,
 					    const int base, const int prefix,
 					    char *truncated_flag);
 static char *precision_formatted_number(char *digits, num_exp_t exp,
@@ -38,9 +39,9 @@ static char *precision_formatted_number(char *digits, num_exp_t exp,
  * string, and does all the fancy presentation stuff we've come to expect from
  * wcalc.
  */
-char *num_to_str_complex(const Number num, const int base, const int engr,
-			 const int prec, const int prefix,
-			 char *truncated_flag)
+char *num_to_str_complex(const Number num, const int base,
+			 const enum engineering_modes engr, const int prec,
+			 const int prefix, char *truncated_flag)
 {
     char *s, *retstr;
     num_exp_t e;
@@ -73,10 +74,10 @@ char *num_to_str_complex(const Number num, const int base, const int engr,
      * so we know it's "correct":
      */
     if (prec > -1) {
-	if (engr == 0) {
+	if (engr == never) {
 	    size_t significant_figures = 0;
 
-	    Dprintf("prec > -1 && engr == 0\n");
+	    Dprintf("prec > -1 && engr == never\n");
 	    /*printf("e: %li\n", (long)e);
 	     * printf("s: %s\n", s);
 	     * printf("prec: %i\n", prec); */
@@ -96,21 +97,45 @@ char *num_to_str_complex(const Number num, const int base, const int engr,
 		s = num_get_str(NULL, &e, base, significant_figures, num);
 	    }
 	} else {
-	    s = num_get_str(NULL, &e, base, 1 + prec, num);
+	    int left_digits = 0;
+	    Number temp;
+	    Dprintf("engr == auto || engr == always\n");
+	    /* first, count how many figures to the left of the decimal */
+	    num_init_set(temp, num);
+	    while (num_get_d(temp) >= 1.0) {
+		num_div_ui(temp, temp, base);
+		left_digits ++;
+	    }
+	    num_free(temp);
+	    if (left_digits == 0) {
+		left_digits = 1;
+	    }
+	    Dprintf("left_digits = %i, asking for %i\n", left_digits, left_digits+prec);
+	    s = num_get_str(NULL, &e, base, left_digits + prec, num);
 	}
     }
     Dprintf("post-mpfr e: %li s: %s\n", (long int)e, s);
     *truncated_flag = 0;
     if (-2 == prec) {
 	retstr = full_precision_formatted_number(s, e, base, prefix);
-    } else if (engr != 0) {
-	retstr = engineering_formatted_number(s, e, prec, base, prefix);
-    } else if (-1 == prec) {
-	retstr =
-	    automatically_formatted_number(s, e, base, prefix,
-					   truncated_flag);
     } else {
-	retstr = precision_formatted_number(s, e, prec, base, prefix);
+	switch (engr) {
+	    case always:
+		Dprintf("ALWAYS print engineering\n");
+		retstr =
+		    engineering_formatted_number(s, e, prec, base, prefix);
+		break;
+	    case never:
+		Dprintf("NEVER print engineering\n");
+		retstr = precision_formatted_number(s, e, prec, base, prefix);
+		break;
+	    case automatic:
+		Dprintf
+		    ("AUTOMATICALLY decide on engineering formatting\n");
+		retstr =
+		    automatically_formatted_number(s, e, prec, base, prefix,
+						   truncated_flag);
+	}
     }
     num_free_str(s);
     Dprintf("return string: %s\n", retstr);
@@ -129,7 +154,7 @@ char *precision_formatted_number(char *digits, num_exp_t exp,
 
     length = strlen(digits);
     /* testing against both zero and length because length is unsigned */
-    if (exp > 0 && (size_t)exp > length)
+    if (exp > 0 && (size_t) exp > length)
 	length = exp;
     length += 3;
 
@@ -182,7 +207,7 @@ char *precision_formatted_number(char *digits, num_exp_t exp,
 		(int)exp);
 	// everything after this is affected by decimalcount
 	// copy in the leading zeros
-	while (exp < 0 && (ssize_t)decimal_count <= precision) {
+	while (exp < 0 && (ssize_t) decimal_count <= precision) {
 	    snprintf(curs++, length--, "0");
 	    exp++;
 	    decimal_count++;
@@ -216,7 +241,7 @@ char *full_precision_formatted_number(char *digits, num_exp_t exp,
 
     length = strlen(digits);
     /* testing against both zero and length because length is unsigned */
-    if (exp > 0 && (size_t)exp > length)
+    if (exp > 0 && (size_t) exp > length)
 	length = exp;
     length += 3;		       /* the null, the (possible) sign, and the decimal */
 
@@ -296,8 +321,8 @@ char *full_precision_formatted_number(char *digits, num_exp_t exp,
 }
 
 char *automatically_formatted_number(char *digits, num_exp_t exp,
-				     const int base, const int prefix,
-				     char *truncated_flag)
+				     const int precision, const int base,
+				     const int prefix, char *truncated_flag)
 {
     size_t length;
     size_t full_length;
@@ -307,7 +332,7 @@ char *automatically_formatted_number(char *digits, num_exp_t exp,
 
     length = strlen(digits);
     /* testing against both zero and length because length is unsigned */
-    if (exp > 0 && (size_t)exp > length)
+    if (exp > 0 && (size_t) exp > length)
 	length = exp;
     length += 3;		       /* the null, the (possible) sign, and the decimal */
 
@@ -372,20 +397,31 @@ char *automatically_formatted_number(char *digits, num_exp_t exp,
     length -= printed;
     decimal_count += printed;
 
-    // strip off the trailing 0's
-    zero_strip(retstring); {	       /* XXX: This seems like a stupid hack. Is this for
+    if (precision == -1) {
+	char *period;
+	// strip off the trailing 0's
+	zero_strip(retstring);
+    
+    				       /* XXX: This seems like a stupid hack. Is this for
 				        * readability? Note to self: remove this if it
 				        * ever becomes an issue again (and merge
 				        * full_precision_formatted_number back with this
 				        * function). */
-	char *period = strchr(retstring, '.');
-
+	period = strchr(retstring, '.');
 	Dprintf("retstring: %s\n", retstring);
 	Dprintf("period: %s\n", period);
 	if (period && strlen(period) > 10) {
 	    period[10] = 0;
 	    *truncated_flag = 1;
 	    zero_strip(retstring);
+	}
+    } else if (precision >= 0) {
+	char * period = strchr(retstring, '.') + 1;
+	Dprintf("period: %s\n", period);
+	if (period && strlen(period) > (size_t)precision) {
+	    Dprintf("truncating down to precision...\n");
+	    period[precision] = 0;
+	    *truncated_flag = 1;
 	}
     }
 
@@ -410,7 +446,7 @@ char *engineering_formatted_number(char *digits, num_exp_t exp,
 
     length = strlen(digits);
     /* testing against both zero and length because length is unsigned */
-    if (exp > 0 && (size_t)exp > length)
+    if (exp > 0 && (size_t) exp > length)
 	length = exp;
     length += 3;		       /* the null, the (possible) sign, and the decimal */
 
@@ -456,12 +492,20 @@ char *engineering_formatted_number(char *digits, num_exp_t exp,
     // strip off the trailing 0's
     if (-1 == precision) {
 	zero_strip(retstring);
+    } else {
+	char * period = strchr(retstring, '.') + 1;
+	Dprintf("period: %s\n", period);
+	if (period && strlen(period) > precision) {
+	    Dprintf("truncating down to precision...\n");
+	    period[precision] = 0;
+	    /* *truncated_flag = 1; XXX: what is this flag for again? */
+	}
     }
     // copy in an exponent
     curs = strchr(retstring, '\0');
     Dprintf("space left: %lu\n", full_length - (curs - retstring));
     snprintf(curs, full_length - (curs - retstring),
-	     (base <= 10 ? "e%ld" : "@%ld"), (long)exp);
+	     (base <= 10 ? "e%+ld" : "@%+ld"), (long)exp);
 
     return retstring;
 }

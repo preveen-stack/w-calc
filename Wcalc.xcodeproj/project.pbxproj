@@ -709,8 +709,8 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.3;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
-					/Users/kyle/Wcalc/libmpfr.a,
-					/Users/kyle/Wcalc/libgmp.a,
+					/Users/kyle/Wcalc_Development/Wcalc/libmpfr.a,
+					/Users/kyle/Wcalc_Development/Wcalc/libgmp.a,
 				);
 				PRIVATE_HEADERS_FOLDER_PATH = "$(CONTENTS_FOLDER_PATH)/PrivateHeaders";
 				PRODUCT_NAME = Wcalc;
@@ -837,8 +837,8 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.3;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
-					/Users/kyle/Wcalc/libmpfr.a,
-					/Users/kyle/Wcalc/libgmp.a,
+					/Users/kyle/Wcalc_Development/Wcalc/libmpfr.a,
+					/Users/kyle/Wcalc_Development/Wcalc/libgmp.a,
 				);
 				PRIVATE_HEADERS_FOLDER_PATH = "$(CONTENTS_FOLDER_PATH)/PrivateHeaders";
 				PRODUCT_NAME = Wcalc;
@@ -863,7 +863,7 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 2.3.1;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				HEADER_SEARCH_PATHS = "-I/Users/kyle/Wcalc/";
+				HEADER_SEARCH_PATHS = "-I/Users/kyle/Wcalc_Development/Wcalc/";
 				MACOSX_DEPLOYMENT_TARGET = "";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -932,8 +932,8 @@
 					"-Wunused",
 				);
 				OTHER_LDFLAGS = (
-					/Users/kyle/Wcalc/libmpfr.a,
-					/Users/kyle/Wcalc/libgmp.a,
+					/Users/kyle/Wcalc_Development/Wcalc/libmpfr.a,
+					/Users/kyle/Wcalc_Development/Wcalc/libgmp.a,
 				);
 				PRODUCT_NAME = Wcalc;
 				SECTORDER_FLAGS = "";

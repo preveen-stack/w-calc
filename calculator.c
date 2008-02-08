@@ -540,14 +540,33 @@ static char *print_this_result_dbl(const double result)
 		return pa;
 	    } else
 		pa = tmp;
-	    if (conf.precision > -1 && !conf.engineering) {
-		snprintf(format, 10, "%%1.%if", conf.precision);
+	    if (conf.precision > -1) {
 		decimal_places = conf.precision;
-	    } else if (conf.precision > -1 && conf.engineering) {
-		snprintf(format, 10, "%%1.%iE", conf.precision);
-		decimal_places = conf.precision;
+		switch(conf.engineering) {
+		    case never:
+			snprintf(format, 10, "%%1.%if", conf.precision);
+			break;
+		    case always:
+			snprintf(format, 10, "%%1.%ie", conf.precision);
+			break;
+		    case automatic:
+			snprintf(format, 10, "%%1.%ig", conf.precision);
+			break;
+		}
+		Dprintf("precision was specified as %i, format string is \"%s\"\n", conf.precision, format);
 	    } else {
-		snprintf(format, 10, "%%G");
+		switch (conf.engineering) {
+		    case never:
+			strncpy(format, "%f", 10);
+			break;
+		    case always:
+			strncpy(format, "%e", 10);
+			break;
+		    case automatic:
+			strncpy(format, "%g", 10);
+			break;
+		}
+		Dprintf("precision is automatic, format string is \"%s\"\n", format);
 		if (fabs(result) < 10.0) {
 		    decimal_places = 6;
 		} else if (fabs(result) < 100.0) {
@@ -652,10 +671,14 @@ static char *print_this_result_dbl(const double result)
 
 		Dprintf("fabs = %f, conf.engineering = %i, conf.print_ints = %i\n", fabs(modf(result, &junk)), conf.engineering, conf.print_ints);
 		/* This is the big call */
-		if (fabs(modf(result, &junk)) != 0.0 || conf.engineering ||
+		/* translation: if we don't have to handle the print_ints special case,
+		 * then we can just use the existing format. */
+		if (fabs(modf(result, &junk)) != 0.0 ||
 		    !conf.print_ints) {
 		    snprintf(pa, 310, format, result);
 		} else {
+		    /* this is the print_ints special case
+		     * (note that we strip trailing zeros) */
 		    snprintf(pa, 310, "%1.0f", result);
 		}
 		Dprintf("pa (unlocalized): %s\n", pa);

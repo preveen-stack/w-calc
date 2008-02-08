@@ -21,7 +21,6 @@
     IBOutlet NSButton *capsLockKey;
     IBOutlet NSButton *shiftKey1;
     IBOutlet NSButton *shiftKey2;
-    IBOutlet NSButton *engineeringNotation;
     IBOutlet NSButton *historyDuplicates;
     IBOutlet NSButton *pickyVariables;
     IBOutlet NSButton *printPrefixes;
@@ -64,6 +63,7 @@
     IBOutlet NSPanel *thePrefPanel;
     IBOutlet NSPanel *conversionWindow;
 
+	IBOutlet NSPopUpButton *engineeringNotation;
     IBOutlet NSPopUpButton *roundingIndication;
     IBOutlet NSPopUpButton *convertType;
 

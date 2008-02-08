@@ -255,6 +255,10 @@ static pthread_mutex_t displayLock;
     Dprintf("awakeFromNib\n");
     prefsVersion = [prefs integerForKey:@"initialized"];
     Dprintf("prefsVersion: %i\n", prefsVersion);
+	if (prefsVersion < 4) {
+	[prefs setObject:@"4" forKey:@"initialized"];
+	[prefs setObject:@"1" forKey:@"engineeringNotation"]
+	}
     if (prefsVersion < 3) {
 	[prefs setObject:@"3" forKey:@"initialized"];
 	[prefs setObject:@"147" forKey:@"maxSliderPrecision"];
@@ -266,7 +270,6 @@ static pthread_mutex_t displayLock;
     }
     if (prefsVersion < 1) {
 	[prefs setObject:@"-1" forKey:@"precision"];
-	[prefs setObject:@"NO" forKey:@"engineeringNotation"];
 	[prefs setObject:@"NO" forKey:@"historyDuplicatesAllowed"];
 	[prefs setObject:@"NO" forKey:@"flagUndefinedVariables"];
 	[prefs setObject:@"YES" forKey:@"useRadians"];
@@ -286,7 +289,11 @@ static pthread_mutex_t displayLock;
 	[prefs setObject:@"NO" forKey:@"printDelimiters"];
     }
     conf.precision = [prefs integerForKey:@"precision"];
-    conf.engineering = [prefs boolForKey:@"engineeringNotation"];
+    switch([prefs integerForKey:@"engineeringNotation"]) {
+		case 1: conf.engineering = automatic;
+		case 2: conf.engineering = always;
+		case 3: conf.engineering = never;
+	}
     conf.picky_variables = [prefs boolForKey:@"flagUndefinedVariables"];
     conf.use_radians = [prefs boolForKey:@"useRadians"];
     conf.output_format = [prefs integerForKey:@"outputFormat"];
@@ -757,10 +764,14 @@ static pthread_mutex_t displayLock;
 	    break;
 	case 3: // Use Engineering Notation
 	    olde = conf.engineering;
-	    conf.engineering = ([engineeringNotation state]==NSOnState);
+		switch([sender indexOfSelectedItem]) {
+			case 1: conf.engineering = automatic; break;
+			case 2: conf.engineering = always; break;
+			case 3: conf.engineering = never; break;
+		}
 	    if (olde != conf.engineering) {
 		need_redraw = 1;
-		[prefs setObject:(conf.engineering?@"YES":@"NO") forKey:@"engineeringNotation"];
+		[prefs setObject:[NSString stringWithFormat:@"%i",conf.engineering] forKey:@"engineeringNotation"];
 	    }
 	    break;
 	case 4: // Allow Duplicates in History
@@ -1066,7 +1077,11 @@ static pthread_mutex_t displayLock;
 
 - (IBAction)displayPrefs:(id)sender
 {
-    [engineeringNotation setState:(conf.engineering?NSOnState:NSOffState)];
+	switch (conf.engineering) {
+	case automatic: [engineeringNotation selectItemAtIndex:1]; break;
+	case always: [engineeringNotation selectItemAtIndex:2]; break;
+	case never: [engineeringNotation selectItemAtIndex:3]; break;
+	}
     [pickyVariables setState:(conf.picky_variables?NSOnState:NSOffState)];
     [historyDuplicates setState:(allow_duplicates?NSOnState:NSOffState)];
     [useRadians setState:(conf.use_radians?NSOnState:NSOffState)];

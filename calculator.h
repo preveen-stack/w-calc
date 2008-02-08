@@ -99,6 +99,9 @@ enum operations
 enum commands
 { redisplay, nothing };
 
+enum engineering_modes
+{ always, never, automatic };
+
 void parseme(const char *);
 void report_error(const char * fmt, ...);
 void display_and_clear_errstring(void);
@@ -113,7 +116,7 @@ char *output_string(const unsigned int);
 struct _conf
 {
     int precision;
-    unsigned int engineering:1;
+    enum engineering_modes engineering:2;
     unsigned int picky_variables:1;
     unsigned int use_radians:1;
     unsigned int output_format:4;

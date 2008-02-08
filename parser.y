@@ -249,7 +249,8 @@ command : HEX_CMD {
 	if (standard_output) {
 		printf("          Display Precision: %-3i %s               -> \\p\n",conf.precision,((conf.precision==-1)?"(auto)":"      "));
 		printf("         Internal Precision: %-24lu -> \\bits\n", (unsigned long) num_get_default_prec());
-		printf("         Engineering Output: %s                      -> \\e\n",conf.engineering?"yes":"no ");
+		printf("         Engineering Output: %s                   -> \\e\n",
+				(conf.engineering==always)?"always":(conf.engineering==never)?"never ":"auto  ");
 		printf("              Output Format: %s -> \\b, \\d, \\h, \\o\n",output_string(conf.output_format));
 		printf("                Use Radians: %s                      -> \\r or \\radians\n",conf.use_radians?"yes":"no ");
 		printf("             Print Prefixes: %s                      -> \\pre or \\prefixes\n",conf.print_prefixes?"yes":"no ");
@@ -302,14 +303,19 @@ command : HEX_CMD {
 	$$ = nothing;
 }
 | ENG_CMD {
-	$$ = isatty(0)?redisplay:nothing;
 	if ($1 < 0) {
-		conf.engineering = ! conf.engineering;
+		switch (conf.engineering) {
+			case always: conf.engineering = never; break;
+			case never: conf.engineering = automatic; break;
+			case automatic: conf.engineering = always; break;
+		}
 	} else {
 		conf.engineering = $1;
 	}
 	if (standard_output)
-		printf("Engineering notation is %s %s\n",conf.engineering?"enabled":"disabled", (conf.precision==-1)?"":"if the precision is set");}
+		printf("Engineering notation is %s\n",(conf.engineering==always)?"always used":(conf.engineering==never)?"never used":"used if convenient");
+	$$ = isatty(0)?redisplay:nothing;
+}
 | ROUNDING_INDICATION_CMD {
 	$$ = nothing;
 	if ($1 != -1)

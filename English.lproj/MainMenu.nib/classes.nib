@@ -130,7 +130,7 @@
                 convertTo = NSTableView; 
                 convertType = NSPopUpButton; 
                 decimalKey = NSButton; 
-                engineeringNotation = NSButton; 
+                engineeringNotation = NSPopUpButton; 
                 enterKey = NSButton; 
                 errorController = id; 
                 historyDuplicates = NSButton; 

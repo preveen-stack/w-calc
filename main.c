@@ -283,7 +283,7 @@ int main(int argc, char *argv[])
 
     /* initialize the preferences */
     conf.precision = -1;
-    conf.engineering = 0;
+    conf.engineering = automatic;
     standard_output = 1;
     conf.picky_variables = 1;
     conf.print_prefixes = 1;
@@ -342,7 +342,11 @@ int main(int argc, char *argv[])
 	    }
 	} else if (!strcmp(argv[i], "-E") ||
 		   !strcmp(argv[i], "--engineering")) {
-	    conf.engineering = !conf.engineering;
+	    switch (conf.engineering) {
+		case always: conf.engineering = never; break;
+		case never: conf.engineering = automatic; break;
+		case automatic: conf.engineering = always; break;
+	    }
 	} else if (!strcmp(argv[i], "-H") || !strcmp(argv[i], "--help")) {
 	    print_command_help();
 	    num_free(last_answer);
@@ -778,8 +782,6 @@ static int read_prefs(char *filename)
 	    conf.precision = atoi(value);
 	else if (!strcmp(key, "show_equals"))
 	    conf.print_equal = TRUEFALSE;
-	else if (!strcmp(key, "engineering"))
-	    conf.engineering = TRUEFALSE;
 	else if (!strcmp(key, "flag_undeclared"))
 	    conf.picky_variables = TRUEFALSE;
 	else if (!strcmp(key, "use_radians"))
@@ -823,6 +825,14 @@ static int read_prefs(char *filename)
 		conf.rounding_indication = SIMPLE_ROUNDING_INDICATION;
 	    else if (!strcmp(value, "sig_fig"))
 		conf.rounding_indication = SIG_FIG_ROUNDING_INDICATION;
+	else if (!strcmp(key, "engineering"))
+	    if (!strcmp(value,"auto") || !strcmp(value,"automatic") || !strcmp(value,"yes") || !strcmp(value,"true") || !strcmp(value,"1")) {
+		conf.engineering = automatic;
+	    } else if (!strcmp(value, "always")) {
+		conf.engineering = always;
+	    } else {
+		conf.engineering = never;
+	    }
 	} else if (!strcmp(key, "c_style_mod")) {
 	    conf.c_style_mod = TRUEFALSE;
 	} else {
