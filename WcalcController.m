@@ -255,19 +255,6 @@ static pthread_mutex_t displayLock;
     Dprintf("awakeFromNib\n");
     prefsVersion = [prefs integerForKey:@"initialized"];
     Dprintf("prefsVersion: %i\n", prefsVersion);
-	if (prefsVersion < 4) {
-	[prefs setObject:@"4" forKey:@"initialized"];
-	[prefs setObject:@"1" forKey:@"engineeringNotation"]
-	}
-    if (prefsVersion < 3) {
-	[prefs setObject:@"3" forKey:@"initialized"];
-	[prefs setObject:@"147" forKey:@"maxSliderPrecision"];
-    }
-    if (prefsVersion < 2) {
-	[prefs setObject:@"YES" forKey:@"livePrecision"];
-	[prefs setObject:@"1024" forKey:@"internalPrecision"];
-	[prefs setObject:@"YES" forKey:@"cModStyle"];
-    }
     if (prefsVersion < 1) {
 	[prefs setObject:@"-1" forKey:@"precision"];
 	[prefs setObject:@"NO" forKey:@"historyDuplicatesAllowed"];
@@ -287,6 +274,19 @@ static pthread_mutex_t displayLock;
 	[prefs setObject:@"NO" forKey:@"printInts"];
 	[prefs setObject:@"NO" forKey:@"simpleCalc"];
 	[prefs setObject:@"NO" forKey:@"printDelimiters"];
+    }
+    if (prefsVersion < 2) {
+	[prefs setObject:@"YES" forKey:@"livePrecision"];
+	[prefs setObject:@"1024" forKey:@"internalPrecision"];
+	[prefs setObject:@"YES" forKey:@"cModStyle"];
+    }
+    if (prefsVersion < 3) {
+	[prefs setObject:@"3" forKey:@"initialized"];
+	[prefs setObject:@"147" forKey:@"maxSliderPrecision"];
+    }
+    if (prefsVersion < 4) {
+	[prefs setObject:@"4" forKey:@"initialized"];
+	[prefs setObject:@"1" forKey:@"engineeringNotation"]
     }
     conf.precision = [prefs integerForKey:@"precision"];
     switch([prefs integerForKey:@"engineeringNotation"]) {
