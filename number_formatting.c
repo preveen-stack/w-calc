@@ -133,6 +133,7 @@ char *num_to_str_complex(const Number num, const int base,
 		Dprintf("NEVER print engineering\n");
 		retstr = precision_formatted_number(s, e, prec, base, prefix);
 		break;
+	    default:
 	    case automatic:
 		Dprintf("AUTOMATICALLY decide on engineering formatting\n");
 		retstr =
@@ -486,12 +487,13 @@ char *engineering_formatted_number(char *digits, num_exp_t exp,
     // note that the digits are already correctly rounded and I've already
     // allocated enough space, because of how I asked mpfr for the original
     // digit string.
-    snprintf(curs, length+1, "%s", dcurs);
+    snprintf(curs, length + 1, "%s", dcurs);
     Dprintf("the decimals: %s\n", retstring);
 
     // strip off the trailing 0's
     if (-1 == precision) {
-	char * period;
+	char *period;
+
 	zero_strip(retstring);
 	/* XXX: This is a stupid hack; the idea is just to get the mpfr output
 	 * to match (roughly) the double output. */
@@ -507,7 +509,7 @@ char *engineering_formatted_number(char *digits, num_exp_t exp,
 	char *period = strchr(retstring, '.') + 1;
 
 	Dprintf("period: %s\n", period);
-	if (period && strlen(period) > precision) {
+	if (period && (int)strlen(period) > precision) {
 	    Dprintf("truncating down to precision...\n");
 	    period[precision] = 0;
 	    *truncated_flag = 1;
