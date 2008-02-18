@@ -63,7 +63,7 @@
     IBOutlet NSPanel *thePrefPanel;
     IBOutlet NSPanel *conversionWindow;
 
-	IBOutlet NSPopUpButton *engineeringNotation;
+    IBOutlet NSPopUpButton *engineeringNotation;
     IBOutlet NSPopUpButton *roundingIndication;
     IBOutlet NSPopUpButton *convertType;
 
@@ -100,5 +100,7 @@
 - (void)displayAnswer;
 - (void)displayErrno:(int)err forFile:(NSString*)filename;
 - (BOOL)validateMenuItem:(NSMenuItem *)anItem;
+- (void)openBDrawer: (id) sender;
+- (void)openIDrawer: (id) sender;
 @end
 #endif
