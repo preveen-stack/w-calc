@@ -19,10 +19,15 @@ IMPROVEMENTS:
  - Added sinc/exp/fact/comp functions to the menu (GUI)
  - Fixed FORTRAN-style syntax errors (BOTH)
  - Updated license to be GPLv2+ compatible (BOTH)
+ - Accept both @NaN@ and @Inf@ as input, correcting some compound operations (BOTH)
+ - Made engineering notation a three-way toggle (BOTH)
+ - Accept input from a "wcalc_input" environment variable (CLI)
 
 BUGFIXES:
  - Fixed display glitches when auto-resizing due to extremely large numbers (GUI)
  - Fixed simple calc mode, more reliable, removed crashes (GUI)
+ - Made engineering configuration more reliable (CLI)
+
 
 *********
 * INTRO *

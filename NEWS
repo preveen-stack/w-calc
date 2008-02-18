@@ -1,3 +1,23 @@
+--- Version 2.3.1 ---
+Feb 08 2008 - Kyle Wheeler
+ - Make engineering notation a three-way toggle (BOTH)
+ - Accept input from a "wcalc_input" environment variable (CLI)
+Feb 04 2008 - Kyle Wheeler
+ - Make engineering configuration more reliable (CLI)
+Dec 05 2007 - Kyle Wheeler
+ - Accept @NaN@ and @Inf@ as input, fixes some compound operations (BOTH)
+Aug 24 2007 - Kyle Wheeler
+ - Add documentation for sinc and exp functions (CLI)
+Aug 23 2007 - Kyle Wheeler
+ - Sync preferences to disk more predictably (GUI)
+Aug 22 2007 - Kyle Wheeler
+ - Fix display glitches when auto-resizing (GUI)
+ - Add max-precision preference (GUI)
+ - Overhaul simpleCalc form, remove crashes, make more robust (GUI)
+Aug 14 2007 - Kyle Wheeler
+ - Fixed FORTRAN-style syntax errors (BOTH)
+Aug 02 2007 - Kyle Wheeler
+ - Updated licensing to be GPLv2+ compatible (BOTH)
 --- Version 2.3 ---
 Jul 20 2007 - Kyle Wheeler
  - Added Wcalc Service to the Service menu (GUI)

@@ -4082,11 +4082,11 @@ extern "C"
 #endif
 /* We use char because int might match the return type of a gcc2
    builtin and then its argument prototype would still apply.  */
-char history_truncate_file ();
+char add_history ();
 int
 main ()
 {
-history_truncate_file ();
+add_history ();
   ;
   return 0;
 }
