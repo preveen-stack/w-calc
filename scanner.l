@@ -107,7 +107,7 @@ SPACE		[ ]
 	POS_STR();
     return(ENG_CMD);
 }
-\\e(ng(ineering)?)?{WHITESPACE}+automatic {
+\\e(ng(ineering)?)?{WHITESPACE}+auto(matic)? {
     POS_STR();
     YYLVALAC->integer = 1;
     line_is_a_command = 1;

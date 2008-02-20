@@ -103,6 +103,23 @@ char *tc_rounding(const char *text, int state)
     return NULL;
 }				       /*}}} */
 
+/*@null@*/
+char *tc_engineering(const char *text, int state)
+{				       /*{{{ */
+    static unsigned int i = 0;
+    char *engineering[] = { "always", "never", "auto", "automatic", 0 };
+    if (state == 0) {
+	i = 0;
+    }
+    while (engineering[i] != NULL) {
+	if (strncmp(text, engineering[i], strlen(text)) == 0) {
+	    return strdup(engineering[i++]);
+	}
+	i++;
+    }
+    return NULL;
+}				       /*}}} */
+
 #define COMPLETE(strs) do { \
     int compareword = 0; \
     int comparechar = 0; \
@@ -178,6 +195,23 @@ char **wcalc_completion(const char *text, int start, int end)
 		++i;
 	    if (i == start) {
 		retvals = rl_completion_matches(text, tc_rounding);
+		return retvals;
+	    }
+	} else
+	    if ((strncmp("\\e", rl_line_buffer, 2) == 0 &&
+	         isspace(rl_line_buffer[2])) ||
+		(strncmp("\\eng", rl_line_buffer, 4) == 0 &&
+		 isspace(rl_line_buffer[4])) ||
+		(strncmp("\\engineering", rl_line_buffer, 12) == 0 &&
+		 isspace(rl_line_buffer[12]))) {
+	    int i = 2;
+
+	    while (!isspace(rl_line_buffer[i]))
+		++i;
+	    while (isspace(rl_line_buffer[i]))
+		++i;
+	    if (i == start) {
+		retvals = rl_completion_matches(text, tc_engineering);
 		return retvals;
 	    }
 	} else
