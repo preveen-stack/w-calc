@@ -17,7 +17,7 @@
 #include "memwatch.h"
 #endif
 
-static void explain_command(const char *);
+static int  explain_command(const char *, int);
 static void explain_variable(const char *);
 static void explain_constant(const char *);
 static void explain_function(const char *);
@@ -41,7 +41,7 @@ void explain(const char *str)
     if (!strcmp(mystr, "q")) {
 	printf("Quits the program.");
     } else if (*mystr == '\\') {	       // it's a command
-	explain_command(mystr);
+	explain_command(mystr, 0);
     } else if (isconst(mystr)) {	       // it's a constant
 	explain_constant(mystr);
     } else if (isfunc(mystr)) {	       // it's a function
@@ -49,13 +49,19 @@ void explain(const char *str)
     } else if (varexists(mystr)) {       // it's a variable
 	explain_variable(mystr);
     } else {			       // it's a call for help
-	printf("%s is neither a command, constant, function, or variable.\n",
-	       mystr);
+	int len = strlen(mystr)+2;
+	char *add_a_slash = calloc(len, sizeof(char));
+	snprintf(add_a_slash, len, "\\%s", mystr);
+	if (explain_command(add_a_slash, 1) == -1) {
+	    printf("%s is neither a command, constant, function, or variable.\n",
+		    mystr);
+	}
+	free(add_a_slash);
     }
     free(mystr);
 }				       /*}}} */
 
-static void explain_command(const char *str)
+static int explain_command(const char *str, int test)
 {				       /*{{{ */
     str++;
     if (!strcmp(str, "b") || !strcmp(str, "bin") || !strcmp(str, "binary")) {
@@ -74,7 +80,7 @@ static void explain_command(const char *str)
     } else if (!strcmp(str, "e") || !strcmp(str, "eng") ||
 	       !strcmp(str, "engineering")) {
 	printf
-	    ("This toggles the formatting of output between decimal and scientific notation. This setting only applies when precision is specified.\n");
+	    ("This toggles the formatting of output between decimal and scientific notation.\n");
     } else if (!strcmp(str, "cons") || !strcmp(str, "conservative")) {
 	printf("Toggles precision guards.\n");
     } else if (!strcmp(str, "h") || !strcmp(str, "hex") ||
@@ -142,8 +148,12 @@ static void explain_command(const char *str)
 	printf
 	    ("Changes how the modulus operator (%%) behaves with negative numbers.\n The default is to behave like the C programming language modulus, the other is slightly more flexible. For example, with the default setting:\n\n\t-340 %% 60 == -40; 340 %% -60 == 40; -340 %% -60 == -40\n\nWhen this setting is toggled, it behaves like this:\n\n\t-340 %% 60 == -40; 340 %% -60 == -20; -340 %% -60 == 20\n");
     } else {
-	printf("Undefined command.\n");
+	if (test == 0) {
+	    printf("Undefined command.\n");
+	}
+	return -1;
     }
+    return 0;
 }				       /*}}} */
 
 static void explain_variable(const char *str)
