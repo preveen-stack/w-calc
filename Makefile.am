@@ -1,10 +1,44 @@
 bin_PROGRAMS = wcalc
-AM_YFLAGS = -dt
+AM_YFLAGS = -d
 #AM_LFLAGS = -w
-wcalc_SOURCES = calculator.h variables.h string_manip.h help.h parser.y \
-		string_manip.h historyManager.h files.h conversion.h \
+EXTRA_DIST = WcalcController.h WcalcController.m \
+			 AboutBoxController.h AboutBoxController.m \
+			 ConversionList.h ConversionList.m \
+			 ErrorController.h ErrorController.m \
+			 HistoryList.h HistoryList.m \
+			 InspectorController.h InspectorController.m \
+			 MyTextField.h MyTextField.m \
+			 OldVariableList.h OldVariableList.m \
+			 PersVarList.h PersVarList.m \
+			 VariableList.h VariableList.m \
+			 WcalcService.h WcalcService.m \
+			 theDelegate.h theDelegate.m \
+			 main.m \
+			 simpleCalc.h simpleCalc.c \
+			 English.lproj/InfoPlist.strings \
+			 English.lproj/MainMenu.nib/classes.nib \
+			 English.lproj/MainMenu.nib/info.nib \
+			 English.lproj/MainMenu.nib/keyedobjects.nib \
+			 Wcalc.xcodeproj/kyle.mode1 \
+			 Wcalc.xcodeproj/kyle.pbxuser \
+			 Wcalc.xcodeproj/project.pbxproj \
+			 Info.plist \
+			 test.errors test.recursion test.simple test.vars \
+			 TheW.icns w.png Wred.png \
+			 wcalc.info wcalc.rc wcalc.spec \
+			 COPYRIGHT
+
+INCLUDES = -I$(top_builddir)
+wcalc_SOURCES = \
+				number.h calculator.h variables.h help.h files.h conversion.h \
+				number_formatting.h \
+				parser.y \
+		string_manip.h historyManager.h \
+		definitions.h \
+		uint32_max.h \
+		number_formatting.h number_formatting.c \
 		scanner.l help.c calculator.c string_manip.c historyManager.c \
-		files.c variables.c conversion.c main.c number_formatting.c \
+		files.c variables.c conversion.c main.c \
 		explain.h explain.c \
 		list.h list.c \
 		extract_vars.h extract_vars.c \
@@ -16,17 +50,6 @@ wcalc_SOURCES = calculator.h variables.h string_manip.h help.h parser.y \
 		evalvar.h evalvar.c
 wcalc_LDADD = @LEXLIB@
 man_MANS = wcalc.1
+EXTRA_DIST += $(man_MANS)
 clean-local:
-	rm -f parser.c parser.h scanner.c
-maintainer-clean-local:
-	rm -f parser.h
-distclean-local:
-	rm -rf CVS
-	rm -rf English.lproj/CVS
-	rm -rf English.lproj/MainMenu.nib/CVS
-	rm -rf Wcalc.xcodeproj/CVS
-	rm -f .*.swp *~ ".#"*
-	find . -name .DS_Store -exec rm -f {} \;
-	find . -name .cvsignore -exec rm -f {} \;
-	rm -f .gdb_history
-	rm -rf build autom4te.cache
+	$(RM) parser.h parser.c scanner.c
