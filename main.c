@@ -812,26 +812,22 @@ static int read_prefs(char *filename)
 	while (retval == 1 && curs < BIG_STRING) {
 	    retval = read(fd, &(key[curs]), 1);
 	    if ((!quoted && isspace((int)(key[curs]))) ||
+		(!quoted && key[curs] == '=') ||
 		(quoted && key[curs] != '\''))
 		break;
 	    ++curs;
 	}
 	if (retval != 1)
 	    break;
+	junk = key[curs];
 	key[curs] = 0;
-	// read in the =
-	junk = 0;
-	while (retval == 1 && junk != '=') {
-	    retval = read(fd, &junk, 1);
-	}
-	if (retval != 1)
-	    break;
+	// eat the equals sign (and any surrounding space)
 	while (retval == 1 && (isspace((int)junk) || junk == '=')) {
 	    retval = read(fd, &junk, 1);
 	}
 	if (retval != 1)
 	    break;
-	value[0] = junk;
+	value[0] = junk; // junk now contains the next non-junk character
 	curs = 0;
 	// read in the value
 	quoted = 1;
