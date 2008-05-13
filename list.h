@@ -22,8 +22,8 @@ void addToListHead(List *, void *);
 void *getHeadOfList(List/*@null@*/);
 void *peekListElement(List/*@null@*/, size_t);
 void *getListElement(List, size_t);
-inline void *peekAheadInList(List);
-inline size_t listLen(List/*@null@*/);
+void *peekAheadInList(List);
+size_t listLen(List/*@null@*/);
 void removeFromList(List, void *);
 void freeList(List *);
 
