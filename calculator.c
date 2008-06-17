@@ -740,6 +740,7 @@ static char *print_this_result_dbl(const double result)
 		break;
 	    case HEXADECIMAL_FORMAT:
 		curs = pa + (conf.print_prefixes ? 2 : 0);
+		strswap('.',conf.dec_delimiter,pa);
 	    case OCTAL_FORMAT:
 		curs = pa + (conf.print_prefixes ? 1 : 0);
 		{
@@ -762,6 +763,7 @@ static char *print_this_result_dbl(const double result)
 			not_all_displayed = 0;
 		    }
 		}
+		strswap('.',conf.dec_delimiter,pa);
 		break;
 	    case BINARY_FORMAT:
 	    {
@@ -813,6 +815,7 @@ static char *print_this_result_dbl(const double result)
 		} else {
 		    not_all_displayed = 0;
 		}
+		strswap('.',conf.dec_delimiter,pa);
 	    }			       // binary format
 	}			       /*}}} */
     }				       // if
@@ -934,6 +937,7 @@ char *print_this_result(const Number result)
     if (conf.rounding_indication == NO_ROUNDING_INDICATION) {
 	not_all_displayed = 0;
     }
+    strswap('.',conf.dec_delimiter,pa);
     // add commas
     if (conf.print_commas) {
 	char *str = add_commas(pa, conf.output_format);
