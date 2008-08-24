@@ -52,6 +52,7 @@ extern int history_truncate_file(char *, int);
 #include "files.h"
 #include "historyManager.h"
 #include "list.h"
+#include "isconst.h"
 #ifdef MEMWATCH
 #include "memwatch.h"
 #endif
@@ -140,12 +141,31 @@ char *tc_engineering(const char *text, int state)
 	} \
     } \
 } while (0)
+#define COMPLETE2(strs) do { \
+    int compareword = 0; \
+    int comparechar = 0; \
+    int textcurs = 0; \
+    while (strs[compareword].label != NULL) { \
+	if (text[textcurs] == 0) { /* add to the list of possibilities */ \
+	    addToList(&tc_options, strdup(strs[compareword].label)); \
+	    textcurs = 0; \
+	    comparechar = 0; \
+	    compareword++; \
+	} else if (text[textcurs] == strs[compareword].label[comparechar]) { \
+	    textcurs++; \
+	    comparechar++; \
+	} else { /* not a possibility: next! */ \
+	    textcurs = 0; \
+	    compareword++; \
+	    comparechar = 0; \
+	} \
+    } \
+} while (0)
 
 char **wcalc_completion(const char *text, int start, int end)
 {				       /*{{{ */
     /*extern const char *commands[];*/
     extern const char *qcommands[];
-    extern const char *consts[];
     extern const char *funcs[];
     char **variables;
     char **retvals = NULL;
@@ -162,7 +182,7 @@ char **wcalc_completion(const char *text, int start, int end)
 		++i;
 	    if (i == start) {
 		COMPLETE(qcommands);
-		COMPLETE(consts);
+		COMPLETE2(consts);
 		COMPLETE(funcs);
 		variables = listvarnames();
 		COMPLETE(variables);
@@ -283,7 +303,7 @@ char **wcalc_completion(const char *text, int start, int end)
 	}
     } else {
 	COMPLETE(qcommands);
-	COMPLETE(consts);
+	COMPLETE2(consts);
 	COMPLETE(funcs);
 	variables = listvarnames();
 	COMPLETE(variables);
@@ -891,7 +911,7 @@ static int read_prefs(char *filename)
 		conf.rounding_indication = SIMPLE_ROUNDING_INDICATION;
 	    else if (!strcmp(value, "sig_fig"))
 		conf.rounding_indication = SIG_FIG_ROUNDING_INDICATION;
-	else if (!strcmp(key, "engineering"))
+	} else if (!strcmp(key, "engineering")) {
 	    if (!strcmp(value,"auto") || !strcmp(value,"automatic") || !strcmp(value,"yes") || !strcmp(value,"true") || !strcmp(value,"1")) {
 		conf.engineering = automatic;
 	    } else if (!strcmp(value, "always")) {
