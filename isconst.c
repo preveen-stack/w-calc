@@ -5,6 +5,8 @@
 #include "memwatch.h"
 #endif
 
+#warning this is all in utf8... should probably use iconv
+
 const constdef consts[] = {
     {W_e,"e"},
     {W_pi,"pi"},

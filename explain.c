@@ -29,7 +29,6 @@ void explain(const char *str)
 
     if (str == NULL || str[0] == 0) {
 	str = "\\explain";
-	return;
     }
     mystr = strdup(str);
     /* for sanity's sake, remove any trailing whitespace */
