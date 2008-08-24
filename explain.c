@@ -2,7 +2,7 @@
 #include "config.h"
 #endif
 #include <string.h>
-#include <ctype.h> /* for isspace() */
+#include <ctype.h>		       /* for isspace() */
 #include "number.h"
 #include "uint32_max.h"
 #include "variables.h"
@@ -17,7 +17,7 @@
 #include "memwatch.h"
 #endif
 
-static int  explain_command(const char *, int);
+static int explain_command(const char *, int);
 static void explain_variable(const char *);
 static void explain_constant(const char *);
 static void explain_function(const char *);
@@ -25,10 +25,10 @@ static void explain_function(const char *);
 void explain(const char *str)
 {				       /*{{{ */
     size_t curs;
-    char * mystr;
+    char *mystr;
 
     if (str == NULL || str[0] == 0) {
-	printf("Nothing to explain.\n");
+	str = "\\explain";
 	return;
     }
     mystr = strdup(str);
@@ -38,23 +38,32 @@ void explain(const char *str)
 	mystr[curs] = 0;
 	curs--;
     }
+    printf("Explaining %s.\n", mystr);
     if (!strcmp(mystr, "q")) {
 	printf("Quits the program.");
-    } else if (*mystr == '\\') {	       // it's a command
+    } else if (!strcmp(mystr, "constants")) {
+	printf("Wcalc understands many standard physical constants.\n"
+	       "Here is the list of the ones currently understood;\n"
+	       "each can be explained in detail individually (some\n"
+	       "mean the same thing).\n");
+	printconsts();
+    } else if (*mystr == '\\') {       // it's a command
 	explain_command(mystr, 0);
-    } else if (isconst(mystr)) {	       // it's a constant
+    } else if (isconst(mystr) != W_notaconstant) {	// it's a constant
 	explain_constant(mystr);
     } else if (isfunc(mystr)) {	       // it's a function
 	explain_function(mystr);
-    } else if (varexists(mystr)) {       // it's a variable
+    } else if (varexists(mystr)) {     // it's a variable
 	explain_variable(mystr);
     } else {			       // it's a call for help
-	int len = strlen(mystr)+2;
+	int len = strlen(mystr) + 2;
 	char *add_a_slash = calloc(len, sizeof(char));
+
 	snprintf(add_a_slash, len, "\\%s", mystr);
 	if (explain_command(add_a_slash, 1) == -1) {
-	    printf("%s is neither a command, constant, function, or variable.\n",
-		    mystr);
+	    printf
+		("%s is neither a command, constant, function, or variable.\n",
+		 mystr);
 	}
 	free(add_a_slash);
     }
@@ -201,131 +210,196 @@ static void explain_variable(const char *str)
 
 static void explain_constant(const char *str)
 {				       /*{{{ */
-    if (!strcmp(str, "e")) {
-	printf
-	    ("The base of the natural logarithm function. Arbitrary precision. Occasionally called Euler's Number (after Leonhard Eulter) or Napier's Constant (after John Napier).");
-    } else if (!strcmp(str, "pi") || !strcmp(str, "PI") || !strcmp(str, "pI")
-	       || !strcmp(str, "Pi")) {
-	printf
-	    ("The ratio of a circle's circumference to its diameter. Arbitrary precision.");
-    } else if (!strcmp(str, "random")) {
-	printf("A random number between 0 and %u.", UINT32_MAX);
-    } else if (!strcmp(str, "irandom")) {
-	printf("A random integer between 0 and %u.", UINT32_MAX);
-    } else if (!strcmp(str, "Na") || !strcmp(str, "NA")) {
-	printf("Avogadro's Constant. The number of molecules in one mole.");
-    } else if (!strcmp(str, "k")) {
-	printf
-	    ("Boltzmann's Constant. The physical constant relating temperature to energy.");
-    } else if (!strcmp(str, "Cc")) {
-	printf("Coulomb force constant. Equal to 1/(4*pi*epsilonzero).");
-    } else if (!strcmp(str, "ec")) {
-	printf
-	    ("Elementary charge. The electric charge carried by a single proton.");
-    } else if (!strcmp(str, "R")) {
-	printf
-	    ("Molar Gas Constant. Used in equations of state to relate various groups of state functions to one another.");
-    } else if (!strcmp(str, "G")) {
-	printf
-	    ("The universal gravitational constant. Appears in Einstein's theory of general relativity.");
-    } else if (!strcmp(str, "g")) {
-	printf("The gravitational accelleration of Earth at sea-level.");
-    } else if (!strcmp(str, "Me")) {
-	printf("The mass of an electron in kilograms.");
-    } else if (!strcmp(str, "Mp")) {
-	printf("The mass of a proton in kilograms.");
-    } else if (!strcmp(str, "Mn")) {
-	printf("The mass of a neutron in kilograms.");
-    } else if (!strcmp(str, "Md")) {
-	printf("The mass of a deuteron in kilograms.");
-    } else if (!strcmp(str, "u") || !strcmp(str, "amu")) {
-	printf
-	    ("Atomic mass unit. One twelfth of the mean mass of an atop of carbon 12 in its nuclear and electronic ground state.");
-    } else if (!strcmp(str, "c")) {
-	printf("The speed of light.");
-    } else if (!strcmp(str, "h")) {
-	printf
-	    ("Planck Constant. Used to describe the sizes of quanta, central to the theory of quantum mechanics.");
-    } else if (!strcmp(str, "mu0") || !strcmp(str, "muzero") ||
-	       !strcmp(str, "muZERO")) {
-	printf
-	    ("Permeability of free space. Also known as the magnetic constant.");
-    } else if (!strcmp(str, "epsilonzero") || !strcmp(str, "epsilonZERO") ||
-	       !strcmp(str, "epsilon0") || !strcmp(str, "EPSILONzero") ||
-	       !strcmp(str, "EPSILONZERO") || !strcmp(str, "EPSILON0")) {
-	printf("Permittivity of free space. The ratio of D/E in vacuum.");
-    } else if (!strcmp(str, "muB")) {
-	printf("Bohr magneton. A physical constant of magnetic moment.");
-    } else if (!strcmp(str, "b")) {
-	printf
-	    ("Wein displacement constant. Defines the relationship between the thermodynamic temperature of a black body and the wavelength at which the intensity of the radiation is the greatest.");
-    } else if (!strcmp(str, "a0")) {
-	printf
-	    ("Bohr radius. A single electron orbiting at the lowest possible energy in a hydrogen atom orbits at this distance.");
-    } else if (!strcmp(str, "F")) {
-	printf
-	    ("Faraday constant. The amount of electric charge in one mole of electrons.");
-    } else if (!strcmp(str, "Vm") || !strcmp(str, "NAk")) {
-	printf("Molar volume of ideal gas.");
-    } else if (!strcmp(str, "eV")) {
-	printf
-	    ("Electron volt. The amount of kinetic energy gained by a single unbound electron when it passes through an electrostatic potential difference of one volt, in vacuum.");
-    } else if (!strcmp(str, "sigma")) {
-	printf
-	    ("Stefan-Boltzmann constant. The constant of proportionality between the total energy radiated per unit surface area of a black body in unit time and the fourth power of the thermodynamic temperature, as per the Stefan-Boltzmann law.");
-    } else if (!strcmp(str, "alpha")) {
-	printf
-	    ("Fine-structure constant. The fundamental physical constant characterizing the strength of the electromagnetic interaction.");
-    } else if (!strcmp(str, "gamma")) {
-	printf
-	    ("Euler-Mascheroni constant. Used mainly in number theory, defined as the limiting difference between the harmonic series and the natural logarithm.");
-    } else if (!strcmp(str, "re")) {
-	printf
-	    ("Electron radius, also known as the Compton radius or the Thomson scattering length based on a classical relativistic model of the electron.");
-    } else if (!strcmp(str, "Kj")) {
-	printf
-	    ("Josephson Constant. The inverse of the magnetic flux quantum.");
-    } else if (!strcmp(str, "Rk")) {
-	printf
-	    ("von Klitzing constant. Named after Klaus von Klitzing, the basic resistance unit.");
-    } else if (!strcmp(str, "Rinf")) {
-	printf
-	    ("The \"infinity\" Rydberg constant, named after physicist Janne Rydberg. Used to calculate the Rydberg constant of any other chemical element.");
-    } else if (!strcmp(str, "Eh")) {
-	printf
-	    ("Hartree energy. The atomic unit of energy, named after physicist Douglas Hartree.");
-    } else if (!strcmp(str, "Gf")) {
-	printf("Fermi Coupling Constant.");
-    } else if (!strcmp(str, "Mmu")) {
-	printf("The mass of a muon in kilograms.");
-    } else if (!strcmp(str, "Mt") || !strcmp(str, "Mtau")) {
-	printf("The tau mass in kilograms.");
-    } else if (!strcmp(str, "Mh")) {
-	printf("The mass of a helion in kilograms.");
-    } else if (!strcmp(str, "Malpha")) {
-	printf("The mass of an alpha particle in kilograms.");
-    } else if (!strcmp(str, "n0") || !strcmp(str, "nzero")) {
-	printf
-	    ("Loschmidt constant. The number of molecules in a cubic meter of ideal gas. Equal to the Avogadro constant divided by molar volume.");
-    } else if (!strcmp(str, "c1")) {
-	printf("First radiation constant.");
-    } else if (!strcmp(str, "c2")) {
-	printf("Second radiation constant.");
-    } else if (!strcmp(str, "G0") || !strcmp(str, "Gzero")) {
-	printf("Conductance quantum.");
-    } else if (!strcmp(str, "Z0") || !strcmp(str, "Zzero")) {
-	printf
-	    ("Characteristic impedance of vacuum, the characteristic impedance of electromagnetic radiation in vacuum. Equal to mu0*c.");
-    } else if (!strcmp(str, "Phi0") || !strcmp(str, "Phizero") ||
-	       !strcmp(str, "PhiZERO")) {
-	printf
-	    ("Magnetic flux quantum. The quantum of magnetic flux passing through a superconductor.");
-    } else if (!strcmp(str, "K")) {
-	printf
-	    ("Catalan's constant commonly appears in estimates of combinatorial functions and in certain classes of sums and definite integrals.");
-    } else if (!strcmp(str, "sinc")) {
-	printf
-	    ("Sinus cardinalis, also known as the interpolation function, filtering function, or the first spherical Bessel function, is the product of a sine function and a monotonically decreasing function.");
+    switch (isconst(str)) {
+	case W_e:
+	    printf
+		("The base of the natural logarithm function. Arbitrary precision. Occasionally called Euler's Number (after Leonhard Eulter) or Napier's Constant (after John Napier).");
+	    break;
+	case W_pi:
+	    printf
+		("The ratio of a circle's circumference to its diameter. Arbitrary precision.");
+	    break;
+	case W_random:
+	    printf("A random number between 0 and %u.", UINT32_MAX);
+	    break;
+	case W_irandom:
+	    printf("A random integer between 0 and %u.", UINT32_MAX);
+	    break;
+	case W_Na:
+	    printf
+		("Avogadro's Constant. The number of molecules in one mole.");
+	    break;
+	case W_k:
+	    printf
+		("Boltzmann's Constant. The physical constant relating temperature to energy.");
+	    break;
+	case W_Cc:
+	    printf("Coulomb force constant. Equal to 1/(4*pi*epsilonzero).");
+	    break;
+	case W_ec:
+	    printf
+		("Elementary charge. The electric charge carried by a single proton.");
+	    break;
+	case W_R:
+	    printf
+		("Molar Gas Constant. Used in equations of state to relate various groups of state functions to one another.");
+	    break;
+	case W_G:
+	    printf
+		("The universal gravitational constant. Appears in Einstein's theory of general relativity.");
+	    break;
+	case W_g:
+	    printf("The gravitational accelleration of Earth at sea-level.");
+	    break;
+	case W_Me:
+	    printf("The mass of an electron in kilograms.");
+	    break;
+	case W_Mp:
+	    printf("The mass of a proton in kilograms.");
+	    break;
+	case W_Mn:
+	    printf("The mass of a neutron in kilograms.");
+	    break;
+	case W_Md:
+	    printf("The mass of a deuteron in kilograms.");
+	    break;
+	case W_u:
+	    printf
+		("Atomic mass unit. One twelfth of the mean mass of an atop of carbon 12 in its nuclear and electronic ground state.");
+	    break;
+	case W_c:
+	    printf("The speed of light.");
+	    break;
+	case W_h:
+	    printf
+		("Planck Constant. Used to describe the sizes of quanta, central to the theory of quantum mechanics.");
+	    break;
+	case W_mu0:
+	    printf
+		("Permeability of free space. Also known as the magnetic constant.");
+	    break;
+	case W_epsilon0:
+	    printf("Permittivity of free space. The ratio of D/E in vacuum.");
+	    break;
+	case W_muB:
+	    printf("Bohr magneton. A physical constant of magnetic moment.");
+	    break;
+	case W_muN:
+	    printf
+		("Nuclear magneton. A physical constant of magnetic moment.");
+	    break;
+	case W_b:
+	    printf
+		("Wein displacement constant. Defines the relationship between the thermodynamic temperature of a black body and the wavelength at which the intensity of the radiation is the greatest.");
+	    break;
+	case W_a0:
+	    printf
+		("Bohr radius. A single electron orbiting at the lowest possible energy in a hydrogen atom orbits at this distance.");
+	    break;
+	case W_F:
+	    printf
+		("Faraday constant. The amount of electric charge in one mole of electrons.");
+	    break;
+	case W_Vm:
+	    printf("Molar volume of ideal gas.");
+	    break;
+	case W_eV:
+	    printf
+		("Electron volt. The amount of kinetic energy gained by a single unbound electron when it passes through an electrostatic potential difference of one volt, in vacuum.");
+	    break;
+	case W_sigma:
+	    printf
+		("Stefan-Boltzmann constant. The constant of proportionality between the total energy radiated per unit surface area of a black body in unit time and the fourth power of the thermodynamic temperature, as per the Stefan-Boltzmann law.");
+	    break;
+	case W_alpha:
+	    printf
+		("Fine-structure constant. The fundamental physical constant characterizing the strength of the electromagnetic interaction.");
+	    break;
+	case W_gamma:
+	    printf
+		("Euler-Mascheroni constant. Used mainly in number theory, defined as the limiting difference between the harmonic series and the natural logarithm.");
+	    break;
+	case W_re:
+	    printf
+		("Electron radius, also known as the Compton radius or the Thomson scattering length based on a classical relativistic model of the electron.");
+	    break;
+	case W_Kj:
+	    printf
+		("Josephson Constant. The inverse of the magnetic flux quantum.");
+	    break;
+	case W_Rk:
+	    printf
+		("von Klitzing constant. Named after Klaus von Klitzing, the basic resistance unit.");
+	    break;
+	case W_Rinf:
+	    printf
+		("The \"infinity\" Rydberg constant, named after physicist Janne Rydberg. Used to calculate the Rydberg constant of any other chemical element.");
+	    break;
+	case W_Eh:
+	    printf
+		("Hartree energy. The atomic unit of energy, named after physicist Douglas Hartree.");
+	    break;
+	case W_Gf:
+	    printf("Fermi Coupling Constant.");
+	    break;
+	case W_Mmu:
+	    printf("The mass of a muon in kilograms.");
+	    break;
+	case W_Mt:
+	    printf("The tau mass in kilograms.");
+	    break;
+	case W_Mh:
+	    printf("The mass of a helion in kilograms.");
+	    break;
+	case W_Malpha:
+	    printf("The mass of an alpha particle in kilograms.");
+	    break;
+	case W_n0:
+	    printf
+		("Loschmidt constant. The number of molecules in a cubic meter of ideal gas. Equal to the Avogadro constant divided by molar volume.");
+	    break;
+	case W_c1:
+	    printf("First radiation constant.");
+	    break;
+	case W_c2:
+	    printf("Second radiation constant.");
+	    break;
+	case W_G0:
+	    printf("Conductance quantum.");
+	    break;
+	case W_Z0:
+	    printf
+		("Characteristic impedance of vacuum, the characteristic impedance of electromagnetic radiation in vacuum. Equal to mu0*c.");
+	    break;
+	case W_Phi0:
+	    printf
+		("Magnetic flux quantum. The quantum of magnetic flux passing through a superconductor.");
+	    break;
+	case W_K:
+	    printf
+		("Catalan's constant commonly appears in estimates of combinatorial functions and in certain classes of sums and definite integrals.");
+	    break;
+	case W_Inf:
+	    printf
+		("This represents infinity. This is a \"special\" number that has specific (unusual) mathematical consequences.");
+	    break;
+	case W_NaN:
+	    printf
+		("Not-a-number. This is a \"special\" number that has specific (unusual) mathematical consequences.");
+	    break;
+	case W_half:
+	    printf("A special symbol for 0.5.");
+	    break;
+	case W_quarter:
+	    printf("A special symbol for 0.25.");
+	    break;
+	case W_threequarters:
+	    printf("A special symbol for 0.75.");
+	    break;
+	case W_notaconstant:
+	    printf
+		("This is not a constant... you should not be seeing this message (report the bug!)");
+	    break;
     }
     printf("\n");
 }				       /*}}} */
@@ -389,9 +463,11 @@ static void explain_function(const char *str)
     } else if (!strcmp(str, "eint")) {
 	printf("The exponential integral function.");
     } else if (!strcmp(str, "sinc")) {
-	printf("Returns the sampling function, which is 1 if the input is 0, or sin(x)/x otherwise.");
+	printf
+	    ("Sinus cardinalis, also known as the interpolation function, filtering function, or the first spherical Bessel function, is the product of a sine function and a monotonically decreasing function.");
     } else if (!strcmp(str, "exp")) {
-	printf("Returns the value of e to the given power. Equivalent to: e^");
+	printf
+	    ("Returns the value of e to the given power. Equivalent to: e^");
     } else {
 	printf
 	    ("Hrm... this function doesn't have any documentation! Pester the developer!");
