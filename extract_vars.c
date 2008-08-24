@@ -59,7 +59,7 @@ List extract_vars(char *str)
 	curs = eov;
 
 	// add it to the set of known variables
-	if (!isfunc(varname) && !isconst(varname)) {
+	if (!isfunc(varname) && isconst(varname) == W_notaconstant) {
 	    size_t i = 0;
 	    char exists = 0;
 
