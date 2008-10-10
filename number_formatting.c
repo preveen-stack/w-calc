@@ -417,13 +417,19 @@ char *automatically_formatted_number(char *digits, num_exp_t exp,
 	    zero_strip(retstring);
 	}
     } else if (precision >= 0) {
-	char *period = strchr(retstring, '.') + 1;
+	char *period = strchr(retstring, '.');
 
 	Dprintf("period: %s\n", period);
-	if (period && strlen(period) > (size_t) precision) {
-	    Dprintf("truncating down to precision...\n");
-	    period[precision] = 0;
-	    *truncated_flag = 1;
+	if (period != NULL) {
+	    if (precision == 0) { // this removes extraneous periods
+		*period == 0;
+	    }
+	    period ++;
+	    if (strlen(period) > (size_t) precision) {
+		Dprintf("truncating down to precision...\n");
+		period[precision] = 0;
+		*truncated_flag = 1;
+	    }
 	}
     }
     // copy in an exponent if necessary
