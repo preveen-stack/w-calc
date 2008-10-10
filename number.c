@@ -690,6 +690,14 @@ void num_bor(Number ret, const Number n1, const Number n2)
 	num_set_nan(ret);
     }
 }
+void num_rshift(Number ret, const Number n1, const Number n2)
+{
+    if (n1->nan == 0 && n2->nan == 0) {
+	num_set_ui(ret, num_get_ui(n1) >> num_get_ui(n2));
+    } else {
+	num_set_nan(ret);
+    }
+}
 void num_unimplemented()
 {
     fprintf(stderr,"This function is unimplemented when not using libmpfr.\n");

@@ -210,6 +210,30 @@ typedef mp_prec_t num_prec_t;
     mpz_clear(intsecond); \
     mpz_clear(intoutput); \
 } while (0)
+#define num_rshift(ret,n1,n2) do { \
+    mpfr_t shift_temp; \
+    mpz_t intfirst, intsecond, intoutput, inttemp; \
+    mpz_init(intfirst); \
+    mpz_init(intoutput); \
+    mpfr_get_z(intfirst, (n1), GMP_RNDN); \
+    if (mpfr_cmp_ui((n2), 32) > 0) { \
+	mpz_init(intsecond); \
+	mpz_init(inttemp); \
+	mpfr_init_set_ui(shift_temp, 2, GMP_RNDN); \
+	mpfr_pow(shift_temp, shift_temp, (n2), GMP_RNDN); \
+	mpfr_get_z(inttemp, shift_temp, GMP_RNDN); \
+	mpfr_get_z(intsecond, (n2), GMP_RNDN); \
+	mpz_tdiv_q(intoutput, intfirst, inttemp); \
+	mpz_clear(intsecond); \
+	mpz_clear(inttemp); \
+	mpfr_clear(shift_temp); \
+    } else { \
+	mpz_tdiv_q_2exp(intoutput, intfirst, mpfr_get_ui((n2), GMP_RNDN)); \
+    } \
+    mpfr_set_z((ret), intoutput, GMP_RNDN); \
+    mpz_clear(intfirst); \
+    mpz_clear(intoutput); \
+} while (0)
 #define num_comp(ret,n) do { \
     mpz_t integer, intoutput; \
     mpz_init(integer); \
