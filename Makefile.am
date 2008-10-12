@@ -1,3 +1,4 @@
+SUBDIRS = English.lproj
 bin_PROGRAMS = wcalc
 AM_YFLAGS = -d
 #AM_LFLAGS = -w
@@ -15,10 +16,6 @@ EXTRA_DIST = WcalcController.h WcalcController.m \
 			 theDelegate.h theDelegate.m \
 			 main.m \
 			 simpleCalc.h simpleCalc.c \
-			 English.lproj/InfoPlist.strings \
-			 English.lproj/MainMenu.nib/classes.nib \
-			 English.lproj/MainMenu.nib/info.nib \
-			 English.lproj/MainMenu.nib/keyedobjects.nib \
 			 Wcalc.xcodeproj/kyle.mode1 \
 			 Wcalc.xcodeproj/kyle.pbxuser \
 			 Wcalc.xcodeproj/project.pbxproj \
@@ -29,6 +26,7 @@ EXTRA_DIST = WcalcController.h WcalcController.m \
 			 COPYRIGHT
 
 INCLUDES = -I$(top_builddir)
+BUILT_SOURCES = parser.h
 wcalc_SOURCES = \
 				number.h calculator.h variables.h help.h files.h conversion.h \
 				number_formatting.h \

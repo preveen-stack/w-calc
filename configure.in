@@ -1,7 +1,7 @@
 # Process this file with autoconf to produce a configure script.
 AC_PREREQ(2.50)
-AC_INIT(wcalc, 2.3.1, kyle-wcalc@memoryhole.net)
-AM_INIT_AUTOMAKE(wcalc, 2.3.1)
+AC_INIT(wcalc, 2.4, kyle-wcalc@memoryhole.net)
+AM_INIT_AUTOMAKE(wcalc, 2.4)
 AC_CONFIG_SRCDIR([WcalcController.h])
 AM_CONFIG_HEADER(config.h)
 
@@ -48,6 +48,6 @@ AC_FUNC_REALLOC
 AC_FUNC_VPRINTF
 AC_CHECK_FUNCS([gettimeofday memset modf pow stpcpy strchr strdup strerror strrchr strtoul])
 
-AC_CONFIG_FILES([Makefile])
+AC_CONFIG_FILES([Makefile English.lproj/Makefile])
 AC_OUTPUT
 
