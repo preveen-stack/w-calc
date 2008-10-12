@@ -690,10 +690,10 @@ void num_bor(Number ret, const Number n1, const Number n2)
 	num_set_nan(ret);
     }
 }
-void num_rshift(Number ret, const Number n1, const Number n2)
+void num_trunc(Number ret, const Number n)
 {
-    if (n1->nan == 0 && n2->nan == 0) {
-	num_set_ui(ret, num_get_ui(n1) >> num_get_ui(n2));
+    if (n->nan == 0) {
+	num_set_d(ret, trunc(n->value));
     } else {
 	num_set_nan(ret);
     }
