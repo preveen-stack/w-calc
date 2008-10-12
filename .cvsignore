@@ -16,7 +16,7 @@ y.output
 y.tab.c
 y.tab.h
 *.swp
-autom4te*
 .gdb_history
 parser.tab.c
 parser.tab.h
+Makefile.in
