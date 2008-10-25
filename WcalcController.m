@@ -340,21 +340,22 @@ static pthread_mutex_t displayLock;
     just_answered = FALSE;
 
     /* Set up the character translation */
-    if ([[prefs objectForKey:NSDecimalSeparator] length] > 0) {
+    NSNumberFormatter *numFormat = [[[NSNumberFormatter alloc] init] autorelease];
+    if ([[numFormat decimalSeparator] length] > 0) {
 	Dprintf("NSDecimalSeparator > 0\n");
-	conf.dec_delimiter = [[prefs objectForKey:NSDecimalSeparator] characterAtIndex:0];
+	conf.dec_delimiter = [[numFormat decimalSeparator] characterAtIndex:0];
     } else {
 	conf.dec_delimiter = '.';
     }
-    Dprintf("NSDecimalSeparator set\n");
-    if ([[prefs objectForKey:NSThousandsSeparator] length] > 0) {
-	Dprintf("thou_delimiter length > 0\n"); fflush(NULL);
-	conf.thou_delimiter = [[prefs objectForKey:NSThousandsSeparator] characterAtIndex:0];
+    Dprintf("NSDecimalSeparator set (%c)\n", conf.dec_delimiter);
+    if ([[numFormat groupingSeparator] length] > 0) {
+	Dprintf("NSGroupingSeparator > 0\n");
+	conf.thou_delimiter = [[numFormat groupingSeparator] characterAtIndex:0];
     } else {
 	conf.thou_delimiter = 0;
     }
-    Dprintf("NSThousandsSeparator set\n");
-    [decimalKey setAttributedTitle:[prefs objectForKey:NSDecimalSeparator]];
+    Dprintf("NSGroupingSeparator set (%c)\n", conf.thou_delimiter);
+    [decimalKey setTitle:[numFormat groupingSeparator]];
     Dprintf("decimalKey title set\n");
 
     /* reset the window to the saved setting */
