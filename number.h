@@ -176,8 +176,8 @@ typedef mp_prec_t num_prec_t;
     mpz_init(intfirst); \
     mpz_init(intsecond); \
     mpz_init(intoutput); \
-    mpfr_get_z(intfirst, (n1), GMP_RNDN); \
-    mpfr_get_z(intsecond, (n2), GMP_RNDN); \
+    mpfr_get_z(intfirst, (n1), GMP_RNDZ); \
+    mpfr_get_z(intsecond, (n2), GMP_RNDZ); \
     mpz_ior(intoutput, intfirst, intsecond); \
     mpfr_set_z((ret), intoutput, GMP_RNDN); \
     mpz_clear(intfirst); \
@@ -189,8 +189,8 @@ typedef mp_prec_t num_prec_t;
     mpz_init(intfirst); \
     mpz_init(intsecond); \
     mpz_init(intoutput); \
-    mpfr_get_z(intfirst, (n1), GMP_RNDN); \
-    mpfr_get_z(intsecond, (n2), GMP_RNDN); \
+    mpfr_get_z(intfirst, (n1), GMP_RNDZ); \
+    mpfr_get_z(intsecond, (n2), GMP_RNDZ); \
     mpz_and(intoutput, intfirst, intsecond); \
     mpfr_set_z((ret), intoutput, GMP_RNDN); \
     mpz_clear(intfirst); \
@@ -202,8 +202,8 @@ typedef mp_prec_t num_prec_t;
     mpz_init(intfirst); \
     mpz_init(intsecond); \
     mpz_init(intoutput); \
-    mpfr_get_z(intfirst, (n1), GMP_RNDN); \
-    mpfr_get_z(intsecond, (n2), GMP_RNDN); \
+    mpfr_get_z(intfirst, (n1), GMP_RNDZ); \
+    mpfr_get_z(intsecond, (n2), GMP_RNDZ); \
     mpz_xor(intoutput, intfirst, intsecond); \
     mpfr_set_z((ret), intoutput, GMP_RNDN); \
     mpz_clear(intfirst); \
@@ -215,7 +215,7 @@ typedef mp_prec_t num_prec_t;
     mpz_t integer, intoutput; \
     mpz_init(integer); \
     mpz_init(intoutput); \
-    mpfr_get_z(integer, (n), GMP_RNDN); \
+    mpfr_get_z(integer, (n), GMP_RNDZ); \
     mpz_com(intoutput, integer); \
     mpfr_set_z((ret), intoutput, GMP_RNDN); \
     mpz_clear(integer); \
