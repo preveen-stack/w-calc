@@ -98,7 +98,7 @@ char *add_commas(const char *input, const int base)
 	    prefix--;
 	    continue;
 	}
-	if (--ctr == 0) {
+	if (--ctr == 0 && separator != '\0') {
 	    tmpstring[tocurs++] = separator;
 	}
 	if (ctr == 0) {
