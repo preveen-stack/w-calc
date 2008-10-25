@@ -422,7 +422,7 @@ char *automatically_formatted_number(char *digits, num_exp_t exp,
 	Dprintf("period: %s\n", period);
 	if (period != NULL) {
 	    if (precision == 0) { // this removes extraneous periods
-		*period == 0;
+		*period = 0;
 	    }
 	    period ++;
 	    if (strlen(period) > (size_t) precision) {
