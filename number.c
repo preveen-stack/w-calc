@@ -36,45 +36,13 @@ void init_numbers(void)
 
 int is_int(const Number potential_int)
 {
-#ifdef HAVE_LIBMPFR
-    char *str;
-    mp_exp_t eptr;
-    int base;
-
-    switch (conf.output_format) {
-	case HEXADECIMAL_FORMAT:
-	    base = 16;
-	    break;
-	default:
-	case DECIMAL_FORMAT:
-	    base = 10;
-	    break;
-	case OCTAL_FORMAT:
-	    base = 8;
-	    break;
-	case BINARY_FORMAT:
-	    base = 2;
-	    break;
-    }
-    str = mpfr_get_str(NULL, &eptr, base, 0, potential_int, GMP_RNDN);
-    /* remove the trailing zeros (which are just precision placeholders) */
-    {
-	size_t curs = strlen(str)-1;
-	while (str[curs] == '0') {
-	    str[curs--] = '\0';
-	}
-    }
-    if (eptr < 0 || (size_t)eptr < strlen(str)) {
-	mpfr_free_str(str);
-	Dprintf("IS NOT an int!\n");
-	return 0;
-    } else {
-	mpfr_free_str(str);
-	Dprintf("IS an int!\n");
-	return 1;
-    }
-#else
-#endif
+    Number temp;
+    int ret;
+    num_init(temp);
+    num_trunc(temp, potential_int);
+    ret = num_is_equal(temp, potential_int);
+    num_free(temp);
+    return ret;
 }
 
 #ifndef HAVE_LIBMPFR
