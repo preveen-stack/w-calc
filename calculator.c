@@ -1033,7 +1033,9 @@ void simple_exp(Number output, const Number first, const enum operations op,
 		num_set_ui(temp, 2);
 		num_pow(temp, temp, second);
 		num_div(output, first, temp);
-		num_trunc(output, output);
+		if (is_int(first)) {
+		    num_trunc(output, output);
+		}
 		break;
 	    case wmod:
 		if (num_is_zero(second)) {
