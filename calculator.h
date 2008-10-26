@@ -125,6 +125,8 @@ struct _conf
     unsigned int remember_errors:1;
     char thou_delimiter;
     char dec_delimiter;
+    char in_thou_delimiter;
+    char in_dec_delimiter;
     unsigned int precision_guard:1;
     unsigned int history_limit:1;
     unsigned long history_limit_len;

@@ -1,191 +1,413 @@
-{
-    IBClasses = (
-        {
-            ACTIONS = {closeIt = id; openIt = id; }; 
-            CLASS = AboutBoxController; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {aboutBox = NSWindow; version = NSTextField; }; 
-            SUPERCLASS = NSObject; 
-        }, 
-        {
-            ACTIONS = {newType = id; }; 
-            CLASS = ConversionList; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {fromList = NSTableView; theType = NSPopUpButton; toList = NSTableView; }; 
-            SUPERCLASS = NSObject; 
-        }, 
-        {
-            ACTIONS = {closeAlert = id; showAlert = id; }; 
-            CLASS = ErrorController; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {errorDialog = id; errorMessage = id; }; 
-            SUPERCLASS = NSObject; 
-        }, 
-        {
-            ACTIONS = {"" = id; }; 
-            CLASS = FirstResponder; 
-            LANGUAGE = ObjC; 
-            SUPERCLASS = NSObject; 
-        }, 
-        {
-            ACTIONS = {clearHistory = id; copyMe = id; rowSelected = id; }; 
-            CLASS = HistoryList; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {expressionField = NSTextField; theList = NSTableView; }; 
-            SUPERCLASS = NSObject; 
-        }, 
-        {
-            ACTIONS = {closeIt = id; onClose = id; openIt = id; toggleIt = id; }; 
-            CLASS = InspectorController; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {
-                affectInspectorMenu = NSMenuItem; 
-                historyList = NSTableView; 
-                inspectorWindow = NSPanel; 
-                variableList = NSTableView; 
-            }; 
-            SUPERCLASS = NSObject; 
-        }, 
-        {CLASS = Interpreter; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
-        {
-            CLASS = MyTextField; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {AnswerField = NSTextField; mainController = id; }; 
-            SUPERCLASS = NSTextField; 
-        }, 
-        {CLASS = NSSegmentedControl; LANGUAGE = ObjC; SUPERCLASS = NSControl; }, 
-        {
-            ACTIONS = {addVar = id; clearVars = id; delVar = id; showList = id; }; 
-            CLASS = PersVarList; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {theList = NSTableView; theWindow = NSWindow; }; 
-            SUPERCLASS = NSObject; 
-        }, 
-        {
-            ACTIONS = {displayPrefs = id; setPrefs = id; showPrefs = id; }; 
-            CLASS = PrefsController; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {
-                answerField = NSTextField; 
-                engineeringNotation = NSButton; 
-                expressionField = NSTextField; 
-                historyDuplicates = NSButton; 
-                historyList = NSTableView; 
-                mainController = id; 
-                outputFormat = NSMatrix; 
-                pickyVariables = NSButton; 
-                precisionSlider = NSSlider; 
-                printPrefixes = NSButton; 
-                thePrefPanel = NSPanel; 
-                useRadians = NSButton; 
-            }; 
-            SUPERCLASS = NSObject; 
-        }, 
-        {
-            ACTIONS = {clearVariables = id; copyMe = id; delVariable = id; newVariable = id; }; 
-            CLASS = VariableList; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {theList = NSTableView; }; 
-            SUPERCLASS = NSObject; 
-        }, 
-        {
-            ACTIONS = {
-                clear = id; 
-                closeWindow = id; 
-                convert = id; 
-                displayPrefs = id; 
-                enterData = id; 
-                go = id; 
-                menuConstant = id; 
-                menuFunction = id; 
-                open = id; 
-                quit = id; 
-                save = id; 
-                saveAs = id; 
-                savePrefs = id; 
-                setPrecision = id; 
-                setPrefs = id; 
-                shConversions = id; 
-                showBaseDrawer = id; 
-                showKeyboardDrawer = id; 
-                showPrefs = id; 
-                toggleSize = id; 
-            }; 
-            CLASS = WcalcController; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {
-                AnswerField = NSTextField; 
-                ExpressionField = NSTextField; 
-                PrecisionSlider = NSSlider; 
-                affectKeyboardMenu = NSMenuItem; 
-                baseDrawer = NSDrawer; 
-                baseMenu = NSMenuItem; 
-                bitsPref = NSTextField; 
-                bitsStepper = NSStepper; 
-                cModPref = NSButton; 
-                capsLockKey = NSButton; 
-                conversionMenu = NSMenuItem; 
-                conversionWindow = NSPanel; 
-                convertFrom = NSTableView; 
-                convertTo = NSTableView; 
-                convertType = NSPopUpButton; 
-                decimalKey = NSButton; 
-                engineeringNotation = NSPopUpButton; 
-                enterKey = NSButton; 
-                errorController = id; 
-                historyDuplicates = NSButton; 
-                historyList = NSTableView; 
-                inspector = InspectorController; 
-                inspectorWindow = NSWindow; 
-                keypad = id; 
-                limitHistory = NSButton; 
-                limitHistoryLen = NSTextField; 
-                limitHistoryLenTag = NSTextField; 
-                livePrecision = NSButton; 
-                mainWindow = NSWindow; 
-                meta = NSApplication; 
-                outputFormat = NSMatrix; 
-                outputFormat2 = NSMatrix; 
-                persVarsWindow = NSWindow; 
-                pickyVariables = NSButton; 
-                precisionGuard = NSButton; 
-                printDelimiters = NSButton; 
-                printInts = NSButton; 
-                printPrefixes = NSButton; 
-                rememberErrors = NSButton; 
-                roundingIndication = NSPopUpButton; 
-                saveAsMenuItem = NSMenuItem; 
-                saveMenuItem = NSMenuItem; 
-                shiftKey1 = NSButton; 
-                shiftKey2 = NSButton; 
-                simpleCalculator = NSButton; 
-                sizeToggleMenu = NSMenuItem; 
-                sliderPref = NSTextField; 
-                sliderStepper = NSStepper; 
-                theKeyboard = id; 
-                thePrefPanel = NSPanel; 
-                updateHistory = NSButton; 
-                useRadians = NSButton; 
-                variableList = id; 
-            }; 
-            SUPERCLASS = NSObject; 
-        }, 
-        {
-            CLASS = WcalcService; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {
-                historyList = NSTableView; 
-                inspectorWindow = NSWindow; 
-                variableList = NSTableView; 
-            }; 
-            SUPERCLASS = NSObject; 
-        }, 
-        {
-            CLASS = theDelegate; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {mainWindow = NSWindow; }; 
-            SUPERCLASS = NSObject; 
-        }
-    ); 
-    IBVersion = 1; 
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IBClasses</key>
+	<array>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>clearVariables</key>
+				<string>id</string>
+				<key>copyMe</key>
+				<string>id</string>
+				<key>delVariable</key>
+				<string>id</string>
+				<key>newVariable</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>VariableList</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>theList</key>
+				<string>NSTableView</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>CLASS</key>
+			<string>theDelegate</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>mainWindow</key>
+				<string>NSWindow</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>closeIt</key>
+				<string>id</string>
+				<key>onClose</key>
+				<string>id</string>
+				<key>openIt</key>
+				<string>id</string>
+				<key>toggleIt</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>InspectorController</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>affectInspectorMenu</key>
+				<string>NSMenuItem</string>
+				<key>historyList</key>
+				<string>NSTableView</string>
+				<key>inspectorWindow</key>
+				<string>NSPanel</string>
+				<key>variableList</key>
+				<string>NSTableView</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>clearHistory</key>
+				<string>id</string>
+				<key>copyMe</key>
+				<string>id</string>
+				<key>rowSelected</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>HistoryList</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>expressionField</key>
+				<string>NSTextField</string>
+				<key>theList</key>
+				<string>NSTableView</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>newType</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>ConversionList</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>fromList</key>
+				<string>NSTableView</string>
+				<key>theType</key>
+				<string>NSPopUpButton</string>
+				<key>toList</key>
+				<string>NSTableView</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>closeIt</key>
+				<string>id</string>
+				<key>openIt</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>AboutBoxController</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>aboutBox</key>
+				<string>NSWindow</string>
+				<key>version</key>
+				<string>NSTextField</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>addVar</key>
+				<string>id</string>
+				<key>clearVars</key>
+				<string>id</string>
+				<key>delVar</key>
+				<string>id</string>
+				<key>showList</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>PersVarList</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>theList</key>
+				<string>NSTableView</string>
+				<key>theWindow</key>
+				<string>NSWindow</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>clear</key>
+				<string>id</string>
+				<key>closeWindow</key>
+				<string>id</string>
+				<key>convert</key>
+				<string>id</string>
+				<key>displayPrefs</key>
+				<string>id</string>
+				<key>enterData</key>
+				<string>id</string>
+				<key>go</key>
+				<string>id</string>
+				<key>menuConstant</key>
+				<string>id</string>
+				<key>menuFunction</key>
+				<string>id</string>
+				<key>open</key>
+				<string>id</string>
+				<key>openBDrawer</key>
+				<string>id</string>
+				<key>openIDrawer</key>
+				<string>id</string>
+				<key>quit</key>
+				<string>id</string>
+				<key>save</key>
+				<string>id</string>
+				<key>saveAs</key>
+				<string>id</string>
+				<key>savePrefs</key>
+				<string>id</string>
+				<key>setPrecision</key>
+				<string>id</string>
+				<key>setPrefs</key>
+				<string>id</string>
+				<key>shConversions</key>
+				<string>id</string>
+				<key>showBaseDrawer</key>
+				<string>id</string>
+				<key>showKeyboardDrawer</key>
+				<string>id</string>
+				<key>showPrefs</key>
+				<string>id</string>
+				<key>toggleSize</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>WcalcController</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>AnswerField</key>
+				<string>NSTextField</string>
+				<key>ExpressionField</key>
+				<string>NSTextField</string>
+				<key>PrecisionSlider</key>
+				<string>NSSlider</string>
+				<key>affectKeyboardMenu</key>
+				<string>NSMenuItem</string>
+				<key>altInputDecSep</key>
+				<string>NSTextField</string>
+				<key>altInputThouSep</key>
+				<string>NSTextField</string>
+				<key>alternateInputPref</key>
+				<string>NSButton</string>
+				<key>baseDrawer</key>
+				<string>NSDrawer</string>
+				<key>baseMenu</key>
+				<string>NSMenuItem</string>
+				<key>bitsPref</key>
+				<string>NSTextField</string>
+				<key>bitsStepper</key>
+				<string>NSStepper</string>
+				<key>cModPref</key>
+				<string>NSButton</string>
+				<key>capsLockKey</key>
+				<string>NSButton</string>
+				<key>conversionMenu</key>
+				<string>NSMenuItem</string>
+				<key>conversionWindow</key>
+				<string>NSPanel</string>
+				<key>convertFrom</key>
+				<string>NSTableView</string>
+				<key>convertTo</key>
+				<string>NSTableView</string>
+				<key>convertType</key>
+				<string>NSPopUpButton</string>
+				<key>decimalKey</key>
+				<string>NSButton</string>
+				<key>engineeringNotation</key>
+				<string>NSPopUpButton</string>
+				<key>enterKey</key>
+				<string>NSButton</string>
+				<key>errorController</key>
+				<string>id</string>
+				<key>historyDuplicates</key>
+				<string>NSButton</string>
+				<key>historyList</key>
+				<string>id</string>
+				<key>inspector</key>
+				<string>InspectorController</string>
+				<key>inspectorWindow</key>
+				<string>NSWindow</string>
+				<key>keypad</key>
+				<string>id</string>
+				<key>limitHistory</key>
+				<string>NSButton</string>
+				<key>limitHistoryLen</key>
+				<string>NSTextField</string>
+				<key>limitHistoryLenTag</key>
+				<string>NSTextField</string>
+				<key>livePrecision</key>
+				<string>NSButton</string>
+				<key>mainWindow</key>
+				<string>NSWindow</string>
+				<key>meta</key>
+				<string>NSApplication</string>
+				<key>outputFormat</key>
+				<string>NSMatrix</string>
+				<key>outputFormat2</key>
+				<string>NSMatrix</string>
+				<key>persVarsWindow</key>
+				<string>NSWindow</string>
+				<key>pickyVariables</key>
+				<string>NSButton</string>
+				<key>precisionGuard</key>
+				<string>NSButton</string>
+				<key>printDelimiters</key>
+				<string>NSButton</string>
+				<key>printInts</key>
+				<string>NSButton</string>
+				<key>printPrefixes</key>
+				<string>NSButton</string>
+				<key>rememberErrors</key>
+				<string>NSButton</string>
+				<key>roundingIndication</key>
+				<string>NSPopUpButton</string>
+				<key>saveAsMenuItem</key>
+				<string>NSMenuItem</string>
+				<key>saveMenuItem</key>
+				<string>NSMenuItem</string>
+				<key>shiftKey1</key>
+				<string>NSButton</string>
+				<key>shiftKey2</key>
+				<string>NSButton</string>
+				<key>simpleCalculator</key>
+				<string>NSButton</string>
+				<key>sizeToggleMenu</key>
+				<string>NSMenuItem</string>
+				<key>sliderPref</key>
+				<string>NSTextField</string>
+				<key>sliderStepper</key>
+				<string>NSStepper</string>
+				<key>strictSyntax</key>
+				<string>NSButton</string>
+				<key>theKeyboard</key>
+				<string>id</string>
+				<key>thePrefPanel</key>
+				<string>NSPanel</string>
+				<key>updateHistory</key>
+				<string>NSButton</string>
+				<key>useRadians</key>
+				<string>NSButton</string>
+				<key>variableList</key>
+				<string>NSTableView</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key></key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>FirstResponder</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>CLASS</key>
+			<string>WcalcService</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>historyList</key>
+				<string>NSTableView</string>
+				<key>inspectorWindow</key>
+				<string>NSWindow</string>
+				<key>variableList</key>
+				<string>NSTableView</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>closeAlert</key>
+				<string>id</string>
+				<key>showAlert</key>
+				<string>id</string>
+				<key>throwAlert</key>
+				<string>NSString</string>
+			</dict>
+			<key>CLASS</key>
+			<string>ErrorController</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>errorDialog</key>
+				<string>id</string>
+				<key>errorMessage</key>
+				<string>id</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>CLASS</key>
+			<string>MyTextField</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>AnswerField</key>
+				<string>NSTextField</string>
+				<key>mainController</key>
+				<string>WcalcController</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSTextField</string>
+		</dict>
+	</array>
+	<key>IBVersion</key>
+	<string>1</string>
+</dict>
+</plist>

@@ -95,6 +95,15 @@ SPACE		[ ]
 	POS_STR();
 	return(DSEP_CMD);
 }
+\\idsep{WHITESPACE}*.     {
+	int i = 5;
+	while (isspace(yytext[i])) i++;
+	if (yytext[i] == 0) i--;
+	YYLVALAC->character = yytext[i];
+	line_is_a_command = 1;
+	POS_STR();
+	return(IDSEP_CMD);
+}
 \\e(ng(ineering)?)?{WHITESPACE}*{DIGIT}* {
 	int i = 2;
     while (yytext[i] != 0 && ! isdigit((int)(yytext[i]))) ++i;
@@ -228,6 +237,15 @@ SPACE		[ ]
 	line_is_a_command = 1;
 	POS_STR();
 	return(TSEP_CMD);
+}
+\\itsep{WHITESPACE}*.       {
+	int i = 5;
+	while (isspace(yytext[i])) ++i;
+	if (yytext[i] == 0) i--;
+	YYLVALAC->character = yytext[i];
+	line_is_a_command = 1;
+	POS_STR();
+	return(ITSEP_CMD);
 }
 \?                      { line_is_a_command = 1; POS_STR(); return(PRINT_HELP_CMD); }
 [Hh][Ee][Ll][Pp]        { line_is_a_command = 1; POS_STR(); return(PRINT_HELP_CMD); }

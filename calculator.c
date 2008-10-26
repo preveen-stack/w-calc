@@ -129,19 +129,26 @@ void parseme(const char *pthis)
 
 	for (i = 0; i < strlen(sanitized); ++i) {
 	    if ((conf.thou_delimiter != '.' && conf.dec_delimiter != '.' &&
+		 conf.in_thou_delimiter != '.' && conf.in_dec_delimiter != '.' &&
 		 sanitized[i] == '.') || (conf.thou_delimiter != ',' &&
+					  conf.in_thou_delimiter != ',' &&
 					  conf.dec_delimiter != ',' &&
+					  conf.in_dec_delimiter != ',' &&
 					  sanitized[i] == ',')) {
 		// throw an error
 		report_error("Improperly formatted numbers! (%c,%c)\n",
 			     conf.thou_delimiter, conf.dec_delimiter);
 		synerrors = 1;
 		break;
-	    } else if (sanitized[i] == conf.thou_delimiter)
+	    } else if (conf.in_thou_delimiter != 0 && sanitized[i] == conf.in_thou_delimiter) {
 		sanitized[i] = ',';
-	    else if (sanitized[i] == conf.dec_delimiter)
+	    } else if (conf.in_thou_delimiter == 0 && sanitized[i] == conf.thou_delimiter) {
+		sanitized[i] = ',';
+	    } else if (conf.in_dec_delimiter != 0 && sanitized[i] == conf.in_dec_delimiter) {
 		sanitized[i] = '.';
-	    //      sanitized[i] = conf.charkey[(int)sanitized[i]];
+	    } else if (conf.in_dec_delimiter == 0 && sanitized[i] == conf.dec_delimiter) {
+		sanitized[i] = '.';
+	    }
 	}
     }
 

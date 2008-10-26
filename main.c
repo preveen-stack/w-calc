@@ -2,7 +2,9 @@
 * Modified by Kyle Wheeler
 */
 
+#ifdef HAVE_CONFIG_H
 #include "config.h"
+#endif
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -46,7 +48,11 @@ extern int history_truncate_file(char *, int);
 
 #include "calculator.h"
 #include "conversion.h"
-#include "parser.h"
+#ifdef HAVE_CONFIG_H /* auto-tool build */
+# include "parser.h"
+#else
+# include "y.tab.h"
+#endif
 #include "variables.h"
 #include "help.h"
 #include "files.h"
@@ -342,6 +348,8 @@ int main(int argc, char *argv[])
     conf.picky_variables = 1;
     conf.print_prefixes = 1;
     conf.precision_guard = 1;
+    conf.in_thou_delimiter = 0;
+    conf.in_dec_delimiter = 0;
     conf.thou_delimiter = ',';
     conf.dec_delimiter = '.';
     conf.print_equal = 1;
@@ -404,7 +412,7 @@ int main(int argc, char *argv[])
 	    num_free(last_answer);
 	    exit(EXIT_SUCCESS);
 	} else if (!strcmp(argv[i], "-v") || !strcmp(argv[i], "--version")) {
-	    printf("wcalc %s\n", VERSION);
+	    printf("wcalc "VERSION"\n");
 	    num_free(last_answer);
 	    exit(EXIT_SUCCESS);
 	} else if (!strcmp(argv[i], "-d") || !strcmp(argv[i], "--decimal") ||
@@ -445,6 +453,19 @@ int main(int argc, char *argv[])
 	    fprintf(stderr,
 		    "--round requires an argument (none|simple|sig_fig)\n");
 	    exit(EXIT_FAILURE);
+	} else if (!strncmp(argv[i], "--idsep=", 7)) {
+	    if (strlen(argv[i]) > 8 || strlen(argv[i]) == 7) {
+		fprintf(stderr, "--idsep= must have an argument\n");
+		exit(EXIT_FAILURE);
+	    }
+	    if (conf.in_thou_delimiter != argv[i][7] && (conf.in_thou_delimiter != 0 || conf.thou_delimiter != argv[i][7])) {
+		conf.in_dec_delimiter = argv[i][7];
+	    } else {
+		fprintf(stderr,
+			"%c cannot be the decimal separator. It is the thousands separator.\n",
+			argv[i][7]);
+		exit(EXIT_FAILURE);
+	    }
 	} else if (!strncmp(argv[i], "--dsep=", 7)) {
 	    if (strlen(argv[i]) > 8 || strlen(argv[i]) == 7) {
 		fprintf(stderr, "--dsep= must have an argument\n");
@@ -455,6 +476,19 @@ int main(int argc, char *argv[])
 	    } else {
 		fprintf(stderr,
 			"%c cannot be the decimal separator. It is the thousands separator.\n",
+			argv[i][7]);
+		exit(EXIT_FAILURE);
+	    }
+	} else if (!strncmp(argv[i], "--itsep=", 7)) {
+	    if (strlen(argv[i]) > 8 || strlen(argv[i]) == 7) {
+		fprintf(stderr, "--itsep= must have an argument\n");
+		exit(EXIT_FAILURE);
+	    }
+	    if (conf.in_dec_delimiter != argv[i][7] && (conf.in_dec_delimiter != 0 || conf.dec_delimiter != argv[i][7])) {
+		conf.in_thou_delimiter = argv[i][7];
+	    } else {
+		fprintf(stderr,
+			"%c cannot be the thousands separator. It is the decimal separator.\n",
 			argv[i][7]);
 		exit(EXIT_FAILURE);
 	    }
@@ -884,6 +918,10 @@ static int read_prefs(char *filename)
 	    conf.print_ints = TRUEFALSE;
 	else if (!strcmp(key, "print_delimiters"))
 	    conf.print_commas = TRUEFALSE;
+	else if (!strcmp(key, "input_thousands_delimiter"))
+	    conf.in_thou_delimiter = value[0];
+	else if (!strcmp(key, "input_decimal_delimiter"))
+	    conf.in_dec_delimiter = value[0];
 	else if (!strcmp(key, "thousands_delimiter"))
 	    conf.thou_delimiter = value[0];
 	else if (!strcmp(key, "decimal_delimiter"))

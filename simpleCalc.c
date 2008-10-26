@@ -48,58 +48,64 @@ char *simpleCalc(const unsigned char input, const char *expStr)
 	    num_get_d(prev_number));
     switch (input) {
 	case '+': case '-': case '*': case '/':
-	    if (operationPending) {
+	    {
 		char * expdup = strdup(expStr);
 		// Americanize the numbers
-		strstrip(conf.thou_delimiter, expdup);
-		if (conf.dec_delimiter != '.') {
+		if (conf.in_thou_delimiter != 0) {
+		    strstrip(conf.in_thou_delimiter, expdup);
+		} else {
+		    strstrip(conf.thou_delimiter, expdup);
+		}
+		if (conf.in_dec_delimiter != 0 && conf.in_dec_delimiter != '.') {
+		    strswap(conf.in_dec_delimiter, '.', expdup);
+		} else if (conf.dec_delimiter != '.') {
 		    strswap(conf.dec_delimiter, '.', expdup);
 		}
-		num_set_str(cur_number, expdup, 10);
-		free(expdup);
-		
-		simpleCalcEval(operationPending);
-		operationPending = input;
-		append = 0;
-		set_prettyanswer(prev_number);
-		return strdup(pretty_answer);
-	    } else {
-		char * expdup = strdup(expStr);
-		// Americanize the numbers
-		strstrip(conf.thou_delimiter, expdup);
-		if (conf.dec_delimiter != '.') {
-		    strswap(conf.dec_delimiter, '.', expdup);
+		// ... and now, depending on the state...
+		if (operationPending) {
+		    num_set_str(cur_number, expdup, 10);
+		    free(expdup);
+
+		    simpleCalcEval(operationPending);
+		    operationPending = input;
+		    append = 0;
+		    set_prettyanswer(prev_number);
+		    return strdup(pretty_answer);
+		} else {
+		    num_set_str(prev_number, expdup, 10);
+		    free(expdup);
+
+		    operationPending = input;
+		    append = 0;
+		    return strdup(expStr);
 		}
-		num_set_str(prev_number, expdup, 10);
-		free(expdup);
-		
-		operationPending = input;
-		append = 0;
-		return strdup(expStr);
 	    }
 	    break;
 	case '=':
 	    append = 0;
-	    if (! operationPending) {
+	    {
 		char * expdup = strdup(expStr);
 		// Americanize the numbers
-		strstrip(conf.thou_delimiter, expdup);
-		if (conf.dec_delimiter != '.') {
+		if (conf.in_thou_delimiter != 0) {
+		    strstrip(conf.in_thou_delimiter, expdup);
+		} else {
+		    strstrip(conf.thou_delimiter, expdup);
+		}
+		if (conf.in_dec_delimiter != 0 && conf.in_dec_delimiter != '.') {
+		    strswap(conf.in_dec_delimiter, '.', expdup);
+		} else if (conf.dec_delimiter != '.') {
 		    strswap(conf.dec_delimiter, '.', expdup);
 		}
-		num_set_str(prev_number, expdup, 10);
-		free(expdup);
-	    } else {
-		char * expdup = strdup(expStr);
-		// Americanize the numbers
-		strstrip(conf.thou_delimiter, expdup);
-		if (conf.dec_delimiter != '.') {
-		    strswap(conf.dec_delimiter, '.', expdup);
+		// ... and now, depending on the state...
+		if (! operationPending) {
+		    num_set_str(prev_number, expdup, 10);
+		    free(expdup);
+		} else {
+		    num_set_str(cur_number, expdup, 10);
+		    free(expdup);
+		    simpleCalcEval(operationPending);
+		    operationPending = 0;
 		}
-		num_set_str(cur_number, expdup, 10);
-		free(expdup);
-		simpleCalcEval(operationPending);
-		operationPending = 0;
 	    }
 	    set_prettyanswer(prev_number);
 	    return NULL; // This should cause it to go through the displayAnswer logic

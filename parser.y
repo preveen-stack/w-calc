@@ -87,7 +87,7 @@ struct conv_req conver;
 
 %token <number> NUMBER
 %token <variable> VARIABLE STRING OPEN_CMD SAVE_CMD ASSIGNMENT
-%token <character> DSEP_CMD TSEP_CMD
+%token <character> IDSEP_CMD DSEP_CMD ITSEP_CMD TSEP_CMD
 
 %type <number> exp exp_l2 exp_l3
 %type <number> oval capsule parenthated
@@ -214,12 +214,30 @@ command : HEX_CMD {
 	} else if (standard_output) {
 		printf("%c cannot be the decimal separator. It is the thousands separator.\n", $1);
 	}}
+| IDSEP_CMD {
+	$$ = nothing;
+	if (conf.in_thou_delimiter != $1 && (conf.in_thou_delimiter != 0 || conf.thou_delimiter != $1)) {
+		conf.in_dec_delimiter = $1;
+		if (standard_output)
+			printf("%c is now the decimal separator for input.\n", $1);
+	} else if (standard_output) {
+		printf("%c cannot be the decimal separator. It is the thousands separator.\n", $1);
+	}}
 | TSEP_CMD {
 	$$ = nothing;
 	if (conf.dec_delimiter != $1) {
 		conf.thou_delimiter = $1;
 		if (standard_output)
 			printf("%c is now the thousands separator.\n", $1);
+	} else if (standard_output) {
+		printf("%c cannot be the thousands separator. It is the decimal separator.\n", $1);
+	}}
+| ITSEP_CMD {
+	$$ = nothing;
+	if (conf.in_dec_delimiter != $1 && (conf.in_dec_delimiter != 0 || conf.dec_delimiter != $1)) {
+		conf.in_thou_delimiter = $1;
+		if (standard_output)
+			printf("%c is now the thousands separator for input.\n", $1);
 	} else if (standard_output) {
 		printf("%c cannot be the thousands separator. It is the decimal separator.\n", $1);
 	}}
