@@ -1,4 +1,4 @@
-#include "calculator.h"
+#include "definitions.h"
 #include "AboutBoxController.h"
 #ifdef MEMWATCH
 #include "memwatch.h"
