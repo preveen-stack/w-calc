@@ -85,6 +85,12 @@ Sets the decimal separator character to be X.
 \fB\*=tsep=\fIX\fP
 Sets the thousands separator character to be X.
 .TP
+\fB\*=idsep=\fIX\fP
+Sets the input-only decimal separator character to be X.
+.TP
+\fB\*=itsep=\fIX\fP
+Sets the input-only thousands separator character to be X.
+.TP
 \fB\*=bits\fIXXXX\fP
 Sets the number of bits of precision that will be used to internally represent numbers to be \fIXXXX\fP. The default is 1024. Set higher if you need more precision, set lower if you want to use less memory.
 .TP
@@ -396,6 +402,12 @@ Sets the decimal separator character to be \fIX\fP.
 \fB\etsep\fIX\fP
 Sets the thousands-place separator character to be \fIX\fP.
 .TP
+\fB\eidsep\fIX\fP
+Sets the input-only decimal separator character to be \fIX\fP.
+.TP
+\fB\eitsep\fIX\fP
+Sets the input-only thousands-place separator character to be \fIX\fP.
+.TP
 \fB\ehlimit\fIX\fP
 Sets the limit (\fIX\fP) on the length of the history.
 .TP
@@ -470,6 +482,12 @@ Uses the next character after the equals sign as its value. Equivalent to the \f
 .TP
 .B decimal_delimiter
 Uses the next character after the equals sign as its value. Equivalent to the \fB\edsep\fP command. Specifies what the decimal delimiter is.
+.TP
+.B input_thousands_delimiter
+Uses the next character after the equals sign as its value. Equivalent to the \fB\eitsep\fP command. Specifies what the input-only thousands delimiter is, and cannot affect output.
+.TP
+.B input_decimal_delimiter
+Uses the next character after the equals sign as its value. Equivalent to the \fB\eidsep\fP command. Specifies what the input-only decimal delimiter is, and cannot affect output.
 .TP
 .B history_limit
 Either "no", for no limit, or a number. Equivalent to the \fB\ehlimit\fP command.
