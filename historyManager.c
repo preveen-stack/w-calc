@@ -71,7 +71,7 @@ void clearHistory()
 
 void addToHistory(char *expression, Number answer)
 {
-#ifdef HAVE_READLINE_HISTORY
+#if defined(HAVE_READLINE_HISTORY) && ! defined(GUI)
     add_history(expression);
 #endif
     if (!histlen) {

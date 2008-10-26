@@ -12,6 +12,13 @@
 		2704376E0C4584640024DB8D /* number.c in Sources */ = {isa = PBXBuildFile; fileRef = 2704376A0C4584640024DB8D /* number.c */; };
 		2704376F0C4584640024DB8D /* number.h in Headers */ = {isa = PBXBuildFile; fileRef = 2704376B0C4584640024DB8D /* number.h */; };
 		27085E2A0EB4D75E009B43DD /* libl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2789AB460EB1877D008DEB99 /* libl.a */; };
+		27085F000EB512E1009B43DD /* libncurses.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 27085EFF0EB512E1009B43DD /* libncurses.dylib */; };
+		27085F040EB51331009B43DD /* iscmd.c in Sources */ = {isa = PBXBuildFile; fileRef = 27085F020EB51331009B43DD /* iscmd.c */; };
+		27085F050EB51331009B43DD /* iscmd.h in Headers */ = {isa = PBXBuildFile; fileRef = 27085F030EB51331009B43DD /* iscmd.h */; };
+		27085F060EB51331009B43DD /* iscmd.c in Sources */ = {isa = PBXBuildFile; fileRef = 27085F020EB51331009B43DD /* iscmd.c */; };
+		27085F070EB51331009B43DD /* iscmd.h in Headers */ = {isa = PBXBuildFile; fileRef = 27085F030EB51331009B43DD /* iscmd.h */; };
+		27085F0A0EB51382009B43DD /* libreadline.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27085F090EB51382009B43DD /* libreadline.a */; };
+		27085F0C0EB5138C009B43DD /* libhistory.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27085F0B0EB5138C009B43DD /* libhistory.a */; };
 		2729A40209B1ECE5001F07F4 /* add_commas.h in Headers */ = {isa = PBXBuildFile; fileRef = 2729A40009B1ECE5001F07F4 /* add_commas.h */; };
 		2729A40309B1ECE5001F07F4 /* add_commas.c in Sources */ = {isa = PBXBuildFile; fileRef = 2729A40109B1ECE5001F07F4 /* add_commas.c */; };
 		2729A40409B1ECE5001F07F4 /* add_commas.h in Headers */ = {isa = PBXBuildFile; fileRef = 2729A40009B1ECE5001F07F4 /* add_commas.h */; };
@@ -122,6 +129,11 @@
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		2704376A0C4584640024DB8D /* number.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = number.c; sourceTree = "<group>"; };
 		2704376B0C4584640024DB8D /* number.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = number.h; sourceTree = "<group>"; };
+		27085EFF0EB512E1009B43DD /* libncurses.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libncurses.dylib; path = usr/lib/libncurses.dylib; sourceTree = SDKROOT; };
+		27085F020EB51331009B43DD /* iscmd.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = iscmd.c; sourceTree = "<group>"; };
+		27085F030EB51331009B43DD /* iscmd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iscmd.h; sourceTree = "<group>"; };
+		27085F090EB51382009B43DD /* libreadline.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libreadline.a; path = "../universal-libs/lib/libreadline.a"; sourceTree = SOURCE_ROOT; };
+		27085F0B0EB5138C009B43DD /* libhistory.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libhistory.a; path = "../universal-libs/lib/libhistory.a"; sourceTree = SOURCE_ROOT; };
 		2721CD490869C13400E3BB4D /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2729A40009B1ECE5001F07F4 /* add_commas.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = add_commas.h; sourceTree = "<group>"; };
 		2729A40109B1ECE5001F07F4 /* add_commas.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = add_commas.c; sourceTree = "<group>"; };
@@ -203,6 +215,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				27085E2A0EB4D75E009B43DD /* libl.a in Frameworks */,
+				27085F000EB512E1009B43DD /* libncurses.dylib in Frameworks */,
+				27085F0A0EB51382009B43DD /* libreadline.a in Frameworks */,
+				27085F0C0EB5138C009B43DD /* libhistory.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -254,6 +269,9 @@
 			isa = PBXGroup;
 			children = (
 				2789AB460EB1877D008DEB99 /* libl.a */,
+				27085F0B0EB5138C009B43DD /* libhistory.a */,
+				27085F090EB51382009B43DD /* libreadline.a */,
+				27085EFF0EB512E1009B43DD /* libncurses.dylib */,
 				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
 			);
 			name = "Linked Frameworks";
@@ -340,6 +358,8 @@
 				273655F2094C63F20043391C /* extract_vars.h */,
 				2799DA4303FAD61400CA71DD /* help.h */,
 				2799DA4403FAD61400CA71DD /* help.c */,
+				27085F020EB51331009B43DD /* iscmd.c */,
+				27085F030EB51331009B43DD /* iscmd.h */,
 				273655FD094C64170043391C /* isconst.c */,
 				273655FE094C64170043391C /* isfunc.c */,
 				273655FF094C64170043391C /* isconst.h */,
@@ -390,6 +410,7 @@
 				2736560E094C642B0043391C /* evalvar.h in Headers */,
 				2729A40409B1ECE5001F07F4 /* add_commas.h in Headers */,
 				2704376F0C4584640024DB8D /* number.h in Headers */,
+				27085F050EB51331009B43DD /* iscmd.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -426,6 +447,7 @@
 				2729A53809B256DA001F07F4 /* PersVarList.h in Headers */,
 				2704376D0C4584640024DB8D /* number.h in Headers */,
 				275D2B5E0C5032E50056D137 /* WcalcService.h in Headers */,
+				27085F070EB51331009B43DD /* iscmd.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -539,6 +561,7 @@
 				2736560D094C642B0043391C /* evalvar.c in Sources */,
 				2729A40509B1ECE5001F07F4 /* add_commas.c in Sources */,
 				2704376E0C4584640024DB8D /* number.c in Sources */,
+				27085F040EB51331009B43DD /* iscmd.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -577,6 +600,7 @@
 				2729A53909B256DA001F07F4 /* PersVarList.m in Sources */,
 				2704376C0C4584640024DB8D /* number.c in Sources */,
 				275D2B5F0C5032E50056D137 /* WcalcService.m in Sources */,
+				27085F060EB51331009B43DD /* iscmd.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -616,6 +640,10 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(GCC_PREPROCESSOR_DEFINITIONS_QUOTED_FOR_TARGET_1)",
 					GUI,
+					HAVE_READLINE_READLINE_H,
+					HAVE_LIBREADLINE,
+					HAVE_READLINE_HISTORY,
+					HAVE_READLINE_HISTORY_H,
 					STDC_HEADERS,
 				);
 				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_FOR_TARGET_1 = "VERSION=\\\"${CURRENT_PROJECT_VERSION}\\\"";
@@ -682,6 +710,10 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(GCC_PREPROCESSOR_DEFINITIONS_QUOTED_FOR_TARGET_1)",
 					GUI,
+					HAVE_READLINE_READLINE_H,
+					HAVE_LIBREADLINE,
+					HAVE_READLINE_HISTORY,
+					HAVE_READLINE_HISTORY_H,
 					STDC_HEADERS,
 				);
 				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_FOR_TARGET_1 = "VERSION=\\\"${CURRENT_PROJECT_VERSION}\\\"";
@@ -740,7 +772,14 @@
 				CURRENT_PROJECT_VERSION = 2.4;
 				GCC_MODEL_TUNING = "";
 				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = "VERSION=\"${CURRENT_PROJECT_VERSION}\"";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					HAVE_READLINE_READLINE_H,
+					HAVE_LIBREADLINE,
+					HAVE_READLINE_HISTORY,
+					HAVE_READLINE_HISTORY_H,
+					"$(GCC_PREPROCESSOR_DEFINITIONS_QUOTED_FOR_PROJECT_1)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_FOR_PROJECT_1 = "VERSION=\"${CURRENT_PROJECT_VERSION}\"";
 				GCC_VERSION = "";
 				HEADER_SEARCH_PATHS = "/Users/kyle/Wcalc_Development/universal-libs/include/";
 				MACOSX_DEPLOYMENT_TARGET = 10.4;
@@ -769,11 +808,15 @@
 				GCC_OPTIMIZATION_LEVEL = 2;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(GCC_PREPROCESSOR_DEFINITIONS_QUOTED_1)",
+					"$(GCC_PREPROCESSOR_DEFINITIONS_QUOTED_FOR_TARGET_1)",
 					GUI,
+					HAVE_READLINE_READLINE_H,
+					HAVE_LIBREADLINE,
+					HAVE_READLINE_HISTORY,
+					HAVE_READLINE_HISTORY_H,
 					STDC_HEADERS,
 				);
-				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_1 = "VERSION=\\\"${CURRENT_PROJECT_VERSION}\\\"";
+				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_FOR_TARGET_1 = "VERSION=\\\"${CURRENT_PROJECT_VERSION}\\\"";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
 				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
@@ -790,8 +833,10 @@
 				LIBRARY_SEARCH_PATHS = (
 					/opt/local/lib,
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_2)",
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)/../universal-libs/lib\"";
 				OTHER_LDFLAGS = (
 					/opt/local/lib/libmpfr.a,
 					/opt/local/lib/libgmp.a,
@@ -830,12 +875,16 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(GCC_PREPROCESSOR_DEFINITIONS_QUOTED_1)",
+					"$(GCC_PREPROCESSOR_DEFINITIONS_QUOTED_FOR_TARGET_1)",
 					GUI,
+					HAVE_READLINE_READLINE_H,
+					HAVE_LIBREADLINE,
+					HAVE_READLINE_HISTORY,
+					HAVE_READLINE_HISTORY_H,
 					STDC_HEADERS,
 					EBUG,
 				);
-				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_1 = "VERSION=\\\"${CURRENT_PROJECT_VERSION}\\\"";
+				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_FOR_TARGET_1 = "VERSION=\\\"${CURRENT_PROJECT_VERSION}\\\"";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
 				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
@@ -881,7 +930,14 @@
 				GCC_CW_ASM_SYNTAX = NO;
 				GCC_MODEL_TUNING = "";
 				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = "VERSION=\"${CURRENT_PROJECT_VERSION}\"";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					HAVE_READLINE_READLINE_H,
+					HAVE_LIBREADLINE,
+					HAVE_READLINE_HISTORY,
+					HAVE_READLINE_HISTORY_H,
+					"$(GCC_PREPROCESSOR_DEFINITIONS_QUOTED_FOR_PROJECT_1)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_FOR_PROJECT_1 = "VERSION=\"${CURRENT_PROJECT_VERSION}\"";
 				GCC_VERSION = "";
 				HEADER_SEARCH_PATHS = (
 					"/Users/kyle/Wcalc_Development/universal-libs/include/",
@@ -909,11 +965,15 @@
 				GCC_OPTIMIZATION_LEVEL = 2;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(GCC_PREPROCESSOR_DEFINITIONS_QUOTED_1)",
+					"$(GCC_PREPROCESSOR_DEFINITIONS_QUOTED_FOR_TARGET_1)",
 					GUI,
+					HAVE_READLINE_READLINE_H,
+					HAVE_LIBREADLINE,
+					HAVE_READLINE_HISTORY,
+					HAVE_READLINE_HISTORY_H,
 					STDC_HEADERS,
 				);
-				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_1 = "VERSION=\\\"${CURRENT_PROJECT_VERSION}\\\"";
+				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_FOR_TARGET_1 = "VERSION=\\\"${CURRENT_PROJECT_VERSION}\\\"";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
 				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
@@ -930,8 +990,10 @@
 				LIBRARY_SEARCH_PATHS = (
 					/Users/kyle/Wcalc_Development/10.3.9/lib,
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_2)",
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)/../universal-libs/lib\"";
 				MACOSX_DEPLOYMENT_TARGET = 10.3;
 				OTHER_LDFLAGS = (
 					/Users/kyle/Wcalc_Development/10.3.9/lib/libgmp.a,
@@ -971,11 +1033,15 @@
 				GCC_OPTIMIZATION_LEVEL = 2;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(GCC_PREPROCESSOR_DEFINITIONS_QUOTED_1)",
+					"$(GCC_PREPROCESSOR_DEFINITIONS_QUOTED_FOR_TARGET_1)",
 					GUI,
+					HAVE_READLINE_READLINE_H,
+					HAVE_LIBREADLINE,
+					HAVE_READLINE_HISTORY,
+					HAVE_READLINE_HISTORY_H,
 					STDC_HEADERS,
 				);
-				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_1 = "VERSION=\\\"${CURRENT_PROJECT_VERSION}\\\"";
+				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_FOR_TARGET_1 = "VERSION=\\\"${CURRENT_PROJECT_VERSION}\\\"";
 				GCC_STRICT_ALIASING = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
@@ -1031,7 +1097,14 @@
 				CURRENT_PROJECT_VERSION = 2.4;
 				GCC_MODEL_TUNING = "";
 				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = "VERSION=\"${CURRENT_PROJECT_VERSION}\"";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					HAVE_READLINE_READLINE_H,
+					HAVE_LIBREADLINE,
+					HAVE_READLINE_HISTORY,
+					HAVE_READLINE_HISTORY_H,
+					"$(GCC_PREPROCESSOR_DEFINITIONS_QUOTED_FOR_PROJECT_1)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_FOR_PROJECT_1 = "VERSION=\"${CURRENT_PROJECT_VERSION}\"";
 				GCC_VERSION = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.3;
 				ONLY_ACTIVE_ARCH = YES;
