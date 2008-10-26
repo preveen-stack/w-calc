@@ -1,3 +1,150 @@
+2008-10-26 14:22  memoryhole
+
+	* AboutBoxController.m: depend on definitions.h
+
+2008-10-26 14:22  memoryhole
+
+	* WcalcController.h, WcalcController.m: alternate input decimal and
+	  thousand separators... this is to handle the pathological case
+	  where input needs to be from one nationality and output needs to
+	  be in another; also fixed display size adjusting
+
+2008-10-25 17:04  memoryhole
+
+	* WcalcController.m: use 10.4+ method of fetching thousands
+	  separator and dec separator
+
+2008-10-25 16:41  memoryhole
+
+	* number.h: make binary operations (bor, band, bxor) use a less
+	  surprising rounding mode when operating on non-integers
+
+2008-10-25 16:38  memoryhole
+
+	* number.c: make is_int simpler and stop relying on string
+	  manipulation
+
+2008-10-25 16:35  memoryhole
+
+	* calculator.c: truncate right-shifts only if we were working with
+	  an integer to begin with
+
+2008-10-25 16:34  memoryhole
+
+	* number_formatting.c: fix typo
+
+2008-10-25 16:34  memoryhole
+
+	* add_commas.c: behave correctly if separator is nil
+
+2008-10-12 00:34  memoryhole
+
+	* .cvsignore: remove generated files from .cvsignore
+
+2008-10-12 00:33  memoryhole
+
+	* English.lproj/.DS_Store: DS_Store
+
+2008-10-12 00:32  memoryhole
+
+	* calculator.c: simplifying previous rshift solution with trunc
+
+2008-10-12 00:31  memoryhole
+
+	* aclocal.m4, config.h.in, configure, ylwrap: removing generated
+	  files from cvs
+
+2008-10-12 00:26  memoryhole
+
+	* .cvsignore, English.lproj/.cvsignore: tidying
+
+2008-10-12 00:19  memoryhole
+
+	* number.c, number.h: less complicated solution to the problem:
+	  just use trunccalculator.c
+
+2008-10-12 00:09  memoryhole
+
+	* Makefile.am, Makefile.in, configure.in, ylwrap,
+	  English.lproj/Makefile.am: better build system
+
+2008-10-10 16:43  memoryhole
+
+	* calculator.c: use num_rshift instead of hand work, because we
+	  need the numbers to be truncated correctly
+
+2008-10-10 16:41  memoryhole
+
+	* number.c, number.h: num_rshift to truncate bits correctly
+
+2008-10-10 16:38  memoryhole
+
+	* number_formatting.c: avoid a stupid segfault
+
+2008-08-24 15:27  memoryhole
+
+	* explain.c, isconst.c: minor fix, and added a warning to remind
+	  myself of an idea
+
+2008-08-24 15:03  memoryhole
+
+	* explain.c: revamped isconst makes it easier to handle this
+	  symbolically, and allows the compiler to notice missing
+	  explanations... added a few missing explanations
+
+2008-08-24 15:01  memoryhole
+
+	* scanner.l, extract_vars.c: deal with new isconst correctly
+
+2008-08-24 15:01  memoryhole
+
+	* isconst.c, isconst.h, main.c: fix the engineering flag (oops) and
+	  expand the power of isconst()
+
+2008-06-17 08:22  memoryhole
+
+	* calculator.c: localizing the output was getting skipped in some
+	  circumstances
+
+2008-05-13 16:38  memoryhole
+
+	* list.h: declaring inline in a header file is pointless, and with
+	  SunStudio's compiler, harmful
+
+2008-05-13 16:28  memoryhole
+
+	* configure.in: remove solaris bodge (have generic isinf/isnan
+	  workaround), but add AC_C_INLINE
+
+2008-05-13 16:27  memoryhole
+
+	* calculator.c: isinf/isnan nonexistence fixes
+
+2008-03-30 23:47  memoryhole
+
+	* Makefile.am: enable "make dist"
+
+2008-03-30 23:25  memoryhole
+
+	* main.c: pref reading shouldn't require a space between the key
+	  and the equals sign
+
+2008-02-20 14:09  memoryhole
+
+	* main.c, scanner.l: add tab-completion of new engineering modes
+
+2008-02-20 14:08  memoryhole
+
+	* explain.c: make explanations of commands tolerant of missing
+	  backslash
+
+2008-02-17 18:26  memoryhole
+
+	* ChangeLog, NEWS, README, Wcalc-nonFHS.pmproj, Wcalc.pmproj,
+	  aclocal.m4, configure, Wcalc.xcodeproj/kyle.mode1,
+	  Wcalc.xcodeproj/kyle.pbxuser, Wcalc.xcodeproj/project.pbxproj:
+	  2.3.1
+
 2008-02-17 18:06  memoryhole
 
 	* acinclude.m4: better readline history detection

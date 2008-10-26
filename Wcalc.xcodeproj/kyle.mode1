@@ -260,7 +260,6 @@
 								<string>080E96DDFE201D6D7F000001</string>
 								<string>29B97315FDCFA39411CA2CEA</string>
 								<string>29B97317FDCFA39411CA2CEA</string>
-								<string>F510EE8F021717DF01A80164</string>
 								<string>29B97323FDCFA39411CA2CEA</string>
 								<string>1058C7A0FEA54F0111CA2CBB</string>
 								<string>19C28FACFE9D520D11CA2CBB</string>
@@ -271,11 +270,11 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>49</integer>
+									<integer>0</integer>
 								</array>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
-							<string>{{0, 374}, {252, 628}}</string>
+							<string>{{0, 0}, {252, 628}}</string>
 						</dict>
 						<key>PBXTopSmartGroupGIDs</key>
 						<array/>
@@ -310,7 +309,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CE0B20306471E060097A5F4</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>WcalcController.m</string>
+								<string>number.h</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -318,11 +317,11 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CE0B20406471E060097A5F4</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>WcalcController.m</string>
+										<string>number.h</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>271E0C750D690803006D1356</string>
+										<string>277E70E80D6A276A001C912C</string>
 										<key>history</key>
 										<array>
 											<string>2721CD220869C0C400E3BB4D</string>
@@ -370,7 +369,8 @@
 											<string>27239AE90C7F8EB400204808</string>
 											<string>279AB3E40D5CD6FC002AFBEA</string>
 											<string>279AB4210D5CDB02002AFBEA</string>
-											<string>271E0C2A0D68FA82006D1356</string>
+											<string>277E70C70D6A22A2001C912C</string>
+											<string>277E70C80D6A22A2001C912C</string>
 										</array>
 										<key>prevStack</key>
 										<array>
@@ -421,6 +421,7 @@
 											<string>2729A55F09B25AE9001F07F4</string>
 											<string>275D2C930C50346B0056D137</string>
 											<string>275D2C940C50346B0056D137</string>
+											<string>277E70C90D6A22A2001C912C</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -478,9 +479,9 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>271E0C250D68F918006D1356</string>
+				<string>277E70B90D6A0FF6001C912C</string>
 				<string>1CE0B1FE06471DED0097A5F4</string>
-				<string>271E0C260D68F918006D1356</string>
+				<string>277E70BA0D6A0FF6001C912C</string>
 				<string>1CE0B20306471E060097A5F4</string>
 				<string>1CE0B20506471E060097A5F4</string>
 			</array>
@@ -614,13 +615,7 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>271E0C3F0D68FBA7006D1356</string>
-		<string>271E0C400D68FBA7006D1356</string>
-		<string>2721CC52086652BA00E3BB4D</string>
-		<string>271E0C3B0D68FBA7006D1356</string>
-		<string>1C0AD2B3069F1EA900FABCE6</string>
 		<string>276C702E09208343005A5B75</string>
-		<string>1CD10A99069EF8BA00B06720</string>
 		<string>/Users/kyle/Wcalc_Development/Wcalc/Wcalc.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
@@ -645,7 +640,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CD0528F0623707200166675</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>number_formatting.c</string>
+								<string>number.h</string>
 								<key>StatusBarVisibility</key>
 								<true/>
 							</dict>
@@ -667,7 +662,7 @@
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXBuildLogShowsTranscriptDefaultKey</key>
-								<string>{{0, 114}, {789, 340}}</string>
+								<string>{{0, 130}, {789, 324}}</string>
 								<key>PBXProjectModuleGUID</key>
 								<string>XCMainBuildResultsModuleGUID</string>
 								<key>PBXProjectModuleLabel</key>
@@ -705,7 +700,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>276C702E09208343005A5B75</string>
-				<string>271E0C2C0D68FA82006D1356</string>
+				<string>277E70BB0D6A0FF6001C912C</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>

@@ -1,6 +1,6 @@
 Hello!
 
-This is Wcalc 2.3.1!
+This is Wcalc 2.4!
 
 1. What's New
 2. Intro
@@ -14,19 +14,23 @@ This is Wcalc 2.3.1!
 **************
 
 IMPROVEMENTS:
- - Preferences saved more reliably (GUI)
- - Can now alter maximum slider precision (GUI)
- - Added sinc/exp/fact/comp functions to the menu (GUI)
- - Fixed FORTRAN-style syntax errors (BOTH)
- - Updated license to be GPLv2+ compatible (BOTH)
- - Accept both @NaN@ and @Inf@ as input, correcting some compound operations (BOTH)
- - Made engineering notation a three-way toggle (BOTH)
- - Accept input from a "wcalc_input" environment variable (CLI)
+ - Allow separate input internationalization characters from output (BOTH)
+ - Made binary operations use a more intuitive rounding mode (BOTH)
+ - Improved documentation of features (CLI)
+ - Made command explanations more tolerant of typos (BOTH)
+ - Expanded tab-completion (CLI)
+ - Improved readline history detection (CLI)
+ - Reorganized the preferences window (GUI)
 
 BUGFIXES:
- - Fixed display glitches when auto-resizing due to extremely large numbers (GUI)
- - Fixed simple calc mode, more reliable, removed crashes (GUI)
- - Made engineering configuration more reliable (CLI)
+ - Fixed display if thousands/grouping separator is unset (BOTH)
+ - Fixed a potential crash (CLI)
+ - Corrected engineering flag behavior (CLI)
+ - Output localization more reliable (BOTH)
+ - Corrected isinf/isnan behavior on some platforms (CLI)
+ - Improved Solaris compatibility (CLI)
+ - Made preference file parsing more tolerant (CLI)
+ - Fixed the backwards compatibility logic (GUI)
 
 
 *********

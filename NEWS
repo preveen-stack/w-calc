@@ -1,3 +1,30 @@
+--- Version 2.4 ---
+Oct 25 2008 - Kyle Wheeler
+ - Allow alternate input internationalization characters (BOTH)
+ - Use the OSX 10.4+ method of fetching internationalization settings (GUI)
+ - Fixed display if thousands/grouping separator is unset (BOTH)
+ - Made binary operations use a more intuitive rounding mode (BOTH)
+Oct 10 2008 - Kyle Wheeler
+ - Fixed a potential crash (CLI)
+ - Made bit-shifts behave a bit more intuitively for C programmers (BOTH)
+Aug 24 2008 - Kyle Wheeler
+ - Improved documentation of features (CLI)
+Jun 24 2008 - Kyle Wheeler
+ - Corrected engineering flag behavior (CLI)
+Jun 17 2008 - Kyle Wheeler
+ - Output localization more reliable (BOTH)
+May 13 2008 - Kyle Wheeler
+ - Corrected isinf/isnan behavior on some platforms (CLI)
+ - Improved Solaris compatibility (CLI)
+Mar 30 2008 - Kyle Wheeler
+ - Made preference file parsing more tolerant (CLI)
+Feb 20 2008 - Kyle Wheeler
+ - Made command explanations more tolerant of typos (BOTH)
+ - Expanded tab-completion (CLI)
+Feb 17 2008 - Kyle Wheeler
+ - Improved readline history detection (CLI)
+Feb 12 2008 - Kyle Wheeler
+ - Fixed the backwards compatibility logic (GUI)
 --- Version 2.3.1 ---
 Feb 08 2008 - Kyle Wheeler
  - Make engineering notation a three-way toggle (BOTH)

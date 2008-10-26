@@ -5,6 +5,19 @@
 	<key>IBClasses</key>
 	<array>
 		<dict>
+			<key>CLASS</key>
+			<string>theDelegate</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>mainWindow</key>
+				<string>NSWindow</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
 			<key>ACTIONS</key>
 			<dict>
 				<key>clearVariables</key>
@@ -24,19 +37,6 @@
 			<dict>
 				<key>theList</key>
 				<string>NSTableView</string>
-			</dict>
-			<key>SUPERCLASS</key>
-			<string>NSObject</string>
-		</dict>
-		<dict>
-			<key>CLASS</key>
-			<string>theDelegate</string>
-			<key>LANGUAGE</key>
-			<string>ObjC</string>
-			<key>OUTLETS</key>
-			<dict>
-				<key>mainWindow</key>
-				<string>NSWindow</string>
 			</dict>
 			<key>SUPERCLASS</key>
 			<string>NSObject</string>
