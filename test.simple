@@ -44,3 +44,7 @@ a # should be 23.05
 a-14.5-8.55 # should be 0, not -1E-09
 2^3 # should be 8
 2**3 # should be 8, equiv to 2^3
+6.6 & 0xff # should be 6
+-6.6 & 0xff # should be 250
+(67113132 >> 8) & 0xff # should be 16
+pi << 60 >> 60 # should be 3.14159
