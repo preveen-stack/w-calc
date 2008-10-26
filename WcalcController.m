@@ -292,6 +292,12 @@ static pthread_mutex_t displayLock;
 	[prefs setObject:@"4" forKey:@"initialized"];
 	[prefs setObject:@"1" forKey:@"engineeringNotation"];
     }
+    if (prefsVersion < 5) {
+	Dprintf("Upgrading prefs to v5\n");
+	[prefs setObject:@"5" forKey:@"initialized"];
+	[prefs setObject:@"" forKey:@"alternateInputDecimalSeparator"];
+	[prefs setObject:@"" forKey:@"alternateInputThousandsSeparator"];
+    }
     conf.precision = [prefs integerForKey:@"precision"];
     switch([prefs integerForKey:@"engineeringNotation"]) {
 		case 1: conf.engineering = automatic; break;
@@ -355,8 +361,20 @@ static pthread_mutex_t displayLock;
 	conf.thou_delimiter = 0;
     }
     Dprintf("NSGroupingSeparator set (%c)\n", conf.thou_delimiter);
-    [decimalKey setTitle:[numFormat groupingSeparator]];
-    Dprintf("decimalKey title set\n");
+    if ([prefs integerForKey:@"alternateInputDecimalSeparator"]) {
+	if ([[prefs stringForKey:@"alternateInputDecimalSeparator"] length] > 0) {
+	    conf.in_dec_delimiter = [[prefs stringForKey:@"alternateInputDecimalSeparator"] characterAtIndex:0];
+	}
+	if ([[prefs stringForKey:@"alternateInputThousandsSeparator"] length] > 0) {
+	    conf.in_thou_delimiter = [[prefs stringForKey:@"alternateInputThousandsSeparator"] characterAtIndex:0];
+	}
+	if (conf.in_dec_delimiter != 0) {
+	    [decimalKey setTitle:[NSString stringWithCString:&conf.in_dec_delimiter length:1]];
+	}
+    } else {
+	[decimalKey setTitle:[numFormat decimalSeparator]];
+	Dprintf("decimalKey title set\n");
+    }
 
     /* reset the window to the saved setting */
     superview = [keypad superview];
@@ -506,9 +524,14 @@ static pthread_mutex_t displayLock;
     { // Make the Answerfield big enough to display the answer
 	NSRect curFrame, newFrame;
 	curFrame = [AnswerField frame];
+	Dprintf("displayAnswer - current size: %f x %f\n", curFrame.size.height, curFrame.size.width);
 	newFrame = curFrame;
-	//newFrame.size.height = 10000000.0; // arbitrarily big number
+	// we set the height to a huge number because cellSizeForBounds only
+	// works "within" the specified bound, which we want because we want to
+	// limit the width.
+	newFrame.size.height = DBL_MAX; 
 	newFrame.size = [[AnswerField cell] cellSizeForBounds:newFrame];
+	Dprintf("displayAnswer - needed size: %f x %f\n", newFrame.size.height, newFrame.size.width);
 	if (curFrame.size.height != newFrame.size.height) {
 	    size_t newHeight = newFrame.size.height;
 	    int difference = newHeight - curFrame.size.height;
@@ -750,8 +773,9 @@ static pthread_mutex_t displayLock;
     short need_redraw = 0;
     short olde;
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    int tag = [sender tag];
 
-    switch ([sender tag]) {
+    switch (tag) {
 	case 1: // Flag Undefined Variables
 	    olde = conf.picky_variables;
 	    conf.picky_variables = ([pickyVariables state]==NSOnState);
@@ -943,7 +967,31 @@ static pthread_mutex_t displayLock;
 		[PrecisionSlider setMaxValue:[sliderStepper doubleValue]];
 		[prefs setObject:[NSString stringWithFormat:@"%lu",[sliderStepper intValue]] forKey:@"maxSliderPrecision"];
 	    }
-	    break;    
+	    break;
+	case 24:
+	    [altInputDecSep setEnabled:([sender state] == NSOnState)];
+	    [altInputThouSep setEnabled:([sender state] == NSOnState)];
+	    if ([sender state] != NSOnState) {
+		[altInputDecSep setStringValue:@""];
+		[altInputThouSep setStringValue:@""];
+		[decimalKey setTitle:[NSString stringWithCString:&conf.dec_delimiter length:1]];
+	    }
+	    break;
+	case 25:
+	    if ([[sender stringValue] length] > 0) {
+		conf.in_dec_delimiter = [[sender stringValue] characterAtIndex:0];
+		[decimalKey setTitle:[NSString stringWithCString:&conf.in_dec_delimiter length:1]];
+	    } else {
+		conf.in_dec_delimiter = 0;
+		[decimalKey setTitle:[NSString stringWithCString:&conf.dec_delimiter length:1]];
+	    }
+	    break;
+	case 26:
+	    if ([[sender stringValue] length] > 0) {
+		conf.in_thou_delimiter = [[sender stringValue] characterAtIndex:0];
+	    } else {
+		conf.in_thou_delimiter = 0;
+	    }
 	default: return;
     }
 
@@ -1110,6 +1158,7 @@ static pthread_mutex_t displayLock;
     [cModPref setState:(conf.c_style_mod?NSOnState:NSOffState)];
     [sliderPref setIntValue:(int)[PrecisionSlider maxValue]];
     [sliderStepper setIntValue:(int)[PrecisionSlider maxValue]];
+    [alternateInputPref setState:(conf.in_dec_delimiter != 0 || conf.in_thou_delimiter != 0)];
 
     /* disable irrelevant preferences */
     [historyDuplicates setEnabled:!conf.simple_calc];
@@ -1122,11 +1171,13 @@ static pthread_mutex_t displayLock;
     [engineeringNotation setEnabled:(conf.output_format==DECIMAL_FORMAT)];
     [limitHistoryLen setEnabled:conf.history_limit&&!conf.simple_calc];
     [limitHistoryLenTag setEnabled:conf.history_limit&&!conf.simple_calc];
+    [altInputDecSep setEnabled:[alternateInputPref state]];
+    [altInputThouSep setEnabled:[alternateInputPref state]];
 
-    {
-	char len[6];
-	sprintf(len,"%lu",conf.history_limit_len);
-	[limitHistoryLen setStringValue:[NSString stringWithFormat:@"%s",len]];
+    [limitHistoryLen setStringValue:[NSString stringWithFormat:@"%lu",conf.history_limit_len]];
+    if ([alternateInputPref state]) {
+	[altInputDecSep setStringValue:[NSString stringWithFormat:@"%c",conf.in_dec_delimiter]];
+	[altInputThouSep setStringValue:[NSString stringWithFormat:@"%c",conf.in_thou_delimiter]];
     }
 }
 

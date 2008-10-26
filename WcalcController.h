@@ -12,6 +12,7 @@
     IBOutlet NSMenuItem *saveMenuItem;
     IBOutlet NSMenuItem *saveAsMenuItem;
     IBOutlet NSMenuItem *sizeToggleMenu;
+    IBOutlet NSMenuItem *conversionMenu;
 
     IBOutlet NSWindow *mainWindow;
     IBOutlet NSWindow *inspectorWindow;
@@ -37,6 +38,7 @@
     IBOutlet NSButton *printDelimiters;
     IBOutlet NSButton *livePrecision;
     IBOutlet NSButton *cModPref;
+    IBOutlet NSButton *alternateInputPref;
 
     IBOutlet NSTextField *AnswerField;
     IBOutlet NSTextField *ExpressionField;
@@ -44,6 +46,8 @@
     IBOutlet NSTextField *limitHistoryLenTag;
     IBOutlet NSTextField *bitsPref;
     IBOutlet NSTextField *sliderPref;
+    IBOutlet NSTextField *altInputDecSep;
+    IBOutlet NSTextField *altInputThouSep;
 
     IBOutlet NSDrawer *baseDrawer;
 	
