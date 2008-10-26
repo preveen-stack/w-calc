@@ -10,10 +10,6 @@
 #ifndef WCALC_DEFINITIONS
 #define WCALC_DEFINITIONS
 
-#ifndef HAVE_CONFIG_H
-#define VERSION "2.3.1"
-#endif
-
 #define W_EXTRA 5
 #define RAND_FILE "/dev/random"
 #define DEFAULT_BASE 10
