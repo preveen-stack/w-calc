@@ -1,5 +1,5 @@
 %define name Wcalc
-%define version 2.1
+%define version 2.4
 
 Summary: A flexible command-line calculator
 Name: %{name}
@@ -7,7 +7,7 @@ Version: %{version}
 Release: 1
 Group: Applications
 Url: http://w-calc.sf.net/
-Source: http://prdownloads.sf.net/w-calc/Wcalc-%{version}.tar.bz2
+Source: http://prdownloads.sf.net/w-calc/wcalc-%{version}.tar.bz2
 License: GPL
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 Vendor: Kyle Wheeler <kyle-rpm@memoryhole.ncr.nd.edu>
