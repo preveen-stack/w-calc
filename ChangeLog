@@ -1,3 +1,44 @@
+2008-10-26 16:27  memoryhole
+
+	* historyManager.c, Wcalc.pmdoc/01wcalc.xml,
+	  Wcalc.xcodeproj/kyle.pbxuser, Wcalc.xcodeproj/project.pbxproj:
+	  fixing compilation in xcode
+
+2008-10-26 15:44  memoryhole
+
+	* ChangeLog, NEWS, README, Wcalc-nonFHS.pmproj, Wcalc.pmproj,
+	  English.lproj/MainMenu.nib/classes.nib,
+	  English.lproj/MainMenu.nib/info.nib,
+	  English.lproj/MainMenu.nib/keyedobjects.nib,
+	  Wcalc.pmdoc/01wcalc-contents.xml, Wcalc.pmdoc/01wcalc.xml,
+	  Wcalc.pmdoc/index.xml, Wcalc.xcodeproj/kyle.mode1,
+	  Wcalc.xcodeproj/kyle.pbxuser, Wcalc.xcodeproj/project.pbxproj:
+	  collective version bump
+
+2008-10-26 15:43  memoryhole
+
+	* wcalc.1: documenting the new options for input
+
+2008-10-26 15:03  memoryhole
+
+	* test.simple: test for crashers and correct binary ops
+
+2008-10-26 15:03  memoryhole
+
+	* Info.plist, definitions.h, help.c: simpler versioning cooperation
+	  with Xcode
+
+2008-10-26 15:02  memoryhole
+
+	* calculator.c, calculator.h, main.c, parser.y, scanner.l,
+	  simpleCalc.c, English.lproj/InfoPlist.strings,
+	  English.lproj/MainMenu.nib/classes.nib,
+	  English.lproj/MainMenu.nib/info.nib,
+	  English.lproj/MainMenu.nib/keyedobjects.nib: alternate input
+	  decimal and thousand separators... this is to handle the
+	  pathological case where input needs to be from one nationality
+	  and output needs to be in another
+
 2008-10-26 14:22  memoryhole
 
 	* AboutBoxController.m: depend on definitions.h

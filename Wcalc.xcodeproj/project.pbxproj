@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 42;
+	objectVersion = 44;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -19,6 +19,10 @@
 		27085F070EB51331009B43DD /* iscmd.h in Headers */ = {isa = PBXBuildFile; fileRef = 27085F030EB51331009B43DD /* iscmd.h */; };
 		27085F0A0EB51382009B43DD /* libreadline.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27085F090EB51382009B43DD /* libreadline.a */; };
 		27085F0C0EB5138C009B43DD /* libhistory.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27085F0B0EB5138C009B43DD /* libhistory.a */; };
+		271AB2670EBB813500250C1C /* libgmp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 271AB2660EBB813500250C1C /* libgmp.a */; };
+		271AB2680EBB813500250C1C /* libgmp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 271AB2660EBB813500250C1C /* libgmp.a */; };
+		271AB26A0EBB813A00250C1C /* libmpfr.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 271AB2690EBB813A00250C1C /* libmpfr.a */; };
+		271AB26B0EBB813A00250C1C /* libmpfr.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 271AB2690EBB813A00250C1C /* libmpfr.a */; };
 		2729A40209B1ECE5001F07F4 /* add_commas.h in Headers */ = {isa = PBXBuildFile; fileRef = 2729A40009B1ECE5001F07F4 /* add_commas.h */; };
 		2729A40309B1ECE5001F07F4 /* add_commas.c in Sources */ = {isa = PBXBuildFile; fileRef = 2729A40109B1ECE5001F07F4 /* add_commas.c */; };
 		2729A40409B1ECE5001F07F4 /* add_commas.h in Headers */ = {isa = PBXBuildFile; fileRef = 2729A40009B1ECE5001F07F4 /* add_commas.h */; };
@@ -133,7 +137,9 @@
 		27085F020EB51331009B43DD /* iscmd.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = iscmd.c; sourceTree = "<group>"; };
 		27085F030EB51331009B43DD /* iscmd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iscmd.h; sourceTree = "<group>"; };
 		27085F090EB51382009B43DD /* libreadline.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libreadline.a; path = "../universal-libs/lib/libreadline.a"; sourceTree = SOURCE_ROOT; };
-		27085F0B0EB5138C009B43DD /* libhistory.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libhistory.a; path = "../universal-libs/lib/libhistory.a"; sourceTree = SOURCE_ROOT; };
+		27085F0B0EB5138C009B43DD /* libhistory.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; name = libhistory.a; path = "../universal-libs/lib/libhistory.a"; sourceTree = SOURCE_ROOT; };
+		271AB2660EBB813500250C1C /* libgmp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgmp.a; path = "../universal-libs/lib/libgmp.a"; sourceTree = SOURCE_ROOT; };
+		271AB2690EBB813A00250C1C /* libmpfr.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmpfr.a; path = "../universal-libs/lib/libmpfr.a"; sourceTree = SOURCE_ROOT; };
 		2721CD490869C13400E3BB4D /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2729A40009B1ECE5001F07F4 /* add_commas.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = add_commas.h; sourceTree = "<group>"; };
 		2729A40109B1ECE5001F07F4 /* add_commas.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = add_commas.c; sourceTree = "<group>"; };
@@ -218,6 +224,8 @@
 				27085F000EB512E1009B43DD /* libncurses.dylib in Frameworks */,
 				27085F0A0EB51382009B43DD /* libreadline.a in Frameworks */,
 				27085F0C0EB5138C009B43DD /* libhistory.a in Frameworks */,
+				271AB2670EBB813500250C1C /* libgmp.a in Frameworks */,
+				271AB26A0EBB813A00250C1C /* libmpfr.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -227,6 +235,8 @@
 			files = (
 				27D39156059BEA850035F25F /* Cocoa.framework in Frameworks */,
 				2789AB470EB1877D008DEB99 /* libl.a in Frameworks */,
+				271AB2680EBB813500250C1C /* libgmp.a in Frameworks */,
+				271AB26B0EBB813A00250C1C /* libmpfr.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -269,6 +279,8 @@
 			isa = PBXGroup;
 			children = (
 				2789AB460EB1877D008DEB99 /* libl.a */,
+				271AB2660EBB813500250C1C /* libgmp.a */,
+				271AB2690EBB813A00250C1C /* libmpfr.a */,
 				27085F0B0EB5138C009B43DD /* libhistory.a */,
 				27085F090EB51382009B43DD /* libreadline.a */,
 				27085EFF0EB512E1009B43DD /* libncurses.dylib */,
@@ -496,7 +508,7 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = 27B38FA40859DCBE00C2FE3C /* Build configuration list for PBXProject "Wcalc" */;
-			compatibilityVersion = "Xcode 2.4";
+			compatibilityVersion = "Xcode 3.0";
 			hasScannedForEncodings = 1;
 			mainGroup = 29B97314FDCFA39411CA2CEA /* Wcalc */;
 			projectDirPath = "";
@@ -665,11 +677,7 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)\"";
-				OTHER_LDFLAGS = (
-					"/Users/kyle/Wcalc_Development/universal-libs/lib/libmpfr.a",
-					"/Users/kyle/Wcalc_Development/universal-libs/lib/libgmp.a",
-					"/Users/kyle/Wcalc_Development/universal-libs/lib/libreadline.a",
-				);
+				OTHER_LDFLAGS = "/Users/kyle/Wcalc_Development/universal-libs/lib/libreadline.a";
 				PREBINDING = YES;
 				PRODUCT_NAME = wcalc;
 				SECTORDER_FLAGS = "";
@@ -738,14 +746,14 @@
 					"/Users/kyle/Wcalc_Development/universal-libs/include",
 				);
 				INFOPLIST_FILE = Info.plist;
-				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)\"";
+				LIBRARY_SEARCH_PATHS = (
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2)",
+				);
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(SRCROOT)/../universal-libs/lib\"";
 				MACOSX_DEPLOYMENT_TARGET = 10.4;
 				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = (
-					/usr/lib/libl.a,
-					"/Users/kyle/Wcalc_Development/universal-libs/lib/libmpfr.a",
-					"/Users/kyle/Wcalc_Development/universal-libs/lib/libgmp.a",
-				);
 				PRIVATE_HEADERS_FOLDER_PATH = "$(CONTENTS_FOLDER_PATH)/PrivateHeaders";
 				PRODUCT_NAME = Wcalc;
 				SECTORDER_FLAGS = "";
@@ -781,16 +789,13 @@
 				);
 				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_FOR_PROJECT_1 = "VERSION=\"${CURRENT_PROJECT_VERSION}\"";
 				GCC_VERSION = "";
-				HEADER_SEARCH_PATHS = "/Users/kyle/Wcalc_Development/universal-libs/include/";
+				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../universal-libs/include\"";
+				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/../universal-libs/lib\"";
 				MACOSX_DEPLOYMENT_TARGET = 10.4;
 				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = (
-					"/Users/kyle/Wcalc_Development/universal-libs/lib/libgmp.a",
-					"/Users/kyle/Wcalc_Development/universal-libs/lib/libmpfr.a",
-					"/Users/kyle/Wcalc_Development/universal-libs/lib/libreadline.a",
-				);
+				OTHER_LDFLAGS = "-Wl,-search_paths_first";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = YES;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.4u.sdk";
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = static;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -834,15 +839,12 @@
 					/opt/local/lib,
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_2)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_3)",
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)/../universal-libs/lib\"";
-				OTHER_LDFLAGS = (
-					/opt/local/lib/libmpfr.a,
-					/opt/local/lib/libgmp.a,
-					/opt/local/lib/libreadline.a,
-					/opt/local/lib/libncursesw.a,
-				);
+				LIBRARY_SEARCH_PATHS_QUOTED_3 = "\"$(SRCROOT)/../universal-libs/lib\"";
+				OTHER_LDFLAGS = /opt/local/lib/libreadline.a;
 				PREBINDING = YES;
 				PRODUCT_NAME = wcalc;
 				SECTORDER_FLAGS = "";
@@ -898,12 +900,13 @@
 				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Info.plist;
-				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)\"";
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = (
-					/Users/kyle/Wcalc_Development/Wcalc/libmpfr.a,
-					/Users/kyle/Wcalc_Development/Wcalc/libgmp.a,
+				LIBRARY_SEARCH_PATHS = (
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_2)",
 				);
+				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)/../universal-libs/lib\"";
+				OTHER_CFLAGS = "";
 				PRIVATE_HEADERS_FOLDER_PATH = "$(CONTENTS_FOLDER_PATH)/PrivateHeaders";
 				PRODUCT_NAME = Wcalc;
 				SECTORDER_FLAGS = "";
@@ -939,13 +942,11 @@
 				);
 				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_FOR_PROJECT_1 = "VERSION=\"${CURRENT_PROJECT_VERSION}\"";
 				GCC_VERSION = "";
-				HEADER_SEARCH_PATHS = (
-					"/Users/kyle/Wcalc_Development/universal-libs/include/",
-					/Users/kyle/Wcalc_Development/Wcalc/,
-				);
-				LIBRARY_SEARCH_PATHS = "/Users/kyle/Wcalc_Development/universal-libs/lib/";
+				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../universal-libs/include\"";
+				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/../universal-libs/lib\"";
 				MACOSX_DEPLOYMENT_TARGET = "";
 				ONLY_ACTIVE_ARCH_PRE_XCODE_3_1 = "$(NATIVE_ARCH)";
+				OTHER_LDFLAGS = "-Wl,-search_paths_first";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = YES;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = static;
 				STRIP_INSTALLED_PRODUCT = NO;
@@ -991,15 +992,13 @@
 					/Users/kyle/Wcalc_Development/10.3.9/lib,
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_2)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_3)",
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)/../universal-libs/lib\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_3 = "\"$(SRCROOT)/../universal-libs/lib\"";
 				MACOSX_DEPLOYMENT_TARGET = 10.3;
-				OTHER_LDFLAGS = (
-					/Users/kyle/Wcalc_Development/10.3.9/lib/libgmp.a,
-					/Users/kyle/Wcalc_Development/10.3.9/lib/libmpfr.a,
-					/Users/kyle/Wcalc_Development/10.3.9/lib/libreadline.a,
-				);
+				OTHER_LDFLAGS = /Users/kyle/Wcalc_Development/10.3.9/lib/libreadline.a;
 				PREBINDING = YES;
 				PRODUCT_NAME = wcalc;
 				SECTORDER_FLAGS = "";
@@ -1063,7 +1062,12 @@
 					/Users/kyle/Wcalc_Development/10.3.9/include,
 				);
 				INFOPLIST_FILE = Info.plist;
-				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)\"";
+				LIBRARY_SEARCH_PATHS = (
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_2)",
+				);
+				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)/../universal-libs/lib\"";
 				MACOSX_DEPLOYMENT_TARGET = 10.3;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
@@ -1073,7 +1077,7 @@
 				);
 				PRIVATE_HEADERS_FOLDER_PATH = "$(CONTENTS_FOLDER_PATH)/PrivateHeaders";
 				PRODUCT_NAME = Wcalc;
-				SDKROOT = /Developer/SDKs/MacOSX10.3.9.sdk;
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.3.9.sdk";
 				SECTORDER_FLAGS = "";
 				SEPARATE_STRIP = YES;
 				STRIP_INSTALLED_PRODUCT = YES;
@@ -1106,10 +1110,13 @@
 				);
 				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_FOR_PROJECT_1 = "VERSION=\"${CURRENT_PROJECT_VERSION}\"";
 				GCC_VERSION = "";
+				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../10.3.9/include\"";
+				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/../10.3.9/lib\"";
 				MACOSX_DEPLOYMENT_TARGET = 10.3;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "-Wl,-search_paths_first";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = YES;
-				SDKROOT = /Developer/SDKs/MacOSX10.3.9.sdk;
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.3.9.sdk";
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = static;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
