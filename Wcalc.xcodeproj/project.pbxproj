@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 44;
+	objectVersion = 45;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -507,8 +507,11 @@
 /* Begin PBXProject section */
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+			};
 			buildConfigurationList = 27B38FA40859DCBE00C2FE3C /* Build configuration list for PBXProject "Wcalc" */;
-			compatibilityVersion = "Xcode 3.0";
+			compatibilityVersion = "Xcode 3.1";
 			hasScannedForEncodings = 1;
 			mainGroup = 29B97314FDCFA39411CA2CEA /* Wcalc */;
 			projectDirPath = "";
@@ -774,8 +777,7 @@
 		275D2DC10C514B850056D137 /* Deployment Universal */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
-				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 2.4;
 				GCC_MODEL_TUNING = "";
@@ -795,7 +797,7 @@
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-Wl,-search_paths_first";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = YES;
-				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.4u.sdk";
+				SDKROOT = macosx10.4;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = static;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -927,7 +929,7 @@
 		276C6F5F091A9B97005A5B75 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ONLY_ACTIVE_ARCH_PRE_XCODE_3_1)";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 2.4;
 				GCC_CW_ASM_SYNTAX = NO;
@@ -945,7 +947,7 @@
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../universal-libs/include\"";
 				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/../universal-libs/lib\"";
 				MACOSX_DEPLOYMENT_TARGET = "";
-				ONLY_ACTIVE_ARCH_PRE_XCODE_3_1 = "$(NATIVE_ARCH)";
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-Wl,-search_paths_first";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = YES;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = static;
@@ -1077,7 +1079,7 @@
 				);
 				PRIVATE_HEADERS_FOLDER_PATH = "$(CONTENTS_FOLDER_PATH)/PrivateHeaders";
 				PRODUCT_NAME = Wcalc;
-				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.3.9.sdk";
+				SDKROOT = macosx10.3.9;
 				SECTORDER_FLAGS = "";
 				SEPARATE_STRIP = YES;
 				STRIP_INSTALLED_PRODUCT = YES;
@@ -1116,7 +1118,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-Wl,-search_paths_first";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = YES;
-				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.3.9.sdk";
+				SDKROOT = macosx10.3.9;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = static;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
