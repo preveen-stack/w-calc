@@ -494,6 +494,7 @@ char *engineering_formatted_number(const char *digits, num_exp_t exp,
     }
     // copy over the integer
     snprintf(curs++, length--, "%c", digits[d_index++]);
+    exp--;
     // the decimal
     snprintf(curs++, length--, ".");
     Dprintf("the integers: %s\n", retstring);
