@@ -340,7 +340,7 @@ char *automatically_formatted_number(const char *digits, num_exp_t exp,
     size_t printed;
     char *retstring, *curs;
     size_t d_index = 0;
-    const long original_exp = exp;
+    const long original_exp = exp-1;
 
     length = strlen(digits);
     /* testing against both zero and length because length is unsigned */
