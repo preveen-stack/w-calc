@@ -139,9 +139,20 @@ char *num_to_str_complex(const Number num, const int base,
 	    default:
 	    case automatic:
 		Dprintf("AUTOMATICALLY decide on engineering formatting\n");
-		retstr =
-		    automatically_formatted_number(s, e, prec, base, prefix,
-						   truncated_flag);
+		if (e >= 10 || e <= -10) {
+		    Dprintf("  -> decided on engineering formatting\n");
+		    retstr =
+			engineering_formatted_number(s, e, prec, base, prefix,
+						     truncated_flag);
+		} else {
+		    Dprintf
+			("  -> decided on non-engineering formatting (%i)\n",
+			 (int)e);
+		    retstr =
+			automatically_formatted_number(s, e, prec, base,
+						       prefix,
+						       truncated_flag);
+		}
 	}
     }
     num_free_str(s);
