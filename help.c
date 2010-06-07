@@ -103,7 +103,7 @@ void print_command_help (void)
 		 "Executing this program without any arguments enters an 'interactive' mode\n"
 		 "with a few more features and options.\n"
 		 "\n"
-		 "This is only a subset of the supporte options. See the man page for complete documentation.\n"
+		 "This is only a subset of the supported options. See the man page for complete documentation.\n"
 		 );
 }
 
