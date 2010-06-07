@@ -942,6 +942,7 @@ char *print_this_result(const Number result)
 	}
     }
     if (conf.rounding_indication == NO_ROUNDING_INDICATION) {
+	Dprintf("clearing rounding indication\n");
 	not_all_displayed = 0;
     }
     strswap('.',conf.dec_delimiter,pa);
