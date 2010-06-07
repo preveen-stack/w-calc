@@ -482,7 +482,7 @@ assignment : ASSIGNMENT exp optionalstring
 				if (standard_output) {
 					Number val;
 					num_init(val);
-					printf($1);
+					printf("%s", $1);
 					getvarval(val, $1);
 					print_this_result(val);
 					num_free(val);
