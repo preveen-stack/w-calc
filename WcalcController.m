@@ -361,16 +361,16 @@ static pthread_mutex_t displayLock;
 	conf.thou_delimiter = 0;
     }
     Dprintf("NSGroupingSeparator set (%c)\n", conf.thou_delimiter);
-    if ([prefs integerForKey:@"alternateInputDecimalSeparator"]) {
-	if ([[prefs stringForKey:@"alternateInputDecimalSeparator"] length] > 0) {
-	    conf.in_dec_delimiter = [[prefs stringForKey:@"alternateInputDecimalSeparator"] characterAtIndex:0];
-	}
-	if ([[prefs stringForKey:@"alternateInputThousandsSeparator"] length] > 0) {
-	    conf.in_thou_delimiter = [[prefs stringForKey:@"alternateInputThousandsSeparator"] characterAtIndex:0];
-	}
-	if (conf.in_dec_delimiter != 0) {
-	    [decimalKey setTitle:[NSString stringWithCString:&conf.in_dec_delimiter length:1]];
-	}
+    if ([[prefs stringForKey:@"alternateInputDecimalSeparator"] length] > 0) {
+	conf.in_dec_delimiter = [[prefs stringForKey:@"alternateInputDecimalSeparator"] characterAtIndex:0];
+	Dprintf("alternate input dec sep (%c)\n", conf.in_dec_delimiter);
+    }
+    if ([[prefs stringForKey:@"alternateInputThousandsSeparator"] length] > 0) {
+	conf.in_thou_delimiter = [[prefs stringForKey:@"alternateInputThousandsSeparator"] characterAtIndex:0];
+	Dprintf("alternate input thou sep (%c)\n", conf.in_thou_delimiter);
+    }
+    if (conf.in_dec_delimiter != 0) {
+	[decimalKey setTitle:[NSString stringWithCString:&conf.in_dec_delimiter length:1]];
     } else {
 	[decimalKey setTitle:[numFormat decimalSeparator]];
 	Dprintf("decimalKey title set\n");
@@ -974,24 +974,33 @@ static pthread_mutex_t displayLock;
 	    if ([sender state] != NSOnState) {
 		[altInputDecSep setStringValue:@""];
 		[altInputThouSep setStringValue:@""];
+		conf.in_dec_delimiter = 0;
+		conf.in_thou_delimiter = 0;
 		[decimalKey setTitle:[NSString stringWithCString:&conf.dec_delimiter length:1]];
+		[prefs setObject:@"" forKey:@"alternateInputDecimalSeparator"];
+		[prefs setObject:@"" forKey:@"alternateInputThousandsSeparator"];
 	    }
 	    break;
 	case 25:
 	    if ([[sender stringValue] length] > 0) {
 		conf.in_dec_delimiter = [[sender stringValue] characterAtIndex:0];
 		[decimalKey setTitle:[NSString stringWithCString:&conf.in_dec_delimiter length:1]];
+		[prefs setObject:[[sender stringValue] substringToIndex:1] forKey:@"alternateInputDecimalSeparator"];
 	    } else {
 		conf.in_dec_delimiter = 0;
 		[decimalKey setTitle:[NSString stringWithCString:&conf.dec_delimiter length:1]];
+		[prefs setObject:@"" forKey:@"alternateInputDecimalSeparator"];
 	    }
 	    break;
 	case 26:
 	    if ([[sender stringValue] length] > 0) {
 		conf.in_thou_delimiter = [[sender stringValue] characterAtIndex:0];
+		[prefs setObject:[[sender stringValue] substringToIndex:1] forKey:@"alternateInputThousandsSeparator"];
 	    } else {
 		conf.in_thou_delimiter = 0;
+		[prefs setObject:@"" forKey:@"alternateInputThousandsSeparator"];
 	    }
+	    break;
 	default: return;
     }
 
