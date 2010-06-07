@@ -36,7 +36,7 @@ Specifies that numerical output should be in scientific notation.
 Specifies that numerical output should NOT be in scientific notation.
 .TP
 \fB\-P\fIXXX\fP
-Sets the precision to be \fIXXX\fP. This setting only affects output, not internal representations. A setting of -1 means formats output in whatever precision seems appropriate.
+Sets the "precision", or the number of decimal places displayed, to be \fIXXX\fP. This setting only affects output, not internal representations. If the precision is set to -1, the number of decimal places displayed will depend on the value.
 .br
 Precision is set to autoadjust (-1) by default.
 .br
@@ -71,7 +71,7 @@ radians. By default, trigonometric functions assume input is in degrees.
 Toggles whether the equals sign will be printed before the results.
 .TP
 \fB\-c\fP or \fB\*=conservative\fP
-Toggles precision guards. Because of the way floating point numbers are stored, some operations, like 1-.9-.1, can return an extremely small number that is not zero but is less than the official precision of the floating point number and thus for all intents and purposes, it is 0. The precision guard will round numbers to zero if they are less than the official precision of the floating point number. However, sometimes numbers that small or smaller need to be displayed, and thus the precision guard should be turned off.
+Toggles accuracy guards. Because of the way floating point numbers are stored in computers, some numbers cannot be represented exactly (such as 0.1). Because of this, calculating with those numbers can produce results that are not exactly correct, but are different from the correct answer by a very small value (smaller than the floating point value can represent accurately). For example, the calculation of 1-.9-.1 can return an extremely small number that is not zero but is less than what can be represented accurately, and thus for all intents and purposes, it is 0. The accuracy guard feature will round numbers to zero if they are less than the representable accuracy of the floating point number. However, sometimes numbers that small or smaller need to be displayed, and thus the accuracy guard should be turned off. Alternatively, the number of internal bits could be increased, which makes it possible to represent numbers with more accuracy.
 .TP
 \fB\*=remember\fP
 Toggles whether or not expressions that produce errors are remembered in the history. Does not affect command-line math.
@@ -92,7 +92,7 @@ Sets the input-only decimal separator character to be X.
 Sets the input-only thousands separator character to be X.
 .TP
 \fB\*=bits\fIXXXX\fP
-Sets the number of bits of precision that will be used to internally represent numbers to be \fIXXXX\fP. The default is 1024. Set higher if you need more precision, set lower if you want to use less memory.
+Sets the number of bits of memory that will be used to internally represent numbers to be \fIXXXX\fP. The default is 1024. Set higher if you need to work with extremely large or extremely small numbers, set lower if you want to use less memory.
 .TP
 \fB\*=ints\fP
 Toggles whether long integers will be abbreviated or not. This conflicts with engineering notation for large numbers, but not for decimals.
@@ -349,7 +349,7 @@ A Random Integer
 There are several commands that are supported in wcalc.
 .TP
 \fB\ep\fIXXX\fP
-Sets the precision to \fIXXX\fP. This setting only affects output, not internal representations. A setting of -1 means formats output in whatever precision seems appropriate.
+Sets the "precision", or the number of decimal places displayed, to be \fIXXX\fP. This setting only affects output, not internal representations. If the precision is set to -1, the number of decimal places displayed will depend on the value. The default is -1.
 .TP
 \fB\ee\fP or \fB\eeng\fP or \fB\eengineering\fP
 Rotates between always using scientific notation, never using scientific
@@ -370,7 +370,7 @@ Prints out the currently defined variables.
 Toggles between using and not using radians for trigonometric calculations.
 .TP
 \fB\econs\fP or \fB\econservative\fP
-Toggles precision guards. Because of the way floating point numbers are stored, some operations, like 1-.9-.1, can return an extremely small number that is not zero but is less than the official precision of the floating point number and thus for all intents and purposes, it is 0. The precision guard will round numbers to zero if they are less than the official precision of the floating point number. However, sometimes numbers that small or smaller need to be displayed, and thus the precision guard should be turned off.
+Toggles accuracy guards. Because of the way floating point numbers are stored in computers, some numbers cannot be represented exactly (such as 0.1). Because of this, calculating with those numbers can produce results that are not exactly correct, but are different from the correct answer by a very small value (smaller than the floating point value can represent accurately). For example, the calculation of 1-.9-.1 can return an extremely small number that is not zero but is less than what can be represented accurately, and thus for all intents and purposes, it is 0. The accuracy guard feature will round numbers to zero if they are less than the representable accuracy of the floating point number. However, sometimes numbers that small or smaller need to be displayed, and thus the accuracy guard should be turned off. Alternatively, the number of internal bits could be increased, which makes it possible to represent numbers with more accuracy.
 .TP
 \fB\ep\fP or \fB\epicky\fP or \fB\el\fP or \fB\elenient\fP
 Toggles variable parsing rules. When wcalc is "picky" it will complain if you use undefined variables. If it is "lenient", wcalc will assume a value of 0 for undefined variables.
