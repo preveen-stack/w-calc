@@ -55,16 +55,17 @@
 
 int line_is_a_command = 0;
 int column = 0;
+int last_word = 0;
 
-#define POS_CHAR() do { column ++; } while(0)
-#define POS_STR() do { column += yyleng; } while (0)
+#define POS_CHAR() do { column ++; last_word = 1; } while(0)
+#define POS_STR() do { column += yyleng; last_word = yyleng; } while (0)
 
 /* Everything up to the funny characters on the next line */
 /* goes directly into the lex.yy.c file */
 %}
 
 %pointer
-%option nounput noinput
+%option nounput noinput noyywrap
 /* shorthand definitions for later */
 DIGIT		[0123456789]
 NDIGIT		[123456789]
@@ -626,7 +627,7 @@ zeta { POS_STR(); return(WZETA); }
 %{
 %}
 
-({NDIGIT}{DIGIT}{0,2}\.{DIGIT}{3})(e[+-]?{DIGIT}+)? {
+({NDIGIT}{DIGIT}?{DIGIT}?\.{DIGIT}{DIGIT}{DIGIT})(e[+-]?{DIGIT}+)? {
     /* simple decimals */
     extern int yydebug;
     int retval;
@@ -672,7 +673,7 @@ zeta { POS_STR(); return(WZETA); }
     return(NUMBER);
 }
 
-[1-9]([0-9]*|([0-9]{0,2}([,][0-9]{3})+))([.][0-9]*)?([eE][+-]?0?[1-9][0-9]*)? {
+[1-9](([0-9]?[0-9]?([,][0-9][0-9][0-9])+)|[0-9]*)([.][0-9]*)?([eE][+-]?0?[1-9][0-9]*)? {
     /* big ugly */
     extern int yydebug;
     int retval;
@@ -738,6 +739,7 @@ zeta { POS_STR(); return(WZETA); }
     if (strchr(yytext,'8') || strchr(yytext,'9')) {
         report_error("Incorrect number format (%s) - expected 0-7 for octal", yytext);
         scanerror = 1;
+		num_init_set_ui(YYLVALAC->number,0);
 		POS_STR();
     } else {
         /*unsigned long int value;*/
@@ -767,6 +769,7 @@ zeta { POS_STR(); return(WZETA); }
     if (strchr(yytext,'2') || strchr(yytext,'3') || strchr(yytext,'4') || strchr(yytext,'5') || strchr(yytext,'6') || strchr(yytext,'7') || strchr(yytext,'8') || strchr(yytext,'9')) {
         report_error("Incorrect number format (%s) - expected 0 or 1 for binary", yytext);
         scanerror = 1;
+		num_init_set_ui(YYLVALAC->number,0);
     } else {
         int retval;
 
