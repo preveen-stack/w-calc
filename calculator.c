@@ -181,9 +181,6 @@ void parseme(const char *pthis)
 	column = 0;
     }
     /* Evaluate the Expression
-     * These two lines borrowed from:
-     * http://www.bgw.org/tutorials/programming/c/lex_yacc/main.c
-     * and are here strictly for readline suppport
      */
     {
 	struct yy_buffer_state *yy = yy_scan_string(sanitized);
@@ -842,7 +839,7 @@ static char *print_this_result_dbl(const double result)
 	}
 	printf("%s%s\n",
 	       conf.print_equal ? (not_all_displayed ? "~= " : " = ")
-	       : (not_all_displayed ? "~" : ""), pa);
+	       : "", pa);
     }
 
     return pa;
@@ -962,7 +959,7 @@ char *print_this_result(const Number result)
 	}
 	printf("%s%s\n",
 	       conf.print_equal ? (not_all_displayed ? "~= " : " = ")
-	       : (not_all_displayed ? "~" : ""), pa);
+	       : "", pa);
     }
 
     return pa;
