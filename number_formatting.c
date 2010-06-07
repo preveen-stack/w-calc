@@ -340,6 +340,7 @@ char *automatically_formatted_number(const char *digits, num_exp_t exp,
     size_t printed;
     char *retstring, *curs;
     size_t d_index = 0;
+    const long original_exp = exp;
 
     length = strlen(digits);
     /* testing against both zero and length because length is unsigned */
@@ -446,7 +447,7 @@ char *automatically_formatted_number(const char *digits, num_exp_t exp,
 	curs = strchr(retstring, '\0');
 	Dprintf("space left: %lu\n", full_length - (curs - retstring));
 	snprintf(curs, full_length - (curs - retstring),
-		 (base <= 10 ? "e%ld" : "@%ld"), (long)exp);
+		 (base <= 10 ? "e%ld" : "@%ld"), original_exp);
     }
 
     return retstring;
@@ -493,7 +494,6 @@ char *engineering_formatted_number(const char *digits, num_exp_t exp,
     }
     // copy over the integer
     snprintf(curs++, length--, "%c", digits[d_index++]);
-    exp--;
     // the decimal
     snprintf(curs++, length--, ".");
     Dprintf("the integers: %s\n", retstring);
