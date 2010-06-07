@@ -360,6 +360,7 @@ int main(int argc, char *argv[])
     conf.print_commas = 0;
     conf.verbose = 0;
     conf.c_style_mod = 1;
+    conf.rounding_indication = SIG_FIG_ROUNDING_INDICATION;
 
     init_numbers();
     num_init_set_ui(last_answer, 0);
@@ -968,13 +969,17 @@ static int read_prefs(char *filename)
 		conf.output_format = BINARY_FORMAT;
 	    else if (!strcmp(value, "hex") || !strcmp(value, "hexadecimal"))
 		conf.output_format = HEXADECIMAL_FORMAT;
+	    else
+		fprintf(stderr, "Unrecognized output_format in wcalcrc.\n\tSupported formats are decimal, octal, binary, hex.\n");
 	} else if (!strcmp(key, "rounding_indication")) {
-	    if (!strcmp(value, "no"))
+	    if (!strcmp(value, "no") || !strcmp(value, "none"))
 		conf.rounding_indication = NO_ROUNDING_INDICATION;
 	    else if (!strcmp(value, "simple"))
 		conf.rounding_indication = SIMPLE_ROUNDING_INDICATION;
 	    else if (!strcmp(value, "sig_fig"))
 		conf.rounding_indication = SIG_FIG_ROUNDING_INDICATION;
+	    else
+		fprintf(stderr, "Unrecognized rounding_indication in wcalcrc.\n\tSupported indication types are none, simple, sig_fig.\n");
 	} else if (!strcmp(key, "engineering")) {
 	    if (!strcmp(value,"auto") || !strcmp(value,"automatic") || !strcmp(value,"yes") || !strcmp(value,"true") || !strcmp(value,"1")) {
 		conf.engineering = automatic;
