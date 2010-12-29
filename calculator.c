@@ -869,6 +869,7 @@ char *print_this_result(const Number result)
 	    if (conf.precision_guard && conf.precision < 0) {
 		Dprintf("precision guard and automatic precision\n");
 		if (!conf.print_ints || !is_int(result)) {
+		    // XXX: this doesn't work for *huge* numbers, like 100!+0.1
 		    Dprintf("no print_ints or it isn't an int\n");
 		    //XXX: what is the following if() for?
 		    //if (mpfr_get_d(result, GMP_RNDN) !=

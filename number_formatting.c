@@ -41,7 +41,7 @@ static char *precision_formatted_number(const char *digits, num_exp_t exp,
  * wcalc.
  */
 char *num_to_str_complex(const Number num, const int base,
-			 const enum engineering_modes engr, const int prec,
+			 enum engineering_modes engr, const int prec,
 			 const int prefix, char *truncated_flag)
 {
     char *s, *retstr;
@@ -125,6 +125,9 @@ char *num_to_str_complex(const Number num, const int base,
     if (-2 == prec) {
 	retstr = full_precision_formatted_number(s, e, base, prefix);
     } else {
+	if (conf.print_ints) {
+	    engr=never;
+	}
 	switch (engr) {
 	    case always:
 		Dprintf("ALWAYS print engineering\n");
@@ -139,7 +142,7 @@ char *num_to_str_complex(const Number num, const int base,
 	    default:
 	    case automatic:
 		Dprintf("AUTOMATICALLY decide on engineering formatting\n");
-		if (!conf.print_ints && (e >= 10 || e <= -10)) {
+		if (e >= 10 || e <= -10) {
 		    Dprintf("  -> decided on engineering formatting\n");
 		    retstr =
 			engineering_formatted_number(s, e, prec, base, prefix,
