@@ -65,6 +65,7 @@ extern int history_truncate_file(char *, int);
 
 #define TRUEFALSE (! strcmp(value,"yes") || ! strcmp(value,"true") || ! strcmp(value,"1"))
 #define BIG_STRING 4096
+#define VERSION "##PACKAGE_VERSION##"
 
 static int read_prefs(char *filename);
 static int read_preload(char *filename);

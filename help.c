@@ -18,6 +18,8 @@
 #include "memwatch.h"
 #endif
 
+#define VERSION "##PACKAGE_VERSION##"
+
 void print_interactive_help (void)
 {
 	printf("Wcalc "VERSION" by Kyle Wheeler.\nVersion 0.1.x written in C++ for CS240C at Ohio University, Jan 14 2000\n");
