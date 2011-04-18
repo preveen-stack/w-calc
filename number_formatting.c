@@ -126,6 +126,7 @@ char *num_to_str_complex(const Number num, const int base,
 	retstr = full_precision_formatted_number(s, e, base, prefix);
     } else {
 	if (conf.print_ints) {
+	    Dprintf("due to print_ints, engr:=never\n");
 	    engr=never;
 	}
 	switch (engr) {
@@ -137,7 +138,13 @@ char *num_to_str_complex(const Number num, const int base,
 		break;
 	    case never:
 		Dprintf("NEVER print engineering\n");
-		retstr = precision_formatted_number(s, e, prec, base, prefix);
+		if (-1 == prec) {
+		    Dprintf("  -> decided on non-engineering auto-formatting (%i)\n", (int)e);
+		    retstr = automatically_formatted_number(s, e, prec, base, prefix, truncated_flag);
+		} else {
+		    Dprintf("  -> decided on non-engineering precision formatting (%i)\n", (int)e);
+		    retstr = precision_formatted_number(s, e, prec, base, prefix);
+		}
 		break;
 	    default:
 	    case automatic:
@@ -248,7 +255,41 @@ char *precision_formatted_number(const char *digits, num_exp_t exp,
 							   decimal_count +
 							   1));
 	snprintf(curs, print_limit, "%s", &digits[d_index]);
+    } else if (strlen(retstring) == 1) {
+	/* this must be able to print `Eh` and other small numbers */
+	Dprintf("all digits\n");
+	// the decimal
+	snprintf(curs++, length--, ".");
+	Dprintf("l: %lu, fl: %lu, dc: %u, p: %i, e: %i\n", length,
+		full_length, (unsigned)decimal_count, (int)precision,
+		(int)exp);
+	// everything after this is affected by decimalcount
+	// copy in the leading zeros
+	while (exp < 0 && length > 0) {
+	    snprintf(curs++, length--, "0");
+	    exp++;
+	    decimal_count++;
+	}
+	Dprintf("l: %lu, fl: %lu, dc: %u, p: %i, e: %i\n", length,
+		full_length, (unsigned)decimal_count, (int)precision,
+		(int)exp);
+	// copy in the rest of the mantissa (the decimals)
+	Dprintf("leading zeros: %s\n", retstring);
+	// this variable exists because snprintf's return value is unreliable,
+	// and can be larger than the number of digits printed
+	print_limit = ((length < (precision - decimal_count + 1)) ? length : (precision - decimal_count + 1));
+	snprintf(curs, print_limit, "%s", &digits[d_index]);
+	/* Now remove trailing zeroes */
+	Dprintf("last character: %c\n", retstring[strlen(retstring)-1]);
+	{
+	    size_t last = strlen(retstring) - 1;
+	    while (retstring[last] == '0' && last > 0) {
+		retstring[last] = 0;
+		last--;
+	    }
+	}
     }
+    Dprintf("retstring='%s' (%i)\n", retstring, strlen(retstring));
 
     return retstring;
 }
@@ -430,6 +471,9 @@ char *automatically_formatted_number(const char *digits, num_exp_t exp,
 
 	// strip off the trailing 0's
 	zero_strip(retstring);
+	/* Removing the following 'stupid hack' in order to be able to print
+	 * small things like Eh */
+#if 0
 	/* XXX: This is a stupid hack; the idea is just to get the mpfr output
 	 * to match the double output. */
 	period = strchr(retstring, '.');
@@ -440,6 +484,7 @@ char *automatically_formatted_number(const char *digits, num_exp_t exp,
 	    *truncated_flag = 1;
 	    zero_strip(retstring);
 	}
+#endif
     } else if (precision >= 0) {
 	char *period = strchr(retstring, '.');
 
