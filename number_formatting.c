@@ -9,7 +9,7 @@
 #include <stdlib.h>		       /* for calloc() */
 
 #include "number.h"
-
+#define EBUG 1
 #include "calculator.h"
 #include "string_manip.h"
 #include "number_formatting.h"
@@ -471,20 +471,16 @@ char *automatically_formatted_number(const char *digits, num_exp_t exp,
 
 	// strip off the trailing 0's
 	zero_strip(retstring);
-	/* Removing the following 'stupid hack' in order to be able to print
-	 * small things like Eh */
-#if 0
 	/* XXX: This is a stupid hack; the idea is just to get the mpfr output
 	 * to match the double output. */
 	period = strchr(retstring, '.');
 	Dprintf("retstring: %s\n", retstring);
 	Dprintf("period: %s\n", period);
 	if (period && strlen(period) > 10) {
-	    period[10] = 0;
+	    period[30] = 0;
 	    *truncated_flag = 1;
 	    zero_strip(retstring);
 	}
-#endif
     } else if (precision >= 0) {
 	char *period = strchr(retstring, '.');
 
