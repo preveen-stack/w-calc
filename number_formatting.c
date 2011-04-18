@@ -477,7 +477,7 @@ char *automatically_formatted_number(const char *digits, num_exp_t exp,
 	Dprintf("retstring: %s\n", retstring);
 	Dprintf("period: %s\n", period);
 	if (period && strlen(period) > 10) {
-	    period[30] = 0;
+	    period[30] = 0; // Arbitrary cutoff to avoid huge outputs for repeating decimals
 	    *truncated_flag = 1;
 	    zero_strip(retstring);
 	}
