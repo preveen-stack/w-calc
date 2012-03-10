@@ -18,7 +18,7 @@
 #include "memwatch.h"
 #endif
 
-#define VERSION "##PACKAGE_VERSION##"
+#define VERSION PACKAGE_VERSION
 
 void print_interactive_help (void)
 {
