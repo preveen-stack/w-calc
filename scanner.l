@@ -653,7 +653,7 @@ zeta { POS_STR(); return(WZETA); }
     return(NUMBER);
 }
 
-0?[.][0-9]*([eE][+-]?[1-9][0-9]*)? {
+0?[.][0-9]*([eE][+-]?[0-9]+)? {
     /* zero-optional decimal */
     extern int yydebug;
     int retval;
@@ -673,7 +673,7 @@ zeta { POS_STR(); return(WZETA); }
     return(NUMBER);
 }
 
-[1-9](([0-9]?[0-9]?([,][0-9][0-9][0-9])+)|[0-9]*)([.][0-9]*)?([eE][+-]?0?[1-9][0-9]*)? {
+[1-9](([0-9]?[0-9]?([,][0-9][0-9][0-9])+)|[0-9]*)([.][0-9]*)?([eE][+-]?[0-9]+)? {
     /* big ugly */
     extern int yydebug;
     int retval;
@@ -707,7 +707,7 @@ zeta { POS_STR(); return(WZETA); }
     return(NUMBER);
 }
 
-0x[0-9a-fA-F]+([.][0-9a-fA-F]*)?([@][+-]?0?[1-9a-fA-F][0-9a-fA-F]*)? {
+0x[0-9a-fA-F]+([.][0-9a-fA-F]*)?([@][+-]?[0-9a-fA-F]+)? {
     /* hex */
     extern int yydebug;
     int retval;
