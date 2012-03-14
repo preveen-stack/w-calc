@@ -6,6 +6,7 @@
 
 const char *commands[] = {
     "b", "bin", "binary", "store", "q", "d", "dec", "decimal",
+    "delim",
     "dsep", "e", "eng", "engineering", "cons", "conservative",
     "h", "hex", "hexadecimal", "x", "help", "hlimit", "ints",
     "li", "list", "listvars", "o", "oct", "octal", "open", "p",
@@ -18,6 +19,7 @@ const char *commands[] = {
 
 const char *qcommands[] = {
     "\\b", "\\bin", "\\binary", "\\store", "\\q", "\\d", "\\dec", "\\decimal",
+    "\\delim",
     "\\dsep", "\\e", "\\eng", "\\engineering", "\\cons", "\\conservative",
     "\\h", "\\hex", "\\hexadecimal", "\\x", "\\help", "\\hlimit", "\\ints",
     "\\li", "\\list", "\\listvars", "\\o", "\\oct", "\\octal", "\\open", "\\p",
