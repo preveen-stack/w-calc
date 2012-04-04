@@ -40,15 +40,11 @@ AC_ARG_WITH([gmp],
 							[specify the path to the gmp library])],
 			[GMP_CPPFLAGS="-I$with_gmp/include"
 			 GMP_LDFLAGS="-L$with_gmp/lib"])
-GMP_saved_CPPFLAGS="$CPPFLAGS"
-GMP_saved_LDFLAGS="$LDFLAGS"
 CPPFLAGS="$GMP_CPPFLAGS $CPPFLAGS"
 LDFLAGS="$GMP_LDFLAGS $LDFLAGS"
 AC_CHECK_LIB([gmp], [__gmpz_init], [],
 			 [AC_CHECK_LIB([gmp], [mpz_init], [],
 						   [AC_CHECK_LIB([gmp2], [mpz_init])])])
-CPPFLAGS="$GMP_saved_CPPFLAGS"
-LDFLAGS="$GMP_saved_LDFLAGS"
 AC_SUBST(GMP_CPPFLAGS)
 AC_SUBST(GMP_LDFLAGS)
 
@@ -60,17 +56,13 @@ AC_ARG_WITH([mpfr],
 							[specify the path to the mpfr library])],
 			[MPFR_CPPFLAGS="-I$with_mpfr/include"
 			 MPFR_LDFLAGS="-L$with_mpfr/lib"])
-MPFR_saved_CPPFLAGS="$CPPFLAGS"
-MPFR_saved_LDFLAGS="$LDFLAGS"
-CPPFLAGS="$MPFR_CPPFLAGS $GMP_CPPFLAGS $CPPFLAGS"
-LDFLAGS="$MPFR_LDFLAGS $GMP_LDFLAGS $LDFLAGS"
+CPPFLAGS="$MPFR_CPPFLAGS $CPPFLAGS"
+LDFLAGS="$MPFR_LDFLAGS $LDFLAGS"
 AC_SEARCH_LIBS([mpfr_free_str], [mpfr],
 			   [AC_DEFINE([HAVE_LIBMPFR], [1], [Have libmpfr])],
 			   [AC_MSG_ERROR([Need MPFR 2.1.x or better. see http://www.mpfr.org])])
 AC_CHECK_FUNC([mpfr_sec],
 			  [AC_DEFINE([HAVE_MPFR_22], [1], [MPFR version 2.2 or better])])
-CPPFLAGS="$MPFR_saved_CPPFLAGS"
-LDFLAGS="$MPFR_saved_LDFLAGS"
 AC_SUBST(MPFR_CPPFLAGS)
 AC_SUBST(MPFR_LDFLAGS)
 # what version of mpfr
