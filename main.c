@@ -407,11 +407,23 @@ int main(int argc, char *argv[])
 	if (!strncmp(argv[i], "-P", 2)) {
 	    long int argnum;
 	    char *endptr;
+	    char *valstr;
 
-	    argnum = strtol(&(argv[i][2]), &endptr, 0);
-	    if (endptr != NULL && (strlen(endptr) > 0)) {
-		fprintf(stderr,
-			"-P option requires a valid integer without spaces.\n");
+	    if (strlen(&argv[i][2]) == 0 && (i+1 < argc)) {
+		// pull the arg from i+1
+		valstr = argv[++i];
+	    } else {
+		valstr = &argv[i][2];
+	    }
+	    argnum = strtol(valstr, &endptr, 0);
+	    if (*endptr != '\0' || endptr == valstr) {
+		if (strlen(valstr)) {
+		    fprintf(stderr,
+			    "-P option requires a valid integer (found '%s' instead).\n", valstr);
+		} else {
+		    fprintf(stderr,
+			    "-P option requires a valid integer.\n");
+		}
 		fflush(stderr);
 		num_free(last_answer);
 		exit(EXIT_FAILURE);
