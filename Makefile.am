@@ -25,7 +25,8 @@ EXTRA_DIST = WcalcController.h WcalcController.m \
 			 wcalc.info wcalc.rc wcalc.spec \
 			 COPYRIGHT
 
-INCLUDES = -I$(top_builddir)
+INCLUDES = -I$(top_builddir) @GMP_CPPFLAGS@ @MPFR_CPPFLAGS@
+AM_LDFLAGS = @GMP_LDFLAGS@ @MPFR_LDFLAGS@
 BUILT_SOURCES = parser.h
 wcalc_SOURCES = \
 				number.h calculator.h variables.h help.h files.h conversion.h \
