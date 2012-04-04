@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_PREREQ(2.50)
+AC_PREREQ(2.59)
 AC_INIT(wcalc, 2.4.1, kyle-wcalc@memoryhole.net)
 AM_INIT_AUTOMAKE([foreign dist-bzip2 no-define 1.7])
 AC_CONFIG_SRCDIR([WcalcController.h])
@@ -62,8 +62,8 @@ AC_ARG_WITH([mpfr],
 			 MPFR_LDFLAGS="-L$with_mpfr/lib"])
 MPFR_saved_CPPFLAGS="$CPPFLAGS"
 MPFR_saved_LDFLAGS="$LDFLAGS"
-CPPFLAGS="$MPFR_CPPFLAGS $CPPFLAGS"
-LDFLAGS="$MPFR_LDFLAGS $LDFLAGS"
+CPPFLAGS="$MPFR_CPPFLAGS $GMP_CPPFLAGS $CPPFLAGS"
+LDFLAGS="$MPFR_LDFLAGS $GMP_LDFLAGS $LDFLAGS"
 AC_SEARCH_LIBS([mpfr_free_str], [mpfr],
 			   [AC_DEFINE([HAVE_LIBMPFR], [1], [Have libmpfr])],
 			   [AC_MSG_ERROR([Need MPFR 2.1.x or better. see http://www.mpfr.org])])
