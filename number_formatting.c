@@ -9,7 +9,6 @@
 #include <stdlib.h>		       /* for calloc() */
 
 #include "number.h"
-#define EBUG 1
 #include "calculator.h"
 #include "string_manip.h"
 #include "number_formatting.h"
@@ -83,7 +82,7 @@ char *num_to_str_complex(const Number num, const int base,
 	     * printf("s: %s\n", s);
 	     * printf("prec: %i\n", prec); */
 	    significant_figures = ((e > 0) ? e : 0) + prec;
-	    Dprintf("sig figs = %i\n", significant_figures);
+	    Dprintf("sig figs = %zu\n", significant_figures);
 	    if (significant_figures < 2) {	/* MPFR-defined minimum (why?) */
 		s = num_get_str(s, &e, base, 2, num);
 		Dprintf("s=%s, e = %i\n", s, (int)e);
@@ -117,7 +116,7 @@ char *num_to_str_complex(const Number num, const int base,
 	    }
 	    Dprintf("left_digits = %i, asking for %i\n", left_digits,
 		    left_digits + prec);
-	    s = num_get_str(NULL, &e, base, left_digits + prec, num);
+	    s = num_get_str(NULL, &e, base, ((left_digits + prec)<2)?2:(left_digits + prec), num);
 	}
     }
     Dprintf("post-mpfr e: %li s: %s\n", (long int)e, s);
@@ -214,7 +213,7 @@ char *precision_formatted_number(const char *digits, num_exp_t exp,
 	curs = nc;
     }
     // copy in the integers
-    Dprintf("exp = %i\n", exp);
+    Dprintf("exp = %i\n", (int)exp);
     if (exp > 0) {
 	snprintf(curs++, length--, "%c", digits[d_index++]);
 	exp--;			       // leading digit
@@ -249,11 +248,9 @@ char *precision_formatted_number(const char *digits, num_exp_t exp,
 	Dprintf("leading zeros: %s\n", retstring);
 	// this variable exists because snprintf's return value is unreliable,
 	// and can be larger than the number of digits printed
-	print_limit =
-	    ((length <
-	      (precision - decimal_count + 1)) ? length : (precision -
-							   decimal_count +
-							   1));
+	print_limit = ((length < (precision - decimal_count + 1)) ?
+		       length + 1 :
+		       (precision - decimal_count + 1));
 	snprintf(curs, print_limit, "%s", &digits[d_index]);
     } else if (strlen(retstring) == 1) {
 	/* this must be able to print `Eh` and other small numbers */
@@ -289,7 +286,7 @@ char *precision_formatted_number(const char *digits, num_exp_t exp,
 	    }
 	}
     }
-    Dprintf("retstring='%s' (%i)\n", retstring, strlen(retstring));
+    Dprintf("retstring='%s' (%zu)\n", retstring, strlen(retstring));
 
     return retstring;
 }
