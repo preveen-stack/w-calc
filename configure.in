@@ -25,6 +25,15 @@ AS_IF([test "x$LEX" == x],
 	  )
 AC_PROG_INSTALL
 
+AC_CHECK_HEADERS([limits.h])
+AC_CHECK_DECL([PATH_MAX],
+			  [AC_DEFINE([HAVE_PATH_MAX], [1], [Have PATH_MAX])],
+			  [],
+			  [#ifdef HAVE_LIMITS_H
+			   #include <limits.h>
+			   #endif
+			   ])
+
 # Checks for libraries.
 AC_CHECK_LIB([m], [acos])
 # FIXME: Replace `main' with a function in `-lreadline':
