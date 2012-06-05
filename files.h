@@ -12,6 +12,7 @@
 
 int saveState(char *filename); // filename is freed by saveState
 int loadState(const char *filename, const int into_history);
+int loadStateFD(int fd, const int into_history); // same as loadState, but takes an FD
 int storeVar(const char *variable);
 
 #endif

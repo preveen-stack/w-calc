@@ -67,8 +67,8 @@ extern int history_truncate_file(char *, int);
 #define BIG_STRING 4096
 #define VERSION PACKAGE_VERSION
 
-static int read_prefs(char *filename);
-static int read_preload(char *filename);
+static int read_prefs(void);
+static int read_preload(void);
 
 /*
  * These are declared here because they're not in any header files.
@@ -368,7 +368,6 @@ int main(int argc, char *argv[])
 
     /* load the preferences */
     {
-	char filename[PATH_MAX];
 	int foundflag = 0;
 
 	/* quick check the commandline for a --defaults argument */
@@ -380,24 +379,10 @@ int main(int argc, char *argv[])
 	}
 
 	if (foundflag == 0) {
-	    char * home = getenv("HOME");
-	    char * rcfile = "/.wcalcrc";
-	    char * preloadfile = "/.wcalc_preload";
-	    if (strlen(home) < PATH_MAX - strlen(rcfile) - 1) {
-		snprintf(filename, PATH_MAX, "%s%s", home, rcfile);
-		if (read_prefs(filename)) {
-		    perror("Writing Preferences");
-		}
+	    if (read_prefs()) {
+		read_preload();
 	    } else {
-		perror("HOME is too long to read preferences");
-	    }
-	    if (strlen(home) < PATH_MAX - strlen(preloadfile) - 1) {
-		snprintf(filename, PATH_MAX, "%s%s", home, preloadfile);
-		if (read_preload(filename)) {
-		    perror("Reading Preload File");
-		}
-	    } else {
-		perror("HOME is too long to read preload file");
+		perror("Error reading preferences file (~/.wcalcrc)");
 	    }
 	}
     }
@@ -852,31 +837,57 @@ int main(int argc, char *argv[])
     exit(EXIT_SUCCESS);
 }				       /*}}} */
 
-static int read_preload(char *filename)
+static int read_preload(void)
 {				       /*{{{ */
-    struct stat sb;
-
-    if (-1 == stat(filename, &sb)) {
-	if (errno != ENOENT) {
-	    return -1;
-	} else {
+    int fd = openDotFile("wcalc_preload", O_RDONLY);
+    switch (fd) {
+	case -1:
+	    fprintf(stderr, "HOME environment variable unset. Cannot read preload file.\n");
 	    return 0;
-	}
+	case -2:
+	    fprintf(stderr, "HOME environment variable is too long. Cannot read preload file.\n");
+	    return 0;
     }
-    return loadState(filename, 0);
+    if (fd < 0) {
+	if (errno == ENOENT) {
+	    /* The prefs file does not exist. This is okay, just means we can't read it. */
+	    return 1;
+	}
+	perror("Could not open preload file (~/.wcalc_preload)");
+	return 0;
+    }
+    if (loadStateFD(fd, 0) < 0) {
+	perror("Error reading preload file (~/.wcalc_preload)");
+    }
+    if (close(fd) < 0) {
+	perror("Could not close preload file.");
+    }
+    return 1;
 }				       /*}}} */
 
-static int read_prefs(char *filename)
+static int read_prefs(void)
 {				       /*{{{ */
-    int fd = open(filename, O_RDONLY);
+    int fd = openDotFile("wcalcrc", O_RDONLY);
     char key[BIG_STRING], value[BIG_STRING];
     size_t curs = 0;
     int retval = 1;
 
-    fd = open(filename, O_RDONLY);
-    if (fd < 0)
+    switch (fd) {
+	case -1:
+	    fprintf(stderr, "HOME environment variable unset. Cannot read preferences.\n");
+	    return 0;
+	case -2:
+	    fprintf(stderr, "HOME environment variable is too long. Cannot read preferences.\n");
+	    return 0;
+    }
+    if (fd < 0) {
+	if (errno == ENOENT) {
+	    /* The prefs file does not exist. This is okay, just means we can't read it. */
+	    return 1;
+	}
+	perror("Could not open preferences file (~/.wcalcrc)");
 	return 0;
-    retval = 1;
+    }
     while (retval == 1) {
 	char quoted = 0;
 	char junk;
@@ -1009,5 +1020,5 @@ static int read_prefs(char *filename)
 	memset(key, 0, sizeof(key));
 	memset(value, 0, sizeof(value));
     }
-    return 0;
+    return 1;
 }				       /*}}} */
