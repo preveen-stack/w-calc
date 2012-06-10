@@ -15,7 +15,7 @@
 #include <ctype.h>		       /* for isdigit and isalpha */
 #include <errno.h>
 #include <fcntl.h>		       /* for open() */
-#include <limits.h>		       /* for stroul() and PATH_MAX */
+#include <limits.h>		       /* for stroul() */
 #include "number.h"
 
 #ifdef HAVE_LIBREADLINE
@@ -554,19 +554,21 @@ int main(int argc, char *argv[])
 
 	    if (!cmdline_input) {
 #ifdef HAVE_READLINE_HISTORY
-		char filename[PATH_MAX];
-		char * home = getenv("HOME");
+		char *filename;
+		const char * const home = getenv("HOME");
 
 		using_history();
-		if (strlen(home) < PATH_MAX - strlen(historyfile) - 1) {
-		    snprintf(filename, PATH_MAX, "%s%s",
-			    home, historyfile);
-		    if (read_history(filename)) {
-			if (errno != ENOENT) {
-			    perror("Reading History");
-			}
+		filename = malloc(strlen(home) + strlen(historyfile) + 2);
+		snprintf(filename,
+			strlen(home) + strlen(historyfile) + 1,
+			"%s%s",
+			home, historyfile);
+		if (read_history(filename)) {
+		    if (errno != ENOENT) {
+			perror("Reading History");
 		    }
 		}
+		free(filename);
 #endif
 		cmdline_input = 1;
 	    }
@@ -596,19 +598,21 @@ int main(int argc, char *argv[])
 	char * envinput = getenv("wcalc_input");
 	if (envinput) {
 #ifdef HAVE_READLINE_HISTORY
-	    char filename[PATH_MAX];
-	    char * home = getenv("HOME");
+	    char *filename;
+	    const char * const home = getenv("HOME");
 
 	    using_history();
-	    if (strlen(home) < PATH_MAX - strlen(historyfile) - 1) {
-		snprintf(filename, PATH_MAX, "%s%s",
-			home, historyfile);
-		if (read_history(filename)) {
-		    if (errno != ENOENT) {
-			perror("Reading History");
-		    }
+	    filename = malloc(strlen(home) + strlen(historyfile) + 2);
+	    snprintf(filename,
+		    strlen(home) + strlen(historyfile) + 1,
+		    "%s%s",
+		    home, historyfile);
+	    if (read_history(filename)) {
+		if (errno != ENOENT) {
+		    perror("Reading History");
 		}
 	    }
+	    free(filename);
 #endif
 	    cmdline_input = 1;
 	    if (conf.verbose) {
@@ -634,18 +638,21 @@ int main(int argc, char *argv[])
 
     if (cmdline_input) {
 #ifdef HAVE_READLINE_HISTORY
-	char filename[PATH_MAX];
+	char *filename;
 	char * home = getenv("HOME");
 
-	if (strlen(home) < PATH_MAX - strlen(historyfile) - 1) {
-	    snprintf(filename, PATH_MAX, "%s%s", home, historyfile);
-	    if (write_history(filename))
-		perror("Saving History");
-	    if (conf.history_limit) {
-		if (history_truncate_file(filename, conf.history_limit_len))
-		    perror("Truncating History");
-	    }
+	filename = malloc(strlen(home) + strlen(historyfile) + 2);
+	snprintf(filename,
+		strlen(home) + strlen(historyfile) + 1,
+		"%s%s",
+		home, historyfile);
+	if (write_history(filename))
+	    perror("Saving History");
+	if (conf.history_limit) {
+	    if (history_truncate_file(filename, conf.history_limit_len))
+		perror("Truncating History");
 	}
+	free(filename);
 #endif
 	clearHistory();
 	cleanupvar();
@@ -658,18 +665,21 @@ int main(int argc, char *argv[])
     if (tty > 0) {
 	/* if stdin is a keyboard or terminal, then use readline and prompts */
 #ifdef HAVE_READLINE_HISTORY
-	char filename[PATH_MAX];
-	char * home = getenv("HOME");
+	char *filename;
+	const char * const home = getenv("HOME");
 
-	if (strlen(home) < PATH_MAX - strlen(historyfile) - 1) {
-	    snprintf(filename, PATH_MAX, "%s%s", home, historyfile);
-	    using_history();
-	    if (read_history(filename)) {
-		if (errno != ENOENT) {
-		    perror("Reading History");
-		}
+	using_history();
+	filename = malloc(strlen(home) + strlen(historyfile) + 2);
+	snprintf(filename,
+		strlen(home) + strlen(historyfile) + 1,
+		"%s%s",
+		home, historyfile);
+	if (read_history(filename)) {
+	    if (errno != ENOENT) {
+		perror("Reading History");
 	    }
 	}
+	free(filename);
 #endif
 #ifdef HAVE_LIBREADLINE
 	rl_attempted_completion_function = wcalc_completion;
