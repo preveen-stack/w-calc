@@ -228,7 +228,7 @@ static void explain_constant(const char *str)
             printf("The universal gravitational constant. Appears in Einstein's theory of general relativity.");
             break;
         case W_g:
-            printf("The gravitational accelleration of Earth at sea-level.");
+            printf("The gravitational acceleration of Earth at sea-level.");
             break;
         case W_Me:
             printf("The mass of an electron in kilograms.");
