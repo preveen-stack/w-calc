@@ -36,11 +36,11 @@ Specifies that numerical output should be in scientific notation.
 Specifies that numerical output should NOT be in scientific notation.
 .TP
 \fB\-P\fIXXX\fP
-Sets the "precision", or the number of decimal places displayed, to be \fIXXX\fP. This setting only affects output, not internal representations. If the precision is set to -1, the number of decimal places displayed will depend on the value.
+Sets the "precision", or the number of decimal places displayed, to be \fIXXX\fP. This setting only affects output, not internal representations. If the precision is set to \-1, the number of decimal places displayed will depend on the value.
 .br
-Precision is set to autoadjust (-1) by default.
+Precision is set to autoadjust (\-1) by default.
 .br
-Example: wcalc -P6
+Example: wcalc \-P6
 .TP
 \fB\-v\fP or \fB\*=version\fP
 Prints the version number and exits.
@@ -71,7 +71,7 @@ radians. By default, trigonometric functions assume input is in degrees.
 Toggles whether the equals sign will be printed before the results.
 .TP
 \fB\-c\fP or \fB\*=conservative\fP
-Toggles accuracy guards. Because of the way floating point numbers are stored in computers, some numbers cannot be represented exactly (such as 0.1). Because of this, calculating with those numbers can produce results that are not exactly correct, but are different from the correct answer by a very small value (smaller than the floating point value can represent accurately). For example, the calculation of 1-.9-.1 can return an extremely small number that is not zero but is less than what can be represented accurately, and thus for all intents and purposes, it is 0. The accuracy guard feature will round numbers to zero if they are less than the representable accuracy of the floating point number. However, sometimes numbers that small or smaller need to be displayed, and thus the accuracy guard should be turned off. Alternatively, the number of internal bits could be increased, which makes it possible to represent numbers with more accuracy.
+Toggles accuracy guards. Because of the way floating point numbers are stored in computers, some numbers cannot be represented exactly (such as 0.1). Because of this, calculating with those numbers can produce results that are not exactly correct, but are different from the correct answer by a very small value (smaller than the floating point value can represent accurately). For example, the calculation of 1\-.9\-.1 can return an extremely small number that is not zero but is less than what can be represented accurately, and thus for all intents and purposes, it is 0. The accuracy guard feature will round numbers to zero if they are less than the representable accuracy of the floating point number. However, sometimes numbers that small or smaller need to be displayed, and thus the accuracy guard should be turned off. Alternatively, the number of internal bits could be increased, which makes it possible to represent numbers with more accuracy.
 .TP
 \fB\*=remember\fP
 Toggles whether or not expressions that produce errors are remembered in the history. Does not affect command-line math.
@@ -138,11 +138,11 @@ In this case, \fIbaz\fP will evaluate to be 5.15643, or the sin of whatever \fIf
 .PP
 To demonstrate the utility of these active variables, here are two functions written by Stephen M. Lawson. The first computes the weekday of a given day (\fIdy\fP) in a given month (\fImo\fP) in a given year (\fIyr\fP). The value it returns is in the range of 1 to 7, where 1 is Sunday, 2 is Monday, 3 is Tuesday, and so forth.
 .PP
-weekday='(((floor((yr - floor(0.6 + 1 / mo)) / 400) - floor((yr - floor(0.6 + 1 / mo)) / 100) + floor((5 * (yr - floor(0.6 + 1 / mo))) / 4) + floor(13 * (mo + 12 * floor(0.6 + 1 / mo) + 1) / 5)) - (7 * floor((floor((yr - floor(0.6 + 1 / mo)) / 400) - floor((yr - floor(0.6 + 1 / mo)) / 100) + floor((5 * (yr - floor(0.6 + 1 / mo))) / 4) + floor(13 * (mo + 12 * floor(0.6 + 1 / mo) + 1) / 5)) / 7)) + 1) + 5 + dy) % 7 + 1'
+weekday='(((floor((yr \- floor(0.6 + 1 / mo)) / 400) \- floor((yr \- floor(0.6 + 1 / mo)) / 100) + floor((5 * (yr \- floor(0.6 + 1 / mo))) / 4) + floor(13 * (mo + 12 * floor(0.6 + 1 / mo) + 1) / 5)) \- (7 * floor((floor((yr \- floor(0.6 + 1 / mo)) / 400) \- floor((yr \- floor(0.6 + 1 / mo)) / 100) + floor((5 * (yr \- floor(0.6 + 1 / mo))) / 4) + floor(13 * (mo + 12 * floor(0.6 + 1 / mo) + 1) / 5)) / 7)) + 1) + 5 + dy) % 7 + 1'
 .PP
-The second function computes what day Easter will be for a given year (\fIyr\fP) and returns an offset from March 31st. For example, for the year 2005, it returns -4, which means March 27th. Because of leap-year problems, this only works from the year 1900 to 2099, but is a good demonstration nevertheless.
+The second function computes what day Easter will be for a given year (\fIyr\fP) and returns an offset from March 31st. For example, for the year 2005, it returns \-4, which means March 27th. Because of leap-year problems, this only works from the year 1900 to 2099, but is a good demonstration nevertheless.
 .PP
-easter='((19 * (yr - 19 * floor(yr / 19)) + 24) - floor((19 * (yr - 19 * floor(yr / 19)) + 24) / 30) * 30) + ((2 * (yr - 4 * floor(yr / 4)) + 4 * (yr - 7 * floor(yr / 7)) + 6 * ((19 * (yr - 19 * floor(yr / 19)) + 24) - floor((19 * (yr - 19 * floor(yr / 19)) + 24) / 30) * 30) + 5) - floor((2 * (yr - 4 * floor(yr / 4)) + 4 * (yr - 7 * floor(yr / 7)) + 6 * ((19 * (yr - 19 * floor(yr / 19)) + 24) - floor((19 * (yr - 19 * floor(yr / 19)) + 24) / 30) * 30) + 5) / 7) * 7) - 9'
+easter='((19 * (yr \- 19 * floor(yr / 19)) + 24) \- floor((19 * (yr \- 19 * floor(yr / 19)) + 24) / 30) * 30) + ((2 * (yr \- 4 * floor(yr / 4)) + 4 * (yr \- 7 * floor(yr / 7)) + 6 * ((19 * (yr \- 19 * floor(yr / 19)) + 24) \- floor((19 * (yr \- 19 * floor(yr / 19)) + 24) / 30) * 30) + 5) \- floor((2 * (yr \- 4 * floor(yr / 4)) + 4 * (yr \- 7 * floor(yr / 7)) + 6 * ((19 * (yr \- 19 * floor(yr / 19)) + 24) \- floor((19 * (yr \- 19 * floor(yr / 19)) + 24) / 30) * 30) + 5) / 7) * 7) \- 9'
 .SH BUILT-IN SYMBOLS
 There are two basic kinds of built-in symbols in wcalc: functions and constants.
 .SS FUNCTIONS
@@ -349,7 +349,7 @@ A Random Integer
 There are several commands that are supported in wcalc.
 .TP
 \fB\ep\fIXXX\fP
-Sets the "precision", or the number of decimal places displayed, to be \fIXXX\fP. This setting only affects output, not internal representations. If the precision is set to -1, the number of decimal places displayed will depend on the value. The default is -1.
+Sets the "precision", or the number of decimal places displayed, to be \fIXXX\fP. This setting only affects output, not internal representations. If the precision is set to \-1, the number of decimal places displayed will depend on the value. The default is \-1.
 .TP
 \fB\ee\fP or \fB\eeng\fP or \fB\eengineering\fP
 Rotates between always using scientific notation, never using scientific
@@ -370,7 +370,7 @@ Prints out the currently defined variables.
 Toggles between using and not using radians for trigonometric calculations.
 .TP
 \fB\econs\fP or \fB\econservative\fP
-Toggles accuracy guards. Because of the way floating point numbers are stored in computers, some numbers cannot be represented exactly (such as 0.1). Because of this, calculating with those numbers can produce results that are not exactly correct, but are different from the correct answer by a very small value (smaller than the floating point value can represent accurately). For example, the calculation of 1-.9-.1 can return an extremely small number that is not zero but is less than what can be represented accurately, and thus for all intents and purposes, it is 0. The accuracy guard feature will round numbers to zero if they are less than the representable accuracy of the floating point number. However, sometimes numbers that small or smaller need to be displayed, and thus the accuracy guard should be turned off. Alternatively, the number of internal bits could be increased, which makes it possible to represent numbers with more accuracy.
+Toggles accuracy guards. Because of the way floating point numbers are stored in computers, some numbers cannot be represented exactly (such as 0.1). Because of this, calculating with those numbers can produce results that are not exactly correct, but are different from the correct answer by a very small value (smaller than the floating point value can represent accurately). For example, the calculation of 1\-.9\-.1 can return an extremely small number that is not zero but is less than what can be represented accurately, and thus for all intents and purposes, it is 0. The accuracy guard feature will round numbers to zero if they are less than the representable accuracy of the floating point number. However, sometimes numbers that small or smaller need to be displayed, and thus the accuracy guard should be turned off. Alternatively, the number of internal bits could be increased, which makes it possible to represent numbers with more accuracy.
 .TP
 \fB\ep\fP or \fB\epicky\fP or \fB\el\fP or \fB\elenient\fP
 Toggles variable parsing rules. When wcalc is "picky" it will complain if you use undefined variables. If it is "lenient", wcalc will assume a value of 0 for undefined variables.
@@ -451,7 +451,7 @@ The format of the file is that each line is either blank or an assignment. Comme
 The possible keys are:
 .TP
 .B precision
-A number defining the display precision. Equivalent to the \fB\eP\fP command, where -1 means "auto" and anything else specifies the number of decimal places. This does not affect the behind-the-scenes precision.
+A number defining the display precision. Equivalent to the \fB\eP\fP command, where \-1 means "auto" and anything else specifies the number of decimal places. This does not affect the behind-the-scenes precision.
 .TP
 .B show_equals
 Either true ("yes" or "true") or false (anything else). Equivalent to the \fB--quiet\fP argument. Specifies whether answers will begin with an equals sign or not.
@@ -502,11 +502,11 @@ Either \fIno\fP, \fIsimple\fP, or \fIsig_fig\fP. Equivalent to the \fB\erounding
 Either true ("yes" or "true") or false (anything else). Equivalent to the \fB\ecmod\fP command. Specifies whether the modulo operator (%) will behave as it does in the C programming language, or whether it will use a more flexible method. This only affects modulo operations where negative numbers are involved. As an example, with \fBc_style_mod\fP set to true (the default):
 .RS
 .PP
--340 % 60 == -40; 340 % -60 == 40; -340 % -60 == -40
+\-340 % 60 == \-40; 340 % \-60 == 40; \-340 % \-60 == \-40
 .PP
 However, with \fBc_style_mod\fP set to false:
 .PP
--340 % 60 == -40; 340 % -60 == -20; -340 % -60 == 20
+\-340 % 60 == \-40; 340 % \-60 == \-20; \-340 % \-60 == 20
 .RE
 .SH PRELOAD
 Wcalc uses a file, \fB~/.wcalc_preload\fP, to store persistent information between instances. Typically, this is used to store variables that are frequently defined. This file can be edited by hand with a standard text editor. There is also a command within wcalc (\fB\estore\fP) to append a variable definition to the end of this file. Any variable defined in this file is defined and available for use in any subsequent invocation of wcalc.
