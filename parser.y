@@ -402,9 +402,9 @@ command : HEX_CMD {
 }
 | BITS_CMD {
 	if ($1 < NUM_PREC_MIN) {
-		report_error("Minimum precision is %lu.\n", (unsigned long)NUM_PREC_MIN);
-	} else if ($1 > (signed)NUM_PREC_MAX) {
-		report_error("Maximum precision is %lu.\n", (unsigned long)NUM_PREC_MAX);
+		report_error("Minimum precision is %lu (you asked for %lu).\n", (unsigned long)NUM_PREC_MIN, $1);
+	} else if ($1 > NUM_PREC_MAX) {
+		report_error("Maximum precision is %lu (you asked for %lu).\n", (unsigned long)NUM_PREC_MAX, $1);
 	} else {
 		num_set_default_prec($1);
 	}
