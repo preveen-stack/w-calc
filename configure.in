@@ -71,7 +71,6 @@ AC_CHECK_DECL([PATH_MAX],
 
 # Checks for libraries.
 AC_CHECK_LIB([m], [acos])
-# FIXME: Replace `main' with a function in `-lreadline':
 AC_ARG_WITH([readline],
 			[AS_HELP_STRING([--without-readline],
 							[do not try to find and use the readline library])],
