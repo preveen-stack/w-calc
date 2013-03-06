@@ -147,6 +147,7 @@ AC_CONFIG_FILES([Makefile
 				 src/Makefile
 				 src/common/Makefile
 				 src/common/includes/Makefile
+				 src/gui/Makefile
 				 English.lproj/Makefile])
 AC_OUTPUT
 

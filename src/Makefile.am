@@ -1,4 +1,4 @@
-SUBDIRS = common .
+SUBDIRS = common gui .
 
 AM_CPPFLAGS = -I$(top_builddir)/src/common/includes \
 			  -I$(top_builddir)/src/common \

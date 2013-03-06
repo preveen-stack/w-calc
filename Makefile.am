@@ -1,19 +1,6 @@
 SUBDIRS = English.lproj src
 ACLOCAL_AMFLAGS = -I config
-EXTRA_DIST = WcalcController.h WcalcController.m \
-			 AboutBoxController.h AboutBoxController.m \
-			 ConversionList.h ConversionList.m \
-			 ErrorController.h ErrorController.m \
-			 HistoryList.h HistoryList.m \
-			 InspectorController.h InspectorController.m \
-			 MyTextField.h MyTextField.m \
-			 OldVariableList.h OldVariableList.m \
-			 PersVarList.h PersVarList.m \
-			 VariableList.h VariableList.m \
-			 WcalcService.h WcalcService.m \
-			 theDelegate.h theDelegate.m \
-			 main.m \
-			 simpleCalc.h simpleCalc.c \
+EXTRA_DIST = \
 			 Wcalc.xcodeproj/kyle.mode1 \
 			 Wcalc.xcodeproj/kyle.pbxuser \
 			 Wcalc.xcodeproj/project.pbxproj \
