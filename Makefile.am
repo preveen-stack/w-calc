@@ -1,4 +1,5 @@
 SUBDIRS = English.lproj src
+ACLOCAL_AMFLAGS = -I config
 EXTRA_DIST = WcalcController.h WcalcController.m \
 			 AboutBoxController.h AboutBoxController.m \
 			 ConversionList.h ConversionList.m \
