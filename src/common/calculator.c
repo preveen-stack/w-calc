@@ -86,9 +86,6 @@ char *strchr(), *strrchr();
 #include "add_commas.h"
 #include "list.h"
 #include "extract_vars.h"
-#ifdef MEMWATCH
-# include "memwatch.h"
-#endif
 
 /* variables everyone needs to get to */
 Number last_answer;

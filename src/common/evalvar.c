@@ -7,9 +7,6 @@
 #include "variables.h"
 #include "calculator.h"
 #include "number_formatting.h"
-#ifdef MEMWATCH
-# include "memwatch.h"
-#endif
 
 /* My Prototype */
 #include "evalvar.h"

@@ -1,7 +1,4 @@
 #import "InspectorController.h"
-#ifdef MEMWATCH
-#include "memwatch.h"
-#endif
 
 @implementation InspectorController
 

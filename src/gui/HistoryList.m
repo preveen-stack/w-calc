@@ -1,8 +1,5 @@
 #include "historyManager.h"
 #include "HistoryList.h"
-#ifdef MEMWATCH
-#include "memwatch.h"
-#endif
 
 @implementation HistoryList
 

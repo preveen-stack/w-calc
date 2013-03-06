@@ -11,9 +11,6 @@
 #include "simpleCalc.h"
 #include "list.h"
 #include "number.h"
-#ifdef MEMWATCH
-#include "memwatch.h"
-#endif
 
 #define KEYPAD_HEIGHT 165
 #define MIN_WINDOW_WIDTH 171

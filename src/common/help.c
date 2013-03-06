@@ -17,9 +17,6 @@
 /* Internal Headers */
 #include "definitions.h"
 #include "help.h"
-#ifdef MEMWATCH
-# include "memwatch.h"
-#endif
 
 void print_interactive_help (void)
 {/*{{{*/

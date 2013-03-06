@@ -1,8 +1,5 @@
 #include "conversion.h"
 #include "ConversionList.h"
-#ifdef MEMWATCH
-#include "memwatch.h"
-#endif
 
 @implementation ConversionList
 - (IBAction)newType:(id)sender

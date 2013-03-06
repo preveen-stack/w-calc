@@ -12,10 +12,6 @@
 #include "variables.h" /* needed to run variable initialization */
 #include "WcalcService.h" /* needed to init the service */
 
-#ifdef MEMWATCH
-#include "memwatch.h"
-#endif
-
 int main(int argc, const char *argv[])
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];

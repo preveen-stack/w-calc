@@ -6,9 +6,6 @@
 #include <string.h>		       // for strcmp/strlen/stpcpy/strdup
 #include <stdlib.h>		       // for calloc
 #include <stdio.h>
-#ifdef MEMWATCH
-#include "memwatch.h"
-#endif
 
 static char append = 1;
 static Number cur_number;

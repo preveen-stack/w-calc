@@ -9,9 +9,6 @@
 
 /* Internal Headers */
 #include "list.h"
-#ifdef MEMWATCH
-# include "memwatch.h"
-#endif
 
 /* structures for constructing the list */
 struct _listheader {

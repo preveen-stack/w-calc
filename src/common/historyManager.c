@@ -33,9 +33,6 @@ extern int  read_history();
 # endif /* defined(HAVE_READLINE_HISTORY_H) */
 /* no history */
 #endif /* HAVE_READLINE_HISTORY */
-#ifdef MEMWATCH
-# include "memwatch.h"
-#endif
 
 /* Configuration Variables */
 short allow_duplicates = 0;

@@ -8,9 +8,6 @@
 
 /* Internal Headers */
 #include "isconst.h"
-#ifdef MEMWATCH
-# include "memwatch.h"
-#endif
 
 #warning this is all in utf8... should probably use iconv
 

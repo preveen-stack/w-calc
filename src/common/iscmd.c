@@ -7,9 +7,6 @@
 
 /* Internal Headers */
 #include "iscmd.h"
-#ifdef MEMWATCH
-# include "memwatch.h"
-#endif
 
 static const char *commands[] = {
     "b", "bin", "binary", "store", "q", "d", "dec", "decimal",

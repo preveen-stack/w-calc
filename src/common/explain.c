@@ -17,9 +17,6 @@
 #include "isconst.h"
 #include "isfunc.h"
 #include "explain.h"
-#ifdef MEMWATCH
-# include "memwatch.h"
-#endif
 
 static int explain_command(const char *,
                            int);

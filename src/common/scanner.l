@@ -32,9 +32,6 @@
 #include "explain.h"
 #include "isfunc.h" /* for isfunc() */
 #include "isconst.h" /* for isconst() */
-#ifdef MEMWATCH
-#include "memwatch.h"
-#endif
 
     extern short scanerror;
 

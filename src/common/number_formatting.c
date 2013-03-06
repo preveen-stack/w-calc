@@ -14,9 +14,6 @@
 #include "calculator.h"
 #include "string_manip.h"
 #include "number_formatting.h"
-#ifdef MEMWATCH
-# include "memwatch.h"
-#endif
 
 static size_t zero_strip(char *num);
 static void   add_prefix(char  *num,

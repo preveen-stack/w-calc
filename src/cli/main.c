@@ -60,9 +60,6 @@ extern int  history_truncate_file(char *,
 #include "historyManager.h"
 #include "list.h"
 #include "isconst.h"
-#ifdef MEMWATCH
-# include "memwatch.h"
-#endif
 
 #define TRUEFALSE  (!strcmp(value, "yes") || !strcmp(value, "true") || !strcmp(value, "1"))
 #define BIG_STRING 4096

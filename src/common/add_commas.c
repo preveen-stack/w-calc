@@ -12,9 +12,6 @@
 /* Internal Headers */
 #include "add_commas.h"
 #include "calculator.h"
-#ifdef MEMWATCH
-# include "memwatch.h"
-#endif
 
 /* this function returns a copy of the input string with delimiters
  * appropriate for the specified base. */

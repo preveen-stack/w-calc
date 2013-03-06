@@ -4,9 +4,6 @@
 #include "VariableList.h"
 
 #include "number.h"
-#ifdef MEMWATCH
-#include "memwatch.h"
-#endif
 
 @implementation VariableList
 // needs to be REALLY fast

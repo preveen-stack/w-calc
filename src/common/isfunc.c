@@ -7,9 +7,6 @@
 
 /* Internal Headers */
 #include "isfunc.h"
-#ifdef MEMWATCH
-# include "memwatch.h"
-#endif
 
 const char *funcs[] = {
     "sin", "cos", "tan", "cot",

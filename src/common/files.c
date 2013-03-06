@@ -33,9 +33,6 @@
 #include "variables.h"
 
 #include "files.h"
-#ifdef MEMWATCH
-# include "memwatch.h"
-#endif
 
 /* this is for communicating with the scanner */
 char *open_file = NULL;

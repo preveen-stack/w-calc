@@ -25,9 +25,6 @@ char *strchr(), *strrchr();
 
 /* Internal Headers */
 #include "string_manip.h"
-#ifdef MEMWATCH
-# include "memwatch.h"
-#endif
 
 void strstrip(const char strip,
               char      *str)

@@ -16,9 +16,6 @@
 #include "number.h"
 #include "calculator.h"
 #include "conversion.h"
-#ifdef MEMWATCH
-#include "memwatch.h"
-#endif
 
 /* The conversion tables */
 

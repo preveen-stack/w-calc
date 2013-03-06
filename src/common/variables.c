@@ -13,9 +13,6 @@
 #include "calculator.h"                /* for report_error */
 #include "list.h"
 #include "variables.h"
-#ifdef MEMWATCH
-# include "memwatch.h"
-#endif
 
 #define THE_VALUE      0
 #define THE_STRUCTURE  2

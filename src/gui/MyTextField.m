@@ -2,9 +2,6 @@
 #include "calculator.h"
 #include "variables.h"
 #include "simpleCalc.h"
-#ifdef MEMWATCH
-#include "memwatch.h"
-#endif
 
 @implementation MyTextField
 - (void)keyDown:(NSEvent*) theEvent
