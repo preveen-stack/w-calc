@@ -43,7 +43,7 @@ char *strchr (), *strrchr ();
 #define YYDEBUG 1
 
 /* to make it stop complaining about undeclared functions */
-int yylex();
+int yylex(void);
 int yyerror(char *error_string, ...);
 
 int lines = 1;

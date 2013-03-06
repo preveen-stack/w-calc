@@ -122,7 +122,7 @@ consttype isconst(const char *str)
     return W_notaconstant;
 }
 
-void printconsts()
+void printconsts(void)
 {
     size_t i;
     size_t linelen = 0;

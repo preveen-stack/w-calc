@@ -67,23 +67,19 @@ unsigned int count_digits(const char *str)
 {
     size_t curs = 0;
     unsigned int counter = 0;
-    char base = 10;
     char * exponent_chars = "eE";
     char * base_chars = "1234567890";
 
     if (!str) return 0;
     if (str[0] == '0' && str[1] == 'x') {
-	base = 16;
 	curs += 2;
 	exponent_chars = "@";
 	base_chars = "1234567890abcdefABCDEF";
     } else if (str[0] == '0' && str[1] == 'b') {
-	base = 2;
 	curs += 2;
 	exponent_chars = "eE";
 	base_chars = "01";
     } else if (str[0] == '0') {
-	base = 8;
 	curs += 1;
 	exponent_chars = "eE";
 	base_chars = "12345670";

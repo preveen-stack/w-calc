@@ -21,6 +21,6 @@ typedef struct
 extern const constdef consts[];
 
 consttype isconst(const char *str);
-void printconsts();
+void printconsts(void);
 
 #endif

@@ -47,7 +47,7 @@ int varexists(const char *key);
 void initvar(void);
 void delnvar(const size_t n);
 void cleanupvar(void);
-size_t numvars();
+size_t numvars(void);
 void printvariables(void);
 
 // this returns a char ** that must be freed. DO NOT free its contents

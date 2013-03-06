@@ -84,7 +84,7 @@ extern int yy_scan_string(const char *);
 static List tc_options = NULL;
 
 /*@null@*/
-char *tc_generator(const char *text, int state)
+static char *tc_generator(const char *text, int state)
 {				       /*{{{ */
     char *ret = getHeadOfList(tc_options);
 
@@ -95,7 +95,7 @@ char *tc_generator(const char *text, int state)
 }				       /*}}} */
 
 /*@null@*/
-char *tc_rounding(const char *text, int state)
+static char *tc_rounding(const char *text, int state)
 {				       /*{{{ */
     static unsigned int i = 0;
     char *rounding[] = { "none", "simple", "sig_fig", 0 };
@@ -112,7 +112,7 @@ char *tc_rounding(const char *text, int state)
 }				       /*}}} */
 
 /*@null@*/
-char *tc_engineering(const char *text, int state)
+static char *tc_engineering(const char *text, int state)
 {				       /*{{{ */
     static unsigned int i = 0;
     char *engineering[] = { "always", "never", "auto", "automatic", 0 };
@@ -169,7 +169,7 @@ char *tc_engineering(const char *text, int state)
     } \
 } while (0)
 
-char **wcalc_completion(const char *text, int start, int end)
+static char **wcalc_completion(const char *text, int start, int end)
 {				       /*{{{ */
     /*extern const char *commands[];*/
     extern const char *qcommands[];

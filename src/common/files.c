@@ -251,8 +251,6 @@ int loadState(const char *filename, const int into_history)
 int storeVar(const char *variable)
 {				       /*{{{ */
     int fd, retval = 0, return_error = 0;
-    char *filename = NULL;
-    const char *preloadfile = "/.wcalc_preload";
 
     if (!varexists(variable)) {
 	report_error("Variable is not defined.");

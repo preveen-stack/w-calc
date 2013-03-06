@@ -88,7 +88,7 @@ struct _conf conf;
  * These two lines are taken from http://www.bgw.org/tutorials/programming/c/lex_yacc/main.c
  */
 struct yy_buffer_state;
-extern int yyparse();
+extern int yyparse(void);
 extern void *yy_scan_string(const char *);
 extern void yy_delete_buffer(struct yy_buffer_state *);
 

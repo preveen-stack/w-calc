@@ -1,3 +1,8 @@
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
+/* Internal Headers */
 #include "number.h"
 #include "variables.h"
 #include "calculator.h"
@@ -5,6 +10,9 @@
 #ifdef MEMWATCH
 #include "memwatch.h"
 #endif
+
+/* My Prototype */
+#include "evalvar.h"
 
 char *evalvar(const char *varname)
 {

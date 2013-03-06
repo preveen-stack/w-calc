@@ -9,7 +9,7 @@
 gmp_randstate_t randstate;
 #endif
 
-void numbers_cleanup(void)
+static void numbers_cleanup(void)
 {
 #ifdef HAVE_LIBMPFR
     mpfr_free_cache();
