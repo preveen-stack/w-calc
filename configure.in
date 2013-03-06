@@ -1,19 +1,50 @@
 # Process this file with autoconf to produce a configure script.
+
+## --------------------- ##
+## Autoconf Requirements ##
+## --------------------- ##
 AC_PREREQ(2.59)
-AC_INIT(wcalc, 2.4.1, kyle-wcalc@memoryhole.net)
-AM_INIT_AUTOMAKE([foreign dist-bzip2 no-define 1.7])
-AC_CONFIG_SRCDIR([WcalcController.h])
-AM_CONFIG_HEADER(config.h)
+
+## ---------------------------------- ##
+## Autoconf / Automake Initialization ##
+## ---------------------------------- ##
+AC_INIT([wcalc], [2.4.1], [kyle-wcalc@memoryhole.net])
+AC_CONFIG_AUX_DIR([config])
+AC_CONFIG_MACRO_DIR([config])
+AC_CONFIG_SRCDIR([src/cli/main.c])
+
+dnl Require at least AM 1.7.  Prior versions require AM_CONFIG_HEADER
+dnl and have no equivalent to AC_CONFIG_HEADERS (the plural version),
+dnl which is a pain.  AM 1.7 also added support for putting target
+dnl information in AM_CONDITIONAL blocks and using the += modifier.
+dnl ... removed "check-news" because of automatic version generation
+# Automake's silent rules were implemented in the same version that
+# color-tests was implemented, so we can use one to detect the other.
+# This nasty, dirty, unreliable trick is strongly discouraged by its author:
+# http://blog.flameeyes.eu/trackbacks?article_id=5155
+m4_ifdef([AM_SILENT_RULES],
+		 [m4_define([wc_color_tests], [color-tests])],
+		 [m4_define([wc_color_tests], [])])
+AM_INIT_AUTOMAKE([foreign subdir-objects dist-bzip2 no-define 1.7 ]wc_color_tests)
 # If Automake supports silent rules, enable them
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
+
 
 AC_ARG_ENABLE([rpath],
 			  [AS_HELP_STRING([--enable-rpath],
 							  [Add -rpath arguments to LDFLAGS])])
+AC_ARG_ENABLE([picky],
+			  [AS_HELP_STRING([--enable-picky],
+							  [turns on extra compiler warnings (for developers)])])
+AS_IF([test "x$enable_picky" = x],
+	  [AS_IF([test -d "${srcdir}/.svn"],
+			 [AC_MSG_NOTICE(["--> developer override: enable picky compiler by default"])
+			  enable_picky=yes])])
 
 # Checks for programs.
-AC_PROG_YACC
 AC_PROG_CC
+AC_PROG_RANLIB
+AC_PROG_YACC
 AM_PROG_LEX
 AS_IF([test "x$LEX" == x],
 	  [AC_MSG_ERROR([A Lex/Flex program is required in order to compile wcalc.])],
@@ -23,7 +54,11 @@ AS_IF([test "x$LEX" == x],
 			  AC_SUBST([LEXLIB], [''])]
 			 )]
 	  )
+AC_PROG_CPP
 AC_PROG_INSTALL
+
+AS_IF([test "x$enable_picky" = xyes],
+	  [CFLAGS="$CFLAGS -Wall -Wno-strict-aliasing -Wmissing-prototypes -Wstrict-prototypes"])
 
 AC_CHECK_HEADERS([limits.h])
 AC_CHECK_DECL([PATH_MAX],
@@ -104,6 +139,11 @@ AC_FUNC_REALLOC
 AC_FUNC_VPRINTF
 AC_CHECK_FUNCS([gettimeofday memset modf pow stpcpy strchr strdup strerror strrchr strtoul])
 
-AC_CONFIG_FILES([Makefile English.lproj/Makefile])
+AM_CONFIG_HEADER(config.h)
+AC_CONFIG_FILES([Makefile
+				 src/Makefile
+				 src/common/Makefile
+				 src/common/includes/Makefile
+				 English.lproj/Makefile])
 AC_OUTPUT
 
