@@ -1,13 +1,18 @@
-#include <string.h>
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
+
+/* System Headers */
+#include <string.h>
+
+/* Internal Headers */
 #include "isfunc.h"
 #ifdef MEMWATCH
-#include "memwatch.h"
+# include "memwatch.h"
 #endif
 
-const char *funcs[] = { "sin", "cos", "tan", "cot",
+const char *funcs[] = {
+    "sin", "cos", "tan", "cot",
     "asin", "acos", "atan", "acot",
     "arcsin", "arccos", "arctan", "arccot",
     "sinh", "cosh", "tanh", "coth",
@@ -18,21 +23,23 @@ const char *funcs[] = { "sin", "cos", "tan", "cot",
     "sqrt", "cbrt",
     "exp", "fact", "comp",
 #ifdef HAVE_MPFR_22
-    "eint","Gamma","gamma","lngamma","lnGamma",
+    "eint", "Gamma", "gamma", "lngamma", "lnGamma",
 #endif
     "rand", "irand",
-    "zeta","sinc",
+    "zeta", "sinc",
     0
 };
 
 int isfunc(const char *str)
-{
+{   /*{{{*/
     size_t i;
 
     for (i = 0; funcs[i]; i++) {
-	if (strcmp(funcs[i], str) == 0) {
-	    return 1;
-	}
+        if (strcmp(funcs[i], str) == 0) {
+            return 1;
+        }
     }
     return 0;
-}
+} /*}}}*/
+
+/* vim:set expandtab: */

@@ -865,7 +865,7 @@ const struct conversion temperatures[] = {
     {NULL,NULL,{NULL}}
 };
 
-char * from_temperatures[] = {
+const char * from_temperatures[] = {
     "[%1.15f]",                     // kelvin
     "[%1.15f + 273.15]",            // celsius
     "[%1.15f / 1.8]",               // rankine
@@ -873,7 +873,7 @@ char * from_temperatures[] = {
     "[((5/4) * %1.15f) + 273.15]"   // reaumur
 };
 
-char * to_temperatures[] = {
+const char * to_temperatures[] = {
     "%s",                 // kelvin
     "%s - 273.15",        // celsius
     "%s * 1.8",           // rankine
@@ -883,7 +883,7 @@ char * to_temperatures[] = {
 
 /* time, energy */
 
-const struct conversion * conversions[] = {
+const struct conversion *conversions[] = {
     lengths,
     areas,
     volumes,
@@ -898,16 +898,16 @@ const struct conversion * conversions[] = {
     NULL
 };
 
-#define CONVERS(x) (x>10)?pressures:((x>9)?angles:((x>8)?temperatures:((x>7)?accelerations:((x>6)?forces:((x>5)?powers:((x>4)?speeds:((x>3)?masses:((x>2)?volumes:((x>1)?areas:lengths)))))))))
+#define CONVERS(x) (x > 10) ? pressures : ((x > 9) ? angles : ((x > 8) ? temperatures : ((x > 7) ? accelerations : ((x > 6) ? forces : ((x > 5) ? powers : ((x > 4) ? speeds : ((x > 3) ? masses : ((x > 2) ? volumes : ((x > 1) ? areas : lengths)))))))))
 
 /* returns the category number of the unit */
-ssize_t identify_unit(const char * unit)
+ssize_t identify_unit(const char *unit)
 {
     ssize_t cat_num;
 
     for (cat_num = 0; conversions[cat_num] != NULL; cat_num++) {
-        size_t unit_num;
-        const struct conversion * category = conversions[cat_num];
+        size_t                   unit_num;
+        const struct conversion *category = conversions[cat_num];
 
         for (unit_num = 0; category[unit_num].name != NULL; unit_num++) {
             size_t abbrev_num;
@@ -922,21 +922,22 @@ ssize_t identify_unit(const char * unit)
     return -1;
 }
 
-ssize_t identify_units(const char * unit1, const char * unit2)
+ssize_t identify_units(const char *unit1,
+                       const char *unit2)
 {
     ssize_t cat_num;
     ssize_t u1 = -1, u2 = -1;
 
     for (cat_num = 0; conversions[cat_num] != NULL; cat_num++) {
-        size_t unit_num;
+        size_t                   unit_num;
         const struct conversion *category = conversions[cat_num];
 
         for (unit_num = 0; category[unit_num].name != NULL; unit_num++) {
             size_t abbrev_num;
 
             for (abbrev_num = 0;
-                    category[unit_num].aka[abbrev_num] != NULL ;
-                    abbrev_num++) {
+                 category[unit_num].aka[abbrev_num] != NULL;
+                 abbrev_num++) {
                 if (!strcmp(category[unit_num].aka[abbrev_num], unit1)) {
                     if (u2 == -1) {
                         u1 = cat_num;
@@ -945,7 +946,7 @@ ssize_t identify_units(const char * unit1, const char * unit2)
                     } else {
                         return -1;
                     }
-                } else if (!strcmp(category[unit_num].aka[abbrev_num],unit2)) {
+                } else if (!strcmp(category[unit_num].aka[abbrev_num], unit2)) {
                     if (u1 == -1) {
                         u2 = cat_num;
                     } else if (u1 == cat_num) {
@@ -965,7 +966,8 @@ ssize_t identify_units(const char * unit1, const char * unit2)
     return -2;
 }
 
-ssize_t unit_id(const int utype, const char * unit)
+ssize_t unit_id(const int   utype,
+                const char *unit)
 {
     size_t unit_num;
 
@@ -973,8 +975,8 @@ ssize_t unit_id(const int utype, const char * unit)
         size_t abbrev_num;
 
         for (abbrev_num = 0;
-                (conversions[utype])[unit_num].aka[abbrev_num] != NULL ;
-                abbrev_num++) {
+             (conversions[utype])[unit_num].aka[abbrev_num] != NULL;
+             abbrev_num++) {
             if (!strcmp((conversions[utype])[unit_num].aka[abbrev_num], unit)) {
                 return (ssize_t)unit_num;
             }
@@ -983,11 +985,15 @@ ssize_t unit_id(const int utype, const char * unit)
     return -1;
 }
 
-void uber_conversion (Number output, const int utype, const int fromunit, const int tounit, Number value)
+void uber_conversion (Number    output,
+                      const int utype,
+                      const int fromunit,
+                      const int tounit,
+                      Number    value)
 {
     if (utype != TEMPERATURE_C) {
         const struct conversion *ltable = conversions[utype];
-        Number tofac, fromfac;
+        Number                   tofac, fromfac;
 
         /* Moving to a more precise model...
          *
@@ -1037,14 +1043,14 @@ void uber_conversion (Number output, const int utype, const int fromunit, const 
                 num_div(value, value, temp);
                 break;
             case FARENHEIT:
-                num_sub_ui(value,value, 32);
+                num_sub_ui(value, value, 32);
                 num_set_d(temp, 1.8);
                 num_div(value, value, temp);
                 num_set_d(temp, 273.15);
                 num_add(value, value, temp);
                 break;
             case REAUMUR:
-                num_set_d(temp, (5.0/4.0));
+                num_set_d(temp, (5.0 / 4.0));
                 num_mul(value, value, temp);
                 num_set_d(temp, 273.15);
                 num_add(value, value, temp);
@@ -1072,20 +1078,19 @@ void uber_conversion (Number output, const int utype, const int fromunit, const 
             case REAUMUR:
                 num_set_d(temp, 273.15);
                 num_sub(value, value, temp);
-                num_set_d(temp, (4.0/5.0));
+                num_set_d(temp, (4.0 / 5.0));
                 num_mul(output, value, temp);
                 break;
         }
         num_free(temp);
 /* The old way *//*
-        //char stage1[100];
-        //char composite[100];
-        //sprintf(stage1,from_temperatures[fromunit],value);
-        //sprintf(composite,to_temperatures[tounit],stage1);
-        //return parseme(composite);
-        */
+ *      //char stage1[100];
+ *      //char composite[100];
+ *      //sprintf(stage1,from_temperatures[fromunit],value);
+ *      //sprintf(composite,to_temperatures[tounit],stage1);
+ *      //return parseme(composite);
+ */
     }
 }
 
-
-
+/* vim:set expandtab: */

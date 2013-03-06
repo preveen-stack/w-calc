@@ -1,10 +1,17 @@
-#include <string.h>
-#include "iscmd.h"
-#ifdef MEMWATCH
-#include "memwatch.h"
+#ifdef HAVE_CONFIG_H
+# include "config.h"
 #endif
 
-const char *commands[] = {
+/* System Headers */
+#include <string.h>
+
+/* Internal Headers */
+#include "iscmd.h"
+#ifdef MEMWATCH
+# include "memwatch.h"
+#endif
+
+static const char *commands[] = {
     "b", "bin", "binary", "store", "q", "d", "dec", "decimal",
     "delim",
     "dsep", "e", "eng", "engineering", "cons", "conservative",
@@ -31,13 +38,15 @@ const char *qcommands[] = {
 };
 
 int iscmd(const char *str)
-{
+{   /*{{{*/
     size_t i;
 
     for (i = 0; commands[i]; i++) {
-	if (strcmp(commands[i], str) == 0) {
-	    return 1;
-	}
+        if (strcmp(commands[i], str) == 0) {
+            return 1;
+        }
     }
     return 0;
-}
+} /*}}}*/
+
+/* vim:set expandtab: */

@@ -18,7 +18,7 @@ char *strchr(), *strrchr();
 
 #include "number.h"
 
-struct variable
+typedef struct variable
 {
     char *key;
     char *expression;
@@ -26,15 +26,15 @@ struct variable
     Number value;
     unsigned int exp:1;
     struct variable *next;
-};
+} variable_t;
 
-struct answer
+typedef struct answer
 {
     Number val;
     char *exp;
     char *desc;
     unsigned int err:1;
-};
+} answer_t;
 
 // requires a working Number
 void getvarval(Number out, const char *key);

@@ -1,8 +1,12 @@
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
+
+/* System Headers */
 #include <string.h>
 #include <ctype.h>                     /* for isspace() */
+
+/* Internal Headers */
 #include "number.h"
 #include "uint32_max.h"
 #include "variables.h"
