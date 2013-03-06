@@ -4,3 +4,4 @@
 void explain(const char *str);
 
 #endif
+/* vim:set expandtab: */

@@ -13,9 +13,11 @@
 
 void clearHistory(void);
 void addToHistory(char *, Number);
-char *historynum(int, int);
+char *historynum(int,
+                 int);
 size_t historyLength(void);
 
 extern short allow_duplicates;
 extern short recalculate;
-#endif
+#endif // ifndef WCALC_HISTORY_MANAGER
+/* vim:set expandtab: */

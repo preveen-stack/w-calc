@@ -1,8 +1,7 @@
 #ifndef WCALC_ISCONST
 #define WCALC_ISCONST
 
-typedef enum constnames
-{
+typedef enum constnames {
     W_notaconstant,
     W_e, W_pi, W_random, W_irandom, W_Na, W_k, W_Cc, W_ec, W_R, W_G, W_g,
     W_Me, W_Mp, W_Mn, W_Md, W_u, W_c, W_h, W_mu0, W_epsilon0, W_muB,
@@ -12,15 +11,15 @@ typedef enum constnames
     W_K, W_NaN, W_Inf,
 } consttype;
 
-typedef struct
-{
+typedef struct {
     consttype type;
-    char *label;
+    char     *label;
 } constdef;
 
 extern const constdef consts[];
 
 consttype isconst(const char *str);
-void printconsts(void);
+void      printconsts(void);
 
-#endif
+#endif // ifndef WCALC_ISCONST
+/* vim:set expandtab: */

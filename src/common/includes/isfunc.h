@@ -4,3 +4,4 @@
 int isfunc(const char *str);
 
 #endif
+/* vim:set expandtab: */

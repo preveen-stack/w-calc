@@ -2,13 +2,13 @@
 #define KBW_VARIABLES
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+# include "config.h"
 #endif
 #if HAVE_STRING_H
 # include <string.h>
 #else
 # if !HAVE_STRCHR
-#  define strchr index
+#  define strchr  index
 #  define strrchr rindex
 # endif
 char *strchr(), *strrchr();
@@ -18,40 +18,43 @@ char *strchr(), *strrchr();
 
 #include "number.h"
 
-typedef struct variable
-{
-    char *key;
-    char *expression;
-    char *description;
-    Number value;
-    unsigned int exp:1;
+typedef struct variable {
+    char            *key;
+    char            *expression;
+    char            *description;
+    Number           value;
+    unsigned int     exp : 1;
     struct variable *next;
 } variable_t;
 
-typedef struct answer
-{
-    Number val;
-    char *exp;
-    char *desc;
-    unsigned int err:1;
+typedef struct answer {
+    Number       val;
+    char        *exp;
+    char        *desc;
+    unsigned int err : 1;
 } answer_t;
 
 // requires a working Number
-void getvarval(Number out, const char *key);
+void getvarval(Number      out,
+               const char *key);
 
 // requires a working Number
-int putval(const char *key, const Number value, const char *desc);
+int putval(const char  *key,
+           const Number value,
+           const char  *desc);
 
-int putexp(const char *key, const char *value, const char *desc);
-int varexists(const char *key);
-void initvar(void);
-void delnvar(const size_t n);
-void cleanupvar(void);
+int putexp(const char *key,
+           const char *value,
+           const char *desc);
+int    varexists(const char *key);
+void   initvar(void);
+void   delnvar(const size_t n);
+void   cleanupvar(void);
 size_t numvars(void);
-void printvariables(void);
+void   printvariables(void);
 
 // this returns a char ** that must be freed. DO NOT free its contents
-char ** listvarnames(void);
+char **listvarnames(void);
 
 /* ******************************
  * NOTE!
@@ -72,4 +75,5 @@ struct answer getvar_full(const char *key);
  */
 struct variable *getrealnvar(const size_t n);
 
-#endif
+#endif // ifndef KBW_VARIABLES
+/* vim:set expandtab: */

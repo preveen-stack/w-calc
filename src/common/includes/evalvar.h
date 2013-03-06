@@ -4,3 +4,4 @@
 char *evalvar(const char *);
 
 #endif
+/* vim:set expandtab: */

@@ -4,3 +4,4 @@
 int iscmd(const char *str);
 
 #endif
+/* vim:set expandtab: */
