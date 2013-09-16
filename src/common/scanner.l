@@ -729,7 +729,7 @@ zeta { POS_STR(); return(WZETA); }
     return(NUMBER);
 }
 
-0[0-9]*([.][0-9]*)?([eE][+-]?[0-9]+)? {
+0[0-9]{1,4}([0-9]*|(,[0-9]{4})*)([.][0-9]*)?([eE][+-]?[0-9]+)? {
     /* octal */
     //char err[strlen(yytext)+57];
     Dprintf("octal\n");
@@ -742,6 +742,10 @@ zeta { POS_STR(); return(WZETA); }
         /*unsigned long int value;*/
         unsigned int t;
         int retval;
+
+        /* take out the ignored char */
+        strstrip(',', yytext);
+
         retval = num_init_set_str(YYLVALAC->number,yytext,8);
         if (-1 == retval) {
 			report_error(strerror(errno));
@@ -757,7 +761,7 @@ zeta { POS_STR(); return(WZETA); }
     }
 }
 
-0b[0-9]+([.][0-9]*)?([eE][+-]?[0-9]+)? {
+0b[0-9]{1,8}([0-9]*|(,[0-9]{8})*)([.][0-9]*)?([eE][+-]?[0-9]+)? {
     /* binary */
     extern int yydebug;
 
@@ -769,6 +773,9 @@ zeta { POS_STR(); return(WZETA); }
 		num_init_set_ui(YYLVALAC->number,0);
     } else {
         int retval;
+
+        /* take out the ignored char */
+        strstrip(',', yytext);
 
         retval = num_init_set_str(YYLVALAC->number,yytext,2);
         if (-1 == retval) {
