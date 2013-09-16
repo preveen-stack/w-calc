@@ -1,6 +1,6 @@
 Hello!
 
-This is Wcalc 2.4.1!
+This is Wcalc 2.4.2!
 
 1. What's New
 2. Intro
@@ -14,26 +14,10 @@ This is Wcalc 2.4.1!
 **************
 
 CHANGES:
- - Removed official support for the GUI
 
 IMPROVEMENTS:
- - Clarity and corrections in documentation
- - Flex/Lex handling improvements
- - Better output (handling of print_ints, big/small numbers, etc.)
- - More flexibility in building against GMP and MPFR
- - Modernize the source code file layout
- - Print variable description in variable list
- - Fix output reinterpretation for octal and binary with delimiters
 
 BUGFIXES:
- - Fix behavior with long HOME values
- - Avoid potential segfault in number display
- - Fix 0-precision exponent calculation during display
- - Fix display of large exponents
- - Don't use PATH_MAX
- - Fix Debian bug 600255
- - Fix \bits command
- - Fix history filename handling
 
 *********
 * INTRO *
