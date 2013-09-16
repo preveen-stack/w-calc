@@ -1,6 +1,6 @@
 Hello!
 
-This is Wcalc 2.4!
+This is Wcalc 2.4.1!
 
 1. What's New
 2. Intro
@@ -13,25 +13,27 @@ This is Wcalc 2.4!
 * What's New *
 **************
 
+CHANGES:
+ - Removed official support for the GUI
+
 IMPROVEMENTS:
- - Allow separate input internationalization characters from output (BOTH)
- - Made binary operations use a more intuitive rounding mode (BOTH)
- - Improved documentation of features (CLI)
- - Made command explanations more tolerant of typos (BOTH)
- - Expanded tab-completion (CLI)
- - Improved readline history detection (CLI)
- - Reorganized the preferences window (GUI)
+ - Clarity and corrections in documentation
+ - Flex/Lex handling improvements
+ - Better output (handling of print_ints, big/small numbers, etc.)
+ - More flexibility in building against GMP and MPFR
+ - Modernize the source code file layout
+ - Print variable description in variable list
+ - Fix output reinterpretation for octal and binary with delimiters
 
 BUGFIXES:
- - Fixed display if thousands/grouping separator is unset (BOTH)
- - Fixed a potential crash (CLI)
- - Corrected engineering flag behavior (CLI)
- - Output localization more reliable (BOTH)
- - Corrected isinf/isnan behavior on some platforms (CLI)
- - Improved Solaris compatibility (CLI)
- - Made preference file parsing more tolerant (CLI)
- - Fixed the backwards compatibility logic (GUI)
-
+ - Fix behavior with long HOME values
+ - Avoid potential segfault in number display
+ - Fix 0-precision exponent calculation during display
+ - Fix display of large exponents
+ - Don't use PATH_MAX
+ - Fix Debian bug 600255
+ - Fix \bits command
+ - Fix history filename handling
 
 *********
 * INTRO *
@@ -39,9 +41,7 @@ BUGFIXES:
 
 Wcalc started as a project written for my C++ class at Ohio University (CS 240B), way back on January 14th, 2000. I made it to be a "natural language" calculator - in that it would successfully interpret any valid mathematical expression. As you can imagine, being a beginner programmer, the code was rather heinous, to say the least!
 
-I reworked it after learning lex and yacc (powerful string parsing tools for C programmers - if you're a C programmer and you don't know them... go google!) in November 2001. Then I thought to myself - I have MacOS X, the standard calculator leaves something to be desired, and they say Cocoa programming is easy... what the heck, I'll give it a shot. Wcalc has turned out better than I thought it would - so I'm putting it on the web, for you! (If you're curious, yes, Cocoa is as wonderful as they say.)
-
-I keep refining and adding to its capabilities - both the GUI/Cocoa version and the command line version (they use the same innards). I think I may personally use the command line version more frequently, but both are excellent (I have fun with the GUI).
+I reworked it after learning lex and yacc (powerful string parsing tools for C programmers - if you're a C programmer and you don't know them... go google!) in November 2001. Then I thought to myself - I have MacOS X, the standard calculator leaves something to be desired, and they say Cocoa programming is easy... what the heck, I'll give it a shot. Wcalc, the GUI version, turned out to be a pretty neat calculator. The GUI version, however, has been abandoned in favor of the CLI.
 
 Wcalc takes "expressions" and calculates the answer. My goal was to make the expressions relatively intutive - no reverse polish, or anything like that. So, by way of a record, here is what Wcalc can do:
 

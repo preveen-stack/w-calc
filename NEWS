@@ -1,3 +1,23 @@
+--- Version 2.4.1 ---
+Changes:
+ - Removed official support for the GUI
+Improvements:
+ - Clarity and corrections in documentation
+ - Flex/Lex handling improvements
+ - Better output (handling of print_ints, big/small numbers, etc.)
+ - More flexibility in building against GMP and MPFR
+ - Modernize the source code file layout
+ - Print variable description in variable list
+ - Fix output reinterpretation for octal and binary with delimiters
+Bugfixes:
+ - Fix behavior with long HOME values
+ - Avoid potential segfault in number display
+ - Fix 0-precision exponent calculation during display
+ - Fix display of large exponents
+ - Don't use PATH_MAX
+ - Fix Debian bug 600255
+ - Fix \bits command
+ - Fix history filename handling
 --- Version 2.4 ---
 Oct 25 2008 - Kyle Wheeler
  - Allow alternate input internationalization characters (BOTH)
