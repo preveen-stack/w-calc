@@ -68,9 +68,12 @@ void printvariables(void)
     while ((cursor = (variable_t *)nextListElement(li)) != NULL) {
         printf("%s = ", cursor->key);
         if (cursor->exp) {
-            printf("%s\n", cursor->expression);
+            printf("%s", cursor->expression);
         } else {
-            printf("%g\n", num_get_d(cursor->value));
+            printf("%g", num_get_d(cursor->value));
+        }
+        if (cursor->description) {
+            printf("\t:: %s\n", cursor->description);
         }
     }
     freeListIterator(li);
