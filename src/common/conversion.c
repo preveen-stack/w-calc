@@ -516,7 +516,7 @@ const struct conversion volumes[] = {
      "14.7867647825e-6",    "Tablespoon (US)",          {"tbsp","tbsp.US","tablespoon","tablespoons",NULL}},
     {"15e-6",               "Tablespoon (metric)",      {"tbsp.metric",NULL}},
     {/* 5/8 fl.oz. */
-     "17.7581640625e-6",    "Tablespoon (Imperial)",    {"tsp.Imp",NULL}},
+     "17.7581640625e-6",    "Tablespoon (Imperial)",    {"tbsp.Imp",NULL}},
     {/* 1/6 fl.oz. */
      "4.735510416667e-6",   "Teaspoon (Canadian)",      {"tsp.CA",NULL}},
     {"4.928921595e-6",      "Teaspoon (U.S.)",          {"tsp","tsp.US","teaspoon","teaspoons",NULL}},
