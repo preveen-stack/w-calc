@@ -1,3 +1,39 @@
+2013-09-17 16:13  Kyle Wheeler <kbwheel@gmail.com>
+
+	* wcalc.1: document new options (-u and -U), ditch unit list for
+	  online unit list
+
+2013-09-17 16:13  Kyle Wheeler <kbwheel@gmail.com>
+
+	* src/cli/main.c: require 2 letters
+
+2013-09-17 16:02  Kyle Wheeler <kbwheel@gmail.com>
+
+	* src/cli/main.c, src/common/help.c: -U and -u (--units) for
+	  printing out the currently supported conversions and their
+	  aliases.
+
+2013-09-17 15:57  Kyle Wheeler <kbwheel@gmail.com>
+
+	* src/common/conversion.c, src/common/includes/conversion.h: Make
+	  the text conversion categories universally accessible
+
+2013-09-17 15:13  Kyle Wheeler <kbwheel@gmail.com>
+
+	* wcalc.1: list all the units in the man-page (thanks Roger!)
+
+2013-09-17 14:57  Kyle Wheeler <kbwheel@gmail.com>
+
+	* src/common/conversion.c: typo - thanks Roger!
+
+2013-09-16 22:07  Kyle Wheeler <kbwheel@gmail.com>
+
+	* NEWS, README, configure.in: post-release commit
+
+2013-09-16 22:05  Kyle Wheeler <kbwheel@gmail.com>
+
+	* ChangeLog: 2.4.1
+
 2013-09-16 21:56  Kyle Wheeler <kbwheel@gmail.com>
 
 	* AUTHORS, NEWS, README: prep for 2.4.1 release
@@ -3354,88 +3390,88 @@
 
 	* parser.y: Fixed a crasher in error reporting.
 
-2002-10-21 05:32  kyle
+2002-10-21 05:32  Kyle Wheeler <kbwheel@gmail.com>
 
 	* website/contact.html, website/download.html,
 	  website/screenshots.html, website/wcalc.html: Just general
 	  updates
 
-2002-10-20 20:48  kyle
+2002-10-20 20:48  Kyle Wheeler <kbwheel@gmail.com>
 
 	* Makefile, parser.y, wcalc.spec: New version, small bugfix.
 
-2002-10-20 20:41  kyle
+2002-10-20 20:41  Kyle Wheeler <kbwheel@gmail.com>
 
 	* ReadMe.rtf: New version
 
-2002-10-20 20:41  kyle
+2002-10-20 20:41  Kyle Wheeler <kbwheel@gmail.com>
 
 	* Makefile, Wcalc.pmsp: New version.
 
-2002-10-20 20:40  kyle
+2002-10-20 20:40  Kyle Wheeler <kbwheel@gmail.com>
 
 	* main.c: Fixed the defaults for the precision guard.
 
-2002-10-20 19:58  kyle
+2002-10-20 19:58  Kyle Wheeler <kbwheel@gmail.com>
 
 	* ChangeLog, definitions.h: New version
 
-2002-10-20 19:56  kyle
+2002-10-20 19:56  Kyle Wheeler <kbwheel@gmail.com>
 
 	* WcalcController.m, calculator.c, calculator.h: Implemented
 	  toggling precision control
 
-2002-10-20 19:55  kyle
+2002-10-20 19:55  Kyle Wheeler <kbwheel@gmail.com>
 
 	* main.c: Documented \conservative
 
-2002-10-20 19:54  kyle
+2002-10-20 19:54  Kyle Wheeler <kbwheel@gmail.com>
 
 	* parser.y, scanner.l: Added the \conservative command, to toggle
 	  conservative precision
 
-2002-10-20 19:47  kyle
+2002-10-20 19:47  Kyle Wheeler <kbwheel@gmail.com>
 
 	* main.c: Documented \list
 
-2002-10-03 05:04  kyle
+2002-10-03 05:04  Kyle Wheeler <kbwheel@gmail.com>
 
 	* parser.y, scanner.l: Lists variables in command-line mode.
 
-2002-09-09 02:16  kyle
+2002-09-09 02:16  Kyle Wheeler <kbwheel@gmail.com>
 
 	* scanner.l: Another way to tell it "hex"
 
-2002-08-30 16:11  kyle
+2002-08-30 16:11  Kyle Wheeler <kbwheel@gmail.com>
 
 	* Makefile: Alternate compiling for redhat
 
-2002-08-12 04:29  kyle
+2002-08-12 04:29  Kyle Wheeler <kbwheel@gmail.com>
 
 	* website/contact.html, website/download.html, website/index.html,
 	  website/screenshots.html, website/wcalc.html: New version
 
-2002-08-12 03:43  kyle
+2002-08-12 03:43  Kyle Wheeler <kbwheel@gmail.com>
 
 	* English.lproj/MainMenu.nib/info.nib,
 	  English.lproj/MainMenu.nib/objects.nib,
 	  Wcalc.pbproj/kyle.pbxuser: *** empty log message ***
 
-2002-08-12 03:43  kyle
+2002-08-12 03:43  Kyle Wheeler <kbwheel@gmail.com>
 
 	* ChangeLog, Makefile, MyTextField.m, ReadMe.rtf, Wcalc.pmsp,
 	  main.c, wcalc.1: Distribution
 
-2002-08-12 02:24  kyle
+2002-08-12 02:24  Kyle Wheeler <kbwheel@gmail.com>
 
 	* Wcalc.pbproj/kyle.pbxuser, Wcalc.pbproj/project.pbxproj, website,
 	  website/.cvsignore, website/wcalc.html: *** empty log message ***
 
-2002-08-12 02:24  kyle
+2002-08-12 02:24  Kyle Wheeler <kbwheel@gmail.com>
 
 	* ReadMe.rtf, Wcalc.pmsp: Synching before release
 
-2002-08-12 02:21  kyle
+2002-08-12 02:21  Kyle Wheeler <kbwheel@gmail.com>
 
 	* English.lproj/InfoPlist.strings,
 	  English.lproj/MainMenu.nib/classes.nib,
@@ -3443,91 +3479,91 @@
 	  English.lproj/MainMenu.nib/objects.nib, definitions.h: Changed
 	  the version numbers
 
-2002-08-11 22:53  kyle
+2002-08-11 22:53  Kyle Wheeler <kbwheel@gmail.com>
 
 	* MyTextField.m: Removed debugging printouts.
 
-2002-08-11 22:53  kyle
+2002-08-11 22:53  Kyle Wheeler <kbwheel@gmail.com>
 
 	* ConversionList.h, ConversionList.m, WcalcController.h,
 	  WcalcController.m: Conversion functions are available in the GUI.
 
-2002-08-11 22:52  kyle
+2002-08-11 22:52  Kyle Wheeler <kbwheel@gmail.com>
 
 	* conversion.c, conversion.h: Conversion functions now work.
 
-2002-08-11 17:38  kyle
+2002-08-11 17:38  Kyle Wheeler <kbwheel@gmail.com>
 
 	* calculator.c: uber_converstion belongs in conversion.c
 
-2002-08-02 06:13  kyle
+2002-08-02 06:13  Kyle Wheeler <kbwheel@gmail.com>
 
 	* calculator.c, calculator.h, conversion.c, conversion.h,
 	  scanner.l: Getting a start on the conversions stuff.
 
-2002-07-31 16:34  kyle
+2002-07-31 16:34  Kyle Wheeler <kbwheel@gmail.com>
 
 	* string_manip.h: Stupid gcc and it's end of line at end of file
 	  nonsense.
 
-2002-07-31 06:05  kyle
+2002-07-31 06:05  Kyle Wheeler <kbwheel@gmail.com>
 
 	* scanner.l: Added shell-style comment support.
 
-2002-07-31 05:57  kyle
+2002-07-31 05:57  Kyle Wheeler <kbwheel@gmail.com>
 
 	* parser.y, scanner.l: Added expression/string support.
 
-2002-07-31 05:55  kyle
+2002-07-31 05:55  Kyle Wheeler <kbwheel@gmail.com>
 
 	* calculator.c: Fixed variable reassignment.
 	  Fixed exessive printouts in command-line mode.
 	  Added expression support (command-line mode).
 
-2002-07-31 05:25  kyle
+2002-07-31 05:25  Kyle Wheeler <kbwheel@gmail.com>
 
 	* calculator.c: Fixed a possible infinite loop.
 
-2002-07-31 05:25  kyle
+2002-07-31 05:25  Kyle Wheeler <kbwheel@gmail.com>
 
 	* scanner.l: Added support for comments.
 
-2002-07-31 04:50  kyle
+2002-07-31 04:50  Kyle Wheeler <kbwheel@gmail.com>
 
 	* main.c: Made the default to print prefixes (0x, etc)
 	  Added the standard -h argument support.
 	  Changed to match variables.c changes.
 
-2002-07-31 04:47  kyle
+2002-07-31 04:47  Kyle Wheeler <kbwheel@gmail.com>
 
 	* MyTextField.m: Removed spacebar actions (now it's normal again).
 	  Removed errors from arrow keys.
 
-2002-07-31 04:46  kyle
+2002-07-31 04:46  Kyle Wheeler <kbwheel@gmail.com>
 
 	* VariableList.m: Handles expressions now.
 
-2002-07-31 04:45  kyle
+2002-07-31 04:45  Kyle Wheeler <kbwheel@gmail.com>
 
 	* string_manip.c, string_manip.h: Added justnumbers.
 
-2002-07-31 04:44  kyle
+2002-07-31 04:44  Kyle Wheeler <kbwheel@gmail.com>
 
 	* scanner.l: Changed the precision syntax a bit.
 	  Added bitshifts.
 
-2002-07-31 04:41  kyle
+2002-07-31 04:41  Kyle Wheeler <kbwheel@gmail.com>
 
 	* parser.y: Added bitshifts.
 	  Updated for changes in variables.c.
 
-2002-07-31 04:37  kyle
+2002-07-31 04:37  Kyle Wheeler <kbwheel@gmail.com>
 
 	* variables.h: Added expressions to the variable struct.
 	  Added the answer struct.
 	  Synched the function definitions with variables.c
 
-2002-07-31 04:35  kyle
+2002-07-31 04:35  Kyle Wheeler <kbwheel@gmail.com>
 
 	* variables.c: Added the _full functions for pulling out
 	  expressions too.
@@ -3537,42 +3573,42 @@
 	  Added a putexp function for inserting expressions.
 	  Renamed putvar to putval (for consistency)
 
-2002-07-31 04:25  kyle
+2002-07-31 04:25  Kyle Wheeler <kbwheel@gmail.com>
 
 	* calculator.c: Added the flatten function to pre-parse variables
 	  (and handle "active" variables recursively).
 	  Fixed the bitshift functions.
 
-2002-07-30 01:35  kyle
+2002-07-30 01:35  Kyle Wheeler <kbwheel@gmail.com>
 
 	* calculator.c, calculator.h: Added left and right bitshifts.
 
-2002-05-21 15:04  kyle
+2002-05-21 15:04  Kyle Wheeler <kbwheel@gmail.com>
 
 	* WcalcController.h, WcalcController.m: Handles '=' and 'clear' at
 	  input-time now (sorta). (also a small change getting ready for
 	  dynamic variables... probably breaks it - will commit more later
 	  that fix it again)
 
-2002-05-21 14:51  kyle
+2002-05-21 14:51  Kyle Wheeler <kbwheel@gmail.com>
 
 	* MyTextField.h, MyTextField.m: Handles '=' and 'clear' at
 	  input-time now (sorta).
 
-2002-05-16 05:30  kyle
+2002-05-16 05:30  Kyle Wheeler <kbwheel@gmail.com>
 
 	* website/download.html: Removed old versions (to save web space).
 
-2002-04-12 21:13  kyle
+2002-04-12 21:13  Kyle Wheeler <kbwheel@gmail.com>
 
 	* website/contact.html, website/download.html, website/index.html,
 	  website/screenshots.html, website/wcalc.html: Version 1.4.5
 
-2002-04-12 20:53  kyle
+2002-04-12 20:53  Kyle Wheeler <kbwheel@gmail.com>
 
 	* wcalc.spec: Updated the version
 
-2002-04-12 20:45  kyle
+2002-04-12 20:45  Kyle Wheeler <kbwheel@gmail.com>
 
 	* English.lproj/MainMenu.nib/classes.nib,
 	  English.lproj/MainMenu.nib/info.nib,
@@ -3580,305 +3616,305 @@
 	  Wcalc.pbproj/kyle.pbxuser, Wcalc.pbproj/project.pbxproj: ***
 	  empty log message ***
 
-2002-04-12 20:29  kyle
+2002-04-12 20:29  Kyle Wheeler <kbwheel@gmail.com>
 
 	* WcalcController.m, calculator.h, main.c, variables.c: Setup
 	  reverse-lookup table for characters (we'll need it when we print
 	  errors/numbers back out)
 
-2002-04-12 20:26  kyle
+2002-04-12 20:26  Kyle Wheeler <kbwheel@gmail.com>
 
 	* scanner.l: Using reverse-lookup table for error formatting.
 
-2002-04-12 20:25  kyle
+2002-04-12 20:25  Kyle Wheeler <kbwheel@gmail.com>
 
 	* calculator.c: Took out debugging printfs
 
-2002-04-12 20:03  kyle
+2002-04-12 20:03  Kyle Wheeler <kbwheel@gmail.com>
 
 	* WcalcController.h: Organized the code a bit.
 
-2002-04-12 20:03  kyle
+2002-04-12 20:03  Kyle Wheeler <kbwheel@gmail.com>
 
 	* WcalcController.m: No use_commas pref!
 
-2002-04-12 20:02  kyle
+2002-04-12 20:02  Kyle Wheeler <kbwheel@gmail.com>
 
 	* scanner.l: Scanner error hides internationalization futzing.
 
-2002-04-12 19:59  kyle
+2002-04-12 19:59  Kyle Wheeler <kbwheel@gmail.com>
 
 	* calculator.c: Stripped out the bogus internationalizing loop.
 
-2002-04-12 19:59  kyle
+2002-04-12 19:59  Kyle Wheeler <kbwheel@gmail.com>
 
 	* calculator.h, parser.y: No comma-command!
 
-2002-04-12 19:57  kyle
+2002-04-12 19:57  Kyle Wheeler <kbwheel@gmail.com>
 
 	* scanner.l: Back to American-only (may be some cruft left in
 	  there... I'll get it later)
 
-2002-04-12 19:56  kyle
+2002-04-12 19:56  Kyle Wheeler <kbwheel@gmail.com>
 
 	* main.c: Specify separators on the fly in cmd-line.
 
-2002-04-12 18:03  kyle
+2002-04-12 18:03  Kyle Wheeler <kbwheel@gmail.com>
 
 	* WcalcController.m, calculator.c, calculator.h, variables.c:
 	  Initial preprocessor support!
 
-2002-04-10 05:03  kyle
+2002-04-10 05:03  Kyle Wheeler <kbwheel@gmail.com>
 
 	* WcalcController.h, WcalcController.m, calculator.h, main.c,
 	  parser.y, scanner.l: Added a preference to optionally forget
 	  expressions that produce errors and don't return values.
 
-2002-04-09 23:40  kyle
+2002-04-09 23:40  Kyle Wheeler <kbwheel@gmail.com>
 
 	* WcalcController.m, theDelegate.m: Minor code cleanups
 
-2002-03-28 05:58  kyle
+2002-03-28 05:58  Kyle Wheeler <kbwheel@gmail.com>
 
 	* WcalcController.m: Now saves the base drawer state, too.
 
-2002-03-28 05:49  kyle
+2002-03-28 05:49  Kyle Wheeler <kbwheel@gmail.com>
 
 	* WcalcController.m: Now saves the history/variable state.
 
-2002-03-08 00:21  kyle
+2002-03-08 00:21  Kyle Wheeler <kbwheel@gmail.com>
 
 	* main.c: Uses new configuration structure.
 
-2002-03-08 00:15  kyle
+2002-03-08 00:15  Kyle Wheeler <kbwheel@gmail.com>
 
 	* ChangeLog: Logging changes
 
-2002-03-08 00:10  kyle
+2002-03-08 00:10  Kyle Wheeler <kbwheel@gmail.com>
 
 	* WcalcController.m, calculator.c, calculator.h, parser.y,
 	  scanner.l: Added cube root (cbrt)
 
-2002-03-07 23:41  kyle
+2002-03-07 23:41  Kyle Wheeler <kbwheel@gmail.com>
 
 	* scanner.l: Added square function and fixed it up with the new
 	  configuration stuff. Counting digits for sig-fig rounding
 	  indication.
 
-2002-03-07 23:40  kyle
+2002-03-07 23:40  Kyle Wheeler <kbwheel@gmail.com>
 
 	* parser.y: Added square function and fixed it up with the new
 	  configuration stuff.
 
-2002-03-07 23:39  kyle
+2002-03-07 23:39  Kyle Wheeler <kbwheel@gmail.com>
 
 	* WcalcController.m, calculator.c, calculator.h: Implemented the
 	  Rounding indications (Simple and Significant Figure)
 
-2002-03-07 23:38  kyle
+2002-03-07 23:38  Kyle Wheeler <kbwheel@gmail.com>
 
 	* string_manip.c, string_manip.h: Added count_digits function.
 
-2002-03-07 21:38  kyle
+2002-03-07 21:38  Kyle Wheeler <kbwheel@gmail.com>
 
 	* WcalcController.h, WcalcController.m, calculator.c, calculator.h:
 	  Redid preferences as a struct to make it easier to maintain.
 
-2002-03-07 08:03  kyle
+2002-03-07 08:03  Kyle Wheeler <kbwheel@gmail.com>
 
 	* WcalcController.m, calculator.c, calculator.h: Visual indication
 	  of rounding. (next: sig figs)
 
-2002-03-06 15:49  kyle
+2002-03-06 15:49  Kyle Wheeler <kbwheel@gmail.com>
 
 	* scanner.l: Added Fortran-style exponent operator.
 
-2002-03-05 02:01  kyle
+2002-03-05 02:01  Kyle Wheeler <kbwheel@gmail.com>
 
 	* English.lproj, English.lproj/.cvsignore,
 	  English.lproj/MainMenu.nib/classes.nib,
 	  English.lproj/MainMenu.nib/info.nib,
 	  English.lproj/MainMenu.nib/objects.nib: *** empty log message ***
 
-2002-03-05 02:00  kyle
+2002-03-05 02:00  Kyle Wheeler <kbwheel@gmail.com>
 
 	* English.lproj/InfoPlist.strings: version increment
 
-2002-03-05 01:45  kyle
+2002-03-05 01:45  Kyle Wheeler <kbwheel@gmail.com>
 
 	* Wcalc.pbproj/kyle.pbxuser, Wcalc.pbproj/project.pbxproj: ***
 	  empty log message ***
 
-2002-03-05 01:37  kyle
+2002-03-05 01:37  Kyle Wheeler <kbwheel@gmail.com>
 
 	* website/w.png: The Logo
 
-2002-03-05 01:30  kyle
+2002-03-05 01:30  Kyle Wheeler <kbwheel@gmail.com>
 
 	* ChangeLog: Updated changes per CVS log
 
-2002-03-05 01:22  kyle
+2002-03-05 01:22  Kyle Wheeler <kbwheel@gmail.com>
 
 	* definitions.h: Incremented the version.
 
-2002-03-05 01:22  kyle
+2002-03-05 01:22  Kyle Wheeler <kbwheel@gmail.com>
 
 	* WcalcController.h, WcalcController.m: Added a base drawer.
 
-2002-03-03 19:57  kyle
+2002-03-03 19:57  Kyle Wheeler <kbwheel@gmail.com>
 
 	* Wcalc.pbproj/kyle.pbxuser, website/wcalc.html: *** empty log
 	  message ***
 
-2002-03-03 19:57  kyle
+2002-03-03 19:57  Kyle Wheeler <kbwheel@gmail.com>
 
 	* ReadMe.rtf, Wcalc.pmsp: Released a pre-release
 
-2002-03-02 17:22  kyle
+2002-03-02 17:22  Kyle Wheeler <kbwheel@gmail.com>
 
 	* English.lproj/MainMenu.nib/classes.nib,
 	  English.lproj/MainMenu.nib/info.nib,
 	  English.lproj/MainMenu.nib/objects.nib,
 	  Wcalc.pbproj/kyle.pbxuser, Wcalc.pbproj/project.pbxproj: stuff
 
-2002-03-02 17:22  kyle
+2002-03-02 17:22  Kyle Wheeler <kbwheel@gmail.com>
 
 	* Makefile: Switched to yacc and flex. Added the new string
 	  manipulation files.
 
-2002-03-02 17:20  kyle
+2002-03-02 17:20  Kyle Wheeler <kbwheel@gmail.com>
 
 	* website/wcalc.html: Posted notice of the mailing list I just made
 
-2002-03-02 05:49  kyle
+2002-03-02 05:49  Kyle Wheeler <kbwheel@gmail.com>
 
 	* WcalcController.h: Removed a pointless pointer (heh).
 
-2002-03-02 05:48  kyle
+2002-03-02 05:48  Kyle Wheeler <kbwheel@gmail.com>
 
 	* WcalcController.m: Fixed the live preference display. Fixed the
 	  menu's response the the drawer state. Made the preference panel
 	  modeless.
 
-2002-03-02 05:46  kyle
+2002-03-02 05:46  Kyle Wheeler <kbwheel@gmail.com>
 
 	* scanner.l: Implemented the strict_syntax preference.
 
-2002-03-02 03:21  kyle
+2002-03-02 03:21  Kyle Wheeler <kbwheel@gmail.com>
 
 	* parser.y: *** empty log message ***
 
-2002-03-02 03:19  kyle
+2002-03-02 03:19  Kyle Wheeler <kbwheel@gmail.com>
 
 	* parser.y: Removed no-longer reserved variables.
 
-2002-03-02 03:09  kyle
+2002-03-02 03:09  Kyle Wheeler <kbwheel@gmail.com>
 
 	* scanner.l: Stripped the wrong char from numbers with commas.
 
-2002-03-02 03:09  kyle
+2002-03-02 03:09  Kyle Wheeler <kbwheel@gmail.com>
 
 	* parser.y: Fixed errors on essentially blank lines.
 
-2002-03-02 03:09  kyle
+2002-03-02 03:09  Kyle Wheeler <kbwheel@gmail.com>
 
 	* WcalcController.h, WcalcController.m: Changes the period button
 	  to a comma button depending on the state. Displays the current
 	  comma preference, too.
 
-2002-03-02 02:22  kyle
+2002-03-02 02:22  Kyle Wheeler <kbwheel@gmail.com>
 
 	* scanner.l: Moved commands from main.c. Added some acceptable,
 	  equivalent symbols. Fixed (I think) comma support. Added a
 	  garbage collector for goofily-formatted numbers.
 
-2002-03-02 02:18  kyle
+2002-03-02 02:18  Kyle Wheeler <kbwheel@gmail.com>
 
 	* parser.y: Added smarts for piped files. Moved commands here from
 	  main.c.
 
-2002-03-02 02:17  kyle
+2002-03-02 02:17  Kyle Wheeler <kbwheel@gmail.com>
 
 	* WcalcController.h, calculator.c, calculator.h: Added a preference
 	  for comma parsing pickiness.
 
-2002-03-02 02:16  kyle
+2002-03-02 02:16  Kyle Wheeler <kbwheel@gmail.com>
 
 	* WcalcController.m: Added a preference for comma parsing
 	  pickiness. Fixed a continuous expression bug (new division
 	  symbol).
 
-2002-03-02 02:14  kyle
+2002-03-02 02:14  Kyle Wheeler <kbwheel@gmail.com>
 
 	* main.c: Moved commands to the parser (so they'll work with piped
 	  files).
 
-2002-03-02 02:12  kyle
+2002-03-02 02:12  Kyle Wheeler <kbwheel@gmail.com>
 
 	* PrefsController.h, PrefsController.m: long since outdated
 
-2002-03-01 22:58  kyle
+2002-03-01 22:58  Kyle Wheeler <kbwheel@gmail.com>
 
 	* calculator.h, main.c, parser.y, scanner.l, string_manip.c,
 	  string_manip.h: Continued fixing international comma support.
 	  Started migrating commands from main.c to the parser/scanner.
 
-2002-03-01 06:42  kyle
+2002-03-01 06:42  Kyle Wheeler <kbwheel@gmail.com>
 
 	* English.lproj/MainMenu.nib/info.nib,
 	  English.lproj/MainMenu.nib/objects.nib, ReadMe.rtf,
 	  Wcalc.pbproj/kyle.pbxuser: stuff
 
-2002-03-01 06:30  kyle
+2002-03-01 06:30  Kyle Wheeler <kbwheel@gmail.com>
 
 	* main.c: More CLI error printing (were previously ignoring
 	  errorstring.
 
-2002-03-01 06:29  kyle
+2002-03-01 06:29  Kyle Wheeler <kbwheel@gmail.com>
 
 	* scanner.l: Added sanity/error checking to alternate bases,
 	  started complete support for commas/periods in decimal numbers
 
-2002-03-01 06:28  kyle
+2002-03-01 06:28  Kyle Wheeler <kbwheel@gmail.com>
 
 	* parser.y: Fixed potential crasher freeing static memory.
 
-2002-02-28 22:07  kyle
+2002-02-28 22:07  Kyle Wheeler <kbwheel@gmail.com>
 
 	* PrefsController.m: Display use_commas preference.
 
-2002-02-28 21:25  kyle
+2002-02-28 21:25  Kyle Wheeler <kbwheel@gmail.com>
 
 	* calculator.c: fixed crasher in comma-output printing
 
-2002-02-28 07:30  kyle
+2002-02-28 07:30  Kyle Wheeler <kbwheel@gmail.com>
 
 	* ChangeLog: logging changes
 
-2002-02-28 07:29  kyle
+2002-02-28 07:29  Kyle Wheeler <kbwheel@gmail.com>
 
 	* calculator.c: Fixed binary output.
 
-2002-02-28 07:05  kyle
+2002-02-28 07:05  Kyle Wheeler <kbwheel@gmail.com>
 
 	* WcalcController.m, calculator.c, calculator.h, main.c, parser.y,
 	  scanner.l: Added sqrt, ceil, floor functions
 
-2002-02-28 06:52  kyle
+2002-02-28 06:52  Kyle Wheeler <kbwheel@gmail.com>
 
 	* main.c: Added an interactive CLI "strict variable parsing"
 	  toggle.
 
-2002-02-27 21:06  kyle
+2002-02-27 21:06  Kyle Wheeler <kbwheel@gmail.com>
 
 	* scanner.l: Fixed the comma parsing.
 
-2002-02-27 19:55  kyle
+2002-02-27 19:55  Kyle Wheeler <kbwheel@gmail.com>
 
 	* WcalcController.m: Made preference panel and keyboard panel
 	  placement more commonsensical.
 
-2002-02-27 17:05  kyle
+2002-02-27 17:05  Kyle Wheeler <kbwheel@gmail.com>
 
 	* ChangeLog, English.lproj/InfoPlist.strings, ReadMe.rtf,
 	  Wcalc.pbproj/kyle.pbxuser, Wcalc.pbproj/project.pbxproj,
@@ -3887,90 +3923,90 @@
 	  website/screenshots.html, website/wcalc.html: Excessive error
 	  reporting fixed (good god)
 
-2002-02-27 16:35  kyle
+2002-02-27 16:35  Kyle Wheeler <kbwheel@gmail.com>
 
 	* calculator.c: clamped too hard! fixed erroneous clamp messages
 
-2002-02-27 07:49  kyle
+2002-02-27 07:49  Kyle Wheeler <kbwheel@gmail.com>
 
 	* ., .cvsignore, Wcalc.pmsp: New stuff to ignore, new version
 
-2002-02-27 07:48  kyle
+2002-02-27 07:48  Kyle Wheeler <kbwheel@gmail.com>
 
 	* website/contact.html, website/download.html,
 	  website/screenshots.html, website/wcalc.html: Updating the
 	  website for the new version
 
-2002-02-27 07:45  kyle
+2002-02-27 07:45  Kyle Wheeler <kbwheel@gmail.com>
 
 	* wcalc.spec: Version increase
 
-2002-02-27 07:17  kyle
+2002-02-27 07:17  Kyle Wheeler <kbwheel@gmail.com>
 
 	* main.c: fixed a typo
 
-2002-02-27 07:11  kyle
+2002-02-27 07:11  Kyle Wheeler <kbwheel@gmail.com>
 
 	* ReadMe.rtf: Just describing the new version (1.4.3)
 
-2002-02-26 23:43  kyle
+2002-02-26 23:43  Kyle Wheeler <kbwheel@gmail.com>
 
 	* Wcalc.pbproj/kyle.pbxuser, Wcalc.pbproj/project.pbxproj: stuff
 
-2002-02-26 23:43  kyle
+2002-02-26 23:43  Kyle Wheeler <kbwheel@gmail.com>
 
 	* English.lproj/MainMenu.nib/classes.nib,
 	  English.lproj/MainMenu.nib/info.nib,
 	  English.lproj/MainMenu.nib/objects.nib: Changed the preferences
 	  layout, added comma option
 
-2002-02-26 23:43  kyle
+2002-02-26 23:43  Kyle Wheeler <kbwheel@gmail.com>
 
 	* English.lproj/InfoPlist.strings: Version changes
 
-2002-02-26 23:42  kyle
+2002-02-26 23:42  Kyle Wheeler <kbwheel@gmail.com>
 
 	* definitions.h: Version increment
 
-2002-02-26 23:41  kyle
+2002-02-26 23:41  Kyle Wheeler <kbwheel@gmail.com>
 
 	* ChangeLog: logging changes
 
-2002-02-26 23:40  kyle
+2002-02-26 23:40  Kyle Wheeler <kbwheel@gmail.com>
 
 	* main.c: Update the help
 
-2002-02-26 23:35  kyle
+2002-02-26 23:35  Kyle Wheeler <kbwheel@gmail.com>
 
 	* Makefile: made it easier to manage debugging and distribution
 
-2002-02-26 23:32  kyle
+2002-02-26 23:32  Kyle Wheeler <kbwheel@gmail.com>
 
 	* WcalcController.h, WcalcController.m, calculator.c, calculator.h,
 	  main.c: Added the preference to output with a comma instead of a
 	  period.
 
-2002-02-26 23:10  kyle
+2002-02-26 23:10  Kyle Wheeler <kbwheel@gmail.com>
 
 	* calculator.c, main.c, parser.y: Fixed a rounding error (all
 	  negative decimals were removed!). (BOTH)
 	  Added error reporting to the command-line. (CLI)
 	  Added a radians toggle (CLI)
 
-2002-02-26 22:18  kyle
+2002-02-26 22:18  Kyle Wheeler <kbwheel@gmail.com>
 
 	* ChangeLog: logging changes
 
-2002-02-25 00:01  kyle
+2002-02-25 00:01  Kyle Wheeler <kbwheel@gmail.com>
 
 	* website, website/contact.html, website/download.html,
 	  website/screenshots.html, website/wcalc.html: These belong here
 
-2002-02-24 20:41  kyle
+2002-02-24 20:41  Kyle Wheeler <kbwheel@gmail.com>
 
 	* Wcalc.pmsp: Goes with the project
 
-2002-02-24 17:32  kyle
+2002-02-24 17:32  Kyle Wheeler <kbwheel@gmail.com>
 
 	* English.lproj, English.lproj/.cvsignore,
 	  English.lproj/MainMenu.nib/classes.nib,
@@ -3981,52 +4017,52 @@
 	  small speed improvements on preference changes.
 	  Made history redisplay configurable.
 
-2002-02-24 15:53  kyle
+2002-02-24 15:53  Kyle Wheeler <kbwheel@gmail.com>
 
 	* scanner.l: Fixed the parsing (0.9 is now 0.9 and not octal 0
 	  times .9)
 
-2002-02-24 05:22  kyle
+2002-02-24 05:22  Kyle Wheeler <kbwheel@gmail.com>
 
 	* ChangeLog: added a dividing line
 
-2002-02-24 04:57  kyle
+2002-02-24 04:57  Kyle Wheeler <kbwheel@gmail.com>
 
 	* calculator.c: to make gcc on linux be quiet, i added a newline at
 	  the end of the file
 
-2002-02-24 04:46  kyle
+2002-02-24 04:46  Kyle Wheeler <kbwheel@gmail.com>
 
 	* wcalc.spec: version increase
 
-2002-02-24 04:44  kyle
+2002-02-24 04:44  Kyle Wheeler <kbwheel@gmail.com>
 
 	* Makefile: strips automatically now
 
-2002-02-24 04:28  kyle
+2002-02-24 04:28  Kyle Wheeler <kbwheel@gmail.com>
 
 	* English.lproj/InfoPlist.strings, Wcalc.pbproj/project.pbxproj:
 	  stuff
 
-2002-02-24 04:28  kyle
+2002-02-24 04:28  Kyle Wheeler <kbwheel@gmail.com>
 
 	* ., .cvsignore, README.txt, ReadMe.rtf: getting ready for release
 	  of 1.4.2, and tidying up
 
-2002-02-24 04:20  kyle
+2002-02-24 04:20  Kyle Wheeler <kbwheel@gmail.com>
 
 	* definitions.h: version change
 
-2002-02-23 21:13  kyle
+2002-02-23 21:13  Kyle Wheeler <kbwheel@gmail.com>
 
 	* .gdb_history, definitions.h, theDelegate.h, theDelegate.m:
 	  Rectifying the repository
 
-2002-02-23 21:10  kyle
+2002-02-23 21:10  Kyle Wheeler <kbwheel@gmail.com>
 
 	* Wred.png: Stuff that got left out along the way.
 
-2002-02-23 20:59  kyle
+2002-02-23 20:59  Kyle Wheeler <kbwheel@gmail.com>
 
 	* WcalcController.m: Fixed the editing-after-pressing-a-button
 	  error (I'm an idiot) (GUI)
@@ -4034,47 +4070,47 @@
 	  The problem with window sizing has gotten WORSE (OSX's fault?)
 	  (GUI)
 
-2002-02-23 20:58  kyle
+2002-02-23 20:58  Kyle Wheeler <kbwheel@gmail.com>
 
 	* English.lproj/MainMenu.nib/classes.nib,
 	  English.lproj/MainMenu.nib/info.nib,
 	  English.lproj/MainMenu.nib/objects.nib,
 	  Wcalc.pbproj/kyle.pbxuser, Wcalc.pbproj/project.pbxproj: stuff
 
-2002-02-23 20:57  kyle
+2002-02-23 20:57  Kyle Wheeler <kbwheel@gmail.com>
 
 	* wcalc.spec: Version changes
 
-2002-02-23 20:56  kyle
+2002-02-23 20:56  Kyle Wheeler <kbwheel@gmail.com>
 
 	* scanner.l: Accepts commas as period replacements
 
-2002-02-23 20:56  kyle
+2002-02-23 20:56  Kyle Wheeler <kbwheel@gmail.com>
 
 	* WcalcController.h: Merged the pref panel to be controlled more
 	  centrally (splitting it was just a pain in the butt)
 
-2002-02-23 20:54  kyle
+2002-02-23 20:54  Kyle Wheeler <kbwheel@gmail.com>
 
 	* ChangeLog: Logging changes
 
-2002-02-23 20:51  kyle
+2002-02-23 20:51  Kyle Wheeler <kbwheel@gmail.com>
 
 	* Makefile: Figured out this static thing (I think)
 
-2002-02-23 20:47  kyle
+2002-02-23 20:47  Kyle Wheeler <kbwheel@gmail.com>
 
 	* English.lproj/MainMenu.nib/info.nib,
 	  English.lproj/MainMenu.nib/objects.nib,
 	  Wcalc.pbproj/kyle.pbxuser, Wcalc.pbproj/project.pbxproj: stuff
 
-2002-02-23 20:47  kyle
+2002-02-23 20:47  Kyle Wheeler <kbwheel@gmail.com>
 
 	* English.lproj/InfoPlist.strings,
 	  English.lproj/MainMenu.nib/classes.nib,
 	  Wcalc.pbproj/project.pbxproj: stuff
 
-2002-02-23 20:47  kyle
+2002-02-23 20:47  Kyle Wheeler <kbwheel@gmail.com>
 
 	* Makefile, PrefsController.h, PrefsController.m,
 	  WcalcController.h, WcalcController.m, calculator.c, calculator.h,
@@ -4086,11 +4122,11 @@
 	  Random is now truly random, if the system supports it - relies on
 	  /dev/random (BOTH)
 
-2002-02-23 20:46  kyle
+2002-02-23 20:46  Kyle Wheeler <kbwheel@gmail.com>
 
 	* ChangeLog: Logging changes
 
-2002-02-23 20:45  kyle
+2002-02-23 20:45  Kyle Wheeler <kbwheel@gmail.com>
 
 	* English.lproj/InfoPlist.strings,
 	  English.lproj/MainMenu.nib/classes.nib,
@@ -4098,7 +4134,7 @@
 	  English.lproj/MainMenu.nib/objects.nib,
 	  Wcalc.pbproj/kyle.pbxuser, Wcalc.pbproj/project.pbxproj: stuff
 
-2002-02-23 20:45  kyle
+2002-02-23 20:45  Kyle Wheeler <kbwheel@gmail.com>
 
 	* HistoryList.m, PrefsController.h, PrefsController.m,
 	  VariableList.m, WcalcController.m, calculator.c, calculator.h,
@@ -4115,19 +4151,19 @@
 	  Tried to fix a window drifting problem (GUI)
 	  Added a "Result" column to the history (GUI)
 
-2002-02-23 20:43  kyle
+2002-02-23 20:43  Kyle Wheeler <kbwheel@gmail.com>
 
 	* wcalc.spec: Version change
 
-2002-02-23 20:42  kyle
+2002-02-23 20:42  Kyle Wheeler <kbwheel@gmail.com>
 
 	* ChangeLog: Logging changes
 
-2002-02-23 20:41  kyle
+2002-02-23 20:41  Kyle Wheeler <kbwheel@gmail.com>
 
 	* .DS_Store: Doesn't belong in repository
 
-2002-02-23 20:40  kyle
+2002-02-23 20:40  Kyle Wheeler <kbwheel@gmail.com>
 
 	* English.lproj/InfoPlist.strings,
 	  English.lproj/MainMenu.nib/classes.nib,
@@ -4135,7 +4171,7 @@
 	  English.lproj/MainMenu.nib/objects.nib,
 	  Wcalc.pbproj/kyle.pbxuser, Wcalc.pbproj/project.pbxproj: stuff
 
-2002-02-23 20:40  kyle
+2002-02-23 20:40  Kyle Wheeler <kbwheel@gmail.com>
 
 	* WcalcController.h, WcalcController.m, calculator.c, calculator.h,
 	  main.m, parser.y, scanner.l, wcalc.spec: More improvements to the
@@ -4147,32 +4183,32 @@
 	  Saves toggled status (GUI)
 	  Added the ability to toggle the presence of the keypad (GUI)
 
-2002-02-23 20:38  kyle
+2002-02-23 20:38  Kyle Wheeler <kbwheel@gmail.com>
 
 	* ChangeLog: Logging changes
 
-2002-02-23 20:35  kyle
+2002-02-23 20:35  Kyle Wheeler <kbwheel@gmail.com>
 
 	* Wcalc.pbproj/kyle.pbxuser, Wcalc.pbproj/project.pbxproj: stuff
 
-2002-02-23 20:35  kyle
+2002-02-23 20:35  Kyle Wheeler <kbwheel@gmail.com>
 
 	* English.lproj/InfoPlist.strings, wcalc.spec: Version change
 
-2002-02-23 20:35  kyle
+2002-02-23 20:35  Kyle Wheeler <kbwheel@gmail.com>
 
 	* WcalcController.h, WcalcController.m, calculator.c, calculator.h,
 	  main.c: Began work on continuous calculations
 
-2002-02-23 20:33  kyle
+2002-02-23 20:33  Kyle Wheeler <kbwheel@gmail.com>
 
 	* parser.y: Fixed the grammar again (or tried to)
 
-2002-02-23 20:32  kyle
+2002-02-23 20:32  Kyle Wheeler <kbwheel@gmail.com>
 
 	* ChangeLog: Logging changes
 
-2002-02-23 20:31  kyle
+2002-02-23 20:31  Kyle Wheeler <kbwheel@gmail.com>
 
 	* AboutBoxController.h, AboutBoxController.m,
 	  English.lproj/MainMenu.nib/classes.nib,
@@ -4180,47 +4216,47 @@
 	  English.lproj/MainMenu.nib/objects.nib: Added the version number
 	  to the about box
 
-2002-02-23 20:30  kyle
+2002-02-23 20:30  Kyle Wheeler <kbwheel@gmail.com>
 
 	* English.lproj/InfoPlist.strings: Version numbers
 
-2002-02-23 20:30  kyle
+2002-02-23 20:30  Kyle Wheeler <kbwheel@gmail.com>
 
 	* calculator.h, parser.y: Fixed a typo in the grammar
 
-2002-02-23 20:29  kyle
+2002-02-23 20:29  Kyle Wheeler <kbwheel@gmail.com>
 
 	* variables.c: Added newline at the end of the file to make gcc on
 	  linux shut up
 
-2002-02-23 20:29  kyle
+2002-02-23 20:29  Kyle Wheeler <kbwheel@gmail.com>
 
 	* variables.h, wcalc.spec: Added newlines at the end of the file to
 	  make gcc on linux shut up
 
-2002-02-23 20:27  kyle
+2002-02-23 20:27  Kyle Wheeler <kbwheel@gmail.com>
 
 	* main.c: Version change
 
-2002-02-23 20:26  kyle
+2002-02-23 20:26  Kyle Wheeler <kbwheel@gmail.com>
 
 	* ChangeLog: Logging changes
 
-2002-02-23 20:19  kyle
+2002-02-23 20:19  Kyle Wheeler <kbwheel@gmail.com>
 
 	* Wcalc.pbproj/kyle.pbxuser, Wcalc.pbproj/project.pbxproj: Dunno
 
-2002-02-23 20:19  kyle
+2002-02-23 20:19  Kyle Wheeler <kbwheel@gmail.com>
 
 	* English.lproj/MainMenu.nib/classes.nib,
 	  English.lproj/MainMenu.nib/info.nib,
 	  English.lproj/MainMenu.nib/objects.nib: GUI changes
 
-2002-02-23 20:19  kyle
+2002-02-23 20:19  Kyle Wheeler <kbwheel@gmail.com>
 
 	* English.lproj/InfoPlist.strings: Version number change
 
-2002-02-23 20:18  kyle
+2002-02-23 20:18  Kyle Wheeler <kbwheel@gmail.com>
 
 	* HistoryList.m, PrefsController.h, PrefsController.m,
 	  WcalcController.h, WcalcController.m, calculator.c, calculator.h,
@@ -4240,11 +4276,11 @@
 	  "random" means a random value (BOTH)
 	  added round() to round a value to the nearest whole number (BOTH)
 
-2002-02-23 20:15  kyle
+2002-02-23 20:15  Kyle Wheeler <kbwheel@gmail.com>
 
 	* ChangeLog: Logging changes
 
-2002-02-23 20:03  kyle
+2002-02-23 20:03  Kyle Wheeler <kbwheel@gmail.com>
 
 	* .DS_Store, .gdb_history, AboutBoxController.h,
 	  AboutBoxController.m, ChangeLog, English.lproj,
