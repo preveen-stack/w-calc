@@ -447,10 +447,13 @@ int main(int   argc,
                 }
             } else if (i + 1 >= argc) {
                 fprintf(stderr, "The %s option requires an argument!\n", argv[i]);
+            } else if (strlen(argv[i+1]) < 2) {
+                fprintf(stderr, "The %s option's argument requires at least two letters!\n", argv[i]);
             } else {
+                const size_t len = strlen(argv[i + 1]);
                 int nCategory;
                 for (nCategory = 0; nCategory <= MAX_TYPE; ++nCategory) {
-                    if (!strncasecmp(argv[i + 1], conversion_names[nCategory], strlen(argv[i + 1]))) {
+                    if (!strncasecmp(argv[i + 1], conversion_names[nCategory], len)) {
                         PrintConversionUnitCategory(nCategory);
                         break;
                     }
