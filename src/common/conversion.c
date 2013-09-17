@@ -18,6 +18,20 @@
 #include "conversion.h"
 
 /* The conversion tables */
+const char *conversion_names[] = {
+    "Lengths",
+    "Areas",
+    "Volumes",
+    "Angles",
+    "Masses",
+    "Speeds",
+    "Forces",
+    "Accelerations",
+    "Temperatures",
+    "Angles",
+    "Pressures",
+    NULL
+};
 
 /* based on Meters */
 const struct conversion lengths[] = {

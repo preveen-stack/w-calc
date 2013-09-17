@@ -84,6 +84,7 @@ struct conv_req {
 #define FARENHEIT              3
 #define REAUMUR                4
 extern const struct conversion *conversions[MAX_TYPE + 2];
+extern const char *conversion_names[MAX_TYPE + 2];
 
 #endif // ifndef WCALC_CONVERSIONS
 /* vim:set expandtab: */
