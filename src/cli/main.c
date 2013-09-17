@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-
+#include <strings.h> /* for strncasecmp(), per POSIX 2001 */
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>                  /* for stat() */
@@ -146,7 +146,7 @@ static char *tc_engineering(const char *text,
                 textcurs ++;                                                  \
                 comparechar ++;                                               \
             } else { /* not a possibility: next! */                           \
-                textcurs = 0;                                                 \
+                textcurs    = 0;                                              \
                 compareword ++;                                               \
                 comparechar = 0;                                              \
             }                                                                 \
@@ -166,7 +166,7 @@ static char *tc_engineering(const char *text,
                 textcurs ++;                                                     \
                 comparechar ++;                                                  \
             } else { /* not a possibility: next! */                              \
-                textcurs = 0;                                                    \
+                textcurs    = 0;                                                 \
                 compareword ++;                                                  \
                 comparechar = 0;                                                 \
             }                                                                    \
@@ -316,6 +316,23 @@ static char **wcalc_completion(const char *text,
 
 #endif /* ifdef HAVE_LIBREADLINE */
 
+static void PrintConversionUnitCategory(int nCategory)
+{
+    printf("\n%s\n", conversion_names[nCategory]);
+    size_t unit, nAka;
+
+    for (unit = 0; conversions[nCategory][unit].name; ++unit) {
+        printf("\n%s: ", conversions[nCategory][unit].name);
+        for (nAka = 0; nAka < 9; ++nAka) {
+            if (conversions[nCategory][unit].aka[nAka] != NULL) {
+                if (nAka > 0) { printf(", "); }
+                printf("%s", conversions[nCategory][unit].aka[nAka]);
+            }
+        }
+    }
+    printf("\n\n");
+}
+
 int main(int   argc,
          char *argv[])
 {                                      /*{{{ */
@@ -325,7 +342,7 @@ int main(int   argc,
 #ifdef HAVE_LIBREADLINE
     char *readme = NULL;
 #else
-    char readme[BIG_STRING];
+    char  readme[BIG_STRING];
 #endif
 #ifdef HAVE_READLINE_HISTORY
     char *historyfile = "/.wcalc_history";
@@ -420,6 +437,25 @@ int main(int   argc,
             exit(EXIT_SUCCESS);
         } else if (!strcmp(argv[i], "-v") || !strcmp(argv[i], "--version")) {
             printf("wcalc "VERSION "\n");
+            num_free(last_answer);
+            exit(EXIT_SUCCESS);
+        } else if (!strcmp(argv[i], "-U") || !strcmp(argv[i], "-u") || !strcmp(argv[i], "--units")) {
+            if (argv[i][1] == 'U') {
+                int nCategory;
+                for (nCategory = 0; nCategory <= MAX_TYPE; ++nCategory) {
+                    PrintConversionUnitCategory(nCategory);
+                }
+            } else if (i + 1 >= argc) {
+                fprintf(stderr, "The %s option requires an argument!\n", argv[i]);
+            } else {
+                int nCategory;
+                for (nCategory = 0; nCategory <= MAX_TYPE; ++nCategory) {
+                    if (!strncasecmp(argv[i + 1], conversion_names[nCategory], strlen(argv[i + 1]))) {
+                        PrintConversionUnitCategory(nCategory);
+                        break;
+                    }
+                }
+            }
             num_free(last_answer);
             exit(EXIT_SUCCESS);
         } else if (!strcmp(argv[i], "-d") || !strcmp(argv[i], "--decimal") ||
@@ -563,7 +599,7 @@ int main(int   argc,
                     }
                 }
                 free(filename);
-#endif /* ifdef HAVE_READLINE_HISTORY */
+#endif          /* ifdef HAVE_READLINE_HISTORY */
                 cmdline_input = 1;
             }
             if (conf.verbose) {
@@ -608,7 +644,7 @@ int main(int   argc,
                 }
             }
             free(filename);
-#endif /* ifdef HAVE_READLINE_HISTORY */
+#endif      /* ifdef HAVE_READLINE_HISTORY */
             cmdline_input = 1;
             if (conf.verbose) {
                 printf("-> %s\n", envinput);
@@ -651,7 +687,7 @@ int main(int   argc,
             }
         }
         free(filename);
-#endif /* ifdef HAVE_READLINE_HISTORY */
+#endif  /* ifdef HAVE_READLINE_HISTORY */
         clearHistory();
         cleanupvar();
         num_free(last_answer);
@@ -677,7 +713,7 @@ int main(int   argc,
                 perror("Reading History");
             }
         }
-#endif /* ifdef HAVE_READLINE_HISTORY */
+#endif  /* ifdef HAVE_READLINE_HISTORY */
 #ifdef HAVE_LIBREADLINE
         rl_attempted_completion_function = wcalc_completion;
         rl_basic_word_break_characters   = " \t\n\"\'+-*/[{()}]=<>!|~&^%";
@@ -708,7 +744,7 @@ int main(int   argc,
                     break;
                 }
             }
-#endif /* ifdef HAVE_LIBREADLINE */
+#endif      /* ifdef HAVE_LIBREADLINE */
             if (!readme) {
                 /* from the readline manpage:
                  *      readline returns the text of the line read. A blank
@@ -774,7 +810,7 @@ int main(int   argc,
             }
         }
         free(filename);
-#endif /* ifdef HAVE_READLINE_HISTORY */
+#endif  /* ifdef HAVE_READLINE_HISTORY */
     } else if (tty < 0) {
         fprintf(stderr, "Could not determine terminal type.\n");
     } else {
@@ -881,7 +917,7 @@ static int read_preload(void)
 
 static int read_prefs(void)
 {                                      /*{{{ */
-    int    fd = openDotFile("wcalcrc", O_RDONLY);
+    int    fd     = openDotFile("wcalcrc", O_RDONLY);
     char   key[BIG_STRING], value[BIG_STRING];
     size_t curs   = 0;
     int    retval = 1;
@@ -955,7 +991,7 @@ static int read_prefs(void)
         value[0] = junk; // junk now contains the next non-junk character
         curs     = 0;
         // read in the value
-        quoted = 1;
+        quoted   = 1;
         if (value[0] != '\'') {
             ++curs;
             quoted = 0;
@@ -1045,3 +1081,5 @@ static int read_prefs(void)
     }
     return 1;
 }                                      /*}}} */
+
+/* vim:set expandtab: */
