@@ -75,7 +75,7 @@ Toggles accuracy guards. Because of the way floating point numbers are stored in
 .I exactly
 correct, but are different from the correct answer by a very small value (smaller than the floating point value can represent accurately). For example, the calculation of 1\-.9\-.1 can return an extremely small number that is not zero but is less than what can be represented accurately, and thus for all intents and purposes, it is 0. The accuracy guard feature will round numbers to zero if they are less than the representable accuracy of the floating point number. However, sometimes numbers that small or smaller need to be displayed, and thus the accuracy guard should be turned off. Alternatively, the number of internal bits could be increased, which makes it possible to represent numbers with more accuracy.
 .TP
-\fB\-u\fP or \fB\*=units\fP \fB[type]\fP
+\fB\-u\fP or \fB\*=units\fP \fItype\fP
 Prints units used for conversions; parameter \fBtype\fP can be: lengths, areas, volumes, masses, speeds, powers, forces, accelerations, temperatures, angles, or pressures.
 Note: only the first two letters of each type are required, e.g. le, ar, etc.
 .TP

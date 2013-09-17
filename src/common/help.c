@@ -94,7 +94,7 @@ void print_command_help (void)
            "-r, --radians            This makes all trigonometric functions work in radians.\n"
            "-q, --quiet              This suppresses the = sign.\n"
            "-c, --conservative       This toggles the precision guard for display.\n"
-           "-u, --units [type]       Prints units used for conversions. Parameter type is one\n"
+           "-u, --units <type>       Prints units used for conversions. Parameter type is one\n"
            "                         of the conversion categories.\n"
            "-U                       Prints all units in all conversion categories.\n"
            "\n"
