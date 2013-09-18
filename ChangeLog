@@ -1,3 +1,37 @@
+2013-09-18 19:33  Kyle Wheeler <kbwheel@gmail.com>
+
+	* src/cli/main.c: add "all" option to -u arg
+
+2013-09-18 18:13  Kyle Wheeler <kbwheel@gmail.com>
+
+	* src/cli/main.c, src/common/help.c, wcalc.1: change -u behavior
+	  slightly, and document it
+
+2013-09-18 16:00  Kyle Wheeler <kbwheel@gmail.com>
+
+	* src/common/variables.c: prettier variable list
+
+2013-09-18 15:34  Kyle Wheeler <kbwheel@gmail.com>
+
+	* src/common/variables.c: missing newline in some cases
+
+2013-09-18 15:30  Kyle Wheeler <kbwheel@gmail.com>
+
+	* src/common/files.c: fix minor memory leak in opening dot-files
+
+2013-09-17 23:02  Kyle Wheeler <kbwheel@gmail.com>
+
+	* src/common/help.c, wcalc.1: argument formatting
+
+2013-09-17 21:45  Kyle Wheeler <kbwheel@gmail.com>
+
+	* src/common/help.c: fix typo - thanks Roger!
+
+2013-09-17 20:25  Kyle Wheeler <kbwheel@gmail.com>
+
+	* AUTHORS, ChangeLog, NEWS, README, configure.in: backtrack - not
+	  releasing 2.4.1 JUST YET
+
 2013-09-17 16:13  Kyle Wheeler <kbwheel@gmail.com>
 
 	* wcalc.1: document new options (-u and -U), ditch unit list for

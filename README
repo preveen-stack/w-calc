@@ -24,6 +24,7 @@ IMPROVEMENTS:
  - Modernize the source code file layout
  - Print variable description in variable list
  - Fix output reinterpretation for octal and binary with delimiters
+ - Use -u option to print list of available units
 
 BUGFIXES:
  - Fix behavior with long HOME values

@@ -9,6 +9,7 @@ Improvements:
  - Modernize the source code file layout
  - Print variable description in variable list
  - Fix output reinterpretation for octal and binary with delimiters
+ - Use -u option to print list of available units
 Bugfixes:
  - Fix behavior with long HOME values
  - Avoid potential segfault in number display
