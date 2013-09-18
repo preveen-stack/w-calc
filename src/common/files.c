@@ -54,9 +54,10 @@ int openDotFile(const char *dotFileName,
     }
 #endif
 
-    filename = calloc(sizeof(char), namelen + 1);
+    filename = malloc(sizeof(char) * namelen + 1);
     snprintf(filename, namelen, "%s/.%s", home, dotFileName);
-    fd = open(filename, flags, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+    fd       = open(filename, flags, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+    free(filename);
     if (fd < 0) {
         return -3;
     } else {
@@ -66,8 +67,8 @@ int openDotFile(const char *dotFileName,
 
 int saveState(char *filename)
 {                                      /*{{{ */
-    int fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC | O_EXCL,
-                  S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+    int fd           = open(filename, O_WRONLY | O_CREAT | O_TRUNC | O_EXCL,
+                            S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
     int return_error = 0;
 
     free(filename);
@@ -300,7 +301,7 @@ int storeVar(const char *variable)
             }
             free(cptr);
             if (keyval.desc) {
-                cptr = malloc(strlen(keyval.desc) + 3);
+                cptr   = malloc(strlen(keyval.desc) + 3);
                 snprintf(cptr, strlen(keyval.desc) + 3, "'%s'", keyval.desc);
                 retval = write(fd, cptr, strlen(cptr));
                 if (retval < (int)strlen(cptr)) {
