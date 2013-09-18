@@ -439,24 +439,39 @@ int main(int   argc,
             printf("wcalc "VERSION "\n");
             num_free(last_answer);
             exit(EXIT_SUCCESS);
-        } else if (!strcmp(argv[i], "-U") || !strcmp(argv[i], "-u") || !strcmp(argv[i], "--units")) {
-            if (argv[i][1] == 'U') {
+        } else if (!strcmp(argv[i], "-u") || !strcmp(argv[i], "--units")) {
+            if (i + 1 >= argc) {
                 int nCategory;
                 for (nCategory = 0; nCategory <= MAX_TYPE; ++nCategory) {
                     PrintConversionUnitCategory(nCategory);
                 }
-            } else if (i + 1 >= argc) {
-                fprintf(stderr, "The %s option requires an argument!\n", argv[i]);
-            } else if (strlen(argv[i+1]) < 2) {
-                fprintf(stderr, "The %s option's argument requires at least two letters!\n", argv[i]);
+            } else if (strlen(argv[i+1]) == 1) {
+                fprintf(stderr, "The %s option's (optional) argument must be two or more letters of one\nof the following (case insensitive):\n", argv[i]);
+                int nCategory;
+                for (nCategory = 0; nCategory <= MAX_TYPE; ++nCategory) {
+                    printf("\t%s\n", conversion_names[nCategory]);
+                }
+                num_free(last_answer);
+                exit(EXIT_FAILURE);
             } else {
                 const size_t len = strlen(argv[i + 1]);
+                int printed = 0;
                 int nCategory;
                 for (nCategory = 0; nCategory <= MAX_TYPE; ++nCategory) {
                     if (!strncasecmp(argv[i + 1], conversion_names[nCategory], len)) {
+                        printed = 1;
                         PrintConversionUnitCategory(nCategory);
                         break;
                     }
+                }
+                if (printed == 0) {
+                    fprintf(stderr, "The %s option's (optional) argument must be two or more letters of one\nof the following (case insensitive):\n", argv[i]);
+                    int nCategory;
+                    for (nCategory = 0; nCategory <= MAX_TYPE; ++nCategory) {
+                        printf("\t%s\n", conversion_names[nCategory]);
+                    }
+                    num_free(last_answer);
+                    exit(EXIT_FAILURE);
                 }
             }
             num_free(last_answer);
