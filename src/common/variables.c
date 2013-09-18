@@ -59,22 +59,35 @@ void printvariables(void)
 {   /*{{{*/
     ListIterator li     = NULL;
     variable_t  *cursor = NULL;
+    unsigned     count  = 1;
 
     if (!them || (listLen(them) == 0)) {
         return;
     }
 
     li = getListIterator(them);
-    while ((cursor = (variable_t *)nextListElement(li)) != NULL) {
-        printf("%s = ", cursor->key);
+    cursor = (variable_t *)nextListElement(li);
+    if (cursor != NULL) {
+        printf("%3u. %s = ", count++, cursor->key);
         if (cursor->exp) {
             printf("%s", cursor->expression);
         } else {
             printf("%g", num_get_d(cursor->value));
         }
         if (cursor->description) {
-            printf("\t:: %s\n", cursor->description);
-        } else {
+            printf("\t:: %s", cursor->description);
+        }
+        printf("\n");
+        while ((cursor = (variable_t *)nextListElement(li)) != NULL) {
+            printf("\n%3u. %s = ", count++, cursor->key);
+            if (cursor->exp) {
+                printf("%s", cursor->expression);
+            } else {
+                printf("%g", num_get_d(cursor->value));
+            }
+            if (cursor->description) {
+                printf("\t:: %s", cursor->description);
+            }
             printf("\n");
         }
     }
