@@ -74,6 +74,8 @@ void printvariables(void)
         }
         if (cursor->description) {
             printf("\t:: %s\n", cursor->description);
+        } else {
+            printf("\n");
         }
     }
     freeListIterator(li);
