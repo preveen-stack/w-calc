@@ -163,15 +163,29 @@ static void explain_variable(const char *str)
     }
     if (var.exp) {                     // it's an expression (i.e. a function)
         List strings;
+        unsigned maxnamelen = 0;
 
         printf("%s is the expression: %s\n", str, var.exp);
         printf("%s uses the following variables:\n", str);
         strings = extract_vars(var.exp);
+        {
+            /* First, find the longest variable name... */
+            ListIterator si = getListIterator(strings);
+            char *cursor = (char*)nextListElement(si);
+            if (cursor != NULL) {
+                maxnamelen = strlen(cursor);
+                while ((cursor = (char*)nextListElement(si)) != NULL) {
+                    unsigned len = strlen(cursor);
+                    if (maxnamelen < len) maxnamelen = len;
+                }
+            }
+            freeListIterator(si);
+        }
         while (listLen(strings) > 0) {
             char *curstr = (char *)getHeadOfList(strings);
             char *value  = evalvar(curstr);
 
-            printf("\t%s\t(currently: %s)\n", curstr,
+            printf("\t%*s\t(currently: %s)\n", - maxnamelen, curstr,
                    value ? value : "undefined");
             if (curstr) {
                 free(curstr);
