@@ -60,33 +60,45 @@ void printvariables(void)
     ListIterator li     = NULL;
     variable_t  *cursor = NULL;
     unsigned     count  = 1;
+    unsigned   maxnamelen = 0;
 
     if (!them || (listLen(them) == 0)) {
         return;
     }
 
     li = getListIterator(them);
+    /* First, find the longest variable name... */
     cursor = (variable_t *)nextListElement(li);
     if (cursor != NULL) {
-        printf("%3u. %s = ", count++, cursor->key);
+        maxnamelen = strlen(cursor->key);
+        while ((cursor = (variable_t *)nextListElement(li)) != NULL) {
+            unsigned len = strlen(cursor->key);
+            if (maxnamelen < len) maxnamelen = len;
+        }
+    }
+    printf("max name len = %u\n", maxnamelen);
+    resetListIterator(li);
+    cursor = (variable_t *)nextListElement(li);
+    if (cursor != NULL) {
+        printf("%3u. %*s = ", count++, - maxnamelen, cursor->key);
         if (cursor->exp) {
             printf("%s", cursor->expression);
         } else {
             printf("%g", num_get_d(cursor->value));
         }
         if (cursor->description) {
-            printf("\t:: %s", cursor->description);
+            printf("\n     :: %s", cursor->description);
         }
         printf("\n");
         while ((cursor = (variable_t *)nextListElement(li)) != NULL) {
-            printf("\n%3u. %s = ", count++, cursor->key);
+            printf("\n%3u. %*s = ", count++, -maxnamelen, cursor->key);
             if (cursor->exp) {
                 printf("%s", cursor->expression);
             } else {
                 printf("%g", num_get_d(cursor->value));
             }
             if (cursor->description) {
-                printf("\t:: %s", cursor->description);
+                printf("\n     :: %s", cursor->description);
             }
             printf("\n");
         }
