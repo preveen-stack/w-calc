@@ -183,7 +183,7 @@ static void explain_variable(const char *str)
         }
         while (listLen(strings) > 0) {
             char *curstr = (char *)getHeadOfList(strings);
-            char *value  = evalvar(curstr);
+            char *value  = evalvar_noparse(curstr);
 
             printf("\t%*s\t(currently: %s)\n", - maxnamelen, curstr,
                    value ? value : "undefined");
