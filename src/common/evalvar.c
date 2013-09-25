@@ -43,13 +43,12 @@ char *evalvar_noparse(const char *varname)
 
     a = getvar_full(varname);
     if (!a.err) {
-        num_init(f);
         if (a.exp) {                   // it is an expression
             return strdup(a.exp);
-        } else {                       // it is a value
-            num_set(f, a.val);
-            num_free(a.val);
         }
+        // it is a value
+        num_init_set(f, a.val);
+        num_free(a.val);
         varvalue = num_to_str_complex(f, 10, 0, -1, 1, &junk);
         num_free(f);
         return varvalue;
