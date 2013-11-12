@@ -104,7 +104,6 @@ enum engineering_modes {always, never, automatic};
 void parseme(const char *);
 void report_error(const char *fmt,
                   ...);
-void  display_and_clear_errstring(void);
 void  set_prettyanswer(const Number num);
 char *print_this_result(const Number result);
 void  uber_function(Number               output,
@@ -140,6 +139,7 @@ struct _conf {
     unsigned int           print_commas        : 1;
     unsigned int           live_precision      : 1;
     unsigned int           c_style_mod         : 1;
+    unsigned int           color_ui            : 1;
 };
 
 /* configuration */

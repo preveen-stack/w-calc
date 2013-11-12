@@ -15,6 +15,7 @@ noinst_HEADERS = \
 		 list.h \
 		 number_formatting.h \
 		 number.h \
+		 output.h \
 		 string_manip.h \
 		 uint32_max.h \
 		 variables.h

@@ -10,6 +10,8 @@
 #include <float.h>                     /* for DBL_EPSILON */
 #include <ctype.h>                     /* for isalpha() */
 
+#include "output.h"
+
 #ifndef isnan
 # define isnan(x)                                   \
     (sizeof(x) == sizeof(long double) ? isnan_ld(x) \
@@ -516,33 +518,6 @@ void report_error(const char *err_fmt,
     }
 }                                      /*}}} */
 
-void display_and_clear_errstring()
-{                                      /*{{{ */
-    extern int   scanerror;
-    extern char *errstring;
-    extern int   errloc;
-
-    if (errstring && errstring[0]) {
-        if (errloc != -1) {
-            int i;
-
-            fprintf(stderr, "   ");
-            for (i = 0; i < errloc; i++) {
-                fprintf(stderr, " ");
-            }
-            fprintf(stderr, "^\n");
-            errloc = -1;
-        }
-        fprintf(stderr, "%s", errstring);
-        if (errstring[strlen(errstring) - 1] != '\n') {
-            fprintf(stderr, "\n");
-        }
-        free(errstring);
-        errstring = NULL;
-        scanerror = 0;
-    }
-}                                      /*}}} */
-
 void set_prettyanswer(const Number num)
 {                                      /*{{{ */
     char *temp;
@@ -862,12 +837,7 @@ static char *print_this_result_dbl(const double result)
     }
 
     if (standard_output) {
-        if (errstring && strlen(errstring)) {
-            display_and_clear_errstring();
-        }
-        printf("%s%s\n",
-               conf.print_equal ? (not_all_displayed ? "~= " : " = ")
-               : "", pa);
+        show_answer(errstring, not_all_displayed, pa);
     }
 
     return pa;
@@ -983,12 +953,7 @@ char *print_this_result(const Number result)
     }
 
     if (standard_output) {
-        if (errstring && strlen(errstring)) {
-            display_and_clear_errstring();
-        }
-        printf("%s%s\n",
-               conf.print_equal ? (not_all_displayed ? "~= " : " = ")
-               : "", pa);
+        show_answer(errstring, not_all_displayed, pa);
     }
 
     return pa;
