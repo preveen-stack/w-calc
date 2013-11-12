@@ -16,6 +16,9 @@
 #include <errno.h>
 #include <fcntl.h>                     /* for open() */
 #include <limits.h>                    /* for stroul() */
+#include <sys/mman.h>                  /* for mmap() */
+#include <assert.h>                    /* for assert() */
+#include <stdarg.h>                    /* for va_start() */
 #include "number.h"
 
 #ifdef HAVE_LIBREADLINE
@@ -60,6 +63,7 @@ extern int  history_truncate_file(char *,
 #include "historyManager.h"
 #include "list.h"
 #include "isconst.h"
+#include "output.h"
 
 #define TRUEFALSE  (!strcmp(value, "yes") || !strcmp(value, "true") || !strcmp(value, "1"))
 #define BIG_STRING 4096
@@ -316,13 +320,59 @@ static char **wcalc_completion(const char *text,
 
 #endif /* ifdef HAVE_LIBREADLINE */
 
+enum ui_colors {
+    RESET,
+    BLACK,
+    RED,
+    GREEN,
+    YELLOW,
+    BLUE,
+    MAGENTA,
+    CYAN,
+    WHITE,
+    BOLDBLACK,
+    BOLDRED,
+    BOLDGREEN,
+    BOLDYELLOW,
+    BOLDBLUE,
+    BOLDMAGENTA,
+    BOLDCYAN,
+    BOLDWHITE,
+};
+
+const char *const  black_and_white_ui[] = {
+    "",
+    "", "", "", "", "", "", "", "",
+    "", "", "", "", "", "", "", "",
+};
+const char *const  color_ui[] = {
+    "\033[0m",
+    "\033[30m",
+    "\033[31m",
+    "\033[32m",
+    "\033[33m",
+    "\033[34m",
+    "\033[35m",
+    "\033[36m",
+    "\033[37m",
+    "\033[1m\033[30m",
+    "\033[1m\033[31m",
+    "\033[1m\033[32m",
+    "\033[1m\033[33m",
+    "\033[1m\033[34m",
+    "\033[1m\033[35m",
+    "\033[1m\033[36m",
+    "\033[1m\033[37m",
+};
+const char *const *colors = black_and_white_ui;
+
 static void PrintConversionUnitCategory(int nCategory)
 {
-    printf("\n%s\n", conversion_names[nCategory]);
+    printf("\n%s%s%s\n", colors[BOLDYELLOW], conversion_names[nCategory], colors[RESET]);
     size_t unit, nAka;
 
     for (unit = 0; conversions[nCategory][unit].name; ++unit) {
-        printf("\n%s: ", conversions[nCategory][unit].name);
+        printf("\n%s%s%s: ", colors[CYAN], conversions[nCategory][unit].name, colors[RESET]);
         for (nAka = 0; nAka < 9; ++nAka) {
             if (conversions[nCategory][unit].aka[nAka] != NULL) {
                 if (nAka > 0) { printf(", "); }
@@ -332,6 +382,56 @@ static void PrintConversionUnitCategory(int nCategory)
     }
     printf("\n\n");
 }
+
+void show_answer(char *err,
+                 int   uncertain,
+                 char *answer)
+{   /*{{{*/
+    if (err && strlen(err)) {
+        display_and_clear_errstring();
+    }
+    if (uncertain) {
+        printf("%s%s %s%s\n", colors[YELLOW], conf.print_equal ? "~=" : "  ", colors[RESET], answer);
+    } else {
+        printf("%s%s %s%s\n", colors[GREEN], conf.print_equal ? " =" : "  ", colors[RESET], answer);
+    }
+} /*}}}*/
+
+void display_and_clear_errstring()
+{                                      /*{{{ */
+    extern int   scanerror;
+    extern char *errstring;
+    extern int   errloc;
+
+    if (errstring && errstring[0]) {
+        if (errloc != -1) {
+            int i;
+
+            fprintf(stderr, "   ");
+            for (i = 0; i < errloc; i++) {
+                fprintf(stderr, " ");
+            }
+            fprintf(stderr, "%s^%s\n", colors[BOLDMAGENTA], colors[RESET]);
+            errloc = -1;
+        }
+        fprintf(stderr, "%s%s%s", colors[RED], errstring, colors[RESET]);
+        if (errstring[strlen(errstring) - 1] != '\n') {
+            fprintf(stderr, "\n");
+        }
+        free(errstring);
+        errstring = NULL;
+        scanerror = 0;
+    }
+}                                      /*}}} */
+
+#define EXIT_EARLY(code) do {  \
+        clearHistory();        \
+        cleanupvar();          \
+        num_free(last_answer); \
+        lists_cleanup();       \
+        fflush(NULL);          \
+        exit(code);            \
+} while (0)
 
 int main(int   argc,
          char *argv[])
@@ -420,9 +520,7 @@ int main(int   argc,
                     fprintf(stderr,
                             "-P option requires a valid integer.\n");
                 }
-                fflush(stderr);
-                num_free(last_answer);
-                exit(EXIT_FAILURE);
+                EXIT_EARLY(EXIT_FAILURE);
             } else {
                 conf.precision = (int)argnum;
             }
@@ -433,12 +531,10 @@ int main(int   argc,
             conf.engineering = never;
         } else if (!strcmp(argv[i], "-H") || !strcmp(argv[i], "--help")) {
             print_command_help();
-            num_free(last_answer);
-            exit(EXIT_SUCCESS);
+            EXIT_EARLY(EXIT_SUCCESS);
         } else if (!strcmp(argv[i], "-v") || !strcmp(argv[i], "--version")) {
             printf("wcalc "VERSION "\n");
-            num_free(last_answer);
-            exit(EXIT_SUCCESS);
+            EXIT_EARLY(EXIT_SUCCESS);
         } else if (!strcmp(argv[i], "-u") || !strcmp(argv[i], "--units")) {
             if ((i + 1 >= argc) || !strcasecmp(argv[i + 1], "all")) {
                 int nCategory;
@@ -451,8 +547,7 @@ int main(int   argc,
                 for (nCategory = 0; nCategory <= MAX_TYPE; ++nCategory) {
                     printf("\t%s\n", conversion_names[nCategory]);
                 }
-                num_free(last_answer);
-                exit(EXIT_FAILURE);
+                EXIT_EARLY(EXIT_FAILURE);
             } else {
                 const size_t len     = strlen(argv[i + 1]);
                 int          printed = 0;
@@ -470,12 +565,10 @@ int main(int   argc,
                     for (nCategory = 0; nCategory <= MAX_TYPE; ++nCategory) {
                         printf("\t%s\n", conversion_names[nCategory]);
                     }
-                    num_free(last_answer);
-                    exit(EXIT_FAILURE);
+                    EXIT_EARLY(EXIT_FAILURE);
                 }
             }
-            num_free(last_answer);
-            exit(EXIT_SUCCESS);
+            EXIT_EARLY(EXIT_SUCCESS);
         } else if (!strcmp(argv[i], "-d") || !strcmp(argv[i], "--decimal") ||
                    !strcmp(argv[i], "-dec") || !strcmp(argv[i], "--dec")) {
             conf.output_format = DECIMAL_FORMAT;
@@ -513,11 +606,11 @@ int main(int   argc,
         } else if (!strcmp(argv[i], "--round")) {
             fprintf(stderr,
                     "--round requires an argument (none|simple|sig_fig)\n");
-            exit(EXIT_FAILURE);
+            EXIT_EARLY(EXIT_FAILURE);
         } else if (!strncmp(argv[i], "--idsep=", 7)) {
             if ((strlen(argv[i]) > 8) || (strlen(argv[i]) == 7)) {
                 fprintf(stderr, "--idsep= must have an argument\n");
-                exit(EXIT_FAILURE);
+                EXIT_EARLY(EXIT_FAILURE);
             }
             if ((conf.in_thou_delimiter != argv[i][7]) && ((conf.in_thou_delimiter != 0) || (conf.thou_delimiter != argv[i][7]))) {
                 conf.in_dec_delimiter = argv[i][7];
@@ -525,12 +618,12 @@ int main(int   argc,
                 fprintf(stderr,
                         "%c cannot be the decimal separator. It is the thousands separator.\n",
                         argv[i][7]);
-                exit(EXIT_FAILURE);
+                EXIT_EARLY(EXIT_FAILURE);
             }
         } else if (!strncmp(argv[i], "--dsep=", 7)) {
             if ((strlen(argv[i]) > 8) || (strlen(argv[i]) == 7)) {
                 fprintf(stderr, "--dsep= must have an argument\n");
-                exit(EXIT_FAILURE);
+                EXIT_EARLY(EXIT_FAILURE);
             }
             if (conf.thou_delimiter != argv[i][7]) {
                 conf.dec_delimiter = argv[i][7];
@@ -538,12 +631,12 @@ int main(int   argc,
                 fprintf(stderr,
                         "%c cannot be the decimal separator. It is the thousands separator.\n",
                         argv[i][7]);
-                exit(EXIT_FAILURE);
+                EXIT_EARLY(EXIT_FAILURE);
             }
         } else if (!strncmp(argv[i], "--itsep=", 7)) {
             if ((strlen(argv[i]) > 8) || (strlen(argv[i]) == 7)) {
                 fprintf(stderr, "--itsep= must have an argument\n");
-                exit(EXIT_FAILURE);
+                EXIT_EARLY(EXIT_FAILURE);
             }
             if ((conf.in_dec_delimiter != argv[i][7]) && ((conf.in_dec_delimiter != 0) || (conf.dec_delimiter != argv[i][7]))) {
                 conf.in_thou_delimiter = argv[i][7];
@@ -551,12 +644,12 @@ int main(int   argc,
                 fprintf(stderr,
                         "%c cannot be the thousands separator. It is the decimal separator.\n",
                         argv[i][7]);
-                exit(EXIT_FAILURE);
+                EXIT_EARLY(EXIT_FAILURE);
             }
         } else if (!strncmp(argv[i], "--tsep=", 7)) {
             if ((strlen(argv[i]) > 8) || (strlen(argv[i]) == 7)) {
                 fprintf(stderr, "--tsep= must have an argument\n");
-                exit(EXIT_FAILURE);
+                EXIT_EARLY(EXIT_FAILURE);
             }
             if (conf.dec_delimiter != argv[i][7]) {
                 conf.thou_delimiter = argv[i][7];
@@ -564,7 +657,7 @@ int main(int   argc,
                 fprintf(stderr,
                         "%c cannot be the thousands separator. It is the decimal separator.\n",
                         argv[i][7]);
-                exit(EXIT_FAILURE);
+                EXIT_EARLY(EXIT_FAILURE);
             }
         } else if (!strncmp(argv[i], "--bits", 6)) {
             unsigned long int argnum;
@@ -574,8 +667,7 @@ int main(int   argc,
             if ((endptr != NULL) && (strlen(endptr) > 0)) {
                 fprintf(stderr,
                         "--bits option requires a valid integer without spaces.\n");
-                num_free(last_answer);
-                exit(EXIT_FAILURE);
+                EXIT_EARLY(EXIT_FAILURE);
             } else {
                 if (argnum < NUM_PREC_MIN) {
                     fprintf(stderr, "Minimum precision is %lu.\n", (unsigned long)NUM_PREC_MIN);
@@ -595,10 +687,21 @@ int main(int   argc,
             yydebug = 1;
         } else if (!strcmp(argv[i], "-n")) {
             conf.print_equal = 0;
+        } else if (!strcmp(argv[i], "-C") || !strcmp(argv[i], "--color")) {
+            conf.color_ui = !conf.color_ui;
+            if (conf.color_ui) {
+                colors = color_ui;
+            } else {
+                colors = black_and_white_ui;
+            }
         } else if (!strcmp(argv[i], "--defaults")) {
             /* ignore this argument */
         } else {
             extern char *errstring;
+
+            if (isatty(1) == 0) { /* Find out where stdout is going */
+                colors = black_and_white_ui;
+            }
 
             if (!cmdline_input) {
 #ifdef HAVE_READLINE_HISTORY
@@ -706,11 +809,7 @@ int main(int   argc,
         }
         free(filename);
 #endif  /* ifdef HAVE_READLINE_HISTORY */
-        clearHistory();
-        cleanupvar();
-        num_free(last_answer);
-        lists_cleanup();
-        exit(EXIT_SUCCESS);
+        EXIT_EARLY(EXIT_SUCCESS);
     }
 
     tty = isatty(0);                   /* Find out where stdin is coming from... */
@@ -742,14 +841,18 @@ int main(int   argc,
             lines = 1;
             fflush(NULL);
 #ifdef HAVE_LIBREADLINE
-            readme = readline("-> ");
+            {
+                char prompt[10];
+                sprintf(prompt, "%s->%s ", colors[BLUE], colors[RESET]);
+                readme = readline(prompt);
+            }
 #else
             {
                 char         c;
                 unsigned int i = 0;
 
                 memset(readme, 0, BIG_STRING);
-                printf("-> ");
+                printf("%s->%s ", colors[BLUE], colors[RESET]);
                 fflush(stdout);
                 c = fgetc(stdin);
                 while (c != '\n' && i < BIG_STRING && !feof(stdin) &&
@@ -786,6 +889,13 @@ int main(int   argc,
                     // addToHistory(readme, 0);
                     yydebug = !yydebug;
                     printf("Debug Mode %s\n", yydebug ? "On" : "Off");
+                } else if (!strncmp(readme, "\\color", 6)) {
+                    conf.color_ui = !conf.color_ui;
+                    if (conf.color_ui) {
+                        colors = color_ui;
+                    } else {
+                        colors = black_and_white_ui;
+                    }
                 } else {
                     if (conf.verbose) {
                         printf("-> %s\n", readme);
@@ -852,7 +962,7 @@ int main(int   argc,
                         free(line);
                         fprintf(stderr,
                                 "Ran out of memory. Line too long.\n");
-                        exit(EXIT_FAILURE);
+                        EXIT_EARLY(EXIT_FAILURE);
                     }
                     memset(temp + maxlinelen, 0, BIG_STRING);
                     maxlinelen += BIG_STRING;
@@ -888,8 +998,6 @@ int main(int   argc,
         }
     }
 
-    clearHistory();
-    cleanupvar();
     if (pretty_answer) {
         extern char *pa;
 
@@ -898,9 +1006,7 @@ int main(int   argc,
             free(pa);
         }
     }
-    num_free(last_answer);
-    lists_cleanup();
-    exit(EXIT_SUCCESS);
+    EXIT_EARLY(EXIT_SUCCESS);
 }                                      /*}}} */
 
 static int read_preload(void)
@@ -933,12 +1039,140 @@ static int read_preload(void)
     return 1;
 }                                      /*}}} */
 
+static int set_pref(const char *key,
+                    const char *value)
+{
+    if (!strcmp(key, "precision")) {
+        conf.precision = atoi(value);
+    } else if (!strcmp(key, "show_equals")) {
+        conf.print_equal = TRUEFALSE;
+    } else if (!strcmp(key, "flag_undeclared")) {
+        conf.picky_variables = TRUEFALSE;
+    } else if (!strcmp(key, "use_radians")) {
+        conf.use_radians = TRUEFALSE;
+    } else if (!strcmp(key, "print_prefixes")) {
+        conf.print_prefixes = TRUEFALSE;
+    } else if (!strcmp(key, "save_errors")) {
+        conf.remember_errors = TRUEFALSE;
+    } else if (!strcmp(key, "remember_errors")) {
+        conf.remember_errors = TRUEFALSE;
+    } else if (!strcmp(key, "precision_guard")) {
+        conf.precision_guard = TRUEFALSE;
+    } else if (!strcmp(key, "print_integers")) {
+        conf.print_ints = TRUEFALSE;
+    } else if (!strcmp(key, "print_delimiters")) {
+        conf.print_commas = TRUEFALSE;
+    } else if (!strcmp(key, "input_thousands_delimiter")) {
+        conf.in_thou_delimiter = value[0];
+    } else if (!strcmp(key, "input_decimal_delimiter")) {
+        conf.in_dec_delimiter = value[0];
+    } else if (!strcmp(key, "thousands_delimiter")) {
+        conf.thou_delimiter = value[0];
+    } else if (!strcmp(key, "decimal_delimiter")) {
+        conf.dec_delimiter = value[0];
+    } else if (!strcmp(key, "history_limit")) {
+        if (!strcmp(value, "no")) {
+            conf.history_limit = conf.history_limit_len = 0;
+        } else {
+            conf.history_limit     = 1;
+            conf.history_limit_len = strtoul(value, NULL, 0);
+        }
+    } else if (!strcmp(key, "output_format")) {
+        if (!strcmp(value, "decimal")) {
+            conf.output_format = DECIMAL_FORMAT;
+        } else if (!strcmp(value, "octal")) {
+            conf.output_format = OCTAL_FORMAT;
+        } else if (!strcmp(value, "binary")) {
+            conf.output_format = BINARY_FORMAT;
+        } else if (!strcmp(value, "hex") || !strcmp(value, "hexadecimal")) {
+            conf.output_format = HEXADECIMAL_FORMAT;
+        } else {
+            fprintf(stderr, "Unrecognized output_format in wcalcrc.\n\tSupported formats are decimal, octal, binary, hex.\n");
+            return 0;
+        }
+    } else if (!strcmp(key, "rounding_indication")) {
+        if (!strcmp(value, "no") || !strcmp(value, "none")) {
+            conf.rounding_indication = NO_ROUNDING_INDICATION;
+        } else if (!strcmp(value, "simple")) {
+            conf.rounding_indication = SIMPLE_ROUNDING_INDICATION;
+        } else if (!strcmp(value, "sig_fig")) {
+            conf.rounding_indication = SIG_FIG_ROUNDING_INDICATION;
+        } else {
+            fprintf(stderr, "Unrecognized rounding_indication in wcalcrc.\n\tSupported indication types are none, simple, sig_fig.\n");
+            return 0;
+        }
+    } else if (!strcmp(key, "engineering")) {
+        if (!strcmp(value, "auto") || !strcmp(value, "automatic") || !strcmp(value, "yes") || !strcmp(value, "true") || !strcmp(value, "1")) {
+            conf.engineering = automatic;
+        } else if (!strcmp(value, "always")) {
+            conf.engineering = always;
+        } else {
+            conf.engineering = never;
+        }
+    } else if (!strcmp(key, "c_style_mod")) {
+        conf.c_style_mod = TRUEFALSE;
+    } else if (!strcmp(key, "color_ui")) {
+        conf.color_ui = TRUEFALSE;
+        if (conf.color_ui) {
+            colors = color_ui;
+        } else {
+            colors = black_and_white_ui;
+        }
+    } else {
+        fprintf(stderr, "Unrecognized key in wcalcrc: %s\n", key);
+        return 0;
+    }
+    return 1;
+}
+
+static void config_error(const char *format,
+                         ...)
+{   /*{{{*/
+    va_list args;
+
+    fprintf(stderr, "Wcalc: Config: ");
+    va_start(args, format);
+    vfprintf(stderr, format, args);
+    va_end(args);
+} /*}}}*/
+
+static size_t copy_string(char       *d,
+                          const char *s,
+                          size_t      dmax,
+                          size_t      smax)
+{   /*{{{*/
+    size_t     dcurs  = 0, scurs = 0;
+    const char quoted = (s[0] == '\'');
+
+    if (quoted) {
+        scurs = 1;
+        while (dcurs < dmax && scurs < smax && s[scurs] != '\'') {
+            d[dcurs++] = s[scurs++];
+        }
+        scurs++; // skip the terminating quote
+    } else {
+        do {
+            d[dcurs++] = s[scurs++];
+        } while (dcurs < dmax && scurs < smax &&
+                 (isalnum(s[scurs]) || s[scurs] == '[' || s[scurs] == ']' || s[scurs] == '.' || s[scurs] == '_' || s[scurs] == ' '));
+    }
+    if (scurs > smax) { return 0; }
+    if (dcurs > dmax) { return 0; }
+    d[dcurs] = 0;
+    while (dcurs > 0 && isspace(d[dcurs - 1])) {
+        dcurs--;
+        d[dcurs] = 0;
+    }
+    return scurs;
+} /*}}}*/
+
 static int read_prefs(void)
 {                                      /*{{{ */
-    int    fd     = openDotFile("wcalcrc", O_RDONLY);
-    char   key[BIG_STRING], value[BIG_STRING];
-    size_t curs   = 0;
-    int    retval = 1;
+    int         fd     = openDotFile("wcalcrc", O_RDONLY);
+    char        key[BIG_STRING], value[BIG_STRING];
+    size_t      curs   = 0;
+    size_t      curs_max;
+    const char *f;
 
     switch (fd) {
         case -1:
@@ -957,147 +1191,84 @@ static int read_prefs(void)
         perror("Could not open preferences file (~/.wcalcrc)");
         return 0;
     }
-    while (retval == 1) {
-        char quoted = 0;
-        char junk;
-
+    {
+        struct stat info;
+        if (fstat(fd, &info)) {
+            perror("Could not determine the size of the preference file");
+            close(fd);
+            return 0;
+        }
+        curs_max = info.st_size - 1;
+        f        = mmap(NULL, info.st_size, PROT_READ, MAP_PRIVATE, fd, 0);
+        if (f == MAP_FAILED) {
+            perror("Could not read the preference file");
+            close(fd);
+            return 0;
+        }
+    }
+    assert(curs_max > curs);
+    do {
         memset(value, 0, BIG_STRING);
         memset(key, 0, BIG_STRING);
-
-        curs = 0;
         // read until we find a non-comment
-        while (1 == (retval = read(fd, &(key[curs]), 1))) {
-            // if we find a comment
-            if (key[curs] == '#') {
-                // read until the end of line
-                junk = 0;
-                while (read(fd, &junk, 1) == 1 && junk != '\n') ;
-            } else if (isalpha((int)(key[curs]))) {
-                break;
+        while (curs < curs_max && (isspace(f[curs]) || f[curs] == '#')) {
+            if (f[curs] == '#') { // skip to the next line
+                do {
+                    curs++;
+                } while (f[curs] != '\n' && curs < curs_max);
             }
+            curs++;
         }
-        if (retval != 1) {
-            break;
-        }
+        if (curs >= curs_max) { break; } // not an error!
         // read in the key
-        quoted = 1;
-        if (key[curs] != '\'') {
-            curs++;
-            quoted = 0;
-        }
-        while (retval == 1 && curs < BIG_STRING) {
-            retval = read(fd, &(key[curs]), 1);
-            if ((!quoted && isspace((int)(key[curs]))) ||
-                (!quoted && (key[curs] == '=')) ||
-                (quoted && (key[curs] != '\''))) {
-                break;
+        {
+            size_t skip = copy_string(key, f + curs, BIG_STRING, curs_max - curs);
+            if (!skip) {
+                config_error("Incomplete key (%s)! (probably an unterminated quote)\n", key);
+                goto err_exit;
             }
-            ++curs;
+            curs += skip;
         }
-        if (retval != 1) {
-            break;
-        }
-        junk      = key[curs];
-        key[curs] = 0;
         // eat the equals sign (and any surrounding space)
-        while (retval == 1 && (isspace((int)junk) || junk == '=')) {
-            retval = read(fd, &junk, 1);
+        while (curs < curs_max && isspace(f[curs])) curs++;
+        if ((curs == curs_max) || (f[curs] != '=')) {
+            config_error("Expected equals (=) after key (%s)!\n", key);
+            goto err_exit;
         }
-        if (retval != 1) {
-            break;
-        }
-        value[0] = junk; // junk now contains the next non-junk character
-        curs     = 0;
-        // read in the value
-        quoted   = 1;
-        if (value[0] != '\'') {
-            ++curs;
-            quoted = 0;
-        }
-        while (retval == 1 && value[curs - 1] && curs < BIG_STRING) {
-            retval = read(fd, &(value[curs]), 1);
-            if ((!quoted && isspace((int)(value[curs]))) ||
-                (quoted && (value[curs] != '\''))) {
-                break;
-            }
+        do {
             curs++;
+        } while (curs < curs_max && isspace(f[curs]));
+        if (curs == curs_max) {
+            config_error("Key (%s) has no value!\n", key);
+            goto err_exit;
         }
-        value[curs] = 0;
+        // read in the value
+        {
+            size_t skip = copy_string(value, f + curs, BIG_STRING, curs_max - curs);
+            if (!skip) {
+                config_error("Incomplete value (%s) for key (%s)! (probably an unterminated quote)\n", value, key);
+                goto err_exit;
+            }
+            curs += skip;
+        }
 
-        if (!strcmp(key, "precision")) {
-            conf.precision = atoi(value);
-        } else if (!strcmp(key, "show_equals")) {
-            conf.print_equal = TRUEFALSE;
-        } else if (!strcmp(key, "flag_undeclared")) {
-            conf.picky_variables = TRUEFALSE;
-        } else if (!strcmp(key, "use_radians")) {
-            conf.use_radians = TRUEFALSE;
-        } else if (!strcmp(key, "print_prefixes")) {
-            conf.print_prefixes = TRUEFALSE;
-        } else if (!strcmp(key, "save_errors")) {
-            conf.remember_errors = TRUEFALSE;
-        } else if (!strcmp(key, "remember_errors")) {
-            conf.remember_errors = TRUEFALSE;
-        } else if (!strcmp(key, "precision_guard")) {
-            conf.precision_guard = TRUEFALSE;
-        } else if (!strcmp(key, "print_integers")) {
-            conf.print_ints = TRUEFALSE;
-        } else if (!strcmp(key, "print_delimiters")) {
-            conf.print_commas = TRUEFALSE;
-        } else if (!strcmp(key, "input_thousands_delimiter")) {
-            conf.in_thou_delimiter = value[0];
-        } else if (!strcmp(key, "input_decimal_delimiter")) {
-            conf.in_dec_delimiter = value[0];
-        } else if (!strcmp(key, "thousands_delimiter")) {
-            conf.thou_delimiter = value[0];
-        } else if (!strcmp(key, "decimal_delimiter")) {
-            conf.dec_delimiter = value[0];
-        } else if (!strcmp(key, "history_limit")) {
-            if (!strcmp(value, "no")) {
-                conf.history_limit = conf.history_limit_len = 0;
-            } else {
-                conf.history_limit     = 1;
-                conf.history_limit_len = strtoul(value, NULL, 0);
-            }
-        } else if (!strcmp(key, "output_format")) {
-            if (!strcmp(value, "decimal")) {
-                conf.output_format = DECIMAL_FORMAT;
-            } else if (!strcmp(value, "octal")) {
-                conf.output_format = OCTAL_FORMAT;
-            } else if (!strcmp(value, "binary")) {
-                conf.output_format = BINARY_FORMAT;
-            } else if (!strcmp(value, "hex") || !strcmp(value, "hexadecimal")) {
-                conf.output_format = HEXADECIMAL_FORMAT;
-            } else {
-                fprintf(stderr, "Unrecognized output_format in wcalcrc.\n\tSupported formats are decimal, octal, binary, hex.\n");
-            }
-        } else if (!strcmp(key, "rounding_indication")) {
-            if (!strcmp(value, "no") || !strcmp(value, "none")) {
-                conf.rounding_indication = NO_ROUNDING_INDICATION;
-            } else if (!strcmp(value, "simple")) {
-                conf.rounding_indication = SIMPLE_ROUNDING_INDICATION;
-            } else if (!strcmp(value, "sig_fig")) {
-                conf.rounding_indication = SIG_FIG_ROUNDING_INDICATION;
-            } else {
-                fprintf(stderr, "Unrecognized rounding_indication in wcalcrc.\n\tSupported indication types are none, simple, sig_fig.\n");
-            }
-        } else if (!strcmp(key, "engineering")) {
-            if (!strcmp(value, "auto") || !strcmp(value, "automatic") || !strcmp(value, "yes") || !strcmp(value, "true") || !strcmp(value, "1")) {
-                conf.engineering = automatic;
-            } else if (!strcmp(value, "always")) {
-                conf.engineering = always;
-            } else {
-                conf.engineering = never;
-            }
-        } else if (!strcmp(key, "c_style_mod")) {
-            conf.c_style_mod = TRUEFALSE;
-        } else {
-            fprintf(stderr, "Unrecognized key in wcalcrc: %s\n", key);
-        }
-        memset(key, 0, sizeof(key));
-        memset(value, 0, sizeof(value));
+        if (!set_pref(key, value)) { goto err_exit; }
+
+        // eat the rest of the line
+        while (curs < curs_max && f[curs] != '\n') curs++;
+        if (curs < curs_max) { curs++; }
+    } while (curs < curs_max);
+    if (munmap((void *)f, curs_max + 1)) {
+        perror("Unmapping the config file");
+    }
+    if (close(fd)) {
+        perror("Closing the config file");
     }
     return 1;
+
+err_exit:
+    config_error("Corrupt config file. Cannot continue.\n");
+    exit(EXIT_FAILURE);
 }                                      /*}}} */
 
 /* vim:set expandtab: */
