@@ -146,7 +146,7 @@ AC_FUNC_REALLOC
 AC_FUNC_VPRINTF
 AC_CHECK_FUNCS([gettimeofday memset modf pow stpcpy strchr strdup strerror strrchr strtoul])
 
-AM_CONFIG_HEADER([src/common/includes/config.h])
+AC_CONFIG_HEADER([src/common/includes/config.h])
 AC_CONFIG_FILES([Makefile
 				 src/Makefile
 				 src/common/Makefile
