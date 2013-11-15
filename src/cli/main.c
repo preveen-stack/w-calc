@@ -835,15 +835,14 @@ int main(int   argc,
         rl_attempted_completion_function = wcalc_completion;
         rl_basic_word_break_characters   = " \t\n\"\'+-*/[{()}]=<>!|~&^%";
 #endif
-        printf
-            ("Enter an expression to evaluate, q to quit, or ? for help:\n");
+        printf("Enter an expression to evaluate, q to quit, or ? for help:\n");
         while (1) {
             lines = 1;
             fflush(NULL);
 #ifdef HAVE_LIBREADLINE
             {
-                char prompt[10];
-                sprintf(prompt, "%s->%s ", colors[BLUE], colors[RESET]);
+                char prompt[30] = "";
+                snprintf(prompt, 30, "%s->%s ", colors[BLUE], colors[RESET]);
                 readme = readline(prompt);
             }
 #else
