@@ -95,6 +95,7 @@ char *num_to_str_complex(const Number           num,
             significant_figures = ((e > 0) ? e : 0) + prec;
             Dprintf("sig figs = %zu\n", significant_figures);
             if (significant_figures < 2) {      /* MPFR-defined minimum (why?) */
+                num_free_str(s);
                 s = num_get_str(s, &e, base, 2, num);
                 Dprintf("s=%s, e = %i\n", s, (int)e);
                 if (s[1] > '4') {      /* XXX: LAME! */
@@ -127,6 +128,7 @@ char *num_to_str_complex(const Number           num,
             }
             Dprintf("left_digits = %i, asking for %i\n", left_digits,
                     left_digits + prec);
+            num_free_str(s);
             s = num_get_str(NULL, &e, base, ((left_digits + prec) < 2) ? 2 : (left_digits + prec), num);
         }
     }
