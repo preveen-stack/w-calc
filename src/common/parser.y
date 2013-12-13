@@ -458,7 +458,7 @@ assignment : ASSIGNMENT exp optionalstring
 			report_error("q cannot be assigned an expression. q is used to exit.");
 		} else {
 			if (putexp($1,$2,$3) == 0) {
-				display_status("%s = %s\n", $1, getvar_full($1).exp);
+                                display_val($1);
 			} else {
 				report_error("There was a problem assigning the expression.");
 			}

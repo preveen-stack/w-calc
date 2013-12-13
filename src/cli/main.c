@@ -63,6 +63,7 @@ extern int  history_truncate_file(char *,
 #include "list.h"
 #include "isconst.h"
 #include "output.h"
+#include "evalvar.h"
 
 #define TRUEFALSE  (!strcmp(value, "yes") || !strcmp(value, "true") || !strcmp(value, "1"))
 #define BIG_STRING 4096
@@ -374,8 +375,12 @@ enum ui_pieces {
     STATUS,
     VAR_NAME,
     VAR_DESC,
+    SUBVAR_NAME,
+    EXPLANATION,
 };
 int  black_and_white_ui[] = {
+    NONE,
+    NONE,
     NONE,
     NONE,
     NONE,
@@ -404,6 +409,8 @@ int  color_ui[] = {
     BOLDGREEN,   // STATUS
     BOLDCYAN,    // VAR_NAME
     CYAN,        // VAR_DESC
+    CYAN,        // SUBVAR_NAME
+    NONE,        // EXPLANATION
 };
 int *uiselect = black_and_white_ui;
 
@@ -1483,7 +1490,7 @@ void display_val(const char *name)
         printf("%s%s%s", colors[uiselect[VAR_NAME]], name, colors[RESET]);
         val = getvar_full(name);
         if (val.exp) {
-            printf("%s=%s %s\n", colors[uiselect[EXACT_ANSWER]], colors[RESET], val.exp);
+            printf(" %s=%s %s\n", colors[uiselect[EXACT_ANSWER]], colors[RESET], val.exp);
         } else {
             char *p = print_this_result(val.val, 0, &approx, &err);
             show_answer(err, approx, p);
@@ -1502,17 +1509,85 @@ void display_var(variable_t *v,
            colors[uiselect[VAR_NAME]], v->key, colors[RESET]);
     if (v->exp) {
         printf(" %s=%s %s\n",
-                colors[uiselect[EXACT_ANSWER]], colors[RESET],
-                v->expression);
+               colors[uiselect[EXACT_ANSWER]], colors[RESET],
+               v->expression);
     } else {
-        char approx = 0;
+        char  approx = 0;
         char *err;
-        char *p = print_this_result(v->value, 0, &approx, &err);
+        char *p      = print_this_result(v->value, 0, &approx, &err);
         show_answer(err, approx, p);
     }
     if (v->description) {
         printf("%*s %s%s%s\n", digits + 4, "::",
                colors[uiselect[VAR_DESC]], v->description, colors[RESET]);
+    }
+}
+
+void display_expvar_explanation(const char *str,
+                                const char *exp,
+                                List        subvars,
+                                const char *desc)
+{
+    printf("%s%s%s is the expression: '%s'\n", colors[uiselect[VAR_NAME]], str,
+           colors[RESET], exp);
+    if (desc) {
+        printf("Description: %s%s%s\n", colors[uiselect[VAR_DESC]], desc, colors[RESET]);
+    }
+    if (listLen(subvars) > 0) {
+        unsigned maxnamelen = 0;
+        {
+            /* First, find the longest variable name... */
+            ListIterator si     = getListIterator(subvars);
+            char        *cursor = (char *)nextListElement(si);
+            if (cursor != NULL) {
+                maxnamelen = strlen(cursor);
+                while ((cursor = (char *)nextListElement(si)) != NULL) {
+                    unsigned len = strlen(cursor);
+                    if (maxnamelen < len) { maxnamelen = len; }
+                }
+            }
+            freeListIterator(si);
+        }
+        printf("%s%s%s uses the following variables:\n",
+               colors[uiselect[VAR_NAME]], str, colors[RESET]);
+        while (listLen(subvars) > 0) {
+            char *curstr = (char *)getHeadOfList(subvars);
+            char *value  = evalvar_noparse(curstr);
+
+            printf("\t%s%*s%s\t(currently: %s)\n", colors[uiselect[SUBVAR_NAME]], -maxnamelen, curstr, colors[RESET],
+                   value ? value : "undefined");
+            if (curstr) {
+                free(curstr);
+            }
+            if (value) {
+                free(value);
+            }
+        }
+    }
+}
+
+void display_valvar_explanation(const char *str,
+                                Number     *val,
+                                const char *desc)
+{
+    printf("%s%s%s is a variable with the value: %s\n",
+           colors[uiselect[VAR_NAME]], str, colors[RESET],
+           print_this_result(*val, 0, NULL, NULL));
+    if (desc) {
+        printf("Description: %s%s%s\n", colors[uiselect[VAR_DESC]], desc, colors[RESET]);
+    }
+}
+
+void display_explanation(const char*exp, ...)
+{
+    if (standard_output) {
+        va_list args;
+
+        printf("%s", colors[uiselect[EXPLANATION]]);
+        va_start(args, exp);
+        vprintf(exp, args);
+        va_end(args);
+        printf("%s\n", colors[RESET]);
     }
 }
 
