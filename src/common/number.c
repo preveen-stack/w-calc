@@ -454,7 +454,7 @@ char *num_get_str(char        *str,
 
     if (!str) { str = malloc(1024); }
     sprintf(str, "%.1000g", op->value);
-    printf("the str: %s\n", str);
+    //printf("the str: %s\n", str);
     dec = strchr(str, conf.dec_delimiter);
     if (dec == NULL) {
         *expptr = strlen(str);
@@ -463,7 +463,7 @@ char *num_get_str(char        *str,
         *expptr -= 1;
     }
     strstrip(conf.dec_delimiter, str);
-    printf("the str (2): %s\n", str);
+    //printf("the str (2): %s\n", str);
     return str;
 }
 
