@@ -104,7 +104,7 @@ int saveState(char *filename)
                 snprintf(cptr, strlen(keyval->expression) + 3, "'%s'",
                          keyval->expression);
             } else {
-                cptr = strdup(print_this_result(keyval->value));
+                cptr = strdup(print_this_result(keyval->value, standard_output, NULL, NULL));
             }
             retval = write(fd, cptr, strlen(cptr));
             if (retval < (int)strlen(cptr)) {
@@ -291,7 +291,7 @@ int storeVar(const char *variable)
                 cptr = malloc(strlen(keyval.exp) + 4);
                 snprintf(cptr, strlen(keyval.exp) + 4, "'%s' ", keyval.exp);
             } else {
-                cptr = strdup(print_this_result(keyval.val));
+                cptr = strdup(print_this_result(keyval.val, standard_output, NULL, NULL));
             }
             retval = write(fd, cptr, strlen(cptr));
             if (retval < (int)strlen(cptr)) {

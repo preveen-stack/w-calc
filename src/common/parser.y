@@ -27,10 +27,10 @@ char *strchr (), *strrchr ();
 #include <unistd.h> /* for isatty() */
 #include "calculator.h"
 #include "variables.h"
-#include "help.h"
 #include "files.h"
 #include "conversion.h"
 #include "number_formatting.h"
+#include "output.h"
 
 /* Based on the headstart code by Shawn Ostermann
 * modified by Kyle Wheeler
@@ -185,124 +185,96 @@ eoln : EOLN { ++lines; }
 command : HEX_CMD {
 	$$ = isatty(0)?redisplay:nothing;
 	conf.output_format = HEXADECIMAL_FORMAT;
-	if (standard_output)
-		printf("Hexadecimal Formatted Output\n");}
+        display_output_format(HEXADECIMAL_FORMAT); }
 | OCT_CMD {
 	$$ = isatty(0)?redisplay:nothing;
 	conf.output_format = OCTAL_FORMAT;
-	if (standard_output)
-		printf("Octal Formatted Output\n");}
+        display_output_format(OCTAL_FORMAT); }
 | BIN_CMD {
 	$$ = isatty(0)?redisplay:nothing;
 	conf.output_format = BINARY_FORMAT;
-	if (standard_output)
-		printf("Binary Formatted Output\n");}
+        display_output_format(BINARY_FORMAT); }
 | DEC_CMD {
 	$$ = isatty(0)?redisplay:nothing;
 	conf.output_format = DECIMAL_FORMAT;
-	if (standard_output)
-		printf("Decimal Formatted Output\n");}
+        display_output_format(DECIMAL_FORMAT); }
 | DSEP_CMD {
 	$$ = nothing;
 	if (conf.thou_delimiter != $1) {
-		conf.dec_delimiter = $1;
-		if (standard_output)
-			printf("%c is now the decimal separator.\n", $1);
-	} else if (standard_output) {
-		printf("%c cannot be the decimal separator. It is the thousands separator.\n", $1);
+            conf.dec_delimiter = $1;
+	    display_status("%c is now the decimal separator.", $1);
+	} else {
+            extern int column;
+            column --;
+	    report_error("%c cannot be the decimal separator. It is the thousands separator.", $1);
 	}}
 | IDSEP_CMD {
 	$$ = nothing;
 	if (conf.in_thou_delimiter != $1 && (conf.in_thou_delimiter != 0 || conf.thou_delimiter != $1)) {
-		conf.in_dec_delimiter = $1;
-		if (standard_output)
-			printf("%c is now the decimal separator for input.\n", $1);
-	} else if (standard_output) {
-		printf("%c cannot be the decimal separator. It is the thousands separator.\n", $1);
+	    conf.in_dec_delimiter = $1;
+	    display_status("%c is now the decimal separator for input.\n", $1);
+	} else {
+            extern int column;
+            column --;
+	    report_error("%c cannot be the decimal separator. It is the thousands separator.\n", $1);
 	}}
 | TSEP_CMD {
 	$$ = nothing;
 	if (conf.dec_delimiter != $1) {
-		conf.thou_delimiter = $1;
-		if (standard_output)
-			printf("%c is now the thousands separator.\n", $1);
+	    conf.thou_delimiter = $1;
+	    display_status("%c is now the thousands separator.\n", $1);
 	} else if (standard_output) {
-		printf("%c cannot be the thousands separator. It is the decimal separator.\n", $1);
+            extern int column;
+            column --;
+	    report_error("%c cannot be the thousands separator. It is the decimal separator.\n", $1);
 	}}
 | ITSEP_CMD {
 	$$ = nothing;
 	if (conf.in_dec_delimiter != $1 && (conf.in_dec_delimiter != 0 || conf.dec_delimiter != $1)) {
-		conf.in_thou_delimiter = $1;
-		if (standard_output)
-			printf("%c is now the thousands separator for input.\n", $1);
-	} else if (standard_output) {
-		printf("%c cannot be the thousands separator. It is the decimal separator.\n", $1);
-	}}
+	    conf.in_thou_delimiter = $1;
+	    display_status("%c is now the thousands separator for input.\n", $1);
+	} else  {
+            extern int column;
+            column --;
+	    report_error("%c cannot be the thousands separator. It is the decimal separator.\n", $1);
+	}
+}
 | DELIM_CMD {
 	$$ = nothing;
 	conf.print_commas = ! conf.print_commas;
-	if (standard_output) {
-		printf("Will %sshow separators when printing large numbers.\n",conf.print_commas?"":"not ");
-	}
+	display_status("Will %sshow separators when printing large numbers.\n",conf.print_commas?"":"not ");
 }
 | INT_CMD {
 	$$ = nothing;
 	conf.print_ints = ! conf.print_ints;
-	if (standard_output) {
-		printf("Will %suse abbreviations for large integers.\n",conf.print_ints?"not ":"");
-	}
+	display_status("Will %suse abbreviations for large integers.\n",conf.print_ints?"not ":"");
 }
 | VERBOSE_CMD
 {
 	$$ = nothing;
 	conf.verbose = ! conf.verbose;
-	if (standard_output) {
-		printf("Will %secho the lines to be evaluated.\n",conf.verbose?"":"not ");
-	}
+	display_status("Will %secho the lines to be evaluated.\n",conf.verbose?"":"not ");
 }
 | DISPLAY_PREFS_CMD {
-	if (standard_output) {
-		printf("          Display Precision: %-3i %s               -> \\p\n",conf.precision,((conf.precision==-1)?"(auto)":"      "));
-		printf("         Internal Precision: %-24lu -> \\bits\n", (unsigned long) num_get_default_prec());
-		printf("         Engineering Output: %s                   -> \\e\n",
-				(conf.engineering==always)?"always":(conf.engineering==never)?"never ":"auto  ");
-		printf("              Output Format: %s -> \\b, \\d, \\h, \\o\n",output_string(conf.output_format));
-		printf("                Use Radians: %s                      -> \\r or \\radians\n",conf.use_radians?"yes":"no ");
-		printf("             Print Prefixes: %s                      -> \\pre or \\prefixes\n",conf.print_prefixes?"yes":"no ");
-		printf("Avoid Abbreviating Integers: %s                      -> \\ints\n",conf.print_ints?"yes":"no ");
-		printf("        Rounding Indication: %s            -> \\round\n",conf.rounding_indication==SIMPLE_ROUNDING_INDICATION?"yes (simple) ":(conf.rounding_indication==SIG_FIG_ROUNDING_INDICATION?"yes (sig_fig)":"no           "));
-		printf("     Save Errors in History: %s                      -> \\re\n",conf.remember_errors?"yes":"no ");
-		printf("        Thousands Delimiter: '%c'                      -> \\tsep\n",conf.thou_delimiter);
-		printf("          Decimal Delimiter: '%c'                      -> \\dsep\n",conf.dec_delimiter);
-		printf("            Precision Guard: %s                      -> \\cons\n",conf.precision_guard?"yes":"no ");
-		printf("              History Limit: %s                      -> \\hlimit\n",conf.history_limit?"yes":"no ");
-		if (conf.history_limit) {
-			printf("         History Limited To: %lu\n",conf.history_limit_len);
-		}
-		printf("                    Verbose: %s                      -> \\verbose\n",conf.verbose?"yes":"no ");
-		printf("         Display Delimiters: %s                      -> \\delim\n",conf.print_commas?"yes":"no ");
-		printf("            Modulo Operator: %s              -> \\cmod\n",conf.c_style_mod?"C-style    ":"not C-style");
-	}
+        display_prefs();
 	$$ = nothing;
 }
 | RADIAN_CMD {
 	$$ = nothing;
 	conf.use_radians = ! conf.use_radians;
-	if (standard_output)
-		printf("Now Using %s\n", conf.use_radians?"Radians":"Degrees");}
+	display_status("Now Using %s\n", conf.use_radians?"Radians":"Degrees");}
 | GUARD_CMD {
 	$$ = nothing;
 	conf.precision_guard = ! conf.precision_guard;
-	if (standard_output)
-		printf("Now %sUsing Conservative Precision\n", conf.precision_guard?"":"Not ");}
+	display_status("Now %sUsing Conservative Precision\n", conf.precision_guard?"":"Not ");}
 | PRECISION_CMD {
 	$$ = isatty(0)?redisplay:nothing;
 	conf.precision = $1;
-	if (standard_output) {
-		printf("Precision = ");
-		if (conf.precision == -1) printf("auto\n");
-		else printf("%i\n", conf.precision);
-	}}
+        if (conf.precision == -1) {
+            display_status("Precision = auto");
+        } else {
+            display_status("Precision = %i", conf.precision);
+        } }
 | HLIMIT_CMD {
     $$ = nothing;
 	if ($1) {
@@ -331,8 +303,7 @@ command : HEX_CMD {
 			case 3: conf.engineering = never; break;
 		}
 	}
-	if (standard_output)
-		printf("Engineering notation is %s\n",(conf.engineering==always)?"always used":(conf.engineering==never)?"never used":"used if convenient");
+	display_status("Engineering notation is %s\n",(conf.engineering==always)?"always used":(conf.engineering==never)?"never used":"used if convenient");
 	$$ = isatty(0)?redisplay:nothing;
 }
 | ROUNDING_INDICATION_CMD {
@@ -343,33 +314,23 @@ command : HEX_CMD {
 		conf.rounding_indication += 1;
 		conf.rounding_indication %= 3;
 	}
-	if (standard_output) {
-		printf("Will display ");
-		switch(conf.rounding_indication) {
-			case NO_ROUNDING_INDICATION: printf("no"); break;
-			case SIMPLE_ROUNDING_INDICATION: printf("simple"); break;
-			case SIG_FIG_ROUNDING_INDICATION: printf("significant figure"); break;
-		}
-		printf(" rounding indication\n");
-	}
+	display_status("Will display %s rounding indication",
+		(conf.rounding_indication==NO_ROUNDING_INDICATION)?"no":
+                ((conf.rounding_indication==SIMPLE_ROUNDING_INDICATION)?"simple":"significant figure"));
 }
 | PREFIX_CMD {
 	$$ = nothing;
 	conf.print_prefixes = ! conf.print_prefixes;
-	if (standard_output)
-		printf("Will %sprint number prefixes\n",conf.print_prefixes?"":"not ");
+	display_status("Will %sprint number prefixes\n",conf.print_prefixes?"":"not ");
 }
 | REMEMBER_CMD {
 	$$ = nothing;
 	conf.remember_errors = ! conf.remember_errors;
-	if (standard_output)
-		printf("Statements that produce errors are %s.\n",conf.remember_errors?"recorded":"forgotten");
+	display_status("Statements that produce errors are %s.\n",conf.remember_errors?"recorded":"forgotten");
 }
 | PRINT_HELP_CMD {
 	$$ = nothing;
-	if (standard_output) {
-		print_interactive_help();
-	}
+	display_interactive_help();
 }
 | OPEN_CMD {
 	extern char* open_file;
@@ -435,7 +396,7 @@ command : HEX_CMD {
 	if ($1 >= 2 && $1 <= 36) {
 		char * str, junk;
 		str = num_to_str_complex(last_answer, $1, conf.engineering, -1, conf.print_prefixes, &junk);
-		printf("base %i: %s\n",$1,str);
+		display_status("base %i: %s\n",$1,str);
 	} else {
 		report_error("Base must be greater than one and less than 37.");
 	}
@@ -445,7 +406,7 @@ command : HEX_CMD {
 {
 	int retval = storeVar($2);
 	if (retval == 0) {
-		printf("successfully stored %s\n",$2);
+		display_status("successfully stored %s\n",$2);
 	} else {
 		report_error("Failure to store variable!");
 	}
@@ -455,8 +416,7 @@ command : HEX_CMD {
 {
 	$$ = nothing;
 	conf.c_style_mod = ! conf.c_style_mod;
-	if (standard_output)
-		printf("The mod (%%) operation will %sbehave like it does in the C programming language.\n",conf.c_style_mod?"":"not ");
+	display_status("The mod (%%) operation will %sbehave like it does in the C programming language.\n",conf.c_style_mod?"":"not ");
 }
 ;
 
@@ -476,14 +436,7 @@ assignment : ASSIGNMENT exp optionalstring
 			report_error("q cannot be assigned a value. q is used to exit.");
 		} else {
 			if (putval($1,$2,$3) == 0) {
-				if (standard_output) {
-					Number val;
-					num_init(val);
-					printf("%s", $1);
-					getvarval(val, $1);
-					print_this_result(val);
-					num_free(val);
-				}
+                                display_val($1);
 			} else {
 				report_error("There was a problem assigning the value.");
 			}
@@ -505,9 +458,7 @@ assignment : ASSIGNMENT exp optionalstring
 			report_error("q cannot be assigned an expression. q is used to exit.");
 		} else {
 			if (putexp($1,$2,$3) == 0) {
-				if (standard_output) {
-					printf("%s = %s\n", $1, getvar_full($1).exp);
-				}
+				display_status("%s = %s\n", $1, getvar_full($1).exp);
 			} else {
 				report_error("There was a problem assigning the expression.");
 			}

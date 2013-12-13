@@ -527,7 +527,7 @@ void set_prettyanswer(const Number num)
         free(pretty_answer);
     }
     Dprintf("set_prettyanswer - call print_this_result\n");
-    temp = print_this_result(num);
+    temp = print_this_result(num, standard_output, NULL, NULL);
     Dprintf("set_prettyanswer: %s\n", temp);
     if (temp) {
         pretty_answer = (char *)strdup(temp);
@@ -537,7 +537,7 @@ void set_prettyanswer(const Number num)
     Dprintf("set_prettyanswer - done\n");
 }                                      /*}}} */
 
-static char *print_this_result_dbl(const double result)
+static char *print_this_result_dbl(const double result, int output, char *nad, char **es)
 {                                      /*{{{ */
     char         format[10];
     static char *tmp;
@@ -836,14 +836,16 @@ static char *print_this_result_dbl(const double result)
         }
     }
 
-    if (standard_output) {
+    if (output) {
         show_answer(errstring, not_all_displayed, pa);
     }
+    if (nad) *nad = not_all_displayed;
+    if (es) *es = errstring;
 
     return pa;
 }                                      /*}}} */
 
-char *print_this_result(const Number result)
+char *print_this_result(const Number result, int output, char *nad, char **es)
 {                                      /*{{{ */
     extern char *errstring;
     unsigned int base = 0;
@@ -877,7 +879,7 @@ char *print_this_result(const Number result)
                     if (fabs(res) < DBL_EPSILON) {
                         res = 0.0;
                     }
-                    return print_this_result_dbl(res);
+                    return print_this_result_dbl(res, output, nad, es);
                     // }
                 }
             }
@@ -952,9 +954,11 @@ char *print_this_result(const Number result)
         }
     }
 
-    if (standard_output) {
+    if (output) {
         show_answer(errstring, not_all_displayed, pa);
     }
+    if (nad) *nad = not_all_displayed;
+    if (es) *es = errstring;
 
     return pa;
 }                                      /*}}} */

@@ -15,6 +15,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>                     /* might make readline happy */
+#include <assert.h>
 
 /* Internal Headers */
 #include "number.h"
@@ -158,7 +159,8 @@ char *historynum(int step,
                 clear_calculated();
             }
         }
-        temp = print_this_result(history[step].ans);
+        assert(standard_output == 0);
+        temp = print_this_result(history[step].ans, 0, NULL, NULL);
         return (temp ? temp : "Not Enough Memory");
     }
 } /*}}}*/

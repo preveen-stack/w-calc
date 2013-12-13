@@ -105,7 +105,7 @@ void parseme(const char *);
 void report_error(const char *fmt,
                   ...);
 void  set_prettyanswer(const Number num);
-char *print_this_result(const Number result);
+char *print_this_result(const Number result, int output, char *nad, char **es);
 void  uber_function(Number               output,
                     const enum functions func,
                     Number               input);

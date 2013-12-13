@@ -16,9 +16,9 @@
 
 /* Internal Headers */
 #include "definitions.h"
-#include "help.h"
+#include "output.h"
 
-void print_interactive_help (void)
+void display_interactive_help (void)
 {/*{{{*/
     printf("Wcalc "PACKAGE_VERSION " by Kyle Wheeler.\nVersion 0.1.x written in C++ for CS240C at Ohio University, Jan 14 2000\n");
     printf("Version 0.2.x rewritten for lex/yacc in C, Nov 25 2001\n");
@@ -65,7 +65,7 @@ void print_interactive_help (void)
            "after a // or #\n");
 }/*}}}*/
 
-void print_command_help (void)
+void display_command_help (void)
 {/*{{{*/
     printf("Wcalc "PACKAGE_VERSION " by Kyle Wheeler.\n");
     printf("Version 0.1.x written in C++ for CS240C at Ohio University, Jan 14 2000\n");

@@ -196,13 +196,8 @@ static void explain_variable(const char *str)
         }
         freeList(&strings);
     } else {
-        char std_save;
-
-        std_save        = standard_output;
-        standard_output = 0;
         printf("%s is a variable with the value: %s\n", str,
-               print_this_result(var.val));
-        standard_output = std_save;
+               print_this_result(var.val, 0, NULL, NULL));
     }
     if (var.desc != NULL) {
         printf("Description: %s\n", var.desc);

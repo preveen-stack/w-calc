@@ -76,7 +76,6 @@ void printvariables(void)
             if (maxnamelen < len) maxnamelen = len;
         }
     }
-    printf("max name len = %u\n", maxnamelen);
     resetListIterator(li);
     cursor = (variable_t *)nextListElement(li);
     if (cursor != NULL) {

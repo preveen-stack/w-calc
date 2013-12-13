@@ -7,7 +7,6 @@ noinst_HEADERS = \
 		 explain.h \
 		 extract_vars.h \
 		 files.h \
-		 help.h \
 		 historyManager.h \
 		 iscmd.h \
 		 isconst.h \

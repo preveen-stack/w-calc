@@ -58,7 +58,6 @@ extern int  history_truncate_file(char *,
 # include "y.tab.h"
 #endif
 #include "variables.h"
-#include "help.h"
 #include "files.h"
 #include "historyManager.h"
 #include "list.h"
@@ -321,6 +320,7 @@ static char **wcalc_completion(const char *text,
 #endif /* ifdef HAVE_LIBREADLINE */
 
 enum ui_colors {
+    NONE,
     RESET,
     BLACK,
     RED,
@@ -339,13 +339,8 @@ enum ui_colors {
     BOLDCYAN,
     BOLDWHITE,
 };
-
-const char *const  black_and_white_ui[] = {
+const char *const colors[] = {
     "",
-    "", "", "", "", "", "", "", "",
-    "", "", "", "", "", "", "", "",
-};
-const char *const  color_ui[] = {
     "\033[0m",
     "\033[30m",
     "\033[31m",
@@ -364,15 +359,61 @@ const char *const  color_ui[] = {
     "\033[1m\033[36m",
     "\033[1m\033[37m",
 };
-const char *const *colors = black_and_white_ui;
+
+enum ui_pieces {
+    PROMPT,
+    CONV_CAT,
+    CONV_UNIT,
+    APPROX_ANSWER,
+    EXACT_ANSWER,
+    ERR_LOCATION,
+    ERR_TXT,
+    PREF_NAME,
+    PREF_VAL,
+    PREF_CMD,
+    STATUS,
+    VAR_NAME,
+    VAR_DESC,
+};
+int  black_and_white_ui[] = {
+    NONE,
+    NONE,
+    NONE,
+    NONE,
+    NONE,
+    NONE,
+    NONE,
+    NONE,
+    NONE,
+    NONE,
+    NONE,
+    NONE,
+    NONE,
+};
+int  color_ui[] = {
+    BLUE,        // PROMPT
+    BOLDYELLOW,  // CONV_CAT
+    CYAN,        // CONV_UNIT
+    YELLOW,      // APPROX_ANSWER
+    GREEN,       // EXACT_ANSWER
+    BOLDMAGENTA, // ERR_LOCATION
+    BOLDRED,     // ERR_TXT
+    YELLOW,      // PREF_NAME
+    CYAN,        // PREF_VAL
+    BLUE,        // PREF_CMD
+    BOLDGREEN,   // STATUS
+    BOLDCYAN,    // VAR_NAME
+    CYAN,        // VAR_DESC
+};
+int *uiselect = black_and_white_ui;
 
 static void PrintConversionUnitCategory(int nCategory)
 {
-    printf("\n%s%s%s\n", colors[BOLDYELLOW], conversion_names[nCategory], colors[RESET]);
+    printf("\n%s%s%s\n", colors[uiselect[CONV_CAT]], conversion_names[nCategory], colors[RESET]);
     size_t unit, nAka;
 
     for (unit = 0; conversions[nCategory][unit].name; ++unit) {
-        printf("\n%s%s%s: ", colors[CYAN], conversions[nCategory][unit].name, colors[RESET]);
+        printf("\n%s%s%s: ", colors[uiselect[CONV_UNIT]], conversions[nCategory][unit].name, colors[RESET]);
         for (nAka = 0; nAka < 9; ++nAka) {
             if (conversions[nCategory][unit].aka[nAka] != NULL) {
                 if (nAka > 0) { printf(", "); }
@@ -391,9 +432,9 @@ void show_answer(char *err,
         display_and_clear_errstring();
     }
     if (uncertain) {
-        printf("%s%s %s%s\n", colors[YELLOW], conf.print_equal ? "~=" : "  ", colors[RESET], answer);
+        printf("%s%s %s%s\n", colors[uiselect[APPROX_ANSWER]], conf.print_equal ? "~=" : "  ", colors[RESET], answer);
     } else {
-        printf("%s%s %s%s\n", colors[GREEN], conf.print_equal ? " =" : "  ", colors[RESET], answer);
+        printf("%s%s %s%s\n", colors[uiselect[EXACT_ANSWER]], conf.print_equal ? " =" : "  ", colors[RESET], answer);
     }
 } /*}}}*/
 
@@ -411,10 +452,10 @@ void display_and_clear_errstring()
             for (i = 0; i < errloc; i++) {
                 fprintf(stderr, " ");
             }
-            fprintf(stderr, "%s^%s\n", colors[BOLDMAGENTA], colors[RESET]);
+            fprintf(stderr, "%s^%s\n", colors[uiselect[ERR_LOCATION]], colors[RESET]);
             errloc = -1;
         }
-        fprintf(stderr, "%s%s%s", colors[RED], errstring, colors[RESET]);
+        fprintf(stderr, "%s%s%s", colors[uiselect[ERR_TXT]], errstring, colors[RESET]);
         if (errstring[strlen(errstring) - 1] != '\n') {
             fprintf(stderr, "\n");
         }
@@ -530,7 +571,7 @@ int main(int   argc,
         } else if (!strcmp(argv[i], "-EE")) {
             conf.engineering = never;
         } else if (!strcmp(argv[i], "-H") || !strcmp(argv[i], "--help")) {
-            print_command_help();
+            display_command_help();
             EXIT_EARLY(EXIT_SUCCESS);
         } else if (!strcmp(argv[i], "-v") || !strcmp(argv[i], "--version")) {
             printf("wcalc "VERSION "\n");
@@ -690,9 +731,9 @@ int main(int   argc,
         } else if (!strcmp(argv[i], "-C") || !strcmp(argv[i], "--color")) {
             conf.color_ui = !conf.color_ui;
             if (conf.color_ui) {
-                colors = color_ui;
+                uiselect = color_ui;
             } else {
-                colors = black_and_white_ui;
+                uiselect = black_and_white_ui;
             }
         } else if (!strcmp(argv[i], "--defaults")) {
             /* ignore this argument */
@@ -700,7 +741,7 @@ int main(int   argc,
             extern char *errstring;
 
             if (isatty(1) == 0) { /* Find out where stdout is going */
-                colors = black_and_white_ui;
+                uiselect = black_and_white_ui;
             }
 
             if (!cmdline_input) {
@@ -842,7 +883,7 @@ int main(int   argc,
 #ifdef HAVE_LIBREADLINE
             {
                 char prompt[30] = "";
-                snprintf(prompt, 30, "%s->%s ", colors[BLUE], colors[RESET]);
+                snprintf(prompt, 30, "%s->%s ", colors[uiselect[PROMPT]], colors[RESET]);
                 readme = readline(prompt);
             }
 #else
@@ -851,7 +892,7 @@ int main(int   argc,
                 unsigned int i = 0;
 
                 memset(readme, 0, BIG_STRING);
-                printf("%s->%s ", colors[BLUE], colors[RESET]);
+                printf("%s->%s ", colors[uiselect[PROMPT]], colors[RESET]);
                 fflush(stdout);
                 c = fgetc(stdin);
                 while (c != '\n' && i < BIG_STRING && !feof(stdin) &&
@@ -891,9 +932,9 @@ int main(int   argc,
                 } else if (!strncmp(readme, "\\color", 6)) {
                     conf.color_ui = !conf.color_ui;
                     if (conf.color_ui) {
-                        colors = color_ui;
+                        uiselect = color_ui;
                     } else {
-                        colors = black_and_white_ui;
+                        uiselect = black_and_white_ui;
                     }
                 } else {
                     if (conf.verbose) {
@@ -1038,6 +1079,67 @@ static int read_preload(void)
     return 1;
 }                                      /*}}} */
 
+#define CHECK_COLOR(x) else if (!strcasecmp(str, # x)) { return x; }
+
+static enum ui_colors str2color(const char *str)
+{
+    if (!strcasecmp(str, "NONE")) {
+        return NONE;
+    }
+    CHECK_COLOR(BLACK)
+    CHECK_COLOR(RED)
+    CHECK_COLOR(GREEN)
+    CHECK_COLOR(YELLOW)
+    CHECK_COLOR(BLUE)
+    CHECK_COLOR(MAGENTA)
+    CHECK_COLOR(CYAN)
+    CHECK_COLOR(WHITE)
+    CHECK_COLOR(BOLDBLACK)
+    CHECK_COLOR(BOLDRED)
+    CHECK_COLOR(BOLDGREEN)
+    CHECK_COLOR(BOLDYELLOW)
+    CHECK_COLOR(BOLDBLUE)
+    CHECK_COLOR(BOLDMAGENTA)
+    CHECK_COLOR(BOLDCYAN)
+    CHECK_COLOR(BOLDWHITE)
+    else {
+        fprintf(stderr, "Unrecognized color: '%s'\n", str);
+        return RESET;
+    }
+}
+
+static int assign_color_prefs(const char *key,
+                              const char *value)
+{
+    assert(key);
+    assert(value);
+    if (uiselect != color_ui) {
+        fprintf(stderr, "Colors not enabled!\n");
+        return 0;
+    }
+    if (!strcasecmp(key, "prompt]")) {
+        uiselect[PROMPT] = str2color(value);
+    } else if (!strcasecmp(key, "conversion_category]")) {
+        uiselect[CONV_CAT] = str2color(value);
+    } else if (!strcasecmp(key, "conversion_unit]")) {
+        uiselect[CONV_UNIT] = str2color(value);
+    } else if (!strcasecmp(key, "approx_answer]")) {
+        uiselect[APPROX_ANSWER] = str2color(value);
+    } else if (!strcasecmp(key, "exact_answer]")) {
+        uiselect[EXACT_ANSWER] = str2color(value);
+    } else if (!strcasecmp(key, "err_location]")) {
+        uiselect[ERR_LOCATION] = str2color(value);
+    } else if (!strcasecmp(key, "err_text]")) {
+        uiselect[ERR_TXT] = str2color(value);
+    } else {
+        char *res = strdup(key);
+        *strchr(res, ']') = 0;
+        fprintf(stderr, "Unrecognized colorable resource: '%s'\n", res);
+        return 0;
+    }
+    return 1;
+}
+
 static int set_pref(const char *key,
                     const char *value)
 {
@@ -1110,13 +1212,15 @@ static int set_pref(const char *key,
         }
     } else if (!strcmp(key, "c_style_mod")) {
         conf.c_style_mod = TRUEFALSE;
-    } else if (!strcmp(key, "color_ui")) {
+    } else if (!strcmp(key, "color_ui") || !strcmp(key, "color")) {
         conf.color_ui = TRUEFALSE;
         if (conf.color_ui) {
-            colors = color_ui;
+            uiselect = color_ui;
         } else {
-            colors = black_and_white_ui;
+            uiselect = black_and_white_ui;
         }
+    } else if (!strncmp(key, "colors[", 7)) {
+        return assign_color_prefs(key + 7, value);
     } else {
         fprintf(stderr, "Unrecognized key in wcalcrc: %s\n", key);
         return 0;
@@ -1167,9 +1271,9 @@ static size_t copy_string(char       *d,
 
 static int read_prefs(void)
 {                                      /*{{{ */
-    int         fd     = openDotFile("wcalcrc", O_RDONLY);
+    int         fd   = openDotFile("wcalcrc", O_RDONLY);
     char        key[BIG_STRING], value[BIG_STRING];
-    size_t      curs   = 0;
+    size_t      curs = 0;
     size_t      curs_max;
     const char *f;
 
@@ -1269,5 +1373,125 @@ err_exit:
     config_error("Corrupt config file. Cannot continue.\n");
     exit(EXIT_FAILURE);
 }                                      /*}}} */
+
+static void prefline(const char *name,
+                     const char *val,
+                     const char *cmd)
+{
+    if (name && val && cmd) {
+        printf("%s%27s:%s %s%-24s%s -> ",
+               colors[uiselect[PREF_NAME]], name, colors[RESET],
+               colors[uiselect[PREF_VAL]], val, colors[RESET]);
+        if (strchr(cmd, ',')) {
+            unsigned offset = 0;
+            while (strchr(cmd + offset, ',')) {
+                unsigned cmdlen = strchr(cmd + offset, ',') - (cmd + offset);
+                printf("%s%.*s%s, ",
+                       colors[uiselect[PREF_CMD]], cmdlen, cmd + offset, colors[RESET]);
+                offset += cmdlen + 1;
+            }
+            printf("%s%s%s\n",
+                   colors[uiselect[PREF_CMD]], cmd + offset, colors[RESET]);
+        } else {
+            printf("%s%s%s\n",
+                   colors[uiselect[PREF_CMD]], cmd, colors[RESET]);
+        }
+    } else if (name && val) {
+        printf("%s%27s:%s %s%-24s%s\n",
+               colors[uiselect[PREF_NAME]], name, colors[RESET],
+               colors[uiselect[PREF_VAL]], val, colors[RESET]);
+    }
+}
+
+#define DP_YESNO(x) ((x) ? "yes" : "no")
+void display_prefs(void)
+{
+    if (standard_output) {
+        char tmp[50];
+        sprintf(tmp, "%-3i %s", conf.precision, ((conf.precision == -1) ? "(auto)" : "      "));
+        prefline("Display Precision", tmp, "\\p");
+        sprintf(tmp, "%-24lu", (unsigned long)num_get_default_prec());
+        prefline("Internal Precision", tmp, "\\bits");
+        prefline("Engineering Output",
+                 (conf.engineering == always) ? "always" : (conf.engineering == never) ? "never " : "auto  ",
+                 "\\e");
+        prefline("Output Format", output_string(conf.output_format), "\\b,\\d,\\h,\\o");
+        prefline("Use Radians", DP_YESNO(conf.use_radians), "\\r");
+        prefline("Print Prefixes", DP_YESNO(conf.print_prefixes), "\\pre,\\prefixes");
+        prefline("Avoid Abbreviating Integers", DP_YESNO(conf.print_ints), "\\ints");
+        prefline("Rounding Indication",
+                 conf.rounding_indication == SIMPLE_ROUNDING_INDICATION ? "yes (simple) " : (conf.rounding_indication == SIG_FIG_ROUNDING_INDICATION ? "yes (sig_fig)" : "no           "),
+                 "\\round");
+        prefline("Save Errors in History", DP_YESNO(conf.remember_errors), "\\re");
+        sprintf(tmp, "'%c'", conf.thou_delimiter);
+        prefline("Thousands Delimiter", tmp, "\\tsep");
+        sprintf(tmp, "'%c'", conf.dec_delimiter);
+        prefline("Decimal Delimiter", tmp, "\\dsep");
+        prefline("Precision Guard", DP_YESNO(conf.precision_guard), "\\cons");
+        prefline("History Limit", DP_YESNO(conf.history_limit), "\\hlimit");
+        if (conf.history_limit) {
+            sprintf(tmp, "%lu", conf.history_limit_len);
+            prefline("History Limited To", tmp, NULL);
+        }
+        prefline("Verbose", DP_YESNO(conf.verbose), "\\verbose");
+        prefline("Display Delimiters", DP_YESNO(conf.print_commas), "\\delim");
+        prefline("Modulo Operator", (conf.c_style_mod ? "C-style    " : "not C-style"), "\\cmod");
+    }
+}
+
+void display_status(const char *format,
+                    ...)
+{
+    if (standard_output) {
+        va_list args;
+
+        printf("%s", colors[uiselect[STATUS]]);
+        va_start(args, format);
+        vprintf(format, args);
+        va_end(args);
+        printf("%s\n", colors[RESET]);
+    }
+}
+
+void display_output_format(int format)
+{
+    if (standard_output) {
+        switch (format) {
+            case HEXADECIMAL_FORMAT:
+                display_status("Hexadecimal Formatted Output");
+                break;
+            case OCTAL_FORMAT:
+                display_status("Octal Formatted Output");
+                break;
+            case DECIMAL_FORMAT:
+                display_status("Decimal Formatted Output");
+                break;
+            case BINARY_FORMAT:
+                display_status("Binary Formatted Output");
+                break;
+        }
+    }
+}
+
+void display_val(const char *name)
+{
+    if (standard_output) {
+        answer_t val;
+        char approx = 0;
+        char *err;
+        display_and_clear_errstring();
+        printf("%s%s%s", colors[uiselect[VAR_NAME]], name, colors[RESET]);
+        val = getvar_full(name);
+        if (val.exp) {
+            printf("%s=%s %s\n", colors[uiselect[EXACT_ANSWER]], colors[RESET], val.exp);
+        } else {
+            char *p = print_this_result(val.val, 0, &approx, &err);
+            show_answer(err, approx, p);
+        }
+        if (val.desc) {
+            printf("    :: %s%s%s\n", colors[uiselect[VAR_DESC]], val.desc, colors[RESET]);
+        }
+    }
+}
 
 /* vim:set expandtab: */
