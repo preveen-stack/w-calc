@@ -368,7 +368,7 @@ enum ui_pieces {
     APPROX_ANSWER,
     EXACT_ANSWER,
     ERR_LOCATION,
-    ERR_TXT,
+    ERR_TEXT,
     PREF_NAME,
     PREF_VAL,
     PREF_CMD,
@@ -402,7 +402,7 @@ int  color_ui[] = {
     YELLOW,      // APPROX_ANSWER
     GREEN,       // EXACT_ANSWER
     BOLDMAGENTA, // ERR_LOCATION
-    BOLDRED,     // ERR_TXT
+    BOLDRED,     // ERR_TEXT
     YELLOW,      // PREF_NAME
     CYAN,        // PREF_VAL
     BLUE,        // PREF_CMD
@@ -462,7 +462,7 @@ void display_and_clear_errstring()
             fprintf(stderr, "%s^%s\n", colors[uiselect[ERR_LOCATION]], colors[RESET]);
             errloc = -1;
         }
-        fprintf(stderr, "%s%s%s", colors[uiselect[ERR_TXT]], errstring, colors[RESET]);
+        fprintf(stderr, "%s%s%s", colors[uiselect[ERR_TEXT]], errstring, colors[RESET]);
         if (errstring[strlen(errstring) - 1] != '\n') {
             fprintf(stderr, "\n");
         }
@@ -1115,6 +1115,7 @@ static enum ui_colors str2color(const char *str)
     }
 }
 
+#define HANDLECOLOR(x) else if (!strcasecmp(key, #x "]")) { uiselect[x] = str2color(value); }
 static int assign_color_prefs(const char *key,
                               const char *value)
 {
@@ -1124,21 +1125,25 @@ static int assign_color_prefs(const char *key,
         fprintf(stderr, "Colors not enabled!\n");
         return 0;
     }
-    if (!strcasecmp(key, "prompt]")) {
-        uiselect[PROMPT] = str2color(value);
-    } else if (!strcasecmp(key, "conversion_category]")) {
+    if (!strcasecmp(key, "conversion_category]")) {
         uiselect[CONV_CAT] = str2color(value);
     } else if (!strcasecmp(key, "conversion_unit]")) {
         uiselect[CONV_UNIT] = str2color(value);
-    } else if (!strcasecmp(key, "approx_answer]")) {
-        uiselect[APPROX_ANSWER] = str2color(value);
-    } else if (!strcasecmp(key, "exact_answer]")) {
-        uiselect[EXACT_ANSWER] = str2color(value);
-    } else if (!strcasecmp(key, "err_location]")) {
-        uiselect[ERR_LOCATION] = str2color(value);
-    } else if (!strcasecmp(key, "err_text]")) {
-        uiselect[ERR_TXT] = str2color(value);
-    } else {
+    }
+        HANDLECOLOR(PROMPT)
+        HANDLECOLOR(APPROX_ANSWER)
+        HANDLECOLOR(EXACT_ANSWER)
+        HANDLECOLOR(ERR_LOCATION)
+        HANDLECOLOR(ERR_TEXT)
+        HANDLECOLOR(PREF_NAME)
+        HANDLECOLOR(PREF_VAL)
+        HANDLECOLOR(PREF_CMD)
+        HANDLECOLOR(STATUS)
+        HANDLECOLOR(VAR_NAME)
+        HANDLECOLOR(VAR_DESC)
+        HANDLECOLOR(SUBVAR_NAME)
+        HANDLECOLOR(EXPLANATION)
+    else {
         char *res = strdup(key);
         *strchr(res, ']') = 0;
         fprintf(stderr, "Unrecognized colorable resource: '%s'\n", res);
