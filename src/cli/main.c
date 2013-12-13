@@ -1477,8 +1477,8 @@ void display_val(const char *name)
 {
     if (standard_output) {
         answer_t val;
-        char approx = 0;
-        char *err;
+        char     approx = 0;
+        char    *err;
         display_and_clear_errstring();
         printf("%s%s%s", colors[uiselect[VAR_NAME]], name, colors[RESET]);
         val = getvar_full(name);
@@ -1489,8 +1489,30 @@ void display_val(const char *name)
             show_answer(err, approx, p);
         }
         if (val.desc) {
-            printf("    :: %s%s%s\n", colors[uiselect[VAR_DESC]], val.desc, colors[RESET]);
+            printf(":: %s%s%s\n", colors[uiselect[VAR_DESC]], val.desc, colors[RESET]);
         }
+    }
+}
+
+void display_var(variable_t *v,
+                 unsigned    count,
+                 unsigned    digits)
+{
+    printf("%*u. %s%s%s", digits, count,
+           colors[uiselect[VAR_NAME]], v->key, colors[RESET]);
+    if (v->exp) {
+        printf(" %s=%s %s\n",
+                colors[uiselect[EXACT_ANSWER]], colors[RESET],
+                v->expression);
+    } else {
+        char approx = 0;
+        char *err;
+        char *p = print_this_result(v->value, 0, &approx, &err);
+        show_answer(err, approx, p);
+    }
+    if (v->description) {
+        printf("%*s %s%s%s\n", digits + 4, "::",
+               colors[uiselect[VAR_DESC]], v->description, colors[RESET]);
     }
 }
 

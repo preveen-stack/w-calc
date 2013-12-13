@@ -9,7 +9,7 @@ AM_LDFLAGS = @GMP_LDFLAGS@ @MPFR_LDFLAGS@
 
 bin_PROGRAMS = wcalc
 wcalc_LDADD = common/libwcalc.a @LEXLIB@
-wcalc_SOURCES = cli/main.c
+wcalc_SOURCES = cli/main.c cli/help.c
 
 common/libwcalc.a:
 	$(MAKE) -C common libwcalc.a

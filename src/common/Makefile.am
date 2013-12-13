@@ -18,7 +18,6 @@ libwcalc_a_SOURCES = \
 		     explain.c \
 		     extract_vars.c \
 		     files.c \
-		     help.c \
 		     historyManager.c \
 		     iscmd.c \
 		     isconst.c \

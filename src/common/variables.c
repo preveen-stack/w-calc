@@ -1,3 +1,8 @@
+/*
+ * stdin
+ * Copyright (c) 2013 Micron Technology, Inc.
+ *
+ */
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
@@ -13,6 +18,7 @@
 #include "calculator.h"                /* for report_error */
 #include "list.h"
 #include "variables.h"
+#include "output.h"
 
 #define THE_VALUE      0
 #define THE_STRUCTURE  2
@@ -57,49 +63,29 @@ size_t numvars()
 /* prints out all the variables */
 void printvariables(void)
 {   /*{{{*/
-    ListIterator li     = NULL;
-    variable_t  *cursor = NULL;
-    unsigned     count  = 1;
-    unsigned   maxnamelen = 0;
+    ListIterator li         = NULL;
+    variable_t  *cursor     = NULL;
+    unsigned     count      = 1;
+    unsigned     digits = 1;
 
     if (!them || (listLen(them) == 0)) {
         return;
     }
 
-    li = getListIterator(them);
-    /* First, find the longest variable name... */
-    cursor = (variable_t *)nextListElement(li);
-    if (cursor != NULL) {
-        maxnamelen = strlen(cursor->key);
-        while ((cursor = (variable_t *)nextListElement(li)) != NULL) {
-            unsigned len = strlen(cursor->key);
-            if (maxnamelen < len) maxnamelen = len;
+    {
+        unsigned len = listLen(them);
+        while (len > 9) {
+            digits++;
+            len /= 10;
         }
     }
-    resetListIterator(li);
+
+    li     = getListIterator(them);
     cursor = (variable_t *)nextListElement(li);
     if (cursor != NULL) {
-        printf("%3u. %*s = ", count++, - maxnamelen, cursor->key);
-        if (cursor->exp) {
-            printf("%s", cursor->expression);
-        } else {
-            printf("%g", num_get_d(cursor->value));
-        }
-        if (cursor->description) {
-            printf("\n     :: %s", cursor->description);
-        }
-        printf("\n");
+        display_var(cursor, count++, digits);
         while ((cursor = (variable_t *)nextListElement(li)) != NULL) {
-            printf("\n%3u. %*s = ", count++, -maxnamelen, cursor->key);
-            if (cursor->exp) {
-                printf("%s", cursor->expression);
-            } else {
-                printf("%g", num_get_d(cursor->value));
-            }
-            if (cursor->description) {
-                printf("\n     :: %s", cursor->description);
-            }
-            printf("\n");
+            display_var(cursor, count++, digits);
         }
     }
     freeListIterator(li);
