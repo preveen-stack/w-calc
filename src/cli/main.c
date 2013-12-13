@@ -1591,4 +1591,30 @@ void display_explanation(const char*exp, ...)
     }
 }
 
+void display_stateline(const char *buf)
+{
+    printf("-> %s\n", buf);
+}
+
+void display_consts(void)
+{
+    size_t i;
+    size_t linelen = 0;
+
+    for (i = 0; consts[i].label; i++) {
+        if (linelen + strlen(consts[i].label) + 2 > 70) {
+            printf(",\n");
+            linelen = 0;
+        }
+        if (linelen == 0) {
+            printf("%s", consts[i].label);
+            linelen = strlen(consts[i].label);
+        } else {
+            printf(", %s", consts[i].label);
+            linelen += strlen(consts[i].label) + 2;
+        }
+    }
+    printf("\n");
+}
+
 /* vim:set expandtab: */

@@ -203,7 +203,7 @@ int loadStateFD(int       fd,
         }
         linebuf[linelen] = 0;
         if (conf.verbose) {
-            printf("-> %s\n", linebuf);
+            display_stateline(linebuf);
         }
         stripComments(linebuf);
         while (linebuf[strlen(linebuf) - 1] == ' ') {

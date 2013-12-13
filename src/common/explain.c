@@ -52,7 +52,7 @@ void explain(const char *str)
                             "Here is the list of the ones currently understood;\n"
                             "each can be explained in detail individually (some\n"
                             "mean the same thing).\n");
-        printconsts();
+        display_consts();
     } else if (*mystr == '\\') {       // it's a command
         explain_command(mystr, 0);
     } else if (isconst(mystr) != W_notaconstant) {      // it's a constant
