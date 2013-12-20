@@ -4,7 +4,6 @@
 
 /* System Headers */
 #include <string.h>
-#include <stdio.h>
 
 /* Internal Headers */
 #include "isconst.h"
