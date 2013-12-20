@@ -10,7 +10,6 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-#include <stdio.h>
 #include <stdlib.h> /* for calloc() */
 #include <string.h> /* for strcmp() */
 #include "number.h"
