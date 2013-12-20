@@ -67,7 +67,7 @@ void explain(const char *str)
 
         add_a_slash[0] = '\\';
         add_a_slash[1] = 0;
-        strncat(add_a_slash, mystr, len);
+        strncat(add_a_slash, mystr, len - 2);
         if (explain_command(add_a_slash, 1) == -1) {
             report_error("%s is neither a command, constant, function, or variable.\n", mystr);
         }
