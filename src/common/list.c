@@ -4,7 +4,6 @@
 
 /* System Headers */
 #include <stdlib.h>                    /* for free() */
-#include <stdio.h>                     /* for fprintf() */
 #include <string.h>                    /* for memset() */
 
 /* Internal Headers */
@@ -214,8 +213,7 @@ void addToList(List *lst,
     pl->payload = addme;
     pl->next    = NULL;
     if (!lst) {
-        fprintf(stderr, "null list passed\n");
-        exit(EXIT_FAILURE);
+        return;
     }
     list = *lst;
     if (!list) {
@@ -245,8 +243,7 @@ void addToListHead(List *lst,
     pl->payload = addme;
     pl->next    = NULL;
     if (!lst) {
-        fprintf(stderr, "null list passed\n");
-        exit(EXIT_FAILURE);
+        return;
     }
     list = *lst;
     if (!list) {
@@ -293,9 +290,6 @@ void *peekListElement(List   list,
     size_t              counter;
 
     if (!list || !list->head || (list->len <= n)) {
-        if (!list) {
-            fprintf(stderr, "peekListElement: null List passed\n");
-        }
         return NULL;
     }
     pl = list->head;
@@ -319,9 +313,6 @@ void *getListElement(List   list,
     struct _listheader *returnme;
 
     if (!list || !list->head || (list->len <= n)) {
-        if (!list) {
-            fprintf(stderr, "getListElement: null List passed\n");
-        }
         return NULL;
     }
     pl = list->head;
@@ -429,9 +420,6 @@ void removeFromList(List  list,
     struct _listheader *returnme;
 
     if (!list || !list->head) {
-        if (!list) {
-            fprintf(stderr, "getListElement: null List passed\n");
-        }
         return;
     }
     pl = list->head;
