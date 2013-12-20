@@ -893,6 +893,20 @@ int main(int   argc,
                 snprintf(prompt, 30, "%s->%s ", colors[uiselect[PROMPT]], colors[RESET]);
                 readme = readline(prompt);
             }
+            if (!readme) {
+                /* from the readline manpage:
+                 *      readline returns the text of the line read. A blank
+                 *      line returns the empty string. If EOF is encountered
+                 *      while reading a line, and the line is empty, NULL is
+                 *      returned. If an eof is read with a non-empty line, it
+                 *      is treated as a newline.
+                 * This means: readme == NULL is a perfectly reasonable
+                 * response from readline(), AND it means something
+                 * significant. DO NOT DO errno PARSING HERE!!!!
+                 */
+                printf("\n");
+                break;
+            }
 #else
             {
                 char         c;
@@ -913,20 +927,6 @@ int main(int   argc,
                 }
             }
 #endif      /* ifdef HAVE_LIBREADLINE */
-            if (!readme) {
-                /* from the readline manpage:
-                 *      readline returns the text of the line read. A blank
-                 *      line returns the empty string. If EOF is encountered
-                 *      while reading a line, and the line is empty, NULL is
-                 *      returned. If an eof is read with a non-empty line, it
-                 *      is treated as a newline.
-                 * This means: readme == NULL is a perfectly reasonable
-                 * response from readline(), AND it means something
-                 * significant. DO NOT DO errno PARSING HERE!!!!
-                 */
-                printf("\n");
-                break;
-            }
             /* if there is a line */
             if (strlen(readme)) {
                 if (!strcmp(readme, "q") || !strcmp(readme, "quit") ||
