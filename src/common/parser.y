@@ -337,7 +337,7 @@ command : HEX_CMD {
 	int i;
 	unsigned int len = strlen($1)+1;
 	open_file = malloc(len);
-        strncpy(open_file, len, $1);
+        strncpy(open_file, $1, len);
 	/* strip trailing spaces */
 	for (i=strlen(open_file)-1;i>=0;i--) {
 		if (open_file[i] != ' ') break;
