@@ -31,11 +31,34 @@
 #include "string_manip.h"
 #include "calculator.h"
 #include "variables.h"
+#include "output.h"
 
 #include "files.h"
 
 /* this is for communicating with the scanner */
 char *open_file = NULL;
+
+static inline void tristrncat(char       *dest,
+                              size_t      len,
+                              const char *one,
+                              const char *two,
+                              const char *three)
+{
+    size_t i;
+    size_t written = 0;
+
+    strncpy(dest, one, len);
+    for (i = 0; i < len; i++) {
+        if (dest[i] == 0) { break; }
+    }
+    written = i;
+    strncat(dest, two, len - written);
+    for (i = written; i < len; i++) {
+        if (dest[i] == 0) { break; }
+    }
+    written = i;
+    strncat(dest, three, len - written);
+}
 
 int openDotFile(const char *dotFileName,
                 int         flags)
@@ -55,7 +78,7 @@ int openDotFile(const char *dotFileName,
 #endif
 
     filename = malloc(sizeof(char) * namelen + 1);
-    snprintf(filename, namelen, "%s/.%s", home, dotFileName);
+    tristrncat(filename, namelen, home, "/.", dotFileName);
     fd       = open(filename, flags, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
     free(filename);
     if (fd < 0) {
@@ -100,9 +123,9 @@ int saveState(char *filename)
                 break;
             }
             if (keyval->exp) {
-                cptr = malloc(strlen(keyval->expression) + 3);
-                snprintf(cptr, strlen(keyval->expression) + 3, "'%s'",
-                         keyval->expression);
+                const size_t len = strlen(keyval->expression) + 3;
+                cptr = malloc(len);
+                tristrncat(cptr, len, "'", keyval->expression, "'");
             } else {
                 cptr = strdup(print_this_result(keyval->value, standard_output, NULL, NULL));
             }
@@ -114,9 +137,9 @@ int saveState(char *filename)
             }
             free(cptr);
             if (keyval->description) {
-                cptr = malloc(strlen(keyval->description) + 4);
-                snprintf(cptr, strlen(keyval->description) + 4, " '%s'",
-                         keyval->description);
+                const size_t len = strlen(keyval->expression) + 4;
+                cptr   = malloc(len);
+                tristrncat(cptr, len, " '", keyval->description, "'");
                 retval = write(fd, cptr, strlen(cptr));
                 if (retval < (int)strlen(cptr)) {
                     return_error = errno;
@@ -288,8 +311,9 @@ int storeVar(const char *variable)
                 goto exit_storeVar;
             }
             if (keyval.exp) {
-                cptr = malloc(strlen(keyval.exp) + 4);
-                snprintf(cptr, strlen(keyval.exp) + 4, "'%s' ", keyval.exp);
+                const size_t len = strlen(keyval.exp) + 4;
+                cptr = malloc(len);
+                tristrncat(cptr, len, "'", keyval.exp, "' ");
             } else {
                 cptr = strdup(print_this_result(keyval.val, standard_output, NULL, NULL));
             }
@@ -301,8 +325,9 @@ int storeVar(const char *variable)
             }
             free(cptr);
             if (keyval.desc) {
-                cptr   = malloc(strlen(keyval.desc) + 3);
-                snprintf(cptr, strlen(keyval.desc) + 3, "'%s'", keyval.desc);
+                const size_t len = strlen(keyval.desc) + 3;
+                cptr   = malloc(len);
+                tristrncat(cptr, len, "'", keyval.desc, "'");
                 retval = write(fd, cptr, strlen(cptr));
                 if (retval < (int)strlen(cptr)) {
                     return_error = errno;
