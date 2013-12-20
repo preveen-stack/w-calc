@@ -50,6 +50,20 @@
 #define YYLVALAC (&yylval)
 #endif
 
+/* a bunch of prototypes for suppressing warnings that might scare people */
+int yyget_lineno(void);
+FILE *yyget_in(void);
+FILE *yyget_out(void);
+int yyget_leng(void);
+char *yyget_text(void);
+void yyset_lineno(int);
+void yyset_in(FILE *);
+void yyset_out(FILE *);
+int yyget_debug(void);
+void yyset_debug(int);
+int yylex_destroy(void);
+/* end scary prototypes */
+
 int line_is_a_command = 0;
 int column = 0;
 int last_word = 0;
@@ -633,7 +647,7 @@ zeta { POS_STR(); return(WZETA); }
     strstrip(',', yytext);
 
     if (yydebug)
-        printf("ambiguous %s\n", yytext);
+        Dprintf("ambiguous %s\n", yytext);
 
     retval = num_init_set_str(YYLVALAC->number, yytext, DEFAULT_BASE);
 
@@ -656,7 +670,7 @@ zeta { POS_STR(); return(WZETA); }
     int retval;
 
     Dprintf("zero-optional decimal\n");
-    if (yydebug) printf("nonambiguous %s => ", yytext);
+    if (yydebug) Dprintf("nonambiguous %s => ", yytext);
     retval = num_init_set_str(YYLVALAC->number, yytext, DEFAULT_BASE);
     if (-1 == retval) {
         report_error("Invalid characters for base 10");
@@ -679,7 +693,7 @@ zeta { POS_STR(); return(WZETA); }
     /* strip out ignored characters */
     strstrip(',',yytext);
 
-    if (yydebug) printf("complex one %s => ", yytext);
+    if (yydebug) Dprintf("complex one %s => ", yytext);
     retval = num_init_set_str(YYLVALAC->number, yytext, DEFAULT_BASE);
 
     if (-1 == retval) {
@@ -710,7 +724,7 @@ zeta { POS_STR(); return(WZETA); }
     int retval;
 
     Dprintf("hex\n");
-    if (yydebug) printf("complex one %s => ", yytext);
+    if (yydebug) Dprintf("complex one %s => ", yytext);
     retval = num_init_set_str(YYLVALAC->number,yytext,16);
 
     if (-1 == retval) {
