@@ -14,7 +14,6 @@
 char *strchr(), *strrchr();
 #endif
 #include <stdlib.h>
-#include <stdio.h>
 
 #include "number.h"
 
