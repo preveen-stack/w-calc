@@ -803,10 +803,8 @@ int main(int   argc,
 
             using_history();
             filename = malloc(strlen(home) + strlen(historyfile) + 2);
-            snprintf(filename,
-                     strlen(home) + strlen(historyfile) + 1,
-                     "%s%s",
-                     home, historyfile);
+            strcpy(filename, home);
+            strcat(filename, historyfile);
             if (read_history(filename)) {
                 if (errno != ENOENT) {
                     perror("Reading History");
