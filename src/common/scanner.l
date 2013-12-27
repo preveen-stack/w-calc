@@ -50,20 +50,6 @@
 #define YYLVALAC (&yylval)
 #endif
 
-/* a bunch of prototypes for suppressing warnings that might scare people */
-int yyget_lineno(void);
-FILE *yyget_in(void);
-FILE *yyget_out(void);
-int yyget_leng(void);
-char *yyget_text(void);
-void yyset_lineno(int);
-void yyset_in(FILE *);
-void yyset_out(FILE *);
-int yyget_debug(void);
-void yyset_debug(int);
-int yylex_destroy(void);
-/* end scary prototypes */
-
 int line_is_a_command = 0;
 int column = 0;
 int last_word = 0;
