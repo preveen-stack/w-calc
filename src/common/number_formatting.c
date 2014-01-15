@@ -315,7 +315,7 @@ char *full_precision_formatted_number(const char *digits,
     size_t length;
     size_t full_length;
     size_t decimal_count = 0;
-    size_t printed;
+    //size_t printed;
     char  *retstring, *curs;
     size_t d_index = 0;
 
@@ -382,10 +382,10 @@ char *full_precision_formatted_number(const char *digits,
 
     // this variable exists because snprintf's return value is unreliable.
     // and can be larger than the number of digits printed
-    printed = ((length - 1 < strlen(&digits[d_index])) ? length - 1 : strlen(&digits[d_index]));
+    //printed = ((length - 1 < strlen(&digits[d_index])) ? length - 1 : strlen(&digits[d_index]));
     snprintf(curs, length, "%s", &digits[d_index]);
-    length        -= printed;
-    decimal_count += printed;
+    //length        -= printed;
+    //decimal_count += printed;
 
     // strip off the trailing 0's
     zero_strip(retstring);
@@ -411,7 +411,7 @@ char *automatically_formatted_number(const char *digits,
     size_t     length;
     size_t     full_length;
     size_t     decimal_count = 0;
-    size_t     printed;
+    //size_t     printed;
     char      *retstring, *curs;
     size_t     d_index      = 0;
     const long original_exp = exp - 1;
@@ -481,10 +481,10 @@ char *automatically_formatted_number(const char *digits,
 
     // this variable exists because snprintf's return value is unreliable.
     // and can be larger than the number of digits printed
-    printed = ((length - 1 < strlen(digits + d_index)) ? length - 1 : strlen(digits + d_index));
+    //printed = ((length - 1 < strlen(digits + d_index)) ? length - 1 : strlen(digits + d_index));
     snprintf(curs, length, "%s", digits + d_index);
-    length        -= printed;
-    decimal_count += printed;
+    //length        -= printed;
+    //decimal_count += printed;
 
     if (precision == -1) {
         char *period;

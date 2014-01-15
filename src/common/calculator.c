@@ -337,7 +337,6 @@ static char *flatten(char *str)
             char *tostring   = nstr;
 
             // nstr is the new string, str is the input string
-            tostring = nstr;
             while (fromstring != curs) {        // copy up to the curs (the beginning of the var name)
                 *tostring = *fromstring;
                 ++fromstring;
@@ -747,8 +746,10 @@ static char *print_this_result_dbl(const double result, int output, char *nad, c
             case HEXADECIMAL_FORMAT:
                 curs = pa + (conf.print_prefixes ? 2 : 0);
                 strswap('.', conf.dec_delimiter, pa);
+                goto hexoct_body;
             case OCTAL_FORMAT:
                 curs = pa + (conf.print_prefixes ? 1 : 0);
+hexoct_body:
                 {
                     long int     temp = result;
                     unsigned int t    = 0;
