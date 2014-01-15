@@ -1,8 +1,3 @@
-/*
- * stdin
- * Copyright (c) 2013 Micron Technology, Inc.
- *
- */
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
@@ -63,9 +58,8 @@ size_t numvars()
 /* prints out all the variables */
 void printvariables(void)
 {   /*{{{*/
-    ListIterator li         = NULL;
-    variable_t  *cursor     = NULL;
-    unsigned     count      = 1;
+    ListIterator li     = NULL;
+    variable_t  *cursor = NULL;
     unsigned     digits = 1;
 
     if (!them || (listLen(them) == 0)) {
@@ -83,6 +77,7 @@ void printvariables(void)
     li     = getListIterator(them);
     cursor = (variable_t *)nextListElement(li);
     if (cursor != NULL) {
+        unsigned count = 1;
         display_var(cursor, count++, digits);
         while ((cursor = (variable_t *)nextListElement(li)) != NULL) {
             display_var(cursor, count++, digits);

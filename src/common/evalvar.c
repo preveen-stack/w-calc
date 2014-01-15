@@ -14,7 +14,7 @@
 char *evalvar(const char *varname)
 {
     struct answer a;
-    char         *varvalue, junk;
+    char          junk;
     Number        f;
 
     a = getvar_full(varname);
@@ -27,7 +27,7 @@ char *evalvar(const char *varname)
             num_set(f, a.val);
             num_free(a.val);
         }
-        varvalue = num_to_str_complex(f, 10, 0, -1, 1, &junk);
+        char *varvalue = num_to_str_complex(f, 10, 0, -1, 1, &junk);
         num_free(f);
         return varvalue;
     } else {
@@ -38,7 +38,7 @@ char *evalvar(const char *varname)
 char *evalvar_noparse(const char *varname)
 {
     struct answer a;
-    char         *varvalue, junk;
+    char          junk;
     Number        f;
 
     a = getvar_full(varname);
@@ -49,7 +49,7 @@ char *evalvar_noparse(const char *varname)
         // it is a value
         num_init_set(f, a.val);
         num_free(a.val);
-        varvalue = num_to_str_complex(f, 10, 0, -1, 1, &junk);
+        char *varvalue = num_to_str_complex(f, 10, 0, -1, 1, &junk);
         num_free(f);
         return varvalue;
     } else {

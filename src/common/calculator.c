@@ -236,7 +236,7 @@ static char *flatten(char *str)
 {                                      /*{{{ */
     char         *curs = str, *eov, *nstr;
     char         *varname, *varvalue;
-    size_t        olen, nlen, changedlen, varnamelen = 100;
+    size_t        changedlen, varnamelen = 100;
     struct answer a;
     char          standard_output_save = standard_output;
 
@@ -292,38 +292,42 @@ static char *flatten(char *str)
             }
             varname[i] = 0;
         }
-        olen = strlen(varname);
+        {
+            size_t olen = strlen(varname);
 
-        // if it's a variable, evaluate it
-        a = getvar_full(varname);
-        if (!a.err) {                  // it is a var
-            Number f;
+            // if it's a variable, evaluate it
+            a = getvar_full(varname);
+            if (!a.err) {                  // it is a var
+                Number f;
 
-            num_init(f);
-            if (a.exp) {               // it is an expression
-                parseme(a.exp);
-                num_set(f, last_answer);
-            } else {                   // it is a value
-                num_set(f, a.val);
-                num_free(a.val);
+                num_init(f);
+                if (a.exp) {               // it is an expression
+                    parseme(a.exp);
+                    num_set(f, last_answer);
+                } else {                   // it is a value
+                    num_set(f, a.val);
+                    num_free(a.val);
+                }
+                // get the number
+                {
+                    char junk;
+
+                    // This value must fully reproduce the contents of f (thus, the -2 in arg 4)
+                    varvalue = num_to_str_complex(f, 10, 0, -2, 1, &junk);
+                }
+                num_free(f);
+            } else {                       // not a known var: itza literal (e.g. cos)
+                varvalue = (char *)strdup(varname);
             }
-            // get the number
             {
-                char junk;
+                size_t nlen = strlen(varvalue);
+                free(varname);
 
-                // This value must fully reproduce the contents of f (thus, the -2 in arg 4)
-                varvalue = num_to_str_complex(f, 10, 0, -2, 1, &junk);
+                // now, put it back in the string
+                // it is a var, and needs parenthesis
+                changedlen = strlen(str) + nlen - olen + 1;
             }
-            num_free(f);
-        } else {                       // not a known var: itza literal (e.g. cos)
-            varvalue = (char *)strdup(varname);
         }
-        nlen = strlen(varvalue);
-        free(varname);
-
-        // now, put it back in the string
-        // it is a var, and needs parenthesis
-        changedlen = strlen(str) + nlen - olen + 1;
         if (!a.err) {
             changedlen += 2;           // space for parens if it's a variable
         }
@@ -417,7 +421,7 @@ static int find_recursion_core(List oldvars)
     ListIterator  oldvarsIterator;
     int           retval = 0;
     struct answer a;
-    char         *newVarname = NULL, *oldVarname = NULL;
+    char         *newVarname = NULL;
 
     a = getvar_full((char *)peekAheadInList(oldvars));
     if (a.err) {
@@ -434,6 +438,7 @@ static int find_recursion_core(List oldvars)
     // see if we've seen it before (i.e. it's in oldvars)
     while (listLen(newvars) > 0) {
         newVarname = (char *)getHeadOfList(newvars);
+        char *oldVarname;
         while ((oldVarname =
                     (char *)nextListElement(oldvarsIterator)) != NULL) {
             if (!strcmp(newVarname, oldVarname)) {
@@ -751,13 +756,13 @@ static char *print_this_result_dbl(const double result, int output, char *nad, c
                 curs = pa + (conf.print_prefixes ? 1 : 0);
 hexoct_body:
                 {
-                    long int     temp = result;
-                    unsigned int t    = 0;
+                    long int temp = result;
 
                     snprintf(pa, 310, format, temp);
                     if (conf.rounding_indication ==
                         SIG_FIG_ROUNDING_INDICATION) {
                         if (sig_figs < UINT32_MAX) {
+                            unsigned int t = 0;
                             while (curs && *curs) {
                                 ++t;
                                 ++curs;

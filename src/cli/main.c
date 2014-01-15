@@ -498,7 +498,7 @@ int main(int   argc,
     int   tty, i;
     short cmdline_input = 0;
 
-    yydebug = 1;                       /* turn on ugly YACC debugging */
+    // yydebug = 1;                       /* turn on ugly YACC debugging */
     yydebug = 0;                       /* turn off ugly YACC debugging */
 
     initvar();
@@ -905,7 +905,7 @@ int main(int   argc,
                 printf("\n");
                 break;
             }
-#else
+#else /* ifdef HAVE_LIBREADLINE */
             {
                 char         c;
                 unsigned int i = 0;
@@ -988,14 +988,13 @@ int main(int   argc,
         fprintf(stderr, "Could not determine terminal type.\n");
     } else {
         /* if stdin is ANYTHING ELSE (a pipe, a file, etc), don't prompt */
-        char        *line, gotten;
         unsigned int linelen = 0, maxlinelen = BIG_STRING;
         extern int   show_line_numbers;
 
         show_line_numbers = 1;
         while (1) {
-            line   = calloc(maxlinelen, sizeof(char));
-            gotten = fgetc(stdin);
+            char *line   = calloc(maxlinelen, sizeof(char));
+            char  gotten = fgetc(stdin);
             while (gotten != '\n' && !feof(stdin) && !ferror(stdin)) {
                 line[linelen] = gotten;
                 gotten        = fgetc(stdin);
@@ -1113,7 +1112,7 @@ static enum ui_colors str2color(const char *str)
     }
 }
 
-#define HANDLECOLOR(x) else if (!strcasecmp(key, #x "]")) { uiselect[x] = str2color(value); }
+#define HANDLECOLOR(x) else if (!strcasecmp(key, # x "]")) { uiselect[x] = str2color(value); }
 static int assign_color_prefs(const char *key,
                               const char *value)
 {
@@ -1128,23 +1127,24 @@ static int assign_color_prefs(const char *key,
     } else if (!strcasecmp(key, "conversion_unit]")) {
         uiselect[CONV_UNIT] = str2color(value);
     }
-        HANDLECOLOR(PROMPT)
-        HANDLECOLOR(APPROX_ANSWER)
-        HANDLECOLOR(EXACT_ANSWER)
-        HANDLECOLOR(ERR_LOCATION)
-        HANDLECOLOR(ERR_TEXT)
-        HANDLECOLOR(PREF_NAME)
-        HANDLECOLOR(PREF_VAL)
-        HANDLECOLOR(PREF_CMD)
-        HANDLECOLOR(STATUS)
-        HANDLECOLOR(VAR_NAME)
-        HANDLECOLOR(VAR_DESC)
-        HANDLECOLOR(SUBVAR_NAME)
-        HANDLECOLOR(EXPLANATION)
+    HANDLECOLOR(PROMPT)
+    HANDLECOLOR(APPROX_ANSWER)
+    HANDLECOLOR(EXACT_ANSWER)
+    HANDLECOLOR(ERR_LOCATION)
+    HANDLECOLOR(ERR_TEXT)
+    HANDLECOLOR(PREF_NAME)
+    HANDLECOLOR(PREF_VAL)
+    HANDLECOLOR(PREF_CMD)
+    HANDLECOLOR(STATUS)
+    HANDLECOLOR(VAR_NAME)
+    HANDLECOLOR(VAR_DESC)
+    HANDLECOLOR(SUBVAR_NAME)
+    HANDLECOLOR(EXPLANATION)
     else {
         char *res = strdup(key);
         *strchr(res, ']') = 0;
         fprintf(stderr, "Unrecognized colorable resource: '%s'\n", res);
+        free(res);
         return 0;
     }
     return 1;
@@ -1328,7 +1328,7 @@ static int read_prefs(void)
             if (f[curs] == '#') { // skip to the next line
                 do {
                     curs++;
-                } while (f[curs] != '\n' && curs < curs_max);
+                } while (curs < curs_max && f[curs] != '\n');
             }
             curs++;
         }
@@ -1581,7 +1581,8 @@ void display_valvar_explanation(const char *str,
     }
 }
 
-void display_explanation(const char*exp, ...)
+void display_explanation(const char *exp,
+                         ...)
 {
     if (standard_output) {
         va_list args;

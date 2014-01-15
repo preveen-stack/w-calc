@@ -34,12 +34,12 @@ struct cleanup {
     void           *data;
 };
 
-static List               lPool        = NULL;
-static List               lPoolUsed    = NULL;
-static unsigned long long lPoolSize    = 0;     /* for exponential growth */
-static struct cleanup    *lCleanupPool = NULL;
-static inline List get_l(void);
-static void        fill_l_pool(void);
+static List                       lPool        = NULL;
+static List                       lPoolUsed    = NULL;
+static unsigned long long         lPoolSize    = 0; /* for exponential growth */
+static struct cleanup            *lCleanupPool = NULL;
+static inline List                get_l(void);
+static void                       fill_l_pool(void);
 
 static struct _listheader        *lhPool        = NULL;
 static unsigned long long         lhPoolSize    = 0; /* for exponential growth */
@@ -58,22 +58,20 @@ void lists_init(void)
 /* This clean up the memory pool(s) */
 void lists_cleanup(void)
 {                                      /*{{{ */
-    struct cleanup     *freec;
-    struct _listheader *freeme;
-    List                freeme2;
+    struct cleanup *freec;
 
     while (lhCleanupPool != NULL) {
         freec         = lhCleanupPool;
-        freeme        = freec->data;
+        struct _listheader *freeme = freec->data;
         lhCleanupPool = lhCleanupPool->next;
         free(freeme);
         free(freec);
     }
     while (lCleanupPool != NULL) {
         freec        = lCleanupPool;
-        freeme2      = freec->data;
+        List freeme = freec->data;
         lCleanupPool = lCleanupPool->next;
-        free(freeme2);
+        free(freeme);
         free(freec);
     }
 }                                      /*}}} */
@@ -308,7 +306,6 @@ void *getListElement(List   list,
                      size_t n)
 {                                      /*{{{ */
     struct _listheader *pl;
-    size_t              counter;
     void               *payload = NULL;
     struct _listheader *returnme;
 
@@ -317,6 +314,7 @@ void *getListElement(List   list,
     }
     pl = list->head;
     if (n > 0) {
+        size_t counter;
         for (counter = 1; counter < n; counter++) {
             if (pl->next == NULL) {
                 return NULL;
@@ -417,7 +415,6 @@ void removeFromList(List  list,
                     void *item)
 {   /*{{{*/
     struct _listheader *pl;
-    struct _listheader *returnme;
 
     if (!list || !list->head) {
         return;
@@ -443,7 +440,7 @@ void removeFromList(List  list,
             pl = pl->next;
         }
         if (pl->next && (pl->next->payload == item)) {
-            returnme = pl->next;
+            struct _listheader *returnme = pl->next;
             pl->next = pl->next->next;
             poolReturn(returnme);
         }

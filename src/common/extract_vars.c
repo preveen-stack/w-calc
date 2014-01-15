@@ -15,7 +15,7 @@
 
 List extract_vars(char *str)
 {   /*{{{*/
-    char *curs, *eov, save_char;
+    char *curs, *eov;
     List  variables = NULL;
     char *varname;
 
@@ -50,16 +50,18 @@ List extract_vars(char *str)
         }
         // if we did find something, pull out the variable name
         eov = curs;
-        while (eov && *eov &&
+        while (*eov &&
                (isalpha((int)(*eov)) || *eov == '_' || *eov == ':' ||
                 isdigit((int)(*eov)))) {
             eov++;
         }
-        save_char = *eov;
-        *eov      = 0;
-        varname   = (char *)strdup(curs);
-        *eov      = save_char;
-        curs      = eov;
+        {
+            char save_char = *eov;
+            *eov    = 0;
+            varname = (char *)strdup(curs);
+            *eov    = save_char;
+            curs    = eov;
+        }
 
         // add it to the set of known variables
         if (!isfunc(varname) && (isconst(varname) == W_notaconstant)) {
