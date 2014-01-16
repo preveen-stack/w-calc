@@ -921,6 +921,7 @@ int main(int   argc,
                     ++i;
                 }
                 if (feof(stdin) || ferror(stdin)) {
+                    printf("\n");
                     break;
                 }
             }
