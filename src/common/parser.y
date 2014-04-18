@@ -57,7 +57,7 @@ int show_line_numbers = 0;
 enum functions function;
 enum operations operation;
 Number number;
-int integer;
+long integer;
 enum commands cmd;
 char * variable;
 char character;
