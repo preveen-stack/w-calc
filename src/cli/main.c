@@ -341,8 +341,8 @@ enum ui_colors {
     BOLDWHITE,
 };
 const char *const colors[] = {
-    "",
-    "\033[0m",
+    "",        // NONE
+    "\033[0m", // RESET
     "\033[30m",
     "\033[31m",
     "\033[32m",
@@ -377,23 +377,25 @@ enum ui_pieces {
     VAR_DESC,
     SUBVAR_NAME,
     EXPLANATION,
+    UNCOLOR,
 };
 int  black_and_white_ui[] = {
-    NONE,
-    NONE,
-    NONE,
-    NONE,
-    NONE,
-    NONE,
-    NONE,
-    NONE,
-    NONE,
-    NONE,
-    NONE,
-    NONE,
-    NONE,
-    NONE,
-    NONE,
+    NONE, // PROMPT
+    NONE, // CONV_CAT
+    NONE, // CONV_UNIT
+    NONE, // APPROX_ANSWER
+    NONE, // EXACT_ANSWER
+    NONE, // ERR_LOCATION
+    NONE, // ERR_TEXT
+    NONE, // PREF_NAME
+    NONE, // PREF_VAL
+    NONE, // PREF_CMD
+    NONE, // STATUS
+    NONE, // VAR_NAME
+    NONE, // VAR_DESC
+    NONE, // SUBVAR_NAME
+    NONE, // EXPLANATION
+    NONE, // UNCOLOR
 };
 int  color_ui[] = {
     BLUE,        // PROMPT
@@ -411,16 +413,17 @@ int  color_ui[] = {
     CYAN,        // VAR_DESC
     CYAN,        // SUBVAR_NAME
     NONE,        // EXPLANATION
+    RESET,       // UNCOLOR
 };
 int *uiselect = black_and_white_ui;
 
 static void PrintConversionUnitCategory(int nCategory)
 {
-    printf("\n%s%s%s\n", colors[uiselect[CONV_CAT]], conversion_names[nCategory], colors[RESET]);
+    printf("\n%s%s%s\n", colors[uiselect[CONV_CAT]], conversion_names[nCategory], colors[uiselect[UNCOLOR]]);
     size_t unit, nAka;
 
     for (unit = 0; conversions[nCategory][unit].name; ++unit) {
-        printf("\n%s%s%s: ", colors[uiselect[CONV_UNIT]], conversions[nCategory][unit].name, colors[RESET]);
+        printf("\n%s%s%s: ", colors[uiselect[CONV_UNIT]], conversions[nCategory][unit].name, colors[uiselect[UNCOLOR]]);
         for (nAka = 0; nAka < 9; ++nAka) {
             if (conversions[nCategory][unit].aka[nAka] != NULL) {
                 if (nAka > 0) { printf(", "); }
@@ -439,9 +442,9 @@ void show_answer(char *err,
         display_and_clear_errstring();
     }
     if (uncertain) {
-        printf("%s%s %s%s\n", colors[uiselect[APPROX_ANSWER]], conf.print_equal ? "~=" : "  ", colors[RESET], answer);
+        printf("%s%s %s%s\n", colors[uiselect[APPROX_ANSWER]], conf.print_equal ? "~=" : "  ", colors[uiselect[UNCOLOR]], answer);
     } else {
-        printf("%s%s %s%s\n", colors[uiselect[EXACT_ANSWER]], conf.print_equal ? " =" : "  ", colors[RESET], answer);
+        printf("%s%s %s%s\n", colors[uiselect[EXACT_ANSWER]], conf.print_equal ? " =" : "  ", colors[uiselect[UNCOLOR]], answer);
     }
 } /*}}}*/
 
@@ -459,10 +462,10 @@ void display_and_clear_errstring()
             for (i = 0; i < errloc; i++) {
                 fprintf(stderr, " ");
             }
-            fprintf(stderr, "%s^%s\n", colors[uiselect[ERR_LOCATION]], colors[RESET]);
+            fprintf(stderr, "%s^%s\n", colors[uiselect[ERR_LOCATION]], colors[uiselect[UNCOLOR]]);
             errloc = -1;
         }
-        fprintf(stderr, "%s%s%s", colors[uiselect[ERR_TEXT]], errstring, colors[RESET]);
+        fprintf(stderr, "%s%s%s", colors[uiselect[ERR_TEXT]], errstring, colors[uiselect[UNCOLOR]]);
         if (errstring[strlen(errstring) - 1] != '\n') {
             fprintf(stderr, "\n");
         }
@@ -888,7 +891,7 @@ int main(int   argc,
 #ifdef HAVE_LIBREADLINE
             {
                 char prompt[30] = "";
-                snprintf(prompt, 30, "%s->%s ", colors[uiselect[PROMPT]], colors[RESET]);
+                snprintf(prompt, 30, "%c%s%c->%c%s%c ", 1, colors[uiselect[PROMPT]], 2, 1, colors[uiselect[UNCOLOR]], 2);
                 readme = readline(prompt);
             }
             if (!readme) {
@@ -905,13 +908,13 @@ int main(int   argc,
                 printf("\n");
                 break;
             }
-#else /* ifdef HAVE_LIBREADLINE */
+#else       /* ifdef HAVE_LIBREADLINE */
             {
                 char         c;
                 unsigned int i = 0;
 
                 memset(readme, 0, BIG_STRING);
-                printf("%s->%s ", colors[uiselect[PROMPT]], colors[RESET]);
+                printf("%s->%s ", colors[uiselect[PROMPT]], colors[uiselect[UNCOLOR]]);
                 fflush(stdout);
                 c = fgetc(stdin);
                 while (c != '\n' && i < BIG_STRING && !feof(stdin) &&
@@ -1391,26 +1394,26 @@ static void prefline(const char *name,
 {
     if (name && val && cmd) {
         printf("%s%27s:%s %s%-24s%s -> ",
-               colors[uiselect[PREF_NAME]], name, colors[RESET],
-               colors[uiselect[PREF_VAL]], val, colors[RESET]);
+               colors[uiselect[PREF_NAME]], name, colors[uiselect[UNCOLOR]],
+               colors[uiselect[PREF_VAL]], val, colors[uiselect[UNCOLOR]]);
         if (strchr(cmd, ',')) {
             unsigned offset = 0;
             while (strchr(cmd + offset, ',')) {
                 unsigned cmdlen = strchr(cmd + offset, ',') - (cmd + offset);
                 printf("%s%.*s%s, ",
-                       colors[uiselect[PREF_CMD]], cmdlen, cmd + offset, colors[RESET]);
+                       colors[uiselect[PREF_CMD]], cmdlen, cmd + offset, colors[uiselect[UNCOLOR]]);
                 offset += cmdlen + 1;
             }
             printf("%s%s%s\n",
-                   colors[uiselect[PREF_CMD]], cmd + offset, colors[RESET]);
+                   colors[uiselect[PREF_CMD]], cmd + offset, colors[uiselect[UNCOLOR]]);
         } else {
             printf("%s%s%s\n",
-                   colors[uiselect[PREF_CMD]], cmd, colors[RESET]);
+                   colors[uiselect[PREF_CMD]], cmd, colors[uiselect[UNCOLOR]]);
         }
     } else if (name && val) {
         printf("%s%27s:%s %s%-24s%s\n",
-               colors[uiselect[PREF_NAME]], name, colors[RESET],
-               colors[uiselect[PREF_VAL]], val, colors[RESET]);
+               colors[uiselect[PREF_NAME]], name, colors[uiselect[UNCOLOR]],
+               colors[uiselect[PREF_VAL]], val, colors[uiselect[UNCOLOR]]);
     }
 }
 
@@ -1460,7 +1463,7 @@ void display_status(const char *format,
         va_start(args, format);
         vprintf(format, args);
         va_end(args);
-        printf("%s\n", colors[RESET]);
+        printf("%s\n", colors[uiselect[UNCOLOR]]);
     }
 }
 
@@ -1491,16 +1494,16 @@ void display_val(const char *name)
         char     approx = 0;
         char    *err;
         display_and_clear_errstring();
-        printf("%s%s%s", colors[uiselect[VAR_NAME]], name, colors[RESET]);
+        printf("%s%s%s", colors[uiselect[VAR_NAME]], name, colors[uiselect[UNCOLOR]]);
         val = getvar_full(name);
         if (val.exp) {
-            printf(" %s=%s %s\n", colors[uiselect[EXACT_ANSWER]], colors[RESET], val.exp);
+            printf(" %s=%s %s\n", colors[uiselect[EXACT_ANSWER]], colors[uiselect[UNCOLOR]], val.exp);
         } else {
             char *p = print_this_result(val.val, 0, &approx, &err);
             show_answer(err, approx, p);
         }
         if (val.desc) {
-            printf(":: %s%s%s\n", colors[uiselect[VAR_DESC]], val.desc, colors[RESET]);
+            printf(":: %s%s%s\n", colors[uiselect[VAR_DESC]], val.desc, colors[uiselect[UNCOLOR]]);
         }
     }
 }
@@ -1510,10 +1513,10 @@ void display_var(variable_t *v,
                  unsigned    digits)
 {
     printf("%*u. %s%s%s", digits, count,
-           colors[uiselect[VAR_NAME]], v->key, colors[RESET]);
+           colors[uiselect[VAR_NAME]], v->key, colors[uiselect[UNCOLOR]]);
     if (v->exp) {
         printf(" %s=%s %s\n",
-               colors[uiselect[EXACT_ANSWER]], colors[RESET],
+               colors[uiselect[EXACT_ANSWER]], colors[uiselect[UNCOLOR]],
                v->expression);
     } else {
         char  approx = 0;
@@ -1523,7 +1526,7 @@ void display_var(variable_t *v,
     }
     if (v->description) {
         printf("%*s %s%s%s\n", digits + 4, "::",
-               colors[uiselect[VAR_DESC]], v->description, colors[RESET]);
+               colors[uiselect[VAR_DESC]], v->description, colors[uiselect[UNCOLOR]]);
     }
 }
 
@@ -1533,9 +1536,9 @@ void display_expvar_explanation(const char *str,
                                 const char *desc)
 {
     printf("%s%s%s is the expression: '%s'\n", colors[uiselect[VAR_NAME]], str,
-           colors[RESET], exp);
+           colors[uiselect[UNCOLOR]], exp);
     if (desc) {
-        printf("Description: %s%s%s\n", colors[uiselect[VAR_DESC]], desc, colors[RESET]);
+        printf("Description: %s%s%s\n", colors[uiselect[VAR_DESC]], desc, colors[uiselect[UNCOLOR]]);
     }
     if (listLen(subvars) > 0) {
         unsigned maxnamelen = 0;
@@ -1553,12 +1556,12 @@ void display_expvar_explanation(const char *str,
             freeListIterator(si);
         }
         printf("%s%s%s uses the following variables:\n",
-               colors[uiselect[VAR_NAME]], str, colors[RESET]);
+               colors[uiselect[VAR_NAME]], str, colors[uiselect[UNCOLOR]]);
         while (listLen(subvars) > 0) {
             char *curstr = (char *)getHeadOfList(subvars);
             char *value  = evalvar_noparse(curstr);
 
-            printf("\t%s%*s%s\t(currently: %s)\n", colors[uiselect[SUBVAR_NAME]], -maxnamelen, curstr, colors[RESET],
+            printf("\t%s%*s%s\t(currently: %s)\n", colors[uiselect[SUBVAR_NAME]], -maxnamelen, curstr, colors[uiselect[UNCOLOR]],
                    value ? value : "undefined");
             if (curstr) {
                 free(curstr);
@@ -1575,10 +1578,10 @@ void display_valvar_explanation(const char *str,
                                 const char *desc)
 {
     printf("%s%s%s is a variable with the value: %s\n",
-           colors[uiselect[VAR_NAME]], str, colors[RESET],
+           colors[uiselect[VAR_NAME]], str, colors[uiselect[UNCOLOR]],
            print_this_result(*val, 0, NULL, NULL));
     if (desc) {
-        printf("Description: %s%s%s\n", colors[uiselect[VAR_DESC]], desc, colors[RESET]);
+        printf("Description: %s%s%s\n", colors[uiselect[VAR_DESC]], desc, colors[uiselect[UNCOLOR]]);
     }
 }
 
@@ -1592,7 +1595,7 @@ void display_explanation(const char *exp,
         va_start(args, exp);
         vprintf(exp, args);
         va_end(args);
-        printf("%s\n", colors[RESET]);
+        printf("%s\n", colors[uiselect[UNCOLOR]]);
     }
 }
 
