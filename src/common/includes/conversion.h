@@ -37,7 +37,7 @@ struct conv_req {
 };
 
 /* Conversion Types */
-#define MAX_TYPE       10
+#define MAX_TYPE       11
 #define LENGTH_C       0  /*-*/
 #define AREA_C         1  /*-*/
 #define VOLUME_C       2  /*-*/
@@ -48,7 +48,8 @@ struct conv_req {
 #define ACCELERATION_C 7  /*-*/
 #define TEMPERATURE_C  8  /*-*/
 #define ANGLE_C        9  /*-*/
-#define PRESSURE_C     10 /**/
+#define PRESSURE_C     10 /*-*/
+#define METRIC_C       11 /**/
 /* Astronomical Units */
 #define MAX_ASTRONOMICAL_UNIT 5
 #define A_METERS              0

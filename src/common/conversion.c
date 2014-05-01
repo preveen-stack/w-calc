@@ -29,6 +29,7 @@ const char *conversion_names[] = {
     "Temperatures",
     "Angles",
     "Pressures",
+    "Metric",
     NULL
 };
 
@@ -820,6 +821,32 @@ const struct conversion accelerations[] = {
     {NULL,NULL,{NULL}}
 };
 
+/* based on none */
+const struct conversion metric[] = {
+    {"10e-18",          "Atto",           {"a","atto",NULL}},
+    {"1e-2",            "Centi",          {"c","centi",NULL}},
+    {"10",              "Deca",            {"da","deca",NULL}},
+    {"0.1",             "Deci",           {"d","deci",NULL}},
+    {"1e18",            "Exa",            {"E","exa",NULL}},
+    {"1e-15",           "Femto",          {"f","femto",NULL}},
+    {"1e9",             "Giga",           {"G","giga",NULL}},
+    {"1e-2",            "Hecto",          {"h","hecto",NULL}},
+    {"1e3",             "Kilo",           {"k","kilo",NULL}},
+    {"1e6",             "Mega",           {"M","mega",NULL}},
+    {"1",               "none",           {"none",NULL}},
+    {"1e-6",            "Micro",          {"µ","micro",NULL}},
+    {"1e-3",            "Milli",          {"m","milli",NULL}},
+    {"1e-9",            "Nano",           {"n","nano",NULL}},
+    {"1e15",            "Peta",           {"P","peta",NULL}},
+    {"1e-12",           "Pico",           {"p","pico",NULL}},
+    {"1e12",            "Tera",           {"T","tera",NULL}},
+    {"1e-24",           "Yocto",          {"y","yocto",NULL}},
+    {"1e24",            "Yotta",          {"Y","yotta",NULL}},
+    {"1e-21",           "Zepto",          {"z","zepto",NULL}},
+    {"1e21",            "Zetta",          {"Z","zetta",NULL}},
+    {NULL,NULL,{NULL}}
+};
+
 /* based on the Pascal */
 const struct conversion pressures[] = {
     {"98.0665e3",   "Atmosphere (technical)",   {"atm.Tech","atmosphere.Tech",NULL}},
@@ -905,10 +932,9 @@ const struct conversion *conversions[] = {
     temperatures,
     angles,
     pressures,
+    metric,
     NULL
 };
-
-#define CONVERS(x) (x > 10) ? pressures : ((x > 9) ? angles : ((x > 8) ? temperatures : ((x > 7) ? accelerations : ((x > 6) ? forces : ((x > 5) ? powers : ((x > 4) ? speeds : ((x > 3) ? masses : ((x > 2) ? volumes : ((x > 1) ? areas : lengths)))))))))
 
 /* returns the category number of the unit */
 ssize_t identify_unit(const char *unit)
