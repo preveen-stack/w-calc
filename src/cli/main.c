@@ -891,7 +891,7 @@ int main(int   argc,
 #ifdef HAVE_LIBREADLINE
             {
                 char prompt[30] = "";
-                snprintf(prompt, 30, "%c%s%c->%c%s%c ", 1, colors[uiselect[PROMPT]], 2, 1, colors[uiselect[UNCOLOR]], 2);
+                snprintf(prompt, 30, "\1%s\2->\1%s\2 ", colors[uiselect[PROMPT]], colors[uiselect[UNCOLOR]]);
                 readme = readline(prompt);
             }
             if (!readme) {
