@@ -96,7 +96,7 @@ char *num_to_str_complex(const Number           num,
             Dprintf("sig figs = %zu\n", significant_figures);
             if (significant_figures < 2) {      /* MPFR-defined minimum (why?) */
                 num_free_str(s);
-                s = num_get_str(s, &e, base, 2, num);
+                s = num_get_str(NULL, &e, base, 2, num);
                 Dprintf("s=%s, e = %i\n", s, (int)e);
                 if (s[1] > '4') {      /* XXX: LAME! */
                     unsigned foo;
