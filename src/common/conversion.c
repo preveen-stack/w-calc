@@ -1044,6 +1044,7 @@ void uber_conversion (Number    output,
         (void)num_init_set_str(fromfac, ltable[fromunit].factor, 10);
         switch (utype) {
             case LENGTH_C:
+            case METRIC_C:
             case AREA_C:
             case VOLUME_C:
             case ANGLE_C:
