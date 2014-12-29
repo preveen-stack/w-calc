@@ -1055,6 +1055,7 @@ int main(int   argc,
                      *  fprintf(stderr, "\n");
                      * free(errstring);
                      * errstring = NULL;*/
+                    EXIT_EARLY(EXIT_FAILURE);
                 }
             }
             free(line);
