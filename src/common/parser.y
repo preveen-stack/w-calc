@@ -67,6 +67,7 @@ struct conv_req conver;
 %token DEC_CMD OCT_CMD HEX_CMD BIN_CMD GUARD_CMD DISPLAY_PREFS_CMD
 %token RADIAN_CMD REMEMBER_CMD LISTVAR_CMD STORE_CMD CMOD_CMD
 %token PRINT_HELP_CMD PREFIX_CMD INT_CMD VERBOSE_CMD DELIM_CMD
+%token <variable> ASSERT_CMD
 %token <integer> ENG_CMD HLIMIT_CMD ROUNDING_INDICATION_CMD
 %token <integer> PRECISION_CMD BITS_CMD BASE_CMD
 %token <conver> CONVERT_CMD
@@ -198,6 +199,14 @@ command : HEX_CMD {
 	$$ = isatty(0)?redisplay:nothing;
 	conf.output_format = DECIMAL_FORMAT;
         display_output_format(DECIMAL_FORMAT); }
+| ASSERT_CMD {
+	if (strcmp($1, pretty_answer)) {
+		fprintf(stderr, "   Pretty Answer is: '%s'\n", pretty_answer);
+		fprintf(stderr, "...should have been: '%s'\n", $1);
+		abort();
+	}
+	free($1);
+}
 | DSEP_CMD {
 	$$ = nothing;
 	if (conf.thou_delimiter != $1) {

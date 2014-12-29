@@ -84,6 +84,15 @@ SPACE		[ ]
 
 \\b(in(ary)?)?		{ line_is_a_command = 1; POS_STR(); return(BIN_CMD); }
 \\d(ec(imal)?)?		{ line_is_a_command = 1; POS_STR(); return(DEC_CMD); }
+\\assert{WHITESPACE}*.*  {
+	int i = 7;
+	while (isspace(yytext[i])) i++;
+	if (yytext[i] == 0) i--;
+	YYLVALAC->variable = strdup(yytext + i);
+	line_is_a_command = 1;
+	POS_STR();
+	return(ASSERT_CMD);
+}
 \\dsep{WHITESPACE}*.     {
 	int i = 5;
 	while (isspace(yytext[i])) i++;
