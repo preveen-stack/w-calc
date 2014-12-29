@@ -12,7 +12,9 @@ POSITIVE_TESTS = \
 				 conversion.test \
 				 website_math.test \
 				 factorial.test \
-				 formatting.test
+				 formatting.test \
+				 active_variable.test \
+				 vars.test
 
 XFAIL_TESTS = \
 			  err.assert.test \

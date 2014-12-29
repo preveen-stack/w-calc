@@ -1,6 +1,12 @@
 8/6 # should return 1.3333
+\assert 1.33333
 8/1 # should return 8
+\assert 8
 a+2 # should return 10
+\assert 10
 foo=5
+\assert 10
 foobar='sin(foo)'
+\assert 10
 foobar # should return 0.0871557
+\assert 0.0871557
