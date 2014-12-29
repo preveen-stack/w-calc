@@ -101,6 +101,7 @@ unsigned int sig_figs = UINT32_MAX;
 char  standard_output   = 1;
 char  not_all_displayed = 0;
 char *pa                = NULL;
+char *last_input        = NULL;
 
 struct _conf conf;
 
@@ -134,6 +135,17 @@ void parseme(const char *pthis)
     Dprintf("parsing: %s\n", pthis);
     sanitized = (char *)strdup(pthis);
 
+    /* Save a copy of the input */
+    {
+        extern int show_line_numbers;
+
+        if (show_line_numbers) {
+            if (last_input) {
+                free(last_input);
+            }
+            last_input = strdup(pthis);
+        }
+    }
     /* Convert to standard notation (american comma and period) if there are
      * numbers */
     // are there numbers?

@@ -70,9 +70,18 @@ extern int  history_truncate_file(char *,
 #define TRUEFALSE  (!strcmp(value, "yes") || !strcmp(value, "true") || !strcmp(value, "1"))
 #define BIG_STRING 4096
 #define VERSION    PACKAGE_VERSION
+#define EXIT_EARLY(code) do {  \
+        clearHistory();        \
+        cleanupvar();          \
+        num_free(last_answer); \
+        lists_cleanup();       \
+        fflush(NULL);          \
+        exit(code);            \
+} while (0)
 
-static int read_prefs(void);
-static int read_preload(void);
+static int  read_prefs(void);
+static int  read_preload(void);
+static void display_and_clear_errstring(void);
 
 /*
  * These are declared here because they're not in any header files.
@@ -83,13 +92,16 @@ static int read_preload(void);
 extern int yyparse(void);
 extern int yy_scan_string(const char *);
 
+static int exit_on_err = 0;
+
 #ifdef HAVE_LIBREADLINE
 /*@null@*/
 static List tc_options = NULL;
 
 /*@null@*/
-static char *tc_generator(const char *text,
-                          int         state)
+static char *
+tc_generator(const char *text,
+             int         state)
 {                                      /*{{{ */
     char *ret = getHeadOfList(tc_options);
 
@@ -101,8 +113,9 @@ static char *tc_generator(const char *text,
 }                                      /*}}} */
 
 /*@null@*/
-static char *tc_rounding(const char *text,
-                         int         state)
+static char *
+tc_rounding(const char *text,
+            int         state)
 {                                      /*{{{ */
     static unsigned int i          = 0;
     char               *rounding[] = { "none", "simple", "sig_fig", 0 };
@@ -120,8 +133,9 @@ static char *tc_rounding(const char *text,
 }                                      /*}}} */
 
 /*@null@*/
-static char *tc_engineering(const char *text,
-                            int         state)
+static char *
+tc_engineering(const char *text,
+               int         state)
 {                                      /*{{{ */
     static unsigned int i             = 0;
     char               *engineering[] = { "always", "never", "auto", "automatic", 0 };
@@ -154,14 +168,14 @@ char **qcommands = NULL;
                 textcurs++;                                                   \
                 comparechar++;                                                \
             } else { /* not a possibility: next! */                           \
-                textcurs = 0;                                                 \
+                textcurs    = 0;                                              \
                 compareword++;                                                \
                 comparechar = 0;                                              \
             }                                                                 \
         }                                                                     \
 } while (0)
 # define COMPLETE2(strs) do {                                       \
-        const unsigned textlen     = strlen(text);                  \
+        const unsigned textlen = strlen(text);                      \
         for (unsigned _c_i = 0; strs[_c_i].explanation; _c_i++) {   \
             const char *const *const _c_names = strs[_c_i].names;   \
             for (unsigned _c_j = 0; _c_names[_c_j]; _c_j++) {       \
@@ -173,7 +187,8 @@ char **qcommands = NULL;
         }                                                           \
 } while (0)
 
-static void build_qcommands(void)
+static void
+build_qcommands(void)
 {
     unsigned c_count = 0;
 
@@ -195,13 +210,14 @@ static void build_qcommands(void)
     qcommands[c_count] = NULL;
 }
 
-static char **wcalc_completion(const char *text,
-                               int         start,
-                               int         end)
+static char **
+wcalc_completion(const char *text,
+                 int         start,
+                 int         end)
 {                                      /*{{{ */
     /*extern const char *commands[];*/
-    char             **variables;
-    char             **retvals = NULL;
+    char **variables;
+    char **retvals = NULL;
 
     // printf("\ncompleting: %s\n", text);
     if ('\\' == rl_line_buffer[0]) {
@@ -432,7 +448,8 @@ int  color_ui[] = {
 };
 int *uiselect = black_and_white_ui;
 
-static void PrintConversionUnitCategory(int nCategory)
+static void
+PrintConversionUnitCategory(int nCategory)
 {
     printf("\n%s%s%s\n", colors[uiselect[CONV_CAT]], conversion_names[nCategory], colors[uiselect[UNCOLOR]]);
     size_t unit, nAka;
@@ -449,9 +466,10 @@ static void PrintConversionUnitCategory(int nCategory)
     printf("\n\n");
 }
 
-void show_answer(char *err,
-                 int   uncertain,
-                 char *answer)
+void
+show_answer(char *err,
+            int   uncertain,
+            char *answer)
 {   /*{{{*/
     if (err && strlen(err)) {
         display_and_clear_errstring();
@@ -463,7 +481,8 @@ void show_answer(char *err,
     }
 } /*}}}*/
 
-void display_and_clear_errstring()
+static void
+display_and_clear_errstring(void)
 {                                      /*{{{ */
     extern int   scanerror;
     extern char *errstring;
@@ -472,7 +491,12 @@ void display_and_clear_errstring()
     if (errstring && errstring[0]) {
         if (errloc != -1) {
             int i;
+            extern int   show_line_numbers;
+            extern char *last_input;
 
+            if (show_line_numbers && last_input) {
+                fprintf(stderr, "-> %s\n", last_input);
+            }
             fprintf(stderr, "   ");
             for (i = 0; i < errloc; i++) {
                 fprintf(stderr, " ");
@@ -487,20 +511,15 @@ void display_and_clear_errstring()
         free(errstring);
         errstring = NULL;
         scanerror = 0;
+        if (exit_on_err) {
+            EXIT_EARLY(EXIT_FAILURE);
+        }
     }
 }                                      /*}}} */
 
-#define EXIT_EARLY(code) do {  \
-        clearHistory();        \
-        cleanupvar();          \
-        num_free(last_answer); \
-        lists_cleanup();       \
-        fflush(NULL);          \
-        exit(code);            \
-} while (0)
-
-int main(int   argc,
-         char *argv[])
+int
+main(int   argc,
+     char *argv[])
 {                                      /*{{{ */
     extern int yydebug;
     extern int lines;
@@ -508,7 +527,7 @@ int main(int   argc,
 #ifdef HAVE_LIBREADLINE
     char *readme = NULL;
 #else
-    char readme[BIG_STRING];
+    char  readme[BIG_STRING];
 #endif
 #ifdef HAVE_READLINE_HISTORY
     char *historyfile = "/.wcalc_history";
@@ -900,6 +919,7 @@ int main(int   argc,
         rl_attempted_completion_function = wcalc_completion;
         rl_basic_word_break_characters   = " \t\n\"\'+-*/[{()}]=<>!|~&^%";
 #endif
+        exit_on_err = 0;
         printf("Enter an expression to evaluate, q to quit, or ? for help:\n");
         while (1) {
             lines = 1;
@@ -1011,6 +1031,7 @@ int main(int   argc,
         unsigned int linelen = 0, maxlinelen = BIG_STRING;
         extern int   show_line_numbers;
 
+        exit_on_err = 0;
         show_line_numbers = 1;
         while (1) {
             char *line   = calloc(maxlinelen, sizeof(char));
@@ -1055,7 +1076,6 @@ int main(int   argc,
                      *  fprintf(stderr, "\n");
                      * free(errstring);
                      * errstring = NULL;*/
-                    EXIT_EARLY(EXIT_FAILURE);
                 }
             }
             free(line);
@@ -1074,7 +1094,8 @@ int main(int   argc,
     EXIT_EARLY(EXIT_SUCCESS);
 }                                      /*}}} */
 
-static int read_preload(void)
+static int
+read_preload(void)
 {                                      /*{{{ */
     int fd = openDotFile("wcalc_preload", O_RDONLY);
 
@@ -1106,7 +1127,8 @@ static int read_preload(void)
 
 #define CHECK_COLOR(x) else if (!strcasecmp(str, # x)) { return x; }
 
-static enum ui_colors str2color(const char *str)
+static enum ui_colors
+str2color(const char *str)
 {
     if (!strcasecmp(str, "NONE")) {
         return NONE;
@@ -1134,8 +1156,9 @@ static enum ui_colors str2color(const char *str)
 }
 
 #define HANDLECOLOR(x) else if (!strcasecmp(key, # x "]")) { uiselect[x] = str2color(value); }
-static int assign_color_prefs(const char *key,
-                              const char *value)
+static int
+assign_color_prefs(const char *key,
+                   const char *value)
 {
     assert(key);
     assert(value);
@@ -1171,8 +1194,9 @@ static int assign_color_prefs(const char *key,
     return 1;
 }
 
-static int set_pref(const char *key,
-                    const char *value)
+static int
+set_pref(const char *key,
+         const char *value)
 {
     if (!strcmp(key, "precision")) {
         conf.precision = atoi(value);
@@ -1259,8 +1283,9 @@ static int set_pref(const char *key,
     return 1;
 }
 
-static void config_error(const char *format,
-                         ...)
+static void
+config_error(const char *format,
+             ...)
 {   /*{{{*/
     va_list args;
 
@@ -1270,10 +1295,11 @@ static void config_error(const char *format,
     va_end(args);
 } /*}}}*/
 
-static size_t copy_string(char       *d,
-                          const char *s,
-                          size_t      dmax,
-                          size_t      smax)
+static size_t
+copy_string(char       *d,
+            const char *s,
+            size_t      dmax,
+            size_t      smax)
 {   /*{{{*/
     size_t     dcurs  = 0, scurs = 0;
     const char quoted = (s[0] == '\'');
@@ -1300,9 +1326,10 @@ static size_t copy_string(char       *d,
     return scurs;
 } /*}}}*/
 
-static int read_prefs(void)
+static int
+read_prefs(void)
 {                                      /*{{{ */
-    int         fd = openDotFile("wcalcrc", O_RDONLY);
+    int         fd   = openDotFile("wcalcrc", O_RDONLY);
     char        key[BIG_STRING], value[BIG_STRING];
     size_t      curs = 0;
     size_t      curs_max;
@@ -1405,9 +1432,10 @@ err_exit:
     exit(EXIT_FAILURE);
 }                                      /*}}} */
 
-static void prefline(const char *name,
-                     const char *val,
-                     const char *cmd)
+static void
+prefline(const char *name,
+         const char *val,
+         const char *cmd)
 {
     if (name && val && cmd) {
         printf("%s%27s:%s %s%-24s%s -> ",
@@ -1435,7 +1463,8 @@ static void prefline(const char *name,
 }
 
 #define DP_YESNO(x) ((x) ? "yes" : "no")
-void display_prefs(void)
+void
+display_prefs(void)
 {
     if (standard_output) {
         char tmp[50];
@@ -1470,8 +1499,9 @@ void display_prefs(void)
     }
 }
 
-void display_status(const char *format,
-                    ...)
+void
+display_status(const char *format,
+               ...)
 {
     if (standard_output) {
         va_list args;
@@ -1484,7 +1514,8 @@ void display_status(const char *format,
     }
 }
 
-void display_output_format(int format)
+void
+display_output_format(int format)
 {
     if (standard_output) {
         switch (format) {
@@ -1504,12 +1535,14 @@ void display_output_format(int format)
     }
 }
 
-void display_val(const char *name)
+void
+display_val(const char *name)
 {
     if (standard_output) {
         answer_t val;
         char     approx = 0;
         char    *err;
+        printf("display_val\n");
         display_and_clear_errstring();
         printf("%s%s%s", colors[uiselect[VAR_NAME]], name, colors[uiselect[UNCOLOR]]);
         val = getvar_full(name);
@@ -1517,6 +1550,7 @@ void display_val(const char *name)
             printf(" %s=%s %s\n", colors[uiselect[EXACT_ANSWER]], colors[uiselect[UNCOLOR]], val.exp);
         } else {
             char *p = print_this_result(val.val, 0, &approx, &err);
+            printf("display_val\n");
             show_answer(err, approx, p);
         }
         if (val.desc) {
@@ -1525,9 +1559,10 @@ void display_val(const char *name)
     }
 }
 
-void display_var(variable_t *v,
-                 unsigned    count,
-                 unsigned    digits)
+void
+display_var(variable_t *v,
+            unsigned    count,
+            unsigned    digits)
 {
     printf("%*u. %s%s%s", digits, count,
            colors[uiselect[VAR_NAME]], v->key, colors[uiselect[UNCOLOR]]);
@@ -1538,7 +1573,8 @@ void display_var(variable_t *v,
     } else {
         char  approx = 0;
         char *err;
-        char *p = print_this_result(v->value, 0, &approx, &err);
+        char *p      = print_this_result(v->value, 0, &approx, &err);
+        printf("display_var\n");
         show_answer(err, approx, p);
     }
     if (v->description) {
@@ -1547,10 +1583,11 @@ void display_var(variable_t *v,
     }
 }
 
-void display_expvar_explanation(const char *str,
-                                const char *exp,
-                                List        subvars,
-                                const char *desc)
+void
+display_expvar_explanation(const char *str,
+                           const char *exp,
+                           List        subvars,
+                           const char *desc)
 {
     printf("%s%s%s is the expression: '%s'\n", colors[uiselect[VAR_NAME]], str,
            colors[uiselect[UNCOLOR]], exp);
@@ -1590,9 +1627,10 @@ void display_expvar_explanation(const char *str,
     }
 }
 
-void display_valvar_explanation(const char *str,
-                                Number     *val,
-                                const char *desc)
+void
+display_valvar_explanation(const char *str,
+                           Number     *val,
+                           const char *desc)
 {
     printf("%s%s%s is a variable with the value: %s\n",
            colors[uiselect[VAR_NAME]], str, colors[uiselect[UNCOLOR]],
@@ -1602,8 +1640,9 @@ void display_valvar_explanation(const char *str,
     }
 }
 
-void display_explanation(const char *exp,
-                         ...)
+void
+display_explanation(const char *exp,
+                    ...)
 {
     if (standard_output) {
         va_list args;
@@ -1616,18 +1655,20 @@ void display_explanation(const char *exp,
     }
 }
 
-void display_stateline(const char *buf)
+void
+display_stateline(const char *buf)
 {
     printf("-> %s\n", buf);
 }
 
-void display_consts(void)
+void
+display_consts(void)
 {
     size_t linelen = 0;
 
-    for (size_t i=0; consts[i].explanation; i++) {
-        const char * const * const names = consts[i].names;
-        for (size_t j=0; names[j]; j++) {
+    for (size_t i = 0; consts[i].explanation; i++) {
+        const char *const *const names = consts[i].names;
+        for (size_t j = 0; names[j]; j++) {
             if (linelen + strlen(names[j]) + 2 > 70) {
                 printf(",\n");
                 linelen = 0;

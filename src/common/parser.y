@@ -204,7 +204,7 @@ command : HEX_CMD {
                 fprintf(stderr, "Assertion on line %u:\n", lines);
 		fprintf(stderr, "   Pretty Answer is: '%s'\n", pretty_answer);
 		fprintf(stderr, "...should have been: '%s'\n", $1);
-		abort();
+		exit(EXIT_FAILURE);
 	}
 	free($1);
 }

@@ -8,7 +8,6 @@
 #include "list.h"      // for List
 
 void display_prefs(void);
-void display_and_clear_errstring(void);
 void show_answer(char *err,
                  int   uncertain,
                  char *answer);
