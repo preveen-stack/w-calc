@@ -1,7 +1,11 @@
 #ifndef WCALC_EXPLAIN
 #define WCALC_EXPLAIN
 
-void explain(const char *str);
+struct name_with_exp {
+    const char *names[5];
+    const char  *explanation;
+};
 
+void explain(const char *str);
 #endif
 /* vim:set expandtab: */

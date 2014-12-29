@@ -61,6 +61,7 @@ extern int  history_truncate_file(char *,
 #include "files.h"
 #include "historyManager.h"
 #include "list.h"
+#include "iscmd.h"
 #include "isconst.h"
 #include "output.h"
 #include "evalvar.h"
@@ -136,6 +137,8 @@ static char *tc_engineering(const char *text,
     return NULL;
 }                                      /*}}} */
 
+char **qcommands = NULL;
+
 # define COMPLETE(strs)  do {                                                 \
         int compareword = 0;                                                  \
         int comparechar = 0;                                                  \
@@ -177,12 +180,32 @@ static char *tc_engineering(const char *text,
         }                                                                        \
 } while (0)
 
+static void build_qcommands(void)
+{
+    unsigned c_count = 0;
+    for (unsigned c=0; commands[c].explanation; c++) {
+        for (unsigned n=0; commands[c].names[n]; n++) {
+            c_count ++;
+        }
+    }
+    c_count++;
+    qcommands=malloc(sizeof(char*)*c_count);
+    c_count = 0;
+    for (unsigned c=0; commands[c].explanation; c++) {
+        for (unsigned n=0; commands[c].names[n]; n++) {
+            qcommands[c_count] = malloc(strlen(commands[c].names[n])+2);
+            sprintf(qcommands[c_count], "\\%s", commands[c].names[n]);
+            c_count++;
+        }
+    }
+    qcommands[c_count] = NULL;
+}
+
 static char **wcalc_completion(const char *text,
                                int         start,
                                int         end)
 {                                      /*{{{ */
     /*extern const char *commands[];*/
-    extern const char *qcommands[];
     extern const char *funcs[];
     char             **variables;
     char             **retvals = NULL;
@@ -881,6 +904,7 @@ int main(int   argc,
         }
 #endif  /* ifdef HAVE_READLINE_HISTORY */
 #ifdef HAVE_LIBREADLINE
+        build_qcommands();
         rl_attempted_completion_function = wcalc_completion;
         rl_basic_word_break_characters   = " \t\n\"\'+-*/[{()}]=<>!|~&^%";
 #endif

@@ -19,6 +19,7 @@
 #include "list.h"
 #include "extract_vars.h"
 #include "evalvar.h"
+#include "iscmd.h"
 #include "isconst.h"
 #include "isfunc.h"
 #include "explain.h"
@@ -79,84 +80,26 @@ void explain(const char *str)
 static int explain_command(const char *str,
                            int         test)
 {                                      /*{{{ */
+    const struct name_with_exp *cmd = commands;
     str++;
-    if (!strcmp(str, "b") || !strcmp(str, "bin") || !strcmp(str, "binary")) {
-        display_explanation("This displays the output in binary.");
-    } else if (!strcmp(str, "store")) {
-        display_explanation("Saves the variable specified in the preload file, ~/.wcalc_preload. Use like so: \\store variablename");
-    } else if (!strcmp(str, "q")) {
-        display_explanation("Exits the program.");
-    } else if (!strcmp(str, "d") || !strcmp(str, "dec") ||
-               !strcmp(str, "decimal")) {
-        display_explanation("This displays the output in decimal.");
-    } else if (!strcmp(str, "delim")) {
-        display_explanation("This toggles the formatting of output such that delimiters are inserted in integers.");
-    } else if (!strcmp(str, "dsep")) {
-        display_explanation("Used like so: \\dsepX This sets the decimal separator to X. By default, it is a period (.).");
-    } else if (!strcmp(str, "e") || !strcmp(str, "eng") ||
-               !strcmp(str, "engineering")) {
-        display_explanation("This toggles the formatting of output between decimal and scientific notation.");
-    } else if (!strcmp(str, "cons") || !strcmp(str, "conservative")) {
-        display_explanation("Toggles precision guards.");
-    } else if (!strcmp(str, "h") || !strcmp(str, "hex") ||
-               !strcmp(str, "hexadecimal") || !strcmp(str, "x")) {
-        display_explanation("This displays the output in hexadecimal.");
-    } else if (!strcmp(str, "help")) {
-        display_explanation("This displays a generic help message.");
-    } else if (!strcmp(str, "hlimit")) {
-        display_explanation("This places (or removes) a limit on the number of things stored in the history. Use like this: \\hlimitX where X is a number. 0 removes the limit.");
-    } else if (!strcmp(str, "ints")) {
-        display_explanation("Toggles whether long integers will be abbreviated or not (conflicts with engineering notation for large numbers, but not for decimals).");
-    } else if (!strcmp(str, "li") || !strcmp(str, "list") ||
-               !strcmp(str, "listvars")) {
-        display_explanation("Prints out the currently defined variables.");
-    } else if (!strcmp(str, "o") || !strcmp(str, "oct") ||
-               !strcmp(str, "octal")) {
-        display_explanation("This displays the output in octal.");
-    } else if (!strcmp(str, "open")) {
-        display_explanation("Loads a saved file. Used like this: \\openXXXXX where XXXXX is the name of the file to load.");
-    } else if (!strcmp(str, "p")) {
-        display_explanation("Sets the precision. Use it like so: \\pX where X is the desired precision. Precision here is in digits. This setting only affects display. -1 means \"auto\".");
-    } else if (!strcmp(str, "pre") || !strcmp(str, "prefix") ||
-               !strcmp(str, "prefixes")) {
-        display_explanation("Toggles whether prefixes are shown with the output.");
-    } else if (!strcmp(str, "pref") || !strcmp(str, "prefs") ||
-               !strcmp(str, "preferences")) {
-        display_explanation("Prints out the current preference settings.");
-    } else if (!strcmp(str, "r") || !strcmp(str, "rad") ||
-               !strcmp(str, "radians")) {
-        display_explanation("Toggles radian mode for trigonometric functions.");
-    } else if (!strcmp(str, "rou") || !strcmp(str, "round") ||
-               !strcmp(str, "rounding")) {
-        display_explanation("Sets the rounding indication. The possible arguments to this preference are \"none\", \"simple\", and \"sig_fig\". Use like this: \\round none");
-    } else if (!strcmp(str, "re") || !strcmp(str, "remember") ||
-               !strcmp(str, "remember_errors")) {
-        display_explanation("Toggles whether errors are remembered in history.");
-    } else if (!strcmp(str, "bits")) {
+    if (!strcmp(str, "bits")) {
         display_explanation("Sets the number of bits used internally to represent numbers. Used like this: \\bitsX where X is a number that must be above %li and below %li.",
                             (long int)NUM_PREC_MIN, (long int)NUM_PREC_MAX);
-    } else if (!strcmp(str, "save")) {
-        display_explanation("Saves the history and variable list to a file. Used like this: \\saveXXXXX where XXXXX is the name of the file to save.");
-    } else if (!strcmp(str, "tsep")) {
-        display_explanation("Used like this: \\tsepX Sets the thousands-place separator character to X. The default is a comma (,).");
-    } else if (!strcmp(str, "c") || !strcmp(str, "conv") ||
-               !strcmp(str, "convert")) {
-        display_explanation("Used either like this: \"\\convert unit1 to unit2\" or like this: \"\\convert unit1 unit2\". Converts the previous answer from the first unit to the second.");
-    } else if (!strcmp(str, "base")) {
-        display_explanation("Prints out the previous answer in any base from 2 to 36.");
-    } else if (!strcmp(str, "verbose")) {
-        display_explanation("Prints out the lines to be evaluated before evaluating them.");
-    } else if (!strcmp(str, "explain")) {
-        display_explanation("Gives you information about commands, variables, constants and functions.");
-    } else if (!strcmp(str, "cmod")) {
-        display_explanation("Changes how the modulus operator (%%) behaves with negative numbers. The default is to behave like the C programming language modulus, the other is slightly more flexible. For example, with the default setting:\t-340 %% 60 == -40; 340 %% -60 == 40; -340 %% -60 == -40When this setting is toggled, it behaves like this:\t-340 %% 60 == -40; 340 %% -60 == -20; -340 %% -60 == 20");
+        return 0;
     } else {
-        if (test == 0) {
-            report_error("Undefined command.");
+        for (cmd = commands; cmd->explanation != NULL; cmd++ ) {
+            for (unsigned i=0; cmd->names[i]; i++) {
+                if (!strcmp(str, cmd->names[i])) {
+                    display_explanation(cmd->explanation);
+                    return 0;
+                }
+            }
         }
-        return -1;
     }
-    return 0;
+    if (test == 0) {
+        report_error("Undefined command.");
+    }
+    return -1;
 }                                      /*}}} */
 
 static void explain_variable(const char *str)
