@@ -1031,7 +1031,7 @@ main(int   argc,
         unsigned int linelen = 0, maxlinelen = BIG_STRING;
         extern int   show_line_numbers;
 
-        exit_on_err = 0;
+        exit_on_err = 1;
         show_line_numbers = 1;
         while (1) {
             char *line   = calloc(maxlinelen, sizeof(char));
@@ -1069,7 +1069,6 @@ main(int   argc,
                 extern int errloc;
 
                 if (errloc != -1) {
-                    errloc = -1;
                     display_and_clear_errstring();
                     /*fprintf(stderr, "%s", errstring);
                      * if (errstring[strlen(errstring) - 1] != '\n')
