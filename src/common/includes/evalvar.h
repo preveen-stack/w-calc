@@ -3,6 +3,5 @@
 
 char *evalvar(const char *);
 char *evalvar_noparse(const char *);
-
 #endif
 /* vim:set expandtab: */

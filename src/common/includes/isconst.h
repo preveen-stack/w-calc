@@ -20,6 +20,5 @@ extern const constdef consts[];
 
 consttype isconst(const char *str);
 void      printconsts(void);
-
 #endif // ifndef WCALC_ISCONST
 /* vim:set expandtab: */

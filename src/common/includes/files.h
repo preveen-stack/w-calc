@@ -18,6 +18,5 @@ int loadState(const char *filename,
 int loadStateFD(int       fd,
                 const int into_history);         // same as loadState, but takes an FD
 int storeVar(const char *variable);
-
 #endif // ifndef WCALC_FILES
 /* vim:set expandtab: */

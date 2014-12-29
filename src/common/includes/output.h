@@ -30,9 +30,9 @@ void display_expvar_explanation(const char *str,
 void display_valvar_explanation(const char *str,
                                 Number     *val,
                                 const char *desc);
-void display_explanation(const char*exp, ...);
+void display_explanation(const char *exp,
+                         ...);
 void display_stateline(const char *buf);
 void display_consts(void);
-
 #endif // ifndef WCALC_OUTPUT_H
 /* vim:set expandtab: */

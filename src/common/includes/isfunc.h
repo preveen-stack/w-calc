@@ -2,6 +2,5 @@
 #define WCALC_ISFUNC
 
 int isfunc(const char *str);
-
 #endif
 /* vim:set expandtab: */

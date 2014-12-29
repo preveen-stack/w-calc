@@ -3,6 +3,5 @@
 
 char *add_commas(const char *input,
                  const int   base);
-
 #endif
 /* vim:set expandtab: */

@@ -396,7 +396,7 @@ int num_cmp_si(const Number n,
 void num_free(Number);
 double       num_get_d(const Number);
 unsigned int num_get_ui(const Number);
-char *       num_get_str(char        *str,
+char        *num_get_str(char        *str,
                          num_exp_t   *expptr,
                          const int    b,
                          const size_t n,
@@ -436,6 +436,5 @@ void num_bor(Number       ret,
 
 void init_numbers(void);
 int  is_int(const Number);
-
 #endif /* NUMBER_H */
 /* vim:set expandtab: */

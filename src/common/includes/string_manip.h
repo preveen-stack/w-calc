@@ -23,6 +23,5 @@ void strswap2(const char sw,
 unsigned int count_digits(const char *);
 int          justnumbers(const char *);
 void         stripComments(char *);
-
 #endif // ifndef KBW_STRING_MANIP
 /* vim:set expandtab: */

@@ -105,10 +105,13 @@ void parseme(const char *);
 void report_error(const char *fmt,
                   ...);
 void  set_prettyanswer(const Number num);
-char *print_this_result(const Number result, int output, char *nad, char **es);
-void  uber_function(Number               output,
-                    const enum functions func,
-                    Number               input);
+char *print_this_result(const Number result,
+                        int          output,
+                        char        *nad,
+                        char       **es);
+void uber_function(Number               output,
+                   const enum functions func,
+                   Number               input);
 void simple_exp(Number                output,
                 const Number          first,
                 const enum operations op,
@@ -165,6 +168,5 @@ extern char not_all_displayed;
 #define NO_ROUNDING_INDICATION      0
 #define SIMPLE_ROUNDING_INDICATION  1
 #define SIG_FIG_ROUNDING_INDICATION 2
-
 #endif // ifndef WCALC_CALCULATOR_H
 /* vim:set expandtab: */

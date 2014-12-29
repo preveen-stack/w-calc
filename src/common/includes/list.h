@@ -35,6 +35,5 @@ void        *currentListElement(ListIterator);
 void        *nextListElement(ListIterator);
 void         resetListIterator(ListIterator);
 void         freeListIterator(ListIterator);
-
 #endif // ifndef WCALC_PACKETLIST
 /* vim:set expandtab: */

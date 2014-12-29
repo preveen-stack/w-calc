@@ -73,6 +73,5 @@ struct answer getvar_full(const char *key);
  * do not under any circumstance un-initialize the Number
  */
 struct variable *getrealnvar(const size_t n);
-
 #endif // ifndef KBW_VARIABLES
 /* vim:set expandtab: */
