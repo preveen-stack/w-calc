@@ -63,6 +63,7 @@ extern int  history_truncate_file(char *,
 #include "list.h"
 #include "iscmd.h"
 #include "isconst.h"
+#include "isfunc.h"
 #include "output.h"
 #include "evalvar.h"
 
@@ -145,55 +146,48 @@ char **qcommands = NULL;
         int textcurs    = 0;                                                  \
         while (strs[compareword] != NULL) {                                   \
             if (text[textcurs] == 0) { /* add to the list of possibilities */ \
-                addToList( &tc_options, strdup(strs[compareword]));           \
+                addToList(&tc_options, strdup(strs[compareword]));            \
                 textcurs    = 0;                                              \
                 comparechar = 0;                                              \
-                compareword ++;                                               \
+                compareword++;                                                \
             } else if (text[textcurs] == strs[compareword][comparechar]) {    \
-                textcurs ++;                                                  \
-                comparechar ++;                                               \
+                textcurs++;                                                   \
+                comparechar++;                                                \
             } else { /* not a possibility: next! */                           \
-                textcurs    = 0;                                              \
-                compareword ++;                                               \
+                textcurs = 0;                                                 \
+                compareword++;                                                \
                 comparechar = 0;                                              \
             }                                                                 \
         }                                                                     \
 } while (0)
-# define COMPLETE2(strs) do {                                                    \
-        int compareword = 0;                                                     \
-        int comparechar = 0;                                                     \
-        int textcurs    = 0;                                                     \
-        while (strs[compareword].label != NULL) {                                \
-            if (text[textcurs] == 0) { /* add to the list of possibilities */    \
-                addToList( &tc_options, strdup(strs[compareword].label));        \
-                textcurs    = 0;                                                 \
-                comparechar = 0;                                                 \
-                compareword ++;                                                  \
-            } else if (text[textcurs] == strs[compareword].label[comparechar]) { \
-                textcurs ++;                                                     \
-                comparechar ++;                                                  \
-            } else { /* not a possibility: next! */                              \
-                textcurs    = 0;                                                 \
-                compareword ++;                                                  \
-                comparechar = 0;                                                 \
-            }                                                                    \
-        }                                                                        \
+# define COMPLETE2(strs) do {                                       \
+        const unsigned textlen     = strlen(text);                  \
+        for (unsigned _c_i = 0; strs[_c_i].explanation; _c_i++) {   \
+            const char *const *const _c_names = strs[_c_i].names;   \
+            for (unsigned _c_j = 0; _c_names[_c_j]; _c_j++) {       \
+                if (!strncmp(text, _c_names[_c_j], textlen)) {      \
+                    /* add to the list of possibilities */          \
+                    addToList(&tc_options, strdup(_c_names[_c_j])); \
+                }                                                   \
+            }                                                       \
+        }                                                           \
 } while (0)
 
 static void build_qcommands(void)
 {
     unsigned c_count = 0;
-    for (unsigned c=0; commands[c].explanation; c++) {
-        for (unsigned n=0; commands[c].names[n]; n++) {
-            c_count ++;
+
+    for (unsigned c = 0; commands[c].explanation; c++) {
+        for (unsigned n = 0; commands[c].names[n]; n++) {
+            c_count++;
         }
     }
     c_count++;
-    qcommands=malloc(sizeof(char*)*c_count);
-    c_count = 0;
-    for (unsigned c=0; commands[c].explanation; c++) {
-        for (unsigned n=0; commands[c].names[n]; n++) {
-            qcommands[c_count] = malloc(strlen(commands[c].names[n])+2);
+    qcommands = malloc(sizeof(char *) * c_count);
+    c_count   = 0;
+    for (unsigned c = 0; commands[c].explanation; c++) {
+        for (unsigned n = 0; commands[c].names[n]; n++) {
+            qcommands[c_count] = malloc(strlen(commands[c].names[n]) + 2);
             sprintf(qcommands[c_count], "\\%s", commands[c].names[n]);
             c_count++;
         }
@@ -206,7 +200,6 @@ static char **wcalc_completion(const char *text,
                                int         end)
 {                                      /*{{{ */
     /*extern const char *commands[];*/
-    extern const char *funcs[];
     char             **variables;
     char             **retvals = NULL;
 
@@ -222,7 +215,7 @@ static char **wcalc_completion(const char *text,
             if (i == start) {
                 COMPLETE(qcommands);
                 COMPLETE2(consts);
-                COMPLETE(funcs);
+                COMPLETE2(funcs);
                 variables = listvarnames();
                 COMPLETE(variables);
                 free(variables);
@@ -330,7 +323,7 @@ static char **wcalc_completion(const char *text,
     } else {
         COMPLETE(qcommands);
         COMPLETE2(consts);
-        COMPLETE(funcs);
+        COMPLETE2(funcs);
         variables = listvarnames();
         COMPLETE(variables);
         free(variables);
@@ -340,7 +333,6 @@ static char **wcalc_completion(const char *text,
     retvals                      = rl_completion_matches(text, tc_generator);
     return retvals;
 }                                      /*}}} */
-
 #endif /* ifdef HAVE_LIBREADLINE */
 
 enum ui_colors {
@@ -516,7 +508,7 @@ int main(int   argc,
 #ifdef HAVE_LIBREADLINE
     char *readme = NULL;
 #else
-    char  readme[BIG_STRING];
+    char readme[BIG_STRING];
 #endif
 #ifdef HAVE_READLINE_HISTORY
     char *historyfile = "/.wcalc_history";
@@ -1309,7 +1301,7 @@ static size_t copy_string(char       *d,
 
 static int read_prefs(void)
 {                                      /*{{{ */
-    int         fd   = openDotFile("wcalcrc", O_RDONLY);
+    int         fd = openDotFile("wcalcrc", O_RDONLY);
     char        key[BIG_STRING], value[BIG_STRING];
     size_t      curs = 0;
     size_t      curs_max;
@@ -1545,7 +1537,7 @@ void display_var(variable_t *v,
     } else {
         char  approx = 0;
         char *err;
-        char *p      = print_this_result(v->value, 0, &approx, &err);
+        char *p = print_this_result(v->value, 0, &approx, &err);
         show_answer(err, approx, p);
     }
     if (v->description) {
@@ -1630,20 +1622,22 @@ void display_stateline(const char *buf)
 
 void display_consts(void)
 {
-    size_t i;
     size_t linelen = 0;
 
-    for (i = 0; consts[i].label; i++) {
-        if (linelen + strlen(consts[i].label) + 2 > 70) {
-            printf(",\n");
-            linelen = 0;
-        }
-        if (linelen == 0) {
-            printf("%s", consts[i].label);
-            linelen = strlen(consts[i].label);
-        } else {
-            printf(", %s", consts[i].label);
-            linelen += strlen(consts[i].label) + 2;
+    for (size_t i=0; consts[i].explanation; i++) {
+        const char * const * const names = consts[i].names;
+        for (size_t j=0; names[j]; j++) {
+            if (linelen + strlen(names[j]) + 2 > 70) {
+                printf(",\n");
+                linelen = 0;
+            }
+            if (linelen == 0) {
+                printf("%s", names[j]);
+                linelen = strlen(names[j]);
+            } else {
+                printf(", %s", names[j]);
+                linelen += strlen(names[j]) + 2;
+            }
         }
     }
     printf("\n");

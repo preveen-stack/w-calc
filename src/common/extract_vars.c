@@ -64,7 +64,7 @@ List extract_vars(char *str)
         }
 
         // add it to the set of known variables
-        if (!isfunc(varname) && (isconst(varname) == W_notaconstant)) {
+        if (!isfunc(varname) && !isconst(varname)) {
             size_t i      = 0;
             char   exists = 0;
 

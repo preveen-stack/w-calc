@@ -606,7 +606,7 @@ zeta { POS_STR(); return(WZETA); }
 	if (isfunc(yytext)) {
 		report_error("'%s' is a function and functions cannot be reassigned.", yytext);
 		scanerror = 1;
-	} else if (isconst(yytext) != W_notaconstant) {
+	} else if (isconst(yytext)) {
 		report_error("'%s' is a pre-defined constant, which cannot be reassigned.", yytext);
 		scanerror = 1;
 	} else {

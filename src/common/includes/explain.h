@@ -2,7 +2,7 @@
 #define WCALC_EXPLAIN
 
 struct name_with_exp {
-    const char *names[5];
+    const char *names[10];
     const char *explanation;
 };
 
