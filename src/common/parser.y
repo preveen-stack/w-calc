@@ -201,6 +201,7 @@ command : HEX_CMD {
         display_output_format(DECIMAL_FORMAT); }
 | ASSERT_CMD {
 	if (strcmp($1, pretty_answer)) {
+                fprintf(stderr, "Assertion on line %u:\n", lines);
 		fprintf(stderr, "   Pretty Answer is: '%s'\n", pretty_answer);
 		fprintf(stderr, "...should have been: '%s'\n", $1);
 		abort();
