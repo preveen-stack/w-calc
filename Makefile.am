@@ -1,4 +1,4 @@
-SUBDIRS = English.lproj src
+SUBDIRS = English.lproj src test
 ACLOCAL_AMFLAGS = -I config
 EXTRA_DIST = \
 			 Wcalc.xcodeproj/kyle.mode1 \

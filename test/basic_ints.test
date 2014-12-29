@@ -1,0 +1,26 @@
+0
+\assert 0
+1
+\assert 1
+0
+\assert 0
+1
+\assert 1
+040
+\assert 32
+40
+\assert 40
+0x40
+\assert 64
+10
+\assert 10
+010
+\assert 8
+0b10
+\assert 2
+0x10
+\assert 16
+1e-9 # should be 1E-9
+\assert 1e-09
+0.9e-9 # should be 9E-10
+\assert 9e-10

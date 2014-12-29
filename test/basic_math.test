@@ -1,0 +1,25 @@
+04+1
+\assert 5
+040+1
+\assert 33
+1,000,000
+\assert 1000000
+a+1+1 # should return 1000002
+\assert 1000002
+5.6*5.6 # should return 31.36
+\assert 31.36
+-340%-60
+\assert -40
+360%60
+\assert 0
+23.05
+a-14.5-8.55 # should be 0, not -1E-09
+\assert 0
+2^3
+\assert 8
+2**3
+\assert 8
+6.6 & 0xff
+\assert 6
+-6.6 & 0xff
+\assert 250

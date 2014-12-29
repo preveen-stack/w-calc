@@ -1,0 +1,18 @@
+1
+\assert 1
+a
+\assert 1
+0
+\assert 0
+a
+\assert 0
+m=5.6
+\assert 0
+f='2m'
+\assert 0
+f
+\assert 11.2
+P=7
+\assert 11.2
+2P # should return 14
+\assert 14

@@ -1,0 +1,6 @@
+sin(8) # should return 0.139173
+\assert 0.139173
+sin 8 # should return 0.139173
+\assert 0.139173
+6cosh 4 # should return 163.849
+\assert 163.849

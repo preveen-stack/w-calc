@@ -1,0 +1,7 @@
+\cons 1
+1-0.9-0.1 # if precision_guard is on, this should return 0
+\assert 0
+1410.06-645.06 # should be 765 if precision_guard is on
+\assert 765
+23.05-14.5-8.55 # should be zero if precision_guard is on
+\assert 0

@@ -1,0 +1,12 @@
+5sin(4) # should return 0.348782
+\assert 0.348782
+5sin(4!) # should return 2.03368
+\assert 2.03368
+5sin(4!)-7 # should return -4.96632
+\assert -4.96632
+5sin(4!)-7*2 # should return -11.9663
+\assert -11.9663
+5sin(4!)-7*2(4%6) # should return -53.9663
+\assert -53.9663
+5sin(4!)-7*2(4%6)^2 # should return -221.966
+\assert -221.966
