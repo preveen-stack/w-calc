@@ -107,6 +107,9 @@ Toggles verbose mode, which displays the expression to be calculated before calc
 .TP
 \fB\*=defaults\fP
 Prevents reading the .wcalcrc file.
+.TP
+\fB-C\fP or \fB\*=color\fP
+Toggles the use of color in the commandline output.
 .SH USER-DEFINED VARIABLES
 Variables are supported and may be assigned using the = operator. To assign
 a variable use the form:
@@ -514,6 +517,8 @@ Display delimiters in numerical output.
 .TP
 \fB\ecmod\fP
 Toggle between C-style modulus operation and a more flexible method.
+\fB\ecolor\fP
+Toggles the use of color in the commandline output.
 .SH PREFERENCES
 Preferences and settings can be retained between invocations of wcalc by storing them in the file \fB~/.wcalcrc\fP
 .PP
@@ -579,10 +584,65 @@ However, with \fBc_style_mod\fP set to false:
 .PP
 \-340 % 60 == \-40; 340 % \-60 == \-20; \-340 % \-60 == 20
 .RE
+.TP
+.B color
+Either true ("yes" or "true") or false (anything else). Equivalent to the \fB\ecolor\fP command. Specifies whether the commandline interface will use color in its output or not.
+.TP
+.B colors[\fIXXX\fB]
+This is used to specify the color of specific interface elements in the commandline interface. Valid colors are:
+.RS
+.RS
+(bold)black
+.br
+(bold)red
+.br
+(bold)green
+.br
+(bold)yellow
+.br
+(bold)blue
+.br
+(bold)magenta
+.br
+(bold)cyan
+.br
+(bold)white
+.RE
+The \fIXXX\fP must be one of the following values:
+.RS
+conversion_category
+.br
+conversion_unit
+.br
+prompt
+.br
+approx_answer
+.br
+exact_answer
+.br
+err_location
+.br
+err_text
+.br
+pref_name
+.br
+pref_val
+.br
+pref_cmd
+.br
+status
+.br
+var_name
+.br
+var_desc
+.br
+subvar_name
+.br
+explanation
 .SH PRELOAD
 Wcalc uses a file, \fB~/.wcalc_preload\fP, to store persistent information between instances. Typically, this is used to store variables that are frequently defined. This file can be edited by hand with a standard text editor. There is also a command within wcalc (\fB\estore\fP) to append a variable definition to the end of this file. Any variable defined in this file is defined and available for use in any subsequent invocation of wcalc.
 .SH COPYRIGHT
-wcalc is Copyright (C) 2000-2007 Kyle Wheeler.
+wcalc is Copyright (C) 2000-2014 Kyle Wheeler.
 .br
 It is distributed under the GPL, version 2, or (at your option) any later version..
 .SH SUGGESTIONS AND BUG REPORTS
