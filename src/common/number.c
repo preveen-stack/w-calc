@@ -47,10 +47,19 @@ int is_int(const Number potential_int)
     int    ret;
 
     num_init(temp);
+#ifdef HAVE_LIBMPFR
+    ret = num_trunc(temp, potential_int);
+    num_free(temp);
+    switch(ret) {
+        case 2: case -2: return 0;
+        default: return 1;
+    }
+#else
     num_trunc(temp, potential_int);
     ret = num_is_equal(temp, potential_int);
     num_free(temp);
     return ret;
+#endif
 } /*}}}*/
 
 #ifndef HAVE_LIBMPFR
