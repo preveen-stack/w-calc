@@ -1,6 +1,5 @@
 %{
 /*
- * Simple example lex input file
  * Original provided by
  * Shawn Ostermann -- Mon Sep 24, 2001
  *
@@ -56,6 +55,17 @@ int last_word = 0;
 
 #define POS_CHAR() do { column ++; last_word = 1; } while(0)
 #define POS_STR() do { column += yyleng; last_word = yyleng; } while (0)
+#define STREQ(y) (!strcasecmp(str, y))
+static int parse_yesno(const char *str)
+{
+    if (STREQ("yes") || STREQ("true") || STREQ("1")) {
+        return 1;
+    } else if (STREQ("no") || STREQ("false") || STREQ("0")) {
+        return 0;
+    } else {
+        return -1;
+    }
+}
 
 /* Everything up to the funny characters on the next line */
 /* goes directly into the lex.yy.c file */
@@ -71,6 +81,7 @@ WHITESPACE	[ \t]
 ACCEPTABLE	[_:0-9]
 UNITCHRS	[-_a-zA-Z0-9^./µÅ]
 SPACE		[ ]
+YESNO       (YES|NO|TRUE|FALSE|1|0|yes|no|true|false)
 
 /* The rest of this after the '%%' is lex rules */
 %%
@@ -141,7 +152,15 @@ SPACE		[ ]
     line_is_a_command = 1;
     return(ENG_CMD);
 }
-\\cons(ervative)?       { line_is_a_command = 1; POS_STR(); return(GUARD_CMD); }
+\\cons(ervative)?({WHITESPACE}+{YESNO})?       {
+    int i = 0;
+    line_is_a_command = 1;
+    POS_STR();
+    while(!isspace(yytext[i])) i++;
+    while(isspace(yytext[i])) i++;
+    YYLVALAC->integer = parse_yesno(yytext + i);
+    return(GUARD_CMD);
+}
 \\h(ex(adecimal)?)?     { line_is_a_command = 1; POS_STR(); return(HEX_CMD); }
 \\help           { line_is_a_command = 1; POS_STR(); return(PRINT_HELP_CMD); }
 \\hlimit{WHITESPACE}*{DIGIT}+ {
@@ -738,7 +757,7 @@ zeta { POS_STR(); return(WZETA); }
     return(NUMBER);
 }
 
-0[0-9]{1,4}([0-9]*|(,[0-9]{4})*)([.][0-9]*)?([eE][+-]?[0-9]+)? {
+0[0-9]{0,4}([0-9]*|(,[0-9]{4})*)([.][0-9]*)?([eE][+-]?[0-9]+)? {
     /* octal */
     //char err[strlen(yytext)+57];
     Dprintf("octal\n");

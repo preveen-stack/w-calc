@@ -64,12 +64,12 @@ char character;
 struct conv_req conver;
 }
 
-%token DEC_CMD OCT_CMD HEX_CMD BIN_CMD GUARD_CMD DISPLAY_PREFS_CMD
+%token DEC_CMD OCT_CMD HEX_CMD BIN_CMD DISPLAY_PREFS_CMD
 %token RADIAN_CMD REMEMBER_CMD LISTVAR_CMD STORE_CMD CMOD_CMD
 %token PRINT_HELP_CMD PREFIX_CMD INT_CMD VERBOSE_CMD DELIM_CMD
 %token <variable> ASSERT_CMD
 %token <integer> ENG_CMD HLIMIT_CMD ROUNDING_INDICATION_CMD
-%token <integer> PRECISION_CMD BITS_CMD BASE_CMD
+%token <integer> PRECISION_CMD BITS_CMD BASE_CMD GUARD_CMD
 %token <conver> CONVERT_CMD
 
 %token EOLN OPEN_PARENTHESES CLOSE_PARENTHESES OPEN_BRACE
@@ -274,7 +274,11 @@ command : HEX_CMD {
 	display_status("Now Using %s\n", conf.use_radians?"Radians":"Degrees");}
 | GUARD_CMD {
 	$$ = nothing;
-	conf.precision_guard = ! conf.precision_guard;
+        switch ($1) {
+            case 0: conf.precision_guard = 0; break;
+            case 1: conf.precision_guard = 1; break;
+            case -1: conf.precision_guard = ! conf.precision_guard; break;
+        }
 	display_status("Now %sUsing Conservative Precision\n", conf.precision_guard?"":"Not ");}
 | PRECISION_CMD {
 	$$ = isatty(0)?redisplay:nothing;
