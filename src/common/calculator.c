@@ -9,6 +9,7 @@
 #include <math.h>                      /* for HUGE_VAL */
 #include <float.h>                     /* for DBL_EPSILON */
 #include <ctype.h>                     /* for isalpha() */
+#include <assert.h>
 
 #include "output.h"
 
@@ -17,21 +18,23 @@
     (sizeof(x) == sizeof(long double) ? isnan_ld(x) \
      : sizeof(x) == sizeof(double) ? isnan_d(x)     \
      : isnan_f(x))
-static inline int isnan_f  (float x)
+static inline int
+isnan_f(float x)
 {   /*{{{*/
     return x != x;
 } /*}}}*/
 
-static inline int isnan_d  (double x)
+static inline int
+isnan_d(double x)
 {   /*{{{*/
     return x != x;
 } /*}}}*/
 
-static inline int isnan_ld (long double x)
+static inline int
+isnan_ld(long double x)
 {   /*{{{*/
     return x != x;
 } /*}}}*/
-
 #endif /* ifndef isnan */
 
 #ifndef isinf
@@ -39,21 +42,23 @@ static inline int isnan_ld (long double x)
     (sizeof(x) == sizeof(long double) ? isinf_ld(x) \
      : sizeof(x) == sizeof(double) ? isinf_d(x)     \
      : isinf_f(x))
-static inline int isinf_f  (float x)
+static inline int
+isinf_f(float x)
 {   /*{{{*/
     return isnan(x - x);
 } /*}}}*/
 
-static inline int isinf_d  (double x)
+static inline int
+isinf_d(double x)
 {   /*{{{*/
     return isnan(x - x);
 } /*}}}*/
 
-static inline int isinf_ld (long double x)
+static inline int
+isinf_ld(long double x)
 {   /*{{{*/
     return isnan(x - x);
 } /*}}}*/
-
 #endif /* ifndef isinf */
 
 #if !defined(HAVE_CONFIG_H) || HAVE_STRING_H
@@ -98,10 +103,10 @@ char         compute  = 1;
 unsigned int sig_figs = UINT32_MAX;
 
 /* communication with the frontend */
-char  standard_output   = 1;
-char  not_all_displayed = 0;
-char *pa                = NULL;
-char *last_input        = NULL;
+char         standard_output   = 1;
+char         not_all_displayed = 0;
+char        *pa                = NULL;
+char        *last_input        = NULL;
 
 struct _conf conf;
 
@@ -121,7 +126,8 @@ static int   find_recursion(char *);
 static int   find_recursion_core(List);
 static char *flatten(char *str);
 
-void parseme(const char *pthis)
+void
+parseme(const char *pthis)
 {                                      /*{{{ */
     extern int   synerrors;
     short        numbers = 0;
@@ -230,7 +236,7 @@ void parseme(const char *pthis)
 
         open_file = NULL;
         Dprintf("open_file\n");
-        retval = loadState(filename, 1);
+        retval    = loadState(filename, 1);
         if (retval) {
             report_error("Could not load file (%s).",
                          (char *)strerror(retval));
@@ -241,14 +247,108 @@ exiting:
     free(sanitized);
 }                                      /*}}} */
 
+static size_t
+find_alpha(const char *str)
+{
+    const size_t len = strlen(str);
+    size_t       i   = 0;
+
+    while ((i < len) && str[i] && !isalpha((int)str[i])) {
+        switch (str[i]) {
+            case '\\':
+                do {
+                    i++;
+                } while ((i < len) && str[i] && isalpha((int)str[i]));
+                break;
+            case '\'':
+            {
+                char *tailquote = strchr(str + i + 1, '\'');
+                if (tailquote == NULL) { return len; } else {
+                    i = (tailquote) - (str);
+                }
+                break;
+            }
+            case '0':
+                switch (str[i + 1]) {
+                    case 'b': case 'x': i += 2; break;
+                    default: i++; break;
+                }
+                break;
+            default: i++; break;
+        }
+    }
+    return i;
+}
+
+static char *
+evaluate_var(const char    *varname,
+             struct answer *aptr)
+{
+    struct answer a;
+    char         *varvalue = NULL;
+
+    // if it's a variable, evaluate it
+    a = getvar_full(varname);
+    if (!a.err) {                  // it is a var
+        Number f;
+
+        num_init(f);
+        if (a.exp) {               // it is an expression
+            parseme(a.exp);
+            num_set(f, last_answer);
+        } else {                   // it is a value
+            num_set(f, a.val);
+            num_free(a.val);
+        }
+        // get the number
+        {
+            char junk;
+
+            // This value must fully reproduce the contents of f (thus, the -2 in arg 4)
+            varvalue = num_to_str_complex(f, 10, 0, -2, 1, &junk);
+        }
+        num_free(f);
+    } else {                       // not a known var: itza literal (e.g. cos)
+        varvalue = (char *)strdup(varname);
+    }
+    *aptr = a;
+    assert(varvalue != NULL);
+    return varvalue;
+}
+
+static char *
+extract_var(char   *str,
+            size_t *len)
+{
+    const size_t max = strlen(str);
+    size_t       i   = 0;
+    char        *var;
+
+    while (i < max &&
+           (isalpha((int)str[i]) || str[i] == '_' ||
+            str[i] == ':' || isdigit((int)str[i]))) {
+        i++;
+    }
+
+    if (i == 0) {
+        return NULL;
+    }
+    var    = malloc((i + 1) * sizeof(char));
+    memcpy(var, str, i);
+    var[i] = 0;
+    if (len) { *len = i; }
+    return var;
+}
+
 /* this function should probably stop flattening if it sees a comment, but
  * that's so rare (and hardly processor intensive) that it's not worth digging
  * at the moment */
-static char *flatten(char *str)
+static char *
+flatten(char *str)
 {                                      /*{{{ */
     char         *curs = str, *eov, *nstr;
     char         *varname, *varvalue;
-    size_t        changedlen, varnamelen = 100;
+    size_t        changedlen;
     struct answer a;
     char          standard_output_save = standard_output;
 
@@ -265,81 +365,31 @@ static char *flatten(char *str)
 
     while (curs && *curs) {
         // search for the first letter of a possible variable
-        while (curs && *curs && !isalpha((int)(*curs))) {
-            if (*curs == '\\') {
-                curs++;
-                while (curs && *curs && isalpha((int)(*curs))) curs++;
-            }
-            if (*curs == '\'') {
-                curs++;
-                while (curs && *curs && *curs != '\'') curs++;
-            }
-            curs++;
-        }
-        if (!curs || !*curs) {
+        size_t max   = strlen(curs);
+        size_t alpha = find_alpha(curs);
+        if (alpha == max) {
             break;
         }
+        curs = curs + alpha;
         // pull out that variable
-        eov = curs;
         {
-            size_t i = 0;
+            size_t varlen = 0;
 
-            varname = malloc(varnamelen * sizeof(char));
-            while (eov && *eov &&
-                   (isalpha((int)(*eov)) || *eov == '_' || *eov == ':' ||
-                    isdigit((int)(*eov)))) {
-                if (i == varnamelen - 1) {
-                    varnamelen += 100;
-                    varname     = realloc(varname, varnamelen * sizeof(char));
-                    if (varname == NULL) {
-                        perror("flatten: ");
-                        exit(EXIT_FAILURE);
-                    }
-                }
-                varname[i++] = *eov;
-                eov++;
-            }
-            if (i == 0) {
-                break;
-            }
-            varname[i] = 0;
+            varname = extract_var(curs, &varlen);
+            eov     = curs + varlen;
         }
+
+        varvalue = evaluate_var(varname, &a);
+        assert(varvalue);
         {
-            size_t olen = strlen(varname);
+            size_t nlen = strlen(varvalue);
 
-            // if it's a variable, evaluate it
-            a = getvar_full(varname);
-            if (!a.err) {                  // it is a var
-                Number f;
-
-                num_init(f);
-                if (a.exp) {               // it is an expression
-                    parseme(a.exp);
-                    num_set(f, last_answer);
-                } else {                   // it is a value
-                    num_set(f, a.val);
-                    num_free(a.val);
-                }
-                // get the number
-                {
-                    char junk;
-
-                    // This value must fully reproduce the contents of f (thus, the -2 in arg 4)
-                    varvalue = num_to_str_complex(f, 10, 0, -2, 1, &junk);
-                }
-                num_free(f);
-            } else {                       // not a known var: itza literal (e.g. cos)
-                varvalue = (char *)strdup(varname);
-            }
-            {
-                size_t nlen = strlen(varvalue);
-                free(varname);
-
-                // now, put it back in the string
-                // it is a var, and needs parenthesis
-                changedlen = strlen(str) + nlen - olen + 1;
-            }
+            // now, put it back in the string
+            // it is a var, and needs parenthesis
+            changedlen = strlen(str) + nlen - strlen(varname) + 1;
+            free(varname);
         }
+
         if (!a.err) {
             changedlen += 2;           // space for parens if it's a variable
         }
@@ -381,7 +431,7 @@ static char *flatten(char *str)
             }
             *tostring = 0;
             free(str);
-            str = nstr;
+            str       = nstr;
         }
         free(varvalue);
     }
@@ -389,7 +439,8 @@ static char *flatten(char *str)
     return str;
 }                                      /*}}} */
 
-static int recursion(char *str)
+static int
+recursion(char *str)
 {                                      /*{{{ */
     List  vlist  = NULL;
     int   retval = 0;
@@ -416,7 +467,8 @@ static int recursion(char *str)
     return retval;
 }                                      /*}}} */
 
-static int find_recursion(char *instring)
+static int
+find_recursion(char *instring)
 {                                      /*{{{ */
     List vl = NULL;
     int  retval;
@@ -427,11 +479,12 @@ static int find_recursion(char *instring)
     return retval;
 }                                      /*}}} */
 
-static int find_recursion_core(List oldvars)
+static int
+find_recursion_core(List oldvars)
 {                                      /*{{{ */
-    List          newvars = NULL;
+    List          newvars    = NULL;
     ListIterator  oldvarsIterator;
-    int           retval = 0;
+    int           retval     = 0;
     struct answer a;
     char         *newVarname = NULL;
 
@@ -484,8 +537,9 @@ static int find_recursion_core(List oldvars)
     return retval;
 }                                      /*}}} */
 
-void report_error(const char *err_fmt,
-                  ...)
+void
+report_error(const char *err_fmt,
+             ...)
 {                                      /*{{{ */
     extern char *errstring;
     extern int   errloc;
@@ -501,7 +555,7 @@ void report_error(const char *err_fmt,
 
     this_error = calloc(strlen(err_fmt) + 1000, sizeof(char));
     vsnprintf(this_error, strlen(err_fmt) + 1000, err_fmt, ap);
-    len = strlen(this_error) + 100;
+    len        = strlen(this_error) + 100;
 
     va_end(ap);
 
@@ -534,7 +588,8 @@ void report_error(const char *err_fmt,
     }
 }                                      /*}}} */
 
-void set_prettyanswer(const Number num)
+void
+set_prettyanswer(const Number num)
 {                                      /*{{{ */
     char *temp;
 
@@ -553,11 +608,15 @@ void set_prettyanswer(const Number num)
     Dprintf("set_prettyanswer - done\n");
 }                                      /*}}} */
 
-static char *print_this_result_dbl(const double result, int output, char *nad, char **es)
+static char *
+print_this_result_dbl(const double result,
+                      int          output,
+                      char        *nad,
+                      char       **es)
 {                                      /*{{{ */
     char         format[10];
     static char *tmp;
-    static char  pa_dyn = 1;
+    static char  pa_dyn         = 1;
     extern char *errstring;
     unsigned int decimal_places = 0;
 
@@ -581,7 +640,7 @@ static char *print_this_result_dbl(const double result, int output, char *nad, c
             }
             if (conf.precision > -1) {
                 decimal_places = conf.precision;
-                switch(conf.engineering) {
+                switch (conf.engineering) {
                     case never:
                         snprintf(format, 10, "%%1.%if", conf.precision);
                         break;
@@ -857,13 +916,17 @@ hexoct_body:
     if (output) {
         show_answer(errstring, not_all_displayed, pa);
     }
-    if (nad) *nad = not_all_displayed;
-    if (es) *es = errstring;
+    if (nad) { *nad = not_all_displayed; }
+    if (es) { *es = errstring; }
 
     return pa;
 }                                      /*}}} */
 
-char *print_this_result(const Number result, int output, char *nad, char **es)
+char *
+print_this_result(const Number result,
+                  int          output,
+                  char        *nad,
+                  char       **es)
 {                                      /*{{{ */
     extern char *errstring;
     unsigned int base = 0;
@@ -975,16 +1038,17 @@ char *print_this_result(const Number result, int output, char *nad, char **es)
     if (output) {
         show_answer(errstring, not_all_displayed, pa);
     }
-    if (nad) *nad = not_all_displayed;
-    if (es) *es = errstring;
+    if (nad) { *nad = not_all_displayed; }
+    if (es) { *es = errstring; }
 
     return pa;
 }                                      /*}}} */
 
-void simple_exp(Number                output,
-                const Number          first,
-                const enum operations op,
-                const Number          second)
+void
+simple_exp(Number                output,
+           const Number          first,
+           const enum operations op,
+           const Number          second)
 {                                      /*{{{ */
     if (compute) {
         Number temp;
@@ -1092,9 +1156,10 @@ void simple_exp(Number                output,
     }
 }                                      /*}}} */
 
-void uber_function(Number               output,
-                   const enum functions func,
-                   Number               input)
+void
+uber_function(Number               output,
+              const enum functions func,
+              Number               input)
 {                                      /*{{{ */
     if (compute) {
         Number temp;
@@ -1311,7 +1376,8 @@ void uber_function(Number               output,
     }
 }                                      /*}}} */
 
-char *output_string(const unsigned int o)
+char *
+output_string(const unsigned int o)
 {                                      /*{{{ */
     switch (o) {
         case HEXADECIMAL_FORMAT:
