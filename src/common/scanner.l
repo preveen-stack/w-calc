@@ -10,6 +10,7 @@
 #include <sys/wait.h>
 #include <stdio.h>
 #include <string.h>
+#include <strings.h> /* for strcasecmp() */
 #ifdef HAVE_INTTYPES_H
 #include <inttypes.h>
 #endif
