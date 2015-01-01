@@ -8,7 +8,7 @@ AC_PREREQ(2.59)
 ## ---------------------------------- ##
 ## Autoconf / Automake Initialization ##
 ## ---------------------------------- ##
-AC_INIT([wcalc], [2.4.1b], [kyle-wcalc@memoryhole.net])
+AC_INIT([wcalc], [2.5b], [kyle-wcalc@memoryhole.net])
 AC_CONFIG_AUX_DIR([config])
 AC_CONFIG_MACRO_DIR([config])
 AC_CONFIG_SRCDIR([src/cli/main.c])
@@ -34,15 +34,16 @@ AC_ARG_ENABLE([rpath],
 			  [AS_HELP_STRING([--enable-rpath],
 							  [Add -rpath arguments to LDFLAGS])])
 AC_ARG_ENABLE([picky],
-			  [AS_HELP_STRING([--enable-picky],
-							  [turns on extra compiler warnings (for developers)])])
+              [AS_HELP_STRING([--enable-picky],
+                              [turns on extra compiler warnings (for developers)])])
 AS_IF([test "x$enable_picky" = x],
-	  [AS_IF([test -d "${srcdir}/.svn"],
-			 [AC_MSG_NOTICE([--> developer override: enable picky compiler by default <--])
-			  enable_picky=yes])])
+      [AS_IF([test -d "${srcdir}/.svn"],
+             [AC_MSG_NOTICE([--> developer override: enable picky compiler by default <--])
+             enable_picky=yes])])
 
 # Checks for programs.
 AC_PROG_CC
+AC_PROG_CC_C99
 AC_PROG_RANLIB
 AC_PROG_YACC
 AM_PROG_LEX
@@ -58,7 +59,9 @@ AC_PROG_CPP
 AC_PROG_INSTALL
 
 AS_IF([test "x$enable_picky" = xyes],
-	  [CFLAGS="$CFLAGS -Wall -Wno-strict-aliasing -Wmissing-prototypes -Wstrict-prototypes"])
+	  [CFLAGS="$CFLAGS -Wall -Wshadow -Wpointer-arith -Wcast-qual -Wmissing-prototypes -Wstrict-prototypes"])
+
+CPPFLAGS="$CPPFLAGS -D_XOPEN_SOURCE=500"
 
 AC_CHECK_HEADERS([limits.h])
 AC_CHECK_DECL([PATH_MAX],
