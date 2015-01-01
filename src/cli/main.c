@@ -646,7 +646,6 @@ main(int   argc,
                 }
                 if (printed == 0) {
                     fprintf(stderr, "The %s option's (optional) argument must be two or more letters of one\nof the following (case insensitive):\n", argv[i]);
-                    int nCategory;
                     for (nCategory = 0; nCategory <= MAX_TYPE; ++nCategory) {
                         printf("\t%s\n", conversion_names[nCategory]);
                     }
