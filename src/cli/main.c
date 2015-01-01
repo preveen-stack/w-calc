@@ -490,7 +490,7 @@ display_and_clear_errstring(void)
 
     if (errstring && errstring[0]) {
         if (errloc != -1) {
-            int i;
+            int          i;
             extern int   show_line_numbers;
             extern char *last_input;
 
@@ -918,7 +918,7 @@ main(int   argc,
         rl_attempted_completion_function = wcalc_completion;
         rl_basic_word_break_characters   = " \t\n\"\'+-*/[{()}]=<>!|~&^%";
 #endif
-        exit_on_err = 0;
+        exit_on_err                      = 0;
         printf("Enter an expression to evaluate, q to quit, or ? for help:\n");
         while (1) {
             lines = 1;
@@ -1030,7 +1030,7 @@ main(int   argc,
         unsigned int linelen = 0, maxlinelen = BIG_STRING;
         extern int   show_line_numbers;
 
-        exit_on_err = 1;
+        exit_on_err       = 1;
         show_line_numbers = 1;
         while (1) {
             char *line   = calloc(maxlinelen, sizeof(char));
@@ -1331,6 +1331,7 @@ read_prefs(void)
     char        key[BIG_STRING], value[BIG_STRING];
     size_t      curs = 0;
     size_t      curs_max;
+    char       *f_mutable;
     const char *f;
 
     switch (fd) {
@@ -1357,13 +1358,14 @@ read_prefs(void)
             close(fd);
             return 0;
         }
-        curs_max = info.st_size - 1;
-        f        = mmap(NULL, info.st_size, PROT_READ, MAP_PRIVATE, fd, 0);
-        if (f == MAP_FAILED) {
+        curs_max  = info.st_size - 1;
+        f_mutable = mmap(NULL, info.st_size, PROT_READ, MAP_PRIVATE, fd, 0);
+        if (f_mutable == MAP_FAILED) {
             perror("Could not read the preference file");
             close(fd);
             return 0;
         }
+        f = f_mutable;
     }
     assert(curs_max > curs);
     do {
@@ -1417,7 +1419,7 @@ read_prefs(void)
         while (curs < curs_max && f[curs] != '\n') curs++;
         if (curs < curs_max) { curs++; }
     } while (curs < curs_max);
-    if (munmap((void *)f, curs_max + 1)) {
+    if (munmap(f_mutable, curs_max + 1)) {
         perror("Unmapping the config file");
     }
     if (close(fd)) {
