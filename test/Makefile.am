@@ -29,7 +29,7 @@ XFAIL_TESTS = \
 
 TESTS = $(POSITIVE_TESTS) $(XFAIL_TESTS)
 
-EXTRA_DIST = checktest.sh
+EXTRA_DIST = checktest.sh $(POSITIVE_TESTS) $(XFAIL_TESTS)
 
 TEST_LOG_COMPILER = $(top_srcdir)/test/checktest.sh
 AM_TEST_LOG_FLAGS = "$(top_builddir)/src/wcalc"

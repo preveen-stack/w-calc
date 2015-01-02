@@ -5,7 +5,6 @@ EXTRA_DIST = \
 			 Wcalc.xcodeproj/kyle.pbxuser \
 			 Wcalc.xcodeproj/project.pbxproj \
 			 Info.plist \
-			 test.errors test.recursion test.simple test.vars \
 			 graphics/TheW.icns graphics/w.png graphics/Wred.png \
 			 wcalc.info wcalc.rc wcalc.spec \
 			 COPYRIGHT
