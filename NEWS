@@ -1,3 +1,21 @@
+--- Version 2.5 ---
+Changes:
+ - Color support
+ - Generic SI unit conversion
+Improvements:
+ - Improved documentation
+ - Increased precision for e constant
+ - More robust prefs parsing
+ - Prettier list output
+ - Better detection of libreadline variants
+ - Support for newer versions of autotools
+ - Support for \assert command
+ - Automatic testing infrastructure (via `make check`)
+Bugfixes:
+ - Fix 0 parsing bug (2.4.1 regression; thanks Arun Prakash Jana!)
+ - Plugged memory leaks
+ - Fixed segfault when parsing hierarchical expressions
+ - Fixed handling of Euler constant
 --- Version 2.4.1 ---
 Changes:
  - Removed official support for the GUI

@@ -1,6 +1,6 @@
 Hello!
 
-This is Wcalc 2.4.1!
+This is Wcalc 2.5!
 
 1. What's New
 2. Intro
@@ -14,27 +14,24 @@ This is Wcalc 2.4.1!
 **************
 
 CHANGES:
- - Removed official support for the GUI
+ - Color support!
+ - Generic SI unit conversion!
 
 IMPROVEMENTS:
- - Clarity and corrections in documentation
- - Flex/Lex handling improvements
- - Better output (handling of print_ints, big/small numbers, etc.)
- - More flexibility in building against GMP and MPFR
- - Modernize the source code file layout
- - Print variable description in variable list
- - Fix output reinterpretation for octal and binary with delimiters
- - Use -u option to print list of available units
+ - Improved documentation
+ - Increased precision for e constant
+ - More robust prefs parsing
+ - Prettier list output
+ - Better detection of libreadline variants
+ - Support for newer versions of autotools
+ - Support for \assert command
+ - Automatic testing infrastructure (via `make check`)
 
 BUGFIXES:
- - Fix behavior with long HOME values
- - Avoid potential segfault in number display
- - Fix 0-precision exponent calculation during display
- - Fix display of large exponents
- - Don't use PATH_MAX
- - Fix Debian bug 600255
- - Fix \bits command
- - Fix history filename handling
+ - Fix 0 parsing bug (2.4.1 regression; thanks Arun Prakash Jana!)
+ - Plugged memory leaks
+ - Fixed segfault when parsing hierarchical expressions
+ - Fixed handling of Euler constant
 
 *********
 * INTRO *
@@ -90,11 +87,11 @@ Wcalc supports user-defined variables. You define a variable like this:
 mynewvariable=5
 Then you can use it in an expression like this: 1+3*mynewvariable/4
 
-You can also define "active" variables. In the GUI, just type an expression into the appropriate spot of the variable list. In the command-line, when you assign a variable, put it in single-quotes, like this:
+You can also define "active" variables. When you assign a variable, put it in single-quotes, like this:
 twicepreviousanswer='a * 2'
 In expressions, these work just like regular variables, except the value is calculated when it's used, not when it's defined.
 
-Some special notes about variables - two things are reserved:
+Some special notes about variables - two letters are reserved:
 a - this variable represents the last answer, and may be used in expressions.
 q - this variable is reserved in the command-line version (it means quit), and cannot be used in expressions.
 Also, built-in constants cannot be re-defined, although they are treated as variables in all other cases.
@@ -119,9 +116,7 @@ You can, however, print a number in any base (without a prefix) by using the \ba
 * Installation *
 ****************
 
-Installing the regular (GUI) version of Wcalc is easy - copy it to your Applications folder! To install the command-line version on OSX, use the .pkg file.
-
-For people who may install and use Wcalc on other Unix systems, there are other packages available for download. The source for Wcalc is available on SourceForge from the Wcalc home page. Install as you would usually install from source. If you're really new to this sort of thing, there's some information in the INSTALL file.
+There are pre-built packages available for download for several Linux and BSD  distributions. Otherwise, the source for Wcalc is available on SourceForge from the Wcalc home page. Install as you would usually install from source. If you're really new to this sort of thing, there's some information in the INSTALL file.
 
 ***********
 * License *
