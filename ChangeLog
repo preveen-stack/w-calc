@@ -1,3 +1,31 @@
+2015-01-02  Kyle Wheeler <kbwheel@gmail.com>
+
+	* Makefile.am, test/Makefile.am: fix distcheck
+
+	* COPYRIGHT, ChangeLog, NEWS, README, configure.ac: prep for 2.5
+
+	* wcalc.1: correct color command documentation
+
+	* src/common/iscmd.c: document color command online
+
+2015-01-01  Kyle Wheeler <kbwheel@gmail.com>
+
+	* configure.ac: update version to 2.5b, and update compile flags
+	  for newer systems
+
+	* src/common/isfunc.c: uncrustify
+
+	* src/common/isconst.c: uncrustify
+
+	* src/common/scanner.l: add missing header
+
+	* src/cli/main.c: fix warning about const cast
+
+	* src/common/calculator.c: fix logic errors in variable expansion;
+	  and uncrustify
+
+	* src/cli/main.c: remove unnecessary shadowed variable
+
 2014-12-29  Kyle Wheeler <kbwheel@gmail.com>
 
 	* wcalc.1: document color configuration
