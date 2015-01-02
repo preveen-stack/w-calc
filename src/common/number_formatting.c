@@ -8,6 +8,7 @@
 #endif
 #include <stdio.h>                     /* for snprintf() */
 #include <stdlib.h>                    /* for calloc() */
+#include <sys/types.h>                 /* for ssize_t */
 
 /* Internal Headers */
 #include "number.h"
