@@ -23,6 +23,8 @@ const struct name_with_exp commands[] = {
         "Used like so: \\dsepX This sets the decimal separator to X. By default, it is a period (.)."},
     { { "e", "eng", "engineering", NULL },
         "This toggles the formatting of output between decimal and scientific notation."},
+    { { "color", NULL},
+        "Toggles the use of color in the commandline output."},
     { { "cons", "conservative", NULL},
         "Toggles precision guards."},
     { { "h", "hex", "hexadecimal", "x", NULL},
