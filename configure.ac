@@ -61,7 +61,7 @@ AC_PROG_INSTALL
 AS_IF([test "x$enable_picky" = xyes],
 	  [CFLAGS="$CFLAGS -Wall -Wshadow -Wpointer-arith -Wcast-qual -Wmissing-prototypes -Wstrict-prototypes"])
 
-CPPFLAGS="$CPPFLAGS -D_XOPEN_SOURCE=500"
+CPPFLAGS="$CPPFLAGS -D_XOPEN_SOURCE=500 -D_POSIX_C_SOURCE=200112L"
 
 AC_CHECK_HEADERS([limits.h])
 AC_CHECK_DECL([PATH_MAX],
