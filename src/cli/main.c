@@ -1542,7 +1542,6 @@ display_val(const char *name)
         answer_t val;
         char     approx = 0;
         char    *err;
-        printf("display_val\n");
         display_and_clear_errstring();
         printf("%s%s%s", colors[uiselect[VAR_NAME]], name, colors[uiselect[UNCOLOR]]);
         val = getvar_full(name);
@@ -1550,7 +1549,6 @@ display_val(const char *name)
             printf(" %s=%s %s\n", colors[uiselect[EXACT_ANSWER]], colors[uiselect[UNCOLOR]], val.exp);
         } else {
             char *p = print_this_result(val.val, 0, &approx, &err);
-            printf("display_val\n");
             show_answer(err, approx, p);
         }
         if (val.desc) {
