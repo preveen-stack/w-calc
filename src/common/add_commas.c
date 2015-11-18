@@ -94,6 +94,7 @@ char *add_commas(const char *input,
            strchr(exponent_chars, input[fromcurs]) == NULL) {
         Dprintf("from: %s to: %s \n", input + fromcurs, tmpstring);
         tmpstring[tocurs++] = input[fromcurs++];
+        Dprintf("after copy from: %s to: %s \n", input + fromcurs, tmpstring);
         if (prefix != 0) {
             prefix--;
             continue;
@@ -106,19 +107,29 @@ char *add_commas(const char *input,
         }
     }
     Dprintf("tmpstring[tocurs-1] == %c\n", tmpstring[tocurs - 1]);
+    Dprintf("  tmpstring[tocurs] == %c\n", tmpstring[tocurs]);
     Dprintf("  input[fromcurs-1] == %c\n", input[fromcurs - 1]);
-    if (tmpstring[tocurs - 1] == separator) {
-        tmpstring[tocurs - 1] = dec_delim;
+    Dprintf("    input[fromcurs] == %c\n", input[fromcurs]);
+    Dprintf("tmpstring = %s (ctr = %i)\n", tmpstring, ctr);
+    if (ctr == skip) {
+        if (separator == '\0') {
+            tmpstring[tocurs++] = dec_delim;
+        } else {
+            tmpstring[tocurs - 1] = dec_delim;
+        }
     }
+    Dprintf("tmpstring = %s\n", tmpstring);
     if ((input[fromcurs] == 'e') || (input[fromcurs] == 'E')) {
         tmpstring[tocurs++] = input[fromcurs];
     }
+    Dprintf("tmpstring = %s\n", tmpstring);
     if (fromcurs < input_len) {
         fromcurs++;
         while (fromcurs < input_len) {
             tmpstring[tocurs++] = input[fromcurs++];
         }
     }
+    Dprintf("tmpstring = %s\n", tmpstring);
     return tmpstring;
 }
 
