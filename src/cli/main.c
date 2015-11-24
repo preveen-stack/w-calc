@@ -1300,11 +1300,12 @@ copy_string(char       *d,
             size_t      smax)
 {   /*{{{*/
     size_t     dcurs  = 0, scurs = 0;
-    const char quoted = (s[0] == '\'');
+    const char quoted = (s[0] == '\'' || s[0] == '"');
+    const char quote = s[0];
 
     if (quoted) {
         scurs = 1;
-        while (dcurs < dmax && scurs < smax && s[scurs] != '\'') {
+        while (dcurs < dmax && scurs < smax && s[scurs] != quote) {
             d[dcurs++] = s[scurs++];
         }
         scurs++; // skip the terminating quote
@@ -1317,9 +1318,11 @@ copy_string(char       *d,
     if (scurs > smax) { return 0; }
     if (dcurs > dmax) { return 0; }
     d[dcurs] = 0;
-    while (dcurs > 0 && isspace(d[dcurs - 1])) {
-        dcurs--;
-        d[dcurs] = 0;
+    if (!quoted) {
+        while (dcurs > 0 && isspace(d[dcurs - 1])) {
+            dcurs--;
+            d[dcurs] = 0;
+        }
     }
     return scurs;
 } /*}}}*/
@@ -1398,10 +1401,13 @@ read_prefs(void)
         }
         do {
             curs++;
-        } while (curs < curs_max && isspace(f[curs]));
+        } while (curs < curs_max && isspace(f[curs]) && f[curs] != '\n');
         if (curs == curs_max) {
             config_error("Key (%s) has no value!\n", key);
             goto err_exit;
+        } else if (f[curs] == '\n') {
+            config_error("Key (%s) has no value!\n", key);
+            continue;
         }
         // read in the value
         {
@@ -1413,6 +1419,7 @@ read_prefs(void)
             curs += skip;
         }
 
+        printf("key:'%s' value:'%s'\n", key, value);
         if (!set_pref(key, value)) { goto err_exit; }
 
         // eat the rest of the line
