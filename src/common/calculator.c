@@ -183,7 +183,8 @@ parseme(const char *pthis)
                 break;
             } else if ((conf.in_thou_delimiter != 0) && (sanitized[i] == conf.in_thou_delimiter)) {
                 sanitized[i] = ',';
-            } else if ((conf.in_thou_delimiter == 0) && (sanitized[i] == conf.thou_delimiter)) {
+            } else if ((conf.in_thou_delimiter == 0) && (sanitized[i] == conf.thou_delimiter) &&
+                    (conf.thou_delimiter != ' ')) {
                 sanitized[i] = ',';
             } else if ((conf.in_dec_delimiter != 0) && (sanitized[i] == conf.in_dec_delimiter)) {
                 sanitized[i] = '.';

@@ -82,6 +82,8 @@ extern int  history_truncate_file(char *,
 static int  read_prefs(void);
 static int  read_preload(void);
 static void display_and_clear_errstring(void);
+static int  set_pref(const char *key, const char *value);
+static void config_error(const char *format, ...);
 
 /*
  * These are declared here because they're not in any header files.
@@ -93,6 +95,7 @@ extern int yyparse(void);
 extern int yy_scan_string(const char *);
 
 static int exit_on_err = 0;
+static char *config_type = "";
 
 #ifdef HAVE_LIBREADLINE
 /*@null@*/
@@ -584,11 +587,10 @@ main(int   argc,
     }
 
     /* Parse commandline options */
+    config_type = "Arg: ";
     for (i = 1; i < argc; ++i) {
         if (!strncmp(argv[i], "-P", 2)) {
-            long int argnum;
-            char    *endptr;
-            char    *valstr;
+            char *valstr;
 
             if ((strlen(&argv[i][2]) == 0) && (i + 1 < argc)) {
                 // pull the arg from i+1
@@ -596,18 +598,8 @@ main(int   argc,
             } else {
                 valstr = &argv[i][2];
             }
-            argnum = strtol(valstr, &endptr, 0);
-            if ((*endptr != '\0') || (endptr == valstr)) {
-                if (strlen(valstr)) {
-                    fprintf(stderr,
-                            "-P option requires a valid integer (found '%s' instead).\n", valstr);
-                } else {
-                    fprintf(stderr,
-                            "-P option requires a valid integer.\n");
-                }
+            if (!set_pref("precision", valstr)) {
                 EXIT_EARLY(EXIT_FAILURE);
-            } else {
-                conf.precision = (int)argnum;
             }
         } else if (!strcmp(argv[i], "-E") ||
                    !strcmp(argv[i], "--engineering")) {
@@ -679,68 +671,23 @@ main(int   argc,
         } else if (!strcmp(argv[i], "-R") || !strcmp(argv[i], "--remember")) {
             conf.remember_errors = !conf.remember_errors;
         } else if (!strncmp(argv[i], "--round=", 8)) {
-            if (!strcmp(&(argv[i][8]), "no") ||
-                !strcmp(&(argv[i][8]), "none")) {
-                conf.rounding_indication = NO_ROUNDING_INDICATION;
-            } else if (!strcmp(&(argv[i][8]), "simple")) {
-                conf.rounding_indication = SIMPLE_ROUNDING_INDICATION;
-            } else if (!strcmp(&(argv[i][8]), "sig_fig")) {
-                conf.rounding_indication = SIG_FIG_ROUNDING_INDICATION;
-            }
-        } else if (!strcmp(argv[i], "--round")) {
-            fprintf(stderr,
-                    "--round requires an argument (none|simple|sig_fig)\n");
-            EXIT_EARLY(EXIT_FAILURE);
-        } else if (!strncmp(argv[i], "--idsep=", 7)) {
-            if ((strlen(argv[i]) > 8) || (strlen(argv[i]) == 7)) {
-                fprintf(stderr, "--idsep= must have an argument\n");
+            if (!set_pref("rounding_indication", &(argv[i][8]))) {
                 EXIT_EARLY(EXIT_FAILURE);
             }
-            if ((conf.in_thou_delimiter != argv[i][7]) && ((conf.in_thou_delimiter != 0) || (conf.thou_delimiter != argv[i][7]))) {
-                conf.in_dec_delimiter = argv[i][7];
-            } else {
-                fprintf(stderr,
-                        "%c cannot be the decimal separator. It is the thousands separator.\n",
-                        argv[i][7]);
+        } else if (!strncmp(argv[i], "--idsep=", 7)) {
+            if (!set_pref("input_decimal_delimiter", &(argv[i][7]))) {
                 EXIT_EARLY(EXIT_FAILURE);
             }
         } else if (!strncmp(argv[i], "--dsep=", 7)) {
-            if ((strlen(argv[i]) > 8) || (strlen(argv[i]) == 7)) {
-                fprintf(stderr, "--dsep= must have an argument\n");
-                EXIT_EARLY(EXIT_FAILURE);
-            }
-            if (conf.thou_delimiter != argv[i][7]) {
-                conf.dec_delimiter = argv[i][7];
-            } else {
-                fprintf(stderr,
-                        "%c cannot be the decimal separator. It is the thousands separator.\n",
-                        argv[i][7]);
+            if (!set_pref("decimal_delimiter", &(argv[i][7]))) {
                 EXIT_EARLY(EXIT_FAILURE);
             }
         } else if (!strncmp(argv[i], "--itsep=", 7)) {
-            if ((strlen(argv[i]) > 8) || (strlen(argv[i]) == 7)) {
-                fprintf(stderr, "--itsep= must have an argument\n");
-                EXIT_EARLY(EXIT_FAILURE);
-            }
-            if ((conf.in_dec_delimiter != argv[i][7]) && ((conf.in_dec_delimiter != 0) || (conf.dec_delimiter != argv[i][7]))) {
-                conf.in_thou_delimiter = argv[i][7];
-            } else {
-                fprintf(stderr,
-                        "%c cannot be the thousands separator. It is the decimal separator.\n",
-                        argv[i][7]);
+            if (!set_pref("input_thousands_delimiter", &(argv[i][7]))) {
                 EXIT_EARLY(EXIT_FAILURE);
             }
         } else if (!strncmp(argv[i], "--tsep=", 7)) {
-            if ((strlen(argv[i]) > 8) || (strlen(argv[i]) == 7)) {
-                fprintf(stderr, "--tsep= must have an argument\n");
-                EXIT_EARLY(EXIT_FAILURE);
-            }
-            if (conf.dec_delimiter != argv[i][7]) {
-                conf.thou_delimiter = argv[i][7];
-            } else {
-                fprintf(stderr,
-                        "%c cannot be the thousands separator. It is the decimal separator.\n",
-                        argv[i][7]);
+            if (!set_pref("thousands_delimiter", &(argv[i][7]))) {
                 EXIT_EARLY(EXIT_FAILURE);
             }
         } else if (!strncmp(argv[i], "--bits", 6)) {
@@ -749,14 +696,13 @@ main(int   argc,
 
             argnum = strtoul(&(argv[i][6]), &endptr, 0);
             if ((endptr != NULL) && (strlen(endptr) > 0)) {
-                fprintf(stderr,
-                        "--bits option requires a valid integer without spaces.\n");
+                config_error("--bits option requires a valid integer without spaces.\n");
                 EXIT_EARLY(EXIT_FAILURE);
             } else {
                 if (argnum < NUM_PREC_MIN) {
-                    fprintf(stderr, "Minimum precision is %lu.\n", (unsigned long)NUM_PREC_MIN);
+                    config_error("Minimum precision is %lu.\n", (unsigned long)NUM_PREC_MIN);
                 } else if (argnum > NUM_PREC_MAX) {
-                    fprintf(stderr, "Maximum precision is %lu.\n", (unsigned long)NUM_PREC_MAX);
+                    config_error("Maximum precision is %lu.\n", (unsigned long)NUM_PREC_MAX);
                 } else {
                     num_set_default_prec(argnum);
                 }
@@ -828,6 +774,7 @@ main(int   argc,
             }
         }
     }
+    config_type = "";
 
     if (!cmdline_input) {
         extern char *errstring;
@@ -1196,8 +1143,20 @@ static int
 set_pref(const char *key,
          const char *value)
 {
+    int ok = 1;
     if (!strcmp(key, "precision")) {
-        conf.precision = atoi(value);
+        char *endptr;
+        long int tmp = strtol(value, &endptr, 0);
+        if (('\0' != *endptr) || (value == endptr)) {
+            if (value[0]) {
+                config_error("Precision requires a valid integer (found '%s' instead).", value);
+            } else {
+                config_error("Precision requires a valid integer.");
+            }
+            ok = 0;
+        } else {
+            conf.precision = (int)tmp;
+        }
     } else if (!strcmp(key, "show_equals")) {
         conf.print_equal = TRUEFALSE;
     } else if (!strcmp(key, "flag_undeclared")) {
@@ -1217,13 +1176,85 @@ set_pref(const char *key,
     } else if (!strcmp(key, "print_delimiters")) {
         conf.print_commas = TRUEFALSE;
     } else if (!strcmp(key, "input_thousands_delimiter")) {
-        conf.in_thou_delimiter = value[0];
+        if ((NULL == value) || ('\0' == value[0])) {
+            config_error("Input thousands separator requires a single character value.");
+            ok = 0;
+        }
+        if ((strlen(value) > 1)) {
+            config_error("Input thousands separator requires a single character value (found '%s').", value);
+            ok = 0;
+        }
+        if (value[0] == ' ') {
+            config_error("'%c' cannot be the input thousands separator; input would be too confusing.", value[0]);
+            ok = 0;
+        }
+        if ((conf.in_dec_delimiter != 0) && (conf.in_dec_delimiter == value[0])) {
+            config_error("'%c' cannot be the input thousands separator; it is the input decimal separator.", value[0]);
+            ok = 0;
+        }
+        if ((conf.in_dec_delimiter == 0) && (conf.dec_delimiter == value[0])) {
+            config_error("'%c' cannot be the input thousands separator; it is the decimal separator.", value[0]);
+            ok = 0;
+        }
+        if (ok) {
+            conf.in_thou_delimiter = value[0];
+        }
     } else if (!strcmp(key, "input_decimal_delimiter")) {
-        conf.in_dec_delimiter = value[0];
+        if ((NULL == value) || ('\0' == value[0])) {
+            config_error("Input decimal separator requires a single character value.");
+            ok = 0;
+        }
+        if ((strlen(value) > 1)) {
+            config_error("Input decimal separator requires a single character value (found '%s').", value);
+            ok = 0;
+        }
+        if (value[0] == ' ') {
+            config_error("'%c' cannot be the input decimal separator; input would be too confusing.", value[0]);
+            ok = 0;
+        }
+        if ((conf.in_thou_delimiter != 0) && (conf.in_thou_delimiter == value[0])) {
+            config_error("'%c' cannot be the input decimal separator; it is the input thousands separator.", value[0]);
+            ok = 0;
+        }
+        if ((conf.in_thou_delimiter == 0) && (conf.thou_delimiter == value[0])) {
+            config_error("'%c' cannot be the input decimal separator; it is the thousands separator.", value[0]);
+            ok = 0;
+        }
+        if (ok) {
+            conf.in_dec_delimiter = value[0];
+        }
     } else if (!strcmp(key, "thousands_delimiter")) {
-        conf.thou_delimiter = value[0];
+        if ((NULL == value) || ('\0' == value[0])) {
+            config_error("Thousands separator requires a single character value.");
+            ok = 0;
+        }
+        if ((strlen(value) > 1)) {
+            config_error("Thousands separator requires a single character value (found '%s').", value);
+            ok = 0;
+        }
+        if (conf.dec_delimiter == value[0]) {
+            config_error("'%c' cannot be the thousands separator; it is the decimal separator.", value[0]);
+            ok = 0;
+        }
+        if (ok) {
+            conf.thou_delimiter = value[0];
+        }
     } else if (!strcmp(key, "decimal_delimiter")) {
-        conf.dec_delimiter = value[0];
+        if ((NULL == value) || ('\0' == value[0])) {
+            config_error("Decimal separator requires a single character value.");
+            ok = 0;
+        }
+        if ((strlen(value) > 1)) {
+            config_error("Decimal separator requires a single character value (found '%s').", value);
+            ok = 0;
+        }
+        if (conf.thou_delimiter == value[0]) {
+            config_error("'%c' cannot be the decimal separator; it is the thousands separator.", value[0]);
+            ok = 0;
+        }
+        if (ok) {
+            conf.dec_delimiter = value[0];
+        }
     } else if (!strcmp(key, "history_limit")) {
         if (!strcmp(value, "no")) {
             conf.history_limit = conf.history_limit_len = 0;
@@ -1232,7 +1263,10 @@ set_pref(const char *key,
             conf.history_limit_len = strtoul(value, NULL, 0);
         }
     } else if (!strcmp(key, "output_format")) {
-        if (!strcmp(value, "decimal")) {
+        if ((NULL == value) || ('\0' == value[0])) {
+            config_error("Output format requires a type. Supported types are: decimal, octal, binary, hex.");
+            ok = 0;
+        } else if (!strcmp(value, "decimal")) {
             conf.output_format = DECIMAL_FORMAT;
         } else if (!strcmp(value, "octal")) {
             conf.output_format = OCTAL_FORMAT;
@@ -1241,19 +1275,22 @@ set_pref(const char *key,
         } else if (!strcmp(value, "hex") || !strcmp(value, "hexadecimal")) {
             conf.output_format = HEXADECIMAL_FORMAT;
         } else {
-            fprintf(stderr, "Unrecognized output_format in wcalcrc.\n\tSupported formats are decimal, octal, binary, hex.\n");
-            return 0;
+            config_error("Unrecognized output format. Supported formats are: decimal, octal, binary, hex.");
+            ok = 0;
         }
     } else if (!strcmp(key, "rounding_indication")) {
-        if (!strcmp(value, "no") || !strcmp(value, "none")) {
+        if ((NULL == value) || ('\0' == value[0])) {
+            config_error("Rounding indication requires a type. Supported types are: none, simple, sig_fig.");
+            ok = 0;
+        } else if (!strcmp(value, "no") || !strcmp(value, "none")) {
             conf.rounding_indication = NO_ROUNDING_INDICATION;
         } else if (!strcmp(value, "simple")) {
             conf.rounding_indication = SIMPLE_ROUNDING_INDICATION;
         } else if (!strcmp(value, "sig_fig")) {
             conf.rounding_indication = SIG_FIG_ROUNDING_INDICATION;
         } else {
-            fprintf(stderr, "Unrecognized rounding_indication in wcalcrc.\n\tSupported indication types are none, simple, sig_fig.\n");
-            return 0;
+            config_error("Unrecognized rounding indication. Supported types are: none, simple, sig_fig.");
+            ok = 0;
         }
     } else if (!strcmp(key, "engineering")) {
         if (!strcmp(value, "auto") || !strcmp(value, "automatic") || !strcmp(value, "yes") || !strcmp(value, "true") || !strcmp(value, "1")) {
@@ -1273,12 +1310,12 @@ set_pref(const char *key,
             uiselect = black_and_white_ui;
         }
     } else if (!strncmp(key, "colors[", 7)) {
-        return assign_color_prefs(key + 7, value);
+        ok = assign_color_prefs(key + 7, value);
     } else {
-        fprintf(stderr, "Unrecognized key in wcalcrc: %s\n", key);
-        return 0;
+        config_error("Unrecognized key in wcalcrc: %s", key);
+        ok = 0;
     }
-    return 1;
+    return ok;
 }
 
 static void
@@ -1287,9 +1324,10 @@ config_error(const char *format,
 {   /*{{{*/
     va_list args;
 
-    fprintf(stderr, "Wcalc: Config: ");
+    fprintf(stderr, "Wcalc: Config: %s", config_type);
     va_start(args, format);
     vfprintf(stderr, format, args);
+    fprintf(stderr, "\n");
     va_end(args);
 } /*}}}*/
 
@@ -1370,6 +1408,7 @@ read_prefs(void)
         }
         f = f_mutable;
     }
+    config_type = "wcalcrc: ";
     assert(curs_max > curs);
     do {
         memset(value, 0, BIG_STRING);
@@ -1388,7 +1427,7 @@ read_prefs(void)
         {
             size_t skip = copy_string(key, f + curs, BIG_STRING, curs_max - curs);
             if (!skip) {
-                config_error("Incomplete key (%s)! (probably an unterminated quote)\n", key);
+                config_error("Incomplete key (%s)! (probably an unterminated quote)", key);
                 goto err_exit;
             }
             curs += skip;
@@ -1396,30 +1435,29 @@ read_prefs(void)
         // eat the equals sign (and any surrounding space)
         while (curs < curs_max && isspace(f[curs])) curs++;
         if ((curs == curs_max) || (f[curs] != '=')) {
-            config_error("Expected equals (=) after key (%s)!\n", key);
+            config_error("Expected equals (=) after key (%s)!", key);
             goto err_exit;
         }
         do {
             curs++;
         } while (curs < curs_max && isspace(f[curs]) && f[curs] != '\n');
         if (curs == curs_max) {
-            config_error("Key (%s) has no value!\n", key);
+            config_error("Key (%s) has no value!", key);
             goto err_exit;
         } else if (f[curs] == '\n') {
-            config_error("Key (%s) has no value!\n", key);
+            config_error("Key (%s) has no value!", key);
             continue;
         }
         // read in the value
         {
             size_t skip = copy_string(value, f + curs, BIG_STRING, curs_max - curs);
             if (!skip) {
-                config_error("Incomplete value (%s) for key (%s)! (probably an unterminated quote)\n", value, key);
+                config_error("Incomplete value (%s) for key (%s)! (probably an unterminated quote)", value, key);
                 goto err_exit;
             }
             curs += skip;
         }
 
-        printf("key:'%s' value:'%s'\n", key, value);
         if (!set_pref(key, value)) { goto err_exit; }
 
         // eat the rest of the line
@@ -1432,10 +1470,11 @@ read_prefs(void)
     if (close(fd)) {
         perror("Closing the config file");
     }
+    config_type = "";
     return 1;
 
 err_exit:
-    config_error("Corrupt config file. Cannot continue.\n");
+    config_error("Corrupt config file. Cannot continue.");
     exit(EXIT_FAILURE);
 }                                      /*}}} */
 
