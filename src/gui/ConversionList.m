@@ -46,7 +46,7 @@
 			case KELVIN: return @"Kelvin";
 			case CELSIUS: return @"Celsius";
 			case RANKINE: return @"Rankine";
-			case FARENHEIT: return @"Farenheit";
+			case FAHRENHEIT: return @"Fahrenheit";
 			case REAUMUR: return reamur;
 			default:
 				return @"UNKNOWN";

@@ -897,7 +897,7 @@ const struct conversion temperatures[] = {
     {"", "Kelvin", {"kelvin", "Kelvin", "K", NULL}},
     {"", "Celsius", {"celsius", "Celsius", "C", NULL}},
     {"", "Rankine", {"rankine", "Rankine", NULL}},
-    {"", "Farenheit", {"farenheit", "Farenheit", "F", NULL}},
+    {"", "Fahrenheit", {"fahrenheit", "Fahrenheit", "F", NULL}},
     {"", "Reaumur", {"reaumur", "Reaumur", "R", NULL}},
     {NULL,NULL,{NULL}}
 };
@@ -906,7 +906,7 @@ const char * from_temperatures[] = {
     "[%1.15f]",                     // kelvin
     "[%1.15f + 273.15]",            // celsius
     "[%1.15f / 1.8]",               // rankine
-    "[(%1.15f - 32)/1.8 + 273.15]", // farenheit
+    "[(%1.15f - 32)/1.8 + 273.15]", // fahrenheit
     "[((5/4) * %1.15f) + 273.15]"   // reaumur
 };
 
@@ -914,7 +914,7 @@ const char * to_temperatures[] = {
     "%s",                 // kelvin
     "%s - 273.15",        // celsius
     "%s * 1.8",           // rankine
-    "1.8*(%s-273.15)+32", // farenheit
+    "1.8*(%s-273.15)+32", // fahrenheit
     "(%s-273.15)*(4/5)"   // reaumur
 };
 
@@ -1079,7 +1079,7 @@ void uber_conversion (Number    output,
                 num_set_d(temp, 1.8);
                 num_div(value, value, temp);
                 break;
-            case FARENHEIT:
+            case FAHRENHEIT:
                 num_sub_ui(value, value, 32);
                 num_set_d(temp, 1.8);
                 num_div(value, value, temp);
@@ -1105,7 +1105,7 @@ void uber_conversion (Number    output,
                 num_set_d(temp, 1.8);
                 num_mul(output, value, temp);
                 break;
-            case FARENHEIT:
+            case FAHRENHEIT:
                 num_set_d(temp, 273.15);
                 num_sub(value, value, temp);
                 num_set_d(temp, 1.8);

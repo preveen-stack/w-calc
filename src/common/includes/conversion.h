@@ -82,7 +82,7 @@ struct conv_req {
 #define KELVIN                 0
 #define CELSIUS                1
 #define RANKINE                2
-#define FARENHEIT              3
+#define FAHRENHEIT             3
 #define REAUMUR                4
 extern const struct conversion *conversions[MAX_TYPE + 2];
 extern const char              *conversion_names[MAX_TYPE + 2];
