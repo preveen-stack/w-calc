@@ -77,10 +77,22 @@ AC_CHECK_LIB([m], [acos])
 AC_ARG_WITH([readline],
 			[AS_HELP_STRING([--without-readline],
 							[do not try to find and use the readline library])],
-			[nc_cv_readline=$withval],
-			[nc_cv_readline=yes])
-AS_IF([test "x$nc_cv_readline" = xyes],
-	  [VL_LIB_READLINE])
+			[wcalc_cv_readline=$withval],
+			[wcalc_cv_readline=yes])
+AC_ARG_WITH([editline],
+            [AS_HELP_STRING([--with-editline],
+                            [attempt to use the editline library rather than the readline library])],
+            [wcalc_cv_editline=$withval],
+            [wcalc_cv_editline=unspec])
+AS_IF([test "x$wcalc_cv_readline" != xno -a "x$wcalc_cv_editline" != xyes],
+	  [AX_LIB_READLINE])
+case "$ac_cv_lib_readline" in
+    -ledit*)
+    wcalc_cv_editline=yes
+    ;;
+esac
+AS_IF([test "x$wcalc_cv_editline" = xyes -o "x$ac_cv_lib_readline" = x],
+      [WCALC_EDITLINE])
 
 #==========================================================================================
 # GMP

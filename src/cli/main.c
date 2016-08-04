@@ -21,7 +21,8 @@
 #include <stdarg.h>                    /* for va_start() */
 #include "number.h"
 
-#ifdef HAVE_LIBREADLINE
+#ifdef HAVE_EDITLINE
+#elif defined(HAVE_LIBREADLINE)
 # if defined(HAVE_READLINE_READLINE_H)
 #  include <readline/readline.h>
 # elif defined(HAVE_READLINE_H)
@@ -40,6 +41,8 @@ char *cmdline = NULL;
 #  include <readline/history.h>
 # elif defined(HAVE_HISTORY_H)
 #  include <history.h>
+# elif defined(HAVE_EDITLINE)
+#  include "editline/readline.h" /* for using_history() */
 # else /* ! defined(HAVE_HISTORY_H) */
 extern void add_history();
 extern int  write_history();
@@ -97,7 +100,7 @@ extern int yy_scan_string(const char *);
 static int exit_on_err = 0;
 static char *config_type = "";
 
-#ifdef HAVE_LIBREADLINE
+#if defined(HAVE_LIBREADLINE)
 /*@null@*/
 static List tc_options = NULL;
 
@@ -348,7 +351,7 @@ wcalc_completion(const char *text,
         free(variables);
     }
     rl_attempted_completion_over = 1;  // do not use standard file completion
-    rl_completion_entry_function = tc_generator;
+    rl_completion_entry_function = (Function*)tc_generator;
     retvals                      = rl_completion_matches(text, tc_generator);
     return retvals;
 }                                      /*}}} */
@@ -872,8 +875,12 @@ main(int   argc,
             fflush(NULL);
 #ifdef HAVE_LIBREADLINE
             {
+#if defined(HAVE_EDITLINE) && ! defined(HAVE_READLINE_H)
+                const char *prompt = "-> ";
+#else
                 char prompt[30] = "";
                 snprintf(prompt, 30, "\1%s\2->\1%s\2 ", colors[uiselect[PROMPT]], colors[uiselect[UNCOLOR]]);
+#endif
                 readme = readline(prompt);
             }
             if (!readme) {
@@ -1116,7 +1123,13 @@ assign_color_prefs(const char *key,
     } else if (!strcasecmp(key, "conversion_unit]")) {
         uiselect[CONV_UNIT] = str2color(value);
     }
+#if defined(HAVE_EDITLINE) && ! defined(HAVE_READLINE_H)
+    else if (!strcasecmp(key, "PROMPT]")) {
+        fprintf(stderr, "Libeditline does not support prompt colors!\n");
+    }
+#else
     HANDLECOLOR(PROMPT)
+#endif
     HANDLECOLOR(APPROX_ANSWER)
     HANDLECOLOR(EXACT_ANSWER)
     HANDLECOLOR(ERR_LOCATION)
