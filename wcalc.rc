@@ -40,8 +40,16 @@ save_errors = no
 # This specifies the thousands and decimal delimiters
 # for international numbers. This affects input and output.
 # For spaces, use ' ' - may only be one character.
+# For single quotes, use "'".
 thousands_delimiter = ,
 decimal_delimiter = .
+
+# Uncomment this to specify the thousands and decimal delimiters
+# for international numbers. This affects input only.
+# The value format is the same for 'thousands_delimiter' and
+# 'decimal_delimiter'.
+#input_thousands_delimiter = ,
+#input_decimal_delimiter = .
 
 # Should numbers be rounded to the pre-defined precision limit of
 # the computer
