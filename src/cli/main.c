@@ -140,18 +140,18 @@ tc_rounding(const char *text,
 
 /*@null@*/
 static char *
-tc_engineering(const char *text,
+tc_scientific(const char *text,
                int         state)
 {                                      /*{{{ */
-    static unsigned int i             = 0;
-    char               *engineering[] = { "always", "never", "auto", "automatic", 0 };
+    static unsigned int i            = 0;
+    char               *scientific[] = { "always", "never", "auto", "automatic", 0 };
 
     if (state == 0) {
         i = 0;
     }
-    while (engineering[i] != NULL) {
-        if (strncmp(text, engineering[i], strlen(text)) == 0) {
-            return strdup(engineering[i++]);
+    while (scientific[i] != NULL) {
+        if (strncmp(text, scientific[i], strlen(text)) == 0) {
+            return strdup(scientific[i++]);
         }
         i++;
     }
@@ -267,18 +267,18 @@ wcalc_completion(const char *text,
                 retvals = rl_completion_matches(text, tc_rounding);
                 return retvals;
             }
-        } else if (((strncmp("\\e", rl_line_buffer, 2) == 0) &&
+        } else if (((strncmp("\\s", rl_line_buffer, 2) == 0) &&
                     isspace(rl_line_buffer[2])) ||
-                   ((strncmp("\\eng", rl_line_buffer, 4) == 0) &&
+                   ((strncmp("\\sci", rl_line_buffer, 4) == 0) &&
                     isspace(rl_line_buffer[4])) ||
-                   ((strncmp("\\engineering", rl_line_buffer, 12) == 0) &&
+                   ((strncmp("\\scientific", rl_line_buffer, 12) == 0) &&
                     isspace(rl_line_buffer[12]))) {
             int i = 2;
 
             while (!isspace(rl_line_buffer[i])) ++i;
             while (isspace(rl_line_buffer[i])) ++i;
             if (i == start) {
-                retvals = rl_completion_matches(text, tc_engineering);
+                retvals = rl_completion_matches(text, tc_scientific);
                 return retvals;
             }
         } else if (((strncmp("\\c", rl_line_buffer, 2) == 0) &&
@@ -549,7 +549,7 @@ main(int   argc,
 
     /* initialize the preferences */
     conf.precision           = -1;
-    conf.engineering         = automatic;
+    conf.scientific          = automatic;
     standard_output          = 1;
     conf.picky_variables     = 1;
     conf.print_prefixes      = 1;
@@ -604,11 +604,11 @@ main(int   argc,
             if (!set_pref("precision", valstr)) {
                 EXIT_EARLY(EXIT_FAILURE);
             }
-        } else if (!strcmp(argv[i], "-E") ||
-                   !strcmp(argv[i], "--engineering")) {
-            conf.engineering = always;
+        } else if (!strcmp(argv[i], "-s") ||
+                   !strcmp(argv[i], "--scientific")) {
+            conf.scientific = always;
         } else if (!strcmp(argv[i], "-EE")) {
-            conf.engineering = never;
+            conf.scientific = never;
         } else if (!strcmp(argv[i], "-H") || !strcmp(argv[i], "--help")) {
             display_command_help();
             EXIT_EARLY(EXIT_SUCCESS);
@@ -1305,13 +1305,13 @@ set_pref(const char *key,
             config_error("Unrecognized rounding indication. Supported types are: none, simple, sig_fig.");
             ok = 0;
         }
-    } else if (!strcmp(key, "engineering")) {
+    } else if (!strcmp(key, "scientific")) {
         if (!strcmp(value, "auto") || !strcmp(value, "automatic") || !strcmp(value, "yes") || !strcmp(value, "true") || !strcmp(value, "1")) {
-            conf.engineering = automatic;
+            conf.scientific = automatic;
         } else if (!strcmp(value, "always")) {
-            conf.engineering = always;
+            conf.scientific = always;
         } else {
-            conf.engineering = never;
+            conf.scientific = never;
         }
     } else if (!strcmp(key, "c_style_mod")) {
         conf.c_style_mod = TRUEFALSE;
@@ -1531,8 +1531,8 @@ display_prefs(void)
         prefline("Display Precision", tmp, "\\p");
         sprintf(tmp, "%-24lu", (unsigned long)num_get_default_prec());
         prefline("Internal Precision", tmp, "\\bits");
-        prefline("Engineering Output",
-                 (conf.engineering == always) ? "always" : (conf.engineering == never) ? "never " : "auto  ",
+        prefline("Scientific Notation",
+                 (conf.scientific == always) ? "always" : (conf.scientific == never) ? "never " : "auto  ",
                  "\\e");
         prefline("Output Format", output_string(conf.output_format), "\\b,\\d,\\h,\\o");
         prefline("Use Radians", DP_YESNO(conf.use_radians), "\\r");

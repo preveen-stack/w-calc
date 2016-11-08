@@ -3,9 +3,9 @@
 # n  : n decimal places
 precision = -1
 
-# Should the numbers be printed in engineering notation?
+# Should the numbers be printed in scientific notation?
 # true/false or yes/no
-engineering = false
+scientific = false
 
 # Should undeclared variables be considered errors?
 # if no, the undeclared variables are considered 0.

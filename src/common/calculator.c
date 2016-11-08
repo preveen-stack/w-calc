@@ -641,7 +641,7 @@ print_this_result_dbl(const double result,
             }
             if (conf.precision > -1) {
                 decimal_places = conf.precision;
-                switch (conf.engineering) {
+                switch (conf.scientific) {
                     case never:
                         snprintf(format, 10, "%%1.%if", conf.precision);
                         break;
@@ -654,7 +654,7 @@ print_this_result_dbl(const double result,
                 }
                 Dprintf("precision was specified as %i, format string is \"%s\"\n", conf.precision, format);
             } else {
-                switch (conf.engineering) {
+                switch (conf.scientific) {
                     case never:
                         strncpy(format, "%f", 10);
                         break;
@@ -771,7 +771,7 @@ print_this_result_dbl(const double result,
             {
                 double junk;
 
-                Dprintf("fabs = %f, conf.engineering = %i, conf.print_ints = %i\n", fabs(modf(result, &junk)), conf.engineering, conf.print_ints);
+                Dprintf("fabs = %f, conf.scientific = %i, conf.print_ints = %i\n", fabs(modf(result, &junk)), conf.scientific, conf.print_ints);
                 /* This is the big call */
                 /* translation: if we don't have to handle the print_ints special case,
                  * then we can just use the existing format. */
@@ -978,7 +978,7 @@ print_this_result(const Number result,
         free(pa);
     }
     not_all_displayed = 0;
-    pa                = num_to_str_complex(result, base, conf.engineering, conf.precision,
+    pa                = num_to_str_complex(result, base, conf.scientific, conf.precision,
                                            conf.print_prefixes, &not_all_displayed);
     Dprintf("not_all_displayed = %i\n", not_all_displayed);
 
@@ -996,7 +996,7 @@ print_this_result(const Number result,
                 Dprintf("simple full\n");
 
                 pa2 =
-                    num_to_str_complex(result, base, conf.engineering, -2,
+                    num_to_str_complex(result, base, conf.scientific, -2,
                                        conf.print_prefixes, &junk);
                 not_all_displayed = (strlen(pa) < strlen(pa2));
                 free(pa2);

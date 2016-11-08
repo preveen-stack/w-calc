@@ -50,7 +50,7 @@
     IBOutlet NSTextField *altInputThouSep;
 
     IBOutlet NSDrawer *baseDrawer;
-	
+
     IBOutlet NSStepper *bitsStepper;
     IBOutlet NSStepper *sliderStepper;
 
@@ -58,7 +58,7 @@
     IBOutlet NSMatrix *outputFormat2;
 
     IBOutlet NSSlider *PrecisionSlider;
-    
+
     IBOutlet id errorController;
     IBOutlet id historyList;
     IBOutlet id theKeyboard;

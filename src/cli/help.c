@@ -26,7 +26,7 @@ void display_interactive_help (void)
     printf("This calculator recognizes the following symbols:\n"
            SUPPORTED_SYMBOLS
            "\nThe following commands are supported:\n"
-           "\\p \\bitsX \\e \\eng \\engineering \\q \\help "
+           "\\p \\bitsX \\s \\sci \\scientific \\q \\help "
            "\\prefs "
            "\\cons \\conservative\n"
            "\\pre \\prefix \\prefixes "

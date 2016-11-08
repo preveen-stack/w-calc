@@ -305,19 +305,19 @@ command : HEX_CMD {
 }
 | ENG_CMD {
 	if ($1 < 0) {
-		switch (conf.engineering) {
-			case always: conf.engineering = never; break;
-			case never: conf.engineering = automatic; break;
-			case automatic: conf.engineering = always; break;
+		switch (conf.scientific) {
+			case always: conf.scientific = never; break;
+			case never: conf.scientific = automatic; break;
+			case automatic: conf.scientific = always; break;
 		}
 	} else {
 		switch($1) {
-			case 1: conf.engineering = automatic; break;
-			case 2: conf.engineering = always; break;
-			case 3: conf.engineering = never; break;
+			case 1: conf.scientific = automatic; break;
+			case 2: conf.scientific = always; break;
+			case 3: conf.scientific = never; break;
 		}
 	}
-	display_status("Engineering notation is %s\n",(conf.engineering==always)?"always used":(conf.engineering==never)?"never used":"used if convenient");
+	display_status("Scientific notation is %s\n",(conf.scientific==always)?"always used":(conf.scientific==never)?"never used":"used if convenient");
 	$$ = isatty(0)?redisplay:nothing;
 }
 | ROUNDING_INDICATION_CMD {
@@ -409,7 +409,7 @@ command : HEX_CMD {
 {
 	if ($1 >= 2 && $1 <= 36) {
 		char * str, junk;
-		str = num_to_str_complex(last_answer, $1, conf.engineering, -1, conf.print_prefixes, &junk);
+		str = num_to_str_complex(last_answer, $1, conf.scientific, -1, conf.print_prefixes, &junk);
 		display_status("base %i: %s\n",$1,str);
 	} else {
 		report_error("Base must be greater than one and less than 37.");

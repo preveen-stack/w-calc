@@ -100,7 +100,7 @@ Sets the input-only thousands separator character to be X.
 Sets the number of bits of memory that will be used to internally represent numbers to be \fIXXXX\fP. The default is 1024. Set higher if you need to work with extremely large or extremely small numbers, set lower if you want to use less memory.
 .TP
 \fB\*=ints\fP
-Toggles whether long integers will be abbreviated or not. This conflicts with engineering notation for large numbers, but not for decimals.
+Toggles whether long integers will be abbreviated or not. This conflicts with scientific notation for large numbers, but not for decimals.
 .TP
 \fB\*=verbose\fP
 Toggles verbose mode, which displays the expression to be calculated before calculating it.
@@ -425,7 +425,7 @@ There are several commands that are supported in wcalc.
 \fB\ep\fIXXX\fP
 Sets the "precision", or the number of decimal places displayed, to be \fIXXX\fP. This setting only affects output, not internal representations. If the precision is set to \-1, the number of decimal places displayed will depend on the value. The default is \-1.
 .TP
-\fB\ee\fP or \fB\eeng\fP or \fB\eengineering\fP
+\fB\es\fP or \fB\esci\fP or \fB\escientific\fP
 Rotates between always using scientific notation, never using scientific
 notation, and choosing to do scientific notation when convenient. Can also take
 an argument that is one of \fIalways\fP, \fInever\fP, and \fIautomatic\fP to
@@ -495,7 +495,7 @@ Saves the current session and variable list to a file, \fIfilename.txt\fP.
 Sets the number of bits of precision that will be used to internally represent numbers to be \fIXXXX\fP. The default is 1024. Set higher if you need more precision, set lower if you want to use less memory.
 .TP
 .B \eints
-Toggles whether long integers will be abbreviated or not. This conflicts with engineering notation for large numbers, but not for decimals.
+Toggles whether long integers will be abbreviated or not. This conflicts with scientific notation for large numbers, but not for decimals.
 .TP
 \fB\eprefs\fP or \fB\epreferences\fP
 Displays the current preference settings.
@@ -533,8 +533,8 @@ A number defining the display precision. Equivalent to the \fB\eP\fP command, wh
 .B show_equals
 Either true ("yes" or "true") or false (anything else). Equivalent to the \fB--quiet\fP argument. Specifies whether answers will begin with an equals sign or not.
 .TP
-.B engineering
-Either "always", "never", or "automatic". Equivalent to the \fB\eengineering\fP command. Specifies whether answers will be displayed in engineering notation or not.
+.B scientific
+Either "always", "never", or "automatic". Equivalent to the \fB\escientific\fP command. Specifies whether answers will be displayed in scientific notation or not.
 .TP
 .B use_radians
 Either true ("yes" or "true") or false (anything else). Equivalent to the \fB\eradians\fP command. Specifies whether trigonometric functions accept input in radians or degrees.
@@ -549,7 +549,7 @@ Either true ("yes" or "true") or false (anything else). Equivalent to the \fB\er
 Either true ("yes" or "true") or false (anything else). Equivalent to the \fB\econservative\fP command. Specifies whether the display will attempt to eliminate numbers too small to be accurate (hopefully, these are only errors created by the binary approximation of the inputs).
 .TP
 .B print_integers
-Either true ("yes" or "true") or false (anything else). Equivalent to the \fB\eints\fP command. Specifies whether whole integers will be printed un-abbreviated or not. This conflicts with engineering notation for large integers, but not for decimals.
+Either true ("yes" or "true") or false (anything else). Equivalent to the \fB\eints\fP command. Specifies whether whole integers will be printed un-abbreviated or not. This conflicts with scientific notation for large integers, but not for decimals.
 .TP
 .B print_delimiters
 Either true ("yes" or "true") or false (anything else). Equivalent to the \fB\edelimiters\fP command. Specifies whether delimiters will be added to output when displaying.

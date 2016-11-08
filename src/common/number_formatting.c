@@ -20,12 +20,12 @@ static size_t zero_strip(char *num);
 static void   add_prefix(char  *num,
                          size_t length,
                          int    base);
-static char *engineering_formatted_number(const char *digits,
-                                          num_exp_t   exp,
-                                          const int   precision,
-                                          const int   base,
-                                          const int   prefix,
-                                          char       *truncated_flag);
+static char *scientific_formatted_number(const char *digits,
+                                         num_exp_t   exp,
+                                         const int   precision,
+                                         const int   base,
+                                         const int   prefix,
+                                         char       *truncated_flag);
 static char *full_precision_formatted_number(const char *digits,
                                              num_exp_t   exp,
                                              const int   base,
@@ -48,12 +48,12 @@ static char *precision_formatted_number(const char *digits,
  * string, and does all the fancy presentation stuff we've come to expect from
  * wcalc.
  */
-char *num_to_str_complex(const Number           num,
-                         const int              base,
-                         enum engineering_modes engr,
-                         const int              prec,
-                         const int              prefix,
-                         char                  *truncated_flag)
+char *num_to_str_complex(const Number          num,
+                         const int             base,
+                         enum scientific_modes engr,
+                         const int             prec,
+                         const int             prefix,
+                         char                 *truncated_flag)
 {   /*{{{*/
     char     *s, *retstr;
     num_exp_t e;
@@ -144,32 +144,32 @@ char *num_to_str_complex(const Number           num,
         }
         switch (engr) {
             case always:
-                Dprintf("ALWAYS print engineering\n");
+                Dprintf("ALWAYS print scientific notation\n");
                 retstr =
-                    engineering_formatted_number(s, e, prec, base, prefix,
+                    scientific_formatted_number(s, e, prec, base, prefix,
                                                  truncated_flag);
                 break;
             case never:
-                Dprintf("NEVER print engineering\n");
+                Dprintf("NEVER print scientific notation\n");
                 if (-1 == prec) {
-                    Dprintf("  -> decided on non-engineering auto-formatting (%i)\n", (int)e);
+                    Dprintf("  -> decided on non-scientific auto-formatting (%i)\n", (int)e);
                     retstr = automatically_formatted_number(s, e, prec, base, prefix, truncated_flag);
                 } else {
-                    Dprintf("  -> decided on non-engineering precision formatting (%i)\n", (int)e);
+                    Dprintf("  -> decided on non-scientific precision formatting (%i)\n", (int)e);
                     retstr = precision_formatted_number(s, e, prec, base, prefix);
                 }
                 break;
             default:
             case automatic:
-                Dprintf("AUTOMATICALLY decide on engineering formatting\n");
+                Dprintf("AUTOMATICALLY decide on scientific formatting\n");
                 if ((e >= 10) || (e <= -10)) {
-                    Dprintf("  -> decided on engineering formatting\n");
+                    Dprintf("  -> decided on scientific formatting\n");
                     retstr =
-                        engineering_formatted_number(s, e, prec, base, prefix,
+                        scientific_formatted_number(s, e, prec, base, prefix,
                                                      truncated_flag);
                 } else {
                     Dprintf
-                        ("  -> decided on non-engineering formatting (%i)\n",
+                        ("  -> decided on non-scientific formatting (%i)\n",
                         (int)e);
                     retstr =
                         automatically_formatted_number(s, e, prec, base,
@@ -529,12 +529,12 @@ char *automatically_formatted_number(const char *digits,
     return retstring;
 } /*}}}*/
 
-char *engineering_formatted_number(const char *digits,
-                                   num_exp_t   exp,
-                                   const int   precision,
-                                   const int   base,
-                                   const int   prefix,
-                                   char       *truncated_flag)
+char *scientific_formatted_number(const char *digits,
+                                  num_exp_t   exp,
+                                  const int   precision,
+                                  const int   base,
+                                  const int   prefix,
+                                  char       *truncated_flag)
 {   /*{{{*/
     size_t length;
     size_t full_length;
@@ -548,7 +548,7 @@ char *engineering_formatted_number(const char *digits,
     }
     length += 3;                       /* the null, the (possible) sign, and the decimal */
 
-    Dprintf("Engineering Formatted Number\n");
+    Dprintf("Scientifically Formatted Number\n");
     Dprintf("digits: %s(%u), exp: %i, prec: %i, prefix: %i\n", digits,
             (unsigned)length, (int)exp, precision, prefix);
 
