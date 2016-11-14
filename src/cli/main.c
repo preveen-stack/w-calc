@@ -1328,7 +1328,6 @@ set_pref(const char *key,
         ok = assign_color_prefs(key + 7, value);
     } else {
         config_error("Unrecognized key in wcalcrc: %s", key);
-        ok = 0;
     }
     return ok;
 }
