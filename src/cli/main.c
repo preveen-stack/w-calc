@@ -548,21 +548,18 @@ main(int   argc,
     lists_init();
 
     /* initialize the preferences */
+    memset(&conf, 0, sizeof(struct _conf));
     conf.precision           = -1;
     conf.scientific          = automatic;
     standard_output          = 1;
     conf.picky_variables     = 1;
     conf.print_prefixes      = 1;
     conf.precision_guard     = 1;
-    conf.in_thou_delimiter   = 0;
-    conf.in_dec_delimiter    = 0;
     conf.thou_delimiter      = ',';
     conf.dec_delimiter       = '.';
     conf.print_equal         = 1;
-    conf.print_ints          = 0;
-    conf.print_commas        = 0;
-    conf.verbose             = 0;
     conf.c_style_mod         = 1;
+    conf.print_greeting      = 1;
     conf.rounding_indication = SIG_FIG_ROUNDING_INDICATION;
 
     init_numbers();
@@ -667,7 +664,8 @@ main(int   argc,
         } else if (!strcmp(argv[i], "-r") || !strcmp(argv[i], "--radians")) {
             conf.use_radians = !conf.use_radians;
         } else if (!strcmp(argv[i], "-q") || !strcmp(argv[i], "--quiet")) {
-            conf.print_equal = !conf.print_equal;
+            conf.print_equal    = !conf.print_equal;
+            conf.print_greeting = !conf.print_greeting;
         } else if (!strcmp(argv[i], "-c") ||
                    !strcmp(argv[i], "--conservative")) {
             conf.precision_guard = !conf.precision_guard;
@@ -869,7 +867,9 @@ main(int   argc,
         rl_basic_word_break_characters   = " \t\n\"\'+-*/[{()}]=<>!|~&^%";
 #endif
         exit_on_err                      = 0;
-        printf("Enter an expression to evaluate, q to quit, or ? for help:\n");
+        if (conf.print_greeting) {
+            printf("Enter an expression to evaluate, q to quit, or ? for help:\n");
+        }
         while (1) {
             lines = 1;
             fflush(NULL);
@@ -1172,6 +1172,8 @@ set_pref(const char *key,
         }
     } else if (!strcmp(key, "show_equals")) {
         conf.print_equal = TRUEFALSE;
+    } else if (!strcmp(key, "print_greeting")) {
+        conf.print_greeting = TRUEFALSE;
     } else if (!strcmp(key, "flag_undeclared")) {
         conf.picky_variables = TRUEFALSE;
     } else if (!strcmp(key, "use_radians")) {
@@ -1495,7 +1497,7 @@ static void
 prefline(const char *name,
          const char *val,
          const char *cmd)
-{
+{/*{{{*/
     if (name && val && cmd) {
         printf("%s%27s:%s %s%-24s%s -> ",
                colors[uiselect[PREF_NAME]], name, colors[uiselect[UNCOLOR]],
@@ -1519,12 +1521,12 @@ prefline(const char *name,
                colors[uiselect[PREF_NAME]], name, colors[uiselect[UNCOLOR]],
                colors[uiselect[PREF_VAL]], val, colors[uiselect[UNCOLOR]]);
     }
-}
+}/*}}}*/
 
 #define DP_YESNO(x) ((x) ? "yes" : "no")
 void
 display_prefs(void)
-{
+{/*{{{*/
     if (standard_output) {
         char tmp[50];
         sprintf(tmp, "%-3i %s", conf.precision, ((conf.precision == -1) ? "(auto)" : "      "));
@@ -1556,12 +1558,12 @@ display_prefs(void)
         prefline("Display Delimiters", DP_YESNO(conf.print_commas), "\\delim");
         prefline("Modulo Operator", (conf.c_style_mod ? "C-style    " : "not C-style"), "\\cmod");
     }
-}
+}/*}}}*/
 
 void
 display_status(const char *format,
                ...)
-{
+{/*{{{*/
     if (standard_output) {
         va_list args;
 
@@ -1571,11 +1573,11 @@ display_status(const char *format,
         va_end(args);
         printf("%s\n", colors[uiselect[UNCOLOR]]);
     }
-}
+}/*}}}*/
 
 void
 display_output_format(int format)
-{
+{/*{{{*/
     if (standard_output) {
         switch (format) {
             case HEXADECIMAL_FORMAT:
@@ -1592,11 +1594,11 @@ display_output_format(int format)
                 break;
         }
     }
-}
+}/*}}}*/
 
 void
 display_val(const char *name)
-{
+{/*{{{*/
     if (standard_output) {
         answer_t val;
         char     approx = 0;
@@ -1614,13 +1616,13 @@ display_val(const char *name)
             printf(":: %s%s%s\n", colors[uiselect[VAR_DESC]], val.desc, colors[uiselect[UNCOLOR]]);
         }
     }
-}
+}/*}}}*/
 
 void
 display_var(variable_t *v,
             unsigned    count,
             unsigned    digits)
-{
+{/*{{{*/
     printf("%*u. %s%s%s", digits, count,
            colors[uiselect[VAR_NAME]], v->key, colors[uiselect[UNCOLOR]]);
     if (v->exp) {
@@ -1638,14 +1640,14 @@ display_var(variable_t *v,
         printf("%*s %s%s%s\n", digits + 4, "::",
                colors[uiselect[VAR_DESC]], v->description, colors[uiselect[UNCOLOR]]);
     }
-}
+}/*}}}*/
 
 void
 display_expvar_explanation(const char *str,
                            const char *exp,
                            List        subvars,
                            const char *desc)
-{
+{/*{{{*/
     printf("%s%s%s is the expression: '%s'\n", colors[uiselect[VAR_NAME]], str,
            colors[uiselect[UNCOLOR]], exp);
     if (desc) {
@@ -1682,25 +1684,25 @@ display_expvar_explanation(const char *str,
             }
         }
     }
-}
+}/*}}}*/
 
 void
 display_valvar_explanation(const char *str,
                            Number     *val,
                            const char *desc)
-{
+{/*{{{*/
     printf("%s%s%s is a variable with the value: %s\n",
            colors[uiselect[VAR_NAME]], str, colors[uiselect[UNCOLOR]],
            print_this_result(*val, 0, NULL, NULL));
     if (desc) {
         printf("Description: %s%s%s\n", colors[uiselect[VAR_DESC]], desc, colors[uiselect[UNCOLOR]]);
     }
-}
+}/*}}}*/
 
 void
 display_explanation(const char *exp,
                     ...)
-{
+{/*{{{*/
     if (standard_output) {
         va_list args;
 
@@ -1710,17 +1712,17 @@ display_explanation(const char *exp,
         va_end(args);
         printf("%s\n", colors[uiselect[UNCOLOR]]);
     }
-}
+}/*}}}*/
 
 void
 display_stateline(const char *buf)
-{
+{/*{{{*/
     printf("-> %s\n", buf);
-}
+}/*}}}*/
 
 void
 display_consts(void)
-{
+{/*{{{*/
     size_t linelen = 0;
 
     for (size_t i = 0; consts[i].explanation; i++) {
@@ -1740,6 +1742,6 @@ display_consts(void)
         }
     }
     printf("\n");
-}
+}/*}}}*/
 
 /* vim:set expandtab: */

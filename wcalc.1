@@ -68,7 +68,7 @@ Toggles whether trigonometric functions assume input (and output) is in
 radians. By default, trigonometric functions assume input is in degrees.
 .TP
 \fB\-q\fP or \fB\*=quiet\fP
-Toggles whether the equals sign will be printed before the results.
+Toggles whether the equals sign will be printed before the results. Also hides the greeting, when used interactively.
 .TP
 \fB\-c\fP or \fB\*=conservative\fP
 Toggles accuracy guards. Because of the way floating point numbers are stored in computers, some numbers cannot be represented exactly (such as 0.1). Because of this, calculating with those numbers can produce results that are not
@@ -531,7 +531,10 @@ The possible keys are:
 A number defining the display precision. Equivalent to the \fB\eP\fP command, where \-1 means "auto" and anything else specifies the number of decimal places. This does not affect the behind-the-scenes precision.
 .TP
 .B show_equals
-Either true ("yes" or "true") or false (anything else). Equivalent to the \fB--quiet\fP argument. Specifies whether answers will begin with an equals sign or not.
+Either true ("yes" or "true") or false (anything else). Specifies whether answers will begin with an equals sign or not.
+.TP
+.B print_greeting
+Either true ("yes" or "true") or false (anything else). Specifies whether the greeting ("Enter an expression to evaluate...") will be displayed when wcalc is opened interactively.
 .TP
 .B scientific
 Either "always", "never", or "automatic". Equivalent to the \fB\escientific\fP command. Specifies whether answers will be displayed in scientific notation or not.

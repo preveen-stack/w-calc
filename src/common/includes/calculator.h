@@ -143,6 +143,7 @@ struct _conf {
     unsigned int          live_precision      : 1;
     unsigned int          c_style_mod         : 1;
     unsigned int          color_ui            : 1;
+    unsigned int          print_greeting      : 1;
 };
 
 /* configuration */

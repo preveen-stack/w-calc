@@ -8,7 +8,7 @@ AC_PREREQ(2.59)
 ## ---------------------------------- ##
 ## Autoconf / Automake Initialization ##
 ## ---------------------------------- ##
-AC_INIT([wcalc], [2.5], [kyle-wcalc@memoryhole.net])
+AC_INIT([wcalc], [2.5.1], [kyle-wcalc@memoryhole.net])
 AC_CONFIG_AUX_DIR([config])
 AC_CONFIG_MACRO_DIR([config])
 AC_CONFIG_SRCDIR([src/cli/main.c])
