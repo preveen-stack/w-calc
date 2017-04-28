@@ -2,3 +2,14 @@
 \r
 sin(pi)
 \assert 0.000000000000000000000
+\p 0
+0xe
+\assert 14
+0x0e
+\assert 14
+0xa
+\assert 10
+0x0a
+\assert 10
+0xa
+\assert 10
