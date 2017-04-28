@@ -273,7 +273,7 @@ find_alpha(const char *str)
                 switch (str[i + 1]) {
                     case 'x': // hex numbers can contain letters; skip the whole thing
                         i += 2; // skip the '0x'
-                        while ((i < len) && str[i] && isxdigit(str[i])) i++;
+                        while ((i < len) && str[i] && (isxdigit(str[i]) || str[i] == '.' || str[i] == '@')) i++;
                         break;
                     case 'b': i += 2; break; // skip the '0b' binary prefix
                     default: i++; break;
