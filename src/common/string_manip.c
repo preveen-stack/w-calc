@@ -12,7 +12,7 @@
 #endif
 
 /* System Headers */
-#include <ctype.h>
+#include <wctype.h> /* for iswdigit(), iswpunct() */
 #if !defined(HAVE_CONFIG_H) || HAVE_STRING_H
 # include <string.h>
 #else
@@ -108,7 +108,7 @@ int justnumbers(const char *str)
     size_t curs = 0;
 
     if (!str) { return 0; }
-    while (str[curs] != 0 && (isdigit((int)(str[curs])) || ispunct((int)(str[curs])))) curs++;
+    while (str[curs] != 0 && (iswdigit((int)(str[curs])) || iswpunct((int)(str[curs])))) curs++;
     if (str[curs] == 0) {              // if we reached the end of the string
         return 1;
     } else {

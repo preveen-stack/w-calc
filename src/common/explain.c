@@ -9,7 +9,7 @@
 
 /* System Headers */
 #include <string.h>
-#include <ctype.h>                     /* for isspace() */
+#include <wctype.h>                     /* for iswspace() */
 
 /* Internal Headers */
 #include "number.h"
@@ -42,7 +42,7 @@ void explain(const char *str)
     mystr = strdup(str);
     /* for sanity's sake, remove any trailing whitespace */
     curs = strlen(mystr) - 1;
-    while (isspace(mystr[curs]) && curs > 0) {
+    while (iswspace(mystr[curs]) && curs > 0) {
         mystr[curs] = 0;
         curs--;
     }

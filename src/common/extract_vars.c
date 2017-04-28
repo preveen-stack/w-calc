@@ -4,7 +4,7 @@
 
 /* System Headers */
 #include <stdlib.h>                    /* for NULL */
-#include <ctype.h>                     /* for isalpha() and isdigit() */
+#include <wctype.h>                    /* for iswalpha() and iswdigit() */
 #include <string.h>                    /* for strdup() */
 
 /* Internal Headers */
@@ -22,7 +22,7 @@ List extract_vars(char *str)
     curs = str;
     while (curs && *curs) {
         // search for the first letter of a possible variable
-        while (curs && *curs && !isalpha((int)(*curs))) {
+        while (curs && *curs && !iswalpha((int)(*curs))) {
             if ((*curs == '\'') || (*curs == '#')) {
                 break;
             }
@@ -32,7 +32,7 @@ List extract_vars(char *str)
                 (*(curs - 1) == '0')) {
                 curs++;
                 while (curs && *curs &&
-                       (isdigit((int)(*curs)) ||
+                       (iswdigit((int)(*curs)) ||
                         (*curs >= 'a' && *curs <= 'f') || (*curs >= 'A' &&
                                                            *curs <= 'F'))) {
                     curs++;
@@ -51,8 +51,8 @@ List extract_vars(char *str)
         // if we did find something, pull out the variable name
         eov = curs;
         while (*eov &&
-               (isalpha((int)(*eov)) || *eov == '_' || *eov == ':' ||
-                isdigit((int)(*eov)))) {
+               (iswalpha((int)(*eov)) || *eov == '_' || *eov == ':' ||
+                iswdigit((int)(*eov)))) {
             eov++;
         }
         {

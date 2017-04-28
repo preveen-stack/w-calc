@@ -7,7 +7,7 @@
 # include <string.h>
 #endif
 #include <stdlib.h>                    /* for calloc() */
-#include <ctype.h>
+#include <wctype.h>                    /* for iswdigit() */
 
 /* Internal Headers */
 #include "add_commas.h"
@@ -32,7 +32,7 @@ char *add_commas(const char *input,
     if (NULL == input) {
         return NULL;
     }
-    if (0 == isdigit(*input)) {
+    if (0 == iswdigit(*input)) {
         return NULL;
     }
     delimiter = strchr(input, dec_delim);

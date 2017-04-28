@@ -12,7 +12,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>                  /* for stat() */
-#include <ctype.h>                     /* for isdigit and isalpha */
+#include <wctype.h>                    /* for iswspace() */
 #include <errno.h>
 #include <fcntl.h>                     /* for open() */
 #include <limits.h>                    /* for stroul() */
@@ -233,7 +233,7 @@ wcalc_completion(const char *text,
         } else if (strncmp("\\explain", rl_line_buffer, 8) == 0) {
             int i = 8;
 
-            while (isspace(rl_line_buffer[i])) ++i;
+            while (iswspace(rl_line_buffer[i])) ++i;
             if (i == start) {
                 COMPLETE(qcommands);
                 COMPLETE2(consts);
@@ -246,7 +246,7 @@ wcalc_completion(const char *text,
                    (strncmp("\\save", rl_line_buffer, 5) == 0)) {
             int i = 5;
 
-            while (isspace(rl_line_buffer[i])) ++i;
+            while (iswspace(rl_line_buffer[i])) ++i;
             if (i == start) {
                 retvals =
                     rl_completion_matches(text,
@@ -254,46 +254,46 @@ wcalc_completion(const char *text,
                 return retvals;
             }
         } else if (((strncmp("\\rou", rl_line_buffer, 4) == 0) &&
-                    isspace(rl_line_buffer[4])) ||
+                    iswspace(rl_line_buffer[4])) ||
                    ((strncmp("\\round", rl_line_buffer, 6) == 0) &&
-                    isspace(rl_line_buffer[6])) ||
+                    iswspace(rl_line_buffer[6])) ||
                    ((strncmp("\\rounding", rl_line_buffer, 9) == 0) &&
-                    isspace(rl_line_buffer[9]))) {
+                    iswspace(rl_line_buffer[9]))) {
             int i = 4;
 
-            while (!isspace(rl_line_buffer[i])) ++i;
-            while (isspace(rl_line_buffer[i])) ++i;
+            while (!iswspace(rl_line_buffer[i])) ++i;
+            while (iswspace(rl_line_buffer[i])) ++i;
             if (i == start) {
                 retvals = rl_completion_matches(text, tc_rounding);
                 return retvals;
             }
         } else if (((strncmp("\\s", rl_line_buffer, 2) == 0) &&
-                    isspace(rl_line_buffer[2])) ||
+                    iswspace(rl_line_buffer[2])) ||
                    ((strncmp("\\sci", rl_line_buffer, 4) == 0) &&
-                    isspace(rl_line_buffer[4])) ||
+                    iswspace(rl_line_buffer[4])) ||
                    ((strncmp("\\scientific", rl_line_buffer, 12) == 0) &&
-                    isspace(rl_line_buffer[12]))) {
+                    iswspace(rl_line_buffer[12]))) {
             int i = 2;
 
-            while (!isspace(rl_line_buffer[i])) ++i;
-            while (isspace(rl_line_buffer[i])) ++i;
+            while (!iswspace(rl_line_buffer[i])) ++i;
+            while (iswspace(rl_line_buffer[i])) ++i;
             if (i == start) {
                 retvals = rl_completion_matches(text, tc_scientific);
                 return retvals;
             }
         } else if (((strncmp("\\c", rl_line_buffer, 2) == 0) &&
-                    isspace(rl_line_buffer[2])) ||
+                    iswspace(rl_line_buffer[2])) ||
                    ((strncmp("\\conv", rl_line_buffer, 5) == 0) &&
-                    isspace(rl_line_buffer[5])) ||
+                    iswspace(rl_line_buffer[5])) ||
                    ((strncmp("\\convert", rl_line_buffer, 8) == 0) &&
-                    isspace(rl_line_buffer[8]))) {
+                    iswspace(rl_line_buffer[8]))) {
             int i = 2;
             /*extern const struct conversion lengths[], areas[], volumes[],
              *  masses[], speeds[], powers[], forces[], accelerations[];*/
             extern const struct conversion *conversions[];
 
-            while (!isspace(rl_line_buffer[i])) ++i;
-            while (isspace(rl_line_buffer[i])) ++i;
+            while (!iswspace(rl_line_buffer[i])) ++i;
+            while (iswspace(rl_line_buffer[i])) ++i;
             if (i == start) {
                 /* complete on ALL units */
                 size_t unit, conversion;
@@ -309,13 +309,13 @@ wcalc_completion(const char *text,
                 char    saved_char;
                 ssize_t unit_cat;
 
-                while (!isspace(rl_line_buffer[i])) ++i;
+                while (!iswspace(rl_line_buffer[i])) ++i;
                 saved_char        = rl_line_buffer[i];
                 rl_line_buffer[i] = 0;
                 unit_cat          = identify_unit(unit1);
                 rl_line_buffer[i] = saved_char;
                 if (unit_cat != -1) {
-                    while (isspace(rl_line_buffer[i])) ++i;
+                    while (iswspace(rl_line_buffer[i])) ++i;
                     if (i == start) {
                         size_t unit;
 
@@ -326,9 +326,9 @@ wcalc_completion(const char *text,
                         }
                         addToList(&tc_options, strdup("to"));
                     } else if ((strncmp(rl_line_buffer + i, "to", 2) == 0) &&
-                               isspace(rl_line_buffer[i + 2])) {
+                               iswspace(rl_line_buffer[i + 2])) {
                         i += 2;
-                        while (isspace(rl_line_buffer[i])) ++i;
+                        while (iswspace(rl_line_buffer[i])) ++i;
                         if (i == start) {
                             size_t unit;
 
@@ -1371,7 +1371,7 @@ copy_string(char       *d,
     if (dcurs > dmax) { return 0; }
     d[dcurs] = 0;
     if (!quoted) {
-        while (dcurs > 0 && isspace(d[dcurs - 1])) {
+        while (dcurs > 0 && iswspace(d[dcurs - 1])) {
             dcurs--;
             d[dcurs] = 0;
         }
@@ -1428,7 +1428,7 @@ read_prefs(void)
         memset(value, 0, BIG_STRING);
         memset(key, 0, BIG_STRING);
         // read until we find a non-comment
-        while (curs < curs_max && (isspace(f[curs]) || f[curs] == '#')) {
+        while (curs < curs_max && (iswspace(f[curs]) || f[curs] == '#')) {
             if (f[curs] == '#') { // skip to the next line
                 do {
                     curs++;
@@ -1447,14 +1447,14 @@ read_prefs(void)
             curs += skip;
         }
         // eat the equals sign (and any surrounding space)
-        while (curs < curs_max && isspace(f[curs])) curs++;
+        while (curs < curs_max && iswspace(f[curs])) curs++;
         if ((curs == curs_max) || (f[curs] != '=')) {
             config_error("Expected equals (=) after key (%s)!", key);
             goto err_exit;
         }
         do {
             curs++;
-        } while (curs < curs_max && isspace(f[curs]) && f[curs] != '\n');
+        } while (curs < curs_max && iswspace(f[curs]) && f[curs] != '\n');
         if (curs == curs_max) {
             config_error("Key (%s) has no value!", key);
             goto err_exit;

@@ -3,7 +3,6 @@
 #endif
 
 /* System Headers */
-#include <ctype.h>
 #if HAVE_STRING_H || !defined(HAVE_CONFIG_H)
 # include <string.h>
 #endif

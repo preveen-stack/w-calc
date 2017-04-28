@@ -19,7 +19,7 @@
 #endif
 #include <math.h>
 #include <errno.h>
-#include <ctype.h> /* for isdigit() */
+#include <wctype.h> /* for iswdigit(), iswspace() */
 #include "number.h"
 #include "calculator.h"
 #include "conversion.h"
@@ -98,7 +98,7 @@ YESNO       (YES|NO|TRUE|FALSE|1|0|yes|no|true|false)
 \\d(ec(imal)?)?		{ line_is_a_command = 1; POS_STR(); return(DEC_CMD); }
 \\assert{WHITESPACE}*.*  {
 	int i = 7;
-	while (isspace(yytext[i])) i++;
+	while (iswspace(yytext[i])) i++;
 	if (yytext[i] == 0) i--;
 	YYLVALAC->variable = strdup(yytext + i);
 	line_is_a_command = 1;
@@ -107,7 +107,7 @@ YESNO       (YES|NO|TRUE|FALSE|1|0|yes|no|true|false)
 }
 \\dsep{WHITESPACE}*.     {
 	int i = 5;
-	while (isspace(yytext[i])) i++;
+	while (iswspace(yytext[i])) i++;
 	if (yytext[i] == 0) i--;
 	YYLVALAC->character = yytext[i];
 	line_is_a_command = 1;
@@ -116,7 +116,7 @@ YESNO       (YES|NO|TRUE|FALSE|1|0|yes|no|true|false)
 }
 \\idsep{WHITESPACE}*.     {
 	int i = 5;
-	while (isspace(yytext[i])) i++;
+	while (iswspace(yytext[i])) i++;
 	if (yytext[i] == 0) i--;
 	YYLVALAC->character = yytext[i];
 	line_is_a_command = 1;
@@ -125,7 +125,7 @@ YESNO       (YES|NO|TRUE|FALSE|1|0|yes|no|true|false)
 }
 \\e(ng(ineering)?)?{WHITESPACE}*{DIGIT}* {
 	int i = 2;
-    while (yytext[i] != 0 && ! isdigit((int)(yytext[i]))) ++i;
+    while (yytext[i] != 0 && ! iswdigit((int)(yytext[i]))) ++i;
     if (yytext[i] != 0 && yytext[i] != '\n') {
 		YYLVALAC->integer = strtoul(yytext+i, NULL, 0);
     } else {
@@ -157,8 +157,8 @@ YESNO       (YES|NO|TRUE|FALSE|1|0|yes|no|true|false)
     int i = 0;
     line_is_a_command = 1;
     POS_STR();
-    while(!isspace(yytext[i])) i++;
-    while(isspace(yytext[i])) i++;
+    while(!iswspace(yytext[i])) i++;
+    while(iswspace(yytext[i])) i++;
     YYLVALAC->integer = parse_yesno(yytext + i);
     return(GUARD_CMD);
 }
@@ -166,7 +166,7 @@ YESNO       (YES|NO|TRUE|FALSE|1|0|yes|no|true|false)
 \\help           { line_is_a_command = 1; POS_STR(); return(PRINT_HELP_CMD); }
 \\hlimit{WHITESPACE}*{DIGIT}+ {
 	int i = 7;
-	while (isspace(yytext[i])) ++i;
+	while (iswspace(yytext[i])) ++i;
 	if (yytext[i] != 0) YYLVALAC->integer = strtoul(yytext+i, NULL, 0);
 	else YYLVALAC->integer = 0;
 	line_is_a_command = 1;
@@ -182,11 +182,11 @@ YESNO       (YES|NO|TRUE|FALSE|1|0|yes|no|true|false)
 	int i = 5;
     char *returnme;
     Dprintf("open\n");
-    while (isspace(yytext[i])) ++i;
+    while (iswspace(yytext[i])) ++i;
     returnme = strdup(yytext + i);
 	/* now trim trailing whitespace */
 	i = (int)strlen(returnme) - 1;
-    while (isspace(returnme[i])) {
+    while (iswspace(returnme[i])) {
         returnme[i] = 0;
         i--;
     }
@@ -198,7 +198,7 @@ YESNO       (YES|NO|TRUE|FALSE|1|0|yes|no|true|false)
 }
 \\p{WHITESPACE}*(({DIGIT}+)|(-1)) {
 	int i = 2;
-	while (isspace(yytext[i])) ++i;
+	while (iswspace(yytext[i])) ++i;
 	YYLVALAC->integer = strtol(yytext+i, NULL, 0);
 	line_is_a_command = 1;
 	POS_STR();
@@ -234,7 +234,7 @@ YESNO       (YES|NO|TRUE|FALSE|1|0|yes|no|true|false)
 \\re(member(_errors)?)?		{ line_is_a_command = 1; POS_STR(); return(REMEMBER_CMD); }
 \\bits{WHITESPACE}*{DIGIT}+ {
 	int i = 5;
-	while (isspace(yytext[i])) ++i;
+	while (iswspace(yytext[i])) ++i;
 	YYLVALAC->integer = strtoul(yytext+i, NULL, 0);
 	line_is_a_command = 1;
 	POS_STR();
@@ -243,11 +243,11 @@ YESNO       (YES|NO|TRUE|FALSE|1|0|yes|no|true|false)
 \\save{WHITESPACE}.*		{
 	int i = 5;
     char *returnme;
-	while (isspace(yytext[i])) ++i;
+	while (iswspace(yytext[i])) ++i;
     returnme = strdup(yytext + i);
 	/* now trim trailing whitespace */
 	i = (int)strlen(returnme) - 1;
-    while (isspace(returnme[i])) {
+    while (iswspace(returnme[i])) {
         returnme[i] = 0;
         i--;
     }
@@ -258,7 +258,7 @@ YESNO       (YES|NO|TRUE|FALSE|1|0|yes|no|true|false)
 }
 \\tsep{WHITESPACE}*.       {
 	int i = 5;
-	while (isspace(yytext[i])) ++i;
+	while (iswspace(yytext[i])) ++i;
 	if (yytext[i] == 0) i--;
 	YYLVALAC->character = yytext[i];
 	line_is_a_command = 1;
@@ -267,7 +267,7 @@ YESNO       (YES|NO|TRUE|FALSE|1|0|yes|no|true|false)
 }
 \\itsep{WHITESPACE}*.       {
 	int i = 5;
-	while (isspace(yytext[i])) ++i;
+	while (iswspace(yytext[i])) ++i;
 	if (yytext[i] == 0) i--;
 	YYLVALAC->character = yytext[i];
 	line_is_a_command = 1;
@@ -280,20 +280,20 @@ YESNO       (YES|NO|TRUE|FALSE|1|0|yes|no|true|false)
     char *unitone;
 	int i = 2;
 	/* find the first space */
-	while (yytext[i] != 0 && ! isspace(yytext[i])) ++i;
+	while (yytext[i] != 0 && ! iswspace(yytext[i])) ++i;
 	/* find the end of that space */
-	while (isspace(yytext[i])) ++i;
+	while (iswspace(yytext[i])) ++i;
     unitone = yytext + i;
 	/* skip the unit */
-	while (yytext[i] != 0 && ! isspace(yytext[i])) ++i;
+	while (yytext[i] != 0 && ! iswspace(yytext[i])) ++i;
 	yytext[i++] = 0;
 	/* onward to the word "to" */
-	while (isspace(yytext[i])) ++i;
-	if (yytext[i] == 't' && yytext[i+1] == 'o' && isspace(yytext[i+2])) {
+	while (iswspace(yytext[i])) ++i;
+	if (yytext[i] == 't' && yytext[i+1] == 'o' && iswspace(yytext[i+2])) {
 		i += 3; /* to */
 	}
 	/* seek the next unit */
-	while (isspace(yytext[i])) ++i;
+	while (iswspace(yytext[i])) ++i;
     YYLVALAC->conver.u1 = strdup(unitone);
     YYLVALAC->conver.u2 = strdup(yytext+i);
     line_is_a_command = 1;
@@ -302,7 +302,7 @@ YESNO       (YES|NO|TRUE|FALSE|1|0|yes|no|true|false)
 }
 \\base{WHITESPACE}*{DIGIT}+  {
 	int i = 5;
-	while (isspace(yytext[i])) ++i;
+	while (iswspace(yytext[i])) ++i;
 	YYLVALAC->integer = strtoul(yytext + i, NULL, 0);
 	line_is_a_command = 1;
 	POS_STR();
@@ -311,9 +311,9 @@ YESNO       (YES|NO|TRUE|FALSE|1|0|yes|no|true|false)
 \\verbose					{ line_is_a_command = 1; POS_STR(); return(VERBOSE_CMD); }
 \\explain{WHITESPACE}*.*	{
 	int i = 9, j;
-	while (isspace(yytext[i])) ++i;
+	while (iswspace(yytext[i])) ++i;
 	j = strlen(yytext+i);
-	while (isspace(yytext[j])) {
+	while (iswspace(yytext[j])) {
 		yytext[j] = 0;
 		j--;
 	}
@@ -621,7 +621,7 @@ zeta { POS_STR(); return(WZETA); }
 
 {LETTER}+({LETTER}|{ACCEPTABLE})*{WHITESPACE}*= {
 	int i = 0;
-	while (yytext[i] != 0 && !isspace(yytext[i]) && yytext[i] != '=') i++;
+	while (yytext[i] != 0 && !iswspace(yytext[i]) && yytext[i] != '=') i++;
 	yytext[i] = 0;
 	if (isfunc(yytext)) {
 		report_error("'%s' is a function and functions cannot be reassigned.", yytext);

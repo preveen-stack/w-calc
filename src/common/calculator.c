@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <math.h>                      /* for HUGE_VAL */
 #include <float.h>                     /* for DBL_EPSILON */
-#include <ctype.h>                     /* for isalpha() */
+#include <wctype.h>                    /* for iswalpha(), iswdigit(), iswxdigit() */
 #include <assert.h>
 
 #include "output.h"
@@ -159,7 +159,7 @@ parseme(const char *pthis)
         unsigned int i;
 
         for (i = 0; i < strlen(sanitized); ++i) {
-            if (isdigit((int)(sanitized[i]))) {
+            if (iswdigit((int)(sanitized[i]))) {
                 numbers = 1;
                 break;
             }
@@ -254,12 +254,12 @@ find_alpha(const char *str)
     const size_t len = strlen(str);
     size_t       i   = 0;
 
-    while ((i < len) && str[i] && !isalpha((int)str[i])) {
+    while ((i < len) && str[i] && !iswalpha((int)str[i])) {
         switch (str[i]) {
             case '\\':
                 do {
                     i++;
-                } while ((i < len) && str[i] && isalpha((int)str[i]));
+                } while ((i < len) && str[i] && iswalpha((int)str[i]));
                 break;
             case '\'':
             {
@@ -273,7 +273,7 @@ find_alpha(const char *str)
                 switch (str[i + 1]) {
                     case 'x': // hex numbers can contain letters; skip the whole thing
                         i += 2; // skip the '0x'
-                        while ((i < len) && str[i] && (isxdigit(str[i]) || str[i] == '.' || str[i] == '@')) i++;
+                        while ((i < len) && str[i] && (iswxdigit(str[i]) || str[i] == '.' || str[i] == '@')) i++;
                         break;
                     case 'b': i += 2; break; // skip the '0b' binary prefix
                     default: i++; break;
@@ -330,8 +330,8 @@ extract_var(char   *str,
     char        *var;
 
     while (i < max &&
-           (isalpha((int)str[i]) || str[i] == '_' ||
-            str[i] == ':' || isdigit((int)str[i]))) {
+           (iswalpha((int)str[i]) || str[i] == '_' ||
+            str[i] == ':' || iswdigit((int)str[i]))) {
         i++;
     }
 
