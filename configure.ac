@@ -164,9 +164,6 @@ AC_CHECK_FUNCS([gettimeofday memset modf pow stpcpy strchr strdup strerror strrc
 AC_CONFIG_HEADER([src/common/includes/config.h])
 AC_CONFIG_FILES([Makefile
 				 src/Makefile
-				 src/common/Makefile
-				 src/common/includes/Makefile
-				 src/gui/Makefile
                  test/Makefile
 				 English.lproj/Makefile])
 AC_OUTPUT

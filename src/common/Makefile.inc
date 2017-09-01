@@ -1,6 +1,6 @@
-SUBDIRS += %C%/includes
-
 noinst_LIBRARIES = libwcalc.a
+
+include %D%/includes/Makefile.inc
 
 BUILT_SOURCES = %D%/parser.h
 

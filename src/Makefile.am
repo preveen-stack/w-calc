@@ -1,5 +1,3 @@
-SUBDIRS = gui .
-
 AM_YFLAGS = -d
 AM_CPPFLAGS = -I$(top_srcdir)/src/common/includes \
 	      -I$(top_builddir)/src/common/includes \
@@ -11,6 +9,7 @@ AM_LDFLAGS = @GMP_LDFLAGS@ @MPFR_LDFLAGS@
 UNIT_TESTS =
 
 include common/Makefile.inc
+include gui/Makefile.inc
 
 bin_PROGRAMS = wcalc
 wcalc_LDADD = libwcalc.a @LEXLIB@
