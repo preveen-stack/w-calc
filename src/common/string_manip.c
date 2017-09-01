@@ -31,10 +31,13 @@ void strstrip(const char strip,
 {   /*{{{*/
     size_t left, right;
 
-    for (left = right = 0; str[right] != 0; ++right) {
-        if ((str[right] != 0) && (str[right] != strip)) {
+    if (!str) { return; }
+    left = right = 0;
+    while (str[right] != 0) {
+        if (str[right] != strip) {
             str[left++] = str[right];
         }
+        right++;
     }
     while (left != right) {
         str[left++] = 0;
@@ -108,8 +111,8 @@ int justnumbers(const char *str)
     size_t curs = 0;
 
     if (!str) { return 0; }
-    while (str[curs] != 0 && (iswdigit((int)(str[curs])) || iswpunct((int)(str[curs])))) curs++;
-    if (str[curs] == 0) {              // if we reached the end of the string
+    while (str[curs] != 0 && (iswxdigit((int)(str[curs])) || iswpunct((int)(str[curs])))) curs++;
+    if (str[curs] == 0 && curs > 0) {              // if we reached the end of the string
         return 1;
     } else {
         return 0;
@@ -140,6 +143,7 @@ void stripComments(char *str)
         if (update_follower != 0) {
             str[follower] = str[curs];
             follower++;
+            if (str[curs] == 0) break;
         }
         curs++;
     }

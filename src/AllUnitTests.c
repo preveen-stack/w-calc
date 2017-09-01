@@ -2,6 +2,8 @@
 #include <stdio.h> /* for printf() */
 
 CuSuite* add_commas_get_suite();
+CuSuite* extract_vars_get_suite();
+CuSuite* string_manip_get_suite();
 CuSuite* evalvar_get_suite();
 
 int main(void) {
@@ -9,6 +11,8 @@ int main(void) {
     CuSuite* suite = CuSuiteNew();
 
     CuSuiteAddSuite(suite, add_commas_get_suite());
+    CuSuiteAddSuite(suite, extract_vars_get_suite());
+    CuSuiteAddSuite(suite, string_manip_get_suite());
     CuSuiteAddSuite(suite, evalvar_get_suite());
 
     CuSuiteRun(suite);

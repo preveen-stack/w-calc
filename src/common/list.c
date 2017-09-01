@@ -74,6 +74,13 @@ void lists_cleanup(void)
         free(freeme);
         free(freec);
     }
+    lPool = NULL;
+    lPoolUsed = NULL;
+    lPoolSize = 0;
+    lCleanupPool = NULL;
+    lhPool = NULL;
+    lhPoolSize = 0;
+    lhCleanupPool = NULL;
 }                                      /*}}} */
 
 /* This returns a struct to the pool */
