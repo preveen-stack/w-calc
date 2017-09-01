@@ -2,6 +2,7 @@
 #define WCALC_NUMBER_FORMATTING_H
 
 #include "number.h"
+#include "conf.h" /* for enum scientific_modes */
 
 char *num_to_str_complex(const Number                num,
                          const int                   base,

@@ -11,7 +11,34 @@
 
 /* Internal Headers */
 #include "add_commas.h"
-#include "calculator.h"
+#include "conf.h"
+
+static int isvaliddigit(const wint_t digit,
+                        const int base)
+{
+    switch (base) {
+        default:
+        case DECIMAL_FORMAT:
+            return iswdigit(digit);
+        case HEXADECIMAL_FORMAT:
+            return iswxdigit(digit);
+        case OCTAL_FORMAT:
+            switch(digit) {
+                case '0': case '1': case '2': case '3':
+                case '4': case '5': case '6': case '7':
+                    return 1;
+                default:
+                    return 0;
+            }
+        case BINARY_FORMAT:
+            switch(digit) {
+                case '0': case '1':
+                    return 1;
+                default:
+                    return 0;
+            }
+    }
+}
 
 /* this function returns a copy of the input string with delimiters
  * appropriate for the specified base. */
@@ -19,34 +46,34 @@
 char *add_commas(const char *input,
                  const int   base)
 {
+    struct _conf *conf = getConf();
     char        *tmpstring, *delimiter;
     unsigned int skip, prefix, ctr;
     char         separator;
-    char         dec_delim = conf.dec_delimiter;
+    char         dec_delim = conf->dec_delimiter;
     size_t       preflen;
     size_t       fromcurs, tocurs;
     char        *exponent_chars;
-    const size_t input_len = strlen(input);
 
     Dprintf("add_commas: %s, %i\n", input, base);
     if (NULL == input) {
+        Dprintf("input was null, returning null\n");
         return NULL;
     }
-    if (0 == iswdigit(*input)) {
-        return NULL;
-    }
+
+    const size_t input_len = strlen(input);
     delimiter = strchr(input, dec_delim);
     if (NULL == delimiter) {
         dec_delim = 0;
         delimiter = strrchr(input, 0);
     }
-    Dprintf("add_commas: input: %s\n", input);
+    Dprintf("add_commas: input: %s ... delimiter: %s\n", input, delimiter);
     switch (base) {
         default:
         case DECIMAL_FORMAT:
             skip           = 3;
             prefix         = 0;
-            separator      = conf.thou_delimiter;
+            separator      = conf->thou_delimiter;
             exponent_chars = "eE";
             break;
         case HEXADECIMAL_FORMAT:
@@ -58,17 +85,17 @@ char *add_commas(const char *input,
         case OCTAL_FORMAT:
             skip           = 4;
             prefix         = 1;
-            separator      = conf.thou_delimiter;
+            separator      = conf->thou_delimiter;
             exponent_chars = "eE";
             break;
         case BINARY_FORMAT:
             skip           = 8;
             prefix         = 2;
-            separator      = conf.thou_delimiter;
+            separator      = conf->thou_delimiter;
             exponent_chars = "eE";
             break;
     }
-    if (0 == conf.print_prefixes) {
+    if (0 == conf->print_prefixes) {
         prefix = 0;
     }
     if (*input == '-') {
@@ -92,11 +119,17 @@ char *add_commas(const char *input,
     tocurs   = 0;
     while (fromcurs < input_len && input[fromcurs] != dec_delim &&
            strchr(exponent_chars, input[fromcurs]) == NULL) {
+        if (prefix == 0 && !isvaliddigit(input[fromcurs], base)) {
+            Dprintf("caught a bad digit: %c returning null...\n", input[fromcurs]);
+            free(tmpstring);
+            return NULL;
+        }
         Dprintf("from: %s to: %s \n", input + fromcurs, tmpstring);
         tmpstring[tocurs++] = input[fromcurs++];
         Dprintf("after copy from: %s to: %s \n", input + fromcurs, tmpstring);
         if (prefix != 0) {
             prefix--;
+            Dprintf("skipping prefix...\n");
             continue;
         }
         if ((--ctr == 0) && (separator != '\0')) {

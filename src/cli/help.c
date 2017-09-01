@@ -11,12 +11,16 @@
 # include "config.h"
 #endif
 
+/* This file's header */
+#include "help.h"
+
 /* System Headers */
 #include <stdio.h>
 
 /* Internal Headers */
 #include "definitions.h"
 #include "output.h"
+
 
 void display_interactive_help (void)
 {/*{{{*/

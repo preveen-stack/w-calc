@@ -12,7 +12,7 @@
 
 /* Internal Headers */
 #include "number.h"
-#include "calculator.h"
+#include "conf.h"
 #include "string_manip.h"
 #include "number_formatting.h"
 
@@ -138,7 +138,7 @@ char *num_to_str_complex(const Number          num,
     if (-2 == prec) {
         retstr = full_precision_formatted_number(s, e, base, prefix);
     } else {
-        if (conf.print_ints) {
+        if (getConf()->print_ints) {
             Dprintf("due to print_ints, engr:=never\n");
             engr = never;
         }

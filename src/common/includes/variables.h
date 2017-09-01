@@ -46,7 +46,7 @@ int putexp(const char *key,
            const char *value,
            const char *desc);
 int    varexists(const char *key);
-void   initvar(void);
+void   init_var(void (*dv)(variable_t *, unsigned, unsigned));
 void   delnvar(const size_t n);
 void   cleanupvar(void);
 size_t numvars(void);

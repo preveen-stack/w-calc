@@ -10,6 +10,7 @@
 #ifndef WCALC_FILES
 #define WCALC_FILES
 
+void init_file_loader(void (*show_stateline)(const char*));
 int openDotFile(const char *dotFileName,
                 int         flags);
 int saveState(char *filename); // filename is freed by saveState

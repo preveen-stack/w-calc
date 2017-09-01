@@ -10,7 +10,7 @@
 
 #warning this is all in utf8... should probably use iconv
 
-const struct name_with_exp consts[] = {
+static const struct name_with_exp consts[] = {
     { { "e", NULL },
       "The base of the natural logarithm function. Arbitrary precision. Occasionally called Euler's Number (after Leonhard Eulter) or Napier's Constant (after John Napier)." },
     { { "pi", "pI", "Pi", "PI", "\317\200", NULL },
@@ -117,6 +117,12 @@ const struct name_with_exp consts[] = {
       "This represents infinity. This is a \"special\" number that has specific (unusual) mathematical consequences." /* W_Inf */ },
     { { 0 }, NULL }
 };
+
+const struct name_with_exp *getConsts()
+{
+    return consts;
+}
+
 
 int
 isconst(const char *str)

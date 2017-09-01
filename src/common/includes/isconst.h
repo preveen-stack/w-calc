@@ -3,9 +3,8 @@
 
 #include "explain.h"
 
-extern const struct name_with_exp consts[];
-
 int  isconst(const char *str);
 void printconsts(void);
+const struct name_with_exp *getConsts(void);
 #endif // ifndef WCALC_ISCONST
 /* vim:set expandtab: */

@@ -21,6 +21,7 @@
 #include "number.h"
 #include "historyManager.h"
 #include "calculator.h"
+#include "conf.h"
 
 #ifdef HAVE_READLINE_HISTORY
 # if defined(HAVE_READLINE_HISTORY_H)
@@ -71,12 +72,13 @@ void clearHistory()
 void addToHistory(char  *expression,
                   Number answer)
 {   /*{{{*/
+    const conf_t *conf = getConf();
 #if defined(HAVE_READLINE_HISTORY)
     add_history(expression);
 #endif
     if (!histlen) {
         /* this is the beginning of a new history record */
-        if (!conf.history_limit || (conf.history_limit_len > 0)) {
+        if (!conf->history_limit || (conf->history_limit_len > 0)) {
             history = malloc(sizeof(struct entry));
             if (!history) {
                 return;
@@ -92,7 +94,7 @@ void addToHistory(char  *expression,
     } else {                           /* a history exists */
         // eliminate duplicates
         if (allow_duplicates || strcmp(history[histlen - 1].exp, expression)) {
-            if (!conf.history_limit || (histlen < conf.history_limit_len)) {
+            if (!conf->history_limit || (histlen < conf->history_limit_len)) {
                 /* history not too long, just add a new entry */
                 struct entry *temp =
                     realloc(history, sizeof(struct entry) * (histlen + 1));

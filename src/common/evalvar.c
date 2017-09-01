@@ -21,8 +21,11 @@ char *evalvar(const char *varname)
     if (!a.err) {
         num_init(f);
         if (a.exp) {                   // it is an expression
+            extern char* errstring;
             parseme(a.exp);
-            num_set(f, last_answer);
+            if (!errstring) {
+                num_set(f, last_answer);
+            }
         } else {                       // it is a value
             num_set(f, a.val);
             num_free(a.val);

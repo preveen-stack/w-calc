@@ -25,6 +25,7 @@ char *strchr (), *strrchr ();
 #include <math.h>
 #include <float.h>
 #include <unistd.h> /* for isatty() */
+#include "conf.h"
 #include "calculator.h"
 #include "variables.h"
 #include "files.h"
@@ -49,6 +50,27 @@ short scanerror = 0;
 char * errstring = NULL;
 int errloc = -1;
 int show_line_numbers = 0;
+
+/* Injected Dependencies (output functions) */
+static void (*_display_prefs)(void);
+static void (*_display_output_format)(int format);
+static void (*_display_status)(const char *format,
+                    ...);
+static void (*_display_interactive_help)(void);
+static void (*_display_val)(const char *name);
+
+void init_parser(void (*dp)(void),
+                 void (*dof)(int),
+                 void (*ds)(const char*, ...),
+                 void (*dih)(void),
+                 void (*dv)(const char*))
+{
+    _display_prefs = dp;
+    _display_output_format = dof;
+    _display_status = ds;
+    _display_interactive_help = dih;
+    _display_val = dv;
+}
 
 %}
 
@@ -185,20 +207,20 @@ eoln : EOLN { ++lines; }
 
 command : HEX_CMD {
 	$$ = isatty(0)?redisplay:nothing;
-	conf.output_format = HEXADECIMAL_FORMAT;
-        display_output_format(HEXADECIMAL_FORMAT); }
+	getConf()->output_format = HEXADECIMAL_FORMAT;
+        _display_output_format(HEXADECIMAL_FORMAT); }
 | OCT_CMD {
 	$$ = isatty(0)?redisplay:nothing;
-	conf.output_format = OCTAL_FORMAT;
-        display_output_format(OCTAL_FORMAT); }
+	getConf()->output_format = OCTAL_FORMAT;
+        _display_output_format(OCTAL_FORMAT); }
 | BIN_CMD {
 	$$ = isatty(0)?redisplay:nothing;
-	conf.output_format = BINARY_FORMAT;
-        display_output_format(BINARY_FORMAT); }
+	getConf()->output_format = BINARY_FORMAT;
+        _display_output_format(BINARY_FORMAT); }
 | DEC_CMD {
 	$$ = isatty(0)?redisplay:nothing;
-	conf.output_format = DECIMAL_FORMAT;
-        display_output_format(DECIMAL_FORMAT); }
+	getConf()->output_format = DECIMAL_FORMAT;
+        _display_output_format(DECIMAL_FORMAT); }
 | ASSERT_CMD {
 	if (strcmp($1, pretty_answer)) {
                 fprintf(stderr, "Assertion on line %u:\n", lines);
@@ -210,9 +232,9 @@ command : HEX_CMD {
 }
 | DSEP_CMD {
 	$$ = nothing;
-	if (conf.thou_delimiter != $1) {
-            conf.dec_delimiter = $1;
-	    display_status("%c is now the decimal separator.", $1);
+	if (getConf()->thou_delimiter != $1) {
+            getConf()->dec_delimiter = $1;
+	    _display_status("%c is now the decimal separator.", $1);
 	} else {
             extern int column;
             column --;
@@ -220,9 +242,10 @@ command : HEX_CMD {
 	}}
 | IDSEP_CMD {
 	$$ = nothing;
-	if (conf.in_thou_delimiter != $1 && (conf.in_thou_delimiter != 0 || conf.thou_delimiter != $1)) {
-	    conf.in_dec_delimiter = $1;
-	    display_status("%c is now the decimal separator for input.\n", $1);
+        conf_t *conf = getConf();
+	if (conf->in_thou_delimiter != $1 && (conf->in_thou_delimiter != 0 || conf->thou_delimiter != $1)) {
+	    conf->in_dec_delimiter = $1;
+	    _display_status("%c is now the decimal separator for input.\n", $1);
 	} else {
             extern int column;
             column --;
@@ -230,9 +253,9 @@ command : HEX_CMD {
 	}}
 | TSEP_CMD {
 	$$ = nothing;
-	if (conf.dec_delimiter != $1) {
-	    conf.thou_delimiter = $1;
-	    display_status("%c is now the thousands separator.\n", $1);
+	if (getConf()->dec_delimiter != $1) {
+	    getConf()->thou_delimiter = $1;
+	    _display_status("%c is now the thousands separator.\n", $1);
 	} else if (standard_output) {
             extern int column;
             column --;
@@ -240,9 +263,10 @@ command : HEX_CMD {
 	}}
 | ITSEP_CMD {
 	$$ = nothing;
-	if (conf.in_dec_delimiter != $1 && (conf.in_dec_delimiter != 0 || conf.dec_delimiter != $1)) {
-	    conf.in_thou_delimiter = $1;
-	    display_status("%c is now the thousands separator for input.\n", $1);
+        conf_t *conf = getConf();
+	if (conf->in_dec_delimiter != $1 && (conf->in_dec_delimiter != 0 || conf->dec_delimiter != $1)) {
+	    conf->in_thou_delimiter = $1;
+	    _display_status("%c is now the thousands separator for input.\n", $1);
 	} else  {
             extern int column;
             column --;
@@ -251,52 +275,59 @@ command : HEX_CMD {
 }
 | DELIM_CMD {
 	$$ = nothing;
-	conf.print_commas = ! conf.print_commas;
-	display_status("Will %sshow separators when printing large numbers.\n",conf.print_commas?"":"not ");
+        conf_t *conf = getConf();
+	conf->print_commas = ! conf->print_commas;
+	_display_status("Will %sshow separators when printing large numbers.\n",conf->print_commas?"":"not ");
 }
 | INT_CMD {
 	$$ = nothing;
-	conf.print_ints = ! conf.print_ints;
-	display_status("Will %suse abbreviations for large integers.\n",conf.print_ints?"not ":"");
+        conf_t *conf = getConf();
+	conf->print_ints = ! conf->print_ints;
+	_display_status("Will %suse abbreviations for large integers.\n",conf->print_ints?"not ":"");
 }
 | VERBOSE_CMD
 {
 	$$ = nothing;
-	conf.verbose = ! conf.verbose;
-	display_status("Will %secho the lines to be evaluated.\n",conf.verbose?"":"not ");
+        conf_t *conf = getConf();
+	conf->verbose = ! conf->verbose;
+	_display_status("Will %secho the lines to be evaluated.\n",conf->verbose?"":"not ");
 }
 | DISPLAY_PREFS_CMD {
-        display_prefs();
+        _display_prefs();
 	$$ = nothing;
 }
 | RADIAN_CMD {
 	$$ = nothing;
-	conf.use_radians = ! conf.use_radians;
-	display_status("Now Using %s\n", conf.use_radians?"Radians":"Degrees");}
+        conf_t *conf = getConf();
+	conf->use_radians = ! conf->use_radians;
+	_display_status("Now Using %s\n", conf->use_radians?"Radians":"Degrees");}
 | GUARD_CMD {
 	$$ = nothing;
+        conf_t *conf = getConf();
         switch ($1) {
-            case 0: conf.precision_guard = 0; break;
-            case 1: conf.precision_guard = 1; break;
-            case -1: conf.precision_guard = ! conf.precision_guard; break;
+            case 0: conf->precision_guard = 0; break;
+            case 1: conf->precision_guard = 1; break;
+            case -1: conf->precision_guard = ! conf->precision_guard; break;
         }
-	display_status("Now %sUsing Conservative Precision\n", conf.precision_guard?"":"Not ");}
+	_display_status("Now %sUsing Conservative Precision\n", conf->precision_guard?"":"Not ");}
 | PRECISION_CMD {
 	$$ = isatty(0)?redisplay:nothing;
-	conf.precision = $1;
-        if (conf.precision == -1) {
-            display_status("Precision = auto");
+        conf_t *conf = getConf();
+	conf->precision = $1;
+        if (conf->precision == -1) {
+            _display_status("Precision = auto");
         } else {
-            display_status("Precision = %i", conf.precision);
+            _display_status("Precision = %i", conf->precision);
         } }
 | HLIMIT_CMD {
-    $$ = nothing;
+        $$ = nothing;
+        conf_t *conf = getConf();
 	if ($1) {
-		conf.history_limit = 1;
-		conf.history_limit_len = $1;
+		conf->history_limit = 1;
+		conf->history_limit_len = $1;
 	} else {
-		conf.history_limit = 0;
-		conf.history_limit_len = 0;
+		conf->history_limit = 0;
+		conf->history_limit_len = 0;
 	}
 }
 | LISTVAR_CMD {
@@ -304,47 +335,51 @@ command : HEX_CMD {
 	$$ = nothing;
 }
 | ENG_CMD {
+        conf_t *conf = getConf();
 	if ($1 < 0) {
-		switch (conf.scientific) {
-			case always: conf.scientific = never; break;
-			case never: conf.scientific = automatic; break;
-			case automatic: conf.scientific = always; break;
+		switch (conf->scientific) {
+			case always: conf->scientific = never; break;
+			case never: conf->scientific = automatic; break;
+			case automatic: conf->scientific = always; break;
 		}
 	} else {
 		switch($1) {
-			case 1: conf.scientific = automatic; break;
-			case 2: conf.scientific = always; break;
-			case 3: conf.scientific = never; break;
+			case 1: conf->scientific = automatic; break;
+			case 2: conf->scientific = always; break;
+			case 3: conf->scientific = never; break;
 		}
 	}
-	display_status("Scientific notation is %s\n",(conf.scientific==always)?"always used":(conf.scientific==never)?"never used":"used if convenient");
+	_display_status("Scientific notation is %s\n",(conf->scientific==always)?"always used":(conf->scientific==never)?"never used":"used if convenient");
 	$$ = isatty(0)?redisplay:nothing;
 }
 | ROUNDING_INDICATION_CMD {
 	$$ = nothing;
+        conf_t *conf = getConf();
 	if ($1 != -1)
-		conf.rounding_indication = $1;
+		conf->rounding_indication = $1;
 	else {
-		conf.rounding_indication += 1;
-		conf.rounding_indication %= 3;
+		conf->rounding_indication += 1;
+		conf->rounding_indication %= 3;
 	}
-	display_status("Will display %s rounding indication",
-		(conf.rounding_indication==NO_ROUNDING_INDICATION)?"no":
-                ((conf.rounding_indication==SIMPLE_ROUNDING_INDICATION)?"simple":"significant figure"));
+	_display_status("Will display %s rounding indication",
+		(conf->rounding_indication==NO_ROUNDING_INDICATION)?"no":
+                ((conf->rounding_indication==SIMPLE_ROUNDING_INDICATION)?"simple":"significant figure"));
 }
 | PREFIX_CMD {
 	$$ = nothing;
-	conf.print_prefixes = ! conf.print_prefixes;
-	display_status("Will %sprint number prefixes\n",conf.print_prefixes?"":"not ");
+        conf_t *conf = getConf();
+	conf->print_prefixes = ! conf->print_prefixes;
+	_display_status("Will %sprint number prefixes\n",conf->print_prefixes?"":"not ");
 }
 | REMEMBER_CMD {
 	$$ = nothing;
-	conf.remember_errors = ! conf.remember_errors;
-	display_status("Statements that produce errors are %s.\n",conf.remember_errors?"recorded":"forgotten");
+        conf_t *conf = getConf();
+	conf->remember_errors = ! conf->remember_errors;
+	_display_status("Statements that produce errors are %s.\n",conf->remember_errors?"recorded":"forgotten");
 }
 | PRINT_HELP_CMD {
 	$$ = nothing;
-	display_interactive_help();
+	_display_interactive_help();
 }
 | OPEN_CMD {
 	extern char* open_file;
@@ -409,8 +444,9 @@ command : HEX_CMD {
 {
 	if ($1 >= 2 && $1 <= 36) {
 		char * str, junk;
-		str = num_to_str_complex(last_answer, $1, conf.scientific, -1, conf.print_prefixes, &junk);
-		display_status("base %i: %s\n",$1,str);
+                conf_t *conf = getConf();
+		str = num_to_str_complex(last_answer, $1, conf->scientific, -1, conf->print_prefixes, &junk);
+		_display_status("base %i: %s\n",$1,str);
 	} else {
 		report_error("Base must be greater than one and less than 37.");
 	}
@@ -420,7 +456,7 @@ command : HEX_CMD {
 {
 	int retval = storeVar($2);
 	if (retval == 0) {
-		display_status("successfully stored %s\n",$2);
+		_display_status("successfully stored %s\n",$2);
 	} else {
 		report_error("Failure to store variable!");
 	}
@@ -429,8 +465,9 @@ command : HEX_CMD {
 | CMOD_CMD
 {
 	$$ = nothing;
-	conf.c_style_mod = ! conf.c_style_mod;
-	display_status("The mod (%%) operation will %sbehave like it does in the C programming language.\n",conf.c_style_mod?"":"not ");
+        conf_t *conf = getConf();
+	conf->c_style_mod = ! conf->c_style_mod;
+	_display_status("The mod (%%) operation will %sbehave like it does in the C programming language.\n",conf->c_style_mod?"":"not ");
 }
 ;
 
@@ -450,7 +487,7 @@ assignment : ASSIGNMENT exp optionalstring
 			report_error("q cannot be assigned a value. q is used to exit.");
 		} else {
 			if (putval($1,$2,$3) == 0) {
-                                display_val($1);
+                                _display_val($1);
 			} else {
 				report_error("There was a problem assigning the value.");
 			}
@@ -472,7 +509,7 @@ assignment : ASSIGNMENT exp optionalstring
 			report_error("q cannot be assigned an expression. q is used to exit.");
 		} else {
 			if (putexp($1,$2,$3) == 0) {
-                                display_val($1);
+                                _display_val($1);
 			} else {
 				report_error("There was a problem assigning the expression.");
 			}

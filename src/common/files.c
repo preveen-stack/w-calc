@@ -29,6 +29,7 @@
 /* Internal Headers */
 #include "historyManager.h"
 #include "string_manip.h"
+#include "conf.h"
 #include "calculator.h"
 #include "variables.h"
 #include "output.h"
@@ -37,6 +38,9 @@
 
 /* this is for communicating with the scanner */
 char *open_file = NULL;
+
+/* Injected Dependencies (output functions) */
+static void (*display_stateline)(const char *buf);
 
 static inline void tristrncat(char       *dest,
                               size_t      len,
@@ -58,6 +62,11 @@ static inline void tristrncat(char       *dest,
     }
     written = i;
     strncat(dest, three, len - written);
+}
+
+void init_file_loader(void (*show_stateline)(const char*))
+{
+    display_stateline = show_stateline;
 }
 
 int openDotFile(const char *dotFileName,
@@ -200,9 +209,10 @@ int loadStateFD(int       fd,
     int standard_output_save = standard_output;
     standard_output = 0;
 
-    char        *linebuf;
-    int          retval;
-    unsigned int linelen = 0, maxlinelen = 99;
+    char         *linebuf;
+    int           retval;
+    unsigned int  linelen = 0, maxlinelen = 99;
+    const conf_t *conf = getConf();
 
     linebuf = calloc(sizeof(char), 100);
     retval  = read(fd, linebuf + linelen, 1);
@@ -225,7 +235,7 @@ int loadStateFD(int       fd,
             retval = read(fd, linebuf + linelen, 1);
         }
         linebuf[linelen] = 0;
-        if (conf.verbose) {
+        if (conf->verbose) {
             display_stateline(linebuf);
         }
         stripComments(linebuf);
@@ -240,7 +250,7 @@ int loadStateFD(int       fd,
             parseme(safe);
             putval("a", last_answer, "previous answer");
             if ((!errstring || (errstring && !strlen(errstring)) ||
-                 conf.remember_errors) && into_history) {
+                 conf->remember_errors) && into_history) {
                 addToHistory(linebuf, last_answer);
             }
             free(safe);

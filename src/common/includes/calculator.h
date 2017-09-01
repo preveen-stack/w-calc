@@ -14,15 +14,6 @@
 # include "config.h"
 #endif
 
-#ifdef EBUG
-# include <stdio.h>
-# define Dprintf(fmt, ...)                                               \
-    fprintf(stderr, "[%s:%d] " fmt, __FILE__, __LINE__, ## __VA_ARGS__); \
-    fflush(stderr);
-#else
-# define Dprintf(...) ;
-#endif
-
 #include "definitions.h"
 #include "number.h"
 
@@ -99,8 +90,7 @@ enum operations {
 
 enum commands {redisplay, nothing};
 
-enum scientific_modes {always, never, automatic};
-
+void init_resultprinter(void (*sa)(char*,int,char*));
 void parseme(const char *);
 void report_error(const char *fmt,
                   ...);
@@ -119,36 +109,6 @@ void simple_exp(Number                output,
 int   seed_random(void);
 char *output_string(const unsigned int);
 
-struct _conf {
-    unsigned long         history_limit_len;
-    int                   precision;
-    char                  thou_delimiter;
-    char                  dec_delimiter;
-    char                  in_thou_delimiter;
-    char                  in_dec_delimiter;
-    enum scientific_modes scientific          : 2;
-    unsigned int          picky_variables     : 1;
-    unsigned int          use_radians         : 1;
-    unsigned int          output_format       : 4;
-    unsigned int          print_prefixes      : 1;
-    unsigned int          rounding_indication : 4;
-    unsigned int          remember_errors     : 1;
-    unsigned int          precision_guard     : 1;
-    unsigned int          history_limit       : 1;
-    unsigned int          print_equal         : 1;
-    unsigned int          print_ints          : 1;
-    unsigned int          simple_calc         : 1;
-    unsigned int          verbose             : 1;
-    unsigned int          print_commas        : 1;
-    unsigned int          live_precision      : 1;
-    unsigned int          c_style_mod         : 1;
-    unsigned int          color_ui            : 1;
-    unsigned int          print_greeting      : 1;
-};
-
-/* configuration */
-extern struct _conf conf;
-
 /* results */
 extern Number last_answer;
 extern char  *pretty_answer;
@@ -161,13 +121,5 @@ extern unsigned int sig_figs;
 extern char standard_output;
 extern char not_all_displayed;
 
-#define DECIMAL_FORMAT     0
-#define OCTAL_FORMAT       1
-#define HEXADECIMAL_FORMAT 2
-#define BINARY_FORMAT      3
-
-#define NO_ROUNDING_INDICATION      0
-#define SIMPLE_ROUNDING_INDICATION  1
-#define SIG_FIG_ROUNDING_INDICATION 2
 #endif // ifndef WCALC_CALCULATOR_H
 /* vim:set expandtab: */

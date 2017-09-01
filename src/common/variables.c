@@ -21,12 +21,18 @@
 
 List them = NULL;
 
+/* Injected Dependencies (Output Functions) */
+static void (*display_var)(variable_t *v,
+                           unsigned    count,
+                           unsigned    digits);
+
 /* Hidden, internal functions */
 static void *getvar_core(const char *key,
                          const int   all_or_nothing);
 
-void initvar(void)
+void init_var(void (*dv)(variable_t *, unsigned, unsigned))
 {                                      /*{{{ */
+    display_var = dv;
 }                                      /*}}} */
 
 /* This function deletes all the variables and frees all the memory. */

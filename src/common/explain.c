@@ -31,10 +31,34 @@ static void explain_variable(const char *);
 static void explain_constant(const char *);
 static void explain_function(const char *);
 
+/* Injected Dependencies (callback functions for output) */
+static void (*display_consts)(const struct name_with_exp *);
+static void (*display_explanation)(const char *, ...);
+static void (*display_expvar_explanation)(const char *,
+                                          const char *,
+                                          List,
+                                          const char *);
+static void (*display_valvar_explanation)(const char *,
+                                          Number *,
+                                          const char *);
+
+void
+init_explanation(void (*show_consts)(const struct name_with_exp *),
+                 void (*show_explanation)(const char *, ...),
+                 void (*show_expvar_exp)(const char *, const char *, List, const char *),
+                 void (*show_valvar_exp)(const char *, Number *, const char *))
+{
+    display_consts = show_consts;
+    display_explanation = show_explanation;
+    display_expvar_explanation = show_expvar_exp;
+    display_valvar_explanation = show_valvar_exp;
+}
+
 void explain(const char *str)
 {                                      /*{{{ */
     size_t curs;
     char  *mystr;
+
 
     if ((str == NULL) || (str[0] == 0)) {
         str = "\\explain";
@@ -53,7 +77,7 @@ void explain(const char *str)
                             "Here is the list of the ones currently understood;\n"
                             "each can be explained in detail individually (some\n"
                             "mean the same thing).\n");
-        display_consts();
+        display_consts(getConsts());
     } else if (*mystr == '\\') {       // it's a command
         explain_command(mystr, 0);
     } else if (isconst(mystr)) {       // it's a constant
@@ -79,7 +103,7 @@ void explain(const char *str)
 
 static inline int scan_exps(const char                 *str,
                             const struct name_with_exp *exps)
-{
+{/*{{{*/
     const struct name_with_exp *curs;
 
     for (curs = exps; curs->explanation; curs++) {
@@ -92,7 +116,7 @@ static inline int scan_exps(const char                 *str,
         }
     }
     return -1;
-}
+}/*}}}*/
 
 static int explain_command(const char *str,
                            int         test)
@@ -135,7 +159,7 @@ static void explain_variable(const char *str)
 
 static void explain_constant(const char *str)
 {                                      /*{{{ */
-    (void)scan_exps(str, consts);
+    (void)scan_exps(str, getConsts());
 }                                      /*}}} */
 
 static void explain_function(const char *str)

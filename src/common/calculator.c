@@ -93,6 +93,7 @@ char *strchr(), *strrchr();
 #include "add_commas.h"
 #include "list.h"
 #include "extract_vars.h"
+#include "conf.h"
 
 /* variables everyone needs to get to */
 Number last_answer;
@@ -107,8 +108,6 @@ char         standard_output   = 1;
 char         not_all_displayed = 0;
 char        *pa                = NULL;
 char        *last_input        = NULL;
-
-struct _conf conf;
 
 /*
  * These are declared here because they're not in any header files.
@@ -126,13 +125,27 @@ static int   find_recursion(char *);
 static int   find_recursion_core(List);
 static char *flatten(char *str);
 
+/* Injected Dependencies (output functions) */
+static void
+(*show_answer)(char *err,
+               int  uncertain,
+               char *answer);
+
+void
+init_resultprinter(void (*sa)(char*,int,char*))
+{
+    num_init(last_answer);
+    show_answer = sa;
+}
+
 void
 parseme(const char *pthis)
 {                                      /*{{{ */
-    extern int   synerrors;
-    short        numbers = 0;
-    char        *sanitized;
-    extern char *open_file;
+    extern int    synerrors;
+    short         numbers = 0;
+    char         *sanitized;
+    const conf_t *conf = getConf();
+    extern char  *open_file;
 
     synerrors = 0;
     compute   = 1;
@@ -169,26 +182,26 @@ parseme(const char *pthis)
         unsigned int i;
 
         for (i = 0; i < strlen(sanitized); ++i) {
-            if (((conf.thou_delimiter != '.') && (conf.dec_delimiter != '.') &&
-                 (conf.in_thou_delimiter != '.') && (conf.in_dec_delimiter != '.') &&
-                 (sanitized[i] == '.')) || ((conf.thou_delimiter != ',') &&
-                                            (conf.in_thou_delimiter != ',') &&
-                                            (conf.dec_delimiter != ',') &&
-                                            (conf.in_dec_delimiter != ',') &&
+            if (((conf->thou_delimiter != '.') && (conf->dec_delimiter != '.') &&
+                 (conf->in_thou_delimiter != '.') && (conf->in_dec_delimiter != '.') &&
+                 (sanitized[i] == '.')) || ((conf->thou_delimiter != ',') &&
+                                            (conf->in_thou_delimiter != ',') &&
+                                            (conf->dec_delimiter != ',') &&
+                                            (conf->in_dec_delimiter != ',') &&
                                             (sanitized[i] == ','))) {
                 // throw an error
                 report_error("Improperly formatted numbers! (%c,%c)\n",
-                             conf.thou_delimiter, conf.dec_delimiter);
+                             conf->thou_delimiter, conf->dec_delimiter);
                 synerrors = 1;
                 break;
-            } else if ((conf.in_thou_delimiter != 0) && (sanitized[i] == conf.in_thou_delimiter)) {
+            } else if ((conf->in_thou_delimiter != 0) && (sanitized[i] == conf->in_thou_delimiter)) {
                 sanitized[i] = ',';
-            } else if ((conf.in_thou_delimiter == 0) && (sanitized[i] == conf.thou_delimiter) &&
-                    (conf.thou_delimiter != ' ')) {
+            } else if ((conf->in_thou_delimiter == 0) && (sanitized[i] == conf->thou_delimiter) &&
+                    (conf->thou_delimiter != ' ')) {
                 sanitized[i] = ',';
-            } else if ((conf.in_dec_delimiter != 0) && (sanitized[i] == conf.in_dec_delimiter)) {
+            } else if ((conf->in_dec_delimiter != 0) && (sanitized[i] == conf->in_dec_delimiter)) {
                 sanitized[i] = '.';
-            } else if ((conf.in_dec_delimiter == 0) && (sanitized[i] == conf.dec_delimiter)) {
+            } else if ((conf->in_dec_delimiter == 0) && (sanitized[i] == conf->dec_delimiter)) {
                 sanitized[i] = '.';
             }
         }
@@ -225,6 +238,7 @@ parseme(const char *pthis)
     /* Evaluate the Expression
      */
     {
+        Dprintf("handing string to parser: '%s'\n", sanitized);
         struct yy_buffer_state *yy = yy_scan_string(sanitized);
 
         yyparse();
@@ -250,7 +264,7 @@ exiting:
 
 static size_t
 find_alpha(const char *str)
-{
+{/*{{{*/
     const size_t len = strlen(str);
     size_t       i   = 0;
 
@@ -283,12 +297,12 @@ find_alpha(const char *str)
         }
     }
     return i;
-}
+}/*}}}*/
 
 static char *
 evaluate_var(const char    *varname,
              struct answer *aptr)
-{
+{/*{{{*/
     struct answer a;
     char         *varvalue = NULL;
 
@@ -319,12 +333,12 @@ evaluate_var(const char    *varname,
     *aptr = a;
     assert(varvalue != NULL);
     return varvalue;
-}
+}/*}}}*/
 
 static char *
 extract_var(char   *str,
             size_t *len)
-{
+{/*{{{*/
     const size_t max = strlen(str);
     size_t       i   = 0;
     char        *var;
@@ -343,7 +357,7 @@ extract_var(char   *str,
     var[i] = 0;
     if (len) { *len = i; }
     return var;
-}
+}/*}}}*/
 
 /* this function should probably stop flattening if it sees a comment, but
  * that's so rare (and hardly processor intensive) that it's not worth digging
@@ -619,15 +633,16 @@ print_this_result_dbl(const double result,
                       char        *nad,
                       char       **es)
 {                                      /*{{{ */
-    char         format[10];
-    static char *tmp;
-    static char  pa_dyn         = 1;
-    extern char *errstring;
-    unsigned int decimal_places = 0;
+    char          format[10];
+    const conf_t *conf = getConf();
+    static char  *tmp;
+    static char   pa_dyn         = 1;
+    extern char  *errstring;
+    unsigned int  decimal_places = 0;
 
     Dprintf("print_this_result_dbl(%f)\n", result);
     /* Build the "format" string, that will be used in an snprintf later */
-    switch (conf.output_format) {      /*{{{ */
+    switch (conf->output_format) {      /*{{{ */
         case DECIMAL_FORMAT:
             if (pa_dyn) {
                 tmp = realloc(pa, sizeof(char) * 310);
@@ -643,22 +658,22 @@ print_this_result_dbl(const double result,
             } else {
                 pa = tmp;
             }
-            if (conf.precision > -1) {
-                decimal_places = conf.precision;
-                switch (conf.scientific) {
+            if (conf->precision > -1) {
+                decimal_places = conf->precision;
+                switch (conf->scientific) {
                     case never:
-                        snprintf(format, 10, "%%1.%if", conf.precision);
+                        snprintf(format, 10, "%%1.%if", conf->precision);
                         break;
                     case always:
-                        snprintf(format, 10, "%%1.%ie", conf.precision);
+                        snprintf(format, 10, "%%1.%ie", conf->precision);
                         break;
                     case automatic:
-                        snprintf(format, 10, "%%1.%ig", conf.precision);
+                        snprintf(format, 10, "%%1.%ig", conf->precision);
                         break;
                 }
-                Dprintf("precision was specified as %i, format string is \"%s\"\n", conf.precision, format);
+                Dprintf("precision was specified as %i, format string is \"%s\"\n", conf->precision, format);
             } else {
-                switch (conf.scientific) {
+                switch (conf->scientific) {
                     case never:
                         strncpy(format, "%f", 10);
                         break;
@@ -700,7 +715,7 @@ print_this_result_dbl(const double result,
             } else {
                 pa = tmp;
             }
-            snprintf(format, 10, conf.print_prefixes ? "%%#o" : "%%o");
+            snprintf(format, 10, conf->print_prefixes ? "%%#o" : "%%o");
             break;
         case HEXADECIMAL_FORMAT:
             if (pa_dyn) {
@@ -717,7 +732,7 @@ print_this_result_dbl(const double result,
             } else {
                 pa = tmp;
             }
-            snprintf(format, 10, conf.print_prefixes ? "%%#x" : "%%x");
+            snprintf(format, 10, conf->print_prefixes ? "%%#x" : "%%x");
             break;
         case BINARY_FORMAT:
             // Binary Format can't just use a format string, so
@@ -770,17 +785,17 @@ print_this_result_dbl(const double result,
         char *curs;
 
         Dprintf("normal numbers (format: %s)\n", format);
-        switch (conf.output_format) {  /*{{{ */
+        switch (conf->output_format) {  /*{{{ */
             case DECIMAL_FORMAT:
             {
                 double junk;
 
-                Dprintf("fabs = %f, conf.scientific = %i, conf.print_ints = %i\n", fabs(modf(result, &junk)), conf.scientific, conf.print_ints);
+                Dprintf("fabs = %f, conf->scientific = %i, conf->print_ints = %i\n", fabs(modf(result, &junk)), conf->scientific, conf->print_ints);
                 /* This is the big call */
                 /* translation: if we don't have to handle the print_ints special case,
                  * then we can just use the existing format. */
                 if ((fabs(modf(result, &junk)) != 0.0) ||
-                    !conf.print_ints) {
+                    !conf->print_ints) {
                     snprintf(pa, 310, format, result);
                 } else {
                     /* this is the print_ints special case
@@ -790,10 +805,10 @@ print_this_result_dbl(const double result,
                 Dprintf("pa (unlocalized): %s\n", pa);
                 /* was it as good for you as it was for me?
                  * now, you must localize it */
-                strswap('.', conf.dec_delimiter, pa);
+                strswap('.', conf->dec_delimiter, pa);
 
                 Dprintf("pa: %s\n", pa);
-                switch (conf.rounding_indication) {
+                switch (conf->rounding_indication) {
                     case SIMPLE_ROUNDING_INDICATION:
                         Dprintf("simple\n");
                         not_all_displayed =
@@ -825,17 +840,17 @@ print_this_result_dbl(const double result,
                 break;
             }
             case HEXADECIMAL_FORMAT:
-                curs = pa + (conf.print_prefixes ? 2 : 0);
-                strswap('.', conf.dec_delimiter, pa);
+                curs = pa + (conf->print_prefixes ? 2 : 0);
+                strswap('.', conf->dec_delimiter, pa);
                 goto hexoct_body;
             case OCTAL_FORMAT:
-                curs = pa + (conf.print_prefixes ? 1 : 0);
+                curs = pa + (conf->print_prefixes ? 1 : 0);
 hexoct_body:
                 {
                     long int temp = result;
 
                     snprintf(pa, 310, format, temp);
-                    if (conf.rounding_indication ==
+                    if (conf->rounding_indication ==
                         SIG_FIG_ROUNDING_INDICATION) {
                         if (sig_figs < UINT32_MAX) {
                             unsigned int t = 0;
@@ -851,7 +866,7 @@ hexoct_body:
                         not_all_displayed = 0;
                     }
                 }
-                strswap('.', conf.dec_delimiter, pa);
+                strswap('.', conf->dec_delimiter, pa);
                 break;
             case BINARY_FORMAT:
             {
@@ -865,20 +880,20 @@ hexoct_body:
                     }
                 }
                 pa = calloc(sizeof(char),
-                            (place + (conf.print_prefixes * 2) + 1));
+                            (place + (conf->print_prefixes * 2) + 1));
                 if (!pa) {
                     pa     = "Not Enough Memory";
                     pa_dyn = 0;
                     return pa;
                 }
-                if (conf.print_prefixes) {
+                if (conf->print_prefixes) {
                     pa[0] = '0';
                     pa[1] = 'b';
                 }
                 // print it
                 {
                     double temp = result;
-                    for (i = conf.print_prefixes * 2; place >= 0; ++i) {
+                    for (i = conf->print_prefixes * 2; place >= 0; ++i) {
                         double t = pow(2.0, place);
 
                         if (temp >= t) {
@@ -893,10 +908,10 @@ hexoct_body:
                 pa[i + 1] = 0;
 
                 if (sig_figs < UINT32_MAX) {
-                    if (conf.rounding_indication ==
+                    if (conf->rounding_indication ==
                         SIG_FIG_ROUNDING_INDICATION) {
                         not_all_displayed =
-                            count_digits(pa + (conf.print_prefixes ? 2 : 0)) <
+                            count_digits(pa + (conf->print_prefixes ? 2 : 0)) <
                             sig_figs;
                     } else {
                         not_all_displayed = 0;
@@ -904,13 +919,13 @@ hexoct_body:
                 } else {
                     not_all_displayed = 0;
                 }
-                strswap('.', conf.dec_delimiter, pa);
+                strswap('.', conf->dec_delimiter, pa);
             }                          // binary format
         }                              /*}}} */
     }                                  // if
 
-    if (conf.print_commas) {
-        char *str = add_commas(pa, conf.output_format);
+    if (conf->print_commas) {
+        char *str = add_commas(pa, conf->output_format);
 
         if (str) {
             free(pa);
@@ -918,7 +933,7 @@ hexoct_body:
         }
     }
 
-    if (output) {
+    if (output && show_answer) {
         show_answer(errstring, not_all_displayed, pa);
     }
     if (nad) { *nad = not_all_displayed; }
@@ -933,13 +948,14 @@ print_this_result(const Number result,
                   char        *nad,
                   char       **es)
 {                                      /*{{{ */
-    extern char *errstring;
-    unsigned int base = 0;
+    extern char  *errstring;
+    unsigned int  base = 0;
+    const conf_t *conf = getConf();
 
     Dprintf("print_this_result (%f) in format %i\n",
-            num_get_d(result), conf.output_format);
+            num_get_d(result), conf->output_format);
     // output in the proper base and format
-    switch (conf.output_format) {
+    switch (conf->output_format) {
         case HEXADECIMAL_FORMAT:
             base = 16;
             break;
@@ -952,11 +968,11 @@ print_this_result(const Number result,
             // I know that DBL_EPSILON can be calculated like so:
             // 2^(mpfr_get_prec(result)-1) HOWEVER, printf magically handles
             // numbers like 5.1 that I don't even wanna begin to think about
-            if (conf.precision_guard && (conf.precision < 0)) {
+            if (conf->precision_guard && (conf->precision < 0)) {
                 Dprintf("precision guard and automatic precision\n");
-                if (!conf.print_ints || !is_int(result)) {
+                if (!conf->print_ints || !is_int(result)) {
                     // XXX: this doesn't work for *huge* numbers, like 100!+0.1
-                    Dprintf("no print_ints (%i) or it isn't an int (%i)\n", (int)conf.print_ints, (int)is_int(result));
+                    Dprintf("no print_ints (%i) or it isn't an int (%i)\n", (int)conf->print_ints, (int)is_int(result));
                     // XXX: what is the following if() for?
                     // if (mpfr_get_d(result, GMP_RNDN) !=
                     // mpfr_get_si(result, GMP_RNDN)) {
@@ -982,8 +998,8 @@ print_this_result(const Number result,
         free(pa);
     }
     not_all_displayed = 0;
-    pa                = num_to_str_complex(result, base, conf.scientific, conf.precision,
-                                           conf.print_prefixes, &not_all_displayed);
+    pa                = num_to_str_complex(result, base, conf->scientific, conf->precision,
+                                           conf->print_prefixes, &not_all_displayed);
     Dprintf("not_all_displayed = %i\n", not_all_displayed);
 
     /* now, decide whether it's been rounded or not */
@@ -992,7 +1008,7 @@ print_this_result(const Number result,
         not_all_displayed = 0;
     } else if (not_all_displayed == 0) {
         /* rounding guess */
-        switch (conf.rounding_indication) {
+        switch (conf->rounding_indication) {
             case SIMPLE_ROUNDING_INDICATION:
             {
                 char *pa2, junk;
@@ -1000,8 +1016,8 @@ print_this_result(const Number result,
                 Dprintf("simple full\n");
 
                 pa2 =
-                    num_to_str_complex(result, base, conf.scientific, -2,
-                                       conf.print_prefixes, &junk);
+                    num_to_str_complex(result, base, conf->scientific, -2,
+                                       conf->print_prefixes, &junk);
                 not_all_displayed = (strlen(pa) < strlen(pa2));
                 free(pa2);
                 break;
@@ -1025,14 +1041,14 @@ print_this_result(const Number result,
                 break;
         }
     }
-    if (conf.rounding_indication == NO_ROUNDING_INDICATION) {
+    if (conf->rounding_indication == NO_ROUNDING_INDICATION) {
         Dprintf("clearing rounding indication\n");
         not_all_displayed = 0;
     }
-    strswap('.', conf.dec_delimiter, pa);
+    strswap('.', conf->dec_delimiter, pa);
     // add commas
-    if (conf.print_commas) {
-        char *str = add_commas(pa, conf.output_format);
+    if (conf->print_commas) {
+        char *str = add_commas(pa, conf->output_format);
 
         if (str) {
             free(pa);
@@ -1040,7 +1056,7 @@ print_this_result(const Number result,
         }
     }
 
-    if (output) {
+    if (output && show_answer) {
         show_answer(errstring, not_all_displayed, pa);
     }
     if (nad) { *nad = not_all_displayed; }
@@ -1138,7 +1154,7 @@ simple_exp(Number                output,
                      * in essence, find the value x in the equation:
                      * first = second * temp + x */
                     num_div(output, first, second);
-                    if (conf.c_style_mod) {
+                    if (getConf()->c_style_mod) {
                         num_rintz(output, output);      // makes zeros work
                     } else {
                         if (num_sign(first) >= 0) {
@@ -1167,10 +1183,11 @@ uber_function(Number               output,
               Number               input)
 {                                      /*{{{ */
     if (compute) {
+        const conf_t *conf = getConf();
         Number temp;
 
         num_init(temp);
-        if (!conf.use_radians) {
+        if (!conf->use_radians) {
             switch (func) {
                 case wsin:
                 case wcos:
@@ -1217,40 +1234,40 @@ uber_function(Number               output,
                 break;
             case wasin:
                 num_asin(output, input);
-                if (!conf.use_radians) {
+                if (!conf->use_radians) {
                     num_mul(output, output, temp);
                 }
                 break;
             case wacos:
                 num_acos(output, input);
-                if (!conf.use_radians) {
+                if (!conf->use_radians) {
                     num_mul(output, output, temp);
                 }
                 break;
             case watan:
                 num_atan(output, input);
-                if (!conf.use_radians) {
+                if (!conf->use_radians) {
                     num_mul(output, output, temp);
                 }
                 break;
             case wacot:
                 num_pow_si(output, input, -1);
                 num_atan(output, output);
-                if (!conf.use_radians) {
+                if (!conf->use_radians) {
                     num_mul(output, output, temp);
                 }
                 break;
             case wasec:
                 num_pow_si(output, input, -1);
                 num_acos(output, output);
-                if (!conf.use_radians) {
+                if (!conf->use_radians) {
                     num_mul(output, output, temp);
                 }
                 break;
             case wacsc:
                 num_pow_si(output, input, -1);
                 num_asin(output, output);
-                if (!conf.use_radians) {
+                if (!conf->use_radians) {
                     num_mul(output, output, temp);
                 }
                 break;

@@ -53,6 +53,7 @@ extern int  history_truncate_file(char *,
 /* no history */
 #endif /* HAVE_READLINE_HISTORY */
 
+#include "conf.h"
 #include "calculator.h"
 #include "conversion.h"
 #ifdef HAVE_CONFIG_H /* auto-tool build */
@@ -69,6 +70,9 @@ extern int  history_truncate_file(char *,
 #include "isfunc.h"
 #include "output.h"
 #include "evalvar.h"
+
+/* CLI Includes */
+#include "help.h"
 
 #define TRUEFALSE  (!strcmp(value, "yes") || !strcmp(value, "true") || !strcmp(value, "1"))
 #define BIG_STRING 4096
@@ -99,6 +103,8 @@ extern int yy_scan_string(const char *);
 
 static int exit_on_err = 0;
 static char *config_type = "";
+
+static const struct name_with_exp *consts = NULL;
 
 #if defined(HAVE_LIBREADLINE)
 /*@null@*/
@@ -472,18 +478,19 @@ PrintConversionUnitCategory(int nCategory)
     printf("\n\n");
 }
 
-void
+static void
 show_answer(char *err,
             int   uncertain,
             char *answer)
 {   /*{{{*/
+    const conf_t *conf = getConf();
     if (err && strlen(err)) {
         display_and_clear_errstring();
     }
     if (uncertain) {
-        printf("%s%s %s%s\n", colors[uiselect[APPROX_ANSWER]], conf.print_equal ? "~=" : "  ", colors[uiselect[UNCOLOR]], answer);
+        printf("%s%s %s%s\n", colors[uiselect[APPROX_ANSWER]], conf->print_equal ? "~=" : "  ", colors[uiselect[UNCOLOR]], answer);
     } else {
-        printf("%s%s %s%s\n", colors[uiselect[EXACT_ANSWER]], conf.print_equal ? " =" : "  ", colors[uiselect[UNCOLOR]], answer);
+        printf("%s%s %s%s\n", colors[uiselect[EXACT_ANSWER]], conf->print_equal ? " =" : "  ", colors[uiselect[UNCOLOR]], answer);
     }
 } /*}}}*/
 
@@ -523,12 +530,265 @@ display_and_clear_errstring(void)
     }
 }                                      /*}}} */
 
+static void
+display_var(variable_t *v,
+            unsigned    count,
+            unsigned    digits)
+{/*{{{*/
+    printf("%*u. %s%s%s", digits, count,
+           colors[uiselect[VAR_NAME]], v->key, colors[uiselect[UNCOLOR]]);
+    if (v->exp) {
+        printf(" %s=%s %s\n",
+               colors[uiselect[EXACT_ANSWER]], colors[uiselect[UNCOLOR]],
+               v->expression);
+    } else {
+        char  approx = 0;
+        char *err;
+        char *p      = print_this_result(v->value, 0, &approx, &err);
+        printf("display_var\n");
+        show_answer(err, approx, p);
+    }
+    if (v->description) {
+        printf("%*s %s%s%s\n", digits + 4, "::",
+               colors[uiselect[VAR_DESC]], v->description, colors[uiselect[UNCOLOR]]);
+    }
+}/*}}}*/
+
+static void
+display_consts(const struct name_with_exp *c)
+{/*{{{*/
+    size_t linelen = 0;
+
+    for (size_t i = 0; c[i].explanation; i++) {
+        const char *const *const names = c[i].names;
+        for (size_t j = 0; names[j]; j++) {
+            if (linelen + strlen(names[j]) + 2 > 70) {
+                printf(",\n");
+                linelen = 0;
+            }
+            if (linelen == 0) {
+                printf("%s", names[j]);
+                linelen = strlen(names[j]);
+            } else {
+                printf(", %s", names[j]);
+                linelen += strlen(names[j]) + 2;
+            }
+        }
+    }
+    printf("\n");
+}/*}}}*/
+
+static void
+display_explanation(const char *exp,
+                    ...)
+{/*{{{*/
+    if (standard_output) {
+        va_list args;
+
+        printf("%s", colors[uiselect[EXPLANATION]]);
+        va_start(args, exp);
+        vprintf(exp, args);
+        va_end(args);
+        printf("%s\n", colors[uiselect[UNCOLOR]]);
+    }
+}/*}}}*/
+
+static void
+display_expvar_explanation(const char *str,
+                           const char *exp,
+                           List        subvars,
+                           const char *desc)
+{/*{{{*/
+    printf("%s%s%s is the expression: '%s'\n", colors[uiselect[VAR_NAME]], str,
+           colors[uiselect[UNCOLOR]], exp);
+    if (desc) {
+        printf("Description: %s%s%s\n", colors[uiselect[VAR_DESC]], desc, colors[uiselect[UNCOLOR]]);
+    }
+    if (listLen(subvars) > 0) {
+        unsigned maxnamelen = 0;
+        {
+            /* First, find the longest variable name... */
+            ListIterator si     = getListIterator(subvars);
+            char        *cursor = (char *)nextListElement(si);
+            if (cursor != NULL) {
+                maxnamelen = strlen(cursor);
+                while ((cursor = (char *)nextListElement(si)) != NULL) {
+                    unsigned len = strlen(cursor);
+                    if (maxnamelen < len) { maxnamelen = len; }
+                }
+            }
+            freeListIterator(si);
+        }
+        printf("%s%s%s uses the following variables:\n",
+               colors[uiselect[VAR_NAME]], str, colors[uiselect[UNCOLOR]]);
+        while (listLen(subvars) > 0) {
+            char *curstr = (char *)getHeadOfList(subvars);
+            char *value  = evalvar_noparse(curstr);
+
+            printf("\t%s%*s%s\t(currently: %s)\n", colors[uiselect[SUBVAR_NAME]], -maxnamelen, curstr, colors[uiselect[UNCOLOR]],
+                   value ? value : "undefined");
+            if (curstr) {
+                free(curstr);
+            }
+            if (value) {
+                free(value);
+            }
+        }
+    }
+}/*}}}*/
+
+static void
+display_valvar_explanation(const char *str,
+                           Number     *val,
+                           const char *desc)
+{/*{{{*/
+    printf("%s%s%s is a variable with the value: %s\n",
+           colors[uiselect[VAR_NAME]], str, colors[uiselect[UNCOLOR]],
+           print_this_result(*val, 0, NULL, NULL));
+    if (desc) {
+        printf("Description: %s%s%s\n", colors[uiselect[VAR_DESC]], desc, colors[uiselect[UNCOLOR]]);
+    }
+}/*}}}*/
+
+static void
+display_stateline(const char *buf)
+{/*{{{*/
+    printf("-> %s\n", buf);
+}/*}}}*/
+
+static void
+prefline(const char *name,
+         const char *val,
+         const char *cmd)
+{/*{{{*/
+    if (name && val && cmd) {
+        printf("%s%27s:%s %s%-24s%s -> ",
+               colors[uiselect[PREF_NAME]], name, colors[uiselect[UNCOLOR]],
+               colors[uiselect[PREF_VAL]], val, colors[uiselect[UNCOLOR]]);
+        if (strchr(cmd, ',')) {
+            unsigned offset = 0;
+            while (strchr(cmd + offset, ',')) {
+                unsigned cmdlen = strchr(cmd + offset, ',') - (cmd + offset);
+                printf("%s%.*s%s, ",
+                       colors[uiselect[PREF_CMD]], cmdlen, cmd + offset, colors[uiselect[UNCOLOR]]);
+                offset += cmdlen + 1;
+            }
+            printf("%s%s%s\n",
+                   colors[uiselect[PREF_CMD]], cmd + offset, colors[uiselect[UNCOLOR]]);
+        } else {
+            printf("%s%s%s\n",
+                   colors[uiselect[PREF_CMD]], cmd, colors[uiselect[UNCOLOR]]);
+        }
+    } else if (name && val) {
+        printf("%s%27s:%s %s%-24s%s\n",
+               colors[uiselect[PREF_NAME]], name, colors[uiselect[UNCOLOR]],
+               colors[uiselect[PREF_VAL]], val, colors[uiselect[UNCOLOR]]);
+    }
+}/*}}}*/
+
+#define DP_YESNO(x) ((x) ? "yes" : "no")
+static void
+display_prefs(void)
+{/*{{{*/
+    if (standard_output) {
+        conf_t *conf = getConf();
+        char tmp[50];
+        sprintf(tmp, "%-3i %s", conf->precision, ((conf->precision == -1) ? "(auto)" : "      "));
+        prefline("Display Precision", tmp, "\\p");
+        sprintf(tmp, "%-24lu", (unsigned long)num_get_default_prec());
+        prefline("Internal Precision", tmp, "\\bits");
+        prefline("Scientific Notation",
+                (conf->scientific == always) ? "always" : (conf->scientific == never) ? "never " : "auto  ",
+                "\\e");
+        prefline("Output Format", output_string(conf->output_format), "\\b,\\d,\\h,\\o");
+        prefline("Use Radians", DP_YESNO(conf->use_radians), "\\r");
+        prefline("Print Prefixes", DP_YESNO(conf->print_prefixes), "\\pre,\\prefixes");
+        prefline("Avoid Abbreviating Integers", DP_YESNO(conf->print_ints), "\\ints");
+        prefline("Rounding Indication",
+                conf->rounding_indication == SIMPLE_ROUNDING_INDICATION ? "yes (simple) " : (conf->rounding_indication == SIG_FIG_ROUNDING_INDICATION ? "yes (sig_fig)" : "no           "),
+                "\\round");
+        prefline("Save Errors in History", DP_YESNO(conf->remember_errors), "\\re");
+        sprintf(tmp, "'%c'", conf->thou_delimiter);
+        prefline("Thousands Delimiter", tmp, "\\tsep");
+        sprintf(tmp, "'%c'", conf->dec_delimiter);
+        prefline("Decimal Delimiter", tmp, "\\dsep");
+        prefline("Precision Guard", DP_YESNO(conf->precision_guard), "\\cons");
+        prefline("History Limit", DP_YESNO(conf->history_limit), "\\hlimit");
+        if (conf->history_limit) {
+            sprintf(tmp, "%lu", conf->history_limit_len);
+            prefline("History Limited To", tmp, NULL);
+        }
+        prefline("Verbose", DP_YESNO(conf->verbose), "\\verbose");
+        prefline("Display Delimiters", DP_YESNO(conf->print_commas), "\\delim");
+        prefline("Modulo Operator", (conf->c_style_mod ? "C-style    " : "not C-style"), "\\cmod");
+    }
+}/*}}}*/
+
+static void
+display_status(const char *format,
+               ...)
+{/*{{{*/
+    if (standard_output) {
+        va_list args;
+
+        printf("%s", colors[uiselect[STATUS]]);
+        va_start(args, format);
+        vprintf(format, args);
+        va_end(args);
+        printf("%s\n", colors[uiselect[UNCOLOR]]);
+    }
+}/*}}}*/
+
+static void
+display_output_format(int format)
+{/*{{{*/
+    if (standard_output) {
+        switch (format) {
+            case HEXADECIMAL_FORMAT:
+                display_status("Hexadecimal Formatted Output");
+                break;
+            case OCTAL_FORMAT:
+                display_status("Octal Formatted Output");
+                break;
+            case DECIMAL_FORMAT:
+                display_status("Decimal Formatted Output");
+                break;
+            case BINARY_FORMAT:
+                display_status("Binary Formatted Output");
+                break;
+        }
+    }
+}/*}}}*/
+
+static void
+display_val(const char *name)
+{/*{{{*/
+    if (standard_output) {
+        answer_t val;
+        char     approx = 0;
+        char    *err;
+        display_and_clear_errstring();
+        printf("%s%s%s", colors[uiselect[VAR_NAME]], name, colors[uiselect[UNCOLOR]]);
+        val = getvar_full(name);
+        if (val.exp) {
+            printf(" %s=%s %s\n", colors[uiselect[EXACT_ANSWER]], colors[uiselect[UNCOLOR]], val.exp);
+        } else {
+            char *p = print_this_result(val.val, 0, &approx, &err);
+            show_answer(err, approx, p);
+        }
+        if (val.desc) {
+            printf(":: %s%s%s\n", colors[uiselect[VAR_DESC]], val.desc, colors[uiselect[UNCOLOR]]);
+        }
+    }
+}/*}}}*/
+
 int
 main(int   argc,
      char *argv[])
 {                                      /*{{{ */
     extern int yydebug;
     extern int lines;
+    conf_t *conf = getConf();
 
 #ifdef HAVE_LIBREADLINE
     char *readme = NULL;
@@ -544,25 +804,30 @@ main(int   argc,
     // yydebug = 1;                       /* turn on ugly YACC debugging */
     yydebug = 0;                       /* turn off ugly YACC debugging */
 
-    initvar();
+    init_var(display_var);
     lists_init();
 
     /* initialize the preferences */
-    memset(&conf, 0, sizeof(struct _conf));
-    conf.precision           = -1;
-    conf.scientific          = automatic;
-    standard_output          = 1;
-    conf.picky_variables     = 1;
-    conf.print_prefixes      = 1;
-    conf.precision_guard     = 1;
-    conf.thou_delimiter      = ',';
-    conf.dec_delimiter       = '.';
-    conf.print_equal         = 1;
-    conf.c_style_mod         = 1;
-    conf.print_greeting      = 1;
-    conf.rounding_indication = SIG_FIG_ROUNDING_INDICATION;
+    memset(conf, 0, sizeof(struct _conf));
+    conf->precision           = -1;
+    conf->scientific          = automatic;
+    standard_output           = 1;
+    conf->picky_variables     = 1;
+    conf->print_prefixes      = 1;
+    conf->precision_guard     = 1;
+    conf->thou_delimiter      = ',';
+    conf->dec_delimiter       = '.';
+    conf->print_equal         = 1;
+    conf->c_style_mod         = 1;
+    conf->print_greeting      = 1;
+    conf->rounding_indication = SIG_FIG_ROUNDING_INDICATION;
 
     init_numbers();
+    init_resultprinter(show_answer);
+    init_parser(display_prefs, display_output_format, display_status,
+                display_interactive_help, display_val);
+    init_file_loader(display_stateline);
+    init_explanation(display_consts, display_explanation, display_expvar_explanation, display_valvar_explanation);
     num_init_set_ui(last_answer, 0);
 
     /* load the preferences */
@@ -603,9 +868,9 @@ main(int   argc,
             }
         } else if (!strcmp(argv[i], "-s") ||
                    !strcmp(argv[i], "--scientific")) {
-            conf.scientific = always;
+            conf->scientific = always;
         } else if (!strcmp(argv[i], "-EE")) {
-            conf.scientific = never;
+            conf->scientific = never;
         } else if (!strcmp(argv[i], "-H") || !strcmp(argv[i], "--help")) {
             display_command_help();
             EXIT_EARLY(EXIT_SUCCESS);
@@ -647,30 +912,30 @@ main(int   argc,
             EXIT_EARLY(EXIT_SUCCESS);
         } else if (!strcmp(argv[i], "-d") || !strcmp(argv[i], "--decimal") ||
                    !strcmp(argv[i], "-dec") || !strcmp(argv[i], "--dec")) {
-            conf.output_format = DECIMAL_FORMAT;
+            conf->output_format = DECIMAL_FORMAT;
         } else if (!strcmp(argv[i], "-h") || !strcmp(argv[i], "--hexadecimal") ||
                    !strcmp(argv[i], "-hex") || !strcmp(argv[i], "--hex")) {
-            conf.output_format = HEXADECIMAL_FORMAT;
+            conf->output_format = HEXADECIMAL_FORMAT;
         } else if (!strcmp(argv[i], "-o") || !strcmp(argv[i], "--octal") ||
                    !strcmp(argv[i], "-oct") || !strcmp(argv[i], "--oct")) {
-            conf.output_format = OCTAL_FORMAT;
+            conf->output_format = OCTAL_FORMAT;
         } else if (!strcmp(argv[i], "-b") || !strcmp(argv[i], "--binary") ||
                    !strcmp(argv[i], "-bin") || !strcmp(argv[i], "--bin")) {
-            conf.output_format = BINARY_FORMAT;
+            conf->output_format = BINARY_FORMAT;
         } else if (!strcmp(argv[i], "-p") || !strcmp(argv[i], "--prefixes")) {
-            conf.print_prefixes = !conf.print_prefixes;
+            conf->print_prefixes = !conf->print_prefixes;
             /*} else if (!strcmp(argv[i], "-l") || !strcmp(argv[i], "--lenient")) {
-             * conf.picky_variables = 0; */
+             * conf->picky_variables = 0; */
         } else if (!strcmp(argv[i], "-r") || !strcmp(argv[i], "--radians")) {
-            conf.use_radians = !conf.use_radians;
+            conf->use_radians = !conf->use_radians;
         } else if (!strcmp(argv[i], "-q") || !strcmp(argv[i], "--quiet")) {
-            conf.print_equal    = !conf.print_equal;
-            conf.print_greeting = !conf.print_greeting;
+            conf->print_equal    = !conf->print_equal;
+            conf->print_greeting = !conf->print_greeting;
         } else if (!strcmp(argv[i], "-c") ||
                    !strcmp(argv[i], "--conservative")) {
-            conf.precision_guard = !conf.precision_guard;
+            conf->precision_guard = !conf->precision_guard;
         } else if (!strcmp(argv[i], "-R") || !strcmp(argv[i], "--remember")) {
-            conf.remember_errors = !conf.remember_errors;
+            conf->remember_errors = !conf->remember_errors;
         } else if (!strncmp(argv[i], "--round=", 8)) {
             if (!set_pref("rounding_indication", &(argv[i][8]))) {
                 EXIT_EARLY(EXIT_FAILURE);
@@ -709,18 +974,18 @@ main(int   argc,
                 }
             }
         } else if (!strcmp(argv[i], "--ints")) {
-            conf.print_ints = !conf.print_ints;
+            conf->print_ints = !conf->print_ints;
         } else if (!strcmp(argv[i], "--delim")) {
-            conf.print_commas = !conf.print_commas;
+            conf->print_commas = !conf->print_commas;
         } else if (!strcmp(argv[i], "--verbose")) {
-            conf.verbose = !conf.verbose;
+            conf->verbose = !conf->verbose;
         } else if (!strcmp(argv[i], "--yydebug")) {
             yydebug = 1;
         } else if (!strcmp(argv[i], "-n")) {
-            conf.print_equal = 0;
+            conf->print_equal = 0;
         } else if (!strcmp(argv[i], "-C") || !strcmp(argv[i], "--color")) {
-            conf.color_ui = !conf.color_ui;
-            if (conf.color_ui) {
+            conf->color_ui = !conf->color_ui;
+            if (conf->color_ui) {
                 uiselect = color_ui;
             } else {
                 uiselect = black_and_white_ui;
@@ -754,12 +1019,12 @@ main(int   argc,
 #endif          /* ifdef HAVE_READLINE_HISTORY */
                 cmdline_input = 1;
             }
-            if (conf.verbose) {
+            if (conf->verbose) {
                 printf("-> %s\n", argv[i]);
             }
             parseme(argv[i]);
             if (!errstring || (errstring && !strlen(errstring)) ||
-                conf.remember_errors) {
+                conf->remember_errors) {
                 addToHistory(argv[i], last_answer);
             }
             if (errstring && strlen(errstring)) {
@@ -797,12 +1062,12 @@ main(int   argc,
             free(filename);
 #endif      /* ifdef HAVE_READLINE_HISTORY */
             cmdline_input = 1;
-            if (conf.verbose) {
+            if (conf->verbose) {
                 printf("-> %s\n", envinput);
             }
             parseme(envinput);
             if (!errstring || (errstring && !strlen(errstring)) ||
-                conf.remember_errors) {
+                conf->remember_errors) {
                 addToHistory(envinput, last_answer);
             }
             if (errstring && strlen(errstring)) {
@@ -832,8 +1097,8 @@ main(int   argc,
         if (write_history(filename)) {
             perror("Saving History 1");
         }
-        if (conf.history_limit) {
-            if (history_truncate_file(filename, conf.history_limit_len)) {
+        if (conf->history_limit) {
+            if (history_truncate_file(filename, conf->history_limit_len)) {
                 perror("Truncating History");
             }
         }
@@ -863,11 +1128,12 @@ main(int   argc,
 #endif  /* ifdef HAVE_READLINE_HISTORY */
 #ifdef HAVE_LIBREADLINE
         build_qcommands();
+        consts = getConsts();
         rl_attempted_completion_function = wcalc_completion;
         rl_basic_word_break_characters   = " \t\n\"\'+-*/[{()}]=<>!|~&^%";
 #endif
         exit_on_err                      = 0;
-        if (conf.print_greeting) {
+        if (conf->print_greeting) {
             printf("Enter an expression to evaluate, q to quit, or ? for help:\n");
         }
         while (1) {
@@ -928,14 +1194,14 @@ main(int   argc,
                     yydebug = !yydebug;
                     printf("Debug Mode %s\n", yydebug ? "On" : "Off");
                 } else if (!strncmp(readme, "\\color", 6)) {
-                    conf.color_ui = !conf.color_ui;
-                    if (conf.color_ui) {
+                    conf->color_ui = !conf->color_ui;
+                    if (conf->color_ui) {
                         uiselect = color_ui;
                     } else {
                         uiselect = black_and_white_ui;
                     }
                 } else {
-                    if (conf.verbose) {
+                    if (conf->verbose) {
                         printf("-> %s\n", readme);
                     }
                     parseme(readme);
@@ -943,7 +1209,7 @@ main(int   argc,
                         extern char *errstring;
 
                         if (!errstring || (errstring && !strlen(errstring)) ||
-                            conf.remember_errors) {
+                            conf->remember_errors) {
                             addToHistory(readme, last_answer);
                         }
                     }
@@ -970,8 +1236,8 @@ main(int   argc,
             fprintf(stderr, "Cannot save history to %s: %s\n", filename, strerror(errno));
             fflush(stderr);
         }
-        if (conf.history_limit) {
-            if (history_truncate_file(filename, conf.history_limit_len)) {
+        if (conf->history_limit) {
+            if (history_truncate_file(filename, conf->history_limit_len)) {
                 perror("Truncating History");
             }
         }
@@ -1011,7 +1277,7 @@ main(int   argc,
                 free(line);
                 break;
             }
-            if (conf.verbose) {
+            if (conf->verbose) {
                 printf("-> %s\n", line);
             }
             parseme(line);
@@ -1156,6 +1422,7 @@ static int
 set_pref(const char *key,
          const char *value)
 {
+    conf_t *conf = getConf();
     int ok = 1;
     if (!strcmp(key, "precision")) {
         char *endptr;
@@ -1168,28 +1435,28 @@ set_pref(const char *key,
             }
             ok = 0;
         } else {
-            conf.precision = (int)tmp;
+            conf->precision = (int)tmp;
         }
     } else if (!strcmp(key, "show_equals")) {
-        conf.print_equal = TRUEFALSE;
+        conf->print_equal = TRUEFALSE;
     } else if (!strcmp(key, "print_greeting")) {
-        conf.print_greeting = TRUEFALSE;
+        conf->print_greeting = TRUEFALSE;
     } else if (!strcmp(key, "flag_undeclared")) {
-        conf.picky_variables = TRUEFALSE;
+        conf->picky_variables = TRUEFALSE;
     } else if (!strcmp(key, "use_radians")) {
-        conf.use_radians = TRUEFALSE;
+        conf->use_radians = TRUEFALSE;
     } else if (!strcmp(key, "print_prefixes")) {
-        conf.print_prefixes = TRUEFALSE;
+        conf->print_prefixes = TRUEFALSE;
     } else if (!strcmp(key, "save_errors")) {
-        conf.remember_errors = TRUEFALSE;
+        conf->remember_errors = TRUEFALSE;
     } else if (!strcmp(key, "remember_errors")) {
-        conf.remember_errors = TRUEFALSE;
+        conf->remember_errors = TRUEFALSE;
     } else if (!strcmp(key, "precision_guard")) {
-        conf.precision_guard = TRUEFALSE;
+        conf->precision_guard = TRUEFALSE;
     } else if (!strcmp(key, "print_integers")) {
-        conf.print_ints = TRUEFALSE;
+        conf->print_ints = TRUEFALSE;
     } else if (!strcmp(key, "print_delimiters")) {
-        conf.print_commas = TRUEFALSE;
+        conf->print_commas = TRUEFALSE;
     } else if (!strcmp(key, "input_thousands_delimiter")) {
         if ((NULL == value) || ('\0' == value[0])) {
             config_error("Input thousands separator requires a single character value.");
@@ -1203,16 +1470,16 @@ set_pref(const char *key,
             config_error("'%c' cannot be the input thousands separator; input would be too confusing.", value[0]);
             ok = 0;
         }
-        if ((conf.in_dec_delimiter != 0) && (conf.in_dec_delimiter == value[0])) {
+        if ((conf->in_dec_delimiter != 0) && (conf->in_dec_delimiter == value[0])) {
             config_error("'%c' cannot be the input thousands separator; it is the input decimal separator.", value[0]);
             ok = 0;
         }
-        if ((conf.in_dec_delimiter == 0) && (conf.dec_delimiter == value[0])) {
+        if ((conf->in_dec_delimiter == 0) && (conf->dec_delimiter == value[0])) {
             config_error("'%c' cannot be the input thousands separator; it is the decimal separator.", value[0]);
             ok = 0;
         }
         if (ok) {
-            conf.in_thou_delimiter = value[0];
+            conf->in_thou_delimiter = value[0];
         }
     } else if (!strcmp(key, "input_decimal_delimiter")) {
         if ((NULL == value) || ('\0' == value[0])) {
@@ -1227,16 +1494,16 @@ set_pref(const char *key,
             config_error("'%c' cannot be the input decimal separator; input would be too confusing.", value[0]);
             ok = 0;
         }
-        if ((conf.in_thou_delimiter != 0) && (conf.in_thou_delimiter == value[0])) {
+        if ((conf->in_thou_delimiter != 0) && (conf->in_thou_delimiter == value[0])) {
             config_error("'%c' cannot be the input decimal separator; it is the input thousands separator.", value[0]);
             ok = 0;
         }
-        if ((conf.in_thou_delimiter == 0) && (conf.thou_delimiter == value[0])) {
+        if ((conf->in_thou_delimiter == 0) && (conf->thou_delimiter == value[0])) {
             config_error("'%c' cannot be the input decimal separator; it is the thousands separator.", value[0]);
             ok = 0;
         }
         if (ok) {
-            conf.in_dec_delimiter = value[0];
+            conf->in_dec_delimiter = value[0];
         }
     } else if (!strcmp(key, "thousands_delimiter")) {
         if ((NULL == value) || ('\0' == value[0])) {
@@ -1247,12 +1514,12 @@ set_pref(const char *key,
             config_error("Thousands separator requires a single character value (found '%s').", value);
             ok = 0;
         }
-        if (conf.dec_delimiter == value[0]) {
+        if (conf->dec_delimiter == value[0]) {
             config_error("'%c' cannot be the thousands separator; it is the decimal separator.", value[0]);
             ok = 0;
         }
         if (ok) {
-            conf.thou_delimiter = value[0];
+            conf->thou_delimiter = value[0];
         }
     } else if (!strcmp(key, "decimal_delimiter")) {
         if ((NULL == value) || ('\0' == value[0])) {
@@ -1263,32 +1530,32 @@ set_pref(const char *key,
             config_error("Decimal separator requires a single character value (found '%s').", value);
             ok = 0;
         }
-        if (conf.thou_delimiter == value[0]) {
+        if (conf->thou_delimiter == value[0]) {
             config_error("'%c' cannot be the decimal separator; it is the thousands separator.", value[0]);
             ok = 0;
         }
         if (ok) {
-            conf.dec_delimiter = value[0];
+            conf->dec_delimiter = value[0];
         }
     } else if (!strcmp(key, "history_limit")) {
         if (!strcmp(value, "no")) {
-            conf.history_limit = conf.history_limit_len = 0;
+            conf->history_limit = conf->history_limit_len = 0;
         } else {
-            conf.history_limit     = 1;
-            conf.history_limit_len = strtoul(value, NULL, 0);
+            conf->history_limit     = 1;
+            conf->history_limit_len = strtoul(value, NULL, 0);
         }
     } else if (!strcmp(key, "output_format")) {
         if ((NULL == value) || ('\0' == value[0])) {
             config_error("Output format requires a type. Supported types are: decimal, octal, binary, hex.");
             ok = 0;
         } else if (!strcmp(value, "decimal")) {
-            conf.output_format = DECIMAL_FORMAT;
+            conf->output_format = DECIMAL_FORMAT;
         } else if (!strcmp(value, "octal")) {
-            conf.output_format = OCTAL_FORMAT;
+            conf->output_format = OCTAL_FORMAT;
         } else if (!strcmp(value, "binary")) {
-            conf.output_format = BINARY_FORMAT;
+            conf->output_format = BINARY_FORMAT;
         } else if (!strcmp(value, "hex") || !strcmp(value, "hexadecimal")) {
-            conf.output_format = HEXADECIMAL_FORMAT;
+            conf->output_format = HEXADECIMAL_FORMAT;
         } else {
             config_error("Unrecognized output format. Supported formats are: decimal, octal, binary, hex.");
             ok = 0;
@@ -1298,28 +1565,28 @@ set_pref(const char *key,
             config_error("Rounding indication requires a type. Supported types are: none, simple, sig_fig.");
             ok = 0;
         } else if (!strcmp(value, "no") || !strcmp(value, "none")) {
-            conf.rounding_indication = NO_ROUNDING_INDICATION;
+            conf->rounding_indication = NO_ROUNDING_INDICATION;
         } else if (!strcmp(value, "simple")) {
-            conf.rounding_indication = SIMPLE_ROUNDING_INDICATION;
+            conf->rounding_indication = SIMPLE_ROUNDING_INDICATION;
         } else if (!strcmp(value, "sig_fig")) {
-            conf.rounding_indication = SIG_FIG_ROUNDING_INDICATION;
+            conf->rounding_indication = SIG_FIG_ROUNDING_INDICATION;
         } else {
             config_error("Unrecognized rounding indication. Supported types are: none, simple, sig_fig.");
             ok = 0;
         }
     } else if (!strcmp(key, "scientific")) {
         if (!strcmp(value, "auto") || !strcmp(value, "automatic") || !strcmp(value, "yes") || !strcmp(value, "true") || !strcmp(value, "1")) {
-            conf.scientific = automatic;
+            conf->scientific = automatic;
         } else if (!strcmp(value, "always")) {
-            conf.scientific = always;
+            conf->scientific = always;
         } else {
-            conf.scientific = never;
+            conf->scientific = never;
         }
     } else if (!strcmp(key, "c_style_mod")) {
-        conf.c_style_mod = TRUEFALSE;
+        conf->c_style_mod = TRUEFALSE;
     } else if (!strcmp(key, "color_ui") || !strcmp(key, "color")) {
-        conf.color_ui = TRUEFALSE;
-        if (conf.color_ui) {
+        conf->color_ui = TRUEFALSE;
+        if (conf->color_ui) {
             uiselect = color_ui;
         } else {
             uiselect = black_and_white_ui;
@@ -1491,256 +1758,5 @@ err_exit:
     config_error("Corrupt config file. Cannot continue.");
     exit(EXIT_FAILURE);
 }                                      /*}}} */
-
-static void
-prefline(const char *name,
-         const char *val,
-         const char *cmd)
-{/*{{{*/
-    if (name && val && cmd) {
-        printf("%s%27s:%s %s%-24s%s -> ",
-               colors[uiselect[PREF_NAME]], name, colors[uiselect[UNCOLOR]],
-               colors[uiselect[PREF_VAL]], val, colors[uiselect[UNCOLOR]]);
-        if (strchr(cmd, ',')) {
-            unsigned offset = 0;
-            while (strchr(cmd + offset, ',')) {
-                unsigned cmdlen = strchr(cmd + offset, ',') - (cmd + offset);
-                printf("%s%.*s%s, ",
-                       colors[uiselect[PREF_CMD]], cmdlen, cmd + offset, colors[uiselect[UNCOLOR]]);
-                offset += cmdlen + 1;
-            }
-            printf("%s%s%s\n",
-                   colors[uiselect[PREF_CMD]], cmd + offset, colors[uiselect[UNCOLOR]]);
-        } else {
-            printf("%s%s%s\n",
-                   colors[uiselect[PREF_CMD]], cmd, colors[uiselect[UNCOLOR]]);
-        }
-    } else if (name && val) {
-        printf("%s%27s:%s %s%-24s%s\n",
-               colors[uiselect[PREF_NAME]], name, colors[uiselect[UNCOLOR]],
-               colors[uiselect[PREF_VAL]], val, colors[uiselect[UNCOLOR]]);
-    }
-}/*}}}*/
-
-#define DP_YESNO(x) ((x) ? "yes" : "no")
-void
-display_prefs(void)
-{/*{{{*/
-    if (standard_output) {
-        char tmp[50];
-        sprintf(tmp, "%-3i %s", conf.precision, ((conf.precision == -1) ? "(auto)" : "      "));
-        prefline("Display Precision", tmp, "\\p");
-        sprintf(tmp, "%-24lu", (unsigned long)num_get_default_prec());
-        prefline("Internal Precision", tmp, "\\bits");
-        prefline("Scientific Notation",
-                 (conf.scientific == always) ? "always" : (conf.scientific == never) ? "never " : "auto  ",
-                 "\\e");
-        prefline("Output Format", output_string(conf.output_format), "\\b,\\d,\\h,\\o");
-        prefline("Use Radians", DP_YESNO(conf.use_radians), "\\r");
-        prefline("Print Prefixes", DP_YESNO(conf.print_prefixes), "\\pre,\\prefixes");
-        prefline("Avoid Abbreviating Integers", DP_YESNO(conf.print_ints), "\\ints");
-        prefline("Rounding Indication",
-                 conf.rounding_indication == SIMPLE_ROUNDING_INDICATION ? "yes (simple) " : (conf.rounding_indication == SIG_FIG_ROUNDING_INDICATION ? "yes (sig_fig)" : "no           "),
-                 "\\round");
-        prefline("Save Errors in History", DP_YESNO(conf.remember_errors), "\\re");
-        sprintf(tmp, "'%c'", conf.thou_delimiter);
-        prefline("Thousands Delimiter", tmp, "\\tsep");
-        sprintf(tmp, "'%c'", conf.dec_delimiter);
-        prefline("Decimal Delimiter", tmp, "\\dsep");
-        prefline("Precision Guard", DP_YESNO(conf.precision_guard), "\\cons");
-        prefline("History Limit", DP_YESNO(conf.history_limit), "\\hlimit");
-        if (conf.history_limit) {
-            sprintf(tmp, "%lu", conf.history_limit_len);
-            prefline("History Limited To", tmp, NULL);
-        }
-        prefline("Verbose", DP_YESNO(conf.verbose), "\\verbose");
-        prefline("Display Delimiters", DP_YESNO(conf.print_commas), "\\delim");
-        prefline("Modulo Operator", (conf.c_style_mod ? "C-style    " : "not C-style"), "\\cmod");
-    }
-}/*}}}*/
-
-void
-display_status(const char *format,
-               ...)
-{/*{{{*/
-    if (standard_output) {
-        va_list args;
-
-        printf("%s", colors[uiselect[STATUS]]);
-        va_start(args, format);
-        vprintf(format, args);
-        va_end(args);
-        printf("%s\n", colors[uiselect[UNCOLOR]]);
-    }
-}/*}}}*/
-
-void
-display_output_format(int format)
-{/*{{{*/
-    if (standard_output) {
-        switch (format) {
-            case HEXADECIMAL_FORMAT:
-                display_status("Hexadecimal Formatted Output");
-                break;
-            case OCTAL_FORMAT:
-                display_status("Octal Formatted Output");
-                break;
-            case DECIMAL_FORMAT:
-                display_status("Decimal Formatted Output");
-                break;
-            case BINARY_FORMAT:
-                display_status("Binary Formatted Output");
-                break;
-        }
-    }
-}/*}}}*/
-
-void
-display_val(const char *name)
-{/*{{{*/
-    if (standard_output) {
-        answer_t val;
-        char     approx = 0;
-        char    *err;
-        display_and_clear_errstring();
-        printf("%s%s%s", colors[uiselect[VAR_NAME]], name, colors[uiselect[UNCOLOR]]);
-        val = getvar_full(name);
-        if (val.exp) {
-            printf(" %s=%s %s\n", colors[uiselect[EXACT_ANSWER]], colors[uiselect[UNCOLOR]], val.exp);
-        } else {
-            char *p = print_this_result(val.val, 0, &approx, &err);
-            show_answer(err, approx, p);
-        }
-        if (val.desc) {
-            printf(":: %s%s%s\n", colors[uiselect[VAR_DESC]], val.desc, colors[uiselect[UNCOLOR]]);
-        }
-    }
-}/*}}}*/
-
-void
-display_var(variable_t *v,
-            unsigned    count,
-            unsigned    digits)
-{/*{{{*/
-    printf("%*u. %s%s%s", digits, count,
-           colors[uiselect[VAR_NAME]], v->key, colors[uiselect[UNCOLOR]]);
-    if (v->exp) {
-        printf(" %s=%s %s\n",
-               colors[uiselect[EXACT_ANSWER]], colors[uiselect[UNCOLOR]],
-               v->expression);
-    } else {
-        char  approx = 0;
-        char *err;
-        char *p      = print_this_result(v->value, 0, &approx, &err);
-        printf("display_var\n");
-        show_answer(err, approx, p);
-    }
-    if (v->description) {
-        printf("%*s %s%s%s\n", digits + 4, "::",
-               colors[uiselect[VAR_DESC]], v->description, colors[uiselect[UNCOLOR]]);
-    }
-}/*}}}*/
-
-void
-display_expvar_explanation(const char *str,
-                           const char *exp,
-                           List        subvars,
-                           const char *desc)
-{/*{{{*/
-    printf("%s%s%s is the expression: '%s'\n", colors[uiselect[VAR_NAME]], str,
-           colors[uiselect[UNCOLOR]], exp);
-    if (desc) {
-        printf("Description: %s%s%s\n", colors[uiselect[VAR_DESC]], desc, colors[uiselect[UNCOLOR]]);
-    }
-    if (listLen(subvars) > 0) {
-        unsigned maxnamelen = 0;
-        {
-            /* First, find the longest variable name... */
-            ListIterator si     = getListIterator(subvars);
-            char        *cursor = (char *)nextListElement(si);
-            if (cursor != NULL) {
-                maxnamelen = strlen(cursor);
-                while ((cursor = (char *)nextListElement(si)) != NULL) {
-                    unsigned len = strlen(cursor);
-                    if (maxnamelen < len) { maxnamelen = len; }
-                }
-            }
-            freeListIterator(si);
-        }
-        printf("%s%s%s uses the following variables:\n",
-               colors[uiselect[VAR_NAME]], str, colors[uiselect[UNCOLOR]]);
-        while (listLen(subvars) > 0) {
-            char *curstr = (char *)getHeadOfList(subvars);
-            char *value  = evalvar_noparse(curstr);
-
-            printf("\t%s%*s%s\t(currently: %s)\n", colors[uiselect[SUBVAR_NAME]], -maxnamelen, curstr, colors[uiselect[UNCOLOR]],
-                   value ? value : "undefined");
-            if (curstr) {
-                free(curstr);
-            }
-            if (value) {
-                free(value);
-            }
-        }
-    }
-}/*}}}*/
-
-void
-display_valvar_explanation(const char *str,
-                           Number     *val,
-                           const char *desc)
-{/*{{{*/
-    printf("%s%s%s is a variable with the value: %s\n",
-           colors[uiselect[VAR_NAME]], str, colors[uiselect[UNCOLOR]],
-           print_this_result(*val, 0, NULL, NULL));
-    if (desc) {
-        printf("Description: %s%s%s\n", colors[uiselect[VAR_DESC]], desc, colors[uiselect[UNCOLOR]]);
-    }
-}/*}}}*/
-
-void
-display_explanation(const char *exp,
-                    ...)
-{/*{{{*/
-    if (standard_output) {
-        va_list args;
-
-        printf("%s", colors[uiselect[EXPLANATION]]);
-        va_start(args, exp);
-        vprintf(exp, args);
-        va_end(args);
-        printf("%s\n", colors[uiselect[UNCOLOR]]);
-    }
-}/*}}}*/
-
-void
-display_stateline(const char *buf)
-{/*{{{*/
-    printf("-> %s\n", buf);
-}/*}}}*/
-
-void
-display_consts(void)
-{/*{{{*/
-    size_t linelen = 0;
-
-    for (size_t i = 0; consts[i].explanation; i++) {
-        const char *const *const names = consts[i].names;
-        for (size_t j = 0; names[j]; j++) {
-            if (linelen + strlen(names[j]) + 2 > 70) {
-                printf(",\n");
-                linelen = 0;
-            }
-            if (linelen == 0) {
-                printf("%s", names[j]);
-                linelen = strlen(names[j]);
-            } else {
-                printf(", %s", names[j]);
-                linelen += strlen(names[j]) + 2;
-            }
-        }
-    }
-    printf("\n");
-}/*}}}*/
 
 /* vim:set expandtab: */
