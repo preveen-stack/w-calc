@@ -1,0 +1,6 @@
+*.log
+*.trs
+.dirstamp
+*.o
+AllUnitTests
+libwcalc.a
