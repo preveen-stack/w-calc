@@ -3,7 +3,8 @@
 #endif
 
 /* System Headers */
-#include <string.h>
+#include <string.h>  /* for strlen() */
+#include <strings.h> /* for strncasecmp(), per POSIX 2001 */
 
 /* Internal Headers */
 #include "isfunc.h"
@@ -68,9 +69,9 @@ const struct name_with_exp funcs[] = {
 #ifdef HAVE_MPFR_22
     { { "eint", NULL },
       "The exponential integral function." },
-    { { "Gamma", "gamma", NULL },
+    { { "gamma", NULL },
       "Returns the Gamma function of the input number. The Gamma function extends the factorial function to complex and non-natural numbers." },
-    { { "lnGamma", "lngamma", NULL },
+    { { "lngamma", NULL },
       "Returns the natural log of the Gamma function of the input number." },
 #endif
     { { "rand", NULL },
@@ -84,14 +85,20 @@ const struct name_with_exp funcs[] = {
     { { 0 }, NULL }
 };
 
+const struct name_with_exp *getFuncs()
+{
+    return funcs;
+}
+
 int
 isfunc(const char *str)
 {   /*{{{*/
     unsigned i, j;
 
+    if (!str) return 0;
     for (i = 0; funcs[i].explanation; i++) {
         for (j = 0; funcs[i].names[j]; j++) {
-            if (strcmp(funcs[i].names[j], str) == 0) {
+            if (strncasecmp(funcs[i].names[j], str, strlen(funcs[i].names[j]) + 1) == 0) {
                 return 1;
             }
         }

@@ -3,6 +3,8 @@
 
 CuSuite* add_commas_get_suite();
 CuSuite* extract_vars_get_suite();
+CuSuite* iscmd_get_suite();
+CuSuite* isfunc_get_suite();
 CuSuite* string_manip_get_suite();
 CuSuite* evalvar_get_suite();
 
@@ -12,6 +14,8 @@ int main(void) {
 
     CuSuiteAddSuite(suite, add_commas_get_suite());
     CuSuiteAddSuite(suite, extract_vars_get_suite());
+    CuSuiteAddSuite(suite, iscmd_get_suite());
+    CuSuiteAddSuite(suite, isfunc_get_suite());
     CuSuiteAddSuite(suite, string_manip_get_suite());
     CuSuiteAddSuite(suite, evalvar_get_suite());
 

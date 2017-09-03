@@ -35,6 +35,8 @@ clean-local:
 UNIT_TESTS += \
 			  %D%/add_commas.test.c \
 			  %D%/extract_vars.test.c \
+			  %D%/iscmd.test.c \
+			  %D%/isfunc.test.c \
 			  %D%/string_manip.test.c \
 			  %D%/evalvar.test.c
 

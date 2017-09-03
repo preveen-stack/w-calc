@@ -3,7 +3,9 @@
 
 #include "explain.h"
 
-extern const struct name_with_exp funcs[];
+struct name_with_exp;
+
 int isfunc(const char *str);
+const struct name_with_exp *getFuncs(void);
 #endif
 /* vim:set expandtab: */

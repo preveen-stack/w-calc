@@ -228,6 +228,7 @@ wcalc_completion(const char *text,
                  int         end)
 {                                      /*{{{ */
     /*extern const char *commands[];*/
+    const struct name_with_exp *funcs = getFuncs();
     char **variables;
     char **retvals = NULL;
 

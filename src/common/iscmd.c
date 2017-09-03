@@ -78,9 +78,10 @@ int iscmd(const char *str)
 {   /*{{{*/
     size_t i;
 
+    if (!str) return 0;
     for (i = 0; commands[i].explanation; i++) {
         for (unsigned j=0; commands[i].names[j]; j++) {
-            if (strcmp(commands[i].names[j], str) == 0) {
+            if (strncmp(commands[i].names[j], str, strlen(commands[i].names[j]) + 1) == 0) {
                 return 1;
             }
         }

@@ -164,7 +164,7 @@ static void explain_constant(const char *str)
 
 static void explain_function(const char *str)
 {                                      /*{{{ */
-    (void)scan_exps(str, funcs);
+    (void)scan_exps(str, getFuncs());
 }                                      /*}}} */
 
 /* vim:set expandtab: */
