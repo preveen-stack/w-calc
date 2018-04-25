@@ -6,6 +6,7 @@
 #include <string.h>		       // for strcmp/strlen/stpcpy/strdup
 #include <stdlib.h>		       // for calloc
 #include <stdio.h>
+#include "includes/conf.h"
 
 static char append = 1;
 static Number cur_number;
@@ -41,8 +42,7 @@ char *simpleCalc(const unsigned char input, const char *expStr)
     unsigned int expStrLen = strlen(expStr);
     simpleCalcInit();
     Dprintf("simpleCalc: %c, %s\n", input, expStr);
-    Dprintf(" ~ cur: %f, prev: %f\n", num_get_d(cur_number),
-	    num_get_d(prev_number));
+    Dprintf(" ~ cur: %RNf, prev: %RNf\n", cur_number, prev_number);
     switch (input) {
 	case '+': case '-': case '*': case '/':
 	    {

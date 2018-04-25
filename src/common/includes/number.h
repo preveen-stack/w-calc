@@ -372,8 +372,8 @@ void num_abs(Number       ret,
 int num_cmp_si(const Number n,
                const int    si);
 
-void num_free(Number);
-double       num_get_d(const Number);
+# define num_free(n)
+# define num_get_d(n) (n)
 unsigned int num_get_ui(const Number);
 char        *num_get_str(char        *str,
                          num_exp_t   *expptr,

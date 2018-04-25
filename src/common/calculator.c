@@ -72,6 +72,8 @@ char *strchr(), *strrchr();
 #if !defined(HAVE_CONFIG_H) || TIME_WITH_SYS_TIME       /* for time() */
 # include <sys/time.h>
 # include <time.h>
+#include <stdbool.h>
+
 #else
 # if HAVE_SYS_TIME_H
 #  include <sys/time.h>
@@ -625,11 +627,13 @@ set_prettyanswer(const Number num)
     Dprintf("set_prettyanswer - done\n");
 }                                      /*}}} */
 
+#define MAGNITUDE_UNDER(n, x) ((num_cmp_d((n), (x)) < 0) || (num_cmp_d((n), -(x)) > 0))
+
 static char *
-print_this_result_dbl(const double result,
-                      int          output,
-                      char        *nad,
-                      char       **es)
+print_this_result_printf(const Number result2,
+                         int          output,
+                         char        *nad,
+                         char       **es)
 {                                      /*{{{ */
     char          format[10];
     const conf_t *conf = getConf();
@@ -638,112 +642,68 @@ print_this_result_dbl(const double result,
     extern char  *errstring;
     unsigned int  decimal_places = 0;
 
-    Dprintf("print_this_result_dbl(%f)\n", result);
+    if (conf->output_format != DECIMAL_FORMAT) {
+        Dprintf("attempted print_this_result_printf for a non-decimal format (%i)",
+                conf->output_format);
+    }
     /* Build the "format" string, that will be used in an snprintf later */
-    switch (conf->output_format) {      /*{{{ */
-        case DECIMAL_FORMAT:
-            if (pa_dyn) {
-                tmp = realloc(pa, sizeof(char) * 310);
-            } else {
-                tmp    = pa = malloc(sizeof(char) * 310);
-                pa_dyn = 1;
-            }
-            if (!tmp) {
-                free(pa);
-                pa     = "Not Enough Memory";
-                pa_dyn = 0;
-                return pa;
-            } else {
-                pa = tmp;
-            }
-            if (conf->precision > -1) {
-                decimal_places = conf->precision;
-                switch (conf->scientific) {
-                    case never:
-                        snprintf(format, 10, "%%1.%if", conf->precision);
-                        break;
-                    case always:
-                        snprintf(format, 10, "%%1.%ie", conf->precision);
-                        break;
-                    case automatic:
-                        snprintf(format, 10, "%%1.%ig", conf->precision);
-                        break;
-                }
-                Dprintf("precision was specified as %i, format string is \"%s\"\n", conf->precision, format);
-            } else {
-                switch (conf->scientific) {
-                    case never:
-                        strncpy(format, "%f", 10);
-                        break;
-                    case always:
-                        strncpy(format, "%e", 10);
-                        break;
-                    case automatic:
-                        strncpy(format, "%g", 10);
-                        break;
-                }
-                Dprintf("precision is automatic, format string is \"%s\"\n", format);
-                if (fabs(result) < 10.0) {
-                    decimal_places = 6;
-                } else if (fabs(result) < 100.0) {
-                    decimal_places = 4;
-                } else if (fabs(result) < 1000.0) {
-                    decimal_places = 3;
-                } else if (fabs(result) < 10000.0) {
-                    decimal_places = 2;
-                } else if (fabs(result) < 100000.0) {
-                    decimal_places = 1;
-                } else {
-                    decimal_places = 0;
-                }
-            }
-            break;
-        case OCTAL_FORMAT:
-            if (pa_dyn) {
-                tmp = realloc(pa, sizeof(char) * 14);
-            } else {
-                tmp    = pa = malloc(sizeof(char) * 14);
-                pa_dyn = 1;
-            }
-            if (!tmp) {
-                free(pa);
-                pa     = "Not Enough Memory";
-                pa_dyn = 0;
-                return pa;
-            } else {
-                pa = tmp;
-            }
-            snprintf(format, 10, conf->print_prefixes ? "%%#o" : "%%o");
-            break;
-        case HEXADECIMAL_FORMAT:
-            if (pa_dyn) {
-                tmp = realloc(pa, sizeof(char) * 11);
-            } else {
-                tmp    = pa = malloc(sizeof(char) * 11);
-                pa_dyn = 1;
-            }
-            if (!tmp) {
-                free(pa);
-                pa     = "Not Enough Memory";
-                pa_dyn = 0;
-                return pa;
-            } else {
-                pa = tmp;
-            }
-            snprintf(format, 10, conf->print_prefixes ? "%%#x" : "%%x");
-            break;
-        case BINARY_FORMAT:
-            // Binary Format can't just use a format string, so
-            // we have to handle it later
-            if (pa_dyn) {
-                free(pa);
-            }
-            pa     = NULL;
-            pa_dyn = 1;
-            break;
-    }                                  /*}}} */
+    if (pa_dyn) {
+        tmp = realloc(pa, sizeof(char) * 310);
+    } else {
+        tmp    = pa = malloc(sizeof(char) * 310);
+        pa_dyn = 1;
+    }
+    if (!tmp) {
+        free(pa);
+        pa     = "Not Enough Memory";
+        pa_dyn = 0;
+        return pa;
+    } else {
+        pa = tmp;
+    }
+    if (conf->precision > -1) {
+        decimal_places = (unsigned)(conf->precision);
+        switch (conf->scientific) {
+            case never:
+                snprintf(format, 10, "%%1.%iRNf", conf->precision);
+                break;
+            case always:
+                snprintf(format, 10, "%%1.%iRNe", conf->precision);
+                break;
+            case automatic:
+                snprintf(format, 10, "%%1.%iRNg", conf->precision);
+                break;
+        }
+        Dprintf("precision was specified as %i, format string is \"%s\"\n", conf->precision, format);
+    } else {
+        switch (conf->scientific) {
+            case never:
+                strncpy(format, "%RNf", 10);
+                break;
+            case always:
+                strncpy(format, "%RNe", 10);
+                break;
+            case automatic:
+                strncpy(format, "%RNg", 10);
+                break;
+        }
+        Dprintf("precision is automatic, format string is \"%s\"\n", format);
+        if (MAGNITUDE_UNDER(result2, 10.0)) {
+            decimal_places = 6;
+        } else if (MAGNITUDE_UNDER(result2, 100.0)) {
+            decimal_places = 4;
+        } else if (MAGNITUDE_UNDER(result2, 1000.0)) {
+            decimal_places = 3;
+        } else if (MAGNITUDE_UNDER(result2, 10000.0)) {
+            decimal_places = 2;
+        } else if (MAGNITUDE_UNDER(result2, 100000.0)) {
+            decimal_places = 1;
+        } else {
+            decimal_places = 0;
+        }
+    }
 
-    if (isinf(result)) {
+    if (num_is_inf(result2)) {
         // if it is infinity, print "Infinity", regardless of format
         if (pa_dyn) {
             tmp = realloc(pa, sizeof(char) * 11);
@@ -761,7 +721,7 @@ print_this_result_dbl(const double result,
         }
         snprintf(pa, 11, "Infinity");
         not_all_displayed = 0;
-    } else if (isnan(result)) {
+    } else if (num_is_nan(result2)) {
         // if it is not a number, print "Not a Number", regardless of format
         if (pa_dyn) {
             tmp = realloc(pa, sizeof(char) * 13);
@@ -780,146 +740,67 @@ print_this_result_dbl(const double result,
         snprintf(pa, 13, "Not a Number");
         not_all_displayed = 0;
     } else {
-        char *curs;
-
         Dprintf("normal numbers (format: %s)\n", format);
-        switch (conf->output_format) {  /*{{{ */
-            case DECIMAL_FORMAT:
-            {
-                double junk;
 
-                Dprintf("fabs = %f, conf->scientific = %i, conf->print_ints = %i\n", fabs(modf(result, &junk)), conf->scientific, conf->print_ints);
-                /* This is the big call */
-                /* translation: if we don't have to handle the print_ints special case,
-                 * then we can just use the existing format. */
-                if ((fabs(modf(result, &junk)) != 0.0) ||
-                    !conf->print_ints) {
-                    snprintf(pa, 310, format, result);
-                } else {
-                    /* this is the print_ints special case
-                     * (note that we strip trailing zeros) */
-                    snprintf(pa, 310, "%1.0f", result);
-                }
-                Dprintf("pa (unlocalized): %s\n", pa);
-                /* was it as good for you as it was for me?
-                 * now, you must localize it */
-                strswap('.', conf->dec_delimiter, pa);
+        Number absfracpart, fracpart;
+        num_init(absfracpart);
+        num_init(fracpart);
+        num_modf(absfracpart /*this part will be discarded in the next line */,
+                 fracpart, result2);
+        num_abs(absfracpart, fracpart);
 
-                Dprintf("pa: %s\n", pa);
-                switch (conf->rounding_indication) {
-                    case SIMPLE_ROUNDING_INDICATION:
-                        Dprintf("simple\n");
-                        not_all_displayed =
-                            (modf(result * pow(10, decimal_places), &junk)) ?
-                            1 : 0;
-                        break;
-                    case SIG_FIG_ROUNDING_INDICATION:
-                        Dprintf("sigfig\n");
-                        if (sig_figs < UINT32_MAX) {
-                            unsigned int t = count_digits(pa);
+        Dprintf("fabs = %Rf, conf->scientific = %i, conf->print_ints = %i\n", absfracpart, conf->scientific, conf->print_ints);
+        /* This is the big call */
+        /* translation: if we don't have to handle the print_ints special case,
+         * then we can just use the existing format. */
+        Dprintf("%s (%RNf)... absfracpart:%RNf (%i) pi:%i\n", format, result2, absfracpart,
+                num_is_zero(absfracpart), !conf->print_ints);
+        if (!num_is_zero(absfracpart) || !conf->print_ints) {
+            Dprintf("general case");
+            num_snprintf(pa, 310, format, result2);
+        } else {
+            Dprintf("Print_ints special case!\n");
+            /* this is the print_ints special case
+             * (note that we strip trailing zeros) */
+            num_snprintf(pa, 310, "%1.0RNf", result2);
+        }
+        Dprintf("pa (unlocalized): %s\n", pa);
+        /* was it as good for you as it was for me?
+         * now, you must localize it */
+        strswap('.', conf->dec_delimiter, pa);
 
-                            Dprintf("digits in pa: %u (%u)\n", t, sig_figs);
-                            if ((pa[0] == '0') && (pa[1] != '\0')) {
-                                --t;
-                            } else if ((pa[0] == '-') && (pa[1] == '0')) {
-                                --t;
-                            }
-                            not_all_displayed = (t < sig_figs);
-                        } else {
-                            not_all_displayed = 1;
-                        }
-                        break;
-                    default:
-                    case NO_ROUNDING_INDICATION:
-                        Dprintf("none\n");
-                        not_all_displayed = 0;
-                        break;
-                }
+        Dprintf("pa: %s\n", pa);
+        switch (conf->rounding_indication) {
+            case SIMPLE_ROUNDING_INDICATION:
+                Dprintf("simple\n");
+                num_mul_d(fracpart, result2, pow(10, decimal_places));
+                num_modf(/* ignored */ absfracpart, fracpart, fracpart);
+                not_all_displayed = (char)num_is_zero(fracpart);
                 break;
-            }
-            case HEXADECIMAL_FORMAT:
-                curs = pa + (conf->print_prefixes ? 2 : 0);
-                strswap('.', conf->dec_delimiter, pa);
-                goto hexoct_body;
-            case OCTAL_FORMAT:
-                curs = pa + (conf->print_prefixes ? 1 : 0);
-hexoct_body:
-                {
-                    long int temp = result;
-
-                    snprintf(pa, 310, format, temp);
-                    if (conf->rounding_indication ==
-                        SIG_FIG_ROUNDING_INDICATION) {
-                        if (sig_figs < UINT32_MAX) {
-                            unsigned int t = 0;
-                            while (curs && *curs) {
-                                ++t;
-                                ++curs;
-                            }
-                            not_all_displayed = (t < sig_figs);
-                        } else {
-                            not_all_displayed = 0;
-                        }
-                    } else {
-                        not_all_displayed = 0;
-                    }
-                }
-                strswap('.', conf->dec_delimiter, pa);
-                break;
-            case BINARY_FORMAT:
-            {
-                int i, place = -1;
-
-                // if it is binary, format it, and print it
-                // first, find the upper limit
-                for (i = 1; place == -1; ++i) {
-                    if (result < pow(2.0, i)) {
-                        place = i - 1;
-                    }
-                }
-                pa = calloc(sizeof(char),
-                            (place + (conf->print_prefixes * 2) + 1));
-                if (!pa) {
-                    pa     = "Not Enough Memory";
-                    pa_dyn = 0;
-                    return pa;
-                }
-                if (conf->print_prefixes) {
-                    pa[0] = '0';
-                    pa[1] = 'b';
-                }
-                // print it
-                {
-                    double temp = result;
-                    for (i = conf->print_prefixes * 2; place >= 0; ++i) {
-                        double t = pow(2.0, place);
-
-                        if (temp >= t) {
-                            pa[i] = '1';
-                            temp -= t;
-                        } else {
-                            pa[i] = '0';
-                        }
-                        --place;
-                    }
-                }
-                pa[i + 1] = 0;
-
+            case SIG_FIG_ROUNDING_INDICATION:
+                Dprintf("sigfig\n");
                 if (sig_figs < UINT32_MAX) {
-                    if (conf->rounding_indication ==
-                        SIG_FIG_ROUNDING_INDICATION) {
-                        not_all_displayed =
-                            count_digits(pa + (conf->print_prefixes ? 2 : 0)) <
-                            sig_figs;
-                    } else {
-                        not_all_displayed = 0;
+                    unsigned int t = count_digits(pa);
+
+                    Dprintf("digits in pa: %u (%u)\n", t, sig_figs);
+                    if ((pa[0] == '0') && (pa[1] != '\0')) {
+                        --t;
+                    } else if ((pa[0] == '-') && (pa[1] == '0')) {
+                        --t;
                     }
+                    not_all_displayed = (t < sig_figs);
                 } else {
-                    not_all_displayed = 0;
+                    not_all_displayed = 1;
                 }
-                strswap('.', conf->dec_delimiter, pa);
-            }                          // binary format
-        }                              /*}}} */
+                break;
+            default:
+            case NO_ROUNDING_INDICATION:
+                Dprintf("none\n");
+                not_all_displayed = 0;
+                break;
+        }
+        num_free(absfracpart);
+        num_free(fracpart);
     }                                  // if
 
     if (conf->print_commas) {
@@ -940,6 +821,44 @@ hexoct_body:
     return pa;
 }                                      /*}}} */
 
+static void
+roundToZeroIfLessThanEpsilon(Number *guardedResult, const Number result)
+{
+    Number epsilon, absresult;
+    num_init(absresult);
+
+    // Estimating epsilon for current precision, per Wikipedia
+    // https://en.wikipedia.org/wiki/Machine_epsilon
+    // 2^-(precision-1)
+    long prec = num_get_default_prec() - 1;
+    prec *= -1;
+    num_init_set_ui(epsilon, 2);
+    num_pow_si(epsilon, epsilon, prec);
+
+    // Updating epsilon for the expression
+    // XXX: this *should* be done via error estimation, but that's complicated, and should be
+    // done as part of parsing. So... we inflate epsilon somewhat here to hopefully be "close
+    // enough". Value chosen to be big enough to get all current tests to pass (and no larger).
+    // Yes, this is a bit of a hack.
+    num_mul_ui(epsilon, epsilon, 8);
+
+    num_abs(absresult, result);
+    Dprintf("Double epsilon: %g\n", DBL_EPSILON);
+    Dprintf("  mpfr epsilon: %RNg\n", epsilon);
+    Dprintf("    abs result: %RNg\n", absresult);
+
+    if (num_is_lessequal(absresult, epsilon)) {
+        Dprintf("abs result (%RNg) less than epsilon (%RNg)! "
+                "Coercing to zero...\n", absresult, epsilon);
+        num_init_set_ui(*guardedResult, 0);
+    } else {
+        num_init_set(*guardedResult, result);
+    }
+
+    num_free(epsilon);
+    num_free(absresult);
+}
+
 char *
 print_this_result(const Number result,
                   int          output,
@@ -950,8 +869,8 @@ print_this_result(const Number result,
     unsigned int  base = 0;
     const conf_t *conf = getConf();
 
-    Dprintf("print_this_result (%f) in format %i\n",
-            num_get_d(result), conf->output_format);
+    Dprintf("print_this_result (%Rf) in format %i\n",
+            result, conf->output_format);
     // output in the proper base and format
     switch (conf->output_format) {
         case HEXADECIMAL_FORMAT:
@@ -960,27 +879,18 @@ print_this_result(const Number result,
         default:
         case DECIMAL_FORMAT:
             // if you want precision_guard and automatic precision,
-            // then we have to go with the tried and true "double" method
+            // then we have to go with the tried and true "printf" method
             // ... unless it's an int and you want ints printed whole
-
-            // I know that DBL_EPSILON can be calculated like so:
-            // 2^(mpfr_get_prec(result)-1) HOWEVER, printf magically handles
-            // numbers like 5.1 that I don't even wanna begin to think about
             if (conf->precision_guard && (conf->precision < 0)) {
                 Dprintf("precision guard and automatic precision\n");
                 if (!conf->print_ints || !is_int(result)) {
-                    // XXX: this doesn't work for *huge* numbers, like 100!+0.1
                     Dprintf("no print_ints (%i) or it isn't an int (%i)\n", (int)conf->print_ints, (int)is_int(result));
-                    // XXX: what is the following if() for?
-                    // if (mpfr_get_d(result, GMP_RNDN) !=
-                    // mpfr_get_si(result, GMP_RNDN)) {
-                    double res = num_get_d(result);
+                    Number guardedResult;
+                    roundToZeroIfLessThanEpsilon(&guardedResult, result);
 
-                    if (fabs(res) < DBL_EPSILON) {
-                        res = 0.0;
-                    }
-                    return print_this_result_dbl(res, output, nad, es);
-                    // }
+                    char * retval = print_this_result_printf(guardedResult, output, nad, es);
+                    num_free(guardedResult);
+                    return retval;
                 }
             }
             base = 10;
@@ -1073,8 +983,7 @@ simple_exp(Number                output,
         Number temp;
 
         num_init(temp);
-        Dprintf("simple_exp: %f %i %f\n", num_get_d(first), op,
-                num_get_d(second));
+        Dprintf("simple_exp: %RNf %i %RNf\n", first, op, second);
 
         switch (op) {
             default:
@@ -1166,7 +1075,7 @@ simple_exp(Number                output,
                 }
                 break;
         }
-        Dprintf("returns: %f\n", num_get_d(output));
+        Dprintf("returns: %Rf\n", output);
         num_free(temp);
         return;
     } else {
@@ -1362,19 +1271,15 @@ uber_function(Number               output,
             case wcomp:
                 num_comp(output, input);
                 break;
-#ifdef HAVE_MPFR_22
             case weint:
                 num_eint(output, input);
                 break;
-#endif
             case wgamma:
                 num_gamma(output, input);
                 break;
-#ifdef HAVE_MPFR_22
             case wlngamma:
                 num_lngamma(output, input);
                 break;
-#endif
             case wzeta:
                 num_zeta(output, input);
                 break;

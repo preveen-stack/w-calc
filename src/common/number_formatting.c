@@ -22,25 +22,30 @@ static void   add_prefix(char  *num,
                          int    base);
 static char *scientific_formatted_number(const char *digits,
                                          num_exp_t   exp,
-                                         const int   precision,
-                                         const int   base,
-                                         const int   prefix,
+                                         int         precision,
+                                         int         base,
+                                         int         prefix,
                                          char       *truncated_flag);
 static char *full_precision_formatted_number(const char *digits,
                                              num_exp_t   exp,
-                                             const int   base,
-                                             const int   prefix);
+                                             int         base,
+                                             int         prefix);
 static char *automatically_formatted_number(const char *digits,
                                             num_exp_t   exp,
-                                            const int   precision,
-                                            const int   base,
-                                            const int   prefix,
+                                            int         precision,
+                                            int         base,
+                                            int         prefix,
                                             char       *truncated_flag);
 static char *precision_formatted_number(const char *digits,
                                         num_exp_t   exp,
-                                        const int   precision,
-                                        const int   base,
-                                        const int   prefix);
+                                        int         precision,
+                                        int         base,
+                                        int         prefix);
+
+static inline size_t max(int a, int b)
+{
+    return (size_t)((a > b) ? a : b);
+}
 
 /* this function takes a number (mpfr_t) and prints it.
  * This is a blatant ripoff of mpfr's mpfr_out_str(), because it formats things
@@ -61,20 +66,20 @@ char *num_to_str_complex(const Number          num,
     Dprintf("num_to_str_complex: base: %i, engr: %i, prec: %i, prefix: %i\n",
             base, engr, prec, prefix);
     if (num_is_nan(num)) {
-        return (char *)strdup("@NaN@");
+        return strdup("@NaN@");
     }
     if (num_is_inf(num)) {
         if (num_sign(num) > 0) {
-            return (char *)strdup("@Inf@");
+            return strdup("@Inf@");
         } else {
-            return (char *)strdup("-@Inf@");
+            return strdup("-@Inf@");
         }
     }
     if (num_is_zero(num)) {
         if (num_sign(num) >= 0) {
-            return (char *)strdup("0");
+            return strdup("0");
         } else {
-            return (char *)strdup("-0");
+            return strdup("-0");
         }
     }
 
@@ -93,7 +98,7 @@ char *num_to_str_complex(const Number          num,
             /*printf("e: %li\n", (long)e);
              * printf("s: %s\n", s);
              * printf("prec: %i\n", prec); */
-            significant_figures = ((e > 0) ? e : 0) + prec;
+            significant_figures = (size_t)((e > 0) ? e : 0) + prec;
             Dprintf("sig figs = %zu\n", significant_figures);
             if (significant_figures < 2) {      /* MPFR-defined minimum (why?) */
                 num_free_str(s);
@@ -102,8 +107,7 @@ char *num_to_str_complex(const Number          num,
                 if (s[1] > '4') {      /* XXX: LAME! */
                     unsigned foo;
 
-                    foo = s[0] - '0';
-                    foo++;
+                    foo = (unsigned)(s[0] - '0') + 1;
                     snprintf(s, 3, "%u", foo);
                     Dprintf("s = %s\n", s);
                     e = 1;
@@ -114,23 +118,25 @@ char *num_to_str_complex(const Number          num,
             }
         } else {
             int    left_digits = 0;
-            Number temp;
+            Number temp, one;
 
             Dprintf("engr == auto || engr == always\n");
             /* first, count how many figures to the left of the decimal */
             num_init_set(temp, num);
-            while (num_get_d(temp) >= 1.0) {
+            num_init_set_ui(one, 1);
+            while (num_is_greaterequal(temp, one)) {
                 num_div_ui(temp, temp, base);
                 left_digits++;
             }
             num_free(temp);
+            num_free(one);
             if (left_digits == 0) {
                 left_digits = 1;
             }
             Dprintf("left_digits = %i, asking for %i\n", left_digits,
                     left_digits + prec);
             num_free_str(s);
-            s = num_get_str(NULL, &e, base, ((left_digits + prec) < 2) ? 2 : (left_digits + prec), num);
+            s = num_get_str(NULL, &e, base, max((left_digits + prec), 2), num);
         }
     }
     Dprintf("post-mpfr e: %li s: %s\n", (long int)e, s);
@@ -199,12 +205,12 @@ char *precision_formatted_number(const char *digits,
     length = strlen(digits);
     /* testing against both zero and length because length is unsigned */
     if ((exp > 0) && ((size_t)exp > length)) {
-        length = exp;
+        length = (size_t)exp;
     }
     length += 3;
 
-    if (length < (size_t)(precision + 3)) {     // leading zero, decimal, and null
-        length = (size_t)(precision + 3);
+    if (length < (size_t)(precision) + 3) {     // leading zero, decimal, and null
+        length = (size_t)(precision) + 3;
     }
     Dprintf("Precision Formatted Number\n");
     Dprintf("digits: %s(%u), exp: %i, base: %i, prefix: %i, precision: %i\n",
@@ -323,7 +329,7 @@ char *full_precision_formatted_number(const char *digits,
     length = strlen(digits);
     /* testing against both zero and length because length is unsigned */
     if ((exp > 0) && ((size_t)exp > length)) {
-        length = exp;
+        length = (size_t)exp;
     }
     length += 3;                       /* the null, the (possible) sign, and the decimal */
 
@@ -420,7 +426,7 @@ char *automatically_formatted_number(const char *digits,
     length = strlen(digits);
     /* testing against both zero and length because length is unsigned */
     if ((exp > 0) && ((size_t)exp > length)) {
-        length = exp;
+        length = (size_t)exp;
     }
     length += 3;                       /* the null, the (possible) sign, and the decimal */
 
@@ -544,7 +550,7 @@ char *scientific_formatted_number(const char *digits,
     length = strlen(digits);
     /* testing against both zero and length because length is unsigned */
     if ((exp > 0) && ((size_t)exp > length)) {
-        length = exp;
+        length = (size_t)exp;
     }
     length += 3;                       /* the null, the (possible) sign, and the decimal */
 
@@ -659,6 +665,9 @@ void add_prefix(char  *num,
 
         case 2:
             snprintf(num, length, "0b");
+            return;
+
+        default:
             return;
     }
 } /*}}}*/
