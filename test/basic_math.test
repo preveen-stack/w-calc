@@ -1,3 +1,4 @@
+\ints
 04+1
 \assert 5
 040+1
@@ -12,6 +13,8 @@ a+1+1 # should return 1000002
 \assert -40
 360%60
 \assert 0
+23.05-14.5
+\assert 8.55
 23.05
 a-14.5-8.55 # should be 0, not -1E-09
 \assert 0

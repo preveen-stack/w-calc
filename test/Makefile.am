@@ -7,6 +7,7 @@ POSITIVE_TESTS = \
 				 basic_float.test \
 				 basic_vars.test \
 				 basic_math.test \
+				 engineering.test \
 				 implicit_mult.test \
 				 precision_guard.test \
 				 conversion.test \
