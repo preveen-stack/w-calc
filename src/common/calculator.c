@@ -1,7 +1,5 @@
 #ifdef HAVE_CONFIG_H
 # include "config.h"
-#else
-# define HAVE_MPFR_22
 #endif
 #include <stdlib.h>
 #include <stdarg.h>

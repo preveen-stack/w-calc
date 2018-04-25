@@ -66,14 +66,12 @@ const struct name_with_exp funcs[] = {
       "Returns the factorial of the input number." },
     { { "comp", NULL },
       "Returns the one's complement of the input number." },
-#ifdef HAVE_MPFR_22
     { { "eint", NULL },
       "The exponential integral function." },
     { { "gamma", NULL },
       "Returns the Gamma function of the input number. The Gamma function extends the factorial function to complex and non-natural numbers." },
     { { "lngamma", NULL },
       "Returns the natural log of the Gamma function of the input number." },
-#endif
     { { "rand", NULL },
       "Returns a random number between 0 and the input number." },
     { { "irand", NULL },

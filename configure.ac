@@ -132,11 +132,9 @@ saved_CPPFLAGS="$CPPFLAGS"
 saved_LDFLAGS="$LDFLAGS"
 CPPFLAGS="$MPFR_CPPFLAGS $GMP_CPPFLAGS $CPPFLAGS"
 LDFLAGS="$MPFR_LDFLAGS $GMP_LDFLAGS $LDFLAGS"
-AC_SEARCH_LIBS([mpfr_free_str], [mpfr],
+AC_SEARCH_LIBS([mpfr_printf], [mpfr],
 			   [AC_DEFINE([HAVE_LIBMPFR], [1], [Have libmpfr])],
-			   [AC_MSG_ERROR([Need MPFR 2.1.x or better. see http://www.mpfr.org])])
-AC_CHECK_FUNC([mpfr_sec],
-			  [AC_DEFINE([HAVE_MPFR_22], [1], [MPFR version 2.2 or better])])
+			   [AC_MSG_ERROR([Need MPFR 2.4.x or better. see http://www.mpfr.org])])
 AC_SUBST(MPFR_CPPFLAGS)
 AC_SUBST(MPFR_LDFLAGS)
 CPPFLAGS="$saved_CPPFLAGS"

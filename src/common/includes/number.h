@@ -38,6 +38,9 @@ typedef mp_exp_t num_exp_t;
 # define num_get_str(a, b, c, d, e) mpfr_get_str(a, b, c, d, e, GMP_RNDN)
 # define num_free_str(a)            mpfr_free_str(a)
 
+# define num_snprintf(s, n, fmt, ...) mpfr_snprintf((s), (n), (fmt), ## __VA_ARGS__)
+# define num_fprintf(f, fmt, ...)     mpfr_fprintf((f), (fmt), ## __VA_ARGS__)
+
 # define num_set(n1, n2)           mpfr_set((n1), (n2), GMP_RNDN)
 # define num_set_d(n, d)           mpfr_set_d((n), (d), GMP_RNDN)
 # define num_set_ui(n, ui)         mpfr_set_ui((n), (ui), GMP_RNDN)
@@ -53,6 +56,7 @@ typedef mp_exp_t num_exp_t;
 # define num_mul(ret, n1, n2)   mpfr_mul((ret), (n1), (n2), GMP_RNDN)
 # define num_mul_si(ret, n, si) mpfr_mul_si((ret), (n), (si), GMP_RNDN)
 # define num_mul_ui(ret, n, ui) mpfr_mul_ui((ret), (n), (ui), GMP_RNDN)
+# define num_mul_d(ret, n, d)   mpfr_mul_d((ret), (n), (d), GMP_RNDN)
 # define num_sqr(ret, n)        mpfr_sqr((ret), (n), GMP_RNDN)
 # define num_sqrt(ret, n)       mpfr_sqrt((ret), (n), GMP_RNDN)
 # define num_cbrt(ret, n)       mpfr_cbrt((ret), (n), GMP_RNDN)
@@ -60,6 +64,7 @@ typedef mp_exp_t num_exp_t;
 # define num_div(ret, n1, n2)   mpfr_div((ret), (n1), (n2), GMP_RNDN)
 # define num_div_ui(ret, n, ui) mpfr_div_ui((ret), (n), (ui), GMP_RNDN)
 
+# define num_modf(ipart, fpart, n) mpfr_modf((ipart), (fpart), (n), GMP_RNDN)
 # define num_rint(ret, n)  mpfr_rint((ret), (n), GMP_RNDN)
 # define num_rintz(ret, n) mpfr_rint((ret), (n), GMP_RNDZ)
 # define num_floor(ret, n) mpfr_floor((ret), (n))
@@ -127,49 +132,22 @@ extern gmp_randstate_t randstate;
 # define num_abs(ret, n)             mpfr_abs((ret), (n), GMP_RNDN)
 
 # define num_cmp_si(n, si) mpfr_cmp_si((n), (si))
+# define num_cmp_d(n, d)   mpfr_cmp_d((n), (d))
 
 typedef mp_prec_t num_prec_t;
 # define num_get_default_prec()     mpfr_get_default_prec()
 # define num_set_default_prec(prec) mpfr_set_default_prec(prec)
 
-# ifdef HAVE_MPFR_22
-#  define num_const_catalan(n) mpfr_const_catalan((n), GMP_RNDN)
-#  define num_cot(ret, n)      mpfr_cot((ret), (n), GMP_RNDN)
-#  define num_sec(ret, n)      mpfr_sec((ret), (n), GMP_RNDN)
-#  define num_csc(ret, n)      mpfr_csc((ret), (n), GMP_RNDN)
-#  define num_coth(ret, n)     mpfr_coth((ret), (n), GMP_RNDN)
-#  define num_sech(ret, n)     mpfr_sech((ret), (n), GMP_RNDN)
-#  define num_csch(ret, n)     mpfr_csch((ret), (n), GMP_RNDN)
-#  define num_eint(ret, n)     mpfr_eint((ret), (n), GMP_RNDN)
-#  define num_gamma(ret, n)    mpfr_gamma((ret), (n), GMP_RNDN)
-#  define num_lngamma(ret, n)  mpfr_lngamma((ret), (n), GMP_RNDN)
-# else // ifdef HAVE_MPFR_22
-#  define num_const_catalan(n) num_set_str((n), W_CATALAN, 0)
-#  define num_cot(ret, n)      do {            \
-        mpfr_tan((ret), (n), GMP_RNDN);        \
-        mpfr_pow_si((ret), (n), -1, GMP_RNDN); \
-} while (0)
-#  define num_sec(ret, n)      do {            \
-        mpfr_cos((ret), (n), GMP_RNDN);        \
-        mpfr_pow_si((ret), (n), -1, GMP_RNDN); \
-} while (0)
-#  define num_csc(ret, n)      do {            \
-        mpfr_sin((ret), (n), GMP_RNDN);        \
-        mpfr_pow_si((ret), (n), -1, GMP_RNDN); \
-} while (0)
-#  define num_coth(ret, n)     do {            \
-        mpfr_tanh((ret), (n), GMP_RNDN);       \
-        mpfr_pow_si((ret), (n), -1, GMP_RNDN); \
-} while (0)
-#  define num_sech(ret, n)     do {            \
-        mpfr_cosh((ret), (n), GMP_RNDN);       \
-        mpfr_pow_si((ret), (n), -1, GMP_RNDN); \
-} while (0)
-#  define num_csch(ret, n)     do {            \
-        mpfr_sinh((ret), (n), GMP_RNDN);       \
-        mpfr_pow_si((ret), (n), -1, GMP_RNDN); \
-} while (0)
-# endif // ifdef HAVE_MPFR_22
+# define num_const_catalan(n) mpfr_const_catalan((n), GMP_RNDN)
+# define num_cot(ret, n)      mpfr_cot((ret), (n), GMP_RNDN)
+# define num_sec(ret, n)      mpfr_sec((ret), (n), GMP_RNDN)
+# define num_csc(ret, n)      mpfr_csc((ret), (n), GMP_RNDN)
+# define num_coth(ret, n)     mpfr_coth((ret), (n), GMP_RNDN)
+# define num_sech(ret, n)     mpfr_sech((ret), (n), GMP_RNDN)
+# define num_csch(ret, n)     mpfr_csch((ret), (n), GMP_RNDN)
+# define num_eint(ret, n)     mpfr_eint((ret), (n), GMP_RNDN)
+# define num_gamma(ret, n)    mpfr_gamma((ret), (n), GMP_RNDN)
+# define num_lngamma(ret, n)  mpfr_lngamma((ret), (n), GMP_RNDN)
 
 # define num_bor(ret, n1, n2)  do {              \
         mpz_t intfirst, intsecond, intoutput;    \
@@ -351,6 +329,7 @@ void num_div_ui(Number             ret,
                 const Number       n,
                 const unsigned int ui);
 
+# define num_modf(ipart, fpart, n) (fpart) = modf((ipart), (n))
 void num_rint(Number       ret,
               const Number n);
 void num_rintz(Number       ret,
@@ -402,6 +381,10 @@ char        *num_get_str(char        *str,
                          const size_t n,
                          const Number op);
 # define num_free_str(a) free(a);
+
+# define num_snprintf(s, n, fmt, ...) snprintf((s), (n), (fmt), ## __VA_ARGS__)
+# define num_fprintf(f, fmt, ...)     fprintf((f), (fmt), ## __VA_ARGS__)
+
 num_prec_t num_get_default_prec();
 # define num_set_default_prec(prec) /* num_set_default_prec doesn't exist */
 void num_cot(Number       ret,

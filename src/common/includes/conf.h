@@ -2,9 +2,11 @@
 #define WCALC_CONF_H
 
 #ifdef EBUG
+#warning "DEBUG OUTPUT ENABLED"
 # include <stdio.h>
+# include <mpfr.h>
 # define Dprintf(fmt, ...)                                               \
-    fprintf(stderr, "[%s:%d] " fmt, __FILE__, __LINE__, ## __VA_ARGS__); \
+    num_fprintf(stderr, "[%s:%d] " fmt, __FILE__, __LINE__, ## __VA_ARGS__); \
     fflush(stderr);
 #else
 # define Dprintf(...) ;
@@ -30,10 +32,10 @@ typedef struct _conf {
     unsigned int          history_limit       : 1;
     unsigned int          print_equal         : 1;
     unsigned int          print_ints          : 1;
-    unsigned int          simple_calc         : 1;
+    unsigned int          simple_calc         : 1; // GUI-only
     unsigned int          verbose             : 1;
     unsigned int          print_commas        : 1;
-    unsigned int          live_precision      : 1;
+    unsigned int          live_precision      : 1; // GUI-only
     unsigned int          c_style_mod         : 1;
     unsigned int          color_ui            : 1;
     unsigned int          print_greeting      : 1;
