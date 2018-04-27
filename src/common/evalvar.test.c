@@ -5,11 +5,11 @@
 #include <stdlib.h> /* for NULL */
 #include <string.h> /* for strcmp() */
 #include <stdio.h> /* for fprintf() */
+#include <calculator.h>
 
 #include "evalvar.h" /* SUT */
 
 #include "variables.h" /* for init_var() */
-#include "calculator.h" /* for init_resultprinter() */
 #include "conf.h" /* for getConf(), so I can ensure a consistent configuration behavior */
 #include "CuTest.h"
 
@@ -25,7 +25,7 @@ static void display_var(variable_t *v,
     dv_called ++;
 }
 
-static void show_answer(char *err, int uncertain, char *answer)
+static void show_answer_test(char *err, int uncertain, char *answer)
 {
     sa_called ++;
 }
@@ -46,7 +46,7 @@ static void test_init() {
     memset(conf, 0, sizeof(conf_t));
     dv_called = 0;
     sa_called = 0;
-    init_resultprinter(show_answer);
+    init_calculator(show_answer_test);
     if (initstate == 0) {
         init_var(display_var);
         initstate = 1;

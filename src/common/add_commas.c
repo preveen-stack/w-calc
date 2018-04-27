@@ -103,7 +103,7 @@ char *add_commas(const char *input,
     }
     // the meat of the function
     preflen = (size_t)(delimiter - input);
-    if (preflen < (size_t)(skip + prefix)) {
+    if (preflen < (skip + prefix)) {
         return NULL;
     }
     Dprintf("tmpstring is alloc'd to be %lu long\n", preflen + strlen(input));

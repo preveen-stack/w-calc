@@ -80,7 +80,7 @@ extern int  history_truncate_file(char *,
 #define EXIT_EARLY(code) do {  \
         clearHistory();        \
         cleanupvar();          \
-        num_free(last_answer); \
+        term_calculator();     \
         lists_cleanup();       \
         fflush(NULL);          \
         exit(code);            \
@@ -480,9 +480,9 @@ PrintConversionUnitCategory(int nCategory)
 }
 
 static void
-show_answer(char *err,
-            int   uncertain,
-            char *answer)
+show_answer_cli(char *err,
+                int   uncertain,
+                char *answer)
 {   /*{{{*/
     const conf_t *conf = getConf();
     if (err && strlen(err)) {
@@ -547,7 +547,7 @@ display_var(variable_t *v,
         char *err;
         char *p      = print_this_result(v->value, 0, &approx, &err);
         printf("display_var\n");
-        show_answer(err, approx, p);
+        show_answer_cli(err, approx, p);
     }
     if (v->description) {
         printf("%*s %s%s%s\n", digits + 4, "::",
@@ -687,6 +687,27 @@ prefline(const char *name,
     }
 }/*}}}*/
 
+static char *
+output_string(const unsigned int o)
+{                                      /*{{{ */
+    switch (o) {
+        case HEXADECIMAL_FORMAT:
+            return "hexadecimal format (0xf)";
+
+        case OCTAL_FORMAT:
+            return "octal format (08)       ";
+
+        case BINARY_FORMAT:
+            return "binary format (0b1)     ";
+
+        case DECIMAL_FORMAT:
+            return "decimal format (9)      ";
+
+        default:
+            return "error, unknown format   ";
+    }
+}                                      /*}}} */
+
 #define DP_YESNO(x) ((x) ? "yes" : "no")
 static void
 display_prefs(void)
@@ -775,7 +796,7 @@ display_val(const char *name)
             printf(" %s=%s %s\n", colors[uiselect[EXACT_ANSWER]], colors[uiselect[UNCOLOR]], val.exp);
         } else {
             char *p = print_this_result(val.val, 0, &approx, &err);
-            show_answer(err, approx, p);
+            show_answer_cli(err, approx, p);
         }
         if (val.desc) {
             printf(":: %s%s%s\n", colors[uiselect[VAR_DESC]], val.desc, colors[uiselect[UNCOLOR]]);
@@ -824,12 +845,11 @@ main(int   argc,
     conf->rounding_indication = SIG_FIG_ROUNDING_INDICATION;
 
     init_numbers();
-    init_resultprinter(show_answer);
+    init_calculator(show_answer_cli);
     init_parser(display_prefs, display_output_format, display_status,
                 display_interactive_help, display_val);
     init_file_loader(display_stateline);
     init_explanation(display_consts, display_explanation, display_expvar_explanation, display_valvar_explanation);
-    num_init_set_ui(last_answer, 0);
 
     /* load the preferences */
     {
@@ -1026,7 +1046,7 @@ main(int   argc,
             parseme(argv[i]);
             if (!errstring || (errstring && !strlen(errstring)) ||
                 conf->remember_errors) {
-                addToHistory(argv[i], last_answer);
+                addToHistory(argv[i], *get_last_answer());
             }
             if (errstring && strlen(errstring)) {
                 fprintf(stderr, "%s", errstring);
@@ -1036,7 +1056,7 @@ main(int   argc,
                 free(errstring);
                 errstring = NULL;
             }
-            if (putval("a", last_answer, "previous answer") != 0) {
+            if (putval("a", *get_last_answer(), "previous answer") != 0) {
                 fprintf(stderr, "error storing last answer\n");
             }
         }
@@ -1069,7 +1089,7 @@ main(int   argc,
             parseme(envinput);
             if (!errstring || (errstring && !strlen(errstring)) ||
                 conf->remember_errors) {
-                addToHistory(envinput, last_answer);
+                addToHistory(envinput, *get_last_answer());
             }
             if (errstring && strlen(errstring)) {
                 fprintf(stderr, "%s", errstring);
@@ -1079,7 +1099,7 @@ main(int   argc,
                 free(errstring);
                 errstring = NULL;
             }
-            if (putval("a", last_answer, "previous answer") != 0) {
+            if (putval("a", *get_last_answer(), "previous answer") != 0) {
                 fprintf(stderr, "error storing last answer\n");
             }
         }
@@ -1211,11 +1231,11 @@ main(int   argc,
 
                         if (!errstring || (errstring && !strlen(errstring)) ||
                             conf->remember_errors) {
-                            addToHistory(readme, last_answer);
+                            addToHistory(readme, *get_last_answer());
                         }
                     }
                 }
-                if (putval("a", last_answer, "previous answer") != 0) {
+                if (putval("a", *get_last_answer(), "previous answer") != 0) {
                     fprintf(stderr, "error storing last answer\n");
                 }
 
@@ -1282,7 +1302,7 @@ main(int   argc,
                 printf("-> %s\n", line);
             }
             parseme(line);
-            if (putval("a", last_answer, "previous answer") != 0) {
+            if (putval("a", *get_last_answer(), "previous answer") != 0) {
                 fprintf(stderr, "error storing last answer\n");
             }
             {
@@ -1302,14 +1322,6 @@ main(int   argc,
         }
     }
 
-    if (pretty_answer) {
-        extern char *pa;
-
-        free(pretty_answer);
-        if (pa) {
-            free(pa);
-        }
-    }
     EXIT_EARLY(EXIT_SUCCESS);
 }                                      /*}}} */
 

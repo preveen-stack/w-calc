@@ -26,6 +26,7 @@ libwcalc_a_SOURCES = \
 		     %D%/number_formatting.c \
 		     %D%/parser.y \
 		     %D%/scanner.l \
+		     %D%/result_printer.c \
 		     %D%/string_manip.c \
 		     %D%/variables.c
 
@@ -38,6 +39,7 @@ UNIT_TESTS += \
 			  %D%/iscmd.test.c \
 			  %D%/isfunc.test.c \
 			  %D%/string_manip.test.c \
+			  %D%/result_printer.test.c \
 			  %D%/evalvar.test.c
 
 # vim:ft=automake

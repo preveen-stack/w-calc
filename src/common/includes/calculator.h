@@ -90,28 +90,25 @@ enum operations {
 
 enum commands {redisplay, nothing};
 
-void init_resultprinter(void (*sa)(char*,int,char*));
+void init_calculator(void (*sa)(char*, int, char*));
+void term_calculator(void);
+
+Number *get_last_answer(void);
+void set_last_answer(Number value);
 void parseme(const char *);
 void report_error(const char *fmt,
                   ...);
-void  set_prettyanswer(const Number num);
 char *print_this_result(const Number result,
                         int          output,
                         char        *nad,
                         char       **es);
-void uber_function(Number               output,
-                   const enum functions func,
-                   Number               input);
-void simple_exp(Number                output,
-                const Number          first,
-                const enum operations op,
-                const Number          second);
-int   seed_random(void);
-char *output_string(const unsigned int);
-
-/* results */
-extern Number last_answer;
-extern char  *pretty_answer;
+void uber_function(Number         output,
+                   enum functions func,
+                   Number         input);
+void simple_exp(Number          output,
+                const Number    first,
+                enum operations op,
+                const Number    second);
 
 /* communication with parser */
 extern char         compute;

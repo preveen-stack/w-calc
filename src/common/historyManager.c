@@ -154,7 +154,7 @@ char *historynum(int step,
 
         if (recalculate) {
             parseme(history[step].exp);
-            num_set(history[step].ans, last_answer);
+            num_set(history[step].ans, *get_last_answer());
             history[step].calc = 1;
             if (all_calculated()) {
                 recalculate = 0;

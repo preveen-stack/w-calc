@@ -7,6 +7,7 @@ CuSuite* iscmd_get_suite();
 CuSuite* isfunc_get_suite();
 CuSuite* string_manip_get_suite();
 CuSuite* evalvar_get_suite();
+CuSuite* result_printer_get_suite();
 
 int main(void) {
     CuString *output = CuStringNew();
@@ -18,6 +19,7 @@ int main(void) {
     CuSuiteAddSuite(suite, isfunc_get_suite());
     CuSuiteAddSuite(suite, string_manip_get_suite());
     CuSuiteAddSuite(suite, evalvar_get_suite());
+    CuSuiteAddSuite(suite, result_printer_get_suite());
 
     CuSuiteRun(suite);
     CuSuiteSummary(suite, output);

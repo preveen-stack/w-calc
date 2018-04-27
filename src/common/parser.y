@@ -27,6 +27,7 @@ char *strchr (), *strrchr ();
 #include <unistd.h> /* for isatty() */
 #include "conf.h"
 #include "calculator.h"
+#include "result_printer.h" /* for get_last_result_str() */
 #include "variables.h"
 #include "files.h"
 #include "conversion.h"
@@ -144,8 +145,7 @@ oneline : exp eoln
 		scanerror = synerrors = 0;
 	} else {
 		if (! synerrors && ! yynerrs) {
-			set_prettyanswer($1);
-			num_set(last_answer,$1);
+                        set_last_answer($1);
 		} else {
 			synerrors = 0;
 			report_error("Too many errors.");
@@ -167,7 +167,7 @@ oneline : exp eoln
 	switch ($1) {
 		case redisplay:
 			if (! synerrors) {
-				set_prettyanswer(last_answer);
+                                reset_last_answer_str();
 			} else {
 				synerrors = 0;
 				report_error("Too many errors.");
@@ -222,9 +222,9 @@ command : HEX_CMD {
 	getConf()->output_format = DECIMAL_FORMAT;
         _display_output_format(DECIMAL_FORMAT); }
 | ASSERT_CMD {
-	if (strcmp($1, pretty_answer)) {
+	if (strcmp($1, get_last_answer_str())) {
                 fprintf(stderr, "Assertion on line %u:\n", lines);
-		fprintf(stderr, "   Pretty Answer is: '%s'\n", pretty_answer);
+		fprintf(stderr, "    Last answer was: '%s'\n", get_last_answer_str());
 		fprintf(stderr, "...should have been: '%s'\n", $1);
 		exit(EXIT_FAILURE);
 	}
@@ -434,7 +434,11 @@ command : HEX_CMD {
 			report_error("Second unit provided was not recognized (%s).", $1.u2);
 			break;
 		default:
-			uber_conversion(last_answer,category,unit_id(category,$1.u1),unit_id(category,$1.u2),last_answer);
+			uber_conversion(*get_last_answer(),
+                                        category,
+                                        unit_id(category,$1.u1),
+                                        unit_id(category,$1.u2),
+                                        *get_last_answer());
 	}
 	free($1.u1);
 	free($1.u2);
@@ -445,7 +449,7 @@ command : HEX_CMD {
 	if ($1 >= 2 && $1 <= 36) {
 		char * str, junk;
                 conf_t *conf = getConf();
-		str = num_to_str_complex(last_answer, $1, conf->scientific, -1, conf->print_prefixes, &junk);
+		str = num_to_str_complex(*get_last_answer(), $1, conf->scientific, -1, conf->print_prefixes, &junk);
 		_display_status("base %i: %s\n",$1,str);
 	} else {
 		report_error("Base must be greater than one and less than 37.");

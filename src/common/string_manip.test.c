@@ -378,6 +378,8 @@ CuSuite* string_manip_get_suite(void) {
     SUITE_ADD_TEST(suite, GIVEN_emptyString_WHEN_strstrip_THEN_emptyString);
     SUITE_ADD_TEST(suite, GIVEN_notPresentChar_WHEN_strstrip_THEN_unchanged);
     SUITE_ADD_TEST(suite, GIVEN_oneCharToStrip_WHEN_strstrip_THEN_oneStripped);
+    SUITE_ADD_TEST(suite, GIVEN_firstCharToStrip_WHEN_strstrip_THEN_oneStripped);
+    SUITE_ADD_TEST(suite, GIVEN_lastCharToStrip_WHEN_strstrip_THEN_oneStripped);
     SUITE_ADD_TEST(suite, GIVEN_twoCharsToStrip_WHEN_strstrip_THEN_twoStripped);
     SUITE_ADD_TEST(suite, GIVEN_allCharsToStrip_WHEN_strstrip_THEN_emptyString);
     SUITE_ADD_TEST(suite, GIVEN_null_WHEN_strswap_THEN_null);
@@ -409,6 +411,7 @@ CuSuite* string_manip_get_suite(void) {
     SUITE_ADD_TEST(suite, GIVEN_mixedAlphaNumeric_WHEN_justnumbers_THEN_zero);
     SUITE_ADD_TEST(suite, GIVEN_tenDigits_WHEN_justnumbers_THEN_one);
     SUITE_ADD_TEST(suite, GIVEN_tenCommaSeparatedDigits_WHEN_justnumbers_THEN_one);
+    SUITE_ADD_TEST(suite, GIVEN_tenDecimalDigits_WHEN_justnumbers_THEN_one);
     SUITE_ADD_TEST(suite, GIVEN_null_WHEN_stripComments_THEN_null);
     SUITE_ADD_TEST(suite, GIVEN_emptyString_WHEN_stripComments_THEN_null);
     SUITE_ADD_TEST(suite, GIVEN_hashComment_WHEN_stripComments_THEN_emptyString);

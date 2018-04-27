@@ -471,7 +471,7 @@ static pthread_mutex_t displayLock;
     Dprintf("locked\n");
     {
 	set_prettyanswer(last_answer);
-	Dprintf("setPrecision - set_prettyanswer\n");
+	Dprintf("setPrecision - set_last_answer_str\n");
 	[self displayAnswer];
 	Dprintf("setPrecision - done\n");
     }

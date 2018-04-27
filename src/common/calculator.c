@@ -10,6 +10,7 @@
 #include <assert.h>
 
 #include "output.h"
+#include "result_printer.h"
 
 #ifndef isnan
 # define isnan(x)                                   \
@@ -95,10 +96,6 @@ char *strchr(), *strrchr();
 #include "extract_vars.h"
 #include "conf.h"
 
-/* variables everyone needs to get to */
-Number last_answer;
-char  *pretty_answer = NULL;
-
 /* communication with the parser */
 char         compute  = 1;
 unsigned int sig_figs = UINT32_MAX;
@@ -106,7 +103,6 @@ unsigned int sig_figs = UINT32_MAX;
 /* communication with the frontend */
 char         standard_output   = 1;
 char         not_all_displayed = 0;
-char        *pa                = NULL;
 char        *last_input        = NULL;
 
 /*
@@ -125,17 +121,37 @@ static int   find_recursion(char *);
 static int   find_recursion_core(List);
 static char *flatten(char *str);
 
-/* Injected Dependencies (output functions) */
-static void
-(*show_answer)(char *err,
-               int  uncertain,
-               char *answer);
+/* *************
+ * Local state *
+ * ************* */
+/** The most recently calculated answer ('a') */
+static Number last_answer;
+static char  *pa = NULL;
+
+Number *get_last_answer(void)
+{
+    return &last_answer;
+}
 
 void
-init_resultprinter(void (*sa)(char*,int,char*))
+set_last_answer(Number value)
 {
-    num_init(last_answer);
-    show_answer = sa;
+    num_set(last_answer, value);
+    reset_last_answer_str();
+}
+
+void
+init_calculator(void (*sa)(char*, int, char*))
+{
+    num_init_set_ui(last_answer, 0);
+    init_resultprinter(sa, &last_answer);
+}
+
+void
+term_calculator(void)
+{
+    term_resultprinter();
+    num_free(last_answer);
 }
 
 void
@@ -566,7 +582,7 @@ report_error(const char *err_fmt,
     extern int   lines;
     extern int   show_line_numbers;
     char        *tempstring;
-    unsigned int len;
+    size_t       len;
     va_list      ap;
     char        *this_error;
 
@@ -605,26 +621,6 @@ report_error(const char *err_fmt,
     if (errloc == -1) {
         errloc = column;
     }
-}                                      /*}}} */
-
-void
-set_prettyanswer(const Number num)
-{                                      /*{{{ */
-    char *temp;
-
-    Dprintf("set_prettyanswer\n");
-    if (pretty_answer) {
-        free(pretty_answer);
-    }
-    Dprintf("set_prettyanswer - call print_this_result\n");
-    temp = print_this_result(num, standard_output, NULL, NULL);
-    Dprintf("set_prettyanswer: %s\n", temp);
-    if (temp) {
-        pretty_answer = (char *)strdup(temp);
-    } else {
-        pretty_answer = NULL;
-    }
-    Dprintf("set_prettyanswer - done\n");
 }                                      /*}}} */
 
 #define MAGNITUDE_UNDER(n, x) ((num_cmp_d((n), (x)) < 0) || (num_cmp_d((n), -(x)) > 0))
@@ -812,7 +808,7 @@ print_this_result_printf(const Number result2,
         }
     }
 
-    if (output && show_answer) {
+    if (output) {
         show_answer(errstring, not_all_displayed, pa);
     }
     if (nad) { *nad = not_all_displayed; }
@@ -964,9 +960,7 @@ print_this_result(const Number result,
         }
     }
 
-    if (output && show_answer) {
-        show_answer(errstring, not_all_displayed, pa);
-    }
+    if (output) { show_answer(errstring, not_all_displayed, pa); }
     if (nad) { *nad = not_all_displayed; }
     if (es) { *es = errstring; }
 
@@ -1298,27 +1292,6 @@ uber_function(Number               output,
     } else {
         num_set_ui(output, 0);
         return;
-    }
-}                                      /*}}} */
-
-char *
-output_string(const unsigned int o)
-{                                      /*{{{ */
-    switch (o) {
-        case HEXADECIMAL_FORMAT:
-            return "hexadecimal format (0xf)";
-
-        case OCTAL_FORMAT:
-            return "octal format (08)       ";
-
-        case BINARY_FORMAT:
-            return "binary format (0b1)     ";
-
-        case DECIMAL_FORMAT:
-            return "decimal format (9)      ";
-
-        default:
-            return "error, unknown format   ";
     }
 }                                      /*}}} */
 

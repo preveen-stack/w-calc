@@ -20,6 +20,7 @@
 #include <string.h>                    /* for strlen() */
 #include <stdlib.h>                    /* for free() */
 #include <assert.h>                    /* for assert() */
+
 #ifdef HAVE_PATH_MAX
 # ifdef HAVE_LIMITS_H
 #  include <limits.h>                  /* for PATH_MAX */
@@ -248,10 +249,10 @@ int loadStateFD(int       fd,
 
             safe = strdup(linebuf);
             parseme(safe);
-            putval("a", last_answer, "previous answer");
+            putval("a", *get_last_answer(), "previous answer");
             if ((!errstring || (errstring && !strlen(errstring)) ||
                  conf->remember_errors) && into_history) {
-                addToHistory(linebuf, last_answer);
+                addToHistory(linebuf, *get_last_answer());
             }
             free(safe);
         }

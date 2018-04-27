@@ -5,11 +5,14 @@
 /* Internal Headers */
 #include "number.h"
 #include "variables.h"
-#include "calculator.h"
+#include "calculator.h" // for parseme()
 #include "number_formatting.h"
 
 /* My Prototype */
 #include "evalvar.h"
+
+/* System Headers */
+#include <string.h> /* for strdup() */
 
 char *evalvar(const char *varname)
 {
@@ -24,7 +27,7 @@ char *evalvar(const char *varname)
             extern char* errstring;
             parseme(a.exp);
             if (!errstring) {
-                num_set(f, last_answer);
+                num_set(f, *get_last_answer());
             }
         } else {                       // it is a value
             num_set(f, a.val);
