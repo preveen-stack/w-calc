@@ -7,6 +7,7 @@
 
 /* This file is used by both calculator.c and parser.y */
 
+#include <stdbool.h>
 #include "number.h"
 
 /**
@@ -14,7 +15,7 @@
  * @param sa function for displaying results (clean separation for GUI vs CLI)
  * @param la pointer to the location of the last-generated answer ("last_answer")
  */
-void init_resultprinter(void (*sa)(char*, int, char*), Number *la);
+void init_resultprinter(void (*sa)(char*, bool, char*), Number *la);
 
 /**
  * Destroy and clean up the resultprinter system.
@@ -38,7 +39,7 @@ void reset_last_answer_str(void);
  * @param uncertain zero if the answer is inexact, non-zero otherwise
  * @param answer The answer string to display
  */
-void show_answer(char *err, int  uncertain, char *answer);
+void show_answer(char *err, bool uncertain, char *answer);
 
 /**
  * Generates a formatted string for the number specified ("result"). If output is set to

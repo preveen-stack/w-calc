@@ -101,8 +101,8 @@ char         compute  = 1;
 unsigned int sig_figs = UINT32_MAX;
 
 /* communication with the frontend */
-char         standard_output   = 1;
-char         not_all_displayed = 0;
+bool         standard_output   = true;
+bool         not_all_displayed = false;
 char        *last_input        = NULL;
 
 /*
@@ -126,7 +126,6 @@ static char *flatten(char *str);
  * ************* */
 /** The most recently calculated answer ('a') */
 static Number last_answer;
-static char  *pa = NULL;
 
 Number *get_last_answer(void)
 {
@@ -141,7 +140,7 @@ set_last_answer(Number value)
 }
 
 void
-init_calculator(void (*sa)(char*, int, char*))
+init_calculator(void (*sa)(char*, bool, char*))
 {
     num_init_set_ui(last_answer, 0);
     init_resultprinter(sa, &last_answer);
@@ -336,12 +335,8 @@ evaluate_var(const char    *varname,
             num_free(a.val);
         }
         // get the number
-        {
-            char junk;
-
-            // This value must fully reproduce the contents of f (thus, the -2 in arg 4)
-            varvalue = num_to_str_complex(f, 10, 0, -2, 1, &junk);
-        }
+        // This value must fully reproduce the contents of f (thus, the -2 in arg 4)
+        varvalue = num_to_str_complex(f, 10, 0, -2, 1, NULL);
         num_free(f);
     } else {                       // not a known var: itza literal (e.g. cos)
         varvalue = (char *)strdup(varname);
@@ -385,9 +380,9 @@ flatten(char *str)
     char         *varname, *varvalue;
     size_t        changedlen;
     struct answer a;
-    char          standard_output_save = standard_output;
+    bool          standard_output_save = standard_output;
 
-    standard_output = 0;
+    standard_output = false;
 
     if (*str == '\\') {
         standard_output = standard_output_save;

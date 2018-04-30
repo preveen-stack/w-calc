@@ -32,6 +32,7 @@
 #include "string_manip.h"
 #include "conf.h"
 #include "calculator.h"
+#include "result_printer.h"
 #include "variables.h"
 #include "output.h"
 
@@ -209,7 +210,7 @@ int loadStateFD(int       fd,
 
     int return_error         = 0;
     int standard_output_save = standard_output;
-    standard_output = 0;
+    standard_output = false;
 
     char         *linebuf;
     int           retval;

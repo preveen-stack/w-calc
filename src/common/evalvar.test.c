@@ -25,7 +25,7 @@ static void display_var(variable_t *v,
     dv_called ++;
 }
 
-static void show_answer_test(char *err, int uncertain, char *answer)
+static void show_answer_test(char *err, bool uncertain, char *answer)
 {
     sa_called ++;
 }

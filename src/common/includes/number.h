@@ -27,6 +27,7 @@
 # define NUM_PREC_MIN MPFR_PREC_MIN
 # define NUM_PREC_MAX MPFR_PREC_MAX
 
+# define NUM_DECL_INIT(n)               MPFR_DECL_INIT(n, mpfr_get_default_prec())
 # define num_init(n)                    mpfr_init(n)
 # define num_init_set(n1, n2)           mpfr_init_set((n1), (n2), GMP_RNDN)
 # define num_init_set_d(n, d)           mpfr_init_set_d((n), (d), GMP_RNDN)
@@ -226,6 +227,7 @@ typedef struct numberstruct Number[1];
 typedef int num_exp_t;
 typedef long int num_prec_t;
 
+# define NUM_DECL_INIT(n)               double (n);
 void num_init(Number n);
 void num_init_set(Number       n1,
                   const Number n2);

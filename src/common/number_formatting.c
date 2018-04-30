@@ -25,7 +25,7 @@ static char *scientific_formatted_number(const char *digits,
                                          int         precision,
                                          int         base,
                                          int         prefix,
-                                         char       *truncated_flag);
+                                         bool       *truncated_flag);
 static char *full_precision_formatted_number(const char *digits,
                                              num_exp_t   exp,
                                              int         base,
@@ -35,7 +35,7 @@ static char *automatically_formatted_number(const char *digits,
                                             int         precision,
                                             int         base,
                                             int         prefix,
-                                            char       *truncated_flag);
+                                            bool       *truncated_flag);
 static char *precision_formatted_number(const char *digits,
                                         num_exp_t   exp,
                                         int         precision,
@@ -58,7 +58,7 @@ char *num_to_str_complex(const Number          num,
                          enum scientific_modes engr,
                          const int             prec,
                          const int             prefix,
-                         char                 *truncated_flag)
+                         bool                 *truncated_flag)
 {   /*{{{*/
     char     *s, *retstr;
     num_exp_t e;
@@ -140,7 +140,9 @@ char *num_to_str_complex(const Number          num,
         }
     }
     Dprintf("post-mpfr e: %li s: %s\n", (long int)e, s);
-    *truncated_flag = 0;
+    if (truncated_flag != NULL) {
+        *truncated_flag = false;
+    }
     if (-2 == prec) {
         retstr = full_precision_formatted_number(s, e, base, prefix);
     } else {
@@ -413,7 +415,7 @@ char *automatically_formatted_number(const char *digits,
                                      const int   precision,
                                      const int   base,
                                      const int   prefix,
-                                     char       *truncated_flag)
+                                     bool       *truncated_flag)
 {   /*{{{*/
     size_t     length;
     size_t     full_length;
@@ -505,7 +507,9 @@ char *automatically_formatted_number(const char *digits,
         Dprintf("period: %s\n", period);
         if (period && (strlen(period) > 10)) {
             period[30]      = 0; // Arbitrary cutoff to avoid huge outputs for repeating decimals
-            *truncated_flag = 1;
+            if (truncated_flag != NULL) {
+                *truncated_flag = true;
+            }
             zero_strip(retstring);
         }
     } else if (precision >= 0) {
@@ -520,7 +524,9 @@ char *automatically_formatted_number(const char *digits,
             if (strlen(period) > (size_t)precision) {
                 Dprintf("truncating down to precision...\n");
                 period[precision] = 0;
-                *truncated_flag   = 1;
+                if (truncated_flag != NULL) {
+                    *truncated_flag = true;
+                }
             }
         }
     }
@@ -540,7 +546,7 @@ char *scientific_formatted_number(const char *digits,
                                   const int   precision,
                                   const int   base,
                                   const int   prefix,
-                                  char       *truncated_flag)
+                                  bool       *truncated_flag)
 {   /*{{{*/
     size_t length;
     size_t full_length;
@@ -605,7 +611,9 @@ char *scientific_formatted_number(const char *digits,
         Dprintf("period: %s\n", period);
         if (period && (strlen(period) > 10)) {
             period[10]      = 0;
-            *truncated_flag = 1;
+            if (truncated_flag != NULL) {
+                *truncated_flag = true;
+            }
             zero_strip(retstring);
         }
     } else {
@@ -615,7 +623,9 @@ char *scientific_formatted_number(const char *digits,
         if (period && ((int)strlen(period) > precision)) {
             Dprintf("truncating down to precision...\n");
             period[precision] = 0;
-            *truncated_flag   = 1;
+            if (truncated_flag != NULL) {
+                *truncated_flag   = true;
+            }
         }
     }
     // copy in an exponent

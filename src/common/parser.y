@@ -447,9 +447,9 @@ command : HEX_CMD {
 | BASE_CMD
 {
 	if ($1 >= 2 && $1 <= 36) {
-		char * str, junk;
+		char * str;
                 conf_t *conf = getConf();
-		str = num_to_str_complex(*get_last_answer(), $1, conf->scientific, -1, conf->print_prefixes, &junk);
+		str = num_to_str_complex(*get_last_answer(), $1, conf->scientific, -1, conf->print_prefixes, NULL);
 		_display_status("base %i: %s\n",$1,str);
 	} else {
 		report_error("Base must be greater than one and less than 37.");

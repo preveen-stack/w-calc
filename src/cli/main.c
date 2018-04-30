@@ -19,6 +19,7 @@
 #include <sys/mman.h>                  /* for mmap() */
 #include <assert.h>                    /* for assert() */
 #include <stdarg.h>                    /* for va_start() */
+#include "result_printer.h"
 #include "number.h"
 
 #ifdef HAVE_EDITLINE
@@ -481,7 +482,7 @@ PrintConversionUnitCategory(int nCategory)
 
 static void
 show_answer_cli(char *err,
-                int   uncertain,
+                bool  uncertain,
                 char *answer)
 {   /*{{{*/
     const conf_t *conf = getConf();
@@ -543,9 +544,9 @@ display_var(variable_t *v,
                colors[uiselect[EXACT_ANSWER]], colors[uiselect[UNCOLOR]],
                v->expression);
     } else {
-        char  approx = 0;
+        bool  approx = false;
         char *err;
-        char *p      = print_this_result(v->value, 0, &approx, &err);
+        char *p      = print_this_result(v->value, false, sig_figs, &approx, &err);
         printf("display_var\n");
         show_answer_cli(err, approx, p);
     }
@@ -645,7 +646,7 @@ display_valvar_explanation(const char *str,
 {/*{{{*/
     printf("%s%s%s is a variable with the value: %s\n",
            colors[uiselect[VAR_NAME]], str, colors[uiselect[UNCOLOR]],
-           print_this_result(*val, 0, NULL, NULL));
+           print_this_result(*val, false, sig_figs, NULL, NULL));
     if (desc) {
         printf("Description: %s%s%s\n", colors[uiselect[VAR_DESC]], desc, colors[uiselect[UNCOLOR]]);
     }
@@ -787,7 +788,7 @@ display_val(const char *name)
 {/*{{{*/
     if (standard_output) {
         answer_t val;
-        char     approx = 0;
+        bool     approx = false;
         char    *err;
         display_and_clear_errstring();
         printf("%s%s%s", colors[uiselect[VAR_NAME]], name, colors[uiselect[UNCOLOR]]);
@@ -795,7 +796,7 @@ display_val(const char *name)
         if (val.exp) {
             printf(" %s=%s %s\n", colors[uiselect[EXACT_ANSWER]], colors[uiselect[UNCOLOR]], val.exp);
         } else {
-            char *p = print_this_result(val.val, 0, &approx, &err);
+            char *p = print_this_result(val.val, false, sig_figs, &approx, &err);
             show_answer_cli(err, approx, p);
         }
         if (val.desc) {
@@ -833,7 +834,7 @@ main(int   argc,
     memset(conf, 0, sizeof(struct _conf));
     conf->precision           = -1;
     conf->scientific          = automatic;
-    standard_output           = 1;
+    standard_output           = true;
     conf->picky_variables     = 1;
     conf->print_prefixes      = 1;
     conf->precision_guard     = 1;

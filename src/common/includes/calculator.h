@@ -17,6 +17,8 @@
 #include "definitions.h"
 #include "number.h"
 
+#include <stdbool.h>
+
 enum functions {
     wnot,
     wbnot,
@@ -90,7 +92,7 @@ enum operations {
 
 enum commands {redisplay, nothing};
 
-void init_calculator(void (*sa)(char*, int, char*));
+void init_calculator(void (*sa)(char*, bool, char*));
 void term_calculator(void);
 
 Number *get_last_answer(void);
@@ -98,10 +100,6 @@ void set_last_answer(Number value);
 void parseme(const char *);
 void report_error(const char *fmt,
                   ...);
-char *print_this_result(const Number result,
-                        int          output,
-                        char        *nad,
-                        char       **es);
 void uber_function(Number         output,
                    enum functions func,
                    Number         input);
@@ -115,8 +113,8 @@ extern char         compute;
 extern unsigned int sig_figs;
 
 /* communication with the frontend */
-extern char standard_output;
-extern char not_all_displayed;
+extern bool standard_output;
+extern bool not_all_displayed;
 
 #endif // ifndef WCALC_CALCULATOR_H
 /* vim:set expandtab: */
