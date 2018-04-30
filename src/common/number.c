@@ -632,7 +632,7 @@ void num_out_str(FILE        *fd,
                  const Number n)
 {
     if (n->nan == 1) {
-        fprintf(fd, "@NaN@");
+        fprintf(fd, NAN_STRING);
         return;
     }
     switch (base) {

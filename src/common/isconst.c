@@ -111,9 +111,9 @@ static const struct name_with_exp consts[] = {
       "A special symbol for 0.75." /* W_threequarters */ },
     { { "K", NULL },
       "Catalan's constant commonly appears in estimates of combinatorial functions and in certain classes of sums and definite integrals." /* W_K */ },
-    { { "@NaN@", NULL },
+    { { NAN_STRING, NULL },
       "Not-a-number. This is a \"special\" number that has specific (unusual) mathematical consequences." /* W_NaN */ },
-    { { "@Inf@", NULL },
+    { { INF_STRING, NULL },
       "This represents infinity. This is a \"special\" number that has specific (unusual) mathematical consequences." /* W_Inf */ },
     { { 0 }, NULL }
 };

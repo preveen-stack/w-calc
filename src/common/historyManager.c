@@ -162,7 +162,7 @@ char *historynum(int step,
             }
         }
         assert(standard_output == 0);
-        temp = print_this_result(history[step].ans, 0, NULL, NULL);
+        temp = print_this_result(history[step].ans, 0, sig_figs, NULL, NULL);
         return (temp ? temp : "Not Enough Memory");
     }
 } /*}}}*/

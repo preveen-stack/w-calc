@@ -9,6 +9,9 @@
 # endif
 #endif
 
+#define NAN_STRING "@NaN@"
+#define INF_STRING "@Inf@"
+
 #ifdef HAVE_LIBMPFR
 
 # if HAVE_LIMITS_H

@@ -137,7 +137,8 @@ int saveState(char *filename)
                 cptr = malloc(len);
                 tristrncat(cptr, len, "'", keyval->expression, "'");
             } else {
-                cptr = strdup(print_this_result(keyval->value, standard_output, NULL, NULL));
+                cptr = strdup(print_this_result(keyval->value, standard_output, sig_figs, NULL,
+                                                NULL));
             }
             retval = write(fd, cptr, strlen(cptr));
             if (retval < (int)strlen(cptr)) {
@@ -326,7 +327,7 @@ int storeVar(const char *variable)
                 cptr = malloc(len);
                 tristrncat(cptr, len, "'", keyval.exp, "' ");
             } else {
-                cptr = strdup(print_this_result(keyval.val, standard_output, NULL, NULL));
+                cptr = strdup(print_this_result(keyval.val, standard_output, sig_figs, NULL, NULL));
             }
             retval = write(fd, cptr, strlen(cptr));
             if (retval < (int)strlen(cptr)) {

@@ -1206,10 +1206,10 @@ static pthread_mutex_t displayLock;
     clearHistory();
     cleanupvar();
     if (pretty_answer) {
-	extern char *pa;
+	extern char *formatted_number;
 	free(pretty_answer);
-	if (pa) {
-	    free(pa);
+	if (formatted_number) {
+	    free(formatted_number);
 	}
     }
     num_free(last_answer);

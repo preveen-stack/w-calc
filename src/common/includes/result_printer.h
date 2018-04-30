@@ -40,4 +40,22 @@ void reset_last_answer_str(void);
  */
 void show_answer(char *err, int  uncertain, char *answer);
 
+/**
+ * Generates a formatted string for the number specified ("result"). If output is set to
+ * non-zero, this gets fed to the output callback function. Reports information about the display
+ * in nad and es.
+ * @param result The number to format
+ * @param output Whether to print a result
+ * @param sig_figs number of significant figures necessary (only used if configured to use
+ *                 sig-figs to determine whether rounding has occurred)
+ * @param nad Character to store whether not all the data is displayed or not.
+ * @param es The error-string (if any)
+ * @return the formatted character string
+ */
+char *print_this_result(const Number result,
+                        bool         output,
+                        unsigned int sig_figs,
+                        bool        *nad,
+                        char       **es);
+
 #endif //W_CALC_GIT_RESULT_PRINTER_H

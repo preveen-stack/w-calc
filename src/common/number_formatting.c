@@ -66,13 +66,13 @@ char *num_to_str_complex(const Number          num,
     Dprintf("num_to_str_complex: base: %i, engr: %i, prec: %i, prefix: %i\n",
             base, engr, prec, prefix);
     if (num_is_nan(num)) {
-        return strdup("@NaN@");
+        return strdup(NAN_STRING);
     }
     if (num_is_inf(num)) {
         if (num_sign(num) > 0) {
-            return strdup("@Inf@");
+            return strdup(INF_STRING);
         } else {
-            return strdup("-@Inf@");
+            return strdup("-" INF_STRING);
         }
     }
     if (num_is_zero(num)) {
