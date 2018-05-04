@@ -4,7 +4,7 @@
 #ifdef EBUG
 #warning "DEBUG OUTPUT ENABLED"
 # include <stdio.h>
-# include <mpfr.h>
+# include "number.h"
 # define Dprintf(fmt, ...)                                               \
     num_fprintf(stderr, "[%s:%d] " fmt, __FILE__, __LINE__, ## __VA_ARGS__); \
     fflush(stderr);
@@ -13,6 +13,22 @@
 #endif
 
 enum scientific_modes {always, never, automatic};
+
+enum output_formats {
+    DECIMAL_FORMAT,
+    OCTAL_FORMAT,
+    HEXADECIMAL_FORMAT,
+    BINARY_FORMAT,
+    FORMAT_COUNT
+};
+
+enum rounding_style {
+    NO_ROUNDING_INDICATION,
+    SIMPLE_ROUNDING_INDICATION,
+    SIG_FIG_ROUNDING_INDICATION,
+    ROUNDING_INDICATION_COUNT
+};
+
 
 typedef struct _conf {
     unsigned long         history_limit_len;
@@ -24,9 +40,9 @@ typedef struct _conf {
     enum scientific_modes scientific          : 2;
     unsigned int          picky_variables     : 1;
     unsigned int          use_radians         : 1;
-    unsigned int          output_format       : 4;
+    enum output_formats   output_format       : 4;
     unsigned int          print_prefixes      : 1;
-    unsigned int          rounding_indication : 4;
+    enum rounding_style   rounding_indication : 4;
     unsigned int          remember_errors     : 1;
     unsigned int          precision_guard     : 1;
     unsigned int          history_limit       : 1;
@@ -40,15 +56,6 @@ typedef struct _conf {
     unsigned int          color_ui            : 1;
     unsigned int          print_greeting      : 1;
 } conf_t;
-
-#define DECIMAL_FORMAT     0
-#define OCTAL_FORMAT       1
-#define HEXADECIMAL_FORMAT 2
-#define BINARY_FORMAT      3
-
-#define NO_ROUNDING_INDICATION      0
-#define SIMPLE_ROUNDING_INDICATION  1
-#define SIG_FIG_ROUNDING_INDICATION 2
 
 conf_t * getConf(void);
 
