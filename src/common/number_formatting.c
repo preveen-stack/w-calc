@@ -491,10 +491,12 @@ char *automatically_formatted_number(const char *digits,
     // this variable exists because snprintf's return value is unreliable.
     // and can be larger than the number of digits printed
     //printed = ((length - 1 < strlen(digits + d_index)) ? length - 1 : strlen(digits + d_index));
-    snprintf(curs, length, "%s", digits + d_index);
+    strncpy(curs, digits + d_index, length);
+    Dprintf("curs:'%s' length:%zu digits+dindex:'%s'\n", curs, length, digits+d_index);
     //length        -= printed;
     //decimal_count += printed;
 
+    Dprintf("precision: %i\n", precision);
     if (precision == -1) {
         char *period;
 
@@ -508,14 +510,22 @@ char *automatically_formatted_number(const char *digits,
         if (period && (strlen(period) > 10)) {
             period[30]      = 0; // Arbitrary cutoff to avoid huge outputs for repeating decimals
             if (truncated_flag != NULL) {
+                Dprintf("Arbitrary cutoff to avoid huge outputs for repeating decimals "
+                        "(truncated=true)\n");
                 *truncated_flag = true;
             }
             zero_strip(retstring);
+        } else {
+            if (truncated_flag != NULL) {
+                Dprintf("No truncation necessary.\n");
+                *truncated_flag = false;
+            }
         }
     } else if (precision >= 0) {
         char *period = strchr(retstring, '.');
+        bool trunc = false;
 
-        Dprintf("period: %s\n", period);
+        Dprintf("period: '%s'\n", period);
         if (period != NULL) {
             if (precision == 0) { // this removes extraneous periods
                 *period = 0;
@@ -523,11 +533,25 @@ char *automatically_formatted_number(const char *digits,
             period++;
             if (strlen(period) > (size_t)precision) {
                 Dprintf("truncating down to precision...\n");
+                bool onlyZeros = true;
+                for (int i=precision; period[i] && onlyZeros; i++) {
+                    if (period[i] != '0') {
+                        onlyZeros = false;
+                    }
+                }
                 period[precision] = 0;
-                if (truncated_flag != NULL) {
-                    *truncated_flag = true;
+                trunc = !onlyZeros;
+            } else if (strlen(period) < (size_t)precision) {
+                Dprintf("adding %i zeros to fill out the precision...\n",
+                        precision - strlen(period));
+                for (int i=0; i < precision - strlen(period); i++) {
+                    strcat(period, "0");
                 }
             }
+        }
+        if (truncated_flag != NULL) {
+            Dprintf("Truncation flag set to %d\n", trunc);
+            *truncated_flag = trunc;
         }
     }
     // copy in an exponent if necessary

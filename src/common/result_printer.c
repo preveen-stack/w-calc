@@ -221,7 +221,7 @@ print_this_result_printf(const Number result,
         Dprintf("%s (%RNf)... absfracpart:%RNf (%i) pi:%i\n", format, result, absfracpart,
                 num_is_zero(absfracpart), !conf->print_ints);
         if (!num_is_zero(absfracpart) || !conf->print_ints) {
-            Dprintf("general case");
+            Dprintf("general case\n");
             num_snprintf(formatted_number, 310, format, result);
         } else {
             Dprintf("Print_ints special case!\n");
@@ -240,7 +240,9 @@ print_this_result_printf(const Number result,
                 Dprintf("simple\n");
                 num_mul_d(fracpart, result, pow(10, decimal_places));
                 num_modf(/* ignored */ absfracpart, fracpart, fracpart);
-                not_all_displayed = (bool)num_is_zero(fracpart);
+                not_all_displayed = !(bool)num_is_zero(fracpart);
+                Dprintf("not_all_displayed = %i because %Rg is (not?) zero\n", not_all_displayed,
+                        fracpart);
                 break;
             case SIG_FIG_ROUNDING_INDICATION:
                 Dprintf("sigfig\n");
@@ -329,8 +331,8 @@ print_this_result(const Number result,
     unsigned int  base = 0;
     const conf_t *conf = getConf();
 
-    Dprintf("print_this_result (%Rf) in format %i\n",
-            result, conf->output_format);
+    Dprintf("print_this_result (%Rf) in format %i (sig_figs:%u)\n",
+            result, conf->output_format, sig_figs);
     // output in the proper base and format
     switch (conf->output_format) {
         case HEXADECIMAL_FORMAT:
@@ -387,7 +389,7 @@ print_this_result(const Number result,
             }
             case SIG_FIG_ROUNDING_INDICATION:
                 /* sig_figs is how many we need to display */
-                Dprintf("sigfig full\n");
+                Dprintf("sigfig full (%u)\n", sig_figs);
                 if (sig_figs < UINT32_MAX) {
                     unsigned int t = count_digits(formatted_number);
 
