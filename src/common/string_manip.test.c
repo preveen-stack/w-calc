@@ -212,7 +212,7 @@ static void GIVEN_tenHexDigitsPlusExtra_WHEN_count_digits_THEN_ten(CuTest *tc)
 
 static void GIVEN_tenHexDigits_WHEN_count_digits_THEN_ten(CuTest *tc)
 {
-    unsigned int result = count_digits("0xcafebabe9a");
+    unsigned int result = count_digits("0xcafebabe90");
     CuAssertIntEquals(tc, 10, result);
 }
 
@@ -238,6 +238,12 @@ static void GIVEN_tenBinDigits_WHEN_count_digits_THEN_ten(CuTest *tc)
 {
     unsigned int result = count_digits("0b1011001110");
     CuAssertIntEquals(tc, 10, result);
+}
+
+static void GIVEN_tenZeroDigits_WHEN_count_digits_THEN_zero(CuTest *tc)
+{
+    unsigned int result = count_digits("0000000000");
+    CuAssertIntEquals(tc, 0, result);
 }
 
 static void GIVEN_null_WHEN_justnumbers_THEN_zero(CuTest *tc)
@@ -405,6 +411,7 @@ CuSuite* string_manip_get_suite(void) {
     SUITE_ADD_TEST(suite, GIVEN_tenOctDigits_WHEN_count_digits_THEN_ten);
     SUITE_ADD_TEST(suite, GIVEN_tenBinDigitsPlusExtra_WHEN_count_digits_THEN_ten);
     SUITE_ADD_TEST(suite, GIVEN_tenBinDigits_WHEN_count_digits_THEN_ten);
+    SUITE_ADD_TEST(suite, GIVEN_tenZeroDigits_WHEN_count_digits_THEN_zero);
     SUITE_ADD_TEST(suite, GIVEN_null_WHEN_justnumbers_THEN_zero);
     SUITE_ADD_TEST(suite, GIVEN_emptyString_WHEN_justnumbers_THEN_zero);
     SUITE_ADD_TEST(suite, GIVEN_noDigits_WHEN_justnumbers_THEN_zero);

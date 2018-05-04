@@ -15,6 +15,8 @@
 #include <wctype.h> /* for iswdigit(), iswpunct() */
 #if !defined(HAVE_CONFIG_H) || HAVE_STRING_H
 # include <string.h>
+#include <stdbool.h>
+
 #else
 # if !HAVE_STRCHR
 #  define strchr  index
@@ -82,12 +84,13 @@ unsigned int count_digits(const char *str)
     unsigned int counter        = 0;
     char        *exponent_chars = "eE";
     char        *base_chars     = "1234567890";
+    bool         nonZeros       = false;
 
     if (!str) { return 0; }
     if ((str[0] == '0') && (str[1] == 'x')) {
         curs          += 2;
         exponent_chars = "@";
-        base_chars     = "1234567890abcdefABCDEF";
+        base_chars     = "1234567890abcdefABCDEF0";
     } else if ((str[0] == '0') && (str[1] == 'b')) {
         curs          += 2;
         exponent_chars = "eE";
@@ -101,9 +104,10 @@ unsigned int count_digits(const char *str)
         if (strchr(base_chars, str[curs]) != NULL) {
             counter++;
         }
+        nonZeros |= str[curs] != '0';
         ++curs;
     }
-    return counter;
+    return nonZeros ? counter : 0;
 } /*}}}*/
 
 int justnumbers(const char *str)
