@@ -22,8 +22,7 @@
 #include "result_printer.h"
 #include "number.h"
 
-#ifdef HAVE_EDITLINE
-#elif defined(HAVE_LIBREADLINE)
+#if defined(HAVE_LIBREADLINE)
 # if defined(HAVE_READLINE_READLINE_H)
 #  include <readline/readline.h>
 # elif defined(HAVE_READLINE_H)
@@ -33,6 +32,7 @@ extern char *readline();
 # endif /* !defined(HAVE_READLINE_H) */
 /*@null@*/
 char *cmdline = NULL;
+#elif defined(HAVE_EDITLINE)
 #else /* !defined(HAVE_READLINE_READLINE_H) */
 /* no readline */
 #endif /* HAVE_LIBREADLINE */
@@ -359,7 +359,7 @@ wcalc_completion(const char *text,
         free(variables);
     }
     rl_attempted_completion_over = 1;  // do not use standard file completion
-    rl_completion_entry_function = (Function*)tc_generator;
+    rl_completion_entry_function = (rl_compentry_func_t*)tc_generator;
     retvals                      = rl_completion_matches(text, tc_generator);
     return retvals;
 }                                      /*}}} */
