@@ -95,7 +95,7 @@ char *add_commas(const char *input,
             exponent_chars = "eE";
             break;
     }
-    if (0 == conf->print_prefixes) {
+    if (!conf->print_prefixes) {
         prefix = 0;
     }
     if (*input == '-') {
