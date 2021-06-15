@@ -110,7 +110,6 @@ char *num_to_str_complex(const Number          num,
                     foo = (unsigned)(s[0] - '0') + 1;
                     snprintf(s, 3, "%u", foo);
                     Dprintf("s = %s\n", s);
-                    e = 1;
                 }
             } else {
                 num_free_str(s);
@@ -261,7 +260,9 @@ char *precision_formatted_number(const char *digits,
                 (int)exp);
         // everything after this is affected by decimalcount
         // copy in the leading zeros
-        while (exp < 0 && (ssize_t)decimal_count <= precision && length > 0) {
+        while (exp < 0 && (ssize_t)decimal_count < precision && length > 0) {
+            Dprintf("decimal_count: %d, precision: %d\n", decimal_count,
+                  precision);
             snprintf(curs++, length--, "0");
             exp++;
             decimal_count++;
@@ -271,12 +272,26 @@ char *precision_formatted_number(const char *digits,
                 (int)exp);
         // copy in the rest of the mantissa (the decimals)
         Dprintf("leading zeros: %s\n", retstring);
+        Dprintf("length + 1: %d\n", length + 1);
+        Dprintf("precision - decimal_count + 1: %d\n", precision -
+                                                           decimal_count + 1);
         // this variable exists because snprintf's return value is unreliable,
         // and can be larger than the number of digits printed
-        print_limit = ((length < (precision - decimal_count + 1)) ?
+        print_limit = ((length < (precision - decimal_count)) ?
                        length + 1 :
                        (precision - decimal_count + 1));
-        snprintf(curs, print_limit, "%s", &digits[d_index]);
+        Dprintf("print_limit: %d, d_index: %d, digits: %s\n", print_limit,
+                d_index, digits);
+        if (print_limit > 1) {
+          snprintf(curs, print_limit, "%s", &digits[d_index]);
+        }
+        else if (exp == 0 && digits[d_index] - '0' > 4)  // manual rounding
+        {
+          Dprintf("EXP=0 && curs: %s, retstring: %s\n", curs, retstring);
+          Dprintf("digits[d_index(%d)]: %c\n", d_index+print_limit-1,
+                  digits[d_index+print_limit-1]);
+          curs[-1] = '1';
+        }
     } else if (strlen(retstring) == 1) {
         /* this must be able to print `Eh` and other small numbers */
         Dprintf("all digits\n");
