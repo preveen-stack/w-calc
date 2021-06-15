@@ -13,7 +13,7 @@ include gui/Makefile.inc
 
 bin_PROGRAMS = wcalc
 wcalc_LDADD = libwcalc.a @LEXLIB@
-wcalc_SOURCES = cli/main.c cli/help.c
+wcalc_SOURCES = cli/main.c cli/help.c cli/display.c
 
 TESTS = AllUnitTests
 

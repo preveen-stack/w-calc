@@ -73,6 +73,7 @@ extern int  history_truncate_file(char *,
 #include "evalvar.h"
 
 /* CLI Includes */
+#include "display.h"
 #include "help.h"
 
 #define TRUEFALSE  (!strcmp(value, "yes") || !strcmp(value, "true") || !strcmp(value, "1"))
@@ -553,30 +554,6 @@ display_var(variable_t *v,
         printf("%*s %s%s%s\n", digits + 4, "::",
                colors[uiselect[VAR_DESC]], v->description, colors[uiselect[UNCOLOR]]);
     }
-}/*}}}*/
-
-static void
-display_consts(const struct name_with_exp *c)
-{/*{{{*/
-    size_t linelen = 0;
-
-    for (size_t i = 0; c[i].explanation; i++) {
-        const char *const *const names = c[i].names;
-        for (size_t j = 0; names[j]; j++) {
-            if (linelen + strlen(names[j]) + 2 > 70) {
-                printf(",\n");
-                linelen = 0;
-            }
-            if (linelen == 0) {
-                printf("%s", names[j]);
-                linelen = strlen(names[j]);
-            } else {
-                printf(", %s", names[j]);
-                linelen += strlen(names[j]) + 2;
-            }
-        }
-    }
-    printf("\n");
 }/*}}}*/
 
 static void

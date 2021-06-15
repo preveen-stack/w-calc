@@ -4,13 +4,15 @@
 
 /* System Headers */
 #include <stdio.h>
+#include <string.h>  // for strlen
 
 /* Internal Headers */
+#include "display.h"
 #include "output.h"
 #include "isconst.h"
 
 void
-display_consts(void)
+display_consts(const struct name_with_exp *consts)
 {/*{{{*/
     size_t linelen = 0;
 
