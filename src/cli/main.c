@@ -171,13 +171,13 @@ char **qcommands = NULL;
         int compareword = 0;                                                  \
         int comparechar = 0;                                                  \
         int textcurs    = 0;                                                  \
-        while (strs[compareword] != NULL) {                                   \
+        while ((strs)[compareword] != NULL) {                                 \
             if (text[textcurs] == 0) { /* add to the list of possibilities */ \
-                addToList(&tc_options, strdup(strs[compareword]));            \
+                addToList(&tc_options, strdup((strs)[compareword]));          \
                 textcurs    = 0;                                              \
                 comparechar = 0;                                              \
                 compareword++;                                                \
-            } else if (text[textcurs] == strs[compareword][comparechar]) {    \
+            } else if (text[textcurs] == (strs)[compareword][comparechar]) {  \
                 textcurs++;                                                   \
                 comparechar++;                                                \
             } else { /* not a possibility: next! */                           \
@@ -189,8 +189,8 @@ char **qcommands = NULL;
 } while (0)
 # define COMPLETE2(strs) do {                                       \
         const unsigned textlen = strlen(text);                      \
-        for (unsigned _c_i = 0; strs[_c_i].explanation; _c_i++) {   \
-            const char *const *const _c_names = strs[_c_i].names;   \
+        for (unsigned _c_i = 0; (strs)[_c_i].explanation; _c_i++) { \
+            const char *const *const _c_names = (strs)[_c_i].names; \
             for (unsigned _c_j = 0; _c_names[_c_j]; _c_j++) {       \
                 if (!strncmp(text, _c_names[_c_j], textlen)) {      \
                     /* add to the list of possibilities */          \
@@ -298,7 +298,6 @@ wcalc_completion(const char *text,
             int i = 2;
             /*extern const struct conversion lengths[], areas[], volumes[],
              *  masses[], speeds[], powers[], forces[], accelerations[];*/
-            extern const struct conversion *conversions[];
 
             while (!iswspace(rl_line_buffer[i])) ++i;
             while (iswspace(rl_line_buffer[i])) ++i;
@@ -625,13 +624,12 @@ display_expvar_explanation(const char *str,
                colors[uiselect[VAR_NAME]], str, colors[uiselect[UNCOLOR]]);
         while (listLen(subvars) > 0) {
             char *curstr = (char *)getHeadOfList(subvars);
+            if (!curstr) continue;
             char *value  = evalvar_noparse(curstr);
 
             printf("\t%s%*s%s\t(currently: %s)\n", colors[uiselect[SUBVAR_NAME]], -maxnamelen, curstr, colors[uiselect[UNCOLOR]],
                    value ? value : "undefined");
-            if (curstr) {
-                free(curstr);
-            }
+            free(curstr);
             if (value) {
                 free(value);
             }
@@ -1045,7 +1043,7 @@ main(int   argc,
                 printf("-> %s\n", argv[i]);
             }
             parseme(argv[i]);
-            if (!errstring || (errstring && !strlen(errstring)) ||
+            if (!errstring || !strlen(errstring) ||
                 conf->remember_errors) {
                 addToHistory(argv[i], *get_last_answer());
             }
@@ -1088,8 +1086,7 @@ main(int   argc,
                 printf("-> %s\n", envinput);
             }
             parseme(envinput);
-            if (!errstring || (errstring && !strlen(errstring)) ||
-                conf->remember_errors) {
+            if (!errstring || !strlen(errstring) || conf->remember_errors) {
                 addToHistory(envinput, *get_last_answer());
             }
             if (errstring && strlen(errstring)) {
@@ -1188,17 +1185,17 @@ main(int   argc,
 #else       /* ifdef HAVE_LIBREADLINE */
             {
                 char         c;
-                unsigned int i = 0;
+                unsigned int idx = 0;
 
                 memset(readme, 0, BIG_STRING);
                 printf("%s->%s ", colors[uiselect[PROMPT]], colors[uiselect[UNCOLOR]]);
                 fflush(stdout);
                 c = fgetc(stdin);
-                while (c != '\n' && i < BIG_STRING && !feof(stdin) &&
+                while (c != '\n' && idx < BIG_STRING && !feof(stdin) &&
                        !ferror(stdin)) {
-                    readme[i] = c;
+                    readme[idx] = c;
                     c         = fgetc(stdin);
-                    ++i;
+                    ++idx;
                 }
                 if (feof(stdin) || ferror(stdin)) {
                     printf("\n");
@@ -1230,7 +1227,7 @@ main(int   argc,
                     {
                         extern char *errstring;
 
-                        if (!errstring || (errstring && !strlen(errstring)) ||
+                        if (!errstring || !strlen(errstring) ||
                             conf->remember_errors) {
                             addToHistory(readme, *get_last_answer());
                         }
@@ -1476,11 +1473,11 @@ set_pref(const char *key,
             config_error("Input thousands separator requires a single character value.");
             ok = 0;
         }
-        if ((strlen(value) > 1)) {
+        if ((NULL != value) && (strlen(value) > 1)) {
             config_error("Input thousands separator requires a single character value (found '%s').", value);
             ok = 0;
         }
-        if (value[0] == ' ') {
+        if ((NULL != value) && (value[0] == ' ')) {
             config_error("'%c' cannot be the input thousands separator; input would be too confusing.", value[0]);
             ok = 0;
         }
@@ -1500,11 +1497,11 @@ set_pref(const char *key,
             config_error("Input decimal separator requires a single character value.");
             ok = 0;
         }
-        if ((strlen(value) > 1)) {
+        if ((NULL != value) && (strlen(value) > 1)) {
             config_error("Input decimal separator requires a single character value (found '%s').", value);
             ok = 0;
         }
-        if (value[0] == ' ') {
+        if ((NULL != value) && (value[0] == ' ')) {
             config_error("'%c' cannot be the input decimal separator; input would be too confusing.", value[0]);
             ok = 0;
         }
@@ -1524,11 +1521,11 @@ set_pref(const char *key,
             config_error("Thousands separator requires a single character value.");
             ok = 0;
         }
-        if ((strlen(value) > 1)) {
+        if ((NULL != value) && (strlen(value) > 1)) {
             config_error("Thousands separator requires a single character value (found '%s').", value);
             ok = 0;
         }
-        if (conf->dec_delimiter == value[0]) {
+        if ((NULL != value) && (conf->dec_delimiter == value[0])) {
             config_error("'%c' cannot be the thousands separator; it is the decimal separator.", value[0]);
             ok = 0;
         }
@@ -1540,11 +1537,11 @@ set_pref(const char *key,
             config_error("Decimal separator requires a single character value.");
             ok = 0;
         }
-        if ((strlen(value) > 1)) {
+        if ((NULL != value) && (strlen(value) > 1)) {
             config_error("Decimal separator requires a single character value (found '%s').", value);
             ok = 0;
         }
-        if (conf->thou_delimiter == value[0]) {
+        if ((NULL != value) && (conf->thou_delimiter == value[0])) {
             config_error("'%c' cannot be the decimal separator; it is the thousands separator.", value[0]);
             ok = 0;
         }
