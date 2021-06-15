@@ -13,12 +13,11 @@
 /* Internal Headers */
 #include "number.h"
 #include "conf.h"
-#include "string_manip.h"
 #include "number_formatting.h"
 
 static size_t zero_strip(char *num);
 static void   add_prefix(char  *num,
-                         size_t length,
+                         int    length,
                          int    base);
 static char *scientific_formatted_number(const char *digits,
                                          num_exp_t   exp,
@@ -98,17 +97,17 @@ char *num_to_str_complex(const Number          num,
             /*printf("e: %li\n", (long)e);
              * printf("s: %s\n", s);
              * printf("prec: %i\n", prec); */
-            significant_figures = (size_t)((e > 0) ? e : 0) + prec;
+            significant_figures = ((e > 0) ? e : 0) + prec;
             Dprintf("sig figs = %zu\n", significant_figures);
             if (significant_figures < 2) {      /* MPFR-defined minimum (why?) */
                 num_free_str(s);
                 s = num_get_str(NULL, &e, base, 2, num);
                 Dprintf("s=%s, e = %i\n", s, (int)e);
                 if (s[1] > '4') {      /* XXX: LAME! */
-                    unsigned foo;
+                    int foo;
 
-                    foo = (unsigned)(s[0] - '0') + 1;
-                    snprintf(s, 3, "%u", foo);
+                    foo = (s[0] - '0') + 1;
+                    snprintf(s, 3, "%d", foo);
                     Dprintf("s = %s\n", s);
                 }
             } else {
@@ -196,22 +195,22 @@ char *precision_formatted_number(const char *digits,
                                  const int   base,
                                  const int   prefix)
 {   /*{{{*/
-    size_t length;
-    size_t full_length;
-    size_t decimal_count = 0;
-    size_t print_limit;
+    int    length;
+    int    full_length;
+    int    decimal_count = 0;
+    int    print_limit;
     char  *retstring, *curs;
     size_t d_index = 0;
 
-    length = strlen(digits);
+    length = (int)strlen(digits);
     /* testing against both zero and length because length is unsigned */
-    if ((exp > 0) && ((size_t)exp > length)) {
-        length = (size_t)exp;
+    if ((exp > 0) && ((int)exp > length)) {
+        length = (int)exp;
     }
     length += 3;
 
-    if (length < (size_t)(precision) + 3) {     // leading zero, decimal, and null
-        length = (size_t)(precision) + 3;
+    if (length < (precision) + 3) {     // leading zero, decimal, and null
+        length = (precision) + 3;
     }
     Dprintf("Precision Formatted Number\n");
     Dprintf("digits: %s(%u), exp: %i, base: %i, prefix: %i, precision: %i\n",
@@ -233,7 +232,7 @@ char *precision_formatted_number(const char *digits,
 
         add_prefix(curs, length, base);
         nc      = strchr(curs, '\0');
-        length -= nc - curs;
+        length -= (int)(nc - curs);
         curs    = nc;
     }
     // copy in the integers
@@ -336,29 +335,29 @@ char *full_precision_formatted_number(const char *digits,
                                       const int   base,
                                       const int   prefix)
 {   /*{{{*/
-    size_t length;
-    size_t full_length;
-    size_t decimal_count = 0;
+    int length;
+    int full_length;
+    int decimal_count = 0;
     //size_t printed;
     char  *retstring, *curs;
     size_t d_index = 0;
 
-    length = strlen(digits);
+    length = (int)strlen(digits);
     /* testing against both zero and length because length is unsigned */
-    if ((exp > 0) && ((size_t)exp > length)) {
-        length = (size_t)exp;
+    if ((exp > 0) && ((int)exp > length)) {
+        length = (int)exp;
     }
     length += 3;                       /* the null, the (possible) sign, and the decimal */
 
     Dprintf("Full Precision Formatted Number\n");
-    Dprintf("digits: %s(%u), exp: %i, base: %i, prefix: %i\n", digits,
-            (unsigned)length, (int)exp, base, prefix);
+    Dprintf("digits: %s(%d), exp: %i, base: %i, prefix: %i\n", digits,
+            length, (int)exp, base, prefix);
     Dprintf("strlen(digits): %u\n", (unsigned)strlen(digits));
 
     // ten extra, 'cuz of the *possible* exponent
     full_length = length + 10;
     curs        = retstring = (char *)calloc(sizeof(char), full_length);
-    Dprintf("length: %lu, full_length: %lu\n", length, full_length);
+    Dprintf("length: %d, full_length: %lu\n", length, full_length);
 
     // now, copy the digits into the output string, carefully
 
@@ -372,7 +371,7 @@ char *full_precision_formatted_number(const char *digits,
 
         add_prefix(curs, length, base);
         nc      = strchr(curs, '\0');
-        length -= nc - curs;
+        length -= (int)(nc - curs);
         curs    = nc;
     }
     Dprintf("ready for ints: %s\n", retstring);
@@ -393,7 +392,7 @@ char *full_precision_formatted_number(const char *digits,
     // the decimal
     snprintf(curs++, length--, ".");
     Dprintf("the integers: %s\n", retstring);
-    Dprintf("length: %lu, full_length: %lu\n", length, full_length);
+    Dprintf("length: %d, full_length: %lu\n", length, full_length);
     // XXX: Currently, this function is not used for decimals, so...
 
     // the leading decimal zeros
@@ -432,30 +431,30 @@ char *automatically_formatted_number(const char *digits,
                                      const int   prefix,
                                      bool       *truncated_flag)
 {   /*{{{*/
-    size_t     length;
-    size_t     full_length;
-    size_t     decimal_count = 0;
+    int        length;
+    int        full_length;
+    int        decimal_count = 0;
     //size_t     printed;
     char      *retstring, *curs;
     size_t     d_index      = 0;
     const long original_exp = exp - 1;
 
-    length = strlen(digits);
+    length = (int)strlen(digits);
     /* testing against both zero and length because length is unsigned */
-    if ((exp > 0) && ((size_t)exp > length)) {
-        length = (size_t)exp;
+    if ((exp > 0) && ((int)exp > length)) {
+        length = (int)exp;
     }
     length += 3;                       /* the null, the (possible) sign, and the decimal */
 
     Dprintf("Automatically Formatted Number\n");
-    Dprintf("digits: %s(%u), exp: %i, base: %i, prefix: %i\n", digits,
-            (unsigned)length, (int)exp, base, prefix);
+    Dprintf("digits: %s(%d), exp: %i, base: %i, prefix: %i\n", digits,
+            (int)length, (int)exp, base, prefix);
     Dprintf("strlen(digits): %u\n", (unsigned)strlen(digits));
 
     // ten extra, 'cuz of the *possible* exponent
     full_length = length + 10;
     curs        = retstring = (char *)calloc(sizeof(char), full_length);
-    Dprintf("length: %lu, full_length: %lu\n", length, full_length);
+    Dprintf("length: %d, full_length: %lu\n", length, full_length);
 
     // now, copy the digits into the output string, carefully
 
@@ -470,7 +469,7 @@ char *automatically_formatted_number(const char *digits,
 
         add_prefix(curs, length, base);
         nc      = strchr(curs, '\0');
-        length -= nc - curs;
+        length -= (int)(nc - curs);
         curs    = nc;
         Dprintf("added prefix: %s\n", retstring);
     }
@@ -492,7 +491,7 @@ char *automatically_formatted_number(const char *digits,
     // the decimal
     snprintf(curs++, length--, ".");
     Dprintf("the integers: %s\n", retstring);
-    Dprintf("length: %lu, full_length: %lu\n", length, full_length);
+    Dprintf("length: %d, full_length: %lu\n", length, full_length);
     // XXX: Currently, this function is not used for decimals, so...
 
     // the leading decimal zeros
@@ -507,7 +506,7 @@ char *automatically_formatted_number(const char *digits,
     // and can be larger than the number of digits printed
     //printed = ((length - 1 < strlen(digits + d_index)) ? length - 1 : strlen(digits + d_index));
     strncpy(curs, digits + d_index, length);
-    Dprintf("curs:'%s' length:%zu digits+dindex:'%s'\n", curs, length, digits+d_index);
+    Dprintf("curs:'%s' length:%d digits+dindex:'%s'\n", curs, length, digits+d_index);
     //length        -= printed;
     //decimal_count += printed;
 
@@ -587,26 +586,26 @@ char *scientific_formatted_number(const char *digits,
                                   const int   prefix,
                                   bool       *truncated_flag)
 {   /*{{{*/
-    size_t length;
-    size_t full_length;
+    int length;
+    int full_length;
     char  *retstring, *curs;
     size_t d_index = 0;
 
-    length = strlen(digits);
+    length = (int)strlen(digits);
     /* testing against both zero and length because length is unsigned */
-    if ((exp > 0) && ((size_t)exp > length)) {
-        length = (size_t)exp;
+    if ((exp > 0) && ((int)exp > length)) {
+        length = (int)exp;
     }
     length += 3;                       /* the null, the (possible) sign, and the decimal */
 
     Dprintf("Scientifically Formatted Number\n");
-    Dprintf("digits: %s(%u), exp: %i, prec: %i, prefix: %i\n", digits,
-            (unsigned)length, (int)exp, precision, prefix);
+    Dprintf("digits: %s(%d), exp: %i, prec: %i, prefix: %i\n", digits,
+            length, (int)exp, precision, prefix);
 
     // ten extra, 'cuz of the exponent
     full_length = length + 10;
     curs        = retstring = (char *)calloc(sizeof(char), full_length);
-    Dprintf("length: %lu, full_length: %lu\n", length, full_length);
+    Dprintf("length: %d, full_length: %lu\n", length, full_length);
 
     // now, copy the digits into the output string, carefully
 
@@ -620,7 +619,7 @@ char *scientific_formatted_number(const char *digits,
 
         add_prefix(curs, length, base);
         nc      = strchr(curs, '\0');
-        length -= nc - curs;
+        length -= (int)(nc - curs);
         curs    = nc;
     }
     // copy over the integer
@@ -629,7 +628,7 @@ char *scientific_formatted_number(const char *digits,
     // the decimal
     snprintf(curs++, length--, ".");
     Dprintf("the integers: %s\n", retstring);
-    Dprintf("length: %lu, full_length: %lu\n", length, full_length);
+    Dprintf("length: %d, full_length: %lu\n", length, full_length);
 
     // now, add in the rest of the digits
     // note that the digits are already correctly rounded and I've already
@@ -697,7 +696,7 @@ size_t zero_strip(char *num)
 /* this function prints a prefix for the specified base into the specified
  * string */
 void add_prefix(char  *num,
-                size_t length,
+                int    length,
                 int    base)
 {   /*{{{*/
     switch (base) {
